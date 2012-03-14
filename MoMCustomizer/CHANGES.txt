@@ -1,0 +1,26 @@
+MoMCustomizer
+Author: Klaas van Aarsen
+
+
+CHANGES IN 0.1g (2010-12-19)
+----------------------------
+
+* Added "Races" tab sheet, showing new races hopefully provided by Lucern. It is not functional yet.
+
+
+
+CHANGES IN 0.1f (2010-12-11)
+----------------------------
+
+* Version numbering is now the same as the MoMTweaker.
+
+* Added troubleshooting features 
+  o Title caption displays to which Magic.exe the Customizer connects to and writes to.
+  o File cout_cerr.log is written with troubleshooting information.
+  o Added markers (*) to signify which actions result in a change of Magic.exe
+
+* Added full Wizard-type editor on the tab sheet Picks.
+
+* Added "Randomize hero picks" button on the tab sheet Heroes:
+  all hero abilities are changed into random picks.
+  
