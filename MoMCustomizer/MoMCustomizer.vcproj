@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\MoMGameBase.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\MoMGameCustom.cpp"
 				>
 			</File>
