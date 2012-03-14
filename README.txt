@@ -7,13 +7,13 @@
 
 SUPPORTED PLATFORMS
 -------------------
-Windows     Developed and tested with Windows XP (with Visual Studio 2008)
+Windows     Developed and tested with Windows XP and Windows 7 (with Visual Studio 2008)
 Linux       Developed and tested with Ubuntu 10.04 LTS (with g++ 4.4.3)
 
 DEPENDENCIES
 ------------
 perl        Needed to generate sources (developed with perl 5.10.1)
-Qt          Needed for GUI components (developed with Qt 4.6.3)
+Qt          Needed for GUI components (developed with Qt 4.8.0)
 
 DEPLOYING
 ---------
