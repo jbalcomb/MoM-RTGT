@@ -41,7 +41,7 @@ private:
     bool m_updating;
 
 private slots:
-    void on_WizardType_editingFinished();
+    void slot_WizardType_editingFinished();
     void on_pushButton_SaveWizardTypes_clicked();
     void on_comboBox_Wizard_currentIndexChanged(int index);
     void on_pushButton_RandomizeHeroAbilities_clicked();

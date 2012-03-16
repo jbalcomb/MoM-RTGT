@@ -78,15 +78,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // CONFIG
 #ifdef _WIN32
-    m_filedialogLoadGame.setDirectory("D:/games/MAGIC/");
-    m_filedialogSaveGame.setDirectory("D:/games/MAGIC/");
+    m_filedialogLoadGame.setDirectory("C:/games/MAGIC-work/");
+    m_filedialogSaveGame.setDirectory("C:/games/MAGIC-work/");
     setFont(QFont("Monotype Corsiva", 11));
     ui->treeView->setFont(QFont("Monotype Corsiva", 11));
 #else // Linux
-    m_filedialogLoadGame.setDirectory("/media/DATA/games/MAGIC/");
-    m_filedialogSaveGame.setDirectory("/media/DATA/games/MAGIC/");
-    setFont(QFont("URW Chancery L", 12));
-    ui->treeView->setFont(QFont("URW Chancery L", 11));
+    m_filedialogLoadGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
+    m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
+//    setFont(QFont("URW Chancery L", 12));
+//    ui->treeView->setFont(QFont("URW Chancery L", 11));
 #endif
 
 

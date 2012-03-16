@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef _WIN32
     setFont(QFont("Monotype Corsiva", 11));
 #else // Linux
-    setFont(QFont("URW Chancery L", 12));
+//    setFont(QFont("URW Chancery L", 12));
 #endif
 
     ui->comboBox_WizardSkill->clear();
@@ -663,7 +663,7 @@ void MainWindow::on_pushButton_SaveWizardTypes_clicked()
     }
 }
 
-void MainWindow::on_WizardType_editingFinished()
+void MainWindow::slot_WizardType_editingFinished()
 {
     if (m_updating)
         return;

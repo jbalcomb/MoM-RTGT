@@ -6,8 +6,8 @@
 ## ---------------------------------------------------------------------------
 
 all: generate
-    cd MoMCustomizer && make all
-    cd MoMTweaker && make all
+	cd MoMCustomizer && make all
+	cd MoMTweaker && make all
 
 generate:
-    cd MoMEditorTemplate && make generate
+	cd MoMEditorTemplate && make generate
