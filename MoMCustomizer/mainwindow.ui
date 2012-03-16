@@ -1156,7 +1156,7 @@
    <sender>lineEdit_Name</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1172,7 +1172,7 @@
    <sender>lineEdit_Life</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1188,7 +1188,7 @@
    <sender>lineEdit_Death</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1204,7 +1204,7 @@
    <sender>lineEdit_Chaos</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1220,7 +1220,7 @@
    <sender>lineEdit_Nature</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1236,7 +1236,7 @@
    <sender>lineEdit_Sorcery</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1252,7 +1252,7 @@
    <sender>comboBox_WizardSkill</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>on_WizardType_editingFinished()</slot>
+   <slot>slot_WizardType_editingFinished()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>277</x>
@@ -1267,6 +1267,6 @@
  </connections>
  <slots>
   <slot>on_timer()</slot>
-  <slot>on_WizardType_editingFinished()</slot>
+  <slot>slot_WizardType_editingFinished()</slot>
  </slots>
 </ui>

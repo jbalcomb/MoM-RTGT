@@ -1,8 +1,10 @@
 # Directories with temporary files
 bin/
 Debug/
+doc/
 GeneratedFiles/
 Linux/
+Release/
 Win32/
 Windows/
 
@@ -15,6 +17,7 @@ Windows/
 .goutputstream-*
 
 # Specific files
-Makefile
+MoMCustomizer/Makefile
+MoMTweaker/Makefile
 Makefile.Debug
 Makefile.Release
