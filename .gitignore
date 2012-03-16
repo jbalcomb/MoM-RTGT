@@ -1,0 +1,20 @@
+# Directories with temporary files
+bin/
+Debug/
+GeneratedFiles/
+Linux/
+Win32/
+Windows/
+
+# Wild cards
+*.log
+*.ncb
+*.pro.user
+*.suo
+*.vcproj.*.user
+.goutputstream-*
+
+# Specific files
+Makefile
+Makefile.Debug
+Makefile.Release
