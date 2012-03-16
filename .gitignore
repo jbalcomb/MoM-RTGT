@@ -17,6 +17,8 @@ Windows/
 .goutputstream-*
 
 # Specific files
+.cproject
+.project
 MoMCustomizer/Makefile
 MoMTweaker/Makefile
 Makefile.Debug
