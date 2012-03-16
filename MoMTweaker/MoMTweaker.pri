@@ -36,6 +36,7 @@ HEADERS += ./mainwindow.h \
 SOURCES += ./main.cpp \
     ./mainwindow.cpp \
     ../MoMEditorTemplate/MoMController.cpp \
+    ../MoMEditorTemplate/MoMGameBase.cpp \
     ../MoMEditorTemplate/MoMGameCustom.cpp \
     ../MoMEditorTemplate/MoMExeBase.cpp \
     ../MoMEditorTemplate/MoMGenerated.cpp \
