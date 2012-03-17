@@ -63,15 +63,12 @@ std::string MoMGameBase::getRaceName(eRace race)
 		}
 		// Strip trailing numbers
 		pos = raceName.find('(');
-		if (std::string::npos == pos)
+        if ((std::string::npos != pos) && (pos > 1))
 		{
-			raceName = raceName.substr(0, pos);
+            raceName = raceName.substr(0, pos - 1);
 		}
 		// Replace underscores by spaces
-		while (std::string::npos != (pos = raceName.find('_')))
-		{
-			raceName[pos] = ' ';
-		}
+        raceName = replaceUnderscoresBySpaces(raceName);
 	}
 	return raceName;
 }

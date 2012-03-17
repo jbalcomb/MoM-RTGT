@@ -54,7 +54,8 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef _WIN32
     setFont(QFont("Monotype Corsiva", 11));
 #else // Linux
-//    setFont(QFont("URW Chancery L", 12));
+    // Note: attribute italic=true is required for URW Chancery L
+    setFont(QFont("URW Chancery L", 12, -1, true));
 #endif
 
     ui->comboBox_WizardSkill->clear();

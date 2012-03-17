@@ -68,7 +68,7 @@ private:
     std::auto_ptr<MoM::MoMGameBase> m_game;
 
 private slots:
-    void on_pushButton_Calculator_clicked();
+    void on_pushButton_AddUnit_clicked();
     void on_pushButton_Connect_clicked();
     void on_pushButton_Load_clicked();
     void on_pushButton_Map_clicked();

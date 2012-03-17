@@ -1,3 +1,10 @@
+// ---------------------------------------------------------------------------
+// Copyright:   2011 Klaas van Aarsen
+// License:     GPL
+// Author:      I like Serena (aka Klaas van Aarsen)
+// Created:     2012-03-12
+// ---------------------------------------------------------------------------
+
 #include <qgraphicsscene.h>
 
 #include "dialogoverlandmap.h"
@@ -27,10 +34,7 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     MoM::MoMGameBase* game = getGame();
     if (0 != game)
     {
-        if (!QMoMResources::hasInstance())
-        {
-            QMoMResources::createInstance(game);
-        }
+        QMoMResources::instance().setGame(game);
         for (int y = 0; y < (int)MoM::gMAX_MAP_ROWS; ++y)
         {
             for (int x = 0; x < (int)MoM::gMAX_MAP_COLS; ++x)

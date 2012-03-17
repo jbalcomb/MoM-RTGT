@@ -357,7 +357,7 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
 	//		 2. Bury the old hero
 
 	// Retrieve the slot types
-	if (static_cast<unsigned>(unitTypeData->m_Hero_TypeCode_or_Building2) <= HEROTYPE_Wizard)
+    if (toUInt(unitTypeData->m_Hero_TypeCode_or_Building2) <= toUInt(HEROTYPE_Wizard))
 	{
 		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + unitTypeData->m_Hero_TypeCode_or_Building2);
 		if (HEROTYPE_Wizard == unitTypeData->m_Hero_TypeCode_or_Building2)

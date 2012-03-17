@@ -6,51 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>211</width>
-    <height>393</height>
+    <width>226</width>
+    <height>426</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>URW Chancery L</family>
+    <pointsize>12</pointsize>
+    <italic>true</italic>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_AddUnit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <italic>true</italic>
-        </font>
-       </property>
-       <property name="text">
-        <string>Summon</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-         <normaloff>:/heroes/shuri.gif</normaloff>:/heroes/shuri.gif</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QPushButton" name="pushButton_RepopLairs">
        <property name="sizePolicy">
@@ -277,6 +249,41 @@
        <property name="icon">
         <iconset resource="../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/aerie.gif</normaloff>:/heroes/aerie.gif</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_Calculator">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="text">
+        <string>Address calculator</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+         <normaloff>:/heroes/shin_bo.gif</normaloff>:/heroes/shin_bo.gif</iconset>
        </property>
        <property name="iconSize">
         <size>

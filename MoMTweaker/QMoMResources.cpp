@@ -20,41 +20,50 @@ namespace MoM
 
 QMoMResources* QMoMResources::m_instance = 0;
 
-QMoMResources::QMoMResources(MoM::MoMGameBase* game)
+QMoMResources::QMoMResources(MoM::MoMGameBase* game) : m_game()
 {
-    if (m_colorTable.empty())
-    {
-        (void)createColorTable(game);
-    }
-    if (m_buildingImages.empty())
-    {
-        (void)createBuildingImages(game);
-    }
-    if (m_itemImages.empty())
-    {
-        (void)createItemImages(game);
-    }
-    if (m_lairImages.empty())
-    {
-        (void)createLairImages(game);
-    }
-    if (m_unitImages.empty())
-    {
-        (void)createUnitImages(game);
-    }
-    if (m_spellImages.empty())
-    {
-        // UnitImages should already have been created, because SpellImages uses them
-        (void)createSpellImages(game);
-    }
-    if (m_terrainTypeImages.empty())
-    {
-        (void)createTerrainImages(game);
-    }
+    setGame(game);
 }
 
 QMoMResources::~QMoMResources()
 {
+}
+
+void QMoMResources::setGame(MoM::MoMGameBase* game)
+{
+    if (game != m_game)
+    {
+        m_game = game;
+        if (m_colorTable.empty())
+        {
+            (void)createColorTable(game);
+        }
+        if (m_buildingImages.empty())
+        {
+            (void)createBuildingImages(game);
+        }
+        if (m_itemImages.empty())
+        {
+            (void)createItemImages(game);
+        }
+        if (m_lairImages.empty())
+        {
+            (void)createLairImages(game);
+        }
+        if (m_unitImages.empty())
+        {
+            (void)createUnitImages(game);
+        }
+        if (m_spellImages.empty())
+        {
+            // UnitImages should already have been created, because SpellImages uses them
+            (void)createSpellImages(game);
+        }
+        if (m_terrainTypeImages.empty())
+        {
+            (void)createTerrainImages(game);
+        }
+    }
 }
 
 bool QMoMResources::createColorTable(MoM::MoMGameBase* game)
@@ -385,7 +394,43 @@ bool QMoMResources::createUnitImages(MoM::MoMGameBase* game)
 
     m_unitImages.resize(MoM::eUnit_Type_MAX);
 
-	// TODO: Put hero pictures in (left out now, since the unit-type pictures are only small horses)
+    // Put specific hero pictures in, since the unit-type pictures are only small horses
+    m_unitImages[UNITTYPE_Dwarf] = QImage(":/units/Dwarf.gif");
+    m_unitImages[UNITTYPE_Barbarian] = QImage(":/units/Barbarian.gif");
+    m_unitImages[UNITTYPE_Sage] = QImage(":/units/Sage.gif");
+    m_unitImages[UNITTYPE_Dervish] = QImage(":/units/Dervish.gif");
+    m_unitImages[UNITTYPE_Beastmaster] = QImage(":/units/Beastmaster.gif");
+    m_unitImages[UNITTYPE_Bard] = QImage(":/units/Bard.gif");
+    m_unitImages[UNITTYPE_Orc_Warrior] = QImage(":/units/Orc Warrior.gif");
+    m_unitImages[UNITTYPE_Healer] = QImage(":/units/Healer.gif");
+    m_unitImages[UNITTYPE_Huntress] = QImage(":/units/Huntress.gif");
+    m_unitImages[UNITTYPE_Thief] = QImage(":/units/Thief.gif");
+    m_unitImages[UNITTYPE_Druid] = QImage(":/units/Druid.gif");
+    m_unitImages[UNITTYPE_War_Monk] = QImage(":/units/War Monk.gif");
+    m_unitImages[UNITTYPE_Warrior_Mage] = QImage(":/units/Warrior Mage.gif");
+    m_unitImages[UNITTYPE_Magician] = QImage(":/units/Magician.gif");
+    m_unitImages[UNITTYPE_Assassin] = QImage(":/units/Assassin.gif");
+    m_unitImages[UNITTYPE_Wind_Mage] = QImage(":/units/Wind Mage.gif");
+    m_unitImages[UNITTYPE_Ranger] = QImage(":/units/Ranger.gif");
+    m_unitImages[UNITTYPE_Draconian] = QImage(":/units/Draconian.gif");
+    m_unitImages[UNITTYPE_Witch] = QImage(":/units/Witch.gif");
+    m_unitImages[UNITTYPE_Golden_One] = QImage(":/units/Golden One.gif");
+    m_unitImages[UNITTYPE_Ninja] = QImage(":/units/Ninja.gif");
+    m_unitImages[UNITTYPE_Rogue] = QImage(":/units/Rogue.gif");
+    m_unitImages[UNITTYPE_Amazon] = QImage(":/units/Amazon.gif");
+    m_unitImages[UNITTYPE_Warlock] = QImage(":/units/Warlock.gif");
+    m_unitImages[UNITTYPE_Unknown] = QImage(":/units/Unknown.gif");
+    m_unitImages[UNITTYPE_Illusionist] = QImage(":/units/Illusionist.gif");
+    m_unitImages[UNITTYPE_Swordsman] = QImage(":/units/Swordsman.gif");
+    m_unitImages[UNITTYPE_Priestess] = QImage(":/units/Priestess.gif");
+    m_unitImages[UNITTYPE_Paladin] = QImage(":/units/Paladin.gif");
+    m_unitImages[UNITTYPE_Black_Knight] = QImage(":/units/Black Knight.gif");
+    m_unitImages[UNITTYPE_Elven_Archer] = QImage(":/units/Elven Archer.gif");
+    m_unitImages[UNITTYPE_Knight] = QImage(":/units/Knight.gif");
+    m_unitImages[UNITTYPE_Necromancer] = QImage(":/units/Necromancer.gif");
+    m_unitImages[UNITTYPE_Chaos_Warrior] = QImage(":/units/Chaos Warrior.gif");
+    m_unitImages[UNITTYPE_Chosen] = QImage(":/units/Chosen.gif");
+
     for (MoM::eUnit_Type unitType = (MoM::eUnit_Type)MoM::gMAX_HERO_TYPES; unitType < MoM::eUnit_Type_MAX; MoM::inc(unitType))
     {
         if (unitType < 120)

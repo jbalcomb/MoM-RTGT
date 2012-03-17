@@ -18,6 +18,7 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/MoMProcess.h \
     ../MoMEditorTemplate/MoMGameSave.h \
     ../MoMEditorTemplate/MoMTemplate.h \
+    ../MoMEditorTemplate/MoMUnit.h \
     ../MoMEditorTemplate/MoMutility.h \
     ../MoMEditorTemplate/MoMExeWizards.h \
     ../MoMEditorTemplate/QMoMCommon.h \
@@ -38,15 +39,16 @@ SOURCES += ./main.cpp \
     ../MoMEditorTemplate/MoMController.cpp \
     ../MoMEditorTemplate/MoMGameBase.cpp \
     ../MoMEditorTemplate/MoMGameCustom.cpp \
-    ../MoMEditorTemplate/MoMExeBase.cpp \
+    ../MoMEditorTemplate/MoMGameMemory.cpp \
+    ../MoMEditorTemplate/MoMGameSave.cpp \
     ../MoMEditorTemplate/MoMGenerated.cpp \
     ../MoMEditorTemplate/MoMLbxBase.cpp \
+    ../MoMEditorTemplate/MoMExeBase.cpp \
     ../MoMEditorTemplate/MoMExeMagic.cpp \
-    ../MoMEditorTemplate/MoMGameMemory.cpp \
-    ../MoMEditorTemplate/MoMProcessCommon.cpp \
-    ../MoMEditorTemplate/MoMGameSave.cpp \
-    ../MoMEditorTemplate/MoMutility.cpp \
     ../MoMEditorTemplate/MoMExeWizards.cpp \
+    ../MoMEditorTemplate/MoMProcessCommon.cpp \
+    ../MoMEditorTemplate/MoMUnit.cpp \
+    ../MoMEditorTemplate/MoMutility.cpp \
     ../MoMEditorTemplate/QMoMCommon.cpp \
     ../MoMEditorTemplate/QMoMGenerated.cpp \
     QMoMMapTile.cpp \

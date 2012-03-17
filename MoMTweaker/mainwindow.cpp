@@ -31,7 +31,7 @@
 #include <QMoMCommon.h>
 
 // Local
-#include "dialogcalculatoraddress.h"
+#include "dialogaddunit.h"
 #include "dialogoverlandmap.h"
 #include "dialogtables.h"
 #include "dialogtools.h"
@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_filedialogSaveGame.setViewMode(QFileDialog::Detail);
 
     // CONFIG
+    // TODO: Load and save config
 #ifdef _WIN32
     m_filedialogLoadGame.setDirectory("C:/games/MAGIC-work/");
     m_filedialogSaveGame.setDirectory("C:/games/MAGIC-work/");
@@ -85,10 +86,11 @@ MainWindow::MainWindow(QWidget *parent) :
 #else // Linux
     m_filedialogLoadGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
     m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
-//    setFont(QFont("URW Chancery L", 12));
-//    ui->treeView->setFont(QFont("URW Chancery L", 11));
-#endif
 
+    // Note: attribute italic=true is required for URW Chancery L
+    setFont(QFont("URW Chancery L", 12, -1, true));
+    ui->treeView->setFont(QFont("URW Chancery L", 11, -1, true));
+#endif
 
     // --- Configure TreeWidget ---
 //    ui->treeWidget->setColumnWidth(0, 250);
@@ -97,7 +99,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // -- Configure TreeView ---
 //    ui->treeView->setColumnWidth(0, 350);
 //    ui->treeView->setColumnWidth(1, 350);
-    ui->treeView->setModel(&m_UnitModel);
+    if (ui->checkBox_UpdateTree->isChecked())
+    {
+        ui->treeView->setModel(&m_UnitModel);
+    }
 
     // --- Set background ---
     //QBrush brush(QPixmap(":/images/background_unit.gif"));
@@ -477,7 +482,7 @@ void MainWindow::update()
 
             QTreeWidgetItem* qtreeHDFlags
                 = new QTreeWidgetItem(qtreeHero, QStringList(tr("Hero Data.Flags")));
-            
+
             ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Cavalry);
             ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Sailing);
             ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Swimming);
@@ -885,15 +890,15 @@ void MainWindow::onTimer()
 
 
 
-void MainWindow::on_pushButton_ShowTables_clicked()
+void MainWindow::on_pushButton_AddUnit_clicked()
 {
-    DialogTables* dialog = new DialogTables(this);
+    DialogAddUnit* dialog = new DialogAddUnit(this);
     dialog->show();
 }
 
-void MainWindow::on_pushButton_Calculator_clicked()
+void MainWindow::on_pushButton_ShowTables_clicked()
 {
-    DialogCalculatorAddress* dialog = new DialogCalculatorAddress(this);
+    DialogTables* dialog = new DialogTables(this);
     dialog->show();
 }
 

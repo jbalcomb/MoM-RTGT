@@ -21,13 +21,13 @@ public:
     ~DialogTools();
    
 private slots:
-    void on_pushButton_AddUnit_clicked();
-    void on_pushButton_RepopLairs_clicked();
     void on_pushButton_ApplyBuildQueues_clicked();
+    void on_pushButton_Calculator_clicked();
     void on_pushButton_CatnipMod_clicked();
     void on_pushButton_LucernMod_clicked();
-    void on_pushButton_Validate_clicked();
+    void on_pushButton_RepopLairs_clicked();
     void on_pushButton_SelectInitialSpells_clicked();
+    void on_pushButton_Validate_clicked();
 
 private:
 	MoM::MoMGameBase* getGame();

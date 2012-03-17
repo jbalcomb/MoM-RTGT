@@ -34,15 +34,16 @@ public:
         m_instance = new QMoMResources(game);
     }
 
-    static bool hasInstance()
-    {
-        return (0 != m_instance);
-    }
-
     static QMoMResources& instance()
     {
+        if (0 == m_instance)
+        {
+            m_instance = new QMoMResources(0);
+        }
         return *m_instance;
     }
+
+    void setGame(MoM::MoMGameBase* game);
 
 	const QVector<QRgb>& GetColorTable()
 	{
@@ -133,6 +134,8 @@ private:
 	}
 
     static QMoMResources* m_instance;
+
+    MoM::MoMGameBase* m_game;
 
     QVector<QRgb> m_colorTable;
     QVector<QImage> m_buildingImages;

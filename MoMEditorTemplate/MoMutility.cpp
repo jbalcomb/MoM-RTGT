@@ -34,6 +34,19 @@ std::string lowercase(const std::string& str)
     return result;
 }
 
+std::string replaceUnderscoresBySpaces(const std::string& str)
+{
+    std::string result = str;
+    for (size_t i = 0; i < result.size(); ++i)
+    {
+        if (result[i] == '_')
+        {
+            result[i] = ' ';
+        }
+    }
+    return result;
+}
+
 bool writeDataToStream(std::ostream& os, const unsigned char* pdata, size_t size)
 {
     size &= 0xFFFFFFF0;     // Make size a multiple of 16

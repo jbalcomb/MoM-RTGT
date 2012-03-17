@@ -21,8 +21,8 @@
 #include <QMoMCommon.h>
 
 // Local
-#include "dialogaddunit.h"
 #include "dialogbuildingqueues.h"
+#include "dialogcalculatoraddress.h"
 #include "dialogselectinitialspells.h"
 #include "mainwindow.h"
 
@@ -49,12 +49,6 @@ MoM::MoMGameBase* DialogTools::getGame()
         return 0;
     MoM::MoMGameBase* game = controller->getGame();
     return game;
-}
-
-void DialogTools::on_pushButton_AddUnit_clicked()
-{
-    DialogAddUnit* dialog = new DialogAddUnit(this);
-    dialog->show();
 }
 
 void DialogTools::on_pushButton_Validate_clicked()
@@ -97,6 +91,12 @@ void DialogTools::on_pushButton_Validate_clicked()
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
     DialogBuildingQueues* dialog = new DialogBuildingQueues(this);
+    dialog->show();
+}
+
+void DialogTools::on_pushButton_Calculator_clicked()
+{
+    DialogCalculatorAddress* dialog = new DialogCalculatorAddress(this);
     dialog->show();
 }
 

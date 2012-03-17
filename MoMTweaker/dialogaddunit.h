@@ -1,8 +1,12 @@
 #ifndef DIALOGADDUNIT_H
 #define DIALOGADDUNIT_H
 
-#include <QAbstractButton>
 #include <QDialog>
+
+class QAbstractButton;
+class QGraphicsItem;
+class QGraphicsScene;
+class QGraphicsSimpleTextItem;
 
 namespace Ui {
 class DialogAddUnit;
@@ -10,6 +14,7 @@ class DialogAddUnit;
 
 namespace MoM {
     class MoMGameBase;
+    class MoMUnit;
 }
 
 class DialogAddUnit : public QDialog
@@ -22,10 +27,24 @@ public:
     
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
+    void on_comboBox_Unit_currentIndexChanged(int index);
 
 private:
     MoM::MoMGameBase* getGame();
 
+    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text);
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue);
+    void displayStrength(QPointF& pos, int strength, const QString& imageBaseName);
+    void displayToHit(QPointF& pos, int toHit, const QString& labelText);
+
+    MoM::MoMUnit* m_unit;
+
+    QFont m_font;
+    int m_labelWidth;
+    int m_lineHeight;
+    int m_pictureHeight;
+    QVector<QGraphicsItem*> m_unitSpecificItems;
+    QGraphicsScene* m_sceneUnit;
     Ui::DialogAddUnit *ui;
 };
 
