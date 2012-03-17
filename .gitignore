@@ -15,8 +15,10 @@ Windows/
 *.suo
 *.vcproj.*.user
 .goutputstream-*
+core.*
 
 # Specific files
+core
 .cproject
 .project
 MoMCustomizer/Makefile
