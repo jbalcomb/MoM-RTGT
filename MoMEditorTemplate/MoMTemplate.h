@@ -633,6 +633,7 @@ enum eRace ENUMSIZE8
     RACE_Life = 0x13,
     RACE_Death = 0x14,
 
+    eRace_MAX,
     eRace__SIZE__ = 0xFF
 };
 
@@ -776,7 +777,7 @@ enum eSlot_Type16 ENUMSIZE16
     eSlot_Type16__SIZE__ = 0xFFFF
 };
 
-enum eSpellKnown ENUMSIZE8 
+enum eSpellKnown ENUMSIZE8
 {
     SPELLKNOWN_unknown = 0,
     SPELLKNOWN_knowable = 1,
@@ -2915,7 +2916,7 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_Guess_Combat_Enchantment_Flag1; // 13
     int8_t      m_In_Tower_without_Seal; // 14
     int8_t      m_Guess_Combat_Enchantment_Flag3; // 15
-    uint8_t     m_Scouting_Range;                   // 16
+    uint8_t     m_Scout;                   // 16
     unionUnit_Weapon_Mutation   m_Weapon_Mutation;  // 17
     unionUnit_Enchantment       m_Unit_Enchantment; // 18-1B <format=hex>;
     int8_t      m_Road_Building_left_to_complete;   // 1C
@@ -3228,10 +3229,10 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     uint8_t     m_TypeCode;         // 10  Type code?
     uint8_t     m_UNK01;            // 11  00
     uint8_t     m_Hitpoints;        // 12  Hit points (hearts) per figure
-    uint8_t     m_Scouting_Range;    // 13  Scouting range
+    uint8_t     m_Scout;    // 13  Scouting range
     uint8_t     m_Transport_Capacity;    // 14  Transport capacity (number of units carried)
     uint8_t     m_Nr_Figures;        // 15  Number of figures in the unit
-    uint8_t     m_Construction_Capacity; // 16  Construction capacity (road building)
+    uint8_t     m_Construction; // 16  Construction capacity (road building)
     int8_t      m_Gaze_Modifier;     // 17  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 18  Movement flags (table 4)
     uint8_t                 m_Zero02;           // 19  00
@@ -3339,10 +3340,10 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t     m_graphics_ID_GUESS;      // 0E
     uint8_t     m_UNK01;            // 0F  00
     uint8_t     m_Hitpoints_per_Figure;        // 10  Hit points (hearts) per figure
-    uint8_t     m_Scouting_Range;    // 11  Scouting range
+    uint8_t     m_Scout;    // 11  Scouting range
     uint8_t     m_Transport_Capacity_GUESS;    // 12  Transport capacity (number of units carried)
     uint8_t     m_Total_Figures;        // 13  Number of figures in the unit
-    uint8_t     m_Construction_Capacity; // 14  Construction capacity (road building)
+    uint8_t     m_Construction; // 14  Construction capacity (road building)
     uint8_t     m_Gaze_Modifier;     // 15  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 16  Movement flags (table 4)
     uint8_t                 m_Zero01;           // 17  00

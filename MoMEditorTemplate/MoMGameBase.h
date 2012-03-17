@@ -11,6 +11,7 @@
 #define MOMGAMEBASE_H
 
 #include "MoMTemplate.h"
+#include "MoMutility.h"
 
 namespace MoM {
 
@@ -26,7 +27,7 @@ public:
     Building_Data* getBuilding_Data(eBuilding building)
     {
         Building_Data* buildingData = getBuilding_Data();
-        if (0 == buildingData)
+        if ((0 == buildingData) || !inRange(building, eBuilding_MAX))
             return 0;
         return &buildingData[building];
     }
@@ -34,7 +35,7 @@ public:
     City* getCity(int cityNr)
     {
         City* cities = getCities();
-        if (0 == cities)
+        if ((0 == cities) || !inRange(cityNr, gMAX_CITIES))
             return 0;
         return &cities[cityNr];
     }
@@ -44,21 +45,21 @@ public:
     Hero_stats* getHero_stats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
-        if (0 == listHeroStats)
+        if ((0 == listHeroStats) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStats[heroNr];
     }
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
-        if (0 == items)
+        if ((0 == items) || !inRange(itemNr, gMAX_ITEMS))
             return 0;
         return &items[itemNr];
     }
     Tower_Node_Lair* getLair(int lairNr)
     {
         Tower_Node_Lair* lairs = getLairs();
-        if (0 == lairs)
+        if ((0 == lairs) || !inRange(lairNr, gMAX_NODES_LAIRS_TOWERS))
             return 0;
         return &lairs[lairNr];
     }

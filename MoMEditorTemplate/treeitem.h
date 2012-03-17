@@ -224,8 +224,6 @@ public:
             return m_data;
         case Qt::DecorationRole:
             return m_icon;
-//        case Qt::FontRole:
-//            return QFont(QString("Monotype Corsiva"), 10);
         default:
             return QVariant();
         }
@@ -409,8 +407,6 @@ public:
                 value.replace(QRegExp(" \\(\\d+\\)"), "");
                 return QIcon("images:" + value + ".gif");
             }
-//        case Qt::FontRole:
-//            return QFont(QString("Monotype Corsiva"), 10);
         default:
             return QVariant();
         }
@@ -471,8 +467,6 @@ public:
             return value;
         case Qt::DecorationRole:
             return QIcon("images:" + value + ".gif");
-//        case Qt::FontRole:
-//            return QFont(QString("Monotype Corsiva"));
         default:
             return QVariant();
         }
@@ -525,8 +519,6 @@ public:
             return value;
         case Qt::DecorationRole:
             return QIcon("images:" + value + ".gif");
-//        case Qt::FontRole:
-//            return QFont(QString("Monotype Corsiva"));
         default:
             return QVariant();
         }

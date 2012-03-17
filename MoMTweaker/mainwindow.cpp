@@ -29,6 +29,7 @@
 #include <MoMGameSave.h>
 #include <MoMutility.h>
 #include <QMoMCommon.h>
+#include <QMoMResources.h>
 
 // Local
 #include "dialogaddunit.h"
@@ -77,40 +78,26 @@ MainWindow::MainWindow(QWidget *parent) :
     m_filedialogSaveGame.setViewMode(QFileDialog::Detail);
 
     // CONFIG
+
+    setFont(MoM::QMoMResources::g_Font);
+    ui->treeView->setFont(MoM::QMoMResources::g_Font);
+
     // TODO: Load and save config
 #ifdef _WIN32
     m_filedialogLoadGame.setDirectory("C:/games/MAGIC-work/");
     m_filedialogSaveGame.setDirectory("C:/games/MAGIC-work/");
-    setFont(QFont("Monotype Corsiva", 11));
-    ui->treeView->setFont(QFont("Monotype Corsiva", 11));
 #else // Linux
     m_filedialogLoadGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
     m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
-
-    // Note: attribute italic=true is required for URW Chancery L
-    setFont(QFont("URW Chancery L", 12, -1, true));
-    ui->treeView->setFont(QFont("URW Chancery L", 11, -1, true));
+    QFont fontTreeView(MoM::QMoMResources::g_Font);
+    fontTreeView.setPointSize(fontTreeView.pointSize() - 1);
+    ui->treeView->setFont(fontTreeView);
 #endif
 
-    // --- Configure TreeWidget ---
-//    ui->treeWidget->setColumnWidth(0, 250);
-//    ui->treeWidget->setColumnWidth(1, 250);
-
-    // -- Configure TreeView ---
-//    ui->treeView->setColumnWidth(0, 350);
-//    ui->treeView->setColumnWidth(1, 350);
     if (ui->checkBox_UpdateTree->isChecked())
     {
         ui->treeView->setModel(&m_UnitModel);
     }
-
-    // --- Set background ---
-    //QBrush brush(QPixmap(":/images/background_unit.gif"));
-    //ui->treeWidget->setBackgroundRole(QPalette::ColorRole::Button);
-    //QPalette palette = ui->treeWidget->palette();
-    //palette.setBrush(ui->treeWidget->backgroundRole(), brush);
-    //ui->treeWidget->setAutoFillBackground(true);
-    //ui->treeWidget->setPalette(palette);
 
     update();
 }
@@ -260,18 +247,6 @@ void MainWindow::update()
     setWindowTitle(title.c_str());
 
     /*
-    MoM::ePlayer playerNr = MoM::PLAYER_YOU;
-    bool activeOnly = ui->checkBox_ShowActiveOnly->isChecked();
-
-//    ui->treeWidget->clear();
-
-    if (0 == m_game)
-    {
-        return;
-    }
-
-    // TODO: index-range-checks
-
     MoM::Wizard& wizard = m_game->getWizard(playerNr);
     char buf[4096];
     for (int hireNr = 0; hireNr < MoM::gMAX_HIRED_HEROES; ++hireNr)
@@ -387,217 +362,6 @@ void MainWindow::update()
         }
 
         //
-        // UNIT DATA
-        //
-
-        featurePrefix = tr("HD.");
-
-        if (0 != pHeroData)
-        {
-            QTreeWidgetItem* qtreeHDFields
-                = new QTreeWidgetItem(qtreeHero, 
-                    QStringList(tr("Hero Data.Fields")));
-
-            const char* hdName = m_game->getNameByOffset(pHeroData->m_PtrName);
-            addTreeFeature(qtreeHDFields, 
-                tr("HD.Name"), 
-                QIcon(),
-                QString(hdName), 
-                QIcon());
-            addTreeFeature(qtreeHDFields, 
-                tr("HD.Upkeep"), 
-                QIcon(),
-                toQStr((unsigned)pHeroData->m_Upkeep), 
-                QIcon());
-
-            ADDMFIELDFEATURE(qtreeHDFields, (int)(*pHeroData), Cost);
-            ADDMFIELDFEATURE(qtreeHDFields, (*pHeroData), Race_Code);
-            ADDMFIELDFEATURE(qtreeHDFields, (unsigned)(*pHeroData), Buildings_Required1);
-            ADDMFIELDFEATURE(qtreeHDFields, (*pHeroData), Hero_TypeCode);
-            ADDMFIELDFEATURE(qtreeHDFields, (unsigned)(*pHeroData), UNKTypeCode);
-            ADDMFIELDFEATURE(qtreeHDFields, (unsigned)(*pHeroData), Scouting_Range);
-            ADDMFIELDFEATURE(qtreeHDFields, (unsigned)(*pHeroData), Transport_Capacity);
-            ADDMFIELDFEATURE(qtreeHDFields, (int)(*pHeroData), Construction_Capacity);
-
-            QTreeWidgetItem* qtreeHDCombat
-                = new QTreeWidgetItem(qtreeHero, QStringList(tr("Hero Data.Combat(base)")));
-
-            ADDMFIELDFEATURE(qtreeHDCombat, (unsigned)(*pHeroData), NrFigures);
-            sprintf(buf, "%.1f", pHeroData->m_MoveHalves / 2.0);
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Move"), 
-                QIcon(),
-                QString(buf), 
-                QIcon());
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Melee"), 
-                QIcon(":/images/sword_normal.gif"),
-                toQStr((unsigned)pHeroData->m_Melee), 
-                QIcon(":/images/sword_normal.gif"));
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Range"), 
-                QIcon(":/images/ranged_unknown.gif"),
-                toQStr((unsigned)pHeroData->m_Ranged), 
-                QIcon(":/images/fireball_normal.gif"));
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.RangedType"), 
-                QIcon(":/images/ranged_unknown.gif"),
-                toQStr(pHeroData->m_Ranged_Type),
-                QIcon());
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.RangedShots"), 
-                QIcon(":/images/ranged_unknown.gif"),
-                toQStr((unsigned)pHeroData->m_Ranged_Shots),
-                QIcon());
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Armor"), 
-                QIcon(":/images/shield_normal.gif"),
-                toQStr((unsigned)pHeroData->m_Defense), 
-                QIcon(":/images/shield_normal.gif"));
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Resist"), 
-                QIcon(":/images/resistance_normal.gif"),
-                toQStr((unsigned)pHeroData->m_Resistance), 
-                QIcon(":/images/resistance_normal.gif"));
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.Hits"), 
-                QIcon(":/images/heart_normal.gif"),
-                toQStr((unsigned)pHeroData->m_Hit_Points),
-                QIcon(":/images/heart_normal.gif"));
-
-            sprintf(buf, "%+d", (int)pHeroData->m_To_Hit);
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.ToHit"), 
-                QIcon(":/images/To Hit.gif"),
-                QString(buf), 
-                QIcon(":/images/To Hit.gif"));
-
-            addTreeFeature(qtreeHDCombat, 
-                tr("HD.GazeModifier"), 
-                QIcon(),
-                toQStr((int)pHeroData->m_Gaze_Modifier),
-                QIcon());
-
-            featurePrefix = tr("HD.");
-
-            QTreeWidgetItem* qtreeHDFlags
-                = new QTreeWidgetItem(qtreeHero, QStringList(tr("Hero Data.Flags")));
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Cavalry);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Sailing);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Swimming);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Flying);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Teleporting);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Forester);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Mountaineer);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Movement_Flags, Merging);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Fire_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Stoning_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Missiles_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Illusions_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Cold_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Magic_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Death_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Poison_Immunity);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Weapon_Immunity);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Lucky);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Summon_Demons_1);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Summon_Demons_2);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Caster_20_MP);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Caster_40_MP);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Standard);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Healing_Spell);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Fire_Ball_Spell);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Doombolt_Spell);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Immolation);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Web_Spell);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Cause_Fear_Spell);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Resistance_to_All);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Attribute_Flags, Holy_Bonus);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Summoned_unit);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Large_Shield);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Plane_Shift);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Wall_Crusher);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Healer);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Create_Outpost);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Invisibility);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Create_Undead);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Long_Range);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Land_Corruption);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Meld_With_Node);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Non_Corporeal);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Wind_Walking);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Regeneration);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Purify);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Ability_Flags, Negate_First_Strike);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Armor_Piercing);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, First_Strike);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Poison_attack);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Life_Stealing);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Automatic_Damage);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Destruction);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Illusionary_attack);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Stoning_Touch);
-
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Death_Touch);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Power_Drain);
-            ADDFLAGFEATURE(qtreeHDFlags, pHeroData->m_Special_attack_Flags, Dispel_Evil);
-        }
-
-        //
-        // HERO STATS
-        //
-
-        featurePrefix = tr("HS.");
-
-        QTreeWidgetItem* qtreeHSFlags
-            = new QTreeWidgetItem(qtreeHero, QStringList(tr("Hero Stats.Flags")));
-
-        ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Level_Status);
-        ADDMFIELDFEATURE(qtreeHSFlags, (unsigned)heroStats, Hero_Casting_Skill);
-        for (int spellNr = 0; spellNr < ARRAYSIZE(heroStats.m_Spell); ++spellNr)
-        {
-            if (MoM::SPELL_None != heroStats.m_Spell[spellNr])
-            {
-                ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Spell[spellNr]);
-            }
-        }
-
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Leadership);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Leadership_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Legendary);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Legendary_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Blademaster);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Blademaster_X);
-
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Armsmaster);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Armsmaster_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Constitution);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Constitution_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Might);
-
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Might_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Arcane_Power);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Arcane_Power_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Sage);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Sage_X);
-
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Prayermaster);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Prayermaster_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Agility_X);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Lucky);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Charmed);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Noble);
-        ADDFLAGFEATURE(qtreeHSFlags, heroStats.m_Hero_Abilities, Agility);
-
-
-        //
         // UNITS
         //
 
@@ -625,7 +389,7 @@ void MainWindow::update()
         ADDMFIELDFEATURE(qtreeUFields, (int)unit, Damage);
         ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Grouping);
         //int8_t      m_Guess_Combat_Enchantment_Flag[3];
-        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Scouting_Range);
+        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Scout);
         ADDMFIELDFEATURE(qtreeUFields, (int)unit, Road_Building_left_to_complete);
         //int8_t      m_Road_Building_parms[3];
 

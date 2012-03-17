@@ -19,6 +19,9 @@ namespace MoM {
 #endif
 #define ARRAYSIZE(a) (sizeof(a) / sizeof(*(a)))
 
+#define MOM_FOREACH(type, var, max) \
+    for (MoM::type var = (MoM::type)0; var < MoM::max; MoM::inc(var))
+
 std::string dirFromFilepath(const std::string filepath);
 
 template< typename E >
@@ -28,6 +31,12 @@ inline E inc(E& e)
     u++;
     e = (E)u;
     return e;
+}
+
+template< typename E, typename Max >
+inline bool inRange(const E& e, const Max& m)
+{
+    return (static_cast<unsigned>(e) < static_cast<unsigned>(m));
 }
 
 std::string lowercase(const std::string& str);
