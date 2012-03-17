@@ -13,11 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Dutch (Netherlands) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
 #ifdef _WIN32
-LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -69,12 +69,12 @@ BEGIN
     BEGIN
         BLOCK "041304b0"
         BEGIN
-            VALUE "FileDescription", "MoMEditorTemplate"
+            VALUE "FileDescription", "MoMRTGT"
             VALUE "FileVersion", "1, 0, 0, 1"
-            VALUE "InternalName", "MoMEditorTemplate"
+            VALUE "InternalName", "MoMRTGT"
             VALUE "LegalCopyright", "Copyright (C) 2010"
             VALUE "OriginalFilename", "MoMEditorTemplate.rc"
-            VALUE "ProductName", "MoMEditorTemplate"
+            VALUE "ProductName", "MoMRTGT"
             VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
@@ -84,7 +84,7 @@ BEGIN
     END
 END
 
-#endif    // Dutch (Netherlands) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

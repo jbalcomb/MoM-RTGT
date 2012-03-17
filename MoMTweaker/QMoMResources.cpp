@@ -18,6 +18,16 @@
 namespace MoM
 {
 
+const QFont QMoMResources::g_FontSmall("Sans Serif", 10, -1, false);
+#ifdef _WIN32
+const QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
+const QFont QMoMResources::g_FontBig("Monotype Corsiva", 13, -1, false);
+#else
+// Note: attribute italic=true is required for URW Chancery L
+const QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
+const QFont QMoMResources::g_FontBig("URW Chancery L", 14, -1, true);
+#endif
+
 QMoMResources* QMoMResources::m_instance = 0;
 
 QMoMResources::QMoMResources(MoM::MoMGameBase* game) : m_game()
@@ -36,42 +46,47 @@ void QMoMResources::setGame(MoM::MoMGameBase* game)
         m_game = game;
         if (m_colorTable.empty())
         {
-            (void)createColorTable(game);
+            (void)createColorTable();
         }
         if (m_buildingImages.empty())
         {
-            (void)createBuildingImages(game);
+            (void)createBuildingImages();
         }
         if (m_itemImages.empty())
         {
-            (void)createItemImages(game);
+            (void)createItemImages();
         }
         if (m_lairImages.empty())
         {
-            (void)createLairImages(game);
+            (void)createLairImages();
+        }
+        if (m_specialsImages.empty())
+        {
+            (void)createSpecialsImages();
         }
         if (m_unitImages.empty())
         {
-            (void)createUnitImages(game);
+            // UnitImages are created before SpellImages, because SpellImages uses them
+            (void)createUnitImages();
         }
         if (m_spellImages.empty())
         {
             // UnitImages should already have been created, because SpellImages uses them
-            (void)createSpellImages(game);
+            (void)createSpellImages();
         }
         if (m_terrainTypeImages.empty())
         {
-            (void)createTerrainImages(game);
+            (void)createTerrainImages();
         }
     }
 }
 
-bool QMoMResources::createColorTable(MoM::MoMGameBase* game)
+bool QMoMResources::createColorTable()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
     m_colorTable.resize(256);
-    std::string fontsLbxFile = game->getGameDirectory() + "/" + "FONTS.LBX";
+    std::string fontsLbxFile = m_game->getGameDirectory() + "/" + "FONTS.LBX";
     MoM::MoMLbxBase fontsLbx;
     if (!fontsLbx.load(fontsLbxFile))
         return false;
@@ -82,11 +97,11 @@ bool QMoMResources::createColorTable(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createBuildingImages(MoM::MoMGameBase* game)
+bool QMoMResources::createBuildingImages()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string lbxFile = game->getGameDirectory() + "/" + "CITYSCAP.LBX";
+    std::string lbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return false;
@@ -122,11 +137,11 @@ bool QMoMResources::createBuildingImages(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createItemImages(MoM::MoMGameBase* game)
+bool QMoMResources::createItemImages()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string itemsLbxFile = game->getGameDirectory() + "/" + "ITEMS.LBX";
+    std::string itemsLbxFile = m_game->getGameDirectory() + "/" + "ITEMS.LBX";
     MoM::MoMLbxBase itemsLbx;
     if (!itemsLbx.load(itemsLbxFile))
         return false;
@@ -140,11 +155,11 @@ bool QMoMResources::createItemImages(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createLairImages(MoM::MoMGameBase* game)
+bool QMoMResources::createLairImages()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string lairsLbxFile = game->getGameDirectory() + "/" + "RELOAD.LBX";
+    std::string lairsLbxFile = m_game->getGameDirectory() + "/" + "RELOAD.LBX";
     MoM::MoMLbxBase lairsLbx;
     if (!lairsLbx.load(lairsLbxFile))
         return false;
@@ -156,15 +171,31 @@ bool QMoMResources::createLairImages(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createSpellImages(MoM::MoMGameBase* game)
+bool QMoMResources::createSpecialsImages()
+{
+    if (0 == m_game)
+        return false;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + "SPECIAL.LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return false;
+    m_specialsImages.resize(lbx.getNrRecords());
+    for (size_t i = 0; i < lbx.getNrRecords(); ++i)
+    {
+        m_specialsImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, "special " + toStr(i));
+    }
+    return true;
+}
+
+bool QMoMResources::createSpellImages()
 {
     // PRE: UnitImages should already have been created, because SpellImages uses them
 
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string cityscapLbxFile = game->getGameDirectory() + "/" + "CITYSCAP.LBX";
-    std::string monsterLbxFile = game->getGameDirectory() + "/" + "MONSTER.LBX";
-    std::string specfxLbxFile = game->getGameDirectory() + "/" + "SPECFX.LBX";
+    std::string cityscapLbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
+    std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
+    std::string specfxLbxFile = m_game->getGameDirectory() + "/" + "SPECFX.LBX";
     MoM::MoMLbxBase cityscapLbx;
     MoM::MoMLbxBase monsterLbx;
     MoM::MoMLbxBase specfxLbx;
@@ -178,7 +209,7 @@ bool QMoMResources::createSpellImages(MoM::MoMGameBase* game)
     m_spellImages.resize(MoM::eSpell_MAX);
 
     // MONSTER.LBX, UNITS1.LBX, UNITS2.LBX
-    MoM::Spell_Data* spellDataArray = game->getSpell_Data();
+    MoM::Spell_Data* spellDataArray = m_game->getSpell_Data();
     for (MoM::eSpell spell = (MoM::eSpell)0; (0 != spellDataArray) && (spell < MoM::eSpell_MAX); MoM::inc(spell))
     {
         MoM::Spell_Data* spellData = &spellDataArray[spell];
@@ -280,11 +311,11 @@ bool QMoMResources::createSpellImages(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createTerrainImages(MoM::MoMGameBase* game)
+bool QMoMResources::createTerrainImages()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string terrainLbxFile = game->getGameDirectory() + "/" + "TERRAIN.LBX";
+    std::string terrainLbxFile = m_game->getGameDirectory() + "/" + "TERRAIN.LBX";
     MoM::MoMLbxBase terrainLbx;
     if (!terrainLbx.load(terrainLbxFile))
         return false;
@@ -375,13 +406,13 @@ bool QMoMResources::createTerrainImages(MoM::MoMGameBase* game)
     return true;
 }
 
-bool QMoMResources::createUnitImages(MoM::MoMGameBase* game)
+bool QMoMResources::createUnitImages()
 {
-    if (0 == game)
+    if (0 == m_game)
         return false;
-    std::string units1LbxFile = game->getGameDirectory() + "/" + "UNITS1.LBX";
-    std::string units2LbxFile = game->getGameDirectory() + "/" + "UNITS2.LBX";
-    std::string monsterLbxFile = game->getGameDirectory() + "/" + "MONSTER.LBX";
+    std::string units1LbxFile = m_game->getGameDirectory() + "/" + "UNITS1.LBX";
+    std::string units2LbxFile = m_game->getGameDirectory() + "/" + "UNITS2.LBX";
+    std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
     MoM::MoMLbxBase units1Lbx;
     MoM::MoMLbxBase units2Lbx;
     MoM::MoMLbxBase monsterLbx;

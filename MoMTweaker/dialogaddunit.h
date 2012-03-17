@@ -32,7 +32,7 @@ private slots:
 private:
     MoM::MoMGameBase* getGame();
 
-    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text);
+    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
     void displaySpecial(QPointF& pos, const QString& specialName, int specialValue);
     void displayStrength(QPointF& pos, int strength, const QString& imageBaseName);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);

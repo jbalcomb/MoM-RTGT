@@ -82,10 +82,6 @@ QVariant UnitModel::headerData(int section, Qt::Orientation orientation, int rol
             break;
         }
     }
-    //    else if ((orientation == Qt::Horizontal) && (role == Qt::FontRole))
-    //    {
-    //        header = QFont("Monotype Corsiva", 12);
-    //    }
     else
     {
         // Nothing to do
@@ -823,17 +819,6 @@ void update_Wizards(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row)
 
 void UnitModel::setupModelData(MoM::MoMGameBase* game)
 {
-    //    QStandardItemModel::setColumnCount(this->m_columnCount);
-    //    QStandardItemModel::setHorizontalHeaderItem(0, new QStandardItem(tr("Feature")));
-    //    QStandardItemModel::setHorizontalHeaderItem(1, new QStandardItem(tr("Value")));
-    //    QStandardItemModel::setHorizontalHeaderItem(2, new QStandardItem(tr("Comment")));
-
-    //    QStandardItemModel::horizontalHeaderItem(0)->setFont(QFont(QString("Monotype Corsiva"), 14));
-    //    QStandardItemModel::horizontalHeaderItem(1)->setFont(QFont(QString("Monotype Corsiva"), 14));
-    //    QStandardItemModel::horizontalHeaderItem(2)->setFont(QFont(QString("Monotype Corsiva"), 14));
-
-    //     QStandardItem *parentItem = QStandardItemModel::invisibleRootItem();
-
     if (0 == m_rootItem)
     {
 

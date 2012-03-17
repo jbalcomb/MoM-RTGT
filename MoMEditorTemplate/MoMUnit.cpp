@@ -23,7 +23,9 @@ MoMUnit::MoMUnit() :
     m_heroStatsInitializer(),
     m_hiredHero(),
     m_unit(),
-    m_unitType()
+    m_unitType(),
+    m_up(),
+    m_dn()
 {
 }
 
@@ -35,16 +37,8 @@ void MoMUnit::close()
     m_hiredHero = 0;
     m_unitType = 0;
     m_unit = 0;
-}
-
-const char* MoMUnit::getName() const
-{
-    const char* ptrName = 0;
-    if ((0 != m_unitType) && (0 != m_game))
-    {
-        ptrName = m_game->getNameByOffset(m_unitType->m_PtrName);
-    }
-    return ptrName;
+    m_up = BaseAttributes();
+    m_dn = BaseAttributes();
 }
 
 int MoMUnit::getMelee() const
@@ -97,6 +91,56 @@ int MoMUnit::getHits() const
     return value;
 }
 
+std::string MoMUnit::getDisplayName() const
+{
+    std::string raceName = getRaceName();
+    std::string unitName = getUnitName();
+
+    std::string name = raceName + " " + unitName;
+
+    return name;
+}
+
+double MoMUnit::getMoves() const
+{
+    double value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_MoveHalves / 2.0;
+    }
+    return value;
+}
+
+int MoMUnit::getNrFigures() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Nr_Figures;
+    }
+    return value;
+}
+
+eRace MoMUnit::getRace() const
+{
+    eRace value = (eRace)0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Race_Code;
+    }
+    return value;
+}
+
+std::string MoMUnit::getRaceName() const
+{
+    std::string name;
+    if ((0 != m_game) && (0 != m_unitType))
+    {
+        name = m_game->getRaceName(m_unitType->m_Race_Code);
+    }
+    return name;
+}
+
 eRanged_Type MoMUnit::getRangedType() const
 {
     eRanged_Type value = MoM::RANGED_None;
@@ -110,14 +154,61 @@ eRanged_Type MoMUnit::getRangedType() const
 MoMUnit::MapSpecials MoMUnit::getSpecials() const
 {
     MapSpecials mapSpecials;
+
+#define ADDFLAGFEATURE(m, u, field) \
+    if (u.s.field) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
+    }
+#define ADDMFIELDFEATURE(m, u, field) \
+    if (u->m_##field != 0) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u->m_##field; \
+    }
+
+    if (0 != m_heroStats)
+    {
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Leadership);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Leadership_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Legendary);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Legendary_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Blademaster);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Blademaster_X);
+
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Armsmaster);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Armsmaster_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Constitution);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Constitution_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Might);
+
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Might_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Arcane_Power);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Arcane_Power_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Sage);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Sage_X);
+
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Prayermaster);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Prayermaster_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Agility_X);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Lucky);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Charmed);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Noble);
+        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Agility);
+
+        // Additional fields
+//        ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Level_Status);
+//        ADDMFIELDFEATURE(qtreeHSFlags, (unsigned)heroStats, Hero_Casting_Skill);
+//        for (int spellNr = 0; spellNr < ARRAYSIZE(heroStats.m_Spell); ++spellNr)
+//        {
+//            if (MoM::SPELL_None != heroStats.m_Spell[spellNr])
+//            {
+//                ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Spell[spellNr]);
+//            }
+//        }
+    }
+
     if (0 != m_unitType)
     {
-#define ADDFLAGFEATURE(m, u, field) \
-        if (u.s.field) \
-        { \
-            m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
-        }
-
         ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Cavalry);
         ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Sailing);
         ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Swimming);
@@ -184,8 +275,24 @@ MoMUnit::MapSpecials MoMUnit::getSpecials() const
         ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Power_Drain);
         ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Dispel_Evil);
 
-#undef ADDFLAGFEATURE
+
+        // Additional fields
+//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Type);
+//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Shots);
+//        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Cost);
+//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Building_Required1);
+//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Hero_TypeCode_or_Building2);
+        if (m_unitType->m_Scout != 1)
+        {
+            ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Scout);
+        }
+        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Transport_Capacity);
+        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction_Capacity);
+        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Gaze_Modifier);
     }
+
+#undef ADDFLAGFEATURE
+
     return mapSpecials;
 }
 
@@ -195,7 +302,7 @@ int MoMUnit::getToHitMelee() const
     int value = 0;
     if (0 != m_unitType)
     {
-        value = m_unitType->m_To_Hit; // + m_up.toHitMelee - m_dn.toHitMelee;
+        value = m_unitType->m_To_Hit + m_up.toHitMelee - m_dn.toHitMelee;
     }
     return value;
 }
@@ -205,14 +312,38 @@ int MoMUnit::getToHitRanged() const
     int value = 0;
     if (0 != m_unitType)
     {
-        value = m_unitType->m_To_Hit; // + m_up.toHitRanged - m_dn.toHitRanged;
+        value = m_unitType->m_To_Hit + m_up.toHitRanged - m_dn.toHitRanged;
     }
     return value;
 }
 
 int MoMUnit::getToDefend() const
 {
-    int value = 0; // + m_up.toDefend - m_dn.toDefend;
+    int value = 0 + m_up.toDefend - m_dn.toDefend;
+    return value;
+}
+
+std::string MoMUnit::getUnitName() const
+{
+    std::string name;
+    if ((0 != m_unitType) && (0 != m_game))
+    {
+        const char* ptrName = m_game->getNameByOffset(m_unitType->m_PtrName);
+        if (0 != ptrName)
+        {
+            name = ptrName;
+        }
+    }
+    return name;
+}
+
+int MoMUnit::getUpkeep() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Upkeep;
+    }
     return value;
 }
 
@@ -253,17 +384,14 @@ void MoMUnit::setUnitTypeNr(eUnit_Type unitTypeNr)
         m_unitType = m_game->getUnit_Type_Data(m_unitTypeNr);
 //        m_unit = 0;
 
-//        m_up = BaseAttributes();
-//        m_dn = BaseAttributes();
-
-        // TODO: Lucky should be centralized in a neat function
-//        if (m_unitType->m_Attribute_Flags.s.Lucky || (m_heroStats && m_heroStats->m_Hero_Abilities.s.Lucky))
-//        {
-//            m_up.toHitMelee++;
-//            m_up.toHitRanged++;
-//            m_up.toDefend++;
-//            m_up.resistance++;
-//        }
+        // TODO: Lucky should be centralized in a neat function or something
+        if (hasSpecial("Lucky"))
+        {
+            m_up.toHitMelee++;
+            m_up.toHitRanged++;
+            m_up.toDefend++;
+            m_up.resistance++;
+        }
     }
 }
 

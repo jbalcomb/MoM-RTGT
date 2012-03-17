@@ -10,6 +10,7 @@
 #ifndef QMOMRESOURCES_H_
 #define QMOMRESOURCES_H_
 
+#include <qfont.h>
 #include <qicon.h>
 #include <qimage.h>
 #include <qvector.h>
@@ -50,7 +51,19 @@ public:
 		return m_colorTable;
 	}
 
-	const QImage* getImage(MoM::eBuilding building) const
+    template<typename T>
+    QIcon getIcon(T t) const
+    {
+        const QImage* image = getImage(t);
+        QIcon icon;
+        if (0 != image)
+        {
+            icon = QPixmap::fromImage(*image);
+        }
+        return icon;
+    }
+
+    const QImage* getImage(MoM::eBuilding building) const
 	{
 		const QImage* image = 0;
 		if (inRange(m_buildingImages, building))
@@ -105,27 +118,21 @@ public:
 		return image;
 	}
 
-	template<typename T>
-	QIcon getIcon(T t) const
-	{
-		const QImage* image = getImage(t);
-        QIcon icon;
-		if (0 != image)
-		{
-			icon = QPixmap::fromImage(*image);
-		}
-		return icon;
-	}
+public:
+    static const QFont g_FontSmall;
+    static const QFont g_Font;
+    static const QFont g_FontBig;
 
 private:
-    bool createColorTable(MoM::MoMGameBase* game);
+    bool createColorTable();
 
-    bool createBuildingImages(MoM::MoMGameBase* game);
-    bool createItemImages(MoM::MoMGameBase* game);
-    bool createLairImages(MoM::MoMGameBase* game);
-    bool createSpellImages(MoM::MoMGameBase* game);
-    bool createTerrainImages(MoM::MoMGameBase* game);
-    bool createUnitImages(MoM::MoMGameBase* game);
+    bool createBuildingImages();
+    bool createItemImages();
+    bool createLairImages();
+    bool createSpecialsImages();
+    bool createSpellImages();
+    bool createTerrainImages();
+    bool createUnitImages();
 
 	template<typename T>
 	bool inRange(const QVector<QImage>& v, T t) const
@@ -141,6 +148,7 @@ private:
     QVector<QImage> m_buildingImages;
     QVector<QImage> m_itemImages;
     QVector<QImage> m_lairImages;
+    QVector<QImage> m_specialsImages;
     QVector<QImage> m_spellImages;
     QVector<QImage> m_terrainTypeImages;
     QVector<QImage> m_unitImages;

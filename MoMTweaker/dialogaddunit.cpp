@@ -18,6 +18,11 @@
 
 #include "mainwindow.h"
 
+namespace
+{
+}
+
+
 DialogAddUnit::DialogAddUnit(QWidget *parent) :
     QDialog(parent),
     m_unit(),
@@ -29,9 +34,10 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui(new Ui::DialogAddUnit)
 {
     ui->setupUi(this);
+    setFont(MoM::QMoMResources::g_Font);
+    m_font = MoM::QMoMResources::g_Font;
+    m_font.setPointSize(16);
 
-    // Note: attribute italic=true is required for URW Chancery L
-    m_font = QFont("URW Chancery L", 12, -1, true);
     m_unit = new MoM::MoMUnit;
     m_unit->setGame(getGame());
 
@@ -41,24 +47,17 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui->comboBox_Unit->clear();
 
     MoM::MoMGameBase* game = getGame();
-    MoM::Unit_Type_Data* unitTypes = 0;
-    int ndata = 0;
 
-    if (0 != game)
-    {
-        unitTypes = game->getUnit_Types();
-    }
-    if (0 != unitTypes)
-    {
-        ndata = (int)MoM::eUnit_Type_MAX;
-    }
     ui->comboBox_Unit->addItem("");
-    for (int row = 0; row < ndata; ++row)
+    MOM_FOREACH(eUnit_Type, unitTypeNr, eUnit_Type_MAX)
     {
-		MoM::eUnit_Type unitTypeNr = static_cast<MoM::eUnit_Type>(row);
-        MoM::Unit_Type_Data* data = &unitTypes[unitTypeNr];
+        QString title = prettyQStr(unitTypeNr);
 
-		QString title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
+        MoM::Unit_Type_Data* data = 0;
+        if ((0 != game) && (0 != (data = game->getUnit_Type_Data(unitTypeNr))))
+        {
+            title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
+        }
         QIcon icon = MoM::QMoMResources::instance().getIcon(unitTypeNr);
 
         ui->comboBox_Unit->addItem(icon, title);
@@ -72,38 +71,38 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 
     // Use a pixmap as reference for coordinate positions
-    QPixmap pixmap(":/images/sword_normal.gif");
-    m_lineHeight = pixmap.height() * 4 / 3;
-
-    // Use a text label as reference for coordinate positions
-    QGraphicsSimpleTextItem* item = addText(QPointF(0, 0), "To Hit Ranged");
-    m_labelWidth = item->boundingRect().width();
-    m_sceneUnit->removeItem(item);
-    delete item;
-    item = 0;
-
-    m_pictureHeight = 4 * m_lineHeight;
+    QPixmap pixmapSword(":/images/sword_normal.gif");
+    m_lineHeight = pixmapSword.height() * 4 / 3;
+    QPixmap pixmapPicture(":/units/Healer.gif");
+    m_labelWidth = pixmapPicture.width() * 4 / 3;
+    m_pictureHeight = pixmapPicture.height() * 4 / 3;
 
 
     QGraphicsSimpleTextItem* textItem = 0;
     QPointF pos(0, m_pictureHeight);
+    bool fixedText = true;
 
-    pos = QPoint(m_labelWidth, 2 * m_lineHeight);
-    textItem = addText(pos, "Moves");
-    pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Upkeep");
-    pos.ry() += m_lineHeight;
+    pos = QPoint(m_labelWidth, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    textItem = addText(pos, "Figures", fixedText);
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, "Moves", fixedText);
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, "Upkeep", fixedText);
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
 
     pos = QPoint(0, m_pictureHeight);
-    textItem = addText(pos, "Melee");
+    textItem = addText(pos, "Melee", fixedText);
     pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Range");
+    textItem = addText(pos, "Range", fixedText);
     pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Armor");
+    textItem = addText(pos, "Armor", fixedText);
     pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Resist");
+    textItem = addText(pos, "Resist", fixedText);
     pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Hits");
+    textItem = addText(pos, "Hits", fixedText);
     pos.ry() += m_lineHeight;
 
 
@@ -126,9 +125,13 @@ MoM::MoMGameBase* DialogAddUnit::getGame()
     return game;
 }
 
-QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QString& text)
+QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QString& text, bool fixed)
 {
     QGraphicsSimpleTextItem* textItem = m_sceneUnit->addSimpleText(text, m_font);
+    if (!fixed)
+    {
+        m_unitSpecificItems.push_back(textItem);
+    }
     textItem->setBrush(QBrush(Qt::white));
     textItem->setPos(pos);
     return textItem;
@@ -145,8 +148,12 @@ void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int
   m_unitSpecificItems.push_back(item);
   item->setPos(pos);
 
-  item = addText(pos + QPointF(pixmap.width() * 4 / 3, 0), specialName);
-  m_unitSpecificItems.push_back(item);
+  QString text = specialName;
+  if (specialValue != 0)
+  {
+      text += " " + QString("%0").arg(specialValue);
+  }
+  item = addText(pos + QPointF(pixmap.width() * 4 / 3, 0), text);
 
   pos.rx() += ui->graphicsView_Unit->width() / 2;
   if (pos.rx() > ui->graphicsView_Unit->width() * 3 / 4)
@@ -196,16 +203,16 @@ void DialogAddUnit::displayStrength(QPointF& pos, int strength, const QString& i
      {
          left += pixmap.width() / 3;
          x = left;
-         y += pixmap.width() / 4;
+         y += pixmap.width() / 3;
      }
      if (col > 0 && col % 5 == 0)
      {
-         x += pixmap.width() / 8;
+         x += pixmap.width() / 5;
      }
      QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
      m_unitSpecificItems.push_back(item);
      item->setPos(x, y);
-     x += pixmap.width();
+     x += pixmap.width() + 1;
   }
 //      for (i = 0; i < lost_normal; ++i, ++col)
 //      {
@@ -243,10 +250,7 @@ void DialogAddUnit::displayToHit(QPointF& pos, int toHit, const QString& labelTe
   if (!labelText.isEmpty())
   {
       QGraphicsSimpleTextItem* textItem = addText(pos, textModifier + " " + labelText);
-      m_unitSpecificItems.push_back(textItem);
-      QFont font(textItem->font());
-      font.setPixelSize(10);
-      textItem->setFont(font);
+      textItem->setFont(MoM::QMoMResources::g_FontSmall);
   }
 
   pos.ry() += 10;
@@ -300,15 +304,26 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
     }
 
     QPointF pos;
+    QGraphicsSimpleTextItem* textItem = 0;
 
-    QPointF posName(m_labelWidth, 0);
-    QGraphicsSimpleTextItem* textItem = addText(posName, QString(m_unit->getName()));
-    m_unitSpecificItems.push_back(textItem);
-    QFont fontName(m_font);
-    fontName.setPixelSize(20);
+    pos = QPointF(m_labelWidth, 0);
+    textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
+    QFont fontName(MoM::QMoMResources::g_Font);
+    fontName.setPointSize(20);
     textItem->setFont(fontName);
 
-    pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_lineHeight);
+    pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, QString("%0").arg(m_unit->getMoves(), 0, 'f', 1));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, QString("%0").arg(m_unit->getUpkeep()));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+
+    pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
     QPixmap pixmap(":images/tohit.gif");
     QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
     m_unitSpecificItems.push_back(item);
@@ -317,7 +332,7 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 
     if (m_unit->getMelee())
     {
-       displayToHit(pos, m_unit->getToHitMelee(), "Melee");
+       displayToHit(pos, m_unit->getToHitMelee(), "To Hit Melee");
     }
     else
     {
@@ -325,7 +340,7 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
     }
     if (m_unit->getRanged())
     {
-        displayToHit(pos, m_unit->getToHitRanged(), "Ranged");
+        displayToHit(pos, m_unit->getToHitRanged(), "To Hit Ranged");
     }
     else
     {
@@ -333,7 +348,7 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
     }
     if (m_unit->getArmor())
     {
-        displayToHit(pos, m_unit->getToDefend(), "Defend");
+        displayToHit(pos, m_unit->getToDefend(), "To Defend");
     }
 
     pos = QPointF(m_labelWidth, m_pictureHeight);

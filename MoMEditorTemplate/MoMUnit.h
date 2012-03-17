@@ -59,19 +59,24 @@ public:
         return m_unitTypeNr;
     }
 
-    const char* getName() const;
-
     int getMelee() const;
     int getRanged() const;
     int getArmor() const;
     int getResist() const;
     int getHits() const;
 
+    std::string getDisplayName() const;
+    double getMoves() const;
+    int getNrFigures() const;
+    eRace getRace() const;
+    std::string getRaceName() const;
     eRanged_Type getRangedType() const;
     MapSpecials getSpecials() const;
     int getToHitMelee() const;
     int getToHitRanged() const;
     int getToDefend() const;
+    std::string getUnitName() const;
+    int getUpkeep() const;
     eWeaponType getWeaponType() const;
 
     bool hasSpecial(const std::string& specialName) const;
@@ -92,8 +97,8 @@ private:
     Hired_Hero* m_hiredHero;
     Unit* m_unit;
     Unit_Type_Data* m_unitType;
-//    BaseAttributes m_up;
-//    BaseAttributes m_dn;
+    BaseAttributes m_up;
+    BaseAttributes m_dn;
 };
 
 }

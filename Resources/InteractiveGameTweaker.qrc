@@ -12,6 +12,8 @@
         <file>abilities/Blademaster.gif</file>
         <file>abilities/Bullets.gif</file>
         <file>abilities/Caster.gif</file>
+        <file>abilities/Caster 20 MP.gif</file>
+        <file>abilities/Caster 40 MP.gif</file>
         <file>abilities/Cause Fear Spell.gif</file>
         <file>abilities/Charmed.gif</file>
         <file>abilities/Cold Immunity.gif</file>
@@ -80,6 +82,8 @@
         <file>abilities/Stoning Immunity.gif</file>
         <file>abilities/Stoning Touch.gif</file>
         <file>abilities/Summon Demons.gif</file>
+        <file>abilities/Summon Demons 1.gif</file>
+        <file>abilities/Summon Demons 2.gif</file>
         <file>abilities/Swimming.gif</file>
         <file>abilities/Teleporting.gif</file>
         <file>abilities/Thrown.gif</file>
@@ -141,6 +145,7 @@
         <file>images/sword_normal.gif</file>
         <file>images/sword_normal_lost.gif</file>
         <file>images/thrown.gif</file>
+        <file>images/thrown_normal.gif</file>
         <file>images/tohit.gif</file>
         <file>images/tohit_lost.gif</file>
         <file>images/ultraelite.gif</file>
