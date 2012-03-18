@@ -277,6 +277,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\QMoMTreeItem.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\unitmodel.cpp"
 				>
 			</File>
