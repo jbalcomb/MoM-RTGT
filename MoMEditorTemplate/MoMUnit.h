@@ -34,7 +34,8 @@ public:
             hitpoints(),
             toHitMelee(),
             toHitRanged(),
-            toDefend()
+            toDefend(),
+            moves()
         {}
         int melee;
         int defense;
@@ -44,51 +45,49 @@ public:
         int toHitMelee;
         int toHitRanged;
         int toDefend;
+        double moves;
     };
 
     MoMUnit();
-    virtual ~MoMUnit()
-    {}
+    virtual ~MoMUnit();
+    MoMUnit(const MoMUnit& rhs);
+    MoMUnit& operator=(const MoMUnit& rhs);
 
     void close();
 
+    void changeUnitTypeNr(eUnit_Type unitTypeNr);
     void setGame(MoMGameBase* game);
-    void setUnitTypeNr(eUnit_Type unitTypeNr);
-    eUnit_Type getUnitTypeNr() const
-    {
-        return m_unitTypeNr;
-    }
 
     int getMelee() const;
     int getRanged() const;
     int getArmor() const;
     int getResist() const;
     int getHits() const;
+    int getToHitMelee() const;
+    int getToHitRanged() const;
+    int getToDefend() const;
+    double getMoves() const;
 
     std::string getDisplayName() const;
-    double getMoves() const;
     int getNrFigures() const;
     eRace getRace() const;
     std::string getRaceName() const;
     eRanged_Type getRangedType() const;
     MapSpecials getSpecials() const;
-    int getToHitMelee() const;
-    int getToHitRanged() const;
-    int getToDefend() const;
     std::string getUnitName() const;
+    eUnit_Type getUnitTypeNr() const;
     int getUpkeep() const;
     eWeaponType getWeaponType() const;
 
     bool hasSpecial(const std::string& specialName) const;
 
 private:
+    void copyMemberData(const MoMUnit& rhs);
+
     // NOT IMPLEMENTED
-    MoMUnit(const MoMUnit& rhs);
-    MoMUnit& operator=(const MoMUnit& rhs);
 
     // CONFIG
     MoMGameBase* m_game;
-    eUnit_Type m_unitTypeNr;
 
     // STATUS
     Battle_Unit* m_battleUnit;

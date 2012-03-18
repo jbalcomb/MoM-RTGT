@@ -7,8 +7,8 @@
 
 /// \file
 
-#ifndef TREEITEM_H
-#define TREEITEM_H
+#ifndef QMOMTREEITEM_H
+#define QMOMTREEITEM_H
 
 #include <QStandardItem>
 
@@ -114,10 +114,10 @@ inline QString prettyQStr(const T& t)
     return tmp;
 }
 
-class TreeItemBase
+class QMoMTreeItemBase
 {
 public:
-    TreeItemBase(const QString& data = QString(), const QIcon& icon = QIcon()) :
+    QMoMTreeItemBase(const QString& data = QString(), const QIcon& icon = QIcon()) :
             m_parent(),
             m_row(),
             m_icon(icon),
@@ -140,7 +140,7 @@ public:
         }
     }
 
-    virtual ~TreeItemBase()
+    virtual ~QMoMTreeItemBase()
     {
         for (int row = 0; row < m_children.count(); ++row)
         {
@@ -151,35 +151,35 @@ public:
         }
     }
 
-    virtual void appendChild(const QString& feature, TreeItemBase* value)
+    virtual void appendChild(const QString& feature, QMoMTreeItemBase* value)
     {
-        QList<TreeItemBase*> items;
+        QList<QMoMTreeItemBase*> items;
 
-        items.append(new TreeItemBase(feature));
+        items.append(new QMoMTreeItemBase(feature));
         items.append(value);
-        items.append(new TreeItemBase);
+        items.append(new QMoMTreeItemBase);
 
         appendRow(items);
     }
 
-    virtual void appendTree(TreeItemBase* tree, const QString& value)
+    virtual void appendTree(QMoMTreeItemBase* tree, const QString& value)
     {
-        QList<TreeItemBase*> items;
+        QList<QMoMTreeItemBase*> items;
 
         items.append(tree);
-        items.append(new TreeItemBase(value));
-        items.append(new TreeItemBase);
+        items.append(new QMoMTreeItemBase(value));
+        items.append(new QMoMTreeItemBase);
 
         appendRow(items);
     }
 
-    void appendRow(const QList<TreeItemBase*>& items)
+    void appendRow(const QList<QMoMTreeItemBase*>& items)
     {
         int newRow = m_children.count();
         m_children.append(items);
         for (int i = 0; i < m_children.back().count(); ++i)
         {
-            TreeItemBase* item = m_children.back().at(i);
+            QMoMTreeItemBase* item = m_children.back().at(i);
             item->setParent(this);
             item->setRow(newRow);
         }
@@ -187,14 +187,14 @@ public:
 
     void appendEmptyRow()
     {
-        QList<TreeItemBase*> items;
-        items.append(new TreeItemBase());
-        items.append(new TreeItemBase());
-        items.append(new TreeItemBase());
+        QList<QMoMTreeItemBase*> items;
+        items.append(new QMoMTreeItemBase());
+        items.append(new QMoMTreeItemBase());
+        items.append(new QMoMTreeItemBase());
         appendRow(items);
     }
 
-    TreeItemBase* child(int row, int col)
+    QMoMTreeItemBase* child(int row, int col)
     {
         if (row >= m_children.count())
             return 0;
@@ -239,7 +239,7 @@ public:
         return m_game;
     }
 
-    TreeItemBase* parent() const
+    QMoMTreeItemBase* parent() const
     {
         return m_parent;
     }
@@ -252,7 +252,7 @@ public:
         }
         for (int row = lastRow; row >= firstRow; --row)
         {
-            QList<TreeItemBase*>& curRow = m_children[row];
+            QList<QMoMTreeItemBase*>& curRow = m_children[row];
             for (int col = curRow.count() - 1; col >= 0; --col)
             {
                 delete curRow[col];
@@ -271,7 +271,7 @@ public:
         return m_children.count();
     }
 
-    void setChild(int row, int col, TreeItemBase* item)
+    void setChild(int row, int col, QMoMTreeItemBase* item)
     {
         if (row > m_children.count())
             return;
@@ -334,7 +334,7 @@ public:
 
 private:
 
-    void setParent(TreeItemBase* parent)
+    void setParent(QMoMTreeItemBase* parent)
     {
         m_parent = parent;
     }
@@ -343,29 +343,29 @@ private:
         m_row = row;
     }
 
-    TreeItemBase* m_parent;
+    QMoMTreeItemBase* m_parent;
     int m_row;
     QIcon m_icon;
     QString m_data;
-    QList< QList<TreeItemBase*> > m_children;
+    QList< QList<QMoMTreeItemBase*> > m_children;
     mutable Qt::ItemFlags m_flags;
 
     static MoM::MoMGameBase* m_game;
 };
 
 template< typename T >
-class TreeItem : public TreeItemBase
+class QMoMTreeItem : public QMoMTreeItemBase
 {
 public:
-    explicit TreeItem(T* ptr) :
-        TreeItemBase(),
+    explicit QMoMTreeItem(T* ptr) :
+        QMoMTreeItemBase(),
         m_ptr(ptr),
         m_mask(0),
         m_shift(0)
     {
     }
-    TreeItem(T* ptr, unsigned mask) :
-        TreeItemBase(),
+    QMoMTreeItem(T* ptr, unsigned mask) :
+        QMoMTreeItemBase(),
         m_ptr(ptr),
         m_mask(mask),
         m_shift(0)
@@ -447,11 +447,11 @@ private:
 };
 
 template< size_t N>
-class TreeItem< char[N] > : public TreeItemBase
+class QMoMTreeItem< char[N] > : public QMoMTreeItemBase
 {
 public:
-    explicit TreeItem(char ptr[N]) :
-        TreeItemBase(),
+    explicit QMoMTreeItem(char ptr[N]) :
+        QMoMTreeItemBase(),
         m_ptr(ptr)
     {
     }
@@ -492,17 +492,17 @@ public slots:
 
 private:
     // NOT IMPLEMENTED
-    TreeItem();
+    QMoMTreeItem();
 
     char* m_ptr;
 };
 
 template<>
-class TreeItem< const char* > : public TreeItemBase
+class QMoMTreeItem< const char* > : public QMoMTreeItemBase
 {
 public:
-    explicit TreeItem(const char* ptr) :
-        TreeItemBase(),
+    explicit QMoMTreeItem(const char* ptr) :
+        QMoMTreeItemBase(),
         m_ptr(ptr),
         m_size(strlen(ptr) + 1)
     {
@@ -544,10 +544,38 @@ public slots:
 
 private:
     // NOT IMPLEMENTED
-    TreeItem();
+    QMoMTreeItem();
 
     const char* m_ptr;
     size_t m_size;
 };
 
-#endif // TREEITEM_H
+//
+//
+//
+
+template< typename T >
+class QMoMTreeItemSubtree : public QMoMTreeItemBase
+{
+public:
+    explicit QMoMTreeItemSubtree(T* ptr, const QString& data = QString(), const QIcon& icon = QIcon()) :
+        QMoMTreeItemBase(data, icon),
+        m_ptr(ptr)
+    {
+    }
+
+    T* getMoMPointer()
+    {
+        return m_ptr;
+    }
+
+signals:
+//    void signal_unitChanged(const MoM::MoMUnit* unit);
+
+public slots:
+
+private:
+    T* m_ptr;
+};
+
+#endif // QMOMTREEITEM_H

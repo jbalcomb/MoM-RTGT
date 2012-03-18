@@ -15,7 +15,7 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/MoMProcess.h \
     ../MoMEditorTemplate/MoMTemplate.h \
     ../MoMEditorTemplate/MoMutility.h \
-    ../MoMEditorTemplate/treeitem.h
+    ../MoMEditorTemplate/QMoMTreeItem.h
 SOURCES += ./main.cpp \
     ./mainwindow.cpp \
     ../MoMEditorTemplate/MoMGameBase.cpp \

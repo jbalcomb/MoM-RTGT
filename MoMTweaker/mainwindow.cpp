@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // CONFIG
 
     setFont(MoM::QMoMResources::g_Font);
-    ui->treeView->setFont(MoM::QMoMResources::g_Font);
+    ui->treeView_MoM->setFont(MoM::QMoMResources::g_Font);
 
     // TODO: Load and save config
 #ifdef _WIN32
@@ -87,17 +87,23 @@ MainWindow::MainWindow(QWidget *parent) :
     m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
     QFont fontTreeView(MoM::QMoMResources::g_Font);
     fontTreeView.setPointSize(fontTreeView.pointSize() - 1);
-    ui->treeView->setFont(fontTreeView);
+    ui->treeView_MoM->setFont(fontTreeView);
 #endif
 
-    ui->treeView->setModel(&m_UnitModel);
+    // Connect the item model UnitModel to the treeview
+    // TODO: Move to new method in UnitModel
+    ui->treeView_MoM->setModel(&m_UnitModel);
+    QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)));
 
-	QObject::connect(this, SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+    // Make internal connections to handle events centrally
+    QObject::connect(this, SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
 	QObject::connect(this, SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+    // Connect a timer to trigger refresh updates
     QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(slot_timer()));
     m_timer->start(10000);
 
-    slot_gameChanged(0);
+    // Signal to start with an empty game
+    slot_gameChanged(m_game.get());
 }
 
 MainWindow::~MainWindow()
@@ -672,25 +678,29 @@ void MainWindow::slot_timer()
 
 void MainWindow::on_pushButton_AddUnit_clicked()
 {
-    DialogAddUnit* dialog = new DialogAddUnit(this);
+    DialogAddUnit* dialog = new DialogAddUnit(this, &m_UnitModel);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void MainWindow::on_pushButton_ShowTables_clicked()
 {
     DialogTables* dialog = new DialogTables(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void MainWindow::on_pushButton_Map_clicked()
 {
     DialogOverlandMap* dialog = new DialogOverlandMap(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void MainWindow::on_pushButton_Tools_clicked()
 {
     DialogTools* dialog = new DialogTools(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
@@ -731,4 +741,3 @@ void MainWindow::slot_gameUpdated()
 {
 	update();
 }
-

@@ -2,14 +2,16 @@
 #define DIALOGADDUNIT_H
 
 #include <QDialog>
+#include <QSharedPointer>
 
 class QAbstractButton;
 class QGraphicsItem;
 class QGraphicsScene;
 class QGraphicsSimpleTextItem;
+class UnitModel;
 
 namespace Ui {
-class DialogAddUnit;
+    class DialogAddUnit;
 }
 
 namespace MoM {
@@ -22,7 +24,7 @@ class DialogAddUnit : public QDialog
     Q_OBJECT
     
 public:
-    explicit DialogAddUnit(QWidget *parent = 0);
+    explicit DialogAddUnit(QWidget *parent, UnitModel* unitModel);
     ~DialogAddUnit();
     
 private slots:
@@ -30,6 +32,7 @@ private slots:
     void on_comboBox_Unit_currentIndexChanged(int index);
 	void slot_gameChanged(MoM::MoMGameBase* game);
 	void slot_gameUpdated();
+    void slot_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit);
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
@@ -39,11 +42,12 @@ private:
 	void update();
 
 	// CONFIG
+    MoM::MoMGameBase* m_game;
+    QSharedPointer<MoM::MoMUnit> m_unit;
+    UnitModel* m_unitModel;
 
 	// STATUS
-	MoM::MoMGameBase* m_game;
-	std::auto_ptr<MoM::MoMUnit> m_unit;
-
+    bool m_updating;
     QFont m_font;
     int m_labelWidth;
     int m_lineHeight;

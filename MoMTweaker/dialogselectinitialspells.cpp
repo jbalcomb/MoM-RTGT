@@ -198,6 +198,8 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
     }
 
     update();
+
+    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
 DialogSelectInitialSpells::~DialogSelectInitialSpells()

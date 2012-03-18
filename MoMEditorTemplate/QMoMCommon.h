@@ -18,6 +18,9 @@
 namespace MoM
 {
 
+// TODO: Move functions to QMoMResources.h
+// TODO: Promote this header file to the first header file each Qt related cpp file includes
+
 bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
 
 inline bool convertImageToLbx(const QImage& image, std::vector<uint8_t>& dataBuffer, const std::string& context)

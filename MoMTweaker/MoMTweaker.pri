@@ -25,7 +25,7 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/QMoMGenerated.h \
     ../MoMEditorTemplate/QMoMMapTile.h \
     ../MoMEditorTemplate/QMoMResources.h \
-    ../MoMEditorTemplate/treeitem.h \
+    ../MoMEditorTemplate/QMoMTreeItem.h \
     unitmodel.h \
     dialogcalculatoraddress.h \
     dialogselectinitialspells.h \

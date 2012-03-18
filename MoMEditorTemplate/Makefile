@@ -37,6 +37,6 @@ GENERATEDFILES= \
 
 generate: $(GENERATEDFILES)
 
-$(GENERATEDFILES):: MoMcommon.h MoMTemplate.h
+$(GENERATEDFILES):: MoMcommon.h MoMTemplate.h generate_code.pl
 	perl -w generate_code.pl
 

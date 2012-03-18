@@ -23,6 +23,10 @@ namespace Ui {
     class MainWindow;
 }
 
+namespace MoM {
+    class MoMUnit;
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

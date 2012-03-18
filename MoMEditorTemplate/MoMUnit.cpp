@@ -17,7 +17,6 @@ namespace MoM
 
 MoMUnit::MoMUnit() :
     m_game(),
-    m_unitTypeNr(),
     m_battleUnit(),
     m_heroStats(),
     m_heroStatsInitializer(),
@@ -27,6 +26,45 @@ MoMUnit::MoMUnit() :
     m_up(),
     m_dn()
 {
+}
+
+MoMUnit::~MoMUnit()
+{
+}
+
+MoMUnit::MoMUnit(const MoMUnit& rhs)
+{
+    copyMemberData(rhs);
+}
+
+MoMUnit& MoMUnit::operator=(const MoMUnit& rhs)
+{
+    if (this != &rhs)
+    {
+        // Release_All_Resources_Of( this );
+        // Not applicable
+
+        // Base::operator=( rhs );
+        // Not applicable
+
+        // Copy_Member_Data( this, rhs );
+        copyMemberData(rhs);
+    }
+    return *this;
+}
+
+void MoMUnit::copyMemberData(const MoMUnit& rhs)
+{
+    m_game = rhs.m_game;
+
+    m_battleUnit = rhs.m_battleUnit;
+    m_heroStats = rhs.m_heroStats;
+    m_heroStatsInitializer = rhs.m_heroStatsInitializer;
+    m_hiredHero = rhs.m_hiredHero;
+    m_unit = rhs.m_unit;
+    m_unitType = rhs.m_unitType;
+    m_up = rhs.m_up;
+    m_dn = rhs.m_dn;
 }
 
 void MoMUnit::close()
@@ -39,6 +77,30 @@ void MoMUnit::close()
     m_unit = 0;
     m_up = BaseAttributes();
     m_dn = BaseAttributes();
+}
+
+void MoMUnit::changeUnitTypeNr(eUnit_Type unitTypeNr)
+{
+    close();
+
+    if (0 != m_game)
+    {
+//        m_battleUnit = m_game->getBattle_Units();
+        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+//        m_heroStatsInitializer = 0;
+//        m_hiredHero = 0;
+        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+//        m_unit = 0;
+
+        // TODO: Lucky should be centralized in a neat function or something
+        if (hasSpecial("Lucky"))
+        {
+            m_up.toHitMelee++;
+            m_up.toHitRanged++;
+            m_up.toDefend++;
+            m_up.resistance++;
+        }
+    }
 }
 
 int MoMUnit::getMelee() const
@@ -337,6 +399,17 @@ std::string MoMUnit::getUnitName() const
     return name;
 }
 
+eUnit_Type MoMUnit::getUnitTypeNr() const
+{
+    eUnit_Type value = (MoM::eUnit_Type)-1;
+    if ((0 != m_unitType) && (0 != m_game))
+    {
+        MoM::MoMGameBase* game = const_cast<MoM::MoMGameBase*>(m_game);
+        value = game->getUnitTypeNr(m_unitType);
+    }
+    return value;
+}
+
 int MoMUnit::getUpkeep() const
 {
     int value = 0;
@@ -365,34 +438,8 @@ bool MoMUnit::hasSpecial(const std::string& specialName) const
 
 void MoMUnit::setGame(MoMGameBase* game)
 {
-    m_game = game;
-    setUnitTypeNr(m_unitTypeNr);
-}
-
-void MoMUnit::setUnitTypeNr(eUnit_Type unitTypeNr)
-{
     close();
-
-    m_unitTypeNr = unitTypeNr;
-
-    if (0 != m_game)
-    {
-//        m_battleUnit = m_game->getBattle_Units();
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, m_unitTypeNr);
-//        m_heroStatsInitializer = 0;
-//        m_hiredHero = 0;
-        m_unitType = m_game->getUnit_Type_Data(m_unitTypeNr);
-//        m_unit = 0;
-
-        // TODO: Lucky should be centralized in a neat function or something
-        if (hasSpecial("Lucky"))
-        {
-            m_up.toHitMelee++;
-            m_up.toHitRanged++;
-            m_up.toDefend++;
-            m_up.resistance++;
-        }
-    }
+    m_game = game;
 }
 
 }

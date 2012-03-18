@@ -11,9 +11,11 @@
 #define UNITMODEL_H
 
 #include <QAbstractItemModel>
+#include <QSharedPointer>
 
 #include <MoMGameBase.h>
-#include "treeitem.h"
+#include <MoMUnit.h>
+#include <QMoMTreeItem.h>
 
 class UnitModel : public QAbstractItemModel
 {
@@ -35,26 +37,27 @@ public:
     void setGame(MoM::MoMGameBase* game);
     void update();
  
+public slots:
+    void slot_selectionChanged(const QModelIndex &index);
+
+signals:
+    void signal_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit);
+
 private:
     void setupModelData(MoM::MoMGameBase* game);
 
-    void removeUnusedRows(int toprow, TreeItemBase* ptree, int firstUnusedRow);
+    void removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstUnusedRow);
 
-    void update_Buildings(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Items_in_Game(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Lairs(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Spell_Data(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Unit_Types(TreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Buildings(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Items_in_Game(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Lairs(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Spell_Data(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Unit_Types(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
 
 
     static const int m_columnCount = 3;
 
-    TreeItemBase *m_rootItem;
-
-signals:
-
-public slots:
-
+    QMoMTreeItemBase *m_rootItem;
 };
 
 #endif // UNITMODEL_H

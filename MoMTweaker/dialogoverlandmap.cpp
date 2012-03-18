@@ -54,6 +54,8 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     }
 
     ui->comboBox_Plane->setCurrentIndex(1);
+
+    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
 DialogOverlandMap::~DialogOverlandMap()

@@ -152,12 +152,22 @@ public:
             return 0;
         return &units[unitNr];
     }
-    Unit_Type_Data* getUnit_Type_Data(eUnit_Type unitType)
+    Unit_Type_Data* getUnit_Type_Data(eUnit_Type unitTypeNr)
     {
         Unit_Type_Data* unitTypes = getUnit_Types();
-		if ((0 == unitTypes) || !inRange(unitType, MoM::eUnit_Type_MAX))
+        if ((0 == unitTypes) || !inRange(unitTypeNr, MoM::eUnit_Type_MAX))
             return 0;
-        return &unitTypes[unitType];
+        return &unitTypes[unitTypeNr];
+    }
+    eUnit_Type getUnitTypeNr(const Unit_Type_Data* unitType)
+    {
+        eUnit_Type unitTypeNr = (eUnit_Type)-1;
+        Unit_Type_Data* unitTypes = getUnit_Types();
+        if (0 != unitTypes)
+        {
+            unitTypeNr = (eUnit_Type)(unitType - unitTypes);
+        }
+        return unitTypeNr;
     }
     Wizard* getWizard(int wizardNr)
     {

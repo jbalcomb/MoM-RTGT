@@ -93,12 +93,14 @@ void DialogTools::on_pushButton_Validate_clicked()
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
     DialogBuildingQueues* dialog = new DialogBuildingQueues(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void DialogTools::on_pushButton_Calculator_clicked()
 {
     DialogCalculatorAddress* dialog = new DialogCalculatorAddress(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
@@ -784,6 +786,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
 void DialogTools::on_pushButton_SelectInitialSpells_clicked()
 {
     DialogSelectInitialSpells* dialog = new DialogSelectInitialSpells(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 

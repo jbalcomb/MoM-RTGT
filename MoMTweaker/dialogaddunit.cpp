@@ -18,10 +18,30 @@
 
 #include "mainwindow.h"
 
-DialogAddUnit::DialogAddUnit(QWidget *parent) :
+
+// TODO: Move to new common header file QMoMUtility.h or perhaps to the existing QMoMCommon.h
+class UpdateLock
+{
+public:
+    UpdateLock(bool& updating) : m_updating(updating)
+    {
+        m_updating = true;
+    }
+    ~UpdateLock()
+    {
+        m_updating = false;
+    }
+private:
+    bool& m_updating;
+};
+
+
+DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
     QDialog(parent),
 	m_game(),
     m_unit(new MoM::MoMUnit),
+    m_unitModel(unitModel),
+    m_updating(false),
     m_labelWidth(),
     m_lineHeight(),
     m_pictureHeight(),
@@ -30,9 +50,11 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui(new Ui::DialogAddUnit)
 {
     ui->setupUi(this);
+
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;
     m_font.setPointSize(16);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // Initalize graphics view with items that are fixed
     QRectF rectf = ui->graphicsView_Unit->rect();
@@ -81,6 +103,9 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+
+    // Connect the item model UnitModel to the dialog
+    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QSharedPointer<MoM::MoMUnit>)), this, SLOT(slot_unitChanged(QSharedPointer<MoM::MoMUnit>)));
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
@@ -228,7 +253,8 @@ void DialogAddUnit::on_buttonBox_clicked(QAbstractButton *button)
     if (0 == controller)
         return;
 
-    if (QDialogButtonBox::ApplyRole == ui->buttonBox->buttonRole(button))
+    QDialogButtonBox::ButtonRole buttonRole = ui->buttonBox->buttonRole(button);
+    if (QDialogButtonBox::ApplyRole == buttonRole)
     {
         MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex() - 1);
         controller->addUnit(unitType);
@@ -237,18 +263,24 @@ void DialogAddUnit::on_buttonBox_clicked(QAbstractButton *button)
 
 void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 {
-    m_unit->setUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
+    // Do nothing if we are busy with an external update
+    if (m_updating)
+        return;
+
+    m_unit->changeUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
 	update();
 }
 
 void DialogAddUnit::slot_gameChanged(MoM::MoMGameBase* game)
 {
-	m_game = game;
+    UpdateLock lock(m_updating);
+
+    m_game = game;
 	m_unit->setGame(m_game);
 
-   // Reinitialize combo box with units
+    // Reinitialize combo box with units
 
-    // Note: clearing the combo box triggers a signal currentIndexChanged.
+    // Save current unitType index
 	int index = ui->comboBox_Unit->currentIndex();
     ui->comboBox_Unit->clear();
 
@@ -267,12 +299,29 @@ void DialogAddUnit::slot_gameChanged(MoM::MoMGameBase* game)
         ui->comboBox_Unit->addItem(icon, title);
 	}
 
-	ui->comboBox_Unit->setCurrentIndex(index);	// Triggers update
+    // Restore current unitType index
+    m_unit->changeUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
+    ui->comboBox_Unit->setCurrentIndex(index);
+
+    update();
 }
 
 void DialogAddUnit::slot_gameUpdated()
 {
-	update();
+    UpdateLock lock(m_updating);
+
+    update();
+}
+
+void DialogAddUnit::slot_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit)
+{
+    UpdateLock lock(m_updating);
+
+    m_unit = unit;
+    MoM::eUnit_Type unitTypeNr = m_unit->getUnitTypeNr();
+    ui->comboBox_Unit->setCurrentIndex(1 + toInt(unitTypeNr));
+
+    update();
 }
 
 void DialogAddUnit::update()

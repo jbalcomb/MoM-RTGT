@@ -21,6 +21,8 @@ DialogCalculatorAddress::DialogCalculatorAddress(QWidget *parent) :
     m_updating(false)
 {
     ui->setupUi(this);
+
+    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
 DialogCalculatorAddress::~DialogCalculatorAddress()
