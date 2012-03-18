@@ -10,9 +10,10 @@ TEMPLATE = app
 unix:PLATF = Linux
 win32:PLATF = Windows
 
-VERSION = $$system(svn info . | grep 'Changed\ Rev' | cut -b 19-)
+#VERSION = $$system(svn info . | grep 'Changed\ Rev' | cut -b 19-)
+VERSION = 1
 !isEmpty(VERSION){
-  VERSION = 0.1.$${VERSION}
+  VERSION = 0.2.$${VERSION}
 }
 
 TARGET = MoMCustomizer
@@ -33,7 +34,9 @@ RCC_DIR += ./GeneratedFiles
 
 include(MoMCustomizer.pri)
 
-SOURCES += ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp
+SOURCES += \
+    ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
+    ./main.cpp
 
 unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
 win32:QMAKE_LIBS += user32.lib
