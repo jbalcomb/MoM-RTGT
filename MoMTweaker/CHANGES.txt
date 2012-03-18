@@ -2,6 +2,18 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.1 (2012-03-19)
+----------------------------
+
+* Turned project into open source project on http://momrtgt.sourceforge.net/
+
+* Added Summon unit dialog with a nice view of the unit to summon.
+  In particular this handles all the details when summoning a hero.
+
+* Moved all buttons that are not very interesting right now into a subdialog named Tools.
+
+
+
 CHANGES IN 0.1g (2010-12-19)
 ----------------------------
 
@@ -19,6 +31,7 @@ CHANGES IN 0.1g (2010-12-19)
 * Added pictures loaded from UNITS1.LBX, UNITS2.LBX, MONSTER.LBX, CITYSCAP.LBX (buildings), ITEMS.LBX
 
 * You can load/save BUILDDAT.LBX, SPELLDAT.LBX, TERRSTAT.LBX (unrest table) now.
+
 
 
 CHANGES IN 0.1e (2010-12-04)
