@@ -2075,7 +2075,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Scout=" << (unsigned)rhs.m_Scout << " 0x" << std::hex << (unsigned)rhs.m_Scout << std::dec << "\n";
     os << "m_Transport_Capacity_GUESS=" << (unsigned)rhs.m_Transport_Capacity_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity_GUESS << std::dec << "\n";
     os << "m_Total_Figures=" << (unsigned)rhs.m_Total_Figures << " 0x" << std::hex << (unsigned)rhs.m_Total_Figures << std::dec << "\n";
-    os << "m_Construction_Capacity=" << (unsigned)rhs.m_Construction_Capacity << " 0x" << std::hex << (unsigned)rhs.m_Construction_Capacity << std::dec << "\n";
+    os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
     os << "m_Gaze_Modifier=" << (unsigned)rhs.m_Gaze_Modifier << " 0x" << std::hex << (unsigned)rhs.m_Gaze_Modifier << std::dec << "\n";
     os << "m_Movement_Flags=" << rhs.m_Movement_Flags << "\n";
     os << "m_Zero01=" << (unsigned)rhs.m_Zero01 << " 0x" << std::hex << (unsigned)rhs.m_Zero01 << std::dec << "\n";
@@ -4707,7 +4707,7 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Scout=" << (unsigned)rhs.m_Scout << " 0x" << std::hex << (unsigned)rhs.m_Scout << std::dec << "\n";
     os << "m_Transport_Capacity=" << (unsigned)rhs.m_Transport_Capacity << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity << std::dec << "\n";
     os << "m_Nr_Figures=" << (unsigned)rhs.m_Nr_Figures << " 0x" << std::hex << (unsigned)rhs.m_Nr_Figures << std::dec << "\n";
-    os << "m_Construction_Capacity=" << (unsigned)rhs.m_Construction_Capacity << " 0x" << std::hex << (unsigned)rhs.m_Construction_Capacity << std::dec << "\n";
+    os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
     os << "m_Gaze_Modifier=" << (int)rhs.m_Gaze_Modifier << " 0x" << std::hex << (int)rhs.m_Gaze_Modifier << std::dec << "\n";
     os << "m_Movement_Flags=" << rhs.m_Movement_Flags << "\n";
     os << "m_Zero02=" << (unsigned)rhs.m_Zero02 << " 0x" << std::hex << (unsigned)rhs.m_Zero02 << std::dec << "\n";

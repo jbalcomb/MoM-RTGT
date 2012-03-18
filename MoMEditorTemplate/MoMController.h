@@ -16,21 +16,31 @@ namespace MoM {
 class MoMController
 {
 public:
-    static bool addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unitType);
+	MoMController()
+	{}
 
-    static bool applyBuildingQueue(MoMGameBase& game, int cityNr);
-    static bool applyBuildingQueue(MoMGameBase& game, ePlayer playerNr);
+	const std::string& errorString() const
+	{
+		return m_errorString;
+	}
 
-    static bool findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units);
+    bool addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unitType);
 
-    static bool polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr);
+    bool applyBuildingQueue(MoMGameBase& game, int cityNr);
+    bool applyBuildingQueue(MoMGameBase& game, ePlayer playerNr);
 
-    static bool repopLairs(MoMGameBase& game, bool maxOut = false);
+    bool findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units);
 
-    static bool validateConsistency(MoMGameBase& game);
+    bool polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr);
+
+    bool repopLairs(MoMGameBase& game, bool maxOut = false);
+
+    bool validateConsistency(MoMGameBase& game);
 
 private:
-    static bool createUnit(MoMGameBase& game, int& unitNr);
+    bool createUnit(MoMGameBase& game, int& unitNr);
+
+	std::string m_errorString;
 };
 
 }

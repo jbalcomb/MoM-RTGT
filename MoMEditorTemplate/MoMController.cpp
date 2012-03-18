@@ -43,15 +43,20 @@ int gXPforLevel[] =
 
 bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unitType)
 {
+	m_errorString.clear();
     if ((unsigned)unitType >= eUnit_Type_MAX)
     {
         std::cout << "Cannot add unit " << unitType << " because it is out-of-range" << std::endl;
+		m_errorString = "UnitType '" + toStr(unitType) + "' is out-of-range";
         return false;
     }
 
     Wizard* wizard = game.getWizard(playerNr);
     if (0 == wizard)
+	{
+		m_errorString = "Wizard data of player '" + toStr(playerNr) + "' is not accessible";
         return false;
+	}
 
     // TODO: Check playerNr range + wizard not destroyed
 
@@ -61,7 +66,10 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
 
     Unit* unit = game.getUnit(unitNr);
     if (0 == unit)
+	{
+		m_errorString = "Failed to create a unit for unitNr '" + toStr(unitNr) + "'";
         ok = false;
+	}
 
 	// Initialize the unit to be on the board
 	if (ok) 
@@ -98,14 +106,13 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
 
 bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
 {
-    if (cityNr < 0 || cityNr >= game.getNrCities())
-    {
-        std::cout << "Cannot apply Building Queue to city " << cityNr << " because it is out-of-range" << std::endl;
-        return false;
-    }
+	m_errorString.clear();
     City* city = game.getCity(cityNr);
     if (0 == city)
+	{
+		m_errorString = "Cannot get the data for to city  '" + toStr(cityNr) + "'";
         return false;
+	}
 
     eProducing producingBefore = city->m_Producing;
 
@@ -261,6 +268,7 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
 
 bool MoMController::applyBuildingQueue(MoMGameBase& game, ePlayer playerNr)
 {
+	m_errorString.clear();
     bool ok = true;
     for (int cityNr = 0; cityNr < game.getNrCities(); ++cityNr)
     {
@@ -278,10 +286,12 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, ePlayer playerNr)
 
 bool MoMController::createUnit(MoMGameBase& game, int& unitNr)
 {
+	m_errorString.clear();
     if (game.getNrUnits() < 0
         || game.getNrUnits() >= (int)gMAX_UNITS)
     {
         std::cout << "Cannot create a unit because NrUnits is out-of-range" << std::endl;
+		m_errorString = "Cannot create a unit because NrUnits '" + toStr(game.getNrUnits()) + "' is out-of-range";
         return false;
     }
 
@@ -289,7 +299,10 @@ bool MoMController::createUnit(MoMGameBase& game, int& unitNr)
 
     Unit* unit = game.getUnit(unitNr);
     if (0 == unit)
+	{
+		m_errorString = "Cannot retrieve data for unit '" + toStr(unitNr) + "'";
         return false;
+	}
 
     memset(unit, '\0', sizeof(unit));
 
@@ -303,6 +316,7 @@ bool MoMController::createUnit(MoMGameBase& game, int& unitNr)
 
 bool MoMController::findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units)
 {
+	m_errorString.clear();
     units.clear();
 
     for (int unitNr = 0; unitNr < game.getNrUnits(); ++unitNr)
@@ -324,6 +338,7 @@ bool MoMController::findUnitsAtLocation(MoMGameBase& game, const Location& locat
 
 bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr)
 {
+	m_errorString.clear();
     // EXTRA INPUT:
 	// TODO: Retrieve heroName from game
 	// TODO: Retrieve heroSlotTypes from game
@@ -395,6 +410,7 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
         if (-1 != wizard->m_Heroes_hired_by_wizard[heroSlotNr].m_Unit_Nr)
         {
             std::cout << "Player " << playerNr << " cannot add hero " << heroNr << " because he has no free slot" << std::endl;
+			m_errorString = "Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because he has no free slot";
             return false;
         }
     }
@@ -405,6 +421,7 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
     if (HEROLEVELSTATUS_Active_in_Wizards_army == heroStats->m_Level_Status)
     {
         std::cout << "Player " << playerNr << " cannot add hero " << heroNr << " because that hero is already active in his army" << std::endl;
+		m_errorString = "Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because that hero is already active in his army";
         return false;
     }
 
@@ -469,6 +486,7 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
 
 bool MoMController::repopLairs(MoMGameBase& game, bool maxOut)
 {
+	m_errorString.clear();
     for (unsigned lairNr = 0; lairNr < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
     {
         Tower_Node_Lair* lair = game.getLair(lairNr);
@@ -511,6 +529,7 @@ bool MoMController::repopLairs(MoMGameBase& game, bool maxOut)
 
 bool MoMController::validateConsistency(MoMGameBase& game)
 {
+	m_errorString.clear();
     bool ok = true;
 
     // Check internal consistencies

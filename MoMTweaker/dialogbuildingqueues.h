@@ -17,6 +17,10 @@ namespace Ui {
     class DialogBuildingQueues;
 }
 
+namespace MoM {
+	class MoMGameBase;
+}
+
 class DialogBuildingQueues : public QDialog
 {
     Q_OBJECT
@@ -25,13 +29,18 @@ public:
     explicit DialogBuildingQueues(QWidget *parent = 0);
     ~DialogBuildingQueues();
 
+private slots:
+    void on_buttonBox_clicked(QAbstractButton* button);
+	void slot_gameChanged(MoM::MoMGameBase* game);
+	void slot_gameUpdated();
+
 private:
     void update();
 
-    Ui::DialogBuildingQueues *ui;
+	MoM::MoMGameBase* m_game;
 
-private slots:
-    void on_buttonBox_clicked(QAbstractButton* button);
+    Ui::DialogBuildingQueues *ui;
 };
+
 
 #endif // DIALOGBUILDINGQUEUES_H

@@ -68,6 +68,7 @@ private:
     std::auto_ptr<MoM::MoMGameBase> m_game;
 
 private slots:
+    void on_checkBox_UpdateTree_clicked();
     void on_pushButton_AddUnit_clicked();
     void on_pushButton_Connect_clicked();
     void on_pushButton_Load_clicked();
@@ -77,7 +78,13 @@ private slots:
     void on_pushButton_ShowTables_clicked();
     void on_pushButton_Tools_clicked();
 
-    void onTimer();
+	void slot_gameChanged(MoM::MoMGameBase* game);
+	void slot_gameUpdated();
+    void slot_timer();
+
+signals:
+	void signal_gameChanged(MoM::MoMGameBase* game);
+	void signal_gameUpdated();
 };
 
 #endif // MAINWINDOW_H

@@ -18,14 +18,10 @@
 
 #include "mainwindow.h"
 
-namespace
-{
-}
-
-
 DialogAddUnit::DialogAddUnit(QWidget *parent) :
     QDialog(parent),
-    m_unit(),
+	m_game(),
+    m_unit(new MoM::MoMUnit),
     m_labelWidth(),
     m_lineHeight(),
     m_pictureHeight(),
@@ -37,32 +33,6 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;
     m_font.setPointSize(16);
-
-    m_unit = new MoM::MoMUnit;
-    m_unit->setGame(getGame());
-
-    // Initialize combo box with units
-
-    // Note: clearing the combo box triggers a signal currentIndexChanged.
-    ui->comboBox_Unit->clear();
-
-    MoM::MoMGameBase* game = getGame();
-
-    ui->comboBox_Unit->addItem("");
-    MOM_FOREACH(eUnit_Type, unitTypeNr, eUnit_Type_MAX)
-    {
-        QString title = prettyQStr(unitTypeNr);
-
-        MoM::Unit_Type_Data* data = 0;
-        if ((0 != game) && (0 != (data = game->getUnit_Type_Data(unitTypeNr))))
-        {
-            title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
-        }
-        QIcon icon = MoM::QMoMResources::instance().getIcon(unitTypeNr);
-
-        ui->comboBox_Unit->addItem(icon, title);
-	}
-
 
     // Initalize graphics view with items that are fixed
     QRectF rectf = ui->graphicsView_Unit->rect();
@@ -107,22 +77,18 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 
     ui->graphicsView_Unit->setScene(m_sceneUnit);
+
+
+	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+
+	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 DialogAddUnit::~DialogAddUnit()
 {
     delete ui;
     delete m_sceneUnit;
-    delete m_unit;
-}
-
-MoM::MoMGameBase* DialogAddUnit::getGame()
-{
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
-    return game;
 }
 
 QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QString& text, bool fixed)
@@ -264,16 +230,53 @@ void DialogAddUnit::on_buttonBox_clicked(QAbstractButton *button)
 
     if (QDialogButtonBox::ApplyRole == ui->buttonBox->buttonRole(button))
     {
-        MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex());
+        MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex() - 1);
         controller->addUnit(unitType);
-        update();
     }
 }
 
 void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 {
     m_unit->setUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
+	update();
+}
 
+void DialogAddUnit::slot_gameChanged(MoM::MoMGameBase* game)
+{
+	m_game = game;
+	m_unit->setGame(m_game);
+
+   // Reinitialize combo box with units
+
+    // Note: clearing the combo box triggers a signal currentIndexChanged.
+	int index = ui->comboBox_Unit->currentIndex();
+    ui->comboBox_Unit->clear();
+
+    ui->comboBox_Unit->addItem("");
+    MOM_FOREACH(eUnit_Type, unitTypeNr, eUnit_Type_MAX)
+    {
+        QString title = prettyQStr(unitTypeNr);
+
+        MoM::Unit_Type_Data* data = 0;
+        if ((0 != game) && (0 != (data = game->getUnit_Type_Data(unitTypeNr))))
+        {
+            title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
+        }
+        QIcon icon = MoM::QMoMResources::instance().getIcon(unitTypeNr);
+
+        ui->comboBox_Unit->addItem(icon, title);
+	}
+
+	ui->comboBox_Unit->setCurrentIndex(index);	// Triggers update
+}
+
+void DialogAddUnit::slot_gameUpdated()
+{
+	update();
+}
+
+void DialogAddUnit::update()
+{
     // Remove old items
     foreach(QGraphicsItem* item, m_unitSpecificItems)
     {
@@ -281,9 +284,6 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
         delete item;
     }
     m_unitSpecificItems.clear();
-
-    if (index <= 0)
-        return;
 
     // Add new items
 

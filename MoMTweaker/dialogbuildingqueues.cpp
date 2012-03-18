@@ -14,6 +14,7 @@
 
 DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     QDialog(parent),
+	m_game(),
     ui(new Ui::DialogBuildingQueues)
 {
     ui->setupUi(this);
@@ -58,7 +59,10 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
 
-    update();
+	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+
+	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 DialogBuildingQueues::~DialogBuildingQueues()
@@ -71,18 +75,21 @@ void DialogBuildingQueues::update()
     MainWindow* controller = MainWindow::getInstance();
     if (0 == controller)
         return;
-    MoM::MoMGameBase* game = controller->getGame();
-    if (0 == game)
-        return;
+	int nrCities = 0;
+    if (0 != m_game)
+	{
+        nrCities = m_game->getNrCities();
+	}
 
     int row = 0;
-    for (int cityNr = 0; (cityNr < game->getNrCities()) && (cityNr < (int)MoM::gMAX_CITIES); ++cityNr)
+    for (int cityNr = 0; (cityNr < nrCities) && (cityNr < (int)MoM::gMAX_CITIES); ++cityNr)
     {
-        MoM::City* city = game->getCity(cityNr);
+        MoM::City* city = m_game->getCity(cityNr);
         if (0 == city)
             break;
         if (MoM::PLAYER_YOU != city->m_Owner)
             continue;
+		QString buildingCost = QString("%0").arg(m_game->getCostToProduce(city->m_Producing));
 
         if (row >= ui->tableWidget_Cities->rowCount())
         {
@@ -91,7 +98,7 @@ void DialogBuildingQueues::update()
         ui->tableWidget_Cities->setItem(row, 0, new QTableWidgetItem(city->m_City_Name));
         ui->tableWidget_Cities->setItem(row, 1, new QTableWidgetItem(prettyQStr(city->m_Race)));
         ui->tableWidget_Cities->setItem(row, 2, new QTableWidgetItem(QString("%0").arg(int(city->m_Population))));
-        ui->tableWidget_Cities->setItem(row, 3, new QTableWidgetItem(QString("%0 / %1").arg(int(city->m_HammersAccumulated)).arg("?")));
+		ui->tableWidget_Cities->setItem(row, 3, new QTableWidgetItem(QString("%0 / %1").arg((int)city->m_HammersAccumulated).arg(buildingCost)));
         ui->tableWidget_Cities->setItem(row, 4, new QTableWidgetItem(prettyQStr(city->m_Producing)));
 //        ui->tableWidget_Cities->setItem(row, 5, new QTableWidgetItem("?"));
 
@@ -103,7 +110,7 @@ void DialogBuildingQueues::update()
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
 {
-    MainWindow* controller = dynamic_cast<MainWindow*>(this->parent());
+    MainWindow* controller = MainWindow::getInstance();
     if (0 == controller)
         return;
 
@@ -112,4 +119,15 @@ void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
         controller->applyBuildQueues();
         update();
     }
+}
+
+void DialogBuildingQueues::slot_gameChanged(MoM::MoMGameBase* game)
+{
+	m_game = game;
+	update();
+}
+
+void DialogBuildingQueues::slot_gameUpdated()
+{
+	update();
 }

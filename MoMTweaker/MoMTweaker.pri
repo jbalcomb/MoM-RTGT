@@ -23,9 +23,9 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/MoMExeWizards.h \
     ../MoMEditorTemplate/QMoMCommon.h \
     ../MoMEditorTemplate/QMoMGenerated.h \
+    ../MoMEditorTemplate/QMoMMapTile.h \
+    ../MoMEditorTemplate/QMoMResources.h \
     ../MoMEditorTemplate/treeitem.h \
-    QMoMMapTile.h \
-    QMoMResources.h \
     unitmodel.h \
     dialogcalculatoraddress.h \
     dialogselectinitialspells.h \
@@ -51,8 +51,8 @@ SOURCES += ./main.cpp \
     ../MoMEditorTemplate/MoMutility.cpp \
     ../MoMEditorTemplate/QMoMCommon.cpp \
     ../MoMEditorTemplate/QMoMGenerated.cpp \
-    QMoMMapTile.cpp \
-    QMoMResources.cpp \
+    ../MoMEditorTemplate/QMoMMapTile.cpp \
+    ../MoMEditorTemplate/QMoMResources.cpp \
     unitmodel.cpp \
     dialogcalculatoraddress.cpp \
     dialogselectinitialspells.cpp \

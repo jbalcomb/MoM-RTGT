@@ -40,6 +40,8 @@ public:
         return &cities[cityNr];
     }
 
+	int getCostToProduce(eProducing producing);
+
     virtual std::string getGameDirectory() = 0;
 
     Hero_stats* getHero_stats(ePlayer playerNr, eUnit_Type heroNr)
@@ -138,7 +140,7 @@ public:
     virtual eTerrainType* getTerrainType(ePlane plane, int x, int y)
     {
         eTerrainType* terrainTypes = getTerrainTypes();
-        if (0 == terrainTypes)
+		if ((0 == terrainTypes) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
             return 0;
         return (terrainTypes + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
@@ -146,21 +148,21 @@ public:
     Unit* getUnit(int unitNr)
     {
         Unit* units = getUnits();
-        if (0 == units)
+		if ((0 == units) || !inRange(unitNr, MoM::gMAX_UNITS))
             return 0;
         return &units[unitNr];
     }
     Unit_Type_Data* getUnit_Type_Data(eUnit_Type unitType)
     {
         Unit_Type_Data* unitTypes = getUnit_Types();
-        if (0 == unitTypes)
+		if ((0 == unitTypes) || !inRange(unitType, MoM::eUnit_Type_MAX))
             return 0;
         return &unitTypes[unitType];
     }
     Wizard* getWizard(int wizardNr)
     {
         Wizard* wizards = getWizards();
-        if (0 == wizards)
+		if ((0 == wizards) || !inRange(wizardNr, MoM::gMAX_WIZARD_RECORDS))
             return 0;
         return &wizards[wizardNr];
     }

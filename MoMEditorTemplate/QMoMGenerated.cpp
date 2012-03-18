@@ -519,7 +519,7 @@ TreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_Scout", new TreeItem<uint8_t>(&rhs->m_Scout));
     ptree->appendChild("m_Transport_Capacity_GUESS", new TreeItem<uint8_t>(&rhs->m_Transport_Capacity_GUESS));
     ptree->appendChild("m_Total_Figures", new TreeItem<uint8_t>(&rhs->m_Total_Figures));
-    ptree->appendChild("m_Construction_Capacity", new TreeItem<uint8_t>(&rhs->m_Construction_Capacity));
+    ptree->appendChild("m_Construction", new TreeItem<uint8_t>(&rhs->m_Construction));
     ptree->appendChild("m_Gaze_Modifier", new TreeItem<uint8_t>(&rhs->m_Gaze_Modifier));
     ptree->appendTree(constructTreeItem(&rhs->m_Movement_Flags, "m_Movement_Flags"), "");
     ptree->appendChild("m_Zero01", new TreeItem<uint8_t>(&rhs->m_Zero01));
@@ -4804,7 +4804,7 @@ TreeItemBase* constructTreeItem(Unit_Type_Data* rhs, const QString& context)
     ptree->appendChild("m_Scout", new TreeItem<uint8_t>(&rhs->m_Scout));
     ptree->appendChild("m_Transport_Capacity", new TreeItem<uint8_t>(&rhs->m_Transport_Capacity));
     ptree->appendChild("m_Nr_Figures", new TreeItem<uint8_t>(&rhs->m_Nr_Figures));
-    ptree->appendChild("m_Construction_Capacity", new TreeItem<uint8_t>(&rhs->m_Construction_Capacity));
+    ptree->appendChild("m_Construction", new TreeItem<uint8_t>(&rhs->m_Construction));
     ptree->appendChild("m_Gaze_Modifier", new TreeItem<int8_t>(&rhs->m_Gaze_Modifier));
     ptree->appendTree(constructTreeItem(&rhs->m_Movement_Flags, "m_Movement_Flags"), "");
     ptree->appendChild("m_Zero02", new TreeItem<uint8_t>(&rhs->m_Zero02));

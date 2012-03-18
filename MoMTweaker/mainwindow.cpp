@@ -43,7 +43,7 @@ MainWindow* MainWindow::m_instance = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_timer(),
+    m_timer(new QTimer()),
     m_UnitModel(this),
     m_filedialogLoadGame(this),
     m_filedialogSaveGame(this),
@@ -52,10 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 	m_instance = this;
-
-    m_timer = new QTimer();
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimer()));
-    m_timer->start(10000);
 
     QStringList searchPaths(":/images");
     searchPaths.append(":/units");
@@ -94,12 +90,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->setFont(fontTreeView);
 #endif
 
-    if (ui->checkBox_UpdateTree->isChecked())
-    {
-        ui->treeView->setModel(&m_UnitModel);
-    }
+    ui->treeView->setModel(&m_UnitModel);
 
-    update();
+	QObject::connect(this, SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+	QObject::connect(this, SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(slot_timer()));
+    m_timer->start(10000);
+
+    slot_gameChanged(0);
 }
 
 MainWindow::~MainWindow()
@@ -137,12 +135,13 @@ void MainWindow::addUnit(MoM::eUnit_Type unitType)
 
     if (ok)
     {
-		ok = MoM::MoMController::addUnit(*m_game, MoM::PLAYER_YOU, unitType);
+		MoM::MoMController momController;
+		ok = momController.addUnit(*m_game, MoM::PLAYER_YOU, unitType);
         if (!ok)
         {
             (void)QMessageBox::warning(this,
                 tr("Summon"),
-                tr("Failed to summon"));
+				tr("Failed to summon %0: %1").arg(prettyQStr(unitType)).arg(momController.errorString().c_str()));
         }
     }
 
@@ -158,9 +157,8 @@ void MainWindow::addUnit(MoM::eUnit_Type unitType)
     else
     {
         statusBar()->showMessage(tr("Summon complete"));
+		emit signal_gameUpdated();
     }
-
-    update();
 }
 
 void MainWindow::applyBuildQueues()
@@ -177,12 +175,13 @@ void MainWindow::applyBuildQueues()
 
     if (ok)
     {
-        ok = MoM::MoMController::applyBuildingQueue(*m_game, MoM::PLAYER_YOU);
+		MoM::MoMController momController;
+        ok = momController.applyBuildingQueue(*m_game, MoM::PLAYER_YOU);
         if (!ok)
         {
             (void)QMessageBox::warning(this,
                 tr("Apply Building Queues"),
-                tr("Failed to apply the Building Queues"));
+				tr("Failed to apply the Building Queues: %0").arg(momController.errorString().c_str()));
         }
     }
 
@@ -198,9 +197,8 @@ void MainWindow::applyBuildQueues()
     else
     {
         statusBar()->showMessage(tr("Building Queues applied"));
+		emit signal_gameUpdated();
     }
-
-    update();
 }
 
 bool MainWindow::commitMemory()
@@ -487,7 +485,11 @@ BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 void MainWindow::on_pushButton_Connect_clicked()
 {
     m_game.reset();
-    m_UnitModel.setGame(m_game.get());
+
+	if (ui->checkBox_UpdateTree->isChecked())
+    {
+	    m_UnitModel.setGame(m_game.get());
+	}
 
     QString title("DOSBox Status Window");
 
@@ -528,11 +530,18 @@ void MainWindow::on_pushButton_Connect_clicked()
     }
     else
     {
-        statusBar()->showMessage(tr("Updating treeview ..."));
-        m_UnitModel.setGame(m_game.get());
+		if (ui->checkBox_UpdateTree->isChecked())
+		{
+			statusBar()->showMessage(tr("Updating treeview ..."));
+			m_UnitModel.setGame(m_game.get());
+		}
         statusBar()->showMessage(tr("Game connected"));
     }
-    update();
+
+	if (ok)
+	{
+		emit signal_gameChanged(m_game.get());
+	}
 
     if (ok)
     {
@@ -555,7 +564,11 @@ void MainWindow::on_pushButton_Load_clicked()
 
     statusBar()->showMessage(tr("Game cleared"));
     m_game.reset();
-    m_UnitModel.setGame(m_game.get());
+
+	if (ui->checkBox_UpdateTree->isChecked())
+    {
+	    m_UnitModel.setGame(m_game.get());
+	}
 
     QString fileName = m_filedialogLoadGame.selectedFiles().first();
 
@@ -575,12 +588,10 @@ void MainWindow::on_pushButton_Load_clicked()
     else
     {
         m_game = saveGame;
-        statusBar()->showMessage(tr("Updating Treeview..."));
-        m_UnitModel.setGame(m_game.get());
         statusBar()->showMessage(tr("Game loaded"));
     }
 
-    update();
+	emit signal_gameChanged(m_game.get());
 }
 
 void MainWindow::on_pushButton_Save_clicked()
@@ -631,11 +642,11 @@ void MainWindow::on_pushButton_Reread_clicked()
     else
     {
         statusBar()->showMessage(tr("Reread completed"));
+		emit signal_gameUpdated();
     }
-    update();
 }
 
-void MainWindow::onTimer()
+void MainWindow::slot_timer()
 {
     if ((0 == m_game.get()) || (0 != dynamic_cast<MoM::MoMGameSave*>(m_game.get())))
         return;
@@ -649,10 +660,15 @@ void MainWindow::onTimer()
     {
         statusBar()->showMessage(tr("Reread completed"), 200);
     }
-    update();
+	if (ok && ui->checkBox_ApplyBuildQueues->isChecked())
+	{
+		applyBuildQueues();
+	}
+	if (ok)
+	{
+		emit signal_gameUpdated();
+	}
 }
-
-
 
 void MainWindow::on_pushButton_AddUnit_clicked()
 {
@@ -672,9 +688,47 @@ void MainWindow::on_pushButton_Map_clicked()
     dialog->show();
 }
 
-
 void MainWindow::on_pushButton_Tools_clicked()
 {
     DialogTools* dialog = new DialogTools(this);
     dialog->show();
 }
+
+void MainWindow::on_checkBox_UpdateTree_clicked()
+{
+	if (ui->checkBox_UpdateTree->isChecked())
+    {
+		statusBar()->showMessage(tr("Updating Treeview..."));
+	    m_UnitModel.setGame(m_game.get());
+        statusBar()->showMessage(tr("Treeview updated"));
+	}
+	else
+	{
+        statusBar()->showMessage(tr("Treeview is not updated anymore"));
+	}
+}
+
+void MainWindow::slot_gameChanged(MoM::MoMGameBase* game)
+{
+	// Ignore the "game" parameter, since we are already the owner of it and triggered it ourselves.
+	assert(m_game.get() == game);
+
+	// Load resources
+	MoM::QMoMResources::instance().setGame(m_game.get());
+
+	// TODO: Get the UnitModel its own slots.
+	if (ui->checkBox_UpdateTree->isChecked())
+    {
+		statusBar()->showMessage(tr("Updating Treeview..."));
+	    m_UnitModel.setGame(m_game.get());
+        statusBar()->showMessage(tr("Treeview updated"));
+	}
+
+	update();
+}
+
+void MainWindow::slot_gameUpdated()
+{
+	update();
+}
+

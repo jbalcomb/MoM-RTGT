@@ -28,16 +28,21 @@ public:
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     void on_comboBox_Unit_currentIndexChanged(int index);
+	void slot_gameChanged(MoM::MoMGameBase* game);
+	void slot_gameUpdated();
 
 private:
-    MoM::MoMGameBase* getGame();
-
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
     void displaySpecial(QPointF& pos, const QString& specialName, int specialValue);
     void displayStrength(QPointF& pos, int strength, const QString& imageBaseName);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);
+	void update();
 
-    MoM::MoMUnit* m_unit;
+	// CONFIG
+
+	// STATUS
+	MoM::MoMGameBase* m_game;
+	std::auto_ptr<MoM::MoMUnit> m_unit;
 
     QFont m_font;
     int m_labelWidth;

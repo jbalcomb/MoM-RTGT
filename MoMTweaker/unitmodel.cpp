@@ -834,8 +834,6 @@ void UnitModel::setupModelData(MoM::MoMGameBase* game)
 
     TreeItemBase::setGame(game);
 
-    QMoMResources::instance().setGame(game);
-
     int toprow = 0;
 
     {

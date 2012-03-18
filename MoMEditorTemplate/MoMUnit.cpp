@@ -287,7 +287,7 @@ MoMUnit::MapSpecials MoMUnit::getSpecials() const
             ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Scout);
         }
         ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Transport_Capacity);
-        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction_Capacity);
+        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction);
         ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Gaze_Modifier);
     }
 

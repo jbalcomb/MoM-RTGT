@@ -34,6 +34,29 @@ MoMGameBase::~MoMGameBase()
 
 // TODO: Centralize getGameDirectory() here.
 
+int MoMGameBase::getCostToProduce(eProducing producing)
+{
+	int buildingCost = -1;
+	if (producing < MoM::PRODUCING_BUILDING_MAX)
+	{
+		MoM::Building_Data* buildingData = getBuilding_Data((eBuilding)producing);
+		if (0 != buildingData)
+		{
+			buildingCost = buildingData->m_Building_cost;
+		}
+	}
+	else 
+	{
+		MoM::eUnit_Type unitTypeNr = (MoM::eUnit_Type)((int)producing - (int)MoM::PRODUCING_Trireme + (int)MoM::UNITTYPE_Trireme);
+		MoM::Unit_Type_Data* unitData = getUnit_Type_Data(unitTypeNr);
+		if (0 != unitData)
+		{
+			buildingCost = unitData->m_Cost;
+		}
+	}
+	return buildingCost;
+}
+
 // TODO: Replace all references in other modules to race names by getRaceName()
 
 std::string MoMGameBase::getRaceName(eRace race)

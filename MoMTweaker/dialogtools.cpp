@@ -118,13 +118,14 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
 
     if (ok)
     {
-        ok = MoM::MoMController::repopLairs(*game, 
+		MoM::MoMController momController;
+        ok = momController.repopLairs(*game, 
             ui->checkBox_RepopMaxOut->isChecked());
         if (!ok)
         {
             (void)QMessageBox::warning(this, 
                 tr("Repop Lairs"),
-                tr("Failed to repop the lairs"));
+				tr("Failed to repop the lairs: %0").arg(momController.errorString().c_str()));
         }
     }
 

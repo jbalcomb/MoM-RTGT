@@ -11,6 +11,7 @@ Windows/
 # Wild cards
 *.log
 *.ncb
+*.pdb
 *.pro.user
 *.suo
 *.vcproj.*.user
