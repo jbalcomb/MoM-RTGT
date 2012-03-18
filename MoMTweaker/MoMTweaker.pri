@@ -5,7 +5,7 @@
 ## Created:     2010-05-01
 ## ---------------------------------------------------------------------------
 
-HEADERS += ./mainwindow.h \
+HEADERS += \
     ../MoMEditorTemplate/MoMcommon.h \
     ../MoMEditorTemplate/MoMController.h \
     ../MoMEditorTemplate/MoMGameCustom.h \
@@ -26,16 +26,18 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/QMoMMapTile.h \
     ../MoMEditorTemplate/QMoMResources.h \
     ../MoMEditorTemplate/QMoMTreeItem.h \
-    unitmodel.h \
-    dialogcalculatoraddress.h \
-    dialogselectinitialspells.h \
-    dialogbuildingqueues.h \
-    dialogtables.h \
-    dialogoverlandmap.h \
-    dialogaddunit.h \
-    dialogtools.h
-SOURCES += ./main.cpp \
-    ./mainwindow.cpp \
+    \
+    ../MoMTweaker/dialogcalculatoraddress.h \
+    ../MoMTweaker/dialogselectinitialspells.h \
+    ../MoMTweaker/dialogbuildingqueues.h \
+    ../MoMTweaker/dialogtables.h \
+    ../MoMTweaker/dialogoverlandmap.h \
+    ../MoMTweaker/dialogaddunit.h \
+    ../MoMTweaker/dialogtools.h \
+    ../MoMTweaker/mainwindow.h \
+    ../MoMTweaker/unitmodel.h
+
+SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
     ../MoMEditorTemplate/MoMGameBase.cpp \
     ../MoMEditorTemplate/MoMGameCustom.cpp \
@@ -53,20 +55,26 @@ SOURCES += ./main.cpp \
     ../MoMEditorTemplate/QMoMGenerated.cpp \
     ../MoMEditorTemplate/QMoMMapTile.cpp \
     ../MoMEditorTemplate/QMoMResources.cpp \
-    unitmodel.cpp \
-    dialogcalculatoraddress.cpp \
-    dialogselectinitialspells.cpp \
-    dialogbuildingqueues.cpp \
-    dialogtables.cpp \
-    dialogoverlandmap.cpp \
-    dialogaddunit.cpp \
-    dialogtools.cpp
-FORMS += ./mainwindow.ui \
-    dialogcalculatoraddress.ui \
-    dialogselectinitialspells.ui \
-    dialogbuildingqueues.ui \
-    dialogtables.ui \
-    dialogoverlandmap.ui \
-    dialogaddunit.ui \
-    dialogtools.ui
+    ../MoMEditorTemplate/QMoMTreeItem.cpp \
+    \
+    ../MoMTweaker/dialogcalculatoraddress.cpp \
+    ../MoMTweaker/dialogselectinitialspells.cpp \
+    ../MoMTweaker/dialogbuildingqueues.cpp \
+    ../MoMTweaker/dialogtables.cpp \
+    ../MoMTweaker/dialogoverlandmap.cpp \
+    ../MoMTweaker/dialogaddunit.cpp \
+    ../MoMTweaker/dialogtools.cpp \
+    ../MoMTweaker/mainwindow.cpp \
+    ../MoMTweaker/unitmodel.cpp
+
+FORMS += \
+    ../MoMTweaker/mainwindow.ui \
+    ../MoMTweaker/dialogcalculatoraddress.ui \
+    ../MoMTweaker/dialogselectinitialspells.ui \
+    ../MoMTweaker/dialogbuildingqueues.ui \
+    ../MoMTweaker/dialogtables.ui \
+    ../MoMTweaker/dialogoverlandmap.ui \
+    ../MoMTweaker/dialogaddunit.ui \
+    ../MoMTweaker/dialogtools.ui
+
 RESOURCES += ../Resources/InteractiveGameTweaker.qrc

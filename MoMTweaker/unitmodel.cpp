@@ -23,10 +23,6 @@
 
 using MoM::QMoMResources;
 
-// TODO: Remove all (other) references of m_game from this file
-MoM::MoMGameBase* QMoMTreeItemBase::m_game = 0;
-
-
 UnitModel::UnitModel(QObject *parent) :
     QAbstractItemModel(parent),
     m_rootItem(0)

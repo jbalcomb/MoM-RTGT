@@ -89,6 +89,8 @@ private slots:
 signals:
 	void signal_gameChanged(MoM::MoMGameBase* game);
 	void signal_gameUpdated();
+
+    friend class Test_MoMTweaker_MainWindow;
 };
 
 #endif // MAINWINDOW_H

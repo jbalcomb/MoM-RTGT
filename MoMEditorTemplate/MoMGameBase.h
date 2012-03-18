@@ -22,6 +22,11 @@ public:
 
     virtual ~MoMGameBase();
 
+    virtual std::string errorString() const
+    {
+        return m_errorString;
+    }
+
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
     Building_Data* getBuilding_Data(eBuilding building)
@@ -311,10 +316,19 @@ public:
         return 0;
     }
 
+protected:
+    virtual void setErrorString(const std::string& value)
+    {
+        m_errorString = value;
+    }
+
 private:
     // NOT IMPLEMENTED
     MoMGameBase(const MoMGameBase& rhs);
     MoMGameBase& operator=(const MoMGameBase& rhs);
+
+    // STATUS
+    std::string m_errorString;
 };
 
 }

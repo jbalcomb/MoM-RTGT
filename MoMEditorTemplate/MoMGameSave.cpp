@@ -80,6 +80,7 @@ MoMGameSave::~MoMGameSave()
 
 bool MoMGameSave::commitData(void* ptr, const void* pNewValue, size_t size)
 {
+    setErrorString("");
     // TODO: Check memory pointer + range
     memcpy(ptr, pNewValue, size);
     return true;
@@ -117,6 +118,7 @@ uint8_t* MoMGameSave::getMagicOverlay(size_t ovlNr)
 bool MoMGameSave::load(const char* filename)
 {
     assert(0 != filename);
+    setErrorString("");
 
     std::string lower_filetitle = lowercase_filetitle(filename);
     std::string ext = lowercase_extension(filename);
@@ -125,7 +127,8 @@ bool MoMGameSave::load(const char* filename)
         std::ifstream ifs(filename, std::ios_base::in | std::ios_base::binary);
         if (!ifs)
         {
-            std::cout << "Could not open file '"<< filename << "' for reading" << std::endl;
+            setErrorString("Could not open file '" + toStr(filename) + "' for reading");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -133,7 +136,8 @@ bool MoMGameSave::load(const char* filename)
         memset(m_SaveGame.get(), '\0', sizeof(SaveGame));
         if (!ifs.read((char*)m_SaveGame.get(), sizeof(SaveGame)))
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
         m_filename_SaveGame = filename;
@@ -144,7 +148,8 @@ bool MoMGameSave::load(const char* filename)
         bool ok = m_BuilddatLbx->load(filename);
         if (!ok)
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -154,7 +159,8 @@ bool MoMGameSave::load(const char* filename)
         bool ok = m_SpelldatLbx->load(filename);
         if (!ok)
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -164,7 +170,8 @@ bool MoMGameSave::load(const char* filename)
         bool ok = m_TerrstatLbx->load(filename);
         if (!ok)
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -174,6 +181,8 @@ bool MoMGameSave::load(const char* filename)
         bool ok = lbxFile.load(filename);
         if (!ok)
         {
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -182,7 +191,8 @@ bool MoMGameSave::load(const char* filename)
         m_MagicExe.reset(new MoMExeMagic);
         if (!m_MagicExe->load(filename))
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -193,7 +203,8 @@ bool MoMGameSave::load(const char* filename)
         m_WizardsExe.reset(new MoMExeWizards);
         if (!m_WizardsExe->load(filename))
         {
-            std::cout << "Could not (fully) read file '"<< filename << "'" << std::endl;
+            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -201,7 +212,8 @@ bool MoMGameSave::load(const char* filename)
     }
     else
     {
-        std::cout << "Filename pattern unrecognized of '"<< filename << "'" << std::endl;
+        setErrorString("Filename pattern unrecognized of '" + toStr(filename) + "'");
+        std::cout << errorString() << std::endl;
         return false;
     }
 
@@ -215,6 +227,7 @@ bool MoMGameSave::load(const char* filename)
 bool MoMGameSave::save(const char* filename)
 {
     assert(0 != filename);
+    setErrorString("");
 
     std::string lower_filetitle = lowercase_filetitle(filename);
     std::string ext = lowercase_extension(filename);
@@ -222,20 +235,23 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_SaveGame.get())
         {
-            std::cout << "Cannot save because no SAVEn.GAM was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no SAVEn.GAM was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         std::ofstream ofs(filename, std::ios_base::out | std::ios_base::binary);
         if (!ofs)
         {
-            std::cout << "Could not open file '"<< filename << "' for writing" << std::endl;
+            setErrorString("Could not open file '" + toStr(filename) + "' for writing");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!ofs.write((const char*)m_SaveGame.get(), sizeof(SaveGame)))
         {
-            std::cout << "Could not write SAVEn.GAM data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write SAVEn.GAM data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -245,13 +261,15 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_MagicExe.get())
         {
-            std::cout << "Cannot save because no MAGIC.EXE was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no MAGIC.EXE was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!m_MagicExe->save(filename))
         {
-            std::cout << "Could not write MAGIC.EXE data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write MAGIC.EXE data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -261,13 +279,15 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_WizardsExe.get())
         {
-            std::cout << "Cannot save because no WIZARDS.EXE was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no WIZARDS.EXE was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!m_WizardsExe->save(filename))
         {
-            std::cout << "Could not write WIZARDS.EXE data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write WIZARDS.EXE data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
@@ -277,13 +297,15 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_BuilddatLbx.get())
         {
-            std::cout << "Cannot save because no BUILDDAT.LBX was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no BUILDDAT.LBX was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!m_BuilddatLbx->save(filename))
         {
-            std::cout << "Could not write BUILDDAT.LBX data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write BUILDDAT.LBX data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -291,13 +313,15 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_SpelldatLbx.get())
         {
-            std::cout << "Cannot save because no SPELLDAT.LBX was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no SPELLDAT.LBX was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!m_SpelldatLbx->save(filename))
         {
-            std::cout << "Could not write SPELLDAT.LBX data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write SPELLDAT.LBX data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
@@ -305,19 +329,22 @@ bool MoMGameSave::save(const char* filename)
     {
         if (0 == m_TerrstatLbx.get())
         {
-            std::cout << "Cannot save because no TERRSTAT.LBX was loaded" << std::endl;
+            setErrorString("Cannot save to '" + toStr(filename) + "' because no TERRSTAT.LBX was loaded");
+            std::cout << errorString() << std::endl;
             return false;
         }
 
         if (!m_TerrstatLbx->save(filename))
         {
-            std::cout << "Could not write TERRSTAT.LBX data (fully) to file '"<< filename << "'" << std::endl;
+            setErrorString("Could not write TERRSTAT.LBX data (fully) to file '" + toStr(filename) + "'");
+            std::cout << errorString() << std::endl;
             return false;
         }
     }
     else
     {
-        std::cout << "File extension unrecognized of '"<< filename << "'" << std::endl;
+        setErrorString("Could not write WIZARDS.EXE data (fully) to file '" + toStr(filename) + "'");
+        std::cout << errorString() << std::endl;
         return false;
     }
 
@@ -326,6 +353,7 @@ bool MoMGameSave::save(const char* filename)
 
 bool MoMGameSave::addLair()
 {
+    setErrorString("");
     if (0 == m_SaveGame.get())
         return false;
 
@@ -374,6 +402,7 @@ bool MoMGameSave::addLair()
 
 bool MoMGameSave::findYourFirstUnit(int& unitNr)
 {
+    setErrorString("");
     if (0 == m_SaveGame.get())
         return false;
 
@@ -394,6 +423,7 @@ bool MoMGameSave::findYourFirstUnit(int& unitNr)
 
 bool MoMGameSave::findOthersFirstUnit(int& unitNr)
 {
+    setErrorString("");
     if (0 == m_SaveGame.get())
         return false;
 
@@ -452,6 +482,7 @@ std::string MoMGameSave::getSources() const
 
 bool MoMGameSave::validate()
 {
+    setErrorString("");
     if (0 == m_SaveGame.get())
         return false;
 

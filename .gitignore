@@ -11,6 +11,7 @@ Windows/
 # Wild cards
 *.log
 *.ncb
+*.o
 *.pdb
 *.pro.user
 *.suo
@@ -19,10 +20,12 @@ Windows/
 core.*
 
 # Specific files
-core
 .cproject
 .project
+core
+dosbox.pid
 MoMCustomizer/Makefile
+MoMTest/Makefile
 MoMTweaker/Makefile
 Makefile.Debug
 Makefile.Release
