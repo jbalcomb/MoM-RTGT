@@ -9,5 +9,8 @@ all: generate
 	cd MoMCustomizer && make all
 	cd MoMTweaker && make all
 
+check:
+	cd MoMTest && make all && bin/MoMTest
+
 generate:
 	cd MoMEditorTemplate && make generate
