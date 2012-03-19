@@ -59,7 +59,7 @@ void Test_MoMTweaker_MainWindow::testCase_Connect_MagicExe()
     // Close DosBox
 }
 
-void Test_MoMTweaker_MainWindow::testCase_Connect_MagicExe()
+void Test_MoMTweaker_MainWindow::testCase_Connect_WizardsExe()
 {
     MainWindow w;
     w.show();
