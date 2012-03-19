@@ -30,7 +30,7 @@ void Test_MoMTweaker_MainWindow::testCase_Nominal()
     QTestEventList eventsConnect;
     eventsConnect.addMouseClick(Qt::LeftButton, 0, QPoint(), 1000);
     // Start thread to wait for QMessageBox and to close that window
-    eventsConnect.simulate(w.ui->pushButton_Connect);
+//    eventsConnect.simulate(w.ui->pushButton_Connect);
     // Wait (with a timeout) for QMessageBox to appear and then close it
     // If timeout
         // Close windows and emit failure
