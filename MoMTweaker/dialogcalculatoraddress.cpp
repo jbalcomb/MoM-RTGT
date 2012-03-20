@@ -41,7 +41,6 @@ MoM::MoMGameBase* DialogCalculatorAddress::getGame()
 
 void DialogCalculatorAddress::update()
 {
-    MoM::MoMGameBase* game = getGame();
 }
 
 void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffset)

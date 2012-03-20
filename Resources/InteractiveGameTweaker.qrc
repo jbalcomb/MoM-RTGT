@@ -16,6 +16,9 @@
         <file>abilities/Caster 40 MP.gif</file>
         <file>abilities/Cause Fear Spell.gif</file>
         <file>abilities/Charmed.gif</file>
+        <file>abilities/Chaos Channels Demon Wings.gif</file>
+        <file>abilities/Chaos Channels Demon Skin.gif</file>
+        <file>abilities/Chaos Channels Fiery Breath.gif</file>
         <file>abilities/Cold Immunity.gif</file>
         <file>abilities/Constitution.gif</file>
         <file>abilities/Constitution X.gif</file>
@@ -40,6 +43,7 @@
         <file>abilities/Illusionary attack.gif</file>
         <file>abilities/Immolation.gif</file>
         <file>abilities/Invisibility.gif</file>
+        <file>abilities/Land Corruption.gif</file>
         <file>abilities/Large Shield.gif</file>
         <file>abilities/Leadership X.gif</file>
         <file>abilities/Leadership.gif</file>
@@ -195,9 +199,6 @@
         <file>spells/Black Sleep.gif</file>
         <file>spells/Bless.gif</file>
         <file>spells/Blur.gif</file>
-        <file>spells/Chaos Channels Demon Wings.gif</file>
-        <file>spells/Chaos Channels Demon Skin.gif</file>
-        <file>spells/Chaos Channels Fiery Breath.gif</file>
         <file>spells/Chaos Channels.gif</file>
         <file>spells/Chaos Surge.gif</file>
         <file>spells/Charm of Life.gif</file>
@@ -206,11 +207,13 @@
         <file>spells/Darkness.gif</file>
         <file>spells/Eldritch Weapon.gif</file>
         <file>spells/Elemental Armor.gif</file>
+        <file>spells/Endurance.gif</file>
         <file>spells/Flame Blade.gif</file>
         <file>spells/Flight.gif</file>
         <file>spells/Giant Strength.gif</file>
         <file>spells/Guardian Wind.gif</file>
         <file>spells/Haste.gif</file>
+        <file>spells/Heroism.gif</file>
         <file>spells/High Prayer.gif</file>
         <file>spells/Holy Armor.gif</file>
         <file>spells/Holy Weapon.gif</file>
@@ -222,12 +225,14 @@
         <file>spells/Magic Immunity.gif</file>
         <file>spells/Metal Fires.gif</file>
         <file>spells/Path Finding.gif</file>
+        <file>spells/Planar Travel.gif</file>
         <file>spells/Prayer.gif</file>
         <file>spells/Regeneration.gif</file>
         <file>spells/Resist Elements.gif</file>
         <file>spells/Resist Magic.gif</file>
         <file>spells/Righteousness.gif</file>
         <file>spells/Shatter.gif</file>
+        <file>spells/Spell Lock.gif</file>
         <file>spells/Stone Skin.gif</file>
         <file>spells/Terror.gif</file>
         <file>spells/True Light.gif</file>
@@ -236,8 +241,10 @@
         <file>spells/Warp Creature.gif</file>
         <file>spells/Warp Reality.gif</file>
         <file>spells/Warp Wood.gif</file>
+        <file>spells/Water Walking.gif</file>
         <file>spells/Weakness.gif</file>
         <file>spells/Web.gif</file>
+        <file>spells/Wind Walking.gif</file>
         <file>spells/Wrack.gif</file>
         <file>spells/Wraith Form.gif</file>
         <file>heroes/aerie.gif</file>

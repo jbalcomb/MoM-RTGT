@@ -570,7 +570,6 @@ public:
     }
 
 signals:
-//    void signal_unitChanged(const MoM::MoMUnit* unit);
 
 public slots:
 

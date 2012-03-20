@@ -21,6 +21,7 @@ usage() {
     echo "USAGE:"
     echo ""
     echo "\$ $0 [-bcfghrt] [-p <platform>] [-q <qtdir>] [-R <URL>] <version>"
+    echo ""
     echo "-a           Do everything for a regular release"
     echo "             Equivalent to -bcfgrt"
     echo "-b           Compile all sources"
@@ -29,11 +30,11 @@ usage() {
     echo "             Implies -c that the sources must be checked out to <version>"
     echo "-g           Generate source. Necessary for a new build"
     echo "-p <platform> Build for the platform 'Linux' or 'Windows'"
-    echo "             Default is '$PLATFORM'"
+    echo "             Current value is '$PLATFORM'"
     echo "-q <qtdir>   Specify the location of Qt root directory"
-    echo "             Default is '$QTDIR'"
+    echo "             Current value is '$QTDIR'"
     echo "-R <URL>     Specify the location of the GIT repository"
-    echo "             Default is '$GIT_REPOS'"
+    echo "             Current value is '$GIT_REPOS'"
     echo "             Implies -f that the sources must be fetched"
     echo "-r           Copy to release directory and compress"
     echo "-t           Run tests to verify the build"
@@ -43,39 +44,68 @@ usage() {
     echo "EXAMPLE:"
     echo ""
     echo "\$ $0 -a 0.2.1"
-    echo "This will check out branch 0.2.1 from the GIT repository to '$CHECKOUTDIR',"
-    echo "build everything and copy it to '$RELEASEDIR'"
-    echo "where the applications will be compressed as well, ready for upload."
+    echo ""
+    echo "    This will check out branch 0.2.1 from the GIT repository to '$CHECKOUTDIR',"
+    echo "    build everything and copy it to '$RELEASEDIR'"
+    echo "    where the applications will be compressed as well, ready for upload."
     echo ""
     exit 2
 }
 
-while getopts abcfghp:q:R:rt name
+# options may be followed by one colon to indicate they have a required argument
+options=$(getopt -o abcfghp:q:R:rt -l all,build,checkout,fetch,generate,help,platform:,qtdir:,repository:,release,test -- "$@")
+
+#set -- $options
+
+while [ $# -gt 0 ]
 do
-    case $name in
-    a)  BUILD=1 ; FETCH=1 ; CHECKOUT=1 ; GENERATE=1 ; RELEASE=1 ; TEST=1 ;;
-    b)  BUILD=1 ;;
-    c)  CHECKOUT=1 ;;
-    f)  FETCH=1 ; CHECKOUT=1 ;;
-    g)  GENERATE=1 ;;
-    h)  usage ; exit 2 ;;
-    p)  PLATFORM="$OPTARG" ;;
-    q)  QTDIR="$OPTARG" ;;
-    R)  GIT_REPOS="$OPTARG" ; FETCH=1 ; CHECKOUT=1 ;;
-    r)  RELEASE=1 ;;
-    t)  TEST=1 ;;
-    ?)  usage ; exit 2 ;;
+    # for options with required arguments, an additional shift is required
+    case $1 in
+    (--) shift; break;;
+    -a|--all)        BUILD=1 ; FETCH=1 ; CHECKOUT=1 ; GENERATE=1 ; RELEASE=1 ; TEST=1 ;;
+    -b|--build)      BUILD=1 ;;
+    -c|--checkout)   CHECKOUT=1 ;;
+    -f|--fetch)      FETCH=1 ; CHECKOUT=1 ;;
+    -g|--generate)   GENERATE=1 ;;
+    -h|--help)       usage ; exit 2 ;;
+    -p|--platform)   PLATFORM="$2" ; shift ;;
+    -q|--qtdir)      QTDIR="$2" ; shift ;;
+    -R|--repository) GIT_REPOS="$2" ; shift ; FETCH=1 ; CHECKOUT=1 ;;
+    -r|--release)    RELEASE=1 ;;
+    -t|--test)       TEST=1 ;;
+    (-*)             echo "$0: error - unrecognized option $1" 1>&2 ; exit 2 ;;
+    (*)              break ;;
     esac
+    shift
 done
-shift $(($OPTIND - 1))
-VERSION="$1"
+
+#while getopts abcfghp:q:R:rt name
+#do
+#    case $name in
+#    a)  BUILD=1 ; FETCH=1 ; CHECKOUT=1 ; GENERATE=1 ; RELEASE=1 ; TEST=1 ;;
+#    b)  BUILD=1 ;;
+#    c)  CHECKOUT=1 ;;
+#    f)  FETCH=1 ; CHECKOUT=1 ;;
+#    g)  GENERATE=1 ;;
+#    h)  usage ; exit 2 ;;
+#    p)  PLATFORM="$OPTARG" ;;
+#    q)  QTDIR="$OPTARG" ;;
+#    R)  GIT_REPOS="$OPTARG" ; FETCH=1 ; CHECKOUT=1 ;;
+#    r)  RELEASE=1 ;;
+#    t)  TEST=1 ;;
+#    ?)  usage ; exit 2 ;;
+#    esac
+#done
+#shift $(($OPTIND - 1))
 
 # MAKE PLATFORM SPECIFIC CHOICES
 case $PLATFORM in
     Linux)   MAKE_ALL="make -j4" ;;
     Windows) MAKE_ALL="nmake -f Makefile.Release" ;;
-    *)       usage ; exit 2 ;;
+    *)       echo "$0: error - platform must be either 'Linux' or 'Windows' and not $PLATFORM" 1>&2 ; exit 2 ;;
 esac
+
+VERSION="$1"
 
 echo "CHECKOUTDIR=$CHECKOUTDIR"
 echo "GIT_REPOS=$GIT_REPOS"
@@ -87,9 +117,16 @@ echo "VERSION=$VERSION"
 echo ""
 
 if [ -z "$VERSION" ]; then
-    usage
+    echo "$0: error - version expected" 1>&2
     exit 2
 fi
+shift
+
+if [ $# -gt 0 ]; then
+    echo "$0: error - no more arguments were expected: $@" 1>&2
+    exit 2
+fi
+
 
 # FETCH from repository
 if [ -n "$FETCH" ]; then

@@ -28,6 +28,20 @@ MoMUnit::MoMUnit() :
 {
 }
 
+MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
+    m_game(),
+    m_battleUnit(),
+    m_heroStats(),
+    m_heroStatsInitializer(),
+    m_hiredHero(),
+    m_unit(),
+    m_unitType(),
+    m_up(),
+    m_dn()
+{
+    setGame(game);
+}
+
 MoMUnit::~MoMUnit()
 {
 }
@@ -79,13 +93,14 @@ void MoMUnit::close()
     m_dn = BaseAttributes();
 }
 
-void MoMUnit::changeUnitTypeNr(eUnit_Type unitTypeNr)
+void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
 {
     close();
 
     if (0 != m_game)
     {
 //        m_battleUnit = m_game->getBattle_Units();
+        // TODO: playerNr is YOU if you want to summon, or otherwise it is unknown
         m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
 //        m_hiredHero = 0;
@@ -102,6 +117,108 @@ void MoMUnit::changeUnitTypeNr(eUnit_Type unitTypeNr)
         }
     }
 }
+
+void MoMUnit::changeUnit(Hired_Hero *hiredHero)
+{
+    close();
+
+    m_hiredHero = hiredHero;
+
+    if (0 != m_game)
+    {
+        ePlayer playerNr = m_game->getPlayerNr(m_hiredHero);
+
+        m_unit = m_game->getUnit(hiredHero->m_Unit_Nr);
+        if (0 != m_unit)
+        {
+            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
+            m_heroStats = m_game->getHero_stats(playerNr, m_unit->m_Unit_Type);
+        }
+//        m_battleUnit = m_game->getBattle_Units();
+//        m_heroStatsInitializer = 0;
+    }
+}
+
+void MoMUnit::changeUnit(Hero_stats *heroStats)
+{
+    close();
+
+    m_heroStats = heroStats;
+
+    if (0 != m_game)
+    {
+        MoM::ePlayer playerNr = m_game->getPlayerNr(m_heroStats);
+        MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(m_heroStats);
+        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+
+        for (unsigned slotNr = 0; slotNr < gMAX_HIRED_HEROES; ++slotNr)
+        {
+            Hired_Hero* hiredHero = m_game->getHired_Hero(playerNr, slotNr);
+            if (0 == hiredHero)
+                continue;
+            Unit* unit = m_game->getUnit(hiredHero->m_Unit_Nr);
+            if (0 == unit)
+                continue;
+            if (unit->m_Unit_Type == unitTypeNr)
+            {
+                m_hiredHero = hiredHero;
+                m_unit = unit;
+            }
+        }
+//        m_battleUnit = m_game->getBattle_Units();
+//        m_heroStatsInitializer = 0;
+    }
+}
+
+void MoMUnit::changeUnit(Unit_Type_Data* unitType)
+{
+    close();
+
+    m_unitType = unitType;
+
+    if (0 != m_game)
+    {
+        MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(unitType);
+
+//        m_battleUnit = m_game->getBattle_Units();
+        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+//        m_heroStatsInitializer = 0;
+//        m_hiredHero = 0;
+//        m_unit = 0;
+
+        // TODO: Lucky should be centralized in a neat function or something
+        if (hasSpecial("Lucky"))
+        {
+            m_up.toHitMelee++;
+            m_up.toHitRanged++;
+            m_up.toDefend++;
+            m_up.resistance++;
+        }
+    }
+}
+
+void MoMUnit::changeUnit(Unit* unit)
+{
+    assert(0 != unit);
+    close();
+
+    m_unit = unit;
+
+    if (0 != m_game)
+    {
+        MoM::eUnit_Type unitTypeNr = unit->m_Unit_Type;
+
+//        m_battleUnit = m_game->getBattle_Units();
+        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+//        m_heroStatsInitializer = 0;
+        m_hiredHero = m_game->getHired_Hero(unit);
+        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+    }
+}
+
+//
+// BASE ATTRIBUTES
+//
 
 int MoMUnit::getMelee() const
 {
@@ -153,67 +270,11 @@ int MoMUnit::getHits() const
     return value;
 }
 
-std::string MoMUnit::getDisplayName() const
-{
-    std::string raceName = getRaceName();
-    std::string unitName = getUnitName();
+//
+// OTHER
+//
 
-    std::string name = raceName + " " + unitName;
-
-    return name;
-}
-
-double MoMUnit::getMoves() const
-{
-    double value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_MoveHalves / 2.0;
-    }
-    return value;
-}
-
-int MoMUnit::getNrFigures() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Nr_Figures;
-    }
-    return value;
-}
-
-eRace MoMUnit::getRace() const
-{
-    eRace value = (eRace)0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Race_Code;
-    }
-    return value;
-}
-
-std::string MoMUnit::getRaceName() const
-{
-    std::string name;
-    if ((0 != m_game) && (0 != m_unitType))
-    {
-        name = m_game->getRaceName(m_unitType->m_Race_Code);
-    }
-    return name;
-}
-
-eRanged_Type MoMUnit::getRangedType() const
-{
-    eRanged_Type value = MoM::RANGED_None;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Ranged_Type;
-    }
-    return value;
-}
-
-MoMUnit::MapSpecials MoMUnit::getSpecials() const
+MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 {
     MapSpecials mapSpecials;
 
@@ -258,8 +319,16 @@ MoMUnit::MapSpecials MoMUnit::getSpecials() const
         ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Agility);
 
         // Additional fields
-//        ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Level_Status);
-//        ADDMFIELDFEATURE(qtreeHSFlags, (unsigned)heroStats, Hero_Casting_Skill);
+        if (m_heroStats->m_Hero_Casting_Skill > 0)
+        {
+            int level = getLevel();
+            if (0 == level)
+            {
+                level++;
+            }
+            int spellPoints = level * (1 + getCastingSkill()) * 5 / 2;
+            mapSpecials["Caster"] = spellPoints;
+        }
 //        for (int spellNr = 0; spellNr < ARRAYSIZE(heroStats.m_Spell); ++spellNr)
 //        {
 //            if (MoM::SPELL_None != heroStats.m_Spell[spellNr])
@@ -346,14 +415,287 @@ MoMUnit::MapSpecials MoMUnit::getSpecials() const
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Hero_TypeCode_or_Building2);
         if (m_unitType->m_Scout != 1)
         {
-            ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Scout);
+            mapSpecials["Scout"] = (m_unitType->m_Scout - 1);
         }
         ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Transport_Capacity);
         ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction);
         ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Gaze_Modifier);
     }
 
+    if (0 != m_unit)
+    {
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Skin);
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Wings);
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Fiery_Breath);
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Undead);
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Stasis_initial);
+        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Stasis_lingering);
+    }
+
+#undef ADDMFIELDFEATURE
 #undef ADDFLAGFEATURE
+
+    return mapSpecials;
+}
+
+std::string MoMUnit::getDisplayName() const
+{
+    std::string raceName = getRaceName();
+    std::string unitName = getUnitName();
+
+    std::string name = raceName + " " + unitName;
+
+    return name;
+}
+
+std::string MoMUnit::getHeroName() const
+{
+    std::string name;
+    if (0 != m_hiredHero)
+    {
+        name = m_hiredHero->m_Hero_name;
+    }
+    return name;
+}
+
+MoMUnit::MapSpecials MoMUnit::getItemEffects() const
+{
+    MapSpecials mapSpecials;
+
+#define ADDFLAGFEATURE(m, u, field) \
+    if (u.s.field) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
+    }
+#define ADDFIELDFEATURE(m, u, field) \
+    if (u.field != 0) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u.field; \
+    }
+#define ADDMFIELDFEATURE(m, u, field) \
+    if (u->m_##field != 0) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u->m_##field; \
+    }
+
+    for (int itemSlotNr = 0; toUInt(itemSlotNr) < gMAX_ITEMSLOTS; ++itemSlotNr)
+    {
+        if ((0 == m_hiredHero) || (0 == m_game))
+            break;
+        MoM::Item* item = m_game->getItem(m_hiredHero->m_Items_In_Slot[itemSlotNr]);
+        if (0 == item)
+            continue;
+
+        // TODO
+//        ADDMFIELDFEATURE(mapSpecials, item, Item_Name);
+//        ADDMFIELDFEATURE(mapSpecials, item, Icon);
+//        ADDMFIELDFEATURE(mapSpecials, item, Slot_Required);
+//        ADDMFIELDFEATURE(mapSpecials, item, Item_Type);
+//        ADDMFIELDFEATURE(mapSpecials, item, Cost);
+
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Attack);
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, To_Hit);
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Defense);
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Movement_in_halves);
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Resistance);
+        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Spell_Points);
+        ADDFIELDFEATURE(mapSpecials, -(int)item->m_Bonuses, Spell_Save);
+
+        ADDMFIELDFEATURE(mapSpecials, item, Spell_Number_Charged);
+        ADDMFIELDFEATURE(mapSpecials, item, Number_Of_Charges);
+
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Vampiric);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Guardian_Wind);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Lightning);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Cloak_Of_Fear);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Destruction);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Wraith_Form);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Regeneration);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Pathfinding);
+
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Water_Walking);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Resist_Elements);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Elemental_Armour);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Doom_equals_Chaos);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Stoning);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Endurance);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Haste);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Invisibility);
+
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Death);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Flight);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Resist_Magic);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Magic_Immunity);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Flaming);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Holy_Avenger);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, True_Sight);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Phantasmal);
+
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Power_Drain);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Bless);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Lion_Heart);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Giant_Strength);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Planar_Travel);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Merging);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Righteousness);
+        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Invulnerability);
+    }
+
+#undef ADDMFIELDFEATURE
+#undef ADDFIELDFEATURE
+#undef ADDFLAGFEATURE
+
+    return mapSpecials;
+}
+
+int MoMUnit::getLevel() const
+{
+    int value = 0;
+    if (0 != m_unit)
+    {
+        value = m_unit->m_Level;
+    }
+    else if (0 != m_heroStats)
+    {
+        value = static_cast<int16_t>(m_heroStats->m_Level_Status);
+        if (value < 0)
+        {
+            value = -value;
+        }
+        else
+        {
+            value++;
+        }
+    }
+    return value;
+}
+
+double MoMUnit::getMoves() const
+{
+    double value = 0;
+    if (0 != m_unit)
+    {
+        value = m_unit->m_Moves_Left / 2.0;
+    }
+    else if (0 != m_unitType)
+    {
+        value = m_unitType->m_MoveHalves / 2.0;
+    }
+    return value;
+}
+
+double MoMUnit::getCastingSkill() const
+{
+    double value = 0;
+    if (0 != m_heroStats)
+    {
+        value = m_heroStats->m_Hero_Casting_Skill / 2.0;
+    }
+    return value;
+}
+
+int MoMUnit::getNrFigures() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Nr_Figures;
+    }
+    return value;
+}
+
+eRace MoMUnit::getRace() const
+{
+    eRace value = (eRace)0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Race_Code;
+    }
+    return value;
+}
+
+std::string MoMUnit::getRaceName() const
+{
+    std::string name;
+    if ((0 != m_game) && (0 != m_unitType))
+    {
+        name = m_game->getRaceName(m_unitType->m_Race_Code);
+    }
+    return name;
+}
+
+eRanged_Type MoMUnit::getRangedType() const
+{
+    eRanged_Type value = MoM::RANGED_None;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Ranged_Type;
+    }
+    return value;
+}
+
+MoMUnit::MapSpecials MoMUnit::getSpecials() const
+{
+    MapSpecials mapSpecials = getAbilityEffects();
+    MapSpecials mapItemEffects = getItemEffects();
+    MapSpecials mapSpellEffects = getSpellEffects();
+
+    mapSpecials.insert(mapItemEffects.begin(), mapItemEffects.end());
+    mapSpecials.insert(mapSpellEffects.begin(), mapSpellEffects.end());
+
+    return mapSpecials;
+}
+
+MoMUnit::MapSpecials MoMUnit::getSpellEffects() const
+{
+    MapSpecials mapSpecials;
+
+#define ADDSPELLFLAGFEATURE(m, u, field) \
+    if (u.s.field) \
+    { \
+        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
+    }
+
+    if (0 != m_unit)
+    {
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Immolation);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Guardian_Wind);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Berserk);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Cloak_of_Fear);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Black_Channels);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Wraith_Form);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Regeneration);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Path_Finding);
+
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Water_Walking);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Resist_Elements);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Elemental_Armor);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Stone_Skin);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Iron_Skin);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Endurance);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Spell_Lock);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Invisibility);
+
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Wind_Walking);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Flight);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Resist_Magic);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Magic_Immunity);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Flame_Blade);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Eldritch_Weapon);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, True_Sight);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Holy_Weapon);
+
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Heroism);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Bless);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Lionheart);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Giant_Strength);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Planar_Travel);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Holy_Armor);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Righteousness);
+        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Invulnerability);
+    }
+
+#undef ADDSPELLFLAGFEATURE
 
     return mapSpecials;
 }
@@ -402,7 +744,11 @@ std::string MoMUnit::getUnitName() const
 eUnit_Type MoMUnit::getUnitTypeNr() const
 {
     eUnit_Type value = (MoM::eUnit_Type)-1;
-    if ((0 != m_unitType) && (0 != m_game))
+    if ((0 != m_unit))
+    {
+        value = m_unit->m_Unit_Type;
+    }
+    else if ((0 != m_unitType) && (0 != m_game))
     {
         MoM::MoMGameBase* game = const_cast<MoM::MoMGameBase*>(m_game);
         value = game->getUnitTypeNr(m_unitType);
@@ -426,6 +772,16 @@ eWeaponType MoMUnit::getWeaponType() const
     if (0 != m_unit)
     {
         value = static_cast<eWeaponType>(m_unit->m_Weapon_Mutation.s.Weapon_Type);
+    }
+    return value;
+}
+
+int MoMUnit::getXP() const
+{
+    int value = 0;
+    if (0 != m_unit)
+    {
+        value = m_unit->m_Experience;
     }
     return value;
 }

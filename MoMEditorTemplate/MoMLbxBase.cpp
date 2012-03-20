@@ -150,7 +150,7 @@ bool MoMLbxBase::replaceRecord(size_t recordNr, const std::vector<uint8_t>& data
     if (recordNr >= this->getNrRecords())
         return false;
 
-    const uint32_t oldRecordSize = m_DataOffsets[recordNr + 1] - m_DataOffsets[recordNr];
+//    const uint32_t oldRecordSize = m_DataOffsets[recordNr + 1] - m_DataOffsets[recordNr];
     const uint32_t oldOffsetNext = m_DataOffsets[recordNr + 1];
     const uint32_t newOffsetNext = m_DataOffsets[recordNr] + dataBuffer.size();
     const uint32_t sizeToMove = m_DataOffsets[ this->getNrRecords() ] - m_DataOffsets[recordNr + 1];

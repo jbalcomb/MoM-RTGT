@@ -56,6 +56,22 @@ public:
             return 0;
         return &listHeroStats[heroNr];
     }
+    Hired_Hero* getHired_Hero(ePlayer playerNr, int slotNr)
+    {
+        Wizard* wizard = getWizard(playerNr);
+        if ((0 == wizard) || !inRange(slotNr, gMAX_HIRED_HEROES))
+            return 0;
+        return &wizard->m_Heroes_hired_by_wizard[slotNr];
+    }
+    Hired_Hero* getHired_Hero(const Unit* unit)
+    {
+        if (0 == unit)
+            return 0;
+        Wizard* wizard = getWizard(unit->m_Owner);
+        if ((0 == wizard) || !inRange(unit->m_Hero_Slot_Number, gMAX_HIRED_HEROES))
+            return 0;
+        return &wizard->m_Heroes_hired_by_wizard[unit->m_Hero_Slot_Number];
+    }
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
@@ -138,7 +154,40 @@ public:
         *getNumber_of_Wizards() = value;
     }
 
-	std::string getRaceName(eRace race);
+    ePlayer getPlayerNr(const Hero_stats* heroStats)
+    {
+        ePlayer value = (ePlayer)-1;
+        for (ePlayer playerNr = (ePlayer)0; toUInt(playerNr) < gMAX_VALID_WIZARDS; inc(playerNr))
+        {
+            Hero_stats* firstHeroStats = getList_Hero_stats(playerNr);
+            unsigned uUnitTypeNr = toUInt(heroStats - firstHeroStats);
+            if (uUnitTypeNr < gMAX_HERO_TYPES)
+            {
+                value = playerNr;
+                break;
+            }
+        }
+        return value;
+    }
+    ePlayer getPlayerNr(const Hired_Hero* hiredHero)
+    {
+        ePlayer value = (ePlayer)-1;
+        for (ePlayer playerNr = (ePlayer)0; toUInt(playerNr) < gMAX_VALID_WIZARDS; inc(playerNr))
+        {
+            Wizard* wizard = getWizard(playerNr);
+            if (0 == wizard)
+                continue;
+            Hired_Hero* firstHiredHero = wizard->m_Heroes_hired_by_wizard;
+            if (toUInt(hiredHero - firstHiredHero) < gMAX_HIRED_HEROES)
+            {
+                value = playerNr;
+                break;
+            }
+        }
+        return value;
+    }
+
+    std::string getRaceName(eRace race);
 
     virtual std::string getSources() const = 0;
 
@@ -163,6 +212,21 @@ public:
         if ((0 == unitTypes) || !inRange(unitTypeNr, MoM::eUnit_Type_MAX))
             return 0;
         return &unitTypes[unitTypeNr];
+    }
+    eUnit_Type getUnitTypeNr(const Hero_stats* heroStats)
+    {
+        eUnit_Type unitTypeNr = (eUnit_Type)-1;
+        for (ePlayer playerNr = (ePlayer)0; toUInt(playerNr) < gMAX_VALID_WIZARDS; inc(playerNr))
+        {
+            Hero_stats* firstHeroStats = getList_Hero_stats(playerNr);
+            unsigned value = toUInt(heroStats - firstHeroStats);
+            if (value < gMAX_HERO_TYPES)
+            {
+                unitTypeNr = (eUnit_Type)value;
+                break;
+            }
+        }
+        return unitTypeNr;
     }
     eUnit_Type getUnitTypeNr(const Unit_Type_Data* unitType)
     {

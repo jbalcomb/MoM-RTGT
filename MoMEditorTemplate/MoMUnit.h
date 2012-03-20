@@ -49,13 +49,18 @@ public:
     };
 
     MoMUnit();
+    explicit MoMUnit(MoM::MoMGameBase* game);
     virtual ~MoMUnit();
     MoMUnit(const MoMUnit& rhs);
     MoMUnit& operator=(const MoMUnit& rhs);
 
     void close();
 
-    void changeUnitTypeNr(eUnit_Type unitTypeNr);
+    void changeUnit(eUnit_Type unitTypeNr);
+    void changeUnit(Hired_Hero* hiredHero);
+    void changeUnit(Hero_stats* heroStats);
+    void changeUnit(Unit_Type_Data* unitType);
+    void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
 
     int getMelee() const;
@@ -66,18 +71,25 @@ public:
     int getToHitMelee() const;
     int getToHitRanged() const;
     int getToDefend() const;
-    double getMoves() const;
 
+    MapSpecials getAbilityEffects() const;
+    double getCastingSkill() const;
     std::string getDisplayName() const;
+    std::string getHeroName() const;
+    MapSpecials getItemEffects() const;
+    int getLevel() const;
+    double getMoves() const;
     int getNrFigures() const;
     eRace getRace() const;
     std::string getRaceName() const;
     eRanged_Type getRangedType() const;
     MapSpecials getSpecials() const;
+    MapSpecials getSpellEffects() const;
     std::string getUnitName() const;
     eUnit_Type getUnitTypeNr() const;
     int getUpkeep() const;
     eWeaponType getWeaponType() const;
+    int getXP() const;
 
     bool hasSpecial(const std::string& specialName) const;
 

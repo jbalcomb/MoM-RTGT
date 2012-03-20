@@ -128,13 +128,11 @@ QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QStrin
     return textItem;
 }
 
-void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int specialValue)
+void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir)
 {
   QGraphicsItem* item = 0;
 
-  QString imageName = ":/abilities/" + specialName + ".gif";
-
-  QPixmap pixmap(imageName);
+  QPixmap pixmap(pixmapDir + specialName + ".gif");
   item = m_sceneUnit->addPixmap(pixmap);
   m_unitSpecificItems.push_back(item);
   item->setPos(pos);
@@ -267,7 +265,7 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
     if (m_updating)
         return;
 
-    m_unit->changeUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
+    m_unit->changeUnit(static_cast<MoM::eUnit_Type>(index - 1));
 	update();
 }
 
@@ -300,7 +298,7 @@ void DialogAddUnit::slot_gameChanged(MoM::MoMGameBase* game)
 	}
 
     // Restore current unitType index
-    m_unit->changeUnitTypeNr(static_cast<MoM::eUnit_Type>(index - 1));
+    m_unit->changeUnit(static_cast<MoM::eUnit_Type>(index - 1));
     ui->comboBox_Unit->setCurrentIndex(index);
 
     update();
@@ -356,10 +354,21 @@ void DialogAddUnit::update()
     QGraphicsSimpleTextItem* textItem = 0;
 
     pos = QPointF(m_labelWidth, 0);
-    textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
     QFont fontName(MoM::QMoMResources::g_Font);
     fontName.setPointSize(20);
-    textItem->setFont(fontName);
+    if (m_unit->getHeroName().empty())
+    {
+        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
+        textItem->setFont(fontName);
+    }
+    else
+    {
+        textItem = addText(pos, QString(m_unit->getHeroName().c_str()));
+        textItem->setFont(fontName);
+        pos.ry() += fontName.pointSize();
+        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
+        textItem->setFont(fontName);
+    }
 
     pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
     textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
@@ -370,7 +379,6 @@ void DialogAddUnit::update()
     pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
     textItem = addText(pos, QString("%0").arg(m_unit->getUpkeep()));
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
 
     pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
     QPixmap pixmap(":images/tohit.gif");
@@ -429,13 +437,25 @@ void DialogAddUnit::update()
     displayStrength(pos, m_unit->getResist(), "resistance");
     displayStrength(pos, m_unit->getHits(), "heart");
 
-    MoM::MoMUnit::MapSpecials mapSpecials(m_unit->getSpecials());
+    MoM::MoMUnit::MapSpecials mapAbilityEffects(m_unit->getAbilityEffects());
+    MoM::MoMUnit::MapSpecials mapItemEffects(m_unit->getItemEffects());
+    MoM::MoMUnit::MapSpecials mapSpellEffects(m_unit->getSpellEffects());
     pos.rx() = 0;
     pos.ry() += m_lineHeight;
-    for (MoM::MoMUnit::MapSpecials::const_iterator it = mapSpecials.begin(); it != mapSpecials.end(); ++it)
+    for (MoM::MoMUnit::MapSpecials::const_iterator it = mapAbilityEffects.begin(); it != mapAbilityEffects.end(); ++it)
     {
         QString specialName(it->first.c_str());
-        displaySpecial(pos, specialName, it->second);
+        displaySpecial(pos, specialName, it->second, ":/abilities/");
+    }
+    for (MoM::MoMUnit::MapSpecials::const_iterator it = mapItemEffects.begin(); it != mapItemEffects.end(); ++it)
+    {
+        QString specialName(it->first.c_str());
+        displaySpecial(pos, specialName, it->second, ":/abilities/");  // TODO: Separate images for item effects
+    }
+    for (MoM::MoMUnit::MapSpecials::const_iterator it = mapSpellEffects.begin(); it != mapSpellEffects.end(); ++it)
+    {
+        QString specialName(it->first.c_str());
+        displaySpecial(pos, specialName, it->second, ":/spells/");
     }
 
 }

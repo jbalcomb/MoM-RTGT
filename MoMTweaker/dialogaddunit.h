@@ -36,7 +36,7 @@ private slots:
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
-    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue);
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir);
     void displayStrength(QPointF& pos, int strength, const QString& imageBaseName);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);
 	void update();

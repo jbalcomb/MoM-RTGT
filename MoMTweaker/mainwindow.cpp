@@ -397,62 +397,11 @@ void MainWindow::update()
         ADDMFIELDFEATURE(qtreeUFields, (int)unit, Road_Building_left_to_complete);
         //int8_t      m_Road_Building_parms[3];
 
-         QTreeWidgetItem* qtreeUFlags
-            = new QTreeWidgetItem(qtreeHero, QStringList(tr("Unit.Flags")));
-
         addTreeFeature(qtreeUFlags, 
             tr("U.Weapon type"), 
             QIcon(),
             toQStr((MoM::eWeaponType)unit.m_Weapon_Mutation.s.Weapon_Type), 
             QIcon());
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Chaos_Channels_Demon_Skin);
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Chaos_Channels_Demon_Wings);
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Chaos_Channels_Fiery_Breath);
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Undead);
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Stasis_initial);
-        ADDSPELLFLAGFEATURE(qtreeUFlags, unit.m_Weapon_Mutation, Stasis_lingering);
-
-         QTreeWidgetItem* qtreeUEnchantments
-            = new QTreeWidgetItem(qtreeHero, QStringList(tr("Unit.Enchantments")));
-
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Immolation);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Guardian_Wind);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Berserk);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Cloak_of_Fear);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Black_Channels);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Wraith_Form);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Regeneration);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Path_Finding);
-
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Water_Walking);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Resist_Elements);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Elemental_Armor);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Stone_Skin);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Iron_Skin);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Endurance);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Spell_Lock);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Invisibility);
-
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Wind_Walking);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Flight);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Resist_Magic);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Magic_Immunity);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Flame_Blade);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Eldritch_Weapon);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, True_Sight);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Holy_Weapon);
-
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Heroism);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Bless);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Lion_Heart);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Giant_Strength);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Planar_Travel);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Holy_Armor);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Righteousness);
-        ADDSPELLFLAGFEATURE(qtreeUEnchantments, unit.m_Unit_Enchantment, Invulnerability);
-
-//        ui->treeWidget->addTopLevelItem(qtreeHero);
-        delete qtreeHero;
     }
     */
 

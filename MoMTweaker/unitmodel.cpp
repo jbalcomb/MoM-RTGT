@@ -168,16 +168,45 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
     std::cout << "Clicked" << std::endl;
     std::cout << "Clicked on: " << itemBase->data(Qt::DisplayRole).toByteArray().data() << std::endl;
 
-    QMoMTreeItemSubtree<MoM::Unit_Type_Data>* itemUnitType = dynamic_cast< QMoMTreeItemSubtree<MoM::Unit_Type_Data>* >(itemBase);
-    if (0 != itemUnitType)
-    {
-        std::cout << "Unit_Type_Data" << std::endl;
+    checkUnitChanged<MoM::Hero_stats>(itemBase);
+    checkUnitChanged<MoM::Hired_Hero>(itemBase);
+    checkUnitChanged<MoM::Unit>(itemBase);
+    checkUnitChanged<MoM::Unit_Type_Data>(itemBase);
 
-        const MoM::Unit_Type_Data* unitType = itemUnitType->getMoMPointer();
-        MoM::eUnit_Type unitTypeNr = QMoMTreeItemBase::game()->getUnitTypeNr(unitType);
-        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit);
-        momUnit->setGame(QMoMTreeItemBase::game());
-        momUnit->changeUnitTypeNr(unitTypeNr);
+//    QMoMTreeItemSubtree<MoM::Unit_Type_Data>* itemUnitType = dynamic_cast< QMoMTreeItemSubtree<MoM::Unit_Type_Data>* >(itemBase);
+//    if (0 != itemUnitType)
+//    {
+//        std::cout << "Unit_Type_Data" << std::endl;
+
+//        MoM::Unit_Type_Data* unitType = itemUnitType->getMoMPointer();
+//        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game()));
+//        momUnit->changeUnit(unitType);
+
+//        emit signal_unitChanged(momUnit);
+//    }
+
+//    QMoMTreeItemSubtree<MoM::Unit>* itemUnit = dynamic_cast< QMoMTreeItemSubtree<MoM::Unit>* >(itemBase);
+//    if (0 != itemUnit)
+//    {
+//        std::cout << "Unit" << std::endl;
+
+//        MoM::Unit* unit = itemUnit->getMoMPointer();
+//        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game()));
+//        momUnit->changeUnit(unit);
+
+//        emit signal_unitChanged(momUnit);
+//    }
+}
+
+template<class T>
+void UnitModel::checkUnitChanged(QMoMTreeItemBase* itemBase)
+{
+    QMoMTreeItemSubtree<T>* itemSubtree = dynamic_cast< QMoMTreeItemSubtree<T>* >(itemBase);
+    if (0 != itemSubtree)
+    {
+        T* t = itemSubtree->getMoMPointer();
+        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game()));
+        momUnit->changeUnit(t);
 
         emit signal_unitChanged(momUnit);
     }
@@ -1728,7 +1757,7 @@ void UnitModel::setupModelData(MoM::MoMGameBase* game)
                     subrow++;
                 }
 
-                for (MoM::eUnit_Type heroType = (MoM::eUnit_Type)0; heroType < MoM::gMAX_HERO_TYPES; MoM::inc(heroType))
+                for (MoM::eUnit_Type heroType = (MoM::eUnit_Type)0; MoM::toUInt(heroType) < MoM::gMAX_HERO_TYPES; MoM::inc(heroType))
                 {
                     psubtree->appendTree(constructTreeItem(&pMagicDataSegment->m_Hero_Stats_Initializers[heroType], toQStr(heroType)), "");
                     psubtree->child(subrow, 1)->setData(QString(), Qt::EditRole);
@@ -1881,6 +1910,7 @@ void UnitModel::setupModelData(MoM::MoMGameBase* game)
 
     if (0 != game)
     {
+        // TODO: Display
         MoM::Available_spell_page* availableSpellPages = game->getAvailable_spell_pages();
         MoM::Available_spell_page& first = *availableSpellPages;
 

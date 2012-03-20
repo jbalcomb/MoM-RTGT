@@ -46,6 +46,9 @@ signals:
 private:
     void setupModelData(MoM::MoMGameBase* game);
 
+    template<class T>
+    void checkUnitChanged(QMoMTreeItemBase* itemBase);
+
     void removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstUnusedRow);
 
     void update_Buildings(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);

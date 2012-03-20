@@ -522,7 +522,7 @@ void DialogTables::update_Unrest_Table()
 
     QStringList labels;
     labels << "Nr" << "HomeRace";
-    for (MoM::eRace race = (MoM::eRace)0; race < MoM::gMAX_RACES; MoM::inc(race))
+    for (MoM::eRace race = (MoM::eRace)0; MoM::toUInt(race) < MoM::gMAX_RACES; MoM::inc(race))
     {
         labels << prettyQStr(race);
     }

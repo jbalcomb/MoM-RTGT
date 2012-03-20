@@ -70,7 +70,7 @@ inline std::string toStr(const T& t)
 }
 
 template< typename T >
-inline int toUInt(const T& t)
+inline unsigned toUInt(const T& t)
 {
     return static_cast<unsigned>(t);
 }
