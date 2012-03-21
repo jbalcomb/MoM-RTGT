@@ -16,23 +16,29 @@
 #define SetBackColor(c)     // Macro to suppress info related to the program 010-EditorTemplate
 
 // Specify to pack structures
-#ifdef _WIN32
+#ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma pack(push, 1)
 #define PACKED_STRUCT
 #endif
 
-#ifndef _WIN32  // Linux g++
+#ifdef __linux__     // Compiler Linux g++
+#define PACKED_STRUCT __attribute__((packed))
+#endif
+
+#ifdef __MINGW_GCC  // Compiler MinGW
+#pragma pack(push, 1)
+#pragma pack(1)
 #define PACKED_STRUCT __attribute__((packed))
 #endif
 
 // Specify to use short enums
-#ifdef _WIN32
+#ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma warning( once : 4480 )  // nonstandard extension used: specifying underlying type for enum
 #define ENUMSIZE8       : uint8_t
 #define ENUMSIZE16      : uint16_t
 #endif
 
-#ifndef _WIN32  // Linux (use g++ -fshort-enums)
+#ifdef __GNUC__     // Compiler Linux g++ (use g++ -fshort-enums)
 #define ENUMSIZE8
 #define ENUMSIZE16
 #endif
@@ -4096,7 +4102,7 @@ typedef struct PACKED_STRUCT {
 #undef ENUMSIZE8
 #undef ENUMSIZE16
 
-#ifdef _WIN32
+#ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
 #undef PACKED_STRUCT

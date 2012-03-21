@@ -5,10 +5,23 @@
 ## Created:     2010-05-01
 ## ---------------------------------------------------------------------------
 
-TEMPLATE = app
-
 unix:PLATF = Linux
-win32:PLATF = Windows
+win32-g++:PLATF = Windows
+win32-msvc2008:PLATF = Windows
+
+unix:COMPILER = gcc
+win32-g++:COMPILER = mingw
+win32-msvc2008:COMPILER = msvc2008
+
+unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
+win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
+win32-msvc2008:QMAKE_CXXFLAGS +=
+
+unix:QMAKE_LIBS +=
+win32-g++:QMAKE_LIBS += -luser32
+win32-msvc2008:QMAKE_LIBS += user32.lib
+
+TEMPLATE = app
 
 #unix:VERSION = $$system(svn info . | grep 'Changed\ Rev' | cut -b 19-)
 VERSION = 1
@@ -32,9 +45,6 @@ MOC_DIR += ./GeneratedFiles/Debug
 OBJECTS_DIR += $${PLATF}
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
-
-unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
-win32:QMAKE_LIBS += user32.lib
 
 include(MoMTweaker.pri)
 

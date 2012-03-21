@@ -21,7 +21,7 @@
 
 
 // Specify integer types with specific sizes
-#ifdef _WIN32
+#ifdef _MSC_VER         // Compiler MS Visual Studio (no proper POSIX)
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
@@ -34,16 +34,15 @@ typedef signed int int32_t;
 
 
 // Specify to pack structures
-#ifdef _WIN32
+#ifdef _MSC_VER         // Compiler MS Visual Studio
 //#pragma warning( once : 4103 )  // alignment changed after including header, may be due to missing #pragma #pragma pack(1)
 #pragma pack(push, 1)
 #define PACKED_STRUCT
 #endif
 
-#ifndef _WIN32  // Linux
+#ifdef __GNUC__         // Compiler g++
 #define PACKED_STRUCT __attribute__((packed))
 #endif
-
 
 namespace MoM {
 
@@ -133,7 +132,7 @@ typedef struct PACKED_STRUCT {   // LBXHEADER
 
 }
 
-#ifdef _WIN32
+#ifdef _MSC_VER         // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
 #undef PACKED_STRUCT
