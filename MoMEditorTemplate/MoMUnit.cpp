@@ -6,6 +6,7 @@
 // ---------------------------------------------------------------------------
 
 #include <assert.h>
+#include <cmath>
 
 #include "MoMGameBase.h"
 #include "MoMutility.h"
@@ -23,7 +24,10 @@ MoMUnit::MoMUnit() :
     m_hiredHero(),
     m_unit(),
     m_unitType(),
-    m_up(),
+	m_bonuses(),
+    m_upAbilities(),
+    m_upItems(),
+    m_upLevel(),
     m_dn()
 {
 }
@@ -36,7 +40,10 @@ MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
     m_hiredHero(),
     m_unit(),
     m_unitType(),
-    m_up(),
+	m_bonuses(),
+    m_upAbilities(),
+    m_upItems(),
+    m_upLevel(),
     m_dn()
 {
     setGame(game);
@@ -67,20 +74,6 @@ MoMUnit& MoMUnit::operator=(const MoMUnit& rhs)
     return *this;
 }
 
-void MoMUnit::copyMemberData(const MoMUnit& rhs)
-{
-    m_game = rhs.m_game;
-
-    m_battleUnit = rhs.m_battleUnit;
-    m_heroStats = rhs.m_heroStats;
-    m_heroStatsInitializer = rhs.m_heroStatsInitializer;
-    m_hiredHero = rhs.m_hiredHero;
-    m_unit = rhs.m_unit;
-    m_unitType = rhs.m_unitType;
-    m_up = rhs.m_up;
-    m_dn = rhs.m_dn;
-}
-
 void MoMUnit::close()
 {
     m_battleUnit = 0;
@@ -89,7 +82,10 @@ void MoMUnit::close()
     m_hiredHero = 0;
     m_unitType = 0;
     m_unit = 0;
-    m_up = BaseAttributes();
+	m_bonuses = BaseAttributes();
+    m_upAbilities = BaseAttributes();
+    m_upItems = BaseAttributes(;,
+    m_upLevel = BaseAttributes();
     m_dn = BaseAttributes();
 }
 
@@ -107,14 +103,7 @@ void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
         m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
 //        m_unit = 0;
 
-        // TODO: Lucky should be centralized in a neat function or something
-        if (hasSpecial("Lucky"))
-        {
-            m_up.toHitMelee++;
-            m_up.toHitRanged++;
-            m_up.toDefend++;
-            m_up.resistance++;
-        }
+        applyEffects();
     }
 }
 
@@ -136,6 +125,8 @@ void MoMUnit::changeUnit(Hired_Hero *hiredHero)
         }
 //        m_battleUnit = m_game->getBattle_Units();
 //        m_heroStatsInitializer = 0;
+
+        applyEffects();
     }
 }
 
@@ -167,6 +158,8 @@ void MoMUnit::changeUnit(Hero_stats *heroStats)
         }
 //        m_battleUnit = m_game->getBattle_Units();
 //        m_heroStatsInitializer = 0;
+
+        applyEffects();
     }
 }
 
@@ -186,14 +179,7 @@ void MoMUnit::changeUnit(Unit_Type_Data* unitType)
 //        m_hiredHero = 0;
 //        m_unit = 0;
 
-        // TODO: Lucky should be centralized in a neat function or something
-        if (hasSpecial("Lucky"))
-        {
-            m_up.toHitMelee++;
-            m_up.toHitRanged++;
-            m_up.toDefend++;
-            m_up.resistance++;
-        }
+        applyEffects();
     }
 }
 
@@ -213,6 +199,8 @@ void MoMUnit::changeUnit(Unit* unit)
 //        m_heroStatsInitializer = 0;
         m_hiredHero = m_game->getHired_Hero(unit);
         m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+
+        applyEffects();
     }
 }
 
@@ -227,6 +215,10 @@ int MoMUnit::getMelee() const
     {
         value = m_unitType->m_Melee;
     }
+    if (0 != value)
+    {
+        value += m_upLevel.melee;
+    }
     return value;
 }
 
@@ -236,6 +228,10 @@ int MoMUnit::getRanged() const
     if (0 != m_unitType)
     {
         value = m_unitType->m_Ranged;
+    }
+    if (0 != value)
+    {
+        value += m_upLevel.ranged;
     }
     return value;
 }
@@ -247,6 +243,10 @@ int MoMUnit::getArmor() const
     {
         value = m_unitType->m_Defense;
     }
+    if (0 != value)
+    {
+        value += m_upLevel.defense;
+    }
     return value;
 }
 
@@ -257,6 +257,10 @@ int MoMUnit::getResist() const
     {
         value = m_unitType->m_Resistance;
     }
+    if (0 != value)
+    {
+        value += m_upLevel.resistance;
+    }
     return value;
 }
 
@@ -266,6 +270,10 @@ int MoMUnit::getHits() const
     if (0 != m_unitType)
     {
         value = m_unitType->m_Hitpoints;
+    }
+    if (0 != value)
+    {
+        value += m_upLevel.hitpoints;
     }
     return value;
 }
@@ -326,7 +334,7 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
             {
                 level++;
             }
-            int spellPoints = level * (1 + getCastingSkill()) * 5 / 2;
+            int spellPoints = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2);
             mapSpecials["Caster"] = spellPoints;
         }
 //        for (int spellNr = 0; spellNr < ARRAYSIZE(heroStats.m_Spell); ++spellNr)
@@ -438,6 +446,31 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
     return mapSpecials;
 }
 
+MoMUnit::BaseAttributes MoMUnit::getBaseAttributes() const
+{
+    BaseAttributes base;
+
+    if (0 != m_unitType)
+    {
+        base.melee = m_unitType->m_Melee;
+        base.defense = m_unitType->m_Melee;
+        base.ranged = m_unitType->m_Ranged;
+        base.resistance = m_unitType->m_Resistance;
+        base.hitpoints = m_unitType->m_Hitpoints;
+        base.toHitMelee = m_unitType->m_To_Hit;
+        base.toHitRanged = m_unitType->m_To_Hit;
+        base.toDefend = 0;
+        base.moves = m_unitType->m_MoveHalves / 2.0;
+    }
+
+    return base;
+}
+
+MoMUnit::BaseAttributes MoMUnit::getBonusAttributes() const
+{
+    return m_bonuses;
+}
+
 std::string MoMUnit::getDisplayName() const
 {
     std::string raceName = getRaceName();
@@ -493,13 +526,13 @@ MoMUnit::MapSpecials MoMUnit::getItemEffects() const
 //        ADDMFIELDFEATURE(mapSpecials, item, Item_Type);
 //        ADDMFIELDFEATURE(mapSpecials, item, Cost);
 
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Attack);
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, To_Hit);
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Defense);
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Movement_in_halves);
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Resistance);
-        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Spell_Points);
-        ADDFIELDFEATURE(mapSpecials, -(int)item->m_Bonuses, Spell_Save);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Attack);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, To_Hit);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Defense);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Movement_in_halves);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Resistance);
+//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Spell_Points);
+//        ADDFIELDFEATURE(mapSpecials, -(int)item->m_Bonuses, Spell_Save);
 
         ADDMFIELDFEATURE(mapSpecials, item, Spell_Number_Charged);
         ADDMFIELDFEATURE(mapSpecials, item, Number_Of_Charges);
@@ -706,7 +739,15 @@ int MoMUnit::getToHitMelee() const
     int value = 0;
     if (0 != m_unitType)
     {
-        value = m_unitType->m_To_Hit + m_up.toHitMelee - m_dn.toHitMelee;
+        value = m_unitType->m_To_Hit;
+    }
+    if (0 != value)
+    {
+        value += m_upAbilities.toHitMelee;
+    }
+    if (0 != value)
+    {
+        value += m_upLevel.toHitMelee;
     }
     return value;
 }
@@ -716,14 +757,30 @@ int MoMUnit::getToHitRanged() const
     int value = 0;
     if (0 != m_unitType)
     {
-        value = m_unitType->m_To_Hit + m_up.toHitRanged - m_dn.toHitRanged;
+        value = m_unitType->m_To_Hit;
+    }
+    if (0 != value)
+    {
+        value += m_upAbilities.toHitRanged;
+    }
+    if (0 != value)
+    {
+        value += m_upLevel.toHitRanged;
     }
     return value;
 }
 
 int MoMUnit::getToDefend() const
 {
-    int value = 0 + m_up.toDefend - m_dn.toDefend;
+    int value = 0;
+    if (0 != value)
+    {
+        value += m_upAbilities.toDefend;
+    }
+    if (0 != value)
+    {
+        value += m_upLevel.toDefend;
+    }
     return value;
 }
 
@@ -786,6 +843,23 @@ int MoMUnit::getXP() const
     return value;
 }
 
+bool MoMUnit::hasMagicalRangedAttack() const
+{
+    eRanged_Type rangedType = getRangedType();
+    bool value = ((rangedType != MoM::RANGED_None) && !hasPhysicalRangedAttack());
+    return value;
+}
+
+bool MoMUnit::hasPhysicalRangedAttack() const
+{
+    eRanged_Type rangedType = getRangedType();
+    bool value = ((rangedType == MoM::RANGED_Arrow)
+                  || (rangedType == MoM::RANGED_Bullet)
+                  || (rangedType == MoM::RANGED_Rock)
+                  || (rangedType == MoM::RANGED_Thrown_Weapons));
+    return value;
+}
+
 bool MoMUnit::hasSpecial(const std::string& specialName) const
 {
     MapSpecials mapSpecials = getSpecials();
@@ -796,6 +870,195 @@ void MoMUnit::setGame(MoMGameBase* game)
 {
     close();
     m_game = game;
+}
+
+void MoMUnit::applyEffects()
+{
+    applyAbilities();
+    applyItems();
+    applyLevel();
+
+    // TODO: other effects
+}
+
+void MoMUnit::applyAbilities()
+{
+    m_upAbilities = BaseAttributes();
+    BaseAttributes& up = m_upAbilities;
+    BaseAttributes up_gold;
+    int level = getLevel();
+    int bonus = 0;
+    int holy_bonus = 0;
+    int prayer_bonus = 0;
+
+    MapSpecials mapAbilities = getAbilityEffects();
+
+#define has(str) (mapAbilities.find(str) != mapAbilities.end())
+#define get_special(str) mapAbilities[str]
+#define set_special(str, bonus)
+
+    // Hero specific
+    if (has("Agility"))        { up.defense += bonus = level; set_special("Agility", bonus); }
+    if (has("Agility x"))      { up.defense += bonus = static_cast<int>(level * 3 / 2); set_special("Agility x", bonus); }
+    if (has("Arcane Power"))   { up.ranged += bonus = level; set_special("Arcane Power", bonus); }
+    if (has("Arcane Power x")) { up.ranged += bonus = static_cast<int>(level * 3 / 2); set_special("Arcane Power x", bonus); }
+    if (has("Armsmaster"))     { bonus = 2 * level; set_special("Armsmaster", bonus); }
+    if (has("Armsmaster x"))   { bonus = static_cast<int>(2 * level * 3 / 2); set_special("Armsmaster x", bonus); }
+    if (has("Blademaster"))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; set_special("Blademaster", bonus); }
+    if (has("Blademaster x"))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; set_special("Blademaster x", bonus); }
+    if (has("Caster"))         { bonus = static_cast<int>(std::ceil(get_special("Caster") / 2.5 + 0.1) * 2.5 * level + 0.1); set_special("Caster", bonus); }
+    if (has("Constitution"))   { up.hitpoints += bonus = level; set_special("Constitution", bonus); }
+    if (has("Constitution x")) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); set_special("Constitution", bonus); }
+    if (has("Leadership"))     { up.melee += bonus = static_cast<int>(level / 3); if (hasPhysicalRangedAttack()) up.ranged += static_cast<int>(bonus / 2); set_special("Leadership", bonus); }
+    if (has("Leadership x"))   { up.melee += bonus = static_cast<int>(level / 2); if (hasPhysicalRangedAttack()) up.ranged += static_cast<int>(bonus / 2); set_special("Leadership x", bonus); }
+
+    if (has("Legendary"))      { bonus = 3 * level; set_special("Legendary", bonus); }
+    if (has("Legendary x"))    { bonus = static_cast<int>(3 * level * 3 / 2); set_special("Legendary x", bonus); }
+    if (has("Lucky"))          { up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1; up.resistance += +1; }
+    if (has("Might"))          { up.melee += bonus = level; set_special("Might", bonus); }
+    if (has("Might x"))        { up.melee += bonus = static_cast<int>(level * 3 / 2); set_special("Might x", bonus); }
+    if (has("Noble"))          ;
+    if (has("Prayermaster"))   { bonus = level; set_special("Prayermaster", bonus); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (has("Prayermaster x")) { bonus = static_cast<int>(level * 3 / 2); set_special("Prayermaster x", bonus); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (has("Sage"))           { bonus = 3 * level; set_special("Sage", bonus); }
+    if (has("Sage x"))         { bonus = static_cast<int>(3 * level * 3 / 2); set_special("Sage x", bonus); }
+
+    // Unit specific
+    if (has("Holy Bonus"))     { bonus = get_special("Holy Bonus"); holy_bonus = Max(holy_bonus, bonus); }
+    if (has("Resistance to All")) { bonus = get_special("Resistance to All"); prayer_bonus = Max(prayer_bonus, bonus); }
+
+#undef set_special
+#undef has
+
+    // Process holy_bonus (highest applies)
+    up_gold.melee += holy_bonus;
+    up_gold.defense += holy_bonus;
+    up_gold.resistance += holy_bonus;
+    // Process prayer_bonus (highest applies)
+    up_gold.resistance += prayer_bonus;
+
+    // Add hero ability bonus where appropriate
+    m_bonuses.addBonus(up_gold);
+}
+
+void MoMUnit::applyItems()
+{
+    m_upItems = BaseAttributes();
+    BaseAttributes& up = m_upItems;
+
+    for (int itemSlotNr = 0; toUInt(itemSlotNr) < gMAX_ITEMSLOTS; ++itemSlotNr)
+    {
+        if ((0 == m_hiredHero) || (0 == m_game))
+            break;
+        MoM::Item* item = m_game->getItem(m_hiredHero->m_Items_In_Slot[itemSlotNr]);
+        if (0 == item)
+            continue;
+
+        // TODO: Verify how bonus depends on type of artifact
+        //       E.g. bow only gives bonus to ranged and toHitRanged
+        //       and not to melee or toHitMelee.
+        switch (item->m_Item_Type)
+        {
+        case ITEMTYPE_Sword:
+        case ITEMTYPE_Mace:
+        case ITEMTYPE_Axe:
+            up.melee += item->m_Bonuses.Attack;
+            if (getRangedType() == RANGED_Thrown_Weapons)
+            {
+                up.ranged += item->m_Bonuses.Attack;
+            }
+            up.toHitMelee += item->m_Bonuses.To_Hit;
+            break;
+        case ITEMTYPE_Bow:
+            // Presumably missile ranged attack
+            up.ranged += item->m_Bonuses.Attack;
+            up.toHitRanged += item->m_Bonuses.To_Hit;
+            break;
+        case ITEMTYPE_Staff:
+        case ITEMTYPE_Wand:
+            // Presumably magical ranged attack
+            up.ranged += item->m_Bonuses.Attack;
+            break;
+        case ITEMTYPE_Various:
+            up.melee += item->m_Bonuses.Attack;
+            up.ranged += item->m_Bonuses.Attack;
+            break;
+        case ITEMTYPE_Shield:
+        case ITEMTYPE_Chain_Mail:
+        case ITEMTYPE_Plate_Mail:
+            up.melee += item->m_Bonuses.Attack;
+            up.ranged += item->m_Bonuses.Attack;
+            break;
+        default:
+            break;
+        }
+
+        up.defense += item->m_Bonuses.Defense;
+        up.resistance += item->m_Bonuses.Resistance;
+        up.hitpoints += 0;
+        up.moves += item->m_Bonuses.Movement_in_halves / 2.0;
+    }
+
+    m_bonuses.addBonus(up);
+}
+
+void MoMUnit::applyLevel()
+{
+    int level = getLevel();
+
+    m_upLevel = BaseAttributes();
+    BaseAttributes& up = m_upLevel;
+
+    switch (level)
+    {
+    default:
+    case 0:
+    case 1: break;
+    case 2: up.melee = +1; up.ranged = +1; up.defense = +1; up.resistance = +1; up.hitpoints = +1; break;
+    case 3: up.melee = +2; up.ranged = +2; up.defense = +1; up.resistance = +2; up.hitpoints = +2; up.toHitMelee = +1; break;
+    case 4: up.melee = +3; up.ranged = +3; up.defense = +2; up.resistance = +3; up.hitpoints = +3; up.toHitMelee = +1; break;
+    case 5: up.melee = +4; up.ranged = +4; up.defense = +2; up.resistance = +4; up.hitpoints = +4; up.toHitMelee = +2; break;
+    case 6: up.melee = +5; up.ranged = +5; up.defense = +3; up.resistance = +5; up.hitpoints = +5; up.toHitMelee = +2; break;
+    case 7: up.melee = +6; up.ranged = +6; up.defense = +3; up.resistance = +6; up.hitpoints = +6; up.toHitMelee = +2; break;
+    case 8: up.melee = +7; up.ranged = +7; up.defense = +4; up.resistance = +7; up.hitpoints = +7; up.toHitMelee = +2; break;
+    case 9: up.melee = +8; up.ranged = +8; up.defense = +4; up.resistance = +8; up.hitpoints = +8; up.toHitMelee = +3; break;
+    }
+    up.toHitRanged = up.toHitMelee;
+
+//    // Add level bonus where appropriate
+//    this.add_bonus(up);
+//    this.fixedunit.add_bonus(up);
+}
+
+void MoMUnit::copyMemberData(const MoMUnit& rhs)
+{
+    m_game = rhs.m_game;
+
+    m_battleUnit = rhs.m_battleUnit;
+    m_heroStats = rhs.m_heroStats;
+    m_heroStatsInitializer = rhs.m_heroStatsInitializer;
+    m_hiredHero = rhs.m_hiredHero;
+    m_unit = rhs.m_unit;
+    m_unitType = rhs.m_unitType;
+	m_bonuses = rhs.m_bonuses;
+    m_upAbilities = rhs.m_upAbilities;
+    m_upItems = rhs.m_upItems;
+    m_upLevel = rhs.m_upLevel;
+    m_dn = rhs.m_dn;
+}
+
+void MoMUnit::BaseAttributes::addBonus(const MoMUnit::BaseAttributes& up)
+{
+    melee += up.melee;
+    defense += up.defense;
+    ranged += up.ranged;
+    resistance += up.resistance;
+    hitpoints += up.hitpoints;
+    toHitMelee += up.toHitMelee;
+    toHitRanged += up.toHitRanged;
+    toDefend += up.toDefend;
+
+    moves += up.moves;
 }
 
 }

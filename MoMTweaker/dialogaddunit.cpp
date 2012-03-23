@@ -128,6 +128,21 @@ QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QStrin
     return textItem;
 }
 
+void DialogAddUnit::displayLevel(QPointF &pos, int level, int experience)
+{
+    QGraphicsItem* item = 0;
+
+    QPixmap pixmap(":/images/Level " + QString("%0").arg(level) + ".gif");
+    item = m_sceneUnit->addPixmap(pixmap);
+    m_unitSpecificItems.push_back(item);
+    item->setPos(pos);
+
+    QString text = QString("Level %0 (%1 ep)").arg(level).arg(experience);
+    item = addText(pos + QPointF(pixmap.width() * 4 / 3, 0), text);
+
+    pos.ry() += MoM::Max(pixmap.height() + 2, 34);
+}
+
 void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir)
 {
   QGraphicsItem* item = 0;
@@ -152,10 +167,10 @@ void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int
   }
 }
 
-void DialogAddUnit::displayStrength(QPointF& pos, int strength, const QString& imageBaseName)
+void DialogAddUnit::displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName)
 {
   // calculate number of normal, lost_normal, gold, and lost_gold icons
-  int normal = strength, lost_normal = 0, gold = 0, lost_gold = 0;
+  int normal = strength, lost_normal = 0, gold = bonusStrength, lost_gold = 0;
 //      if (m_unit.bonuses[strength] >= m_unit.penalties[strength])
 //      {
 //         // Bonus at least as large as the penalty - only lost gold
@@ -210,13 +225,24 @@ void DialogAddUnit::displayStrength(QPointF& pos, int strength, const QString& i
 //         if (col > 0 && col % 5 == 0) doc.write(style_spacer);
 //         doc.writeln("src=\"images/" + image + "_normal_lost.gif\" alt=\"n\">");
 //      }
-//      for (i = 0; i < gold; ++i, ++col)
-//      {
-//         if (col > 0 && col % 15 == 0) doc.writeln("<br />");
-//         doc.write("<img ");
-//         if (col > 0 && col % 5 == 0) doc.write(style_spacer);
-//         doc.writeln("src=\"images/" + image + "_gold.gif\" alt=\"G\">");
-//      }
+    pixmap = QPixmap(":/images/" + imageBaseName + "_gold.gif");
+      for (i = 0; i < gold; ++i, ++col)
+      {
+         if (col > 0 && col % 15 == 0)
+         {
+             left += pixmap.width() / 3;
+             x = left;
+             y += pixmap.width() / 3;
+         }
+         if (col > 0 && col % 5 == 0)
+         {
+             x += pixmap.width() / 5;
+         }
+         QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
+         m_unitSpecificItems.push_back(item);
+         item->setPos(x, y);
+         x += pixmap.width() + 1;
+      }
 //      for (i = 0; i < lost_gold; ++i, ++col)
 //      {
 //         if (col > 0 && col % 15 == 0) doc.writeln("<br />");
@@ -353,6 +379,7 @@ void DialogAddUnit::update()
     QPointF pos;
     QGraphicsSimpleTextItem* textItem = 0;
 
+    // Name
     pos = QPointF(m_labelWidth, 0);
     QFont fontName(MoM::QMoMResources::g_Font);
     fontName.setPointSize(20);
@@ -370,6 +397,7 @@ void DialogAddUnit::update()
         textItem->setFont(fontName);
     }
 
+    // Figures, moves, upkeep
     pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
     textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
@@ -380,6 +408,7 @@ void DialogAddUnit::update()
     textItem = addText(pos, QString("%0").arg(m_unit->getUpkeep()));
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
 
+    // To Hit
     pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
     QPixmap pixmap(":images/tohit.gif");
     QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
@@ -408,7 +437,10 @@ void DialogAddUnit::update()
         displayToHit(pos, m_unit->getToDefend(), "To Defend");
     }
 
+
     pos = QPointF(m_labelWidth, m_pictureHeight);
+
+    // Basic attributes
 
     QString imageBaseName;
     switch (m_unit->getWeaponType())
@@ -420,7 +452,7 @@ void DialogAddUnit::update()
     case MoM::WEAPON_adamantium:    imageBaseName = "sword_adamantium"; break;
     }
 
-    displayStrength(pos, m_unit->getMelee(), imageBaseName);
+    displayStrength(pos, m_unit->getMelee(), m_unit->getBonusAttributes().melee, imageBaseName);
 
     switch (m_unit->getRangedType())
     {
@@ -431,17 +463,31 @@ void DialogAddUnit::update()
     default:                         imageBaseName = "fireball"; break;
     }
 
-    displayStrength(pos, m_unit->getRanged(), imageBaseName);
+    displayStrength(pos, m_unit->getRanged(), m_unit->getBonusAttributes().ranged, imageBaseName);
 
-    displayStrength(pos, m_unit->getArmor(), "shield");
-    displayStrength(pos, m_unit->getResist(), "resistance");
-    displayStrength(pos, m_unit->getHits(), "heart");
+    displayStrength(pos, m_unit->getArmor(), m_unit->getBonusAttributes().defense, "shield");
+    displayStrength(pos, m_unit->getResist(), m_unit->getBonusAttributes().resistance, "resistance");
+    displayStrength(pos, m_unit->getHits(), m_unit->getBonusAttributes().hitpoints, "heart");
 
+    pos.rx() = 0;
+    pos.ry() += m_lineHeight;
+
+    // Level/XP
+    if (0 != m_unit->getLevel())
+    {
+        displayLevel(pos, m_unit->getLevel(), m_unit->getXP());
+    }
+
+    // Items
+//    for (int slotNr = 0; slotNr < MoM::gMAX_ITEMSLOTS; ++slotNr)
+//    {
+//        displayItem(pos, m_unit->getSlotType(slotNr), m_unit->getSlotItem(slotNr));
+//    }
+
+    // Abilities, item effects, and spell effects
     MoM::MoMUnit::MapSpecials mapAbilityEffects(m_unit->getAbilityEffects());
     MoM::MoMUnit::MapSpecials mapItemEffects(m_unit->getItemEffects());
     MoM::MoMUnit::MapSpecials mapSpellEffects(m_unit->getSpellEffects());
-    pos.rx() = 0;
-    pos.ry() += m_lineHeight;
     for (MoM::MoMUnit::MapSpecials::const_iterator it = mapAbilityEffects.begin(); it != mapAbilityEffects.end(); ++it)
     {
         QString specialName(it->first.c_str());

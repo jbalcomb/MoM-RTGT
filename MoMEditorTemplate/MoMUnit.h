@@ -37,6 +37,8 @@ public:
             toDefend(),
             moves()
         {}
+        void addBonus(const BaseAttributes& up);
+
         int melee;
         int defense;
         int ranged;
@@ -73,6 +75,8 @@ public:
     int getToDefend() const;
 
     MapSpecials getAbilityEffects() const;
+    BaseAttributes getBaseAttributes() const;
+    BaseAttributes getBonusAttributes() const;
     double getCastingSkill() const;
     std::string getDisplayName() const;
     std::string getHeroName() const;
@@ -91,9 +95,24 @@ public:
     eWeaponType getWeaponType() const;
     int getXP() const;
 
+    bool hasMagicalRangedAttack() const;
+    bool hasPhysicalRangedAttack() const;
     bool hasSpecial(const std::string& specialName) const;
 
 private:
+
+    /// \brief (Re)applies all effects
+    void applyEffects();
+
+    /// \brief (Re)applies effects of (hero) abilities
+    void applyAbilities();
+
+    /// \brief (Re)applies effects of items
+    void applyItems();
+
+    /// \brief (Re)applies effects of level
+    void applyLevel();
+
     void copyMemberData(const MoMUnit& rhs);
 
     // NOT IMPLEMENTED
@@ -108,7 +127,12 @@ private:
     Hired_Hero* m_hiredHero;
     Unit* m_unit;
     Unit_Type_Data* m_unitType;
-    BaseAttributes m_up;
+
+    BaseAttributes m_bonuses;
+    BaseAttributes m_upAbilities;
+    BaseAttributes m_upItems;
+    BaseAttributes m_upLevel;
+
     BaseAttributes m_dn;
 };
 
