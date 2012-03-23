@@ -2,6 +2,7 @@
 
 # CONFIG
 PLATFORM=Linux
+COMPILER=gcc
 VERSION=
 [ -z "$QTDIR" ] && QTDIR="/usr/local/Trolltech/Qt-4.8.0"
 GIT_REPOS="ssh://ilikeserena@git.code.sf.net/p/momrtgt/code"
@@ -79,35 +80,18 @@ do
     shift
 done
 
-#while getopts abcfghp:q:R:rt name
-#do
-#    case $name in
-#    a)  BUILD=1 ; FETCH=1 ; CHECKOUT=1 ; GENERATE=1 ; RELEASE=1 ; TEST=1 ;;
-#    b)  BUILD=1 ;;
-#    c)  CHECKOUT=1 ;;
-#    f)  FETCH=1 ; CHECKOUT=1 ;;
-#    g)  GENERATE=1 ;;
-#    h)  usage ; exit 2 ;;
-#    p)  PLATFORM="$OPTARG" ;;
-#    q)  QTDIR="$OPTARG" ;;
-#    R)  GIT_REPOS="$OPTARG" ; FETCH=1 ; CHECKOUT=1 ;;
-#    r)  RELEASE=1 ;;
-#    t)  TEST=1 ;;
-#    ?)  usage ; exit 2 ;;
-#    esac
-#done
-#shift $(($OPTIND - 1))
-
 # MAKE PLATFORM SPECIFIC CHOICES
 case $PLATFORM in
-    Linux)   MAKE_ALL="make -j4" ;;
-    Windows) MAKE_ALL="nmake -f Makefile.Release" ;;
+    Linux)   COMPILER="gcc" ; MAKE_ALL="make -j4" ;;
+    Windows) COMPILER="mingw" ; MAKE_ALL="make -j4" ;;
+#    Windows) COMPILER="msvc2008" ; MAKE_ALL="nmake -f Makefile.Release" ;;
     *)       echo "$0: error - platform must be either 'Linux' or 'Windows' and not $PLATFORM" 1>&2 ; exit 2 ;;
 esac
 
 VERSION="$1"
 
 echo "CHECKOUTDIR=$CHECKOUTDIR"
+echo "COMPILER=$GCC"
 echo "GIT_REPOS=$GIT_REPOS"
 echo "MAKE_ALL=$MAKE_ALL"
 echo "PLATFORM=$PLATFORM"
@@ -194,14 +178,27 @@ if [ -n "$RELEASE" ]; then
 
     echo "Copy MoMCustomizer to '$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/'"
     mkdir "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
-    cp "$RELEASEDIR/MoMCustomizer-TEMPLATE-$PLATFORM"/* "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
-    cp "$CHECKOUTDIR/MoMCustomizer/bin/MoMCustomizer" "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/MoMCustomizer-$VERSION"
+    cp "$CHECKOUTDIR/MoMCustomizer/$COMPILER/bin/MoMCustomizer" "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/MoMCustomizer-$VERSION"
+    cp "$QTDIR/lib"/libQtCore.so.4.8.0 "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+    cp "$QTDIR/lib"/libQtGui.so.4.8.0 "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+# TODO: WINDOWS
+#    cp "$QTDIR/bin"/QtCore4.dll "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+#    cp "$QTDIR/bin"/QtGui4.dll "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+# TODO: MSVC-redist?
+    cp "$CHECKOUTDIR/scripts/MoMCustomizer.sh" "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
     cp "$CHECKOUTDIR/MoMCustomizer"/*.txt "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
 
     echo "Copy MoMCustomizer to '$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/'"
     mkdir "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
     cp "$RELEASEDIR/MoMTweaker-TEMPLATE-$PLATFORM"/* "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
-    cp "$CHECKOUTDIR/MoMTweaker/bin/MoMTweaker" "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/MoMTweaker-$VERSION"
+    cp "$CHECKOUTDIR/MoMTweaker/$COMPILER/bin/MoMTweaker" "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/MoMTweaker-$VERSION"
+    cp "$QTDIR/lib"/libQtCore.so.4.8.0 "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
+    cp "$QTDIR/lib"/libQtGui.so.4.8.0 "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
+# TODO: WINDOWS
+#    cp "$QTDIR/bin"/QtCore4.dll "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+#    cp "$QTDIR/bin"/QtGui4.dll "$RELEASEDIR/MoMCustomizer-$VERSION-$PLATFORM/"
+# TODO: MSVC-redist?
+    cp "$CHECKOUTDIR/scripts/MoMTweaker.sh" "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
     cp "$CHECKOUTDIR/MoMTweaker"/*.txt "$RELEASEDIR/MoMTweaker-$VERSION-$PLATFORM/"
 
     # COMPRESS
@@ -209,6 +206,7 @@ if [ -n "$RELEASE" ]; then
     echo "COMPRESS:"
     cd "$RELEASEDIR"
     echo "Remove old compressed files if any"
+# TODO: WINDOWS
     rm "MoMCustomizer-$VERSION-$PLATFORM.tar.gz" || true
     rm "MoMTweaker-$VERSION-$PLATFORM.tar.gz" || true
     echo "Compress files"
