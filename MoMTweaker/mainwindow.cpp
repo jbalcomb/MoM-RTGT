@@ -393,7 +393,7 @@ void MainWindow::update()
         ADDMFIELDFEATURE(qtreeUFields, (int)unit, Damage);
         ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Grouping);
         //int8_t      m_Guess_Combat_Enchantment_Flag[3];
-        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Scout);
+        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Scouting);
         ADDMFIELDFEATURE(qtreeUFields, (int)unit, Road_Building_left_to_complete);
         //int8_t      m_Road_Building_parms[3];
 

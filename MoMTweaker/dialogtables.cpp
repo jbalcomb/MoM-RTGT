@@ -485,7 +485,7 @@ void DialogTables::update_Unit_Types()
 
         ui->tableWidget->item(row, col++)->setText(QString("0x%0").arg((uint)data->m_UNK02, 2, 16, (QChar)'0'));
         ui->tableWidget->item(row, col++)->setText(QString("%0").arg((unsigned)data->m_TypeCode, 3));
-        ui->tableWidget->item(row, col++)->setText(QString("%0").arg((unsigned)data->m_Scout, 3));
+        ui->tableWidget->item(row, col++)->setText(QString("%0").arg((unsigned)data->m_Scouting, 3));
 
         if (0 != data->m_Transport_Capacity)
         {

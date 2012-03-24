@@ -85,7 +85,7 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
 		unit->m_Hero_Slot_Number = -1;
 		unit->m_Moves_Total = 2;
 		unit->m_Moves_Left = 2;
-        unit->m_Scout = 1;
+        unit->m_Scouting = 1;
 		unit->m_Road_Building_left_to_complete = -1;
 	}
 
