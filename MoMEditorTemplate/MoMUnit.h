@@ -81,6 +81,8 @@ public:
     std::string getDisplayName() const;
     std::string getHeroName() const;
     MapSpecials getItemEffects() const;
+    Item* getSlotItem(int itemSlotNr) const;
+    eSlot_Type16 getSlotType(int itemSlotNr) const;
     int getLevel() const;
     double getMoves() const;
     int getNrFigures() const;
@@ -97,8 +99,11 @@ public:
 
     bool hasMagicalRangedAttack() const;
     bool hasMissileRangedAttack() const;
+    bool hasPhysicalRangedAttack() const;
     bool hasThrownRangedAttack() const;
     bool hasSpecial(const std::string& specialName) const;
+
+	bool isHero() const;
 
 private:
 
@@ -113,6 +118,9 @@ private:
 
     /// \brief (Re)applies effects of level
     void applyLevel();
+
+    /// \brief (Re)applies effects of weapon type
+	void applyWeaponType();
 
     void copyMemberData(const MoMUnit& rhs);
 
@@ -133,8 +141,7 @@ private:
     BaseAttributes m_upAbilities;
     BaseAttributes m_upItems;
     BaseAttributes m_upLevel;
-
-    BaseAttributes m_dn;
+    BaseAttributes m_upWeaponType;
 };
 
 }

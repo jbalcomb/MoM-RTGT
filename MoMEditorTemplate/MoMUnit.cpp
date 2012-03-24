@@ -28,7 +28,7 @@ MoMUnit::MoMUnit() :
     m_upAbilities(),
     m_upItems(),
     m_upLevel(),
-    m_dn()
+    m_upWeaponType()
 {
 }
 
@@ -44,7 +44,7 @@ MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
     m_upAbilities(),
     m_upItems(),
     m_upLevel(),
-    m_dn()
+    m_upWeaponType()
 {
     setGame(game);
 }
@@ -86,7 +86,7 @@ void MoMUnit::close()
     m_upAbilities = BaseAttributes();
     m_upItems = BaseAttributes();
     m_upLevel = BaseAttributes();
-    m_dn = BaseAttributes();
+    m_upWeaponType = BaseAttributes();
 }
 
 void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
@@ -223,6 +223,10 @@ int MoMUnit::getMelee() const
     {
         value += m_upLevel.melee;
     }
+    if (0 != value)
+    {
+        value += m_upWeaponType.melee;
+    }
     return value;
 }
 
@@ -240,6 +244,10 @@ int MoMUnit::getRanged() const
     if (0 != value)
     {
         value += m_upLevel.ranged;
+    }
+    if (0 != value)
+    {
+        value += m_upWeaponType.ranged;
     }
     return value;
 }
@@ -456,9 +464,9 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 //        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Cost);
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Building_Required1);
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Hero_TypeCode_or_Building2);
-        if (m_unitType->m_Scout != 1)
+        if (m_unitType->m_Scouting != 1)
         {
-            mapSpecials["Scout"] = m_unitType->m_Scout;
+            mapSpecials["Scouting"] = m_unitType->m_Scouting;
         }
         ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Transport_Capacity);
         ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction);
@@ -467,6 +475,10 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 
     if (0 != m_unit)
     {
+		if (m_unit->m_Weapon_Mutation.s.Weapon_Type != MoM::WEAPON_normal)
+		{
+            mapSpecials["Magic Weapon"] = 0;
+		}
         ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Skin);
         ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Wings);
         ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Fiery_Breath);
@@ -616,6 +628,62 @@ MoMUnit::MapSpecials MoMUnit::getItemEffects() const
     return mapSpecials;
 }
 
+Item* MoMUnit::getSlotItem(int itemSlotNr) const
+{
+    Item* item = 0;
+    if ((0 != m_hiredHero) && (0 != m_game))
+    {
+        int itemNr = m_hiredHero->m_Items_In_Slot[itemSlotNr];
+        item = m_game->getItem(itemNr);
+    }
+    return item;
+}
+
+eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
+{
+    eSlot_Type16 value = (eSlot_Type16)0;
+    if ((0 != m_hiredHero) && (toUInt(itemSlotNr) < gMAX_ITEMSLOTS))
+    {
+        value = m_hiredHero->m_Slot_Types[itemSlotNr];
+    }
+    else if (0 != m_unitType)
+    {
+        // TODO: Centralize hero->itemslot code, including the same code in MoMController
+
+        eSlot_Type16 heroSlotTypes[3];
+       // Retrieve the slot types
+       if (toUInt(m_unitType->m_Hero_TypeCode_or_Building2) <= toUInt(HEROTYPE_Wizard))
+       {
+           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + m_unitType->m_Hero_TypeCode_or_Building2);
+           if (HEROTYPE_Wizard == m_unitType->m_Hero_TypeCode_or_Building2)
+           {
+               heroSlotTypes[1] = SLOT16_Amulet;
+           }
+           else
+           {
+               heroSlotTypes[1] = SLOT16_Armor_Shield;
+           }
+           heroSlotTypes[2] = SLOT16_Amulet;
+       }
+       else
+       {
+           unsigned slotCode = static_cast<unsigned>(m_unitType->m_Hero_TypeCode_or_Building2);
+           slotCode -= 6;
+           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+           slotCode /= 6;
+           heroSlotTypes[1] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+           slotCode /= 6;
+           heroSlotTypes[2] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+       }
+
+       if (toUInt(itemSlotNr) < 3)
+       {
+           value = heroSlotTypes[itemSlotNr];
+       }
+    }
+    return value;
+}
+
 int MoMUnit::getLevel() const
 {
     int value = 0;
@@ -626,7 +694,11 @@ int MoMUnit::getLevel() const
     else if (0 != m_heroStats)
     {
         value = static_cast<int16_t>(m_heroStats->m_Level_Status);
-        if (value < 0)
+		if (m_heroStats->m_Level_Status == HEROLEVELSTATUS_Active_in_Wizards_army)
+		{
+			value = 0;
+		}
+        else if (value < 0)
         {
             value = -value;
         }
@@ -643,7 +715,7 @@ double MoMUnit::getMoves() const
     double value = 0;
     if (0 != m_unit)
     {
-        value = m_unit->m_Moves_Left / 2.0;
+        value = m_unit->m_Moves_Total / 2.0;
     }
     else if (0 != m_unitType)
     {
@@ -778,6 +850,7 @@ int MoMUnit::getToHitMelee() const
     }
     value += m_upAbilities.toHitMelee;
     value += m_upLevel.toHitMelee;
+    value += m_upWeaponType.toHitMelee;
     return value;
 }
 
@@ -790,6 +863,7 @@ int MoMUnit::getToHitRanged() const
     }
     value += m_upAbilities.toHitRanged;
     value += m_upLevel.toHitRanged;
+    value += m_upWeaponType.toHitRanged;
     return value;
 }
 
@@ -863,7 +937,7 @@ int MoMUnit::getXP() const
 bool MoMUnit::hasMagicalRangedAttack() const
 {
     eRanged_Type rangedType = getRangedType();
-    bool value = ((rangedType != MoM::RANGED_None) && !hasMissileRangedAttack() && !hasThrownRangedAttack());
+    bool value = ((rangedType != MoM::RANGED_None) && !hasPhysicalRangedAttack());
     return value;
 }
 
@@ -873,6 +947,12 @@ bool MoMUnit::hasMissileRangedAttack() const
     bool value = ((rangedType == MoM::RANGED_Arrow)
                   || (rangedType == MoM::RANGED_Bullet)
                   || (rangedType == MoM::RANGED_Rock));
+    return value;
+}
+
+bool MoMUnit::hasPhysicalRangedAttack() const
+{
+    bool value = (hasMissileRangedAttack() || hasThrownRangedAttack());
     return value;
 }
 
@@ -887,6 +967,12 @@ bool MoMUnit::hasSpecial(const std::string& specialName) const
 {
     MapSpecials mapSpecials = getSpecials();
     return (mapSpecials.find(specialName) != mapSpecials.end());
+}
+
+bool MoMUnit::isHero() const
+{
+	// TODO: A hero only counts as a hero if he occupies a hired hero slot.
+	return (toUInt(getUnitTypeNr()) < gMAX_HERO_TYPES);
 }
 
 void MoMUnit::setGame(MoMGameBase* game)
@@ -1013,6 +1099,7 @@ void MoMUnit::applyItems()
         case ITEMTYPE_Plate_Mail:
             up.melee += item->m_Bonuses.Attack;
             up.ranged += item->m_Bonuses.Attack;
+			// TODO: Add special "Large Shield"
             break;
         default:
             break;
@@ -1034,25 +1121,87 @@ void MoMUnit::applyLevel()
     m_upLevel = BaseAttributes();
     BaseAttributes& up = m_upLevel;
 
-    switch (level)
-    {
-    default:
-    case 0:
-    case 1: break;
-    case 2: up.melee = +1; up.ranged = +1; up.defense = +1; up.resistance = +1; up.hitpoints = +1; break;
-    case 3: up.melee = +2; up.ranged = +2; up.defense = +1; up.resistance = +2; up.hitpoints = +2; up.toHitMelee = +1; break;
-    case 4: up.melee = +3; up.ranged = +3; up.defense = +2; up.resistance = +3; up.hitpoints = +3; up.toHitMelee = +1; break;
-    case 5: up.melee = +4; up.ranged = +4; up.defense = +2; up.resistance = +4; up.hitpoints = +4; up.toHitMelee = +2; break;
-    case 6: up.melee = +5; up.ranged = +5; up.defense = +3; up.resistance = +5; up.hitpoints = +5; up.toHitMelee = +2; break;
-    case 7: up.melee = +6; up.ranged = +6; up.defense = +3; up.resistance = +6; up.hitpoints = +6; up.toHitMelee = +2; break;
-    case 8: up.melee = +7; up.ranged = +7; up.defense = +4; up.resistance = +7; up.hitpoints = +7; up.toHitMelee = +2; break;
-    case 9: up.melee = +8; up.ranged = +8; up.defense = +4; up.resistance = +8; up.hitpoints = +8; up.toHitMelee = +3; break;
-    }
+	if (isHero())
+	{
+		switch (level)
+		{
+		default:
+		case 0:
+		case 1: break;
+		case 2: up.melee = +1; up.ranged = +1; up.defense = +1; up.resistance = +1; up.hitpoints = +1; break;
+		case 3: up.melee = +2; up.ranged = +2; up.defense = +1; up.resistance = +2; up.hitpoints = +2; up.toHitMelee = +1; break;
+		case 4: up.melee = +3; up.ranged = +3; up.defense = +2; up.resistance = +3; up.hitpoints = +3; up.toHitMelee = +1; break;
+		case 5: up.melee = +4; up.ranged = +4; up.defense = +2; up.resistance = +4; up.hitpoints = +4; up.toHitMelee = +2; break;
+		case 6: up.melee = +5; up.ranged = +5; up.defense = +3; up.resistance = +5; up.hitpoints = +5; up.toHitMelee = +2; break;
+		case 7: up.melee = +6; up.ranged = +6; up.defense = +3; up.resistance = +6; up.hitpoints = +6; up.toHitMelee = +2; break;
+		case 8: up.melee = +7; up.ranged = +7; up.defense = +4; up.resistance = +7; up.hitpoints = +7; up.toHitMelee = +2; break;
+		case 9: up.melee = +8; up.ranged = +8; up.defense = +4; up.resistance = +8; up.hitpoints = +8; up.toHitMelee = +3; break;
+		}
+	}
+	else
+	{
+      switch (level)
+      {
+         default:
+         case 0:
+         case 1: break;
+         case 2: up.melee = +1; up.ranged = +1;                  up.resistance = +1; break;
+         case 3: up.melee = +1; up.ranged = +1; up.defense = +1; up.resistance = +2; break;
+         case 4: up.melee = +2; up.ranged = +2; up.defense = +1; up.resistance = +3; up.hitpoints = +1; up.toHitMelee = +1; break;
+         case 5: up.melee = +2; up.ranged = +2; up.defense = +2; up.resistance = +4; up.hitpoints = +1; up.toHitMelee = +2; break;
+         case 6: up.melee = +3; up.ranged = +3; up.defense = +2; up.resistance = +5; up.hitpoints = +2; up.toHitMelee = +3; break;
+      }
+	}
+
     up.toHitRanged = up.toHitMelee;
 
 //    // Add level bonus where appropriate
 //    this.add_bonus(up);
 //    this.fixedunit.add_bonus(up);
+}
+
+void MoMUnit::applyWeaponType()
+{
+	m_upWeaponType = BaseAttributes();
+	BaseAttributes& up = m_upWeaponType;
+
+	switch (getWeaponType())
+	{
+	default:
+	case MoM::WEAPON_normal:  
+		break;
+	case MoM::WEAPON_magic: 
+		// TODO: Magic Weapon
+		//            if (Me) this.add_special("Magic Weapon");
+		up.toHitMelee = +1;
+		if (hasPhysicalRangedAttack()) up.toHitRanged = +1;
+		break;
+	case MoM::WEAPON_mithril: 
+		//            if (Me) this.add_special("Magic Weapon");
+		up.melee = +1;
+		up.defense = +1;
+		up.toHitMelee = +1;
+		if (hasPhysicalRangedAttack())
+		{
+			up.toHitRanged = +1;
+			up.ranged = +1;
+		}
+		break;
+	case MoM::WEAPON_adamantium:
+//		if (Me) this.add_special("Magic Weapon");
+		up.melee = +2;
+		up.defense = +2; 
+		up.toHitMelee = +1;
+		if (hasPhysicalRangedAttack())
+		{
+			up.toHitRanged = +1;
+			up.ranged = +2;
+		}
+		break;
+	}
+
+	// Add weapon bonus where appropriate
+	m_bonuses.addBonus(up);
 }
 
 void MoMUnit::copyMemberData(const MoMUnit& rhs)
@@ -1069,7 +1218,7 @@ void MoMUnit::copyMemberData(const MoMUnit& rhs)
     m_upAbilities = rhs.m_upAbilities;
     m_upItems = rhs.m_upItems;
     m_upLevel = rhs.m_upLevel;
-    m_dn = rhs.m_dn;
+    m_upWeaponType = rhs.m_upWeaponType;
 }
 
 void MoMUnit::BaseAttributes::addBonus(const MoMUnit::BaseAttributes& up)

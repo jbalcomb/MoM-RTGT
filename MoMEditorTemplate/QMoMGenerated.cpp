@@ -516,7 +516,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_graphics_ID_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_graphics_ID_GUESS));
     ptree->appendChild("m_UNK01", new QMoMTreeItem<uint8_t>(&rhs->m_UNK01));
     ptree->appendChild("m_Hitpoints_per_Figure", new QMoMTreeItem<uint8_t>(&rhs->m_Hitpoints_per_Figure));
-    ptree->appendChild("m_Scout", new QMoMTreeItem<uint8_t>(&rhs->m_Scout));
+    ptree->appendChild("m_Scouting", new QMoMTreeItem<uint8_t>(&rhs->m_Scouting));
     ptree->appendChild("m_Transport_Capacity_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_Transport_Capacity_GUESS));
     ptree->appendChild("m_Total_Figures", new QMoMTreeItem<uint8_t>(&rhs->m_Total_Figures));
     ptree->appendChild("m_Construction", new QMoMTreeItem<uint8_t>(&rhs->m_Construction));
@@ -4418,7 +4418,7 @@ QMoMTreeItemBase* constructTreeItem(Unit* rhs, const QString& context)
     ptree->appendChild("m_Guess_Combat_Enchantment_Flag1", new QMoMTreeItem<int8_t>(&rhs->m_Guess_Combat_Enchantment_Flag1));
     ptree->appendChild("m_In_Tower_without_Seal", new QMoMTreeItem<int8_t>(&rhs->m_In_Tower_without_Seal));
     ptree->appendChild("m_Guess_Combat_Enchantment_Flag3", new QMoMTreeItem<int8_t>(&rhs->m_Guess_Combat_Enchantment_Flag3));
-    ptree->appendChild("m_Scout", new QMoMTreeItem<uint8_t>(&rhs->m_Scout));
+    ptree->appendChild("m_Scouting", new QMoMTreeItem<uint8_t>(&rhs->m_Scouting));
     ptree->appendTree(constructTreeItem(&rhs->m_Weapon_Mutation, "m_Weapon_Mutation"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_Unit_Enchantment, "m_Unit_Enchantment"), "");
     ptree->appendChild("m_Road_Building_left_to_complete", new QMoMTreeItem<int8_t>(&rhs->m_Road_Building_left_to_complete));
@@ -4801,7 +4801,7 @@ QMoMTreeItemBase* constructTreeItem(Unit_Type_Data* rhs, const QString& context)
     ptree->appendChild("m_TypeCode", new QMoMTreeItem<uint8_t>(&rhs->m_TypeCode));
     ptree->appendChild("m_UNK01", new QMoMTreeItem<uint8_t>(&rhs->m_UNK01));
     ptree->appendChild("m_Hitpoints", new QMoMTreeItem<uint8_t>(&rhs->m_Hitpoints));
-    ptree->appendChild("m_Scout", new QMoMTreeItem<uint8_t>(&rhs->m_Scout));
+    ptree->appendChild("m_Scouting", new QMoMTreeItem<uint8_t>(&rhs->m_Scouting));
     ptree->appendChild("m_Transport_Capacity", new QMoMTreeItem<uint8_t>(&rhs->m_Transport_Capacity));
     ptree->appendChild("m_Nr_Figures", new QMoMTreeItem<uint8_t>(&rhs->m_Nr_Figures));
     ptree->appendChild("m_Construction", new QMoMTreeItem<uint8_t>(&rhs->m_Construction));

@@ -565,7 +565,7 @@ void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, MoM::MoMGameBase* 
             ptree->child(row, 2)->setData(QString("Item[%0]").arg(i), Qt::UserRole);
         }
         ptree->child(row, 0)->setData(toQStr(item.m_Item_Name), Qt::EditRole);
-		QIcon icon = QMoMResources::instance().getIcon(item.m_Item_Type);
+		QIcon icon = QMoMResources::instance().getIcon(item.m_Icon);
         if (!icon.isNull())
         {
             if ((item.m_Cost > 0) || (0 != item.m_Icon))

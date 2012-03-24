@@ -72,12 +72,12 @@ public:
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eItem_Type item) const
+	const QImage* getImage(MoM::eItem_Icon itemIcon) const
 	{
 		const QImage* image = 0;
-		if (inRange(m_itemImages, item))
+		if (inRange(m_itemImages, itemIcon))
 		{
-			image = &m_itemImages[item];
+			image = &m_itemImages[itemIcon];
 		}
 		return image;
 	}
@@ -117,6 +117,26 @@ public:
 		}
 		return image;
 	}
+
+    template<typename T>
+    QPixmap getPixmap(T t, int scale = 1) const
+    {
+        const QImage* pImage = getImage(t);
+        QPixmap pixmap;
+        if (0 != pImage)
+        {
+			if (1 != scale)
+			{
+				QImage image = pImage->scaled(image.size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	            pixmap.convertFromImage(image);
+			}
+			else
+			{
+	            pixmap.convertFromImage(*pImage);
+			}
+        }
+        return pixmap;
+    }
 
 public:
     static const QFont g_FontSmall;

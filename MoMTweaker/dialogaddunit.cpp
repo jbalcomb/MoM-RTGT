@@ -128,6 +128,35 @@ QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QStrin
     return textItem;
 }
 
+void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem)
+{
+    if (0 == momItem)
+        return;
+
+    QPointF tmpPos = pos;
+    QGraphicsItem* item = 0;
+
+    // TODO: Slot type icon
+	QString strSlotType = prettyQStr(slotType) + ":  ";
+    item = addText(tmpPos, strSlotType);
+    tmpPos.rx() += item->boundingRect().width();
+
+	// TODO: For some reason a scale of x2 does not work?!!
+    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 1);
+    if (!pixmapItem.isNull())
+    {
+        QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapItem);
+        m_unitSpecificItems.push_back(item);
+        item->setPos(tmpPos);
+        tmpPos.rx() += pixmapItem.width() * 4 / 3;
+    }
+
+    QString text = QString("%0").arg(momItem->m_Item_Name);
+    item = addText(tmpPos, text);
+
+    pos.ry() += MoM::Max(pixmapItem.height() + 2, 34);
+}
+
 void DialogAddUnit::displayLevel(QPointF &pos, int level, int experience)
 {
     QGraphicsItem* item = 0;
@@ -479,10 +508,10 @@ void DialogAddUnit::update()
     }
 
     // Items
-//    for (int slotNr = 0; slotNr < MoM::gMAX_ITEMSLOTS; ++slotNr)
-//    {
-//        displayItem(pos, m_unit->getSlotType(slotNr), m_unit->getSlotItem(slotNr));
-//    }
+    for (int slotNr = 0; slotNr < MoM::gMAX_ITEMSLOTS; ++slotNr)
+    {
+        displayItem(pos, m_unit->getSlotType(slotNr), m_unit->getSlotItem(slotNr));
+    }
 
     // Abilities, item effects, and spell effects
     MoM::MoMUnit::MapSpecials mapAbilityEffects(m_unit->getAbilityEffects());

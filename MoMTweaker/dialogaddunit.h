@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QSharedPointer>
 
+#include <MoMTemplate.h>
+
 class QAbstractButton;
 class QGraphicsItem;
 class QGraphicsScene;
@@ -36,6 +38,7 @@ private slots:
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
+	void displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem);
     void displayLevel(QPointF& pos, int level, int experience);
     void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir);
     void displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName);

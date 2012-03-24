@@ -2072,7 +2072,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_graphics_ID_GUESS=" << (unsigned)rhs.m_graphics_ID_GUESS << " 0x" << std::hex << (unsigned)rhs.m_graphics_ID_GUESS << std::dec << "\n";
     os << "m_UNK01=" << (unsigned)rhs.m_UNK01 << " 0x" << std::hex << (unsigned)rhs.m_UNK01 << std::dec << "\n";
     os << "m_Hitpoints_per_Figure=" << (unsigned)rhs.m_Hitpoints_per_Figure << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints_per_Figure << std::dec << "\n";
-    os << "m_Scout=" << (unsigned)rhs.m_Scout << " 0x" << std::hex << (unsigned)rhs.m_Scout << std::dec << "\n";
+    os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Transport_Capacity_GUESS=" << (unsigned)rhs.m_Transport_Capacity_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity_GUESS << std::dec << "\n";
     os << "m_Total_Figures=" << (unsigned)rhs.m_Total_Figures << " 0x" << std::hex << (unsigned)rhs.m_Total_Figures << std::dec << "\n";
     os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
@@ -4493,7 +4493,7 @@ std::ostream& operator<<(std::ostream& os, const Unit& rhs)
     os << "m_Guess_Combat_Enchantment_Flag1=" << (int)rhs.m_Guess_Combat_Enchantment_Flag1 << " 0x" << std::hex << (int)rhs.m_Guess_Combat_Enchantment_Flag1 << std::dec << "\n";
     os << "m_In_Tower_without_Seal=" << (int)rhs.m_In_Tower_without_Seal << " 0x" << std::hex << (int)rhs.m_In_Tower_without_Seal << std::dec << "\n";
     os << "m_Guess_Combat_Enchantment_Flag3=" << (int)rhs.m_Guess_Combat_Enchantment_Flag3 << " 0x" << std::hex << (int)rhs.m_Guess_Combat_Enchantment_Flag3 << std::dec << "\n";
-    os << "m_Scout=" << (unsigned)rhs.m_Scout << " 0x" << std::hex << (unsigned)rhs.m_Scout << std::dec << "\n";
+    os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Weapon_Mutation=" << rhs.m_Weapon_Mutation << "\n";
     os << "m_Unit_Enchantment=" << rhs.m_Unit_Enchantment << "\n";
     os << "m_Road_Building_left_to_complete=" << (int)rhs.m_Road_Building_left_to_complete << " 0x" << std::hex << (int)rhs.m_Road_Building_left_to_complete << std::dec << "\n";
@@ -4704,7 +4704,7 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_TypeCode=" << (unsigned)rhs.m_TypeCode << " 0x" << std::hex << (unsigned)rhs.m_TypeCode << std::dec << "\n";
     os << "m_UNK01=" << (unsigned)rhs.m_UNK01 << " 0x" << std::hex << (unsigned)rhs.m_UNK01 << std::dec << "\n";
     os << "m_Hitpoints=" << (unsigned)rhs.m_Hitpoints << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints << std::dec << "\n";
-    os << "m_Scout=" << (unsigned)rhs.m_Scout << " 0x" << std::hex << (unsigned)rhs.m_Scout << std::dec << "\n";
+    os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Transport_Capacity=" << (unsigned)rhs.m_Transport_Capacity << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity << std::dec << "\n";
     os << "m_Nr_Figures=" << (unsigned)rhs.m_Nr_Figures << " 0x" << std::hex << (unsigned)rhs.m_Nr_Figures << std::dec << "\n";
     os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
