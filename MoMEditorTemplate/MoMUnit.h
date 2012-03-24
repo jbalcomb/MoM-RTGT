@@ -77,7 +77,7 @@ public:
     MapSpecials getAbilityEffects() const;
     BaseAttributes getBaseAttributes() const;
     BaseAttributes getBonusAttributes() const;
-    double getCastingSkill() const;
+    int getCastingSkill() const;
     std::string getDisplayName() const;
     std::string getHeroName() const;
     MapSpecials getItemEffects() const;
@@ -96,7 +96,8 @@ public:
     int getXP() const;
 
     bool hasMagicalRangedAttack() const;
-    bool hasPhysicalRangedAttack() const;
+    bool hasMissileRangedAttack() const;
+    bool hasThrownRangedAttack() const;
     bool hasSpecial(const std::string& specialName) const;
 
 private:

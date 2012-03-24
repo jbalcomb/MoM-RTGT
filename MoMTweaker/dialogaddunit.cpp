@@ -416,7 +416,7 @@ void DialogAddUnit::update()
     item->setPos(pos);
     pos.rx() += pixmap.width() + 2;
 
-    if (m_unit->getMelee())
+    if (m_unit->getMelee() && m_unit->getToHitMelee())
     {
        displayToHit(pos, m_unit->getToHitMelee(), "To Hit Melee");
     }
@@ -424,7 +424,7 @@ void DialogAddUnit::update()
     {
         pos.ry() += 10;
     }
-    if (m_unit->getRanged())
+    if (m_unit->getRanged() && m_unit->getToHitRanged())
     {
         displayToHit(pos, m_unit->getToHitRanged(), "To Hit Ranged");
     }
@@ -432,7 +432,7 @@ void DialogAddUnit::update()
     {
         pos.ry() += 10;
     }
-    if (m_unit->getArmor())
+    if (m_unit->getArmor() && m_unit->getToDefend())
     {
         displayToHit(pos, m_unit->getToDefend(), "To Defend");
     }
