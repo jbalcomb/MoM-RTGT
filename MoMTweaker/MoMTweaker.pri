@@ -25,6 +25,7 @@ HEADERS += \
     ../MoMEditorTemplate/QMoMGenerated.h \
     ../MoMEditorTemplate/QMoMMapTile.h \
     ../MoMEditorTemplate/QMoMResources.h \
+    ../MoMEditorTemplate/QMoMRSharedPointers.h \
     ../MoMEditorTemplate/QMoMTreeItem.h \
     \
     ../MoMTweaker/dialogcalculatoraddress.h \

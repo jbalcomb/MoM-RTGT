@@ -27,6 +27,8 @@
         <file>abilities/Create Undead.gif</file>
         <file>abilities/Death Gaze.gif</file>
         <file>abilities/Death Immunity.gif</file>
+        <file>abilities/Death Touch.gif</file>
+        <file>abilities/Destruction.gif</file>
         <file>abilities/Dispel Evil.gif</file>
         <file>abilities/Doom Gaze.gif</file>
         <file>abilities/Doombolt Spell.gif</file>
@@ -53,6 +55,7 @@
         <file>abilities/Lightning.gif</file>
         <file>abilities/Long Range.gif</file>
         <file>abilities/Lucky.gif</file>
+        <file>abilities/Lucky_Hero.gif</file>
         <file>abilities/Magic Immunity.gif</file>
         <file>abilities/Magic Ranged.gif</file>
         <file>abilities/Magic Weapon.gif</file>
@@ -69,6 +72,7 @@
         <file>abilities/Plane Shift.gif</file>
         <file>abilities/Poison Immunity.gif</file>
         <file>abilities/Poison attack.gif</file>
+        <file>abilities/Power Drain.gif</file>
         <file>abilities/Prayermaster X.gif</file>
         <file>abilities/Prayermaster.gif</file>
         <file>abilities/Purify.gif</file>
@@ -97,6 +101,7 @@
         <file>abilities/Web Spell.gif</file>
         <file>abilities/Web.gif</file>
         <file>abilities/Wind Walking.gif</file>
+
         <file>images/background_screen.gif</file>
         <file>images/background_unit.gif</file>
         <file>images/bow_gold.gif</file>
@@ -179,6 +184,7 @@
         <file>images/Resistance.gif</file>
         <file>images/Sorcery.gif</file>
         <file>images/To Hit.gif</file>
+
         <file>race/Barbarian.gif</file>
         <file>race/Beastmen.gif</file>
         <file>race/Dark Elf.gif</file>
@@ -193,6 +199,7 @@
         <file>race/Nomad.gif</file>
         <file>race/Orc.gif</file>
         <file>race/Troll.gif</file>
+
         <file>spells/Berserk.gif</file>
         <file>spells/Black Channels.gif</file>
         <file>spells/Black Prayer.gif</file>
@@ -203,8 +210,11 @@
         <file>spells/Chaos Surge.gif</file>
         <file>spells/Charm of Life.gif</file>
         <file>spells/Cloak of Fear.gif</file>
+        <file>spells/Confusion.gif</file>
         <file>spells/Counter Magic.gif</file>
+        <file>spells/Creature Binding.gif</file>
         <file>spells/Darkness.gif</file>
+        <file>spells/Dispel Evil.gif</file>
         <file>spells/Eldritch Weapon.gif</file>
         <file>spells/Elemental Armor.gif</file>
         <file>spells/Endurance.gif</file>
@@ -224,8 +234,11 @@
         <file>spells/Lionheart.gif</file>
         <file>spells/Magic Immunity.gif</file>
         <file>spells/Metal Fires.gif</file>
+        <file>spells/Mind Storm.gif</file>
+        <file>spells/Mind Twist.gif</file>
         <file>spells/Path Finding.gif</file>
         <file>spells/Planar Travel.gif</file>
+        <file>spells/Possession.gif</file>
         <file>spells/Prayer.gif</file>
         <file>spells/Regeneration.gif</file>
         <file>spells/Resist Elements.gif</file>
@@ -239,14 +252,19 @@
         <file>spells/True Sight.gif</file>
         <file>spells/Vertigo.gif</file>
         <file>spells/Warp Creature.gif</file>
+        <file>spells/Warp Creature Attack.gif</file>
+        <file>spells/Warp Creature Defense.gif</file>
+        <file>spells/Warp Creature Resistance.gif</file>
         <file>spells/Warp Reality.gif</file>
         <file>spells/Warp Wood.gif</file>
         <file>spells/Water Walking.gif</file>
         <file>spells/Weakness.gif</file>
         <file>spells/Web.gif</file>
+        <file>spells/Whirlwind.gif</file>
         <file>spells/Wind Walking.gif</file>
         <file>spells/Wrack.gif</file>
         <file>spells/Wraith Form.gif</file>
+
         <file>heroes/aerie.gif</file>
         <file>heroes/allora.gif</file>
         <file>heroes/aureus.gif</file>
@@ -284,6 +302,7 @@
         <file>heroes/warrax.gif</file>
         <file>heroes/yramrag.gif</file>
         <file>heroes/zaldron.gif</file>
+
         <file>units/Amazon.gif</file>
         <file>units/Assassin.gif</file>
         <file>units/Barbarian.gif</file>
@@ -320,6 +339,7 @@
         <file>units/Warrior Mage.gif</file>
         <file>units/Wind Mage.gif</file>
         <file>units/Witch.gif</file>
+
         <file>wizards/Ariel.gif</file>
         <file>wizards/Freya.gif</file>
         <file>wizards/Horus.gif</file>
