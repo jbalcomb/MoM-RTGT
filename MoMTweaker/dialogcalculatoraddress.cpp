@@ -30,12 +30,14 @@ DialogCalculatorAddress::~DialogCalculatorAddress()
     delete ui;
 }
 
-MoM::MoMGameBase* DialogCalculatorAddress::getGame()
+QMoMGamePtr DialogCalculatorAddress::getGame()
 {
+	QMoMGamePtr game;
     MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
+    if (0 != controller)
+	{
+		game = controller->getGame();
+	}
     return game;
 }
 
@@ -52,9 +54,9 @@ void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffs
     ui->lineEdit_OffsetIDA->clear();
     ui->lineEdit_OffsetMem->clear();
 
-    MoM::MoMGameBase* game = getGame();
+    QMoMGamePtr game = getGame();
     MoM::MoMExeWizards* wizardsExe = 0;
-    if (0 != game)
+    if (!game.isNull())
     {
         wizardsExe = game->getWizardsExe();
     }
@@ -86,9 +88,9 @@ void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffs
     ui->lineEdit_OffsetExe->clear();
     ui->lineEdit_OffsetMem->clear();
 
-    MoM::MoMGameBase* game = getGame();
+    QMoMGamePtr game = getGame();
     MoM::MoMExeWizards* wizardsExe = 0;
-    if (0 != game)
+    if (!game.isNull())
     {
         wizardsExe = game->getWizardsExe();
     }

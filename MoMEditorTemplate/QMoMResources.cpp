@@ -21,16 +21,14 @@ namespace MoM
 const QFont QMoMResources::g_FontSmall("Sans Serif", 10, -1, false);
 #ifdef _WIN32
 const QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
-const QFont QMoMResources::g_FontBig("Monotype Corsiva", 13, -1, false);
 #else
 // Note: attribute italic=true is required for URW Chancery L
 const QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
-const QFont QMoMResources::g_FontBig("URW Chancery L", 14, -1, true);
 #endif
 
 QMoMResources* QMoMResources::m_instance = 0;
 
-QMoMResources::QMoMResources(MoM::MoMGameBase* game) : m_game()
+QMoMResources::QMoMResources(const QMoMGamePtr& game) : m_game()
 {
     setGame(game);
 }
@@ -39,9 +37,9 @@ QMoMResources::~QMoMResources()
 {
 }
 
-void QMoMResources::setGame(MoM::MoMGameBase* game)
+void QMoMResources::setGame(const QMoMGamePtr& game)
 {
-    if (game != m_game)
+    if (game.data() != m_game.data())
     {
         m_game = game;
         if (m_colorTable.empty())
@@ -83,7 +81,7 @@ void QMoMResources::setGame(MoM::MoMGameBase* game)
 
 bool QMoMResources::createColorTable()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     m_colorTable.resize(256);
     std::string fontsLbxFile = m_game->getGameDirectory() + "/" + "FONTS.LBX";
@@ -99,7 +97,7 @@ bool QMoMResources::createColorTable()
 
 bool QMoMResources::createBuildingImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string lbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     MoM::MoMLbxBase lbx;
@@ -139,7 +137,7 @@ bool QMoMResources::createBuildingImages()
 
 bool QMoMResources::createItemImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string itemsLbxFile = m_game->getGameDirectory() + "/" + "ITEMS.LBX";
     MoM::MoMLbxBase itemsLbx;
@@ -157,7 +155,7 @@ bool QMoMResources::createItemImages()
 
 bool QMoMResources::createLairImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string lairsLbxFile = m_game->getGameDirectory() + "/" + "RELOAD.LBX";
     MoM::MoMLbxBase lairsLbx;
@@ -173,7 +171,7 @@ bool QMoMResources::createLairImages()
 
 bool QMoMResources::createSpecialsImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string lbxFile = m_game->getGameDirectory() + "/" + "SPECIAL.LBX";
     MoM::MoMLbxBase lbx;
@@ -191,7 +189,7 @@ bool QMoMResources::createSpellImages()
 {
     // PRE: UnitImages should already have been created, because SpellImages uses them
 
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string cityscapLbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
@@ -313,7 +311,7 @@ bool QMoMResources::createSpellImages()
 
 bool QMoMResources::createTerrainImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string terrainLbxFile = m_game->getGameDirectory() + "/" + "TERRAIN.LBX";
     MoM::MoMLbxBase terrainLbx;
@@ -408,7 +406,7 @@ bool QMoMResources::createTerrainImages()
 
 bool QMoMResources::createUnitImages()
 {
-    if (0 == m_game)
+    if (m_game.isNull())
         return false;
     std::string units1LbxFile = m_game->getGameDirectory() + "/" + "UNITS1.LBX";
     std::string units2LbxFile = m_game->getGameDirectory() + "/" + "UNITS2.LBX";

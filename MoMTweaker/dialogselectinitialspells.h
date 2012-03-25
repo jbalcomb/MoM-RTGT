@@ -14,9 +14,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-namespace MoM {
-    class MoMGameBase;
-}
+#include <QMoMSharedPointers.h>
 
 namespace Ui {
     class DialogSelectInitialSpells;
@@ -32,7 +30,7 @@ public:
 
 private:
     bool apply();
-    MoM::MoMGameBase* getGame();
+    QMoMGamePtr getGame();
     void update();
 
     Ui::DialogSelectInitialSpells *ui;

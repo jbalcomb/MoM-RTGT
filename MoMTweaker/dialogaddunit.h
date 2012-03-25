@@ -1,3 +1,12 @@
+// ---------------------------------------------------------------------------
+// Copyright:   2011 Klaas van Aarsen
+// License:     GPL
+// Author:      I like Serena (aka Klaas van Aarsen)
+// Created:     2010-05-01
+// ---------------------------------------------------------------------------
+
+/// \file
+
 #ifndef DIALOGADDUNIT_H
 #define DIALOGADDUNIT_H
 
@@ -5,6 +14,7 @@
 #include <QSharedPointer>
 
 #include <MoMTemplate.h>
+#include <QMoMSharedPointers.h>
 
 class QAbstractButton;
 class QGraphicsItem;
@@ -32,9 +42,9 @@ public:
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     void on_comboBox_Unit_currentIndexChanged(int index);
-	void slot_gameChanged(MoM::MoMGameBase* game);
+	void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
-    void slot_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit);
+    void slot_unitChanged(const QMoMUnitPtr& unit);
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
@@ -46,7 +56,7 @@ private:
 	void update();
 
 	// CONFIG
-    MoM::MoMGameBase* m_game;
+    QMoMGamePtr m_game;
     QSharedPointer<MoM::MoMUnit> m_unit;
     UnitModel* m_unitModel;
 

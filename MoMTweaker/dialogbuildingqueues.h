@@ -13,12 +13,10 @@
 #include <QAbstractButton>
 #include <QDialog>
 
+#include <QMoMSharedPointers.h>
+
 namespace Ui {
     class DialogBuildingQueues;
-}
-
-namespace MoM {
-	class MoMGameBase;
 }
 
 class DialogBuildingQueues : public QDialog
@@ -31,13 +29,13 @@ public:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton* button);
-	void slot_gameChanged(MoM::MoMGameBase* game);
+	void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
 
 private:
     void update();
 
-	MoM::MoMGameBase* m_game;
+	QMoMGamePtr m_game;
 
     Ui::DialogBuildingQueues *ui;
 };

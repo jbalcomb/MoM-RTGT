@@ -15,6 +15,7 @@
 
 #include <MoMGameBase.h>
 #include <MoMUnit.h>
+#include <QMoMSharedPointers.h>
 #include <QMoMTreeItem.h>
 
 class UnitModel : public QAbstractItemModel
@@ -22,6 +23,7 @@ class UnitModel : public QAbstractItemModel
     Q_OBJECT
 public:
     explicit UnitModel(QObject *parent = 0);
+	virtual ~UnitModel();
 
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -34,33 +36,43 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-    void setGame(MoM::MoMGameBase* game);
-    void update();
- 
+//    void setGame(const QMoMGamePtr& game);
+//    void update();
+
 public slots:
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
     void slot_selectionChanged(const QModelIndex &index);
 
 signals:
-    void signal_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit);
+    void signal_unitChanged(const QMoMUnitPtr& unit);
 
 private:
-    void setupModelData(MoM::MoMGameBase* game);
+	void abortUpdate();
+	void startUpdate();
+    void waitForUpdate();
+	void threadUpdateModelData();
+
+//    void setupModelData(const QMoMGamePtr& game);
 
     template<class T>
     void checkUnitChanged(QMoMTreeItemBase* itemBase);
 
     void removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstUnusedRow);
 
-    void update_Buildings(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Items_in_Game(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Lairs(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Spell_Data(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
-    void update_Unit_Types(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row);
+    void update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
 
 
     static const int m_columnCount = 3;
 
-    QMoMTreeItemBase *m_rootItem;
+    QMoMTreeItemPtr m_rootItem;
+	bool m_abortUpdate;
+
+	friend class ThreadUpdateModelData;
 };
 
 #endif // UNITMODEL_H

@@ -96,14 +96,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)));
 
     // Make internal connections to handle events centrally
-    QObject::connect(this, SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+    QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(this, SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
     // Connect a timer to trigger refresh updates
     QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(slot_timer()));
-    m_timer->start(10000);
+
+    // Connect the item model UnitModel to signals from this class
+	if (ui->checkBox_UpdateTree->isChecked())
+	{
+		QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), &m_UnitModel, SLOT(slot_gameChanged(QMoMGamePtr)));
+		QObject::connect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()));
+	}
 
     // Signal to start with an empty game
-    slot_gameChanged(m_game.get());
+	emit signal_gameChanged(m_game);
+
+	// Start the timer
+    m_timer->start(10000);
 }
 
 MainWindow::~MainWindow()
@@ -129,7 +138,7 @@ QTreeWidgetItem* MainWindow::addTreeFeature(QTreeWidgetItem* parent,
 
 void MainWindow::addUnit(MoM::eUnit_Type unitType)
 {
-    if (0 == m_game.get())
+    if (m_game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Summon"),
@@ -169,7 +178,7 @@ void MainWindow::addUnit(MoM::eUnit_Type unitType)
 
 void MainWindow::applyBuildQueues()
 {
-    if (0 == m_game.get())
+    if (m_game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Apply Building Queues"),
@@ -210,7 +219,7 @@ void MainWindow::applyBuildQueues()
 bool MainWindow::commitMemory()
 {
     bool ok = true;
-    MoM::MoMGameMemory* memGame = dynamic_cast<MoM::MoMGameMemory*>(m_game.get());
+    QMoMGameMemoryPtr memGame = m_game.dynamicCast<MoM::MoMGameMemory>();
     if (0 != memGame)
     {
         ok = memGame->commitChanges();
@@ -227,7 +236,7 @@ bool MainWindow::commitMemory()
 bool MainWindow::refreshMemory()
 {
     bool ok = true;
-    if (0 != m_game.get())
+    if (!m_game.isNull())
     {
         ok = m_game->readData();
         if (!ok)
@@ -243,7 +252,7 @@ bool MainWindow::refreshMemory()
 void MainWindow::update()
 {
     std::string title = "MoM Real-Time Game Tweaker";
-    if (0 != m_game.get())
+    if (!m_game.isNull())
     {
         title = m_game->getSources();
     }
@@ -406,15 +415,10 @@ void MainWindow::update()
     */
 
     ui->pushButton_Reread->setEnabled(
-            (0 != dynamic_cast<MoM::MoMGameMemory*>(m_game.get()))
-            || (0 != dynamic_cast<MoM::MoMGameCustom*>(m_game.get()))
+            (0 != dynamic_cast<MoM::MoMGameMemory*>(m_game.data()))
+            || (0 != dynamic_cast<MoM::MoMGameCustom*>(m_game.data()))
             );
-    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.get()));
-
-    if (ui->checkBox_UpdateTree->isChecked())
-    {
-        m_UnitModel.update();
-    }
+    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
 }
 
 #ifdef _WIN32
@@ -439,13 +443,6 @@ BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 
 void MainWindow::on_pushButton_Connect_clicked()
 {
-    m_game.reset();
-
-	if (ui->checkBox_UpdateTree->isChecked())
-    {
-	    m_UnitModel.setGame(m_game.get());
-	}
-
     QString title("DOSBox Status Window");
 
 #ifdef _WIN32
@@ -462,15 +459,16 @@ void MainWindow::on_pushButton_Connect_clicked()
     std::auto_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
 
     bool ok = momProcess->findProcessAndData(title.toAscii().data());
-    std::auto_ptr<MoM::MoMGameMemory> memGame( new MoM::MoMGameMemory );
-    std::auto_ptr<MoM::MoMGameCustom> customGame( new MoM::MoMGameCustom );
+	QMoMGamePtr newGame;
+    QMoMGameMemoryPtr memGame( new MoM::MoMGameMemory );
+    QMoMGameCustomPtr customGame( new MoM::MoMGameCustom );
     if (ok && memGame->openGame(momProcess))
     {
-        m_game = memGame;
+		newGame = memGame.dynamicCast<MoM::MoMGameBase>();
     }
     else if (ok && customGame->openGame(momProcess))
     {
-        m_game = customGame;
+        newGame = customGame.dynamicCast<MoM::MoMGameBase>();
     }
     else
     {
@@ -485,17 +483,17 @@ void MainWindow::on_pushButton_Connect_clicked()
     }
     else
     {
-		if (ui->checkBox_UpdateTree->isChecked())
-		{
-			statusBar()->showMessage(tr("Updating treeview ..."));
-			m_UnitModel.setGame(m_game.get());
-		}
+//		if (ui->checkBox_UpdateTree->isChecked())
+//		{
+//			statusBar()->showMessage(tr("Updating treeview ..."));
+//			m_UnitModel.setGame(m_game.get());
+//		}
         statusBar()->showMessage(tr("Game connected"));
     }
 
 	if (ok)
 	{
-		emit signal_gameChanged(m_game.get());
+        emit signal_gameChanged(newGame);
 	}
 
     if (ok)
@@ -517,18 +515,10 @@ void MainWindow::on_pushButton_Load_clicked()
     if (!m_filedialogLoadGame.exec())
         return;
 
-    statusBar()->showMessage(tr("Game cleared"));
-    m_game.reset();
-
-	if (ui->checkBox_UpdateTree->isChecked())
-    {
-	    m_UnitModel.setGame(m_game.get());
-	}
-
     QString fileName = m_filedialogLoadGame.selectedFiles().first();
 
     MoM::MoMLbxBase lbxFile;
-    std::auto_ptr<MoM::MoMGameSave> saveGame( new MoM::MoMGameSave );
+    QMoMGameSavePtr saveGame( new MoM::MoMGameSave );
 
     statusBar()->showMessage(tr("Loading game..."));
 
@@ -542,17 +532,17 @@ void MainWindow::on_pushButton_Load_clicked()
     }
     else
     {
-        m_game = saveGame;
         statusBar()->showMessage(tr("Game loaded"));
     }
 
-	emit signal_gameChanged(m_game.get());
+	QMoMGamePtr newGame = saveGame.dynamicCast<MoM::MoMGameBase>();
+	emit signal_gameChanged(newGame);
 }
 
 void MainWindow::on_pushButton_Save_clicked()
 {
-    MoM::MoMGameSave* saveGame = dynamic_cast<MoM::MoMGameSave*>(m_game.get());
-    if ((0 == saveGame) || !saveGame->isOpen())
+    QMoMGameSavePtr saveGame = m_game.dynamicCast<MoM::MoMGameSave>();
+    if ((saveGame.isNull()) || !saveGame->isOpen())
     {
         (void)QMessageBox::warning(this, 
             tr("Save MoM SAVEn.GAM"),
@@ -586,7 +576,7 @@ void MainWindow::on_pushButton_Save_clicked()
 
 void MainWindow::on_pushButton_Reread_clicked()
 {
-    if (0 == m_game.get())
+    if (m_game.isNull())
         return;
 
     bool ok = m_game->readData();
@@ -603,7 +593,7 @@ void MainWindow::on_pushButton_Reread_clicked()
 
 void MainWindow::slot_timer()
 {
-    if ((0 == m_game.get()) || (0 != dynamic_cast<MoM::MoMGameSave*>(m_game.get())))
+    if (m_game.isNull() || (0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data())))
         return;
 
     bool ok = m_game->readData();
@@ -657,31 +647,29 @@ void MainWindow::on_checkBox_UpdateTree_clicked()
 {
 	if (ui->checkBox_UpdateTree->isChecked())
     {
+	    // Connect the item model UnitModel to signals from this class
+		QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), &m_UnitModel, SLOT(slot_gameChanged(QMoMGamePtr)));
+		QObject::connect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()));
 		statusBar()->showMessage(tr("Updating Treeview..."));
-	    m_UnitModel.setGame(m_game.get());
+	    m_UnitModel.slot_gameChanged(m_game);
         statusBar()->showMessage(tr("Treeview updated"));
 	}
 	else
 	{
+	    // Disconnect the item model UnitModel to signals from this class
+		QObject::disconnect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), &m_UnitModel, SLOT(slot_gameChanged(QMoMGamePtr)));
+		QObject::disconnect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()));
         statusBar()->showMessage(tr("Treeview is not updated anymore"));
 	}
 }
 
-void MainWindow::slot_gameChanged(MoM::MoMGameBase* game)
+void MainWindow::slot_gameChanged(const QMoMGamePtr& game)
 {
-	// Ignore the "game" parameter, since we are already the owner of it and triggered it ourselves.
-	assert(m_game.get() == game);
+    m_game = game;
 
+	// TODO: Resources should be loaded centrally...
 	// Load resources
-	MoM::QMoMResources::instance().setGame(m_game.get());
-
-	// TODO: Get the UnitModel its own slots.
-	if (ui->checkBox_UpdateTree->isChecked())
-    {
-		statusBar()->showMessage(tr("Updating Treeview..."));
-	    m_UnitModel.setGame(m_game.get());
-        statusBar()->showMessage(tr("Treeview updated"));
-	}
+    MoM::QMoMResources::instance().setGame(m_game);
 
 	update();
 }

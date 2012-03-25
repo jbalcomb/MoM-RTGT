@@ -44,20 +44,22 @@ DialogTools::~DialogTools()
     delete ui;
 }
 
-MoM::MoMGameBase* DialogTools::getGame()
+QMoMGamePtr DialogTools::getGame()
 {
+	QMoMGamePtr game;
 	MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
+    if (0 != controller)
+	{
+	    game = controller->getGame();
+	}
     return game;
 }
 
 void DialogTools::on_pushButton_Validate_clicked()
 {
     MainWindow* controller = MainWindow::getInstance();
-	MoM::MoMGameBase* game = getGame();
-    if (0 == game)
+	QMoMGamePtr game = getGame();
+    if (game.isNull())
     {
         (void)QMessageBox::warning(this, 
             tr("Repop Lairs"),
@@ -107,8 +109,8 @@ void DialogTools::on_pushButton_Calculator_clicked()
 void DialogTools::on_pushButton_RepopLairs_clicked()
 {
     MainWindow* controller = MainWindow::getInstance();
-	MoM::MoMGameBase* game = getGame();
-    if (0 == game)
+	QMoMGamePtr game = getGame();
+    if (game.isNull())
     {
         (void)QMessageBox::warning(this, 
             tr("Repop Lairs"),
@@ -151,8 +153,8 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
 void DialogTools::on_pushButton_CatnipMod_clicked()
 {
     MainWindow* controller = MainWindow::getInstance();
-	MoM::MoMGameBase* game = getGame();
-    if (0 == game)
+	QMoMGamePtr game = getGame();
+    if (game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Catnip mod"),
@@ -660,8 +662,8 @@ bool replaceUnitGraphics(MoM::eUnit_Type unitType, const std::string& unitFilena
 void DialogTools::on_pushButton_LucernMod_clicked()
 {
     MainWindow* controller = MainWindow::getInstance();
-	MoM::MoMGameBase* game = getGame();
-    if (0 == game)
+	QMoMGamePtr game = getGame();
+    if (game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Lucern mod"),

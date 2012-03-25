@@ -10,11 +10,13 @@
 #ifndef QMOMTREEITEM_H
 #define QMOMTREEITEM_H
 
+//#include <QDebug>
 #include <QStandardItem>
 
 #include <iomanip>
 
 #include "MoMGameBase.h"
+#include "QMoMSharedPointers.h"
 
 template< typename T >
 inline QString toQStr(const T& t)
@@ -215,6 +217,8 @@ public:
 
     virtual QVariant data(int role) const
     {
+//        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(m_data);
+
         m_flags &= ~Qt::ItemIsEditable; // If we get here, this item is not editable by the user
 
         switch (role)
@@ -234,7 +238,7 @@ public:
         return m_flags;
     }
 
-    static MoM::MoMGameBase* game(void)
+    static const QMoMGamePtr& game(void)
     {
         return m_game;
     }
@@ -291,6 +295,7 @@ public:
 
     virtual void setData(const QVariant &value, int role)
     {
+//        qDebug() << QString("setData(value='%0', role=%1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
         if (Qt::EditRole == role)
         {
             if (QVariant::Icon == value.type())
@@ -327,7 +332,7 @@ public:
         }
     }
 
-    static void setGame(MoM::MoMGameBase* game)
+    static void setGame(const QMoMGamePtr game)
     {
         m_game = game;
     }
@@ -350,7 +355,7 @@ private:
     QList< QList<QMoMTreeItemBase*> > m_children;
     mutable Qt::ItemFlags m_flags;
 
-    static MoM::MoMGameBase* m_game;
+    static QMoMGamePtr m_game;
 };
 
 template< typename T >
@@ -396,6 +401,7 @@ public:
                 value = toQStr(static_cast<T>(((unsigned)*m_ptr & m_mask) >> m_shift));
             }
         }
+//        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(value);
         switch (role)
         {
         case Qt::DisplayRole:
@@ -414,6 +420,7 @@ public:
 
     virtual void setData(const QVariant &value, int role)
     {
+//        qDebug() << QString("setData(value='%0', role=%1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
         switch (role)
         {
         case Qt::EditRole:
@@ -460,6 +467,8 @@ public:
     {
         QString value(m_ptr);
 
+//        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(value);
+
         switch (role)
         {
         case Qt::DisplayRole:
@@ -474,6 +483,7 @@ public:
 
     virtual void setData(const QVariant &value, int role)
     {
+//        qDebug() << QString("setData(%0, %1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
         char newvalue[N] = "";
         switch (role)
         {
@@ -512,6 +522,8 @@ public:
     {
         QString value(m_ptr);
 
+//        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(value);
+
         switch (role)
         {
         case Qt::DisplayRole:
@@ -526,6 +538,7 @@ public:
 
     virtual void setData(const QVariant &value, int role)
     {
+//        qDebug() << QString("setData(value='%0', role=%1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
         std::string newvalue(m_size, '\0');
         switch (role)
         {

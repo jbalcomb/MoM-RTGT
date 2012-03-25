@@ -13,12 +13,10 @@
 #include <QDialog>
 #include <QModelIndex>
 
+#include <QMoMSharedPointers.h>
+
 namespace Ui {
     class DialogTables;
-}
-
-namespace MoM {
-    class MoMGameBase;
 }
 
 class DialogTables : public QDialog
@@ -37,7 +35,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent* event);
 
 private:
-    MoM::MoMGameBase* getGame();
+    QMoMGamePtr getGame();
 
     Ui::DialogTables *ui;
 

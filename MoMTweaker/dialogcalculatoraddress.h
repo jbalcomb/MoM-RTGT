@@ -12,9 +12,7 @@
 
 #include <QDialog>
 
-namespace MoM {
-    class MoMGameBase;
-}
+#include <QMoMSharedPointers.h>
 
 namespace Ui {
     class DialogCalculatorAddress;
@@ -28,7 +26,7 @@ public:
     explicit DialogCalculatorAddress(QWidget *parent = 0);
     ~DialogCalculatorAddress();
 
-    MoM::MoMGameBase* getGame();
+    QMoMGamePtr getGame();
     void update();
 
 private:

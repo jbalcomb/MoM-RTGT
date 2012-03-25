@@ -33,12 +33,14 @@ DialogTables::~DialogTables()
 }
 
 
-MoM::MoMGameBase* DialogTables::getGame()
+QMoMGamePtr DialogTables::getGame()
 {
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
+	QMoMGamePtr game;
+	MainWindow* controller = MainWindow::getInstance();
+    if (0 != controller)
+	{
+	    game = controller->getGame();
+	}
     return game;
 }
 
@@ -102,14 +104,14 @@ void DialogTables::keyPressEvent(QKeyEvent* event)
 
 void DialogTables::update_Spell_Data()
 {
-    MoM::MoMGameBase* game = getGame();
+    QMoMGamePtr game = getGame();
     MoM::Spell_Data* spellData = 0;
     MoM::Upkeep_Enchantments* upkeepEnchantments = 0;
     MoM::MoMExeWizards* wizardsExe = 0;
     uint8_t* ovl112 = 0;
     int ndata = 0;
 
-    if (0 != game)
+    if (!game.isNull())
     {
         spellData = game->getSpell_Data();
         if (0 != game->getDataSegment())
@@ -330,11 +332,11 @@ void DialogTables::update_Spell_Data()
 
 void DialogTables::update_Unit_Types()
 {
-    MoM::MoMGameBase* game = getGame();
+    QMoMGamePtr game = getGame();
     MoM::Unit_Type_Data* unitTypes = 0;
     int ndata = 0;
 
-    if (0 != game)
+    if (!game.isNull())
     {
         unitTypes = game->getUnit_Types();
     }
@@ -507,11 +509,11 @@ void DialogTables::update_Unit_Types()
 
 void DialogTables::update_Unrest_Table()
 {
-    MoM::MoMGameBase* game = getGame();
+    QMoMGamePtr game = getGame();
     int8_t* unrestTable = 0;
     int ndata = 0;
 
-    if (0 != game)
+    if (!game.isNull())
     {
         unrestTable = game->getUnrest_Table(MoM::RACE_Barbarian);
     }

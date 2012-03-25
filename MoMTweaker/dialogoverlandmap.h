@@ -1,16 +1,23 @@
+// ---------------------------------------------------------------------------
+// Copyright:   2011 Klaas van Aarsen
+// License:     GPL
+// Author:      I like Serena (aka Klaas van Aarsen)
+// Created:     2010-05-01
+// ---------------------------------------------------------------------------
+
+/// \file
+
 #ifndef DIALOGOVERLANDMAP_H
 #define DIALOGOVERLANDMAP_H
 
 #include <QDialog>
 
+#include <QMoMSharedPointers.h>
+
 class QGraphicsScene;
 
 namespace Ui {
     class DialogOverlandMap;
-}
-
-namespace MoM {
-    class MoMGameBase;
 }
 
 class DialogOverlandMap : public QDialog
@@ -22,7 +29,7 @@ public:
     ~DialogOverlandMap();
 
 private:
-    MoM::MoMGameBase* getGame();
+    QMoMGamePtr getGame();
 
     QGraphicsScene* m_sceneArcanus;
     QGraphicsScene* m_sceneMyrror;

@@ -31,8 +31,8 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     m_sceneArcanus->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
     m_sceneMyrror->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
 
-    MoM::MoMGameBase* game = getGame();
-    if (0 != game)
+    QMoMGamePtr game = getGame();
+    if (!game.isNull())
     {
         for (int y = 0; y < (int)MoM::gMAX_MAP_ROWS; ++y)
         {
@@ -65,12 +65,14 @@ DialogOverlandMap::~DialogOverlandMap()
     delete m_sceneArcanus;
 }
 
-MoM::MoMGameBase* DialogOverlandMap::getGame()
+QMoMGamePtr DialogOverlandMap::getGame()
 {
+	QMoMGamePtr game;
     MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
+    if (0 != controller)
+	{
+        game = controller->getGame();
+	}
     return game;
 }
 

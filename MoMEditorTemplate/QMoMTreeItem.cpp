@@ -7,4 +7,4 @@
 
 #include "QMoMTreeItem.h"
 
-MoM::MoMGameBase* QMoMTreeItemBase::m_game = 0;
+QMoMGamePtr QMoMTreeItemBase::m_game;

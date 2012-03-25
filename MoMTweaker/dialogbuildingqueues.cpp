@@ -121,7 +121,7 @@ void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
     }
 }
 
-void DialogBuildingQueues::slot_gameChanged(MoM::MoMGameBase* game)
+void DialogBuildingQueues::slot_gameChanged(const QMoMGamePtr& game)
 {
 	m_game = game;
 	update();

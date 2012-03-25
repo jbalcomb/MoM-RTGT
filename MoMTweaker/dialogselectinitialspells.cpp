@@ -171,8 +171,8 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 
     int16_t* nrSpellbooks = 0;
     MoM::eSpellKnown* known = 0;
-    MoM::MoMGameBase* game = getGame();
-    if (0 != game)
+    QMoMGamePtr game = getGame();
+    if (!game.isNull())
     {
         MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
         if (0 != wizard)
@@ -212,8 +212,8 @@ DialogSelectInitialSpells::~DialogSelectInitialSpells()
 bool DialogSelectInitialSpells::apply()
 {
     MoM::eSpellKnown* known = 0;
-    MoM::MoMGameBase* game = getGame();
-    if (0 == game)
+    QMoMGamePtr game = getGame();
+    if (game.isNull())
         return false;
     MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
     if (0 == wizard)
@@ -273,20 +273,22 @@ bool DialogSelectInitialSpells::apply()
     return true;
 }
 
-MoM::MoMGameBase* DialogSelectInitialSpells::getGame()
+QMoMGamePtr DialogSelectInitialSpells::getGame()
 {
+	QMoMGamePtr game;
     MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return 0;
-    MoM::MoMGameBase* game = controller->getGame();
+    if (0 != controller)
+	{
+		game = controller->getGame();
+	}
     return game;
 }
 
 void DialogSelectInitialSpells::update()
 {
     int16_t* nrSpellbooks = 0;
-    MoM::MoMGameBase* game = getGame();
-    if (0 != game)
+    QMoMGamePtr game = getGame();
+    if (!game.isNull())
     {
         MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
         if (0 != wizard)

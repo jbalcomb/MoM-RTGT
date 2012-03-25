@@ -46,9 +46,9 @@ public:
 		return m_instance;
 	}
 
-    MoM::MoMGameBase* getGame()
+    QMoMGamePtr getGame()
     {
-        return m_game.get();
+        return m_game;
     }
 
 private:
@@ -69,7 +69,7 @@ private:
     QFileDialog m_filedialogLoadGame;
     QFileDialog m_filedialogSaveGame;
 
-    std::auto_ptr<MoM::MoMGameBase> m_game;
+    QMoMGamePtr m_game;
 
 private slots:
     void on_checkBox_UpdateTree_clicked();
@@ -82,12 +82,12 @@ private slots:
     void on_pushButton_ShowTables_clicked();
     void on_pushButton_Tools_clicked();
 
-	void slot_gameChanged(MoM::MoMGameBase* game);
+    void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
     void slot_timer();
 
 signals:
-	void signal_gameChanged(MoM::MoMGameBase* game);
+    void signal_gameChanged(const QMoMGamePtr& game);
 	void signal_gameUpdated();
 
     friend class Test_MoMTweaker_MainWindow;

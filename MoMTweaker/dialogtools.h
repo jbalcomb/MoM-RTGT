@@ -1,15 +1,22 @@
+// ---------------------------------------------------------------------------
+// Copyright:   2011 Klaas van Aarsen
+// License:     GPL
+// Author:      I like Serena (aka Klaas van Aarsen)
+// Created:     2010-05-01
+// ---------------------------------------------------------------------------
+
+/// \file
+
 #ifndef DIALOGTOOLS_H
 #define DIALOGTOOLS_H
 
 #include <QDialog>
 #include <QStatusBar>
 
+#include <QMoMSharedPointers.h>
+
 namespace Ui {
 class DialogTools;
-}
-
-namespace MoM {
-    class MoMGameBase;
 }
 
 class DialogTools : public QDialog
@@ -30,7 +37,7 @@ private slots:
     void on_pushButton_Validate_clicked();
 
 private:
-	MoM::MoMGameBase* getGame();
+	QMoMGamePtr getGame();
 	QStatusBar* statusBar();
 
     Ui::DialogTools *ui;

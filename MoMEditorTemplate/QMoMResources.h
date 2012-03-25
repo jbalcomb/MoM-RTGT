@@ -15,7 +15,8 @@
 #include <qimage.h>
 #include <qvector.h>
 
-#include <MoMTemplate.h>
+#include "MoMTemplate.h"
+#include "QMoMSharedPointers.h"
 
 namespace MoM {
     class MoMGameBase;
@@ -26,10 +27,10 @@ namespace MoM {
 class QMoMResources
 {
 public:
-    QMoMResources(MoM::MoMGameBase* game);
+    QMoMResources(const QMoMGamePtr& game);
     virtual ~QMoMResources();
 
-    static void createInstance(MoM::MoMGameBase* game)
+    static void createInstance(const QMoMGamePtr& game)
     {
         delete m_instance;
         m_instance = new QMoMResources(game);
@@ -39,12 +40,12 @@ public:
     {
         if (0 == m_instance)
         {
-            m_instance = new QMoMResources(0);
+            m_instance = new QMoMResources(QMoMGamePtr());
         }
         return *m_instance;
     }
 
-    void setGame(MoM::MoMGameBase* game);
+    void setGame(const QMoMGamePtr& game);
 
 	const QVector<QRgb>& GetColorTable()
 	{
@@ -141,7 +142,6 @@ public:
 public:
     static const QFont g_FontSmall;
     static const QFont g_Font;
-    static const QFont g_FontBig;
 
 private:
     bool createColorTable();
@@ -162,7 +162,7 @@ private:
 
     static QMoMResources* m_instance;
 
-    MoM::MoMGameBase* m_game;
+    QMoMGamePtr m_game;
 
     QVector<QRgb> m_colorTable;
     QVector<QImage> m_buildingImages;

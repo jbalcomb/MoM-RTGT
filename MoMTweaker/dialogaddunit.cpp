@@ -142,9 +142,14 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
     tmpPos.rx() += item->boundingRect().width();
 
 	// TODO: For some reason a scale of x2 does not work?!!
-    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 1);
-    if (!pixmapItem.isNull())
+//    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 1);
+    const QImage* pImage = MoM::QMoMResources::instance().getImage(momItem->m_Icon);
+    QPixmap pixmapItem;
+    if (0 != pImage)
     {
+		QImage image = *pImage;
+        image = image.scaled(image.size() * 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		pixmapItem.convertFromImage(image);
         QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapItem);
         m_unitSpecificItems.push_back(item);
         item->setPos(tmpPos);
@@ -324,12 +329,12 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 	update();
 }
 
-void DialogAddUnit::slot_gameChanged(MoM::MoMGameBase* game)
+void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
 {
     UpdateLock lock(m_updating);
 
     m_game = game;
-	m_unit->setGame(m_game);
+	m_unit->setGame(m_game.data());
 
     // Reinitialize combo box with units
 
