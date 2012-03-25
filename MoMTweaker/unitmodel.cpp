@@ -165,37 +165,11 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
     // Check if a unit was clicked.
     // If so, emit a signal
     QMoMTreeItemBase* itemBase = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
-    std::cout << "Clicked" << std::endl;
-    std::cout << "Clicked on: " << itemBase->data(Qt::DisplayRole).toByteArray().data() << std::endl;
 
     checkUnitChanged<MoM::Hero_stats>(itemBase);
     checkUnitChanged<MoM::Hired_Hero>(itemBase);
     checkUnitChanged<MoM::Unit>(itemBase);
     checkUnitChanged<MoM::Unit_Type_Data>(itemBase);
-
-//    QMoMTreeItemSubtree<MoM::Unit_Type_Data>* itemUnitType = dynamic_cast< QMoMTreeItemSubtree<MoM::Unit_Type_Data>* >(itemBase);
-//    if (0 != itemUnitType)
-//    {
-//        std::cout << "Unit_Type_Data" << std::endl;
-
-//        MoM::Unit_Type_Data* unitType = itemUnitType->getMoMPointer();
-//        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game()));
-//        momUnit->changeUnit(unitType);
-
-//        emit signal_unitChanged(momUnit);
-//    }
-
-//    QMoMTreeItemSubtree<MoM::Unit>* itemUnit = dynamic_cast< QMoMTreeItemSubtree<MoM::Unit>* >(itemBase);
-//    if (0 != itemUnit)
-//    {
-//        std::cout << "Unit" << std::endl;
-
-//        MoM::Unit* unit = itemUnit->getMoMPointer();
-//        QSharedPointer<MoM::MoMUnit> momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game()));
-//        momUnit->changeUnit(unit);
-
-//        emit signal_unitChanged(momUnit);
-//    }
 }
 
 template<class T>
@@ -637,6 +611,8 @@ void update_Races(QMoMTreeItemBase* ptree, MoM::MoMGameBase* game, int& row)
             }
 
             ptree->child(row, 0)->setData(toQStr((MoM::eRace)row), Qt::UserRole);
+// TODO
+//            ptree->child(row, 0)->setData(MoM::QMoMResources::instance().getIcon((MoM::eRace)raceNr, 2), Qt::DecorationRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
         }

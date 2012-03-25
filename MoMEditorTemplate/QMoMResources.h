@@ -52,14 +52,9 @@ public:
 	}
 
     template<typename T>
-    QIcon getIcon(T t) const
+    QIcon getIcon(T t, int scale = 1) const
     {
-        const QImage* image = getImage(t);
-        QIcon icon;
-        if (0 != image)
-        {
-            icon = QPixmap::fromImage(*image);
-        }
+        QIcon icon(getPixmap(t, scale));
         return icon;
     }
 
@@ -90,7 +85,17 @@ public:
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eSpell spell) const
+//    const QImage* getImage(MoM::eRace race) const
+//	{
+//		const QImage* image = 0;
+//        QImage image
+//		if (inRange(m_itemImages, race))
+//		{
+//			image = &m_itemImages[itemIcon];
+//		}
+//		return image;
+//	}
+    const QImage* getImage(MoM::eSpell spell) const
 	{
 		const QImage* image = 0;
 		if (inRange(m_spellImages, spell))
@@ -127,7 +132,7 @@ public:
         {
 			if (1 != scale)
 			{
-				QImage image = pImage->scaled(image.size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	            pixmap.convertFromImage(image);
 			}
 			else

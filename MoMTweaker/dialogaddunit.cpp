@@ -141,8 +141,7 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
     item = addText(tmpPos, strSlotType);
     tmpPos.rx() += item->boundingRect().width();
 
-	// TODO: For some reason a scale of x2 does not work?!!
-    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 1);
+    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 2);
     if (!pixmapItem.isNull())
     {
         QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapItem);
