@@ -454,11 +454,12 @@ public slots:
 signals:
 
 private:
+	void update_Buildings();
 };
 
 
-void QMoMTreeItemSubtree_Buildings::QMoMTreeItemSubtree_Buildings() :
-    QMoMTreeItemBase(tr("Buildings"))
+QMoMTreeItemSubtree_Buildings::QMoMTreeItemSubtree_Buildings() :
+    QMoMTreeItemBase("Buildings")
 {
 }
 
@@ -466,54 +467,60 @@ void QMoMTreeItemSubtree_Buildings::slot_gameUpdated()
 {
 	QMoMTreeItemBase* parentItem = this->parent();
 
+	int toprow = row();
+
     int nrBuildings = 0;
-    if ((0 != game) && (0 != game->getDataSegment()))
+    if ((0 != game()) && (0 != game()->getDataSegment()))
     {
-        const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
+        const MoM::EXE_Reloc& addr = game()->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
         parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
     }
     else
     {
         parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
     }
-    if (0 == game)
+    if (0 == game())
     {
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
     }
     else
     {
         nrBuildings = MoM::eBuilding_MAX;
-        parentItem->child(toprow, 2)->setData(tr("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
+        parentItem->child(toprow, 2)->setData(QString("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
     }
 
-    int row = 0;
-    if (nrBuildings > rowCount())
-    {
-        beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
-        update_Buildings(ptree, game, row);
-        endInsertRows();
-    }
-    else
-    {
-        update_Buildings(ptree, game, row);
-    }
-    removeUnusedRows(toprow, ptree, row);
 
-    toprow++;
+    update_Buildings();
+//    int row = 0;
+//    if (nrBuildings > rowCount())
+//    {
+//        beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
+//        update_Buildings(ptree, game, row);
+//        endInsertRows();
+//    }
+//    else
+//    {
+//        update_Buildings(ptree, game, row);
+//    }
+//    removeUnusedRows(toprow, ptree, row);
+
+//    toprow++;
 }
 
 void QMoMTreeItemSubtree_Buildings::update_Buildings()
 {
-    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != m_game) && (0 != m_game->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
+	int row = 0;
+    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game()) && (0 != game()->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
     {
-        MoM::Building_Data* buildingData = m_game->getBuilding_Data(building);
+        MoM::Building_Data* buildingData = game()->getBuilding_Data(building);
         if (0 == buildingData)
             break;
         if (building >= rowCount())
         {
 			// Row consists of 3 cells.
 			// The first cell contains the subtree and a title+icon
-			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building)); 
+			QIcon icon = MoM::QMoMResources::instance().getIcon(building);
+			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building), icon); 
             setChild(row, 0, psubtree);
 
             child(row, 1)->setData(QString(), Qt::EditRole);
@@ -817,6 +824,8 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
     {
         if (row >= ptree->rowCount())
         {
+			MoM::eRace race = (MoM::eRace)raceNr;
+            QIcon icon = MoM::QMoMResources::instance().getIcon(race, 1);
             ptree->setChild(row, 0, constructTreeItem(&dataSegment->m_Race_Data[raceNr], ""));
 
             // Additional custom fields:
@@ -827,9 +836,8 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
                 ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItem<const char*>(ptrName));
             }
 
-            ptree->child(row, 0)->setData(toQStr((MoM::eRace)row), Qt::UserRole);
-// TODO
-//            ptree->child(row, 0)->setData(MoM::QMoMResources::instance().getIcon((MoM::eRace)raceNr, 2), Qt::DecorationRole);
+            ptree->child(row, 0)->setData(prettyQStr((MoM::eRace)row), Qt::EditRole);
+            ptree->child(row, 0)->setData(icon, Qt::EditRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
         }
@@ -1111,11 +1119,11 @@ void UnitModel::threadUpdateModelData()
             parentItem->appendEmptyRow();
         }
 
-        QMoMTreeItemSubtree_Buildings* ptree = dynamic_cast<QMoMTreeItemSubtree_Buildings>(parentItem->child(toprow, 0));
+        QMoMTreeItemSubtree_Buildings* ptree = dynamic_cast<QMoMTreeItemSubtree_Buildings*>(parentItem->child(toprow, 0));
         if (0 == ptree)
 		{
-            ptree = new QMoMTreeItemSubtree_Buildings(tr("Buildings"));
-            parentItem->setChild(toprow, 0, psubtree);
+            ptree = new QMoMTreeItemSubtree_Buildings;
+            parentItem->setChild(toprow, 0, ptree);
 		}
         else
         {

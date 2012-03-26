@@ -12,6 +12,7 @@
 #include <MoMLbxBase.h>
 #include <MoMutility.h>
 #include <QMoMCommon.h>
+#include <QMoMTreeItem.h>
 
 #include "QMoMResources.h"
 
@@ -77,6 +78,12 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
             (void)createTerrainImages();
         }
     }
+}
+
+const QMoMImagePtr QMoMResources::getImage(eRace race) const
+{
+    QMoMImagePtr image(new QImage(QString(":/race/%0.gif").arg(prettyQStr(race))));
+    return image;
 }
 
 bool QMoMResources::createColorTable()
@@ -424,41 +431,41 @@ bool QMoMResources::createUnitImages()
     m_unitImages.resize(MoM::eUnit_Type_MAX);
 
     // Put specific hero pictures in, since the unit-type pictures are only small horses
-    m_unitImages[UNITTYPE_Dwarf] = QImage(":/units/Dwarf.gif");
-    m_unitImages[UNITTYPE_Barbarian] = QImage(":/units/Barbarian.gif");
-    m_unitImages[UNITTYPE_Sage] = QImage(":/units/Sage.gif");
-    m_unitImages[UNITTYPE_Dervish] = QImage(":/units/Dervish.gif");
-    m_unitImages[UNITTYPE_Beastmaster] = QImage(":/units/Beastmaster.gif");
-    m_unitImages[UNITTYPE_Bard] = QImage(":/units/Bard.gif");
-    m_unitImages[UNITTYPE_Orc_Warrior] = QImage(":/units/Orc Warrior.gif");
-    m_unitImages[UNITTYPE_Healer] = QImage(":/units/Healer.gif");
-    m_unitImages[UNITTYPE_Huntress] = QImage(":/units/Huntress.gif");
-    m_unitImages[UNITTYPE_Thief] = QImage(":/units/Thief.gif");
-    m_unitImages[UNITTYPE_Druid] = QImage(":/units/Druid.gif");
-    m_unitImages[UNITTYPE_War_Monk] = QImage(":/units/War Monk.gif");
-    m_unitImages[UNITTYPE_Warrior_Mage] = QImage(":/units/Warrior Mage.gif");
-    m_unitImages[UNITTYPE_Magician] = QImage(":/units/Magician.gif");
-    m_unitImages[UNITTYPE_Assassin] = QImage(":/units/Assassin.gif");
-    m_unitImages[UNITTYPE_Wind_Mage] = QImage(":/units/Wind Mage.gif");
-    m_unitImages[UNITTYPE_Ranger] = QImage(":/units/Ranger.gif");
-    m_unitImages[UNITTYPE_Draconian] = QImage(":/units/Draconian.gif");
-    m_unitImages[UNITTYPE_Witch] = QImage(":/units/Witch.gif");
-    m_unitImages[UNITTYPE_Golden_One] = QImage(":/units/Golden One.gif");
-    m_unitImages[UNITTYPE_Ninja] = QImage(":/units/Ninja.gif");
-    m_unitImages[UNITTYPE_Rogue] = QImage(":/units/Rogue.gif");
-    m_unitImages[UNITTYPE_Amazon] = QImage(":/units/Amazon.gif");
-    m_unitImages[UNITTYPE_Warlock] = QImage(":/units/Warlock.gif");
-    m_unitImages[UNITTYPE_Unknown] = QImage(":/units/Unknown.gif");
-    m_unitImages[UNITTYPE_Illusionist] = QImage(":/units/Illusionist.gif");
-    m_unitImages[UNITTYPE_Swordsman] = QImage(":/units/Swordsman.gif");
-    m_unitImages[UNITTYPE_Priestess] = QImage(":/units/Priestess.gif");
-    m_unitImages[UNITTYPE_Paladin] = QImage(":/units/Paladin.gif");
-    m_unitImages[UNITTYPE_Black_Knight] = QImage(":/units/Black Knight.gif");
-    m_unitImages[UNITTYPE_Elven_Archer] = QImage(":/units/Elven Archer.gif");
-    m_unitImages[UNITTYPE_Knight] = QImage(":/units/Knight.gif");
-    m_unitImages[UNITTYPE_Necromancer] = QImage(":/units/Necromancer.gif");
-    m_unitImages[UNITTYPE_Chaos_Warrior] = QImage(":/units/Chaos Warrior.gif");
-    m_unitImages[UNITTYPE_Chosen] = QImage(":/units/Chosen.gif");
+    m_unitImages[UNITTYPE_Dwarf] = QMoMImagePtr(new QImage(":/units/Dwarf.gif"));
+    m_unitImages[UNITTYPE_Barbarian] = QMoMImagePtr(new QImage(":/units/Barbarian.gif"));
+    m_unitImages[UNITTYPE_Sage] = QMoMImagePtr(new QImage(":/units/Sage.gif"));
+    m_unitImages[UNITTYPE_Dervish] = QMoMImagePtr(new QImage(":/units/Dervish.gif"));
+    m_unitImages[UNITTYPE_Beastmaster] = QMoMImagePtr(new QImage(":/units/Beastmaster.gif"));
+    m_unitImages[UNITTYPE_Bard] = QMoMImagePtr(new QImage(":/units/Bard.gif"));
+    m_unitImages[UNITTYPE_Orc_Warrior] = QMoMImagePtr(new QImage(":/units/Orc Warrior.gif"));
+    m_unitImages[UNITTYPE_Healer] = QMoMImagePtr(new QImage(":/units/Healer.gif"));
+    m_unitImages[UNITTYPE_Huntress] = QMoMImagePtr(new QImage(":/units/Huntress.gif"));
+    m_unitImages[UNITTYPE_Thief] = QMoMImagePtr(new QImage(":/units/Thief.gif"));
+    m_unitImages[UNITTYPE_Druid] = QMoMImagePtr(new QImage(":/units/Druid.gif"));
+    m_unitImages[UNITTYPE_War_Monk] = QMoMImagePtr(new QImage(":/units/War Monk.gif"));
+    m_unitImages[UNITTYPE_Warrior_Mage] = QMoMImagePtr(new QImage(":/units/Warrior Mage.gif"));
+    m_unitImages[UNITTYPE_Magician] = QMoMImagePtr(new QImage(":/units/Magician.gif"));
+    m_unitImages[UNITTYPE_Assassin] = QMoMImagePtr(new QImage(":/units/Assassin.gif"));
+    m_unitImages[UNITTYPE_Wind_Mage] = QMoMImagePtr(new QImage(":/units/Wind Mage.gif"));
+    m_unitImages[UNITTYPE_Ranger] = QMoMImagePtr(new QImage(":/units/Ranger.gif"));
+    m_unitImages[UNITTYPE_Draconian] = QMoMImagePtr(new QImage(":/units/Draconian.gif"));
+    m_unitImages[UNITTYPE_Witch] = QMoMImagePtr(new QImage(":/units/Witch.gif"));
+    m_unitImages[UNITTYPE_Golden_One] = QMoMImagePtr(new QImage(":/units/Golden One.gif"));
+    m_unitImages[UNITTYPE_Ninja] = QMoMImagePtr(new QImage(":/units/Ninja.gif"));
+    m_unitImages[UNITTYPE_Rogue] = QMoMImagePtr(new QImage(":/units/Rogue.gif"));
+    m_unitImages[UNITTYPE_Amazon] = QMoMImagePtr(new QImage(":/units/Amazon.gif"));
+    m_unitImages[UNITTYPE_Warlock] = QMoMImagePtr(new QImage(":/units/Warlock.gif"));
+    m_unitImages[UNITTYPE_Unknown] = QMoMImagePtr(new QImage(":/units/Unknown.gif"));
+    m_unitImages[UNITTYPE_Illusionist] = QMoMImagePtr(new QImage(":/units/Illusionist.gif"));
+    m_unitImages[UNITTYPE_Swordsman] = QMoMImagePtr(new QImage(":/units/Swordsman.gif"));
+    m_unitImages[UNITTYPE_Priestess] = QMoMImagePtr(new QImage(":/units/Priestess.gif"));
+    m_unitImages[UNITTYPE_Paladin] = QMoMImagePtr(new QImage(":/units/Paladin.gif"));
+    m_unitImages[UNITTYPE_Black_Knight] = QMoMImagePtr(new QImage(":/units/Black Knight.gif"));
+    m_unitImages[UNITTYPE_Elven_Archer] = QMoMImagePtr(new QImage(":/units/Elven Archer.gif"));
+    m_unitImages[UNITTYPE_Knight] = QMoMImagePtr(new QImage(":/units/Knight.gif"));
+    m_unitImages[UNITTYPE_Necromancer] = QMoMImagePtr(new QImage(":/units/Necromancer.gif"));
+    m_unitImages[UNITTYPE_Chaos_Warrior] = QMoMImagePtr(new QImage(":/units/Chaos Warrior.gif"));
+    m_unitImages[UNITTYPE_Chosen] = QMoMImagePtr(new QImage(":/units/Chosen.gif"));
 
     for (MoM::eUnit_Type unitType = (MoM::eUnit_Type)MoM::gMAX_HERO_TYPES; unitType < MoM::eUnit_Type_MAX; MoM::inc(unitType))
     {

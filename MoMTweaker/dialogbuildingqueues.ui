@@ -56,6 +56,9 @@
        <property name="text">
         <string>Race</string>
        </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
       </column>
       <column>
        <property name="text">
@@ -77,10 +80,16 @@
        <property name="text">
         <string>Producing</string>
        </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
       </column>
       <column>
        <property name="text">
-        <string>Queue</string>
+        <string>Garrison</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
       </column>
       <item row="0" column="0">
@@ -116,13 +125,7 @@
       </item>
       <item row="0" column="5">
        <property name="text">
-        <string>Economy</string>
-       </property>
-       <property name="checkState">
-        <enum>Checked</enum>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+        <string>0</string>
        </property>
       </item>
       <item row="1" column="0">
@@ -158,13 +161,7 @@
       </item>
       <item row="1" column="5">
        <property name="text">
-        <string>Economy</string>
-       </property>
-       <property name="checkState">
-        <enum>Checked</enum>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+        <string>2</string>
        </property>
       </item>
       <item row="2" column="0">
@@ -200,13 +197,7 @@
       </item>
       <item row="2" column="5">
        <property name="text">
-        <string>Farming</string>
-       </property>
-       <property name="checkState">
-        <enum>Checked</enum>
-       </property>
-       <property name="flags">
-        <set>ItemIsSelectable|ItemIsEditable|ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+        <string>2</string>
        </property>
       </item>
      </widget>
@@ -225,6 +216,9 @@
         </item>
         <item>
          <widget class="QListWidget" name="listWidget_Queues">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>

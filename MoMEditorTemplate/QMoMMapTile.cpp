@@ -38,7 +38,7 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
             iTerrainType += MoM::eTerrainType_MAX;
         }
 		MoM::eTerrainType terrainType = static_cast<MoM::eTerrainType>(iTerrainType);
-		const QImage* image = QMoMResources::instance().getImage(terrainType);
+		const QMoMImagePtr image = QMoMResources::instance().getImage(terrainType);
 		if (0 != image)
 		{
 			painter->drawImage(boundingRect(), *image);

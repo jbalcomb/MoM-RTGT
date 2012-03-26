@@ -14,6 +14,7 @@
 #include <QVector>
 
 #include "MoMcommon.h"
+#include "QMoMSharedPointers.h"
 
 namespace MoM
 {
@@ -30,17 +31,17 @@ inline bool convertImageToLbx(const QImage& image, std::vector<uint8_t>& dataBuf
 
 bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTable, QVector<QImage>& images, const std::string& context);
 
-inline QImage convertLbxToImage(const uint8_t* data, const QVector<QRgb>& defaultColorTable, const std::string& context)
+inline QMoMImagePtr convertLbxToImage(const uint8_t* data, const QVector<QRgb>& defaultColorTable, const std::string& context)
 {
     QVector<QImage> images;
     (void)convertLbxToImages(data, defaultColorTable, images, context);
     if (images.empty())
     {
-        return QImage();
+        return QMoMImagePtr();
     }
     else
     {
-        return images[0];
+        return QMoMImagePtr(new QImage(images[0]));
     }
 }
 

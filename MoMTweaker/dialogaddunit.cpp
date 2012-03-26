@@ -130,7 +130,7 @@ QGraphicsSimpleTextItem* DialogAddUnit::addText(const QPointF& pos, const QStrin
 
 void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem)
 {
-    if (0 == momItem)
+    if ((MoM::eSlot_Type16)0 == slotType)
         return;
 
     QPointF tmpPos = pos;
@@ -141,17 +141,21 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
     item = addText(tmpPos, strSlotType);
     tmpPos.rx() += item->boundingRect().width();
 
-    QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 2);
-    if (!pixmapItem.isNull())
-    {
-        QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapItem);
-        m_unitSpecificItems.push_back(item);
-        item->setPos(tmpPos);
-        tmpPos.rx() += pixmapItem.width() * 4 / 3;
-    }
+	QPixmap pixmapItem;
+	if (0 != momItem)
+	{
+		pixmapItem = MoM::QMoMResources::instance().getPixmap(momItem->m_Icon, 2);
+		if (!pixmapItem.isNull())
+		{
+			QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapItem);
+			m_unitSpecificItems.push_back(item);
+			item->setPos(tmpPos);
+			tmpPos.rx() += pixmapItem.width() * 4 / 3;
+		}
 
-    QString text = QString("%0").arg(momItem->m_Item_Name);
-    item = addText(tmpPos, text);
+		QString text = QString("%0").arg(momItem->m_Item_Name);
+		item = addText(tmpPos, text);
+	}
 
     pos.ry() += MoM::Max(pixmapItem.height() + 2, 34);
 }
@@ -388,7 +392,7 @@ void DialogAddUnit::update()
 
     // Add new items
 
-    const QImage* pImage = MoM::QMoMResources::instance().getImage(m_unit->getUnitTypeNr());
+    const QMoMImagePtr pImage = MoM::QMoMResources::instance().getImage(m_unit->getUnitTypeNr());
     if (0 != pImage)
     {
         QImage image(*pImage);

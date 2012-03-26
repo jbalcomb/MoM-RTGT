@@ -59,67 +59,58 @@ public:
         return icon;
     }
 
-    const QImage* getImage(MoM::eBuilding building) const
+    const QMoMImagePtr getImage(MoM::eBuilding building) const
 	{
-		const QImage* image = 0;
+        QMoMImagePtr image;
 		if (inRange(m_buildingImages, building))
 		{
-			image = &m_buildingImages[building];
+            image = m_buildingImages[building];
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eItem_Icon itemIcon) const
+    const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const
 	{
-		const QImage* image = 0;
-		if (inRange(m_itemImages, itemIcon))
+        QMoMImagePtr image;
+        if (inRange(m_itemImages, itemIcon))
 		{
-			image = &m_itemImages[itemIcon];
+            image = m_itemImages[itemIcon];
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eTower_Node_Lair_Type lair) const
+    const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const
 	{
-		const QImage* image = 0;
-		if (inRange(m_lairImages, lair))
+        QMoMImagePtr image;
+        if (inRange(m_lairImages, lair))
 		{
-			image = &m_lairImages[lair];
+            image = m_lairImages[lair];
 		}
 		return image;
 	}
-//    const QImage* getImage(MoM::eRace race) const
-//	{
-//		const QImage* image = 0;
-//        QImage image
-//		if (inRange(m_itemImages, race))
-//		{
-//			image = &m_itemImages[itemIcon];
-//		}
-//		return image;
-//	}
-    const QImage* getImage(MoM::eSpell spell) const
+    const QMoMImagePtr getImage(MoM::eRace race) const;
+    const QMoMImagePtr getImage(MoM::eSpell spell) const
 	{
-		const QImage* image = 0;
-		if (inRange(m_spellImages, spell))
+        QMoMImagePtr image;
+        if (inRange(m_spellImages, spell))
 		{
-			image = &m_spellImages[spell];
+            image = m_spellImages[spell];
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eTerrainType terrain) const
+    const QMoMImagePtr getImage(MoM::eTerrainType terrain) const
 	{
-		const QImage* image = 0;
-		if (inRange(m_terrainTypeImages, terrain))
+        QMoMImagePtr image;
+        if (inRange(m_terrainTypeImages, terrain))
 		{
-			image = &m_terrainTypeImages[terrain];
+            image = m_terrainTypeImages[terrain];
 		}
 		return image;
 	}
-	const QImage* getImage(MoM::eUnit_Type unitType) const
+    const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const
 	{
-		const QImage* image = 0;
-		if (inRange(m_unitImages, unitType))
+        QMoMImagePtr image;
+        if (inRange(m_unitImages, unitType))
 		{
-			image = &m_unitImages[unitType];
+            image = m_unitImages[unitType];
 		}
 		return image;
 	}
@@ -127,9 +118,9 @@ public:
     template<typename T>
     QPixmap getPixmap(T t, int scale = 1) const
     {
-        const QImage* pImage = getImage(t);
+        const QMoMImagePtr pImage = getImage(t);
         QPixmap pixmap;
-        if (0 != pImage)
+        if (!pImage.isNull())
         {
 			if (1 != scale)
 			{
@@ -160,7 +151,7 @@ private:
     bool createUnitImages();
 
 	template<typename T>
-	bool inRange(const QVector<QImage>& v, T t) const
+    bool inRange(const QVector<QMoMImagePtr>& v, T t) const
 	{
 		return (static_cast<unsigned>(t) < static_cast<unsigned>(v.size()));
 	}
@@ -170,13 +161,13 @@ private:
     QMoMGamePtr m_game;
 
     QVector<QRgb> m_colorTable;
-    QVector<QImage> m_buildingImages;
-    QVector<QImage> m_itemImages;
-    QVector<QImage> m_lairImages;
-    QVector<QImage> m_specialsImages;
-    QVector<QImage> m_spellImages;
-    QVector<QImage> m_terrainTypeImages;
-    QVector<QImage> m_unitImages;
+    QVector<QMoMImagePtr> m_buildingImages;
+    QVector<QMoMImagePtr> m_itemImages;
+    QVector<QMoMImagePtr> m_lairImages;
+    QVector<QMoMImagePtr> m_specialsImages;
+    QVector<QMoMImagePtr> m_spellImages;
+    QVector<QMoMImagePtr> m_terrainTypeImages;
+    QVector<QMoMImagePtr> m_unitImages;
 };
 
 }
