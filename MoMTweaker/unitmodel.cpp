@@ -383,156 +383,6 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 //    T* m_ptr;
 //};
 
-//void QMoMTreeItem_Buildings::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
-//{
-//    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (0 != game->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
-//    {
-//        MoM::Building_Data* buildingData = game->getBuilding_Data(building);
-//        if (0 == buildingData)
-//            break;
-//        if (building >= ptree->rowCount())
-//        {
-//            ptree->setChild(row, 0, constructTreeItem(buildingData, ""));
-
-//            ptree->child(row, 0)->setData(toQStr(building), Qt::UserRole);
-////            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
-////                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
-////                                                    .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
-//            ptree->child(row, 2)->setData(QString("Building[%0]").arg((int)building), Qt::EditRole);
-//        }
-//        ++row;
-//    }
-//}
-
-
-class QMoMTreeItemSubtree_Building_Data : public QMoMTreeItemBase
-{
-public:
-    explicit QMoMTreeItemSubtree_Building_Data(MoM::Building_Data* ptr, const QString& data = QString(), const QIcon& icon = QIcon());
-
-    MoM::Building_Data* getMoMPointer()
-    {
-        return m_ptr;
-    }
-
-public slots:
-
-signals:
-
-private:
-    MoM::Building_Data* m_ptr;
-};
-
-QMoMTreeItemSubtree_Building_Data::QMoMTreeItemSubtree_Building_Data(MoM::Building_Data* ptr, const QString& data, const QIcon& icon) :
-    QMoMTreeItemBase(data, icon),
-    m_ptr(ptr)
-{
-    appendChild("m_BuildingName", new QMoMTreeItem<char[20]>(m_ptr->m_BuildingName));
-	appendChild("m_Prerequisite1", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Prerequisite1));
-    appendChild("m_Prerequisite2", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Prerequisite2));
-    appendChild("m_Replaces_building", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Replaces_building));
-    appendChild("m_Produces_Regulars", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Regulars));
-    appendChild("m_Produces_Veterans", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Veterans));
-    appendChild("m_Produces_Magic_Weapons", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Magic_Weapons));
-    appendChild("m_Upkeep_yield", new QMoMTreeItem<int16_t>(&m_ptr->m_Upkeep_yield));
-    appendChild("m_Food_and_pop_bonus", new QMoMTreeItem<uint16_t>(&m_ptr->m_Food_and_pop_bonus));
-    appendChild("m_Zero_24", new QMoMTreeItem<uint16_t>(&m_ptr->m_Zero_24));
-    appendChild("m_Unk_26", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_26));
-    appendChild("m_Mana_produced", new QMoMTreeItem<uint16_t>(&m_ptr->m_Mana_produced));
-    appendChild("m_Unk_2A", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_2A));
-    appendChild("m_Building_cost", new QMoMTreeItem<uint16_t>(&m_ptr->m_Building_cost));
-    appendChild("m_Zero_2E", new QMoMTreeItem<uint16_t>(&m_ptr->m_Zero_2E));
-    appendChild("m_Unk_30", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_30));
-    appendChild("m_Unk_32", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_32));
-}
-
-class QMoMTreeItemSubtree_Buildings : public QMoMTreeItemBase
-{
-public:
-    explicit QMoMTreeItemSubtree_Buildings();
-
-public slots:
-	void slot_gameUpdated();
-
-signals:
-
-private:
-	void update_Buildings();
-};
-
-
-QMoMTreeItemSubtree_Buildings::QMoMTreeItemSubtree_Buildings() :
-    QMoMTreeItemBase("Buildings")
-{
-}
-
-void QMoMTreeItemSubtree_Buildings::slot_gameUpdated()
-{
-	QMoMTreeItemBase* parentItem = this->parent();
-
-	int toprow = row();
-
-    int nrBuildings = 0;
-    if ((0 != game()) && (0 != game()->getDataSegment()))
-    {
-        const MoM::EXE_Reloc& addr = game()->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
-        parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-    }
-    else
-    {
-        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-    }
-    if (0 == game())
-    {
-        parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
-    }
-    else
-    {
-        nrBuildings = MoM::eBuilding_MAX;
-        parentItem->child(toprow, 2)->setData(QString("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
-    }
-
-
-    update_Buildings();
-//    int row = 0;
-//    if (nrBuildings > rowCount())
-//    {
-//        beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
-//        update_Buildings(ptree, game, row);
-//        endInsertRows();
-//    }
-//    else
-//    {
-//        update_Buildings(ptree, game, row);
-//    }
-//    removeUnusedRows(toprow, ptree, row);
-
-//    toprow++;
-}
-
-void QMoMTreeItemSubtree_Buildings::update_Buildings()
-{
-	int row = 0;
-    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game()) && (0 != game()->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
-    {
-        MoM::Building_Data* buildingData = game()->getBuilding_Data(building);
-        if (0 == buildingData)
-            break;
-        if (building >= rowCount())
-        {
-			// Row consists of 3 cells.
-			// The first cell contains the subtree and a title+icon
-			QIcon icon = MoM::QMoMResources::instance().getIcon(building);
-			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building), icon); 
-            setChild(row, 0, psubtree);
-
-            child(row, 1)->setData(QString(), Qt::EditRole);
-            child(row, 2)->setData(QString("Building[%0]").arg((int)building), Qt::EditRole);
-        }
-        ++row;
-    }
-}
-
 void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (0 != game->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
@@ -542,8 +392,7 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
             break;
         if (building >= ptree->rowCount())
         {
-			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building)); 
-            ptree->setChild(row, 0, psubtree);
+            ptree->setChild(row, 0, constructTreeItem(buildingData, ""));
 
             ptree->child(row, 0)->setData(toQStr(building), Qt::UserRole);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
@@ -554,6 +403,157 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
         ++row;
     }
 }
+
+
+//class QMoMTreeItemSubtree_Building_Data : public QMoMTreeItemBase
+//{
+//public:
+//    explicit QMoMTreeItemSubtree_Building_Data(MoM::Building_Data* ptr, const QString& data = QString(), const QIcon& icon = QIcon());
+
+//    MoM::Building_Data* getMoMPointer()
+//    {
+//        return m_ptr;
+//    }
+
+//public slots:
+
+//signals:
+
+//private:
+//    MoM::Building_Data* m_ptr;
+//};
+
+//QMoMTreeItemSubtree_Building_Data::QMoMTreeItemSubtree_Building_Data(MoM::Building_Data* ptr, const QString& data, const QIcon& icon) :
+//    QMoMTreeItemBase(data, icon),
+//    m_ptr(ptr)
+//{
+//    appendChild("m_BuildingName", new QMoMTreeItem<char[20]>(m_ptr->m_BuildingName));
+//	appendChild("m_Prerequisite1", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Prerequisite1));
+//    appendChild("m_Prerequisite2", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Prerequisite2));
+//    appendChild("m_Replaces_building", new QMoMTreeItem<MoM::eBuilding>(&m_ptr->m_Replaces_building));
+//    appendChild("m_Produces_Regulars", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Regulars));
+//    appendChild("m_Produces_Veterans", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Veterans));
+//    appendChild("m_Produces_Magic_Weapons", new QMoMTreeItem<MoM::eYesNo16>(&m_ptr->m_Produces_Magic_Weapons));
+//    appendChild("m_Upkeep_yield", new QMoMTreeItem<int16_t>(&m_ptr->m_Upkeep_yield));
+//    appendChild("m_Food_and_pop_bonus", new QMoMTreeItem<uint16_t>(&m_ptr->m_Food_and_pop_bonus));
+//    appendChild("m_Zero_24", new QMoMTreeItem<uint16_t>(&m_ptr->m_Zero_24));
+//    appendChild("m_Unk_26", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_26));
+//    appendChild("m_Mana_produced", new QMoMTreeItem<uint16_t>(&m_ptr->m_Mana_produced));
+//    appendChild("m_Unk_2A", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_2A));
+//    appendChild("m_Building_cost", new QMoMTreeItem<uint16_t>(&m_ptr->m_Building_cost));
+//    appendChild("m_Zero_2E", new QMoMTreeItem<uint16_t>(&m_ptr->m_Zero_2E));
+//    appendChild("m_Unk_30", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_30));
+//    appendChild("m_Unk_32", new QMoMTreeItem<uint16_t>(&m_ptr->m_Unk_32));
+//}
+
+//class QMoMTreeItemSubtree_Buildings : public QMoMTreeItemBase
+//{
+//public:
+//    explicit QMoMTreeItemSubtree_Buildings();
+
+//public slots:
+//	void slot_gameUpdated();
+
+//signals:
+
+//private:
+//	void update_Buildings();
+//};
+
+
+//QMoMTreeItemSubtree_Buildings::QMoMTreeItemSubtree_Buildings() :
+//    QMoMTreeItemBase("Buildings")
+//{
+//}
+
+//void QMoMTreeItemSubtree_Buildings::slot_gameUpdated()
+//{
+//	QMoMTreeItemBase* parentItem = this->parent();
+
+//	int toprow = row();
+
+//    int nrBuildings = 0;
+//    if ((0 != game()) && (0 != game()->getDataSegment()))
+//    {
+//        const MoM::EXE_Reloc& addr = game()->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
+//        parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
+//    }
+//    else
+//    {
+//        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
+//    }
+//    if (0 == game())
+//    {
+//        parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
+//    }
+//    else
+//    {
+//        nrBuildings = MoM::eBuilding_MAX;
+//        parentItem->child(toprow, 2)->setData(QString("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
+//    }
+
+
+//    update_Buildings();
+////    int row = 0;
+////    if (nrBuildings > rowCount())
+////    {
+////        beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
+////        update_Buildings(ptree, game, row);
+////        endInsertRows();
+////    }
+////    else
+////    {
+////        update_Buildings(ptree, game, row);
+////    }
+////    removeUnusedRows(toprow, ptree, row);
+
+////    toprow++;
+//}
+
+//void QMoMTreeItemSubtree_Buildings::update_Buildings()
+//{
+//	int row = 0;
+//    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game()) && (0 != game()->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
+//    {
+//        MoM::Building_Data* buildingData = game()->getBuilding_Data(building);
+//        if (0 == buildingData)
+//            break;
+//        if (building >= rowCount())
+//        {
+//			// Row consists of 3 cells.
+//			// The first cell contains the subtree and a title+icon
+//			QIcon icon = MoM::QMoMResources::instance().getIcon(building);
+//			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building), icon);
+//            setChild(row, 0, psubtree);
+
+//            child(row, 1)->setData(QString(), Qt::EditRole);
+//            child(row, 2)->setData(QString("Building[%0]").arg((int)building), Qt::EditRole);
+//        }
+//        ++row;
+//    }
+//}
+
+//void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+//{
+//    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (0 != game->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
+//    {
+//        MoM::Building_Data* buildingData = game->getBuilding_Data(building);
+//        if (0 == buildingData)
+//            break;
+//        if (building >= ptree->rowCount())
+//        {
+//			QMoMTreeItemBase* psubtree = new QMoMTreeItemSubtree_Building_Data(buildingData, toQStr(building));
+//            ptree->setChild(row, 0, psubtree);
+
+//            ptree->child(row, 0)->setData(toQStr(building), Qt::UserRole);
+////            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
+////                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
+////                                                    .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
+//            ptree->child(row, 2)->setData(QString("Building[%0]").arg((int)building), Qt::EditRole);
+//        }
+//        ++row;
+//    }
+//}
 
 void update_Cities(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 {
@@ -1122,50 +1122,50 @@ void UnitModel::threadUpdateModelData()
             parentItem->appendEmptyRow();
         }
 
-        QMoMTreeItemSubtree_Buildings* ptree = dynamic_cast<QMoMTreeItemSubtree_Buildings*>(parentItem->child(toprow, 0));
-        if (0 == ptree)
-		{
-            ptree = new QMoMTreeItemSubtree_Buildings;
-            parentItem->setChild(toprow, 0, ptree);
-		}
+//        QMoMTreeItemSubtree_Buildings* ptree = dynamic_cast<QMoMTreeItemSubtree_Buildings*>(parentItem->child(toprow, 0));
+//        if (0 == ptree)
+//		{
+//            ptree = new QMoMTreeItemSubtree_Buildings;
+//            parentItem->setChild(toprow, 0, ptree);
+//		}
+//        else
+//        {
+//            ptree->slot_gameUpdated();
+//        }
+        int nrBuildings = 0;
+        parentItem->child(toprow, 0)->setData(tr("Buildings"), Qt::UserRole);
+        if ((0 != game) && (0 != game->getDataSegment()))
+        {
+            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
+            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
+        }
         else
         {
-            ptree->slot_gameUpdated();
+            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         }
-        //int nrBuildings = 0;
-        //parentItem->child(toprow, 0)->setData(tr("Buildings"), Qt::UserRole);
-        //if ((0 != game) && (0 != game->getDataSegment()))
-        //{
-        //    const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
-        //    parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        //}
-        //else
-        //{
-        //    parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        //}
-        //if (0 == game)
-        //{
-        //    parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
-        //}
-        //else
-        //{
-        //    nrBuildings = MoM::eBuilding_MAX;
-        //    parentItem->child(toprow, 2)->setData(tr("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
-        //}
+        if (0 == game)
+        {
+            parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
+        }
+        else
+        {
+            nrBuildings = MoM::eBuilding_MAX;
+            parentItem->child(toprow, 2)->setData(tr("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
+        }
 
-        //int row = 0;
-        //QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
-        //if (nrBuildings > ptree->rowCount())
-        //{
-        //    beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
-        //    update_Buildings(ptree, game, row);
-        //    endInsertRows();
-        //}
-        //else
-        //{
-        //    update_Buildings(ptree, game, row);
-        //}
-        //removeUnusedRows(toprow, ptree, row);
+        int row = 0;
+        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        if (nrBuildings > ptree->rowCount())
+        {
+            beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
+            update_Buildings(ptree, game, row);
+            endInsertRows();
+        }
+        else
+        {
+            update_Buildings(ptree, game, row);
+        }
+        removeUnusedRows(toprow, ptree, row);
 
         toprow++;
     }

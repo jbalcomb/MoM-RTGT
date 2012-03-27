@@ -6,7 +6,6 @@
 ## ---------------------------------------------------------------------------
 
 HEADERS += \
-    ../MoMEditorTemplate/MoMcommon.h \
     ../MoMEditorTemplate/MoMController.h \
     ../MoMEditorTemplate/MoMGameCustom.h \
     ../MoMEditorTemplate/MoMExeBase.h \
@@ -37,7 +36,8 @@ HEADERS += \
     ../MoMTweaker/dialogaddunit.h \
     ../MoMTweaker/dialogtools.h \
     ../MoMTweaker/mainwindow.h \
-    ../MoMTweaker/unitmodel.h
+    ../MoMTweaker/unitmodel.h \
+    ../MoMEditorTemplate/MoMCommon.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \

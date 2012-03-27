@@ -13,6 +13,7 @@
 #include <MoMUtility.h>
 #include <QMoMLbx.h>
 #include <QMoMTreeItem.h>
+#include <QMoMUtility.h>
 
 #include "QMoMResources.h"
 

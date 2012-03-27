@@ -23,7 +23,7 @@
 #include <string.h>     // memcmp()
 
 // Libraries / Local
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 #include "MoMProcess.h"
 
@@ -97,8 +97,10 @@ void MoMProcess::close() throw()
     m_hProcess = NULL;
 }
 
-bool MoMProcess::findProcessAndData(const std::string& title)
+bool MoMProcess::findProcessAndData()
 {
+    std::string title = "dosbox";
+
     close();
 
     std::string filename;

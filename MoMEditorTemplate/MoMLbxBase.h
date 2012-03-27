@@ -10,7 +10,7 @@
 #ifndef MOMLBXBASE_H_
 #define MOMLBXBASE_H_
 
-#include "MoMcommon.h"
+#include "MoMCommon.h"
 
 namespace MoM
 {

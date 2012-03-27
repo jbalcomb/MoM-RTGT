@@ -512,7 +512,7 @@ void DialogAddUnit::update()
     }
 
     // Items
-    for (int slotNr = 0; slotNr < MoM::gMAX_ITEMSLOTS; ++slotNr)
+    for (int slotNr = 0; MoM::toUInt(slotNr) < MoM::gMAX_ITEMSLOTS; ++slotNr)
     {
         displayItem(pos, m_unit->getSlotType(slotNr), m_unit->getSlotItem(slotNr));
     }

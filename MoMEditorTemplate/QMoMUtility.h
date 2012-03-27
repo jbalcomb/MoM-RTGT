@@ -11,6 +11,7 @@
 #define QMOMUTILITY_H_
 
 #include <QDateTime>
+#include <QDebug>
 
 namespace MoM
 {

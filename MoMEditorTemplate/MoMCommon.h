@@ -40,6 +40,11 @@ typedef signed int int32_t;
 #define PACKED_STRUCT
 #endif
 
+#ifdef __MINGW_GCC  // Compiler MinGW
+#pragma pack(push, 1)
+#define PACKED_STRUCT __attribute__((packed))
+#endif
+
 #ifdef __GNUC__         // Compiler g++
 #define PACKED_STRUCT __attribute__((packed))
 #endif
@@ -135,6 +140,10 @@ typedef struct PACKED_STRUCT {   // LBXHEADER
 #ifdef _MSC_VER         // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
+#ifdef __MINGW_GCC  // Compiler MinGW
+#pragma pack(pop)
+#endif
+
 #undef PACKED_STRUCT
 
 #endif

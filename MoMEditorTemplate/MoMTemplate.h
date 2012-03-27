@@ -11,7 +11,7 @@
 #ifndef MOMTEMPLATE_H
 #define MOMTEMPLATE_H
 
-#include "MoMcommon.h"
+#include "MoMCommon.h"
 
 #define SetBackColor(c)     // Macro to suppress info related to the program 010-EditorTemplate
 
@@ -27,7 +27,6 @@
 
 #ifdef __MINGW_GCC  // Compiler MinGW
 #pragma pack(push, 1)
-#pragma pack(1)
 #define PACKED_STRUCT __attribute__((packed))
 #endif
 
@@ -4105,6 +4104,10 @@ typedef struct PACKED_STRUCT {
 #ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
+#ifdef __MINGW_GCC  // Compiler MinGW
+#pragma pack(pop)
+#endif
+
 #undef PACKED_STRUCT
 
 #endif // MOMTEMPLATE_H
