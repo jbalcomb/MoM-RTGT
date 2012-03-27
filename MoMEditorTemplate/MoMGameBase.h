@@ -11,7 +11,7 @@
 #define MOMGAMEBASE_H
 
 #include "MoMTemplate.h"
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 namespace MoM {
 

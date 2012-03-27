@@ -13,13 +13,14 @@
 
 #include <MoMGenerated.h>
 #include <MoMUnit.h>
-#include <MoMutility.h>
+#include <MoMUtility.h>
 #include "QMoMResources.h"
+#include "QMoMSharedPointers.h"
 
 #include "mainwindow.h"
 
 
-// TODO: Move to new common header file QMoMUtility.h or perhaps to the existing QMoMCommon.h
+// TODO: Move to common header file MoMUtility.h
 class UpdateLock
 {
 public:
@@ -101,11 +102,11 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
     ui->graphicsView_Unit->setScene(m_sceneUnit);
 
 
-	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Connect the item model UnitModel to the dialog
-    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QSharedPointer<MoM::MoMUnit>)), this, SLOT(slot_unitChanged(QSharedPointer<MoM::MoMUnit>)));
+    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)));
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
@@ -369,7 +370,7 @@ void DialogAddUnit::slot_gameUpdated()
     update();
 }
 
-void DialogAddUnit::slot_unitChanged(const QSharedPointer<MoM::MoMUnit>& unit)
+void DialogAddUnit::slot_unitChanged(const QMoMUnitPtr& unit)
 {
     UpdateLock lock(m_updating);
 

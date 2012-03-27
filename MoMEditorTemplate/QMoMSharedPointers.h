@@ -1,0 +1,48 @@
+// ---------------------------------------------------------------------------
+// Copyright:   2011 Klaas van Aarsen
+// License:     GPL
+// Author:      I like Serena (aka Klaas van Aarsen)
+// Created:     2010-05-01
+// ---------------------------------------------------------------------------
+
+/// \file
+
+#ifndef QMOMSHAREDPOINTERS_H
+#define QMOMSHAREDPOINTERS_H
+
+#include <QSharedPointer>
+
+#include <MoMGameBase.h>
+
+namespace MoM {
+	class MoMGameCustom;
+	class MoMGameMemory;
+    class MoMGameSave;
+    class MoMUnit;
+}
+
+class QMoMTreeItemBase;
+
+
+/// \brief Shared pointer to a MoMGameBase
+typedef QSharedPointer<MoM::MoMGameBase> QMoMGamePtr;
+
+/// \brief Shared pointer to a MoMGameCustom
+typedef QSharedPointer<MoM::MoMGameCustom> QMoMGameCustomPtr;
+
+/// \brief Shared pointer to a MoMGameMemory
+typedef QSharedPointer<MoM::MoMGameMemory> QMoMGameMemoryPtr;
+
+/// \brief Shared pointer to a MoMGameSave
+typedef QSharedPointer<MoM::MoMGameSave> QMoMGameSavePtr;
+
+/// \brief Shared pointer to a QMoMTreeItemBase
+typedef QSharedPointer<QMoMTreeItemBase> QMoMTreeItemPtr;
+
+/// \brief Shared pointer to a MoMUnit
+typedef QSharedPointer<MoM::MoMUnit> QMoMUnitPtr;
+
+/// \brief Shared pointer to a QImage
+typedef QSharedPointer<QImage> QMoMImagePtr;
+
+#endif // QMOMSHAREDPOINTERS_H

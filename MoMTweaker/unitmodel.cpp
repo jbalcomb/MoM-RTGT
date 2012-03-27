@@ -5,6 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
+#include <QDateTime>
 #include <QtGui>
 
 #include <sstream>
@@ -13,10 +14,10 @@
 #include <MoMGenerated.h>
 #include <MoMLbxBase.h>
 #include <MoMUnit.h>
-#include <MoMutility.h>
+#include <MoMUtility.h>
 #include <MoMExeWizards.h>
-#include <QMoMCommon.h>
 #include <QMoMGenerated.h>
+#include <QMoMUtility.h>
 #include "QMoMResources.h"
 
 #include "unitmodel.h"
@@ -33,7 +34,6 @@ UnitModel::UnitModel(QObject *parent) :
     m_rootItem(new QMoMTreeItemBase),
 	m_abortUpdate(false)
 {
-//    setupModelData(0);
 }
 
 UnitModel::~UnitModel()
@@ -187,6 +187,7 @@ bool UnitModel::setData(const QModelIndex& index, const QVariant& value, int rol
 
 void UnitModel::slot_gameChanged(const QMoMGamePtr &game)
 {
+    qDebug() << MoM::getDateTimeStr() << ">UnitModel::slot_gameChanged() begin";
     // Abort an old update if any
     abortUpdate();
 
@@ -200,6 +201,8 @@ void UnitModel::slot_gameChanged(const QMoMGamePtr &game)
     MoM::QMoMResources::instance().setGame(game);	// Load resources if they are changed
     QMoMTreeItemBase::setGame(game);
     startUpdate();
+
+    qDebug() << MoM::getDateTimeStr() << "<UnitModel::slot_gameChanged() end";
 }
 
 void UnitModel::slot_gameUpdated()

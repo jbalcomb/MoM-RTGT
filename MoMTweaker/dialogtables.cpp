@@ -11,7 +11,7 @@
 #include "dialogtables.h"
 #include "ui_dialogtables.h"
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
 #include "mainwindow.h"

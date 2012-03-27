@@ -11,8 +11,10 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string>
+#include <vector>
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 #include "MoMProcess.h"
 
@@ -26,24 +28,24 @@ const DWORD gBASEADDRESS_SIZE = 0x1001000;
 
 const char gLOCAL_DIRECTORY[] = "local directory ";
 
-/*
+
 BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 {
-    QStringList& windowTitles = *(QStringList*)lParam;
+	std::vector<std::string>& windowTitles = *(std::vector<std::string>*)lParam;
 
     char szTitle[4096] = "";
     if (0 < GetWindowTextA(hwnd, szTitle, sizeof(szTitle)))
     {
-        QString qtitle(szTitle);
-        if (-1 != qtitle.indexOf(QString("DOSBox"), 0, Qt::CaseInsensitive))
+        std::string lowercaseTitle = lowercase(szTitle);
+        if (std::string::npos != lowercaseTitle.find("dosbox"))
         {
-            windowTitles.append(szTitle);
+            windowTitles.push_back(szTitle);
         }
     }
 
     return TRUE;
 }
-*/
+
 }
 
 
@@ -83,27 +85,33 @@ void MoMProcess::close() throw()
     m_exeFilepath.clear();
 }
 
-bool MoMProcess::findProcessAndData(const std::string& title)
+bool MoMProcess::findProcessAndData()
 {
     close();
 
-/*
-    QStringList windowTitles;
-    if (EnumWindows(wndEnumProc, (LPARAM)&windowTitles)
-        && !windowTitles.isEmpty())
-    {
-        windowTitle = windowTitles.front();
+    std::vector<std::string> windowTitles;
+    (void)EnumWindows(wndEnumProc, (LPARAM)&windowTitles);
+
+	bool ok = false;
+	for (size_t i = 0; !ok && (i < windowTitles.size()); ++i)
+	{
+		ok = tryWindowTitle(windowTitles[i]);
     }
-*/
-    HWND hwnd = FindWindowA(0, title.c_str());
+
+	return ok;
+}
+
+bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
+{
+    HWND hwnd = FindWindowA(0, windowTitle.c_str());
     if (0 == hwnd)
     {
-        std::cout << "MoM Window '" << title << "' not found" << std::endl;
+        std::cout << "MoM Window '" << windowTitle << "' not found" << std::endl;
         return false;
     }
     else
     {
-        std::cout << "Found MoM Window '" << title << "' (hwnd=0x" << std::hex << (unsigned)hwnd << std::dec << ")" << std::endl;
+        std::cout << "Found MoM Window '" << windowTitle << "' (hwnd=0x" << std::hex << (unsigned)hwnd << std::dec << ")" << std::endl;
     }
 
     DWORD dwProcessId = 0;

@@ -5,7 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 #include "MoMExeWizards.h"
 

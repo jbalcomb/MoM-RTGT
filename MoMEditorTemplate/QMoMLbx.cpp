@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "QMoMCommon.h"
+#include "QMoMLbx.h"
 
 namespace MoM
 {

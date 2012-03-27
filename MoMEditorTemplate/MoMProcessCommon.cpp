@@ -10,7 +10,7 @@
 #include <string.h>     // memcmp()
 
 #include "MoMProcess.h"
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 namespace MoM
 {

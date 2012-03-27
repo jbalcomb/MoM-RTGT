@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string.h> // memcmp()
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMExeMagic.h"
 
 #include "MoMGameCustom.h"

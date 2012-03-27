@@ -37,7 +37,7 @@ public:
 
     void close() throw();
 
-    bool findProcessAndData(const std::string& title);
+    bool findProcessAndData();
 
     const uint8_t* getDatasegmentData() const
     {
@@ -110,6 +110,8 @@ private:
     }
 
     static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data);
+
+	bool tryWindowTitle(const std::string& windowTitle);
 
     void* m_hProcess;
     uint8_t* m_lpBaseAddress;

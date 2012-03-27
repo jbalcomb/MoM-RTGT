@@ -10,7 +10,7 @@
 #include "dialogoverlandmap.h"
 #include "ui_dialogoverlandmap.h"
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
 #include "mainwindow.h"

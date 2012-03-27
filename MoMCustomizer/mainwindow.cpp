@@ -22,7 +22,7 @@
 
 // Library
 #include <MoMGenerated.h>
-#include <MoMutility.h>
+#include <MoMUtility.h>
 #include <QMoMTreeItem.h>
 
 // Local
@@ -251,50 +251,17 @@ void MainWindow::update()
     m_updating = false;
 }
 
-#ifdef _WIN32
-
-BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
-{
-    QStringList& windowTitles = *(QStringList*)lParam;
-
-    char szTitle[4096] = "";
-    if (0 < GetWindowTextA(hwnd, szTitle, sizeof(szTitle)))
-    {
-        QString qtitle(szTitle);
-        if (-1 != qtitle.indexOf(QString("DOSBox"), 0, Qt::CaseInsensitive))
-        {
-            windowTitles.append(szTitle);
-        }
-    }
-
-    return TRUE;
-}
-#endif
-
 void MainWindow::on_pushButton_Connect_clicked()
 {
-    QString title("DOSBox Status Window");
-
-#ifdef _WIN32
-    QStringList windowTitles;
-    if (EnumWindows(wndEnumProc, (LPARAM)&windowTitles)
-        && !windowTitles.isEmpty())
-    {
-        title = windowTitles.front();
-    }
-#else // Linux
-    title = "dosbox";     // Process name
-#endif
-
     std::auto_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
     std::auto_ptr<MoM::MoMGameCustom> customGame( new MoM::MoMGameCustom );
 
-    if (!momProcess->findProcessAndData(title.toAscii().data()))
+    if (!momProcess->findProcessAndData())
     {
         statusBar()->showMessage(tr("Game connection failed"));
         (void)QMessageBox::warning(this,
             tr("Connect to MoM"),
-            tr("Could not find MoM using title '%1'").arg(title));
+            tr("Could not find MoM"));
     }
     else if (!customGame->openGame(momProcess))
     {

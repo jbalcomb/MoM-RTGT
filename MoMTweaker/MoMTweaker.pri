@@ -19,14 +19,15 @@ HEADERS += \
     ../MoMEditorTemplate/MoMGameSave.h \
     ../MoMEditorTemplate/MoMTemplate.h \
     ../MoMEditorTemplate/MoMUnit.h \
-    ../MoMEditorTemplate/MoMutility.h \
+    ../MoMEditorTemplate/MoMUtility.h \
     ../MoMEditorTemplate/MoMExeWizards.h \
-    ../MoMEditorTemplate/QMoMCommon.h \
     ../MoMEditorTemplate/QMoMGenerated.h \
+    ../MoMEditorTemplate/QMoMLbx.h \
     ../MoMEditorTemplate/QMoMMapTile.h \
     ../MoMEditorTemplate/QMoMResources.h \
-    ../MoMEditorTemplate/QMoMRSharedPointers.h \
+    ../MoMEditorTemplate/QMoMSharedPointers.h \
     ../MoMEditorTemplate/QMoMTreeItem.h \
+    ../MoMEditorTemplate/QMoMUtility.h \
     \
     ../MoMTweaker/dialogcalculatoraddress.h \
     ../MoMTweaker/dialogselectinitialspells.h \
@@ -51,12 +52,13 @@ SOURCES += \
     ../MoMEditorTemplate/MoMExeWizards.cpp \
     ../MoMEditorTemplate/MoMProcessCommon.cpp \
     ../MoMEditorTemplate/MoMUnit.cpp \
-    ../MoMEditorTemplate/MoMutility.cpp \
-    ../MoMEditorTemplate/QMoMCommon.cpp \
+    ../MoMEditorTemplate/MoMUtility.cpp \
     ../MoMEditorTemplate/QMoMGenerated.cpp \
+    ../MoMEditorTemplate/QMoMLbx.cpp \
     ../MoMEditorTemplate/QMoMMapTile.cpp \
     ../MoMEditorTemplate/QMoMResources.cpp \
     ../MoMEditorTemplate/QMoMTreeItem.cpp \
+    ../MoMEditorTemplate/QMoMUtility.cpp \
     \
     ../MoMTweaker/dialogcalculatoraddress.cpp \
     ../MoMTweaker/dialogselectinitialspells.cpp \

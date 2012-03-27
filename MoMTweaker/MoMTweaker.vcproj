@@ -261,11 +261,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\QMoMCommon.cpp"
+				RelativePath="..\MoMEditorTemplate\QMoMGenerated.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\QMoMGenerated.cpp"
+				RelativePath="..\MoMEditorTemplate\QMoMLbx.cpp"
 				>
 			</File>
 			<File
@@ -278,6 +278,10 @@
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\QMoMTreeItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\MoMEditorTemplate\QMoMUtility.cpp"
 				>
 			</File>
 			<File
@@ -563,11 +567,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\QMoMCommon.h"
+				RelativePath="..\MoMEditorTemplate\QMoMGenerated.h"
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\QMoMGenerated.h"
+				RelativePath="..\MoMEditorTemplate\QMoMLbx.h"
 				>
 			</File>
 			<File
@@ -584,6 +588,10 @@
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\QMoMTreeItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\MoMEditorTemplate\QMoMUtility.h"
 				>
 			</File>
 			<File

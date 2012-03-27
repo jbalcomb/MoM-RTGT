@@ -17,8 +17,8 @@
 #include <MoMGameMemory.h>
 #include <MoMProcess.h>
 #include <MoMGameSave.h>
-#include <MoMutility.h>
-#include <QMoMCommon.h>
+#include <MoMUtility.h>
+#include <QMoMLbx.h>
 #include <QMoMResources.h>
 
 // Local

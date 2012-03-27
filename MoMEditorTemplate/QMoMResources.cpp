@@ -10,8 +10,8 @@
 #include <MoMGameBase.h>
 #include <MoMGenerated.h>
 #include <MoMLbxBase.h>
-#include <MoMutility.h>
-#include <QMoMCommon.h>
+#include <MoMUtility.h>
+#include <QMoMLbx.h>
 #include <QMoMTreeItem.h>
 
 #include "QMoMResources.h"
@@ -42,6 +42,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 {
     if (game.data() != m_game.data())
     {
+		qDebug() << MoM::getDateTimeStr() << ">QMoMResources::setGame() begin";
         m_game = game;
         if (m_colorTable.empty())
         {
@@ -77,6 +78,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         {
             (void)createTerrainImages();
         }
+		qDebug() << MoM::getDateTimeStr() << "<QMoMResources::setGame() end";
     }
 }
 

@@ -14,7 +14,7 @@ HEADERS += ./mainwindow.h \
     ../MoMEditorTemplate/MoMExeMagic.h \
     ../MoMEditorTemplate/MoMProcess.h \
     ../MoMEditorTemplate/MoMTemplate.h \
-    ../MoMEditorTemplate/MoMutility.h \
+    ../MoMEditorTemplate/MoMUtility.h \
     ../MoMEditorTemplate/QMoMTreeItem.h
 SOURCES += \
     ./mainwindow.cpp \
@@ -24,7 +24,7 @@ SOURCES += \
     ../MoMEditorTemplate/MoMGenerated.cpp \
     ../MoMEditorTemplate/MoMExeMagic.cpp \
     ../MoMEditorTemplate/MoMProcessCommon.cpp \
-    ../MoMEditorTemplate/MoMutility.cpp \
+    ../MoMEditorTemplate/MoMUtility.cpp \
     ../MoMEditorTemplate/QMoMTreeItem.cpp
 FORMS += ./mainwindow.ui
 RESOURCES += ../Resources/InteractiveGameTweaker.qrc

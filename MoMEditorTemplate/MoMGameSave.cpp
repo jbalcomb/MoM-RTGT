@@ -15,7 +15,7 @@
 #include "MoMController.h"
 #include "MoMGenerated.h"
 #include "MoMLbxBase.h"
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMExeWizards.h"
 
 #include "MoMGameSave.h"

@@ -27,8 +27,7 @@
 #include <MoMGameMemory.h>
 #include <MoMProcess.h>
 #include <MoMGameSave.h>
-#include <MoMutility.h>
-#include <QMoMCommon.h>
+#include <MoMUtility.h>
 #include <QMoMResources.h>
 
 // Local
@@ -110,6 +109,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Signal to start with an empty game
 	emit signal_gameChanged(m_game);
+
+	// Give the tree view a kick to display its contents
+    // TODO: This should not be necessary
+    m_UnitModel.slot_gameChanged(m_game);
+    ui->treeView_MoM->update();
 
 	// Start the timer
     m_timer->start(10000);
@@ -421,44 +425,11 @@ void MainWindow::update()
     ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
 }
 
-#ifdef _WIN32
-
-BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
-{
-    QStringList& windowTitles = *(QStringList*)lParam;
-
-    char szTitle[4096] = "";
-    if (0 < GetWindowTextA(hwnd, szTitle, sizeof(szTitle)))
-    {
-        QString qtitle(szTitle);
-        if (-1 != qtitle.indexOf(QString("DOSBox"), 0, Qt::CaseInsensitive))
-        {
-            windowTitles.append(szTitle);
-        }
-    }
-
-    return TRUE;
-}
-#endif
-
 void MainWindow::on_pushButton_Connect_clicked()
 {
-    QString title("DOSBox Status Window");
-
-#ifdef _WIN32
-    QStringList windowTitles;
-    if (EnumWindows(wndEnumProc, (LPARAM)&windowTitles)
-        && !windowTitles.isEmpty())
-    {
-        title = windowTitles.front();
-    }
-#else // Linux
-    title = "dosbox";     // Process name
-#endif
-
     std::auto_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
 
-    bool ok = momProcess->findProcessAndData(title.toAscii().data());
+    bool ok = momProcess->findProcessAndData();
 	QMoMGamePtr newGame;
     QMoMGameMemoryPtr memGame( new MoM::MoMGameMemory );
     QMoMGameCustomPtr customGame( new MoM::MoMGameCustom );
@@ -479,7 +450,7 @@ void MainWindow::on_pushButton_Connect_clicked()
         statusBar()->showMessage(tr("Game connection failed"));
         (void)QMessageBox::warning(this,
             tr("Connect to MoM"),
-            tr("Could not find MoM using title '%1'").arg(title));
+            tr("Could not find MoM window"));
     }
     else
     {

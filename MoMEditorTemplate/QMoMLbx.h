@@ -7,20 +7,17 @@
 
 /// \file
 
-#ifndef QMOMCOMMON_H_
-#define QMOMCOMMON_H_
+#ifndef QMOMLBX_H_
+#define QMOMLBX_H_
 
 #include <QImage>
 #include <QVector>
 
-#include "MoMcommon.h"
+#include "MoMCommon.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM
 {
-
-// TODO: Move functions to QMoMResources.h
-// TODO: Promote this header file to the first header file each Qt related cpp file includes
 
 bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
 

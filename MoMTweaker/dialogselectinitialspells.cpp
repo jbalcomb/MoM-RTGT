@@ -12,7 +12,7 @@
 #include <stdlib.h>     // rand(), srand()
 #include <time.h>       // time()
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "mainwindow.h"
 

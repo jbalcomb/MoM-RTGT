@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include "MoMGameBase.h"
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 #include "MoMUnit.h"
 

@@ -8,7 +8,7 @@
 #include <cctype>
 #include <iomanip>
 
-#include "MoMutility.h"
+#include "MoMUtility.h"
 
 namespace MoM
 {

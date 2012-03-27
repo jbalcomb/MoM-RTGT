@@ -11,7 +11,7 @@
 #include <string.h> // memcmp()
 
 #include "MoMController.h"
-#include "MoMutility.h"
+#include "MoMUtility.h"
 #include "MoMExeWizards.h"
 
 #include "MoMGameMemory.h"

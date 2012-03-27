@@ -409,6 +409,7 @@ public:
             return value;
         case Qt::DecorationRole:
             {
+                // TODO: Only construct icon if the value has changed (cache in parent)
                 // Strip number information
                 value.replace(QRegExp(" \\(\\d+\\)"), "");
                 return QIcon("images:" + value + ".gif");
@@ -475,7 +476,8 @@ public:
         case Qt::EditRole:
             return value;
         case Qt::DecorationRole:
-            return QIcon("images:" + value + ".gif");
+//            return QIcon("images:" + value + ".gif");
+            return QMoMTreeItemBase::data(role);
         default:
             return QVariant();
         }
@@ -530,7 +532,8 @@ public:
         case Qt::EditRole:
             return value;
         case Qt::DecorationRole:
-            return QIcon("images:" + value + ".gif");
+//            return QIcon("images:" + value + ".gif");
+            return QMoMTreeItemBase::data(role);
         default:
             return QVariant();
         }

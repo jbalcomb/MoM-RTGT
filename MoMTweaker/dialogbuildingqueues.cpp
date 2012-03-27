@@ -90,7 +90,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
 
-	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(MoM::MoMGameBase*)), this, SLOT(slot_gameChanged(MoM::MoMGameBase*)));
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
