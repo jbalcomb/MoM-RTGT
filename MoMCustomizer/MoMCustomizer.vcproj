@@ -201,7 +201,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\MoMutility.cpp"
+				RelativePath="..\MoMEditorTemplate\MoMUtility.cpp"
 				>
 			</File>
 		</Filter>
@@ -237,7 +237,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\MoMcommon.h"
+				RelativePath="..\MoMEditorTemplate\MoMCommon.h"
 				>
 			</File>
 			<File
@@ -269,7 +269,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\MoMEditorTemplate\MoMutility.h"
+				RelativePath="..\MoMEditorTemplate\MoMUtility.h"
 				>
 			</File>
 		</Filter>
