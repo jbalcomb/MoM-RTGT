@@ -30,7 +30,7 @@ VERSION = 1
 }
 
 TARGET = MoMTweaker
-DESTDIR = bin
+DESTDIR = $${COMPILER}/bin
 
 QT += core gui
 CONFIG += debug
@@ -42,7 +42,7 @@ INCLUDEPATH += ./GeneratedFiles \
     ../MoMEditorTemplate
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/Debug
-OBJECTS_DIR += $${PLATF}
+OBJECTS_DIR += $${COMPILER}/obj
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
 

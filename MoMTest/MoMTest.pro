@@ -28,7 +28,7 @@ message(QMAKE_LIBS: $$QMAKE_LIBS)
 QT       += testlib
 
 TARGET = MoMTest
-DESTDIR = bin
+DESTDIR = $${COMPILER}/bin
 
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -36,7 +36,7 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 MOC_DIR += ./GeneratedFiles
-OBJECTS_DIR += $${PLATF}
+OBJECTS_DIR += $${COMPILER}/obj
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
 
