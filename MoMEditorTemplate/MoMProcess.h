@@ -116,7 +116,8 @@ private:
 
     static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data);
 
-	bool tryWindowTitle(const std::string& windowTitle);
+    bool tryLinuxPid(void* vPid);
+    bool tryWindowTitle(const std::string& windowTitle);
 
     void* m_hProcess;
     uint8_t* m_lpBaseAddress;
