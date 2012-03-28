@@ -88,14 +88,14 @@ void MoMProcess::close() throw()
 
 bool MoMProcess::findProcessAndData()
 {
-    close();
-
     std::vector<std::string> windowTitles;
     (void)EnumWindows(wndEnumProc, (LPARAM)&windowTitles);
 
 	bool ok = false;
     for (size_t i = 0; !ok && (i < windowTitles.size()); ++i)
 	{
+		close();
+
 		ok = tryWindowTitle(windowTitles[i]);
     }
 
