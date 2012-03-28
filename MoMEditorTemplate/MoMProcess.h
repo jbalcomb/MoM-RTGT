@@ -82,6 +82,11 @@ public:
 
     bool readData();
 
+    void setVerbose(bool value)
+    {
+        m_verbose = true;
+    }
+
     bool validPointer(void* pointer, size_t size)
     {
         if (m_dataSegmentAndUp.empty())
@@ -121,6 +126,7 @@ private:
     size_t  m_dwOffsetDatasegment;
     std::vector<uint8_t> m_dataSegmentAndUp;
     std::string m_exeFilepath;
+    bool    m_verbose;
 };
 
 }

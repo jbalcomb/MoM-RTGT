@@ -57,7 +57,8 @@ MoMProcess::MoMProcess(void) :
     m_dwOffsetCode(0),
     m_dwOffsetDatasegment(0),
     m_dataSegmentAndUp(),
-    m_exeFilepath()
+    m_exeFilepath(),
+    m_verbose(false)
 {
 }
 
@@ -93,7 +94,7 @@ bool MoMProcess::findProcessAndData()
     (void)EnumWindows(wndEnumProc, (LPARAM)&windowTitles);
 
 	bool ok = false;
-	for (size_t i = 0; !ok && (i < windowTitles.size()); ++i)
+    for (size_t i = 0; !ok && (i < windowTitles.size()); ++i)
 	{
 		ok = tryWindowTitle(windowTitles[i]);
     }
@@ -144,20 +145,18 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
     for (; 0 != size;
         baseAddr += mbi.RegionSize, size = VirtualQueryEx(m_hProcess, baseAddr, &mbi, sizeof(mbi)))
     {
-        //printf( "\n\n     VirtualQueryEx( 0x%08X )", baseAddr );
-        //printf( "\n       BaseAddress= 0x%08X )", mbi.BaseAddress );
-        //printf( "\n       AllocationBase= 0x%08X )", mbi.AllocationBase );
-        //printf( "\n       RegionSize= 0x%08X )", mbi.RegionSize );
-
-        std::cout << std::hex << "Scanning virtual memory at baseAddr 0x" << (unsigned)baseAddr
-            << ", BaseAddress=0x" << (unsigned)mbi.BaseAddress
-            << ", RegionSize=0x" << mbi.RegionSize
-            << ", AllocationBase=0x" << (unsigned)mbi.AllocationBase
-            << ", AllocationProtect=0x" << mbi.AllocationProtect
-            << ", State=0x" << mbi.State
-            << ", Protect=0x" << mbi.Protect
-            << ", Type=0x" << mbi.Type
-            << std::dec << std::endl;
+        if (m_verbose)
+        {
+            std::cout << std::hex << "Scanning virtual memory at baseAddr 0x" << (unsigned)baseAddr
+                << ", BaseAddress=0x" << (unsigned)mbi.BaseAddress
+                << ", RegionSize=0x" << mbi.RegionSize
+                << ", AllocationBase=0x" << (unsigned)mbi.AllocationBase
+                << ", AllocationProtect=0x" << mbi.AllocationProtect
+                << ", State=0x" << mbi.State
+                << ", Protect=0x" << mbi.Protect
+                << ", Type=0x" << mbi.Type
+                << std::dec << std::endl;
+        }
         if (gBASEADDRESS_SIZE == mbi.RegionSize && MEM_PRIVATE == mbi.Type)
         {
             std::cout << std::hex << "Found MoM virtual memory (baseAddress=0x" << (unsigned)mbi.BaseAddress << ", size=0x" << mbi.RegionSize << ")" << std::dec << std::endl;
@@ -169,12 +168,18 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
         else if ((mbi.Protect & PAGE_NOACCESS) || (mbi.Protect & PAGE_EXECUTE))
         {
             // Documented access violations: skip
-            std::cout << "Skipped due to protection settings" << std::endl;
+            if (m_verbose)
+            {
+                std::cout << "Skipped due to protection settings" << std::endl;
+            }
             continue;
         }
         else
         {
-            std::cout << "Skipped due to mismatching size" << std::endl;
+            if (m_verbose)
+            {
+                std::cout << "Skipped due to mismatching size" << std::endl;
+            }
             continue;
         }
 
@@ -280,9 +285,13 @@ void MoMProcess::printError(int errorNumber, const std::string& msg)
     // Trim the end of the line and terminate it with a null
     p = sysMsg;
     while( ( *p > 31 ) || ( *p == 9 ) )
+    {
         ++p;
-    do { *p-- = 0; } while( ( p >= sysMsg ) &&
-        ( ( *p == '.' ) || ( *p < 33 ) ) );
+    }
+    do
+    {
+        *p-- = 0;
+    } while( ( p >= sysMsg ) && ( ( *p == '.' ) || ( *p < 33 ) ) );
 
     // Display the message
     std::cout << "WARN: " << msg << " failed with error 0x" << std::hex << eNum << " (" << sysMsg << ")" << std::hex << std::endl;
