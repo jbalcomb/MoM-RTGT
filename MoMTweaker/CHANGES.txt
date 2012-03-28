@@ -2,6 +2,13 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.2 (2012-03-29)
+----------------------------
+
+* Improved mechanism to find MoM in dosbox by a repeated search.
+
+
+
 CHANGES IN 0.2.1 (2012-03-19)
 ----------------------------
 
