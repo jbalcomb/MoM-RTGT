@@ -75,6 +75,21 @@ inline unsigned toUInt(const T& t)
     return static_cast<unsigned>(t);
 }
 
+class UpdateLock
+{
+public:
+    UpdateLock(bool& updating) : m_updating(updating)
+    {
+        m_updating = true;
+    }
+    ~UpdateLock()
+    {
+        m_updating = false;
+    }
+private:
+    bool& m_updating;
+};
+
 bool writeDataToStream(std::ostream& os, const unsigned char* pdata, size_t size);
 
 }

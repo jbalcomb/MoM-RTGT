@@ -10,12 +10,12 @@
 #ifndef QMOMTREEITEM_H
 #define QMOMTREEITEM_H
 
-//#include <QDebug>
 #include <QStandardItem>
 
 #include <iomanip>
 
 #include "MoMGameBase.h"
+#include "QMoMResources.h"
 #include "QMoMSharedPointers.h"
 
 template< typename T >
@@ -119,7 +119,7 @@ inline QString prettyQStr(const T& t)
 class QMoMTreeItemBase
 {
 public:
-    QMoMTreeItemBase(const QString& data = QString(), const QIcon& icon = QIcon()) :
+    QMoMTreeItemBase(const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr()) :
             m_parent(),
             m_row(),
             m_icon(icon),
@@ -138,7 +138,7 @@ public:
 
         if (m_icon.isNull() && !m_data.isEmpty())
         {
-            m_icon = QIcon("images:" + m_data + ".gif");
+            m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>(QString("images:" + m_data + ".gif")));
         }
     }
 
@@ -227,7 +227,10 @@ public:
         case Qt::EditRole:
             return m_data;
         case Qt::DecorationRole:
-            return m_icon;
+            if (m_icon.isNull())
+                return QIcon();
+            else
+                return m_icon->data();
         default:
             return QVariant();
         }
@@ -241,6 +244,11 @@ public:
     static const QMoMGamePtr& game(void)
     {
         return m_game;
+    }
+
+    const QMoMLazyIconPtr& lazyIcon() const
+    {
+        return m_icon;
     }
 
     QMoMTreeItemBase* parent() const
@@ -300,7 +308,7 @@ public:
         {
             if (QVariant::Icon == value.type())
             {
-                m_icon = value.value<QIcon>();
+                m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QIcon>(value.value<QIcon>()));
             }
             else if (QVariant::String == value.type())
             {
@@ -324,7 +332,7 @@ public:
             // Replace underscores by spaces
             m_data.replace('_', ' ');
 
-            m_icon = QIcon("images:" + m_data + ".gif");
+            m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>("images:" + m_data + ".gif"));
         }
         else
         {
@@ -335,6 +343,11 @@ public:
     static void setGame(const QMoMGamePtr game)
     {
         m_game = game;
+    }
+
+    void setLazyIcon(const QString& ref) const
+    {
+        m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>(ref));
     }
 
 private:
@@ -350,7 +363,7 @@ private:
 
     QMoMTreeItemBase* m_parent;
     int m_row;
-    QIcon m_icon;
+    mutable QMoMLazyIconPtr m_icon;
     QString m_data;
     QList< QList<QMoMTreeItemBase*> > m_children;
     mutable Qt::ItemFlags m_flags;
@@ -409,10 +422,10 @@ public:
             return value;
         case Qt::DecorationRole:
             {
-                // TODO: Only construct icon if the value has changed (cache in parent)
                 // Strip number information
                 value.replace(QRegExp(" \\(\\d+\\)"), "");
-                return QIcon("images:" + value + ".gif");
+                setLazyIcon("images:" + value + ".gif");
+                return QMoMTreeItemBase::data(role);
             }
         default:
             return QVariant();
@@ -574,7 +587,7 @@ template< typename T >
 class QMoMTreeItemSubtree : public QMoMTreeItemBase
 {
 public:
-    explicit QMoMTreeItemSubtree(T* ptr, const QString& data = QString(), const QIcon& icon = QIcon()) :
+    explicit QMoMTreeItemSubtree(T* ptr, const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr()) :
         QMoMTreeItemBase(data, icon),
         m_ptr(ptr)
     {

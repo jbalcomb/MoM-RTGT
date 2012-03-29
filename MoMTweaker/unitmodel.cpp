@@ -394,7 +394,9 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
         {
             ptree->setChild(row, 0, constructTreeItem(buildingData, ""));
 
+            QIcon icon = MoM::QMoMResources::instance().getIcon(building);
             ptree->child(row, 0)->setData(toQStr(building), Qt::UserRole);
+            ptree->child(row, 0)->setData(icon, Qt::EditRole);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
 //                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
 //                                                    .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
@@ -2148,12 +2150,12 @@ ThreadUpdateModelData* g_pThreadUpdateModelData = 0;
 void UnitModel::abortUpdate()
 {
  //   if(0 != g_pThreadUpdateModelData)
-	//{
-	//    m_abortUpdate = true;
-	//    g_pThreadUpdateModelData->wait();
-	//    delete g_pThreadUpdateModelData;
-	//    g_pThreadUpdateModelData = 0;
-	//}
+    //{
+    //    m_abortUpdate = true;
+    //    g_pThreadUpdateModelData->wait();
+    //    delete g_pThreadUpdateModelData;
+    //    g_pThreadUpdateModelData = 0;
+    //}
 }
 
 void UnitModel::startUpdate()
@@ -2173,9 +2175,9 @@ void UnitModel::startUpdate()
 void UnitModel::waitForUpdate()
 {
  //   if (0 != g_pThreadUpdateModelData)
-	//{
-	//	g_pThreadUpdateModelData->wait();
-	//	delete g_pThreadUpdateModelData;
-	//	g_pThreadUpdateModelData = 0;
-	//}
+    //{
+    //	g_pThreadUpdateModelData->wait();
+    //	delete g_pThreadUpdateModelData;
+    //	g_pThreadUpdateModelData = 0;
+    //}
 }

@@ -10,6 +10,7 @@
 #ifndef QMOMSHAREDPOINTERS_H
 #define QMOMSHAREDPOINTERS_H
 
+#include <QIcon>
 #include <QSharedPointer>
 
 #include <MoMGameBase.h>
@@ -19,6 +20,7 @@ namespace MoM {
 	class MoMGameMemory;
     class MoMGameSave;
     class MoMUnit;
+    class QMoMLazyIconBase;
 }
 
 class QMoMTreeItemBase;
@@ -35,6 +37,12 @@ typedef QSharedPointer<MoM::MoMGameMemory> QMoMGameMemoryPtr;
 
 /// \brief Shared pointer to a MoMGameSave
 typedef QSharedPointer<MoM::MoMGameSave> QMoMGameSavePtr;
+
+/// \brief Shared pointer to a QIcon
+typedef QSharedPointer<QIcon> QMoMIconPtr;
+
+/// \brief Shared pointer to a QMoMLazyIcon
+typedef QSharedPointer<MoM::QMoMLazyIconBase> QMoMLazyIconPtr;
 
 /// \brief Shared pointer to a QMoMTreeItemBase
 typedef QSharedPointer<QMoMTreeItemBase> QMoMTreeItemPtr;

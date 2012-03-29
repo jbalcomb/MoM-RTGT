@@ -19,24 +19,6 @@
 
 #include "mainwindow.h"
 
-
-// TODO: Move to common header file MoMUtility.h
-class UpdateLock
-{
-public:
-    UpdateLock(bool& updating) : m_updating(updating)
-    {
-        m_updating = true;
-    }
-    ~UpdateLock()
-    {
-        m_updating = false;
-    }
-private:
-    bool& m_updating;
-};
-
-
 DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
     QDialog(parent),
 	m_game(),
@@ -106,7 +88,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Connect the item model UnitModel to the dialog
-    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)));
+    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)), Qt::QueuedConnection);
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
@@ -330,7 +312,7 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 
 void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
 {
-    UpdateLock lock(m_updating);
+    MoM::UpdateLock lock(m_updating);
 
     m_game = game;
 	m_unit->setGame(m_game.data());
@@ -365,14 +347,14 @@ void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
 
 void DialogAddUnit::slot_gameUpdated()
 {
-    UpdateLock lock(m_updating);
+    MoM::UpdateLock lock(m_updating);
 
     update();
 }
 
 void DialogAddUnit::slot_unitChanged(const QMoMUnitPtr& unit)
 {
-    UpdateLock lock(m_updating);
+    MoM::UpdateLock lock(m_updating);
 
     m_unit = unit;
     MoM::eUnit_Type unitTypeNr = m_unit->getUnitTypeNr();
