@@ -62,7 +62,8 @@ private:
 
 	static MainWindow* m_instance;
 
-    QTimer* m_timer;
+    QSharedPointer<QTimer> m_timerReread;
+    QSharedPointer<QTimer> m_timerUpdateIcons;
 
     UnitModel m_UnitModel;
 
@@ -85,7 +86,8 @@ private slots:
 
     void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
-    void slot_timer();
+    void slot_timerReread();
+    void slot_timerUpdateIcons();
 
 signals:
     void signal_gameChanged(const QMoMGamePtr& game);

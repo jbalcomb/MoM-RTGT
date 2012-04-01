@@ -88,7 +88,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Connect the item model UnitModel to the dialog
-    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)), Qt::QueuedConnection);
+    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)));
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
@@ -333,9 +333,9 @@ void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
         {
             title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
         }
-        QIcon icon = MoM::QMoMResources::instance().getIcon(unitTypeNr);
+        QMoMIconPtr icon = MoM::QMoMResources::instance().getIcon(unitTypeNr);
 
-        ui->comboBox_Unit->addItem(icon, title);
+        ui->comboBox_Unit->addItem(*icon, title);
 	}
 
     // Restore current unitType index

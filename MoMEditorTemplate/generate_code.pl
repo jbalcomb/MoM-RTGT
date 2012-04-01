@@ -1,6 +1,6 @@
 use strict;
 
-my @INPUTFILENAMES = ("MoMTemplate.h", "MoMcommon.h");
+my @INPUTFILENAMES = ("MoMTemplate.h", "MoMCommon.h");
 my $HFILENAME = "MoMGenerated.h";
 my $CPPFILENAME = "MoMGenerated.cpp";
 
@@ -203,7 +203,7 @@ EOF
             if ((defined $range) && ($type =~ m#int\d+_t$#))
             {
                 print "    os << \"$name=(\\n\";\n";
-                print "    for (int i = 0; i < $range; ++i)\n";
+                print "    for (unsigned i = 0; i < $range; ++i)\n";
                 print "    {\n";
                 print qq#        os << "[" << i << "] " << ${cast}rhs.$name\[i] << " 0x" << std::hex << ${cast}rhs.$name\[i] << std::dec << ",\\n";\n#;
                 print "    }\n";
@@ -212,7 +212,7 @@ EOF
             elsif ((defined $range) && ($type ne "char"))
             {
                 print "    os << \"$name=(\\n\";\n";
-                print "    for (int i = 0; i < $range; ++i)\n";
+                print "    for (unsigned i = 0; i < $range; ++i)\n";
                 print "    {\n";
                 print qq#        os << "[" << i << "] " << ${cast}rhs.${name}\[i] << ",\\n";\n#;
                 print "    }\n";
@@ -316,7 +316,7 @@ EOF
                 $range = "rhs.m_Game_Data.m_Number_of_Cities" if ($name eq "m_Cities");
                 $range = "rhs.m_Game_Data.m_Number_of_Units" if ($name eq "m_Unit");
                 
-                print qq#    for (int i = 0; i < $range; ++i)\n#;
+                print qq#    for (unsigned i = 0; i < $range; ++i)\n#;
                 print qq#    {\n#;
                 print qq#          std::ostringstream oss;\n#;
                 print qq#          oss << context << ".${name}\[" << i << "]";\n#;
@@ -443,7 +443,7 @@ sub generate_Qt_code
                     print qq#    }\n#;
                 }
             
-                print qq#    for (int i = 0; i < $range; ++i)\n#;
+                print qq#    for (unsigned i = 0; i < $range; ++i)\n#;
                 print qq#    {\n#;
                 print qq#          std::ostringstream oss;\n#;
                 print qq#          oss << "${name}\[" << i << "]";\n#;
@@ -459,15 +459,11 @@ sub generate_Qt_code
             }
             elsif ($type =~ m#u?int\d+_t# and defined $bitmask)
             {
+		my $max_value = 2**$bitmask - 1;
                 print qq#    $classname mask${name};\n#;
                 print qq#    memset(&mask${name}, '\\0', sizeof(mask${name}));\n#;
-                print qq#    mask${name}.${name} = 0xFF;\n#;
-                print qq#    if (1 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
-                print qq#    else if (2 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
-                print qq#    else\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
+                print qq#    mask${name}.${name} = $max_value;\n#;
+                print qq#    ptree->appendChild("${name}", new QMoMTreeItem<$type>(($type*)rhs, *($type*)&mask${name}));\n#;
             }
             elsif ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
             {

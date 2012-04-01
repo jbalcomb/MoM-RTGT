@@ -42,7 +42,8 @@ MainWindow* MainWindow::m_instance = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_timer(new QTimer()),
+    m_timerReread(new QTimer()),
+    m_timerUpdateIcons(new QTimer()),
     m_UnitModel(this),
     m_filedialogLoadGame(this),
     m_filedialogSaveGame(this),
@@ -98,7 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(this, SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
     // Connect a timer to trigger refresh updates
-    QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(slot_timer()));
+    QObject::connect(m_timerReread.data(), SIGNAL(timeout()), this, SLOT(slot_timerReread()));
+    QObject::connect(m_timerUpdateIcons.data(), SIGNAL(timeout()), this, SLOT(slot_timerUpdateIcons()));
 
     // Connect the item model UnitModel to signals from this class
 	if (ui->checkBox_UpdateTree->isChecked())
@@ -115,14 +117,13 @@ MainWindow::MainWindow(QWidget *parent) :
     m_UnitModel.slot_gameChanged(m_game);
     ui->treeView_MoM->update();
 
-	// Start the timer
-    m_timer->start(10000);
+    // Start the timers
+    m_timerReread->start(10000);
+    m_timerUpdateIcons->start(100);
 }
 
 MainWindow::~MainWindow()
 {
-    delete m_timer;
-
     delete ui;
 }
 
@@ -562,7 +563,7 @@ void MainWindow::on_pushButton_Reread_clicked()
     }
 }
 
-void MainWindow::slot_timer()
+void MainWindow::slot_timerReread()
 {
     if (m_game.isNull() || (0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data())))
         return;
@@ -583,7 +584,15 @@ void MainWindow::slot_timer()
 	if (ok)
 	{
 		emit signal_gameUpdated();
-	}
+    }
+}
+
+void MainWindow::slot_timerUpdateIcons()
+{
+    if (ui->checkBox_UpdateTree->isChecked())
+    {
+        m_UnitModel.updateFirstUnresolvedIcon();
+    }
 }
 
 void MainWindow::on_pushButton_AddUnit_clicked()

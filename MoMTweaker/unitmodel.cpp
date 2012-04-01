@@ -394,9 +394,8 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
         {
             ptree->setChild(row, 0, constructTreeItem(buildingData, ""));
 
-            QIcon icon = MoM::QMoMResources::instance().getIcon(building);
-            ptree->child(row, 0)->setData(toQStr(building), Qt::UserRole);
-            ptree->child(row, 0)->setData(icon, Qt::EditRole);
+            ptree->child(row, 0)->setData(prettyQStr(building), Qt::EditRole);
+            ptree->child(row, 0)->setLazyIcon(building);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
 //                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
 //                                                    .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
@@ -768,19 +767,15 @@ void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr&
             ptree->child(row, 2)->setData(QString("Item[%0]").arg(i), Qt::UserRole);
         }
         ptree->child(row, 0)->setData(toQStr(item.m_Item_Name), Qt::EditRole);
-		QIcon icon = QMoMResources::instance().getIcon(item.m_Icon);
-        if (!icon.isNull())
+        if ((MoM::toUInt(item.m_Icon) < MoM::eItem_Icon_MAX) && ((item.m_Cost > 0) || (0 != item.m_Icon)))
         {
-            if ((item.m_Cost > 0) || (0 != item.m_Icon))
-            {
-                ptree->child(row, 0)->setData(icon, Qt::EditRole);
-                ptree->child(row, 1)->setData(toQStr(item.m_Item_Type), Qt::UserRole);
-            }
-            else
-            {
-                ptree->child(row, 0)->setData(QIcon(), Qt::EditRole);
-                ptree->child(row, 1)->setData(QString(), Qt::UserRole);
-            }
+            ptree->child(row, 0)->setLazyIcon(item.m_Icon);
+            ptree->child(row, 1)->setData(toQStr(item.m_Item_Type), Qt::UserRole);
+        }
+        else
+        {
+            ptree->child(row, 0)->setLazyIcon(QIcon());
+            ptree->child(row, 1)->setData(QString(), Qt::UserRole);
         }
 
         ++row;
@@ -798,18 +793,15 @@ void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
         {
             ptree->setChild(row, 0, constructTreeItem(lair, ""));
 
-            ptree->child(lairNr, 0)->setData(toQStr(lair->m_Type), Qt::UserRole);
+            ptree->child(lairNr, 0)->setData(prettyQStr(lair->m_Type), Qt::EditRole);
             ptree->child(lairNr, 1)->setData(QString("(%0, %1, %2) %3")
                                                     .arg(lair->m_XPos).arg(lair->m_YPos).arg((int)lair->m_Plane)
                                                     .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
             ptree->child(lairNr, 2)->setData(QString("Lair[%0]").arg(lairNr), Qt::EditRole);
 
-			QIcon icon = QMoMResources::instance().getIcon(lair->m_Type);
-            if (!icon.isNull())
+            if (MoM::toUInt(lair->m_Type) < MoM::eTower_Node_Lair_Type_MAX)
             {
-                ptree->child(row, 0)->appendChild(QString("LairIcon"), new QMoMTreeItemBase(QString(), icon));
-
-                ptree->child(row, 0)->setData(icon, Qt::EditRole);
+                ptree->child(row, 0)->setLazyIcon(lair->m_Type);
             }
         }
         ++row;
@@ -830,7 +822,6 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
         if (row >= ptree->rowCount())
         {
 			MoM::eRace race = (MoM::eRace)raceNr;
-            QIcon icon = MoM::QMoMResources::instance().getIcon(race, 1);
             ptree->setChild(row, 0, constructTreeItem(&dataSegment->m_Race_Data[raceNr], ""));
 
             // Additional custom fields:
@@ -842,7 +833,7 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
             }
 
             ptree->child(row, 0)->setData(prettyQStr((MoM::eRace)row), Qt::EditRole);
-            ptree->child(row, 0)->setData(icon, Qt::EditRole);
+            ptree->child(row, 0)->setLazyIcon(race);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
         }
@@ -868,12 +859,8 @@ void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
             ptree->setChild(row, 0, constructTreeItem(&spellData[spellNr], ""));
         }
 
-        ptree->child(spellNr, 0)->setData(toQStr(spell), Qt::UserRole);
-		QIcon icon = QMoMResources::instance().getIcon(spell);
-        if (!icon.isNull())
-        {
-            ptree->child(spellNr, 0)->setData(icon, Qt::EditRole);
-        }
+        ptree->child(spellNr, 0)->setData(prettyQStr(spell), Qt::EditRole);
+        ptree->child(spellNr, 0)->setLazyIcon(spell);
 
         if ((spellNr <= MoM::SPELL_Magic_Spirit) && (spellNr - 1) % 10 == 0)
         {
@@ -995,7 +982,7 @@ void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
             ptree->setChild(row, 0, constructTreeItem(pUnitData, ""));
 
             // Update top-level unit fields (only need to do this once, since they won't change)
-            ptree->child(row, 0)->setData(toQStr(unitType), Qt::UserRole);
+            ptree->child(row, 0)->setData(prettyQStr(unitType), Qt::EditRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("UnitType[%0]").arg(unitTypeNr), Qt::EditRole);
 
@@ -1038,13 +1025,7 @@ void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
 //                }
 //            }
 
-			QIcon icon = QMoMResources::instance().getIcon(unitType);
-            if (!icon.isNull())
-            {
-                ptree->child(row, 0)->appendChild(QString("UnitIcon"), new QMoMTreeItemBase(QString(), icon));
-
-                ptree->child(row, 0)->setData(icon, Qt::EditRole);
-            }
+            ptree->child(row, 0)->setLazyIcon(unitType);
 
         }
 
@@ -2125,6 +2106,26 @@ void UnitModel::threadUpdateModelData()
     emit dataChanged(index(0, 0), index(parentItem->rowCount() - 1, m_columnCount - 1));
 }
 
+void UnitModel::traverseTree(QMoMTreeItemBase* node, int& nrToResolve)
+{
+    bool succesfulResolution = false;
+    for (int row = 0; (nrToResolve > 0) && (row < node->rowCount()); ++row)
+    {
+        for (int col = 0; (nrToResolve > 0) && (col < this->columnCount()); ++col)
+        {
+            succesfulResolution = node->child(row, col)->resolveIcon();
+            if (succesfulResolution)
+            {
+                nrToResolve--;
+                // TODO: signal update to GUI
+//                emit dataChanged(createIndex(index(row, col, node), index(row, col, node));
+            }
+        }
+
+        traverseTree(node->child(row, 0), nrToResolve);
+    }
+}
+
 //QMutex gUnitModelMutex;
 
 class ThreadUpdateModelData : public QThread
@@ -2169,7 +2170,7 @@ void UnitModel::startUpdate()
     //g_pThreadUpdateModelData = new ThreadUpdateModelData(this);
     //g_pThreadUpdateModelData->start();
     threadUpdateModelData();
-//	waitForUpdate();	// TODO: Remove wait
+//    waitForUpdate();	// TODO: Remove wait
 }
 
 void UnitModel::waitForUpdate()

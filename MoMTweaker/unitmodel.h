@@ -38,6 +38,11 @@ public:
 
 //    void setGame(const QMoMGamePtr& game);
 //    void update();
+    void updateFirstUnresolvedIcon()
+    {
+        int nrToResolve = 100;
+        traverseTree(m_rootItem.data(), nrToResolve);
+    }
 
 public slots:
     void slot_gameChanged(const QMoMGamePtr& game);
@@ -52,6 +57,7 @@ private:
 	void startUpdate();
     void waitForUpdate();
 	void threadUpdateModelData();
+    void traverseTree(QMoMTreeItemBase* node, int& nrToResolve);
 
 //    void setupModelData(const QMoMGamePtr& game);
 

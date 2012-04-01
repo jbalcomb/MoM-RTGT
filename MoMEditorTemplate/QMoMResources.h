@@ -204,12 +204,14 @@ public:
     }
     bool resolve()
     {
+        bool resolution = false;
         if (!m_resolved)
         {
             m_icon = QMoMResources::instance().getIcon(m_ref, m_scale);
             m_resolved = true;
+            resolution = (!m_icon.isNull() && !m_icon->isNull());
         }
-        return !m_icon.isNull();
+        return resolution;
     }
     void setData(const T& t)
     {
@@ -248,12 +250,14 @@ public:
     }
     bool resolve()
     {
+        bool resolution = false;
         if (!m_resolved)
         {
             m_icon = QMoMIconPtr(new QIcon(m_ref));
             m_resolved = true;
+            resolution = (!m_icon.isNull() && !m_icon->isNull());
         }
-        return !m_icon.isNull();
+        return resolution;
     }
     void setData(const QString& ref)
     {
@@ -290,12 +294,14 @@ public:
     }
     bool resolve()
     {
+        bool resolution = false;
         if (!m_resolved)
         {
             m_icon = QMoMIconPtr(new QIcon(m_ref));
             m_resolved = true;
+            resolution = (!m_icon.isNull() && !m_icon->isNull());
         }
-        return !m_icon.isNull();
+        return resolution;
     }
     void setData(const QIcon& ref)
     {

@@ -125,7 +125,7 @@ public:
             m_icon(icon),
             m_data(data),
             m_children(),
-            m_flags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable)
+            m_flags(Qt::ItemIsEnabled | Qt::ItemIsSelectable)
     {
         // Strip number information
         m_data.replace(QRegExp(" \\(\\d+\\)"), "");
@@ -138,7 +138,7 @@ public:
 
         if (m_icon.isNull() && !m_data.isEmpty())
         {
-            m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>(QString("images:" + m_data + ".gif")));
+            setLazyIcon(QString("images:" + m_data + ".gif"));
         }
     }
 
@@ -219,8 +219,6 @@ public:
     {
 //        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(m_data);
 
-        m_flags &= ~Qt::ItemIsEditable; // If we get here, this item is not editable by the user
-
         switch (role)
         {
         case Qt::DisplayRole:
@@ -273,6 +271,13 @@ public:
         }
     }
 
+    bool resolveIcon() const
+    {
+        if (m_icon.isNull())
+            return false;
+        return m_icon->resolve();
+    }
+
     int row() const
     {
         return m_row;
@@ -308,7 +313,7 @@ public:
         {
             if (QVariant::Icon == value.type())
             {
-                m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QIcon>(value.value<QIcon>()));
+                setLazyIcon(value.value<QIcon>());
             }
             else if (QVariant::String == value.type())
             {
@@ -332,7 +337,7 @@ public:
             // Replace underscores by spaces
             m_data.replace('_', ' ');
 
-            m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>("images:" + m_data + ".gif"));
+            setLazyIcon(QString("images:" + m_data + ".gif"));
         }
         else
         {
@@ -340,14 +345,28 @@ public:
         }
     }
 
+    void setFlagsEditable()
+    {
+        m_flags |= Qt::ItemIsEditable;
+    }
+
     static void setGame(const QMoMGamePtr game)
     {
         m_game = game;
     }
 
-    void setLazyIcon(const QString& ref) const
+    template<class T>
+    void setLazyIcon(const T& ref) const
     {
-        m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<QString>(ref));
+        QSharedPointer< MoM::QMoMLazyIcon<T> > p = m_icon.dynamicCast< MoM::QMoMLazyIcon<T> >();
+        if (!p.isNull())
+        {
+            p->setData(ref);
+        }
+        else
+        {
+            m_icon = QMoMLazyIconPtr(new MoM::QMoMLazyIcon<T>(ref));
+        }
     }
 
 private:
@@ -366,7 +385,7 @@ private:
     mutable QMoMLazyIconPtr m_icon;
     QString m_data;
     QList< QList<QMoMTreeItemBase*> > m_children;
-    mutable Qt::ItemFlags m_flags;
+    Qt::ItemFlags m_flags;
 
     static QMoMGamePtr m_game;
 };
@@ -381,6 +400,7 @@ public:
         m_mask(0),
         m_shift(0)
     {
+        setFlagsEditable();
     }
     QMoMTreeItem(T* ptr, unsigned mask) :
         QMoMTreeItemBase(),
@@ -388,6 +408,7 @@ public:
         m_mask(mask),
         m_shift(0)
     {
+        setFlagsEditable();
         for (unsigned i = 0; (0 != mask) && (i < 32); ++i)
         {
             if (((mask >> i) << i) != mask)
@@ -475,6 +496,7 @@ public:
         QMoMTreeItemBase(),
         m_ptr(ptr)
     {
+        setFlagsEditable();
     }
 
     virtual QVariant data(int role) const
@@ -531,6 +553,7 @@ public:
         m_ptr(ptr),
         m_size(strlen(ptr) + 1)
     {
+        setFlagsEditable();
     }
 
     virtual QVariant data(int role) const
