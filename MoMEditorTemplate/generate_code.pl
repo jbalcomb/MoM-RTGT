@@ -459,12 +459,16 @@ sub generate_Qt_code
             }
             elsif ($type =~ m#u?int\d+_t# and defined $bitmask)
             {
-		my $max_value = 2**$bitmask - 1;
+                my $max_value = 2**$bitmask - 1;
                 print qq#    $classname mask${name};\n#;
                 print qq#    memset(&mask${name}, '\\0', sizeof(mask${name}));\n#;
                 print qq#    mask${name}.${name} = $max_value;\n#;
-                print qq#    ptree->appendChild("${name}", new QMoMTreeItem<$type>(($type*)rhs, *($type*)&mask${name}));\n#;
-            }
+                print qq#    if (1 == sizeof(mask${name}))\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
+                print qq#    else if (2 == sizeof(mask${name}))\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
+                print qq#    else\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;           }
             elsif ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
             {
                 print qq#    ptree->appendChild("${name}", new QMoMTreeItem<$type>(&rhs->${name}));\n#;

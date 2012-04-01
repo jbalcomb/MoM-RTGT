@@ -20,67 +20,147 @@ QMoMTreeItemBase* constructTreeItem(Ability_Flags* rhs, const QString& context)
     Ability_Flags maskSummoned_Unit;
     memset(&maskSummoned_Unit, '\0', sizeof(maskSummoned_Unit));
     maskSummoned_Unit.Summoned_Unit = 1;
-    ptree->appendChild("Summoned_Unit", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummoned_Unit));
+    if (1 == sizeof(maskSummoned_Unit))
+        ptree->appendChild("Summoned_Unit", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummoned_Unit));
+    else if (2 == sizeof(maskSummoned_Unit))
+        ptree->appendChild("Summoned_Unit", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSummoned_Unit));
+    else
+        ptree->appendChild("Summoned_Unit", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSummoned_Unit));
     Ability_Flags maskLarge_Shield;
     memset(&maskLarge_Shield, '\0', sizeof(maskLarge_Shield));
     maskLarge_Shield.Large_Shield = 1;
-    ptree->appendChild("Large_Shield", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLarge_Shield));
+    if (1 == sizeof(maskLarge_Shield))
+        ptree->appendChild("Large_Shield", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLarge_Shield));
+    else if (2 == sizeof(maskLarge_Shield))
+        ptree->appendChild("Large_Shield", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLarge_Shield));
+    else
+        ptree->appendChild("Large_Shield", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLarge_Shield));
     Ability_Flags maskPlane_Shift;
     memset(&maskPlane_Shift, '\0', sizeof(maskPlane_Shift));
     maskPlane_Shift.Plane_Shift = 1;
-    ptree->appendChild("Plane_Shift", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlane_Shift));
+    if (1 == sizeof(maskPlane_Shift))
+        ptree->appendChild("Plane_Shift", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlane_Shift));
+    else if (2 == sizeof(maskPlane_Shift))
+        ptree->appendChild("Plane_Shift", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPlane_Shift));
+    else
+        ptree->appendChild("Plane_Shift", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPlane_Shift));
     Ability_Flags maskWall_Crusher;
     memset(&maskWall_Crusher, '\0', sizeof(maskWall_Crusher));
     maskWall_Crusher.Wall_Crusher = 1;
-    ptree->appendChild("Wall_Crusher", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWall_Crusher));
+    if (1 == sizeof(maskWall_Crusher))
+        ptree->appendChild("Wall_Crusher", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWall_Crusher));
+    else if (2 == sizeof(maskWall_Crusher))
+        ptree->appendChild("Wall_Crusher", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWall_Crusher));
+    else
+        ptree->appendChild("Wall_Crusher", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWall_Crusher));
     Ability_Flags maskHealer;
     memset(&maskHealer, '\0', sizeof(maskHealer));
     maskHealer.Healer = 1;
-    ptree->appendChild("Healer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHealer));
+    if (1 == sizeof(maskHealer))
+        ptree->appendChild("Healer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHealer));
+    else if (2 == sizeof(maskHealer))
+        ptree->appendChild("Healer", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHealer));
+    else
+        ptree->appendChild("Healer", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHealer));
     Ability_Flags maskCreate_Outpost;
     memset(&maskCreate_Outpost, '\0', sizeof(maskCreate_Outpost));
     maskCreate_Outpost.Create_Outpost = 1;
-    ptree->appendChild("Create_Outpost", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreate_Outpost));
+    if (1 == sizeof(maskCreate_Outpost))
+        ptree->appendChild("Create_Outpost", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreate_Outpost));
+    else if (2 == sizeof(maskCreate_Outpost))
+        ptree->appendChild("Create_Outpost", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCreate_Outpost));
+    else
+        ptree->appendChild("Create_Outpost", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCreate_Outpost));
     Ability_Flags maskInvisibility;
     memset(&maskInvisibility, '\0', sizeof(maskInvisibility));
     maskInvisibility.Invisibility = 1;
-    ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    if (1 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    else if (2 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskInvisibility));
+    else
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskInvisibility));
     Ability_Flags maskCreate_Undead;
     memset(&maskCreate_Undead, '\0', sizeof(maskCreate_Undead));
     maskCreate_Undead.Create_Undead = 1;
-    ptree->appendChild("Create_Undead", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreate_Undead));
+    if (1 == sizeof(maskCreate_Undead))
+        ptree->appendChild("Create_Undead", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreate_Undead));
+    else if (2 == sizeof(maskCreate_Undead))
+        ptree->appendChild("Create_Undead", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCreate_Undead));
+    else
+        ptree->appendChild("Create_Undead", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCreate_Undead));
     Ability_Flags maskLong_Range;
     memset(&maskLong_Range, '\0', sizeof(maskLong_Range));
     maskLong_Range.Long_Range = 1;
-    ptree->appendChild("Long_Range", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLong_Range));
+    if (1 == sizeof(maskLong_Range))
+        ptree->appendChild("Long_Range", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLong_Range));
+    else if (2 == sizeof(maskLong_Range))
+        ptree->appendChild("Long_Range", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLong_Range));
+    else
+        ptree->appendChild("Long_Range", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLong_Range));
     Ability_Flags maskLand_Corruption;
     memset(&maskLand_Corruption, '\0', sizeof(maskLand_Corruption));
     maskLand_Corruption.Land_Corruption = 1;
-    ptree->appendChild("Land_Corruption", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLand_Corruption));
+    if (1 == sizeof(maskLand_Corruption))
+        ptree->appendChild("Land_Corruption", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLand_Corruption));
+    else if (2 == sizeof(maskLand_Corruption))
+        ptree->appendChild("Land_Corruption", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLand_Corruption));
+    else
+        ptree->appendChild("Land_Corruption", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLand_Corruption));
     Ability_Flags maskMeld_With_Node;
     memset(&maskMeld_With_Node, '\0', sizeof(maskMeld_With_Node));
     maskMeld_With_Node.Meld_With_Node = 1;
-    ptree->appendChild("Meld_With_Node", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMeld_With_Node));
+    if (1 == sizeof(maskMeld_With_Node))
+        ptree->appendChild("Meld_With_Node", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMeld_With_Node));
+    else if (2 == sizeof(maskMeld_With_Node))
+        ptree->appendChild("Meld_With_Node", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMeld_With_Node));
+    else
+        ptree->appendChild("Meld_With_Node", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMeld_With_Node));
     Ability_Flags maskNon_Corporeal;
     memset(&maskNon_Corporeal, '\0', sizeof(maskNon_Corporeal));
     maskNon_Corporeal.Non_Corporeal = 1;
-    ptree->appendChild("Non_Corporeal", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNon_Corporeal));
+    if (1 == sizeof(maskNon_Corporeal))
+        ptree->appendChild("Non_Corporeal", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNon_Corporeal));
+    else if (2 == sizeof(maskNon_Corporeal))
+        ptree->appendChild("Non_Corporeal", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNon_Corporeal));
+    else
+        ptree->appendChild("Non_Corporeal", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNon_Corporeal));
     Ability_Flags maskWind_Walking;
     memset(&maskWind_Walking, '\0', sizeof(maskWind_Walking));
     maskWind_Walking.Wind_Walking = 1;
-    ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWind_Walking));
+    if (1 == sizeof(maskWind_Walking))
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWind_Walking));
+    else if (2 == sizeof(maskWind_Walking))
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWind_Walking));
+    else
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWind_Walking));
     Ability_Flags maskRegeneration;
     memset(&maskRegeneration, '\0', sizeof(maskRegeneration));
     maskRegeneration.Regeneration = 1;
-    ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    if (1 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    else if (2 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskRegeneration));
+    else
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskRegeneration));
     Ability_Flags maskPurify;
     memset(&maskPurify, '\0', sizeof(maskPurify));
     maskPurify.Purify = 1;
-    ptree->appendChild("Purify", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPurify));
+    if (1 == sizeof(maskPurify))
+        ptree->appendChild("Purify", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPurify));
+    else if (2 == sizeof(maskPurify))
+        ptree->appendChild("Purify", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPurify));
+    else
+        ptree->appendChild("Purify", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPurify));
     Ability_Flags maskNegate_First_Strike;
     memset(&maskNegate_First_Strike, '\0', sizeof(maskNegate_First_Strike));
     maskNegate_First_Strike.Negate_First_Strike = 1;
-    ptree->appendChild("Negate_First_Strike", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNegate_First_Strike));
+    if (1 == sizeof(maskNegate_First_Strike))
+        ptree->appendChild("Negate_First_Strike", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNegate_First_Strike));
+    else if (2 == sizeof(maskNegate_First_Strike))
+        ptree->appendChild("Negate_First_Strike", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNegate_First_Strike));
+    else
+        ptree->appendChild("Negate_First_Strike", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNegate_First_Strike));
     return ptree;
 }
 
@@ -93,67 +173,147 @@ QMoMTreeItemBase* constructTreeItem(Attack_Flags* rhs, const QString& context)
     Attack_Flags maskArmor_Piercing;
     memset(&maskArmor_Piercing, '\0', sizeof(maskArmor_Piercing));
     maskArmor_Piercing.Armor_Piercing = 1;
-    ptree->appendChild("Armor_Piercing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmor_Piercing));
+    if (1 == sizeof(maskArmor_Piercing))
+        ptree->appendChild("Armor_Piercing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmor_Piercing));
+    else if (2 == sizeof(maskArmor_Piercing))
+        ptree->appendChild("Armor_Piercing", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskArmor_Piercing));
+    else
+        ptree->appendChild("Armor_Piercing", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskArmor_Piercing));
     Attack_Flags maskFirst_Strike;
     memset(&maskFirst_Strike, '\0', sizeof(maskFirst_Strike));
     maskFirst_Strike.First_Strike = 1;
-    ptree->appendChild("First_Strike", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFirst_Strike));
+    if (1 == sizeof(maskFirst_Strike))
+        ptree->appendChild("First_Strike", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFirst_Strike));
+    else if (2 == sizeof(maskFirst_Strike))
+        ptree->appendChild("First_Strike", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFirst_Strike));
+    else
+        ptree->appendChild("First_Strike", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFirst_Strike));
     Attack_Flags maskPoison_attack;
     memset(&maskPoison_attack, '\0', sizeof(maskPoison_attack));
     maskPoison_attack.Poison_attack = 1;
-    ptree->appendChild("Poison_attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPoison_attack));
+    if (1 == sizeof(maskPoison_attack))
+        ptree->appendChild("Poison_attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPoison_attack));
+    else if (2 == sizeof(maskPoison_attack))
+        ptree->appendChild("Poison_attack", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPoison_attack));
+    else
+        ptree->appendChild("Poison_attack", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPoison_attack));
     Attack_Flags maskLife_Stealing;
     memset(&maskLife_Stealing, '\0', sizeof(maskLife_Stealing));
     maskLife_Stealing.Life_Stealing = 1;
-    ptree->appendChild("Life_Stealing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLife_Stealing));
+    if (1 == sizeof(maskLife_Stealing))
+        ptree->appendChild("Life_Stealing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLife_Stealing));
+    else if (2 == sizeof(maskLife_Stealing))
+        ptree->appendChild("Life_Stealing", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLife_Stealing));
+    else
+        ptree->appendChild("Life_Stealing", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLife_Stealing));
     Attack_Flags maskAutomatic_Damage;
     memset(&maskAutomatic_Damage, '\0', sizeof(maskAutomatic_Damage));
     maskAutomatic_Damage.Automatic_Damage = 1;
-    ptree->appendChild("Automatic_Damage", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAutomatic_Damage));
+    if (1 == sizeof(maskAutomatic_Damage))
+        ptree->appendChild("Automatic_Damage", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAutomatic_Damage));
+    else if (2 == sizeof(maskAutomatic_Damage))
+        ptree->appendChild("Automatic_Damage", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskAutomatic_Damage));
+    else
+        ptree->appendChild("Automatic_Damage", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskAutomatic_Damage));
     Attack_Flags maskDestruction;
     memset(&maskDestruction, '\0', sizeof(maskDestruction));
     maskDestruction.Destruction = 1;
-    ptree->appendChild("Destruction", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDestruction));
+    if (1 == sizeof(maskDestruction))
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDestruction));
+    else if (2 == sizeof(maskDestruction))
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDestruction));
+    else
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDestruction));
     Attack_Flags maskIllusionary_attack;
     memset(&maskIllusionary_attack, '\0', sizeof(maskIllusionary_attack));
     maskIllusionary_attack.Illusionary_attack = 1;
-    ptree->appendChild("Illusionary_attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIllusionary_attack));
+    if (1 == sizeof(maskIllusionary_attack))
+        ptree->appendChild("Illusionary_attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIllusionary_attack));
+    else if (2 == sizeof(maskIllusionary_attack))
+        ptree->appendChild("Illusionary_attack", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskIllusionary_attack));
+    else
+        ptree->appendChild("Illusionary_attack", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskIllusionary_attack));
     Attack_Flags maskStoning_Touch;
     memset(&maskStoning_Touch, '\0', sizeof(maskStoning_Touch));
     maskStoning_Touch.Stoning_Touch = 1;
-    ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning_Touch));
+    if (1 == sizeof(maskStoning_Touch))
+        ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning_Touch));
+    else if (2 == sizeof(maskStoning_Touch))
+        ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStoning_Touch));
+    else
+        ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStoning_Touch));
     Attack_Flags maskNo_effect05;
     memset(&maskNo_effect05, '\0', sizeof(maskNo_effect05));
     maskNo_effect05.No_effect05 = 1;
-    ptree->appendChild("No_effect05", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect05));
+    if (1 == sizeof(maskNo_effect05))
+        ptree->appendChild("No_effect05", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect05));
+    else if (2 == sizeof(maskNo_effect05))
+        ptree->appendChild("No_effect05", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect05));
+    else
+        ptree->appendChild("No_effect05", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect05));
     Attack_Flags maskDeath_Touch;
     memset(&maskDeath_Touch, '\0', sizeof(maskDeath_Touch));
     maskDeath_Touch.Death_Touch = 1;
-    ptree->appendChild("Death_Touch", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath_Touch));
+    if (1 == sizeof(maskDeath_Touch))
+        ptree->appendChild("Death_Touch", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath_Touch));
+    else if (2 == sizeof(maskDeath_Touch))
+        ptree->appendChild("Death_Touch", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDeath_Touch));
+    else
+        ptree->appendChild("Death_Touch", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDeath_Touch));
     Attack_Flags maskPower_Drain;
     memset(&maskPower_Drain, '\0', sizeof(maskPower_Drain));
     maskPower_Drain.Power_Drain = 1;
-    ptree->appendChild("Power_Drain", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPower_Drain));
+    if (1 == sizeof(maskPower_Drain))
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPower_Drain));
+    else if (2 == sizeof(maskPower_Drain))
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPower_Drain));
+    else
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPower_Drain));
     Attack_Flags maskDispel_Evil;
     memset(&maskDispel_Evil, '\0', sizeof(maskDispel_Evil));
     maskDispel_Evil.Dispel_Evil = 1;
-    ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDispel_Evil));
+    if (1 == sizeof(maskDispel_Evil))
+        ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDispel_Evil));
+    else if (2 == sizeof(maskDispel_Evil))
+        ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDispel_Evil));
+    else
+        ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDispel_Evil));
     Attack_Flags maskNo_effect04_COMBAT;
     memset(&maskNo_effect04_COMBAT, '\0', sizeof(maskNo_effect04_COMBAT));
     maskNo_effect04_COMBAT.No_effect04_COMBAT = 1;
-    ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect04_COMBAT));
+    if (1 == sizeof(maskNo_effect04_COMBAT))
+        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect04_COMBAT));
+    else if (2 == sizeof(maskNo_effect04_COMBAT))
+        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect04_COMBAT));
+    else
+        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect04_COMBAT));
     Attack_Flags maskNo_effect03_COMBAT;
     memset(&maskNo_effect03_COMBAT, '\0', sizeof(maskNo_effect03_COMBAT));
     maskNo_effect03_COMBAT.No_effect03_COMBAT = 1;
-    ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect03_COMBAT));
+    if (1 == sizeof(maskNo_effect03_COMBAT))
+        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect03_COMBAT));
+    else if (2 == sizeof(maskNo_effect03_COMBAT))
+        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect03_COMBAT));
+    else
+        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect03_COMBAT));
     Attack_Flags maskEldritch_Weapon_COMBAT;
     memset(&maskEldritch_Weapon_COMBAT, '\0', sizeof(maskEldritch_Weapon_COMBAT));
     maskEldritch_Weapon_COMBAT.Eldritch_Weapon_COMBAT = 1;
-    ptree->appendChild("Eldritch_Weapon_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEldritch_Weapon_COMBAT));
+    if (1 == sizeof(maskEldritch_Weapon_COMBAT))
+        ptree->appendChild("Eldritch_Weapon_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEldritch_Weapon_COMBAT));
+    else if (2 == sizeof(maskEldritch_Weapon_COMBAT))
+        ptree->appendChild("Eldritch_Weapon_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskEldritch_Weapon_COMBAT));
+    else
+        ptree->appendChild("Eldritch_Weapon_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskEldritch_Weapon_COMBAT));
     Attack_Flags maskWarp_Lightning_COMBAT;
     memset(&maskWarp_Lightning_COMBAT, '\0', sizeof(maskWarp_Lightning_COMBAT));
     maskWarp_Lightning_COMBAT.Warp_Lightning_COMBAT = 1;
-    ptree->appendChild("Warp_Lightning_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Lightning_COMBAT));
+    if (1 == sizeof(maskWarp_Lightning_COMBAT))
+        ptree->appendChild("Warp_Lightning_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Lightning_COMBAT));
+    else if (2 == sizeof(maskWarp_Lightning_COMBAT))
+        ptree->appendChild("Warp_Lightning_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWarp_Lightning_COMBAT));
+    else
+        ptree->appendChild("Warp_Lightning_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWarp_Lightning_COMBAT));
     return ptree;
 }
 
@@ -166,67 +326,147 @@ QMoMTreeItemBase* constructTreeItem(Attribute_Flags* rhs, const QString& context
     Attribute_Flags maskWeapon_Immunity;
     memset(&maskWeapon_Immunity, '\0', sizeof(maskWeapon_Immunity));
     maskWeapon_Immunity.Weapon_Immunity = 1;
-    ptree->appendChild("Weapon_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeapon_Immunity));
+    if (1 == sizeof(maskWeapon_Immunity))
+        ptree->appendChild("Weapon_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeapon_Immunity));
+    else if (2 == sizeof(maskWeapon_Immunity))
+        ptree->appendChild("Weapon_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWeapon_Immunity));
+    else
+        ptree->appendChild("Weapon_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWeapon_Immunity));
     Attribute_Flags maskFlyer;
     memset(&maskFlyer, '\0', sizeof(maskFlyer));
     maskFlyer.Flyer = 1;
-    ptree->appendChild("Flyer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlyer));
+    if (1 == sizeof(maskFlyer))
+        ptree->appendChild("Flyer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlyer));
+    else if (2 == sizeof(maskFlyer))
+        ptree->appendChild("Flyer", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlyer));
+    else
+        ptree->appendChild("Flyer", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlyer));
     Attribute_Flags maskLucky;
     memset(&maskLucky, '\0', sizeof(maskLucky));
     maskLucky.Lucky = 1;
-    ptree->appendChild("Lucky", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLucky));
+    if (1 == sizeof(maskLucky))
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLucky));
+    else if (2 == sizeof(maskLucky))
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLucky));
+    else
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLucky));
     Attribute_Flags maskSummon_Demons_1;
     memset(&maskSummon_Demons_1, '\0', sizeof(maskSummon_Demons_1));
     maskSummon_Demons_1.Summon_Demons_1 = 1;
-    ptree->appendChild("Summon_Demons_1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummon_Demons_1));
+    if (1 == sizeof(maskSummon_Demons_1))
+        ptree->appendChild("Summon_Demons_1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummon_Demons_1));
+    else if (2 == sizeof(maskSummon_Demons_1))
+        ptree->appendChild("Summon_Demons_1", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSummon_Demons_1));
+    else
+        ptree->appendChild("Summon_Demons_1", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSummon_Demons_1));
     Attribute_Flags maskSummon_Demons_2;
     memset(&maskSummon_Demons_2, '\0', sizeof(maskSummon_Demons_2));
     maskSummon_Demons_2.Summon_Demons_2 = 1;
-    ptree->appendChild("Summon_Demons_2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummon_Demons_2));
+    if (1 == sizeof(maskSummon_Demons_2))
+        ptree->appendChild("Summon_Demons_2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSummon_Demons_2));
+    else if (2 == sizeof(maskSummon_Demons_2))
+        ptree->appendChild("Summon_Demons_2", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSummon_Demons_2));
+    else
+        ptree->appendChild("Summon_Demons_2", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSummon_Demons_2));
     Attribute_Flags maskCaster_20_MP;
     memset(&maskCaster_20_MP, '\0', sizeof(maskCaster_20_MP));
     maskCaster_20_MP.Caster_20_MP = 1;
-    ptree->appendChild("Caster_20_MP", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCaster_20_MP));
+    if (1 == sizeof(maskCaster_20_MP))
+        ptree->appendChild("Caster_20_MP", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCaster_20_MP));
+    else if (2 == sizeof(maskCaster_20_MP))
+        ptree->appendChild("Caster_20_MP", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCaster_20_MP));
+    else
+        ptree->appendChild("Caster_20_MP", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCaster_20_MP));
     Attribute_Flags maskCaster_40_MP;
     memset(&maskCaster_40_MP, '\0', sizeof(maskCaster_40_MP));
     maskCaster_40_MP.Caster_40_MP = 1;
-    ptree->appendChild("Caster_40_MP", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCaster_40_MP));
+    if (1 == sizeof(maskCaster_40_MP))
+        ptree->appendChild("Caster_40_MP", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCaster_40_MP));
+    else if (2 == sizeof(maskCaster_40_MP))
+        ptree->appendChild("Caster_40_MP", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCaster_40_MP));
+    else
+        ptree->appendChild("Caster_40_MP", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCaster_40_MP));
     Attribute_Flags maskStandard;
     memset(&maskStandard, '\0', sizeof(maskStandard));
     maskStandard.Standard = 1;
-    ptree->appendChild("Standard", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStandard));
+    if (1 == sizeof(maskStandard))
+        ptree->appendChild("Standard", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStandard));
+    else if (2 == sizeof(maskStandard))
+        ptree->appendChild("Standard", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStandard));
+    else
+        ptree->appendChild("Standard", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStandard));
     Attribute_Flags maskHealing_Spell;
     memset(&maskHealing_Spell, '\0', sizeof(maskHealing_Spell));
     maskHealing_Spell.Healing_Spell = 1;
-    ptree->appendChild("Healing_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHealing_Spell));
+    if (1 == sizeof(maskHealing_Spell))
+        ptree->appendChild("Healing_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHealing_Spell));
+    else if (2 == sizeof(maskHealing_Spell))
+        ptree->appendChild("Healing_Spell", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHealing_Spell));
+    else
+        ptree->appendChild("Healing_Spell", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHealing_Spell));
     Attribute_Flags maskFire_Ball_Spell;
     memset(&maskFire_Ball_Spell, '\0', sizeof(maskFire_Ball_Spell));
     maskFire_Ball_Spell.Fire_Ball_Spell = 1;
-    ptree->appendChild("Fire_Ball_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFire_Ball_Spell));
+    if (1 == sizeof(maskFire_Ball_Spell))
+        ptree->appendChild("Fire_Ball_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFire_Ball_Spell));
+    else if (2 == sizeof(maskFire_Ball_Spell))
+        ptree->appendChild("Fire_Ball_Spell", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFire_Ball_Spell));
+    else
+        ptree->appendChild("Fire_Ball_Spell", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFire_Ball_Spell));
     Attribute_Flags maskDoombolt_Spell;
     memset(&maskDoombolt_Spell, '\0', sizeof(maskDoombolt_Spell));
     maskDoombolt_Spell.Doombolt_Spell = 1;
-    ptree->appendChild("Doombolt_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDoombolt_Spell));
+    if (1 == sizeof(maskDoombolt_Spell))
+        ptree->appendChild("Doombolt_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDoombolt_Spell));
+    else if (2 == sizeof(maskDoombolt_Spell))
+        ptree->appendChild("Doombolt_Spell", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDoombolt_Spell));
+    else
+        ptree->appendChild("Doombolt_Spell", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDoombolt_Spell));
     Attribute_Flags maskImmolation;
     memset(&maskImmolation, '\0', sizeof(maskImmolation));
     maskImmolation.Immolation = 1;
-    ptree->appendChild("Immolation", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskImmolation));
+    if (1 == sizeof(maskImmolation))
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskImmolation));
+    else if (2 == sizeof(maskImmolation))
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskImmolation));
+    else
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskImmolation));
     Attribute_Flags maskWeb_Spell;
     memset(&maskWeb_Spell, '\0', sizeof(maskWeb_Spell));
     maskWeb_Spell.Web_Spell = 1;
-    ptree->appendChild("Web_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeb_Spell));
+    if (1 == sizeof(maskWeb_Spell))
+        ptree->appendChild("Web_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeb_Spell));
+    else if (2 == sizeof(maskWeb_Spell))
+        ptree->appendChild("Web_Spell", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWeb_Spell));
+    else
+        ptree->appendChild("Web_Spell", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWeb_Spell));
     Attribute_Flags maskCause_Fear_Spell;
     memset(&maskCause_Fear_Spell, '\0', sizeof(maskCause_Fear_Spell));
     maskCause_Fear_Spell.Cause_Fear_Spell = 1;
-    ptree->appendChild("Cause_Fear_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCause_Fear_Spell));
+    if (1 == sizeof(maskCause_Fear_Spell))
+        ptree->appendChild("Cause_Fear_Spell", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCause_Fear_Spell));
+    else if (2 == sizeof(maskCause_Fear_Spell))
+        ptree->appendChild("Cause_Fear_Spell", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCause_Fear_Spell));
+    else
+        ptree->appendChild("Cause_Fear_Spell", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCause_Fear_Spell));
     Attribute_Flags maskResistance_to_All;
     memset(&maskResistance_to_All, '\0', sizeof(maskResistance_to_All));
     maskResistance_to_All.Resistance_to_All = 1;
-    ptree->appendChild("Resistance_to_All", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResistance_to_All));
+    if (1 == sizeof(maskResistance_to_All))
+        ptree->appendChild("Resistance_to_All", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResistance_to_All));
+    else if (2 == sizeof(maskResistance_to_All))
+        ptree->appendChild("Resistance_to_All", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskResistance_to_All));
+    else
+        ptree->appendChild("Resistance_to_All", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskResistance_to_All));
     Attribute_Flags maskHoly_Bonus;
     memset(&maskHoly_Bonus, '\0', sizeof(maskHoly_Bonus));
     maskHoly_Bonus.Holy_Bonus = 1;
-    ptree->appendChild("Holy_Bonus", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Bonus));
+    if (1 == sizeof(maskHoly_Bonus))
+        ptree->appendChild("Holy_Bonus", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Bonus));
+    else if (2 == sizeof(maskHoly_Bonus))
+        ptree->appendChild("Holy_Bonus", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHoly_Bonus));
+    else
+        ptree->appendChild("Holy_Bonus", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHoly_Bonus));
     return ptree;
 }
 
@@ -870,67 +1110,147 @@ QMoMTreeItemBase* constructTreeItem(Combat_Enchantment* rhs, const QString& cont
     Combat_Enchantment maskVertigo;
     memset(&maskVertigo, '\0', sizeof(maskVertigo));
     maskVertigo.Vertigo = 1;
-    ptree->appendChild("Vertigo", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVertigo));
+    if (1 == sizeof(maskVertigo))
+        ptree->appendChild("Vertigo", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVertigo));
+    else if (2 == sizeof(maskVertigo))
+        ptree->appendChild("Vertigo", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskVertigo));
+    else
+        ptree->appendChild("Vertigo", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskVertigo));
     Combat_Enchantment maskConfusion;
     memset(&maskConfusion, '\0', sizeof(maskConfusion));
     maskConfusion.Confusion = 1;
-    ptree->appendChild("Confusion", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConfusion));
+    if (1 == sizeof(maskConfusion))
+        ptree->appendChild("Confusion", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConfusion));
+    else if (2 == sizeof(maskConfusion))
+        ptree->appendChild("Confusion", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskConfusion));
+    else
+        ptree->appendChild("Confusion", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskConfusion));
     Combat_Enchantment maskWhirlwind;
     memset(&maskWhirlwind, '\0', sizeof(maskWhirlwind));
     maskWhirlwind.Whirlwind = 1;
-    ptree->appendChild("Whirlwind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWhirlwind));
+    if (1 == sizeof(maskWhirlwind))
+        ptree->appendChild("Whirlwind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWhirlwind));
+    else if (2 == sizeof(maskWhirlwind))
+        ptree->appendChild("Whirlwind", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWhirlwind));
+    else
+        ptree->appendChild("Whirlwind", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWhirlwind));
     Combat_Enchantment maskMind_Storm;
     memset(&maskMind_Storm, '\0', sizeof(maskMind_Storm));
     maskMind_Storm.Mind_Storm = 1;
-    ptree->appendChild("Mind_Storm", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMind_Storm));
+    if (1 == sizeof(maskMind_Storm))
+        ptree->appendChild("Mind_Storm", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMind_Storm));
+    else if (2 == sizeof(maskMind_Storm))
+        ptree->appendChild("Mind_Storm", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMind_Storm));
+    else
+        ptree->appendChild("Mind_Storm", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMind_Storm));
     Combat_Enchantment maskShatter;
     memset(&maskShatter, '\0', sizeof(maskShatter));
     maskShatter.Shatter = 1;
-    ptree->appendChild("Shatter", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskShatter));
+    if (1 == sizeof(maskShatter))
+        ptree->appendChild("Shatter", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskShatter));
+    else if (2 == sizeof(maskShatter))
+        ptree->appendChild("Shatter", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskShatter));
+    else
+        ptree->appendChild("Shatter", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskShatter));
     Combat_Enchantment maskWeakness;
     memset(&maskWeakness, '\0', sizeof(maskWeakness));
     maskWeakness.Weakness = 1;
-    ptree->appendChild("Weakness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeakness));
+    if (1 == sizeof(maskWeakness))
+        ptree->appendChild("Weakness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeakness));
+    else if (2 == sizeof(maskWeakness))
+        ptree->appendChild("Weakness", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWeakness));
+    else
+        ptree->appendChild("Weakness", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWeakness));
     Combat_Enchantment maskBlack_Sleep;
     memset(&maskBlack_Sleep, '\0', sizeof(maskBlack_Sleep));
     maskBlack_Sleep.Black_Sleep = 1;
-    ptree->appendChild("Black_Sleep", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlack_Sleep));
+    if (1 == sizeof(maskBlack_Sleep))
+        ptree->appendChild("Black_Sleep", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlack_Sleep));
+    else if (2 == sizeof(maskBlack_Sleep))
+        ptree->appendChild("Black_Sleep", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBlack_Sleep));
+    else
+        ptree->appendChild("Black_Sleep", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBlack_Sleep));
     Combat_Enchantment maskWarp_Creature_Attack;
     memset(&maskWarp_Creature_Attack, '\0', sizeof(maskWarp_Creature_Attack));
     maskWarp_Creature_Attack.Warp_Creature_Attack = 1;
-    ptree->appendChild("Warp_Creature_Attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Attack));
+    if (1 == sizeof(maskWarp_Creature_Attack))
+        ptree->appendChild("Warp_Creature_Attack", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Attack));
+    else if (2 == sizeof(maskWarp_Creature_Attack))
+        ptree->appendChild("Warp_Creature_Attack", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWarp_Creature_Attack));
+    else
+        ptree->appendChild("Warp_Creature_Attack", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWarp_Creature_Attack));
     Combat_Enchantment maskWarp_Creature_Defense;
     memset(&maskWarp_Creature_Defense, '\0', sizeof(maskWarp_Creature_Defense));
     maskWarp_Creature_Defense.Warp_Creature_Defense = 1;
-    ptree->appendChild("Warp_Creature_Defense", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Defense));
+    if (1 == sizeof(maskWarp_Creature_Defense))
+        ptree->appendChild("Warp_Creature_Defense", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Defense));
+    else if (2 == sizeof(maskWarp_Creature_Defense))
+        ptree->appendChild("Warp_Creature_Defense", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWarp_Creature_Defense));
+    else
+        ptree->appendChild("Warp_Creature_Defense", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWarp_Creature_Defense));
     Combat_Enchantment maskWarp_Creature_Resistance;
     memset(&maskWarp_Creature_Resistance, '\0', sizeof(maskWarp_Creature_Resistance));
     maskWarp_Creature_Resistance.Warp_Creature_Resistance = 1;
-    ptree->appendChild("Warp_Creature_Resistance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Resistance));
+    if (1 == sizeof(maskWarp_Creature_Resistance))
+        ptree->appendChild("Warp_Creature_Resistance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWarp_Creature_Resistance));
+    else if (2 == sizeof(maskWarp_Creature_Resistance))
+        ptree->appendChild("Warp_Creature_Resistance", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWarp_Creature_Resistance));
+    else
+        ptree->appendChild("Warp_Creature_Resistance", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWarp_Creature_Resistance));
     Combat_Enchantment maskMind_Twist;
     memset(&maskMind_Twist, '\0', sizeof(maskMind_Twist));
     maskMind_Twist.Mind_Twist = 1;
-    ptree->appendChild("Mind_Twist", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMind_Twist));
+    if (1 == sizeof(maskMind_Twist))
+        ptree->appendChild("Mind_Twist", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMind_Twist));
+    else if (2 == sizeof(maskMind_Twist))
+        ptree->appendChild("Mind_Twist", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMind_Twist));
+    else
+        ptree->appendChild("Mind_Twist", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMind_Twist));
     Combat_Enchantment maskHaste;
     memset(&maskHaste, '\0', sizeof(maskHaste));
     maskHaste.Haste = 1;
-    ptree->appendChild("Haste", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHaste));
+    if (1 == sizeof(maskHaste))
+        ptree->appendChild("Haste", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHaste));
+    else if (2 == sizeof(maskHaste))
+        ptree->appendChild("Haste", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHaste));
+    else
+        ptree->appendChild("Haste", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHaste));
     Combat_Enchantment maskWeb;
     memset(&maskWeb, '\0', sizeof(maskWeb));
     maskWeb.Web = 1;
-    ptree->appendChild("Web", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeb));
+    if (1 == sizeof(maskWeb))
+        ptree->appendChild("Web", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeb));
+    else if (2 == sizeof(maskWeb))
+        ptree->appendChild("Web", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWeb));
+    else
+        ptree->appendChild("Web", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWeb));
     Combat_Enchantment maskCreature_Binding;
     memset(&maskCreature_Binding, '\0', sizeof(maskCreature_Binding));
     maskCreature_Binding.Creature_Binding = 1;
-    ptree->appendChild("Creature_Binding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreature_Binding));
+    if (1 == sizeof(maskCreature_Binding))
+        ptree->appendChild("Creature_Binding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCreature_Binding));
+    else if (2 == sizeof(maskCreature_Binding))
+        ptree->appendChild("Creature_Binding", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCreature_Binding));
+    else
+        ptree->appendChild("Creature_Binding", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCreature_Binding));
     Combat_Enchantment maskPossession;
     memset(&maskPossession, '\0', sizeof(maskPossession));
     maskPossession.Possession = 1;
-    ptree->appendChild("Possession", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPossession));
+    if (1 == sizeof(maskPossession))
+        ptree->appendChild("Possession", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPossession));
+    else if (2 == sizeof(maskPossession))
+        ptree->appendChild("Possession", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPossession));
+    else
+        ptree->appendChild("Possession", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPossession));
     Combat_Enchantment maskNo_Effect80;
     memset(&maskNo_Effect80, '\0', sizeof(maskNo_Effect80));
     maskNo_Effect80.No_Effect80 = 1;
-    ptree->appendChild("No_Effect80", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_Effect80));
+    if (1 == sizeof(maskNo_Effect80))
+        ptree->appendChild("No_Effect80", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_Effect80));
+    else if (2 == sizeof(maskNo_Effect80))
+        ptree->appendChild("No_Effect80", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_Effect80));
+    else
+        ptree->appendChild("No_Effect80", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_Effect80));
     return ptree;
 }
 
@@ -1198,131 +1518,291 @@ QMoMTreeItemBase* constructTreeItem(Hero_Ability* rhs, const QString& context)
     Hero_Ability maskLeadership;
     memset(&maskLeadership, '\0', sizeof(maskLeadership));
     maskLeadership.Leadership = 1;
-    ptree->appendChild("Leadership", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLeadership));
+    if (1 == sizeof(maskLeadership))
+        ptree->appendChild("Leadership", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLeadership));
+    else if (2 == sizeof(maskLeadership))
+        ptree->appendChild("Leadership", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLeadership));
+    else
+        ptree->appendChild("Leadership", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLeadership));
     Hero_Ability maskLeadership_X;
     memset(&maskLeadership_X, '\0', sizeof(maskLeadership_X));
     maskLeadership_X.Leadership_X = 1;
-    ptree->appendChild("Leadership_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLeadership_X));
+    if (1 == sizeof(maskLeadership_X))
+        ptree->appendChild("Leadership_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLeadership_X));
+    else if (2 == sizeof(maskLeadership_X))
+        ptree->appendChild("Leadership_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLeadership_X));
+    else
+        ptree->appendChild("Leadership_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLeadership_X));
     Hero_Ability masku1;
     memset(&masku1, '\0', sizeof(masku1));
     masku1.u1 = 1;
-    ptree->appendChild("u1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku1));
+    if (1 == sizeof(masku1))
+        ptree->appendChild("u1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku1));
+    else if (2 == sizeof(masku1))
+        ptree->appendChild("u1", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku1));
+    else
+        ptree->appendChild("u1", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku1));
     Hero_Ability maskLegendary;
     memset(&maskLegendary, '\0', sizeof(maskLegendary));
     maskLegendary.Legendary = 1;
-    ptree->appendChild("Legendary", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLegendary));
+    if (1 == sizeof(maskLegendary))
+        ptree->appendChild("Legendary", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLegendary));
+    else if (2 == sizeof(maskLegendary))
+        ptree->appendChild("Legendary", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLegendary));
+    else
+        ptree->appendChild("Legendary", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLegendary));
     Hero_Ability maskLegendary_X;
     memset(&maskLegendary_X, '\0', sizeof(maskLegendary_X));
     maskLegendary_X.Legendary_X = 1;
-    ptree->appendChild("Legendary_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLegendary_X));
+    if (1 == sizeof(maskLegendary_X))
+        ptree->appendChild("Legendary_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLegendary_X));
+    else if (2 == sizeof(maskLegendary_X))
+        ptree->appendChild("Legendary_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLegendary_X));
+    else
+        ptree->appendChild("Legendary_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLegendary_X));
     Hero_Ability masku0;
     memset(&masku0, '\0', sizeof(masku0));
     masku0.u0 = 1;
-    ptree->appendChild("u0", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku0));
+    if (1 == sizeof(masku0))
+        ptree->appendChild("u0", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku0));
+    else if (2 == sizeof(masku0))
+        ptree->appendChild("u0", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku0));
+    else
+        ptree->appendChild("u0", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku0));
     Hero_Ability maskBlademaster;
     memset(&maskBlademaster, '\0', sizeof(maskBlademaster));
     maskBlademaster.Blademaster = 1;
-    ptree->appendChild("Blademaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlademaster));
+    if (1 == sizeof(maskBlademaster))
+        ptree->appendChild("Blademaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlademaster));
+    else if (2 == sizeof(maskBlademaster))
+        ptree->appendChild("Blademaster", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBlademaster));
+    else
+        ptree->appendChild("Blademaster", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBlademaster));
     Hero_Ability maskBlademaster_X;
     memset(&maskBlademaster_X, '\0', sizeof(maskBlademaster_X));
     maskBlademaster_X.Blademaster_X = 1;
-    ptree->appendChild("Blademaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlademaster_X));
+    if (1 == sizeof(maskBlademaster_X))
+        ptree->appendChild("Blademaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlademaster_X));
+    else if (2 == sizeof(maskBlademaster_X))
+        ptree->appendChild("Blademaster_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBlademaster_X));
+    else
+        ptree->appendChild("Blademaster_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBlademaster_X));
     Hero_Ability masku4;
     memset(&masku4, '\0', sizeof(masku4));
     masku4.u4 = 1;
-    ptree->appendChild("u4", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku4));
+    if (1 == sizeof(masku4))
+        ptree->appendChild("u4", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku4));
+    else if (2 == sizeof(masku4))
+        ptree->appendChild("u4", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku4));
+    else
+        ptree->appendChild("u4", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku4));
     Hero_Ability maskArmsmaster;
     memset(&maskArmsmaster, '\0', sizeof(maskArmsmaster));
     maskArmsmaster.Armsmaster = 1;
-    ptree->appendChild("Armsmaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmsmaster));
+    if (1 == sizeof(maskArmsmaster))
+        ptree->appendChild("Armsmaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmsmaster));
+    else if (2 == sizeof(maskArmsmaster))
+        ptree->appendChild("Armsmaster", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskArmsmaster));
+    else
+        ptree->appendChild("Armsmaster", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskArmsmaster));
     Hero_Ability maskArmsmaster_X;
     memset(&maskArmsmaster_X, '\0', sizeof(maskArmsmaster_X));
     maskArmsmaster_X.Armsmaster_X = 1;
-    ptree->appendChild("Armsmaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmsmaster_X));
+    if (1 == sizeof(maskArmsmaster_X))
+        ptree->appendChild("Armsmaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArmsmaster_X));
+    else if (2 == sizeof(maskArmsmaster_X))
+        ptree->appendChild("Armsmaster_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskArmsmaster_X));
+    else
+        ptree->appendChild("Armsmaster_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskArmsmaster_X));
     Hero_Ability masku3;
     memset(&masku3, '\0', sizeof(masku3));
     masku3.u3 = 1;
-    ptree->appendChild("u3", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku3));
+    if (1 == sizeof(masku3))
+        ptree->appendChild("u3", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku3));
+    else if (2 == sizeof(masku3))
+        ptree->appendChild("u3", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku3));
+    else
+        ptree->appendChild("u3", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku3));
     Hero_Ability maskConstitution;
     memset(&maskConstitution, '\0', sizeof(maskConstitution));
     maskConstitution.Constitution = 1;
-    ptree->appendChild("Constitution", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConstitution));
+    if (1 == sizeof(maskConstitution))
+        ptree->appendChild("Constitution", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConstitution));
+    else if (2 == sizeof(maskConstitution))
+        ptree->appendChild("Constitution", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskConstitution));
+    else
+        ptree->appendChild("Constitution", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskConstitution));
     Hero_Ability maskConstitution_X;
     memset(&maskConstitution_X, '\0', sizeof(maskConstitution_X));
     maskConstitution_X.Constitution_X = 1;
-    ptree->appendChild("Constitution_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConstitution_X));
+    if (1 == sizeof(maskConstitution_X))
+        ptree->appendChild("Constitution_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskConstitution_X));
+    else if (2 == sizeof(maskConstitution_X))
+        ptree->appendChild("Constitution_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskConstitution_X));
+    else
+        ptree->appendChild("Constitution_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskConstitution_X));
     Hero_Ability masku2;
     memset(&masku2, '\0', sizeof(masku2));
     masku2.u2 = 1;
-    ptree->appendChild("u2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku2));
+    if (1 == sizeof(masku2))
+        ptree->appendChild("u2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku2));
+    else if (2 == sizeof(masku2))
+        ptree->appendChild("u2", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku2));
+    else
+        ptree->appendChild("u2", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku2));
     Hero_Ability maskMight;
     memset(&maskMight, '\0', sizeof(maskMight));
     maskMight.Might = 1;
-    ptree->appendChild("Might", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMight));
+    if (1 == sizeof(maskMight))
+        ptree->appendChild("Might", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMight));
+    else if (2 == sizeof(maskMight))
+        ptree->appendChild("Might", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMight));
+    else
+        ptree->appendChild("Might", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMight));
     Hero_Ability maskMight_X;
     memset(&maskMight_X, '\0', sizeof(maskMight_X));
     maskMight_X.Might_X = 1;
-    ptree->appendChild("Might_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMight_X));
+    if (1 == sizeof(maskMight_X))
+        ptree->appendChild("Might_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMight_X));
+    else if (2 == sizeof(maskMight_X))
+        ptree->appendChild("Might_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMight_X));
+    else
+        ptree->appendChild("Might_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMight_X));
     Hero_Ability masku7;
     memset(&masku7, '\0', sizeof(masku7));
     masku7.u7 = 1;
-    ptree->appendChild("u7", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku7));
+    if (1 == sizeof(masku7))
+        ptree->appendChild("u7", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku7));
+    else if (2 == sizeof(masku7))
+        ptree->appendChild("u7", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku7));
+    else
+        ptree->appendChild("u7", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku7));
     Hero_Ability maskArcane_Power;
     memset(&maskArcane_Power, '\0', sizeof(maskArcane_Power));
     maskArcane_Power.Arcane_Power = 1;
-    ptree->appendChild("Arcane_Power", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArcane_Power));
+    if (1 == sizeof(maskArcane_Power))
+        ptree->appendChild("Arcane_Power", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArcane_Power));
+    else if (2 == sizeof(maskArcane_Power))
+        ptree->appendChild("Arcane_Power", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskArcane_Power));
+    else
+        ptree->appendChild("Arcane_Power", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskArcane_Power));
     Hero_Ability maskArcane_Power_X;
     memset(&maskArcane_Power_X, '\0', sizeof(maskArcane_Power_X));
     maskArcane_Power_X.Arcane_Power_X = 1;
-    ptree->appendChild("Arcane_Power_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArcane_Power_X));
+    if (1 == sizeof(maskArcane_Power_X))
+        ptree->appendChild("Arcane_Power_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskArcane_Power_X));
+    else if (2 == sizeof(maskArcane_Power_X))
+        ptree->appendChild("Arcane_Power_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskArcane_Power_X));
+    else
+        ptree->appendChild("Arcane_Power_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskArcane_Power_X));
     Hero_Ability masku6;
     memset(&masku6, '\0', sizeof(masku6));
     masku6.u6 = 1;
-    ptree->appendChild("u6", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku6));
+    if (1 == sizeof(masku6))
+        ptree->appendChild("u6", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku6));
+    else if (2 == sizeof(masku6))
+        ptree->appendChild("u6", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku6));
+    else
+        ptree->appendChild("u6", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku6));
     Hero_Ability maskSage;
     memset(&maskSage, '\0', sizeof(maskSage));
     maskSage.Sage = 1;
-    ptree->appendChild("Sage", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSage));
+    if (1 == sizeof(maskSage))
+        ptree->appendChild("Sage", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSage));
+    else if (2 == sizeof(maskSage))
+        ptree->appendChild("Sage", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSage));
+    else
+        ptree->appendChild("Sage", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSage));
     Hero_Ability maskSage_X;
     memset(&maskSage_X, '\0', sizeof(maskSage_X));
     maskSage_X.Sage_X = 1;
-    ptree->appendChild("Sage_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSage_X));
+    if (1 == sizeof(maskSage_X))
+        ptree->appendChild("Sage_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSage_X));
+    else if (2 == sizeof(maskSage_X))
+        ptree->appendChild("Sage_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSage_X));
+    else
+        ptree->appendChild("Sage_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSage_X));
     Hero_Ability masku5;
     memset(&masku5, '\0', sizeof(masku5));
     masku5.u5 = 1;
-    ptree->appendChild("u5", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku5));
+    if (1 == sizeof(masku5))
+        ptree->appendChild("u5", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku5));
+    else if (2 == sizeof(masku5))
+        ptree->appendChild("u5", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku5));
+    else
+        ptree->appendChild("u5", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku5));
     Hero_Ability maskPrayermaster;
     memset(&maskPrayermaster, '\0', sizeof(maskPrayermaster));
     maskPrayermaster.Prayermaster = 1;
-    ptree->appendChild("Prayermaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPrayermaster));
+    if (1 == sizeof(maskPrayermaster))
+        ptree->appendChild("Prayermaster", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPrayermaster));
+    else if (2 == sizeof(maskPrayermaster))
+        ptree->appendChild("Prayermaster", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPrayermaster));
+    else
+        ptree->appendChild("Prayermaster", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPrayermaster));
     Hero_Ability maskPrayermaster_X;
     memset(&maskPrayermaster_X, '\0', sizeof(maskPrayermaster_X));
     maskPrayermaster_X.Prayermaster_X = 1;
-    ptree->appendChild("Prayermaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPrayermaster_X));
+    if (1 == sizeof(maskPrayermaster_X))
+        ptree->appendChild("Prayermaster_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPrayermaster_X));
+    else if (2 == sizeof(maskPrayermaster_X))
+        ptree->appendChild("Prayermaster_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPrayermaster_X));
+    else
+        ptree->appendChild("Prayermaster_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPrayermaster_X));
     Hero_Ability maskAgility_X;
     memset(&maskAgility_X, '\0', sizeof(maskAgility_X));
     maskAgility_X.Agility_X = 1;
-    ptree->appendChild("Agility_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAgility_X));
+    if (1 == sizeof(maskAgility_X))
+        ptree->appendChild("Agility_X", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAgility_X));
+    else if (2 == sizeof(maskAgility_X))
+        ptree->appendChild("Agility_X", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskAgility_X));
+    else
+        ptree->appendChild("Agility_X", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskAgility_X));
     Hero_Ability maskLucky;
     memset(&maskLucky, '\0', sizeof(maskLucky));
     maskLucky.Lucky = 1;
-    ptree->appendChild("Lucky", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLucky));
+    if (1 == sizeof(maskLucky))
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLucky));
+    else if (2 == sizeof(maskLucky))
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLucky));
+    else
+        ptree->appendChild("Lucky", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLucky));
     Hero_Ability maskCharmed;
     memset(&maskCharmed, '\0', sizeof(maskCharmed));
     maskCharmed.Charmed = 1;
-    ptree->appendChild("Charmed", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCharmed));
+    if (1 == sizeof(maskCharmed))
+        ptree->appendChild("Charmed", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCharmed));
+    else if (2 == sizeof(maskCharmed))
+        ptree->appendChild("Charmed", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCharmed));
+    else
+        ptree->appendChild("Charmed", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCharmed));
     Hero_Ability maskNoble;
     memset(&maskNoble, '\0', sizeof(maskNoble));
     maskNoble.Noble = 1;
-    ptree->appendChild("Noble", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNoble));
+    if (1 == sizeof(maskNoble))
+        ptree->appendChild("Noble", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNoble));
+    else if (2 == sizeof(maskNoble))
+        ptree->appendChild("Noble", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNoble));
+    else
+        ptree->appendChild("Noble", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNoble));
     Hero_Ability masku8;
     memset(&masku8, '\0', sizeof(masku8));
     masku8.u8 = 1;
-    ptree->appendChild("u8", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku8));
+    if (1 == sizeof(masku8))
+        ptree->appendChild("u8", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku8));
+    else if (2 == sizeof(masku8))
+        ptree->appendChild("u8", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku8));
+    else
+        ptree->appendChild("u8", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku8));
     Hero_Ability maskAgility;
     memset(&maskAgility, '\0', sizeof(maskAgility));
     maskAgility.Agility = 1;
-    ptree->appendChild("Agility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAgility));
+    if (1 == sizeof(maskAgility))
+        ptree->appendChild("Agility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskAgility));
+    else if (2 == sizeof(maskAgility))
+        ptree->appendChild("Agility", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskAgility));
+    else
+        ptree->appendChild("Agility", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskAgility));
     return ptree;
 }
 
@@ -1442,35 +1922,75 @@ QMoMTreeItemBase* constructTreeItem(Immunity_Flags* rhs, const QString& context)
     Immunity_Flags maskFire_Immunity;
     memset(&maskFire_Immunity, '\0', sizeof(maskFire_Immunity));
     maskFire_Immunity.Fire_Immunity = 1;
-    ptree->appendChild("Fire_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFire_Immunity));
+    if (1 == sizeof(maskFire_Immunity))
+        ptree->appendChild("Fire_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFire_Immunity));
+    else if (2 == sizeof(maskFire_Immunity))
+        ptree->appendChild("Fire_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFire_Immunity));
+    else
+        ptree->appendChild("Fire_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFire_Immunity));
     Immunity_Flags maskStoning_Immunity;
     memset(&maskStoning_Immunity, '\0', sizeof(maskStoning_Immunity));
     maskStoning_Immunity.Stoning_Immunity = 1;
-    ptree->appendChild("Stoning_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning_Immunity));
+    if (1 == sizeof(maskStoning_Immunity))
+        ptree->appendChild("Stoning_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning_Immunity));
+    else if (2 == sizeof(maskStoning_Immunity))
+        ptree->appendChild("Stoning_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStoning_Immunity));
+    else
+        ptree->appendChild("Stoning_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStoning_Immunity));
     Immunity_Flags maskMissiles_Immunity;
     memset(&maskMissiles_Immunity, '\0', sizeof(maskMissiles_Immunity));
     maskMissiles_Immunity.Missiles_Immunity = 1;
-    ptree->appendChild("Missiles_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMissiles_Immunity));
+    if (1 == sizeof(maskMissiles_Immunity))
+        ptree->appendChild("Missiles_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMissiles_Immunity));
+    else if (2 == sizeof(maskMissiles_Immunity))
+        ptree->appendChild("Missiles_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMissiles_Immunity));
+    else
+        ptree->appendChild("Missiles_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMissiles_Immunity));
     Immunity_Flags maskIllusions_Immunity;
     memset(&maskIllusions_Immunity, '\0', sizeof(maskIllusions_Immunity));
     maskIllusions_Immunity.Illusions_Immunity = 1;
-    ptree->appendChild("Illusions_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIllusions_Immunity));
+    if (1 == sizeof(maskIllusions_Immunity))
+        ptree->appendChild("Illusions_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIllusions_Immunity));
+    else if (2 == sizeof(maskIllusions_Immunity))
+        ptree->appendChild("Illusions_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskIllusions_Immunity));
+    else
+        ptree->appendChild("Illusions_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskIllusions_Immunity));
     Immunity_Flags maskCold_Immunity;
     memset(&maskCold_Immunity, '\0', sizeof(maskCold_Immunity));
     maskCold_Immunity.Cold_Immunity = 1;
-    ptree->appendChild("Cold_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCold_Immunity));
+    if (1 == sizeof(maskCold_Immunity))
+        ptree->appendChild("Cold_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCold_Immunity));
+    else if (2 == sizeof(maskCold_Immunity))
+        ptree->appendChild("Cold_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCold_Immunity));
+    else
+        ptree->appendChild("Cold_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCold_Immunity));
     Immunity_Flags maskMagic_Immunity;
     memset(&maskMagic_Immunity, '\0', sizeof(maskMagic_Immunity));
     maskMagic_Immunity.Magic_Immunity = 1;
-    ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    if (1 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    else if (2 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMagic_Immunity));
+    else
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMagic_Immunity));
     Immunity_Flags maskDeath_Immunity;
     memset(&maskDeath_Immunity, '\0', sizeof(maskDeath_Immunity));
     maskDeath_Immunity.Death_Immunity = 1;
-    ptree->appendChild("Death_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath_Immunity));
+    if (1 == sizeof(maskDeath_Immunity))
+        ptree->appendChild("Death_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath_Immunity));
+    else if (2 == sizeof(maskDeath_Immunity))
+        ptree->appendChild("Death_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDeath_Immunity));
+    else
+        ptree->appendChild("Death_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDeath_Immunity));
     Immunity_Flags maskPoison_Immunity;
     memset(&maskPoison_Immunity, '\0', sizeof(maskPoison_Immunity));
     maskPoison_Immunity.Poison_Immunity = 1;
-    ptree->appendChild("Poison_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPoison_Immunity));
+    if (1 == sizeof(maskPoison_Immunity))
+        ptree->appendChild("Poison_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPoison_Immunity));
+    else if (2 == sizeof(maskPoison_Immunity))
+        ptree->appendChild("Poison_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPoison_Immunity));
+    else
+        ptree->appendChild("Poison_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPoison_Immunity));
     return ptree;
 }
 
@@ -1551,131 +2071,291 @@ QMoMTreeItemBase* constructTreeItem(Item_Powers* rhs, const QString& context)
     Item_Powers maskVampiric;
     memset(&maskVampiric, '\0', sizeof(maskVampiric));
     maskVampiric.Vampiric = 1;
-    ptree->appendChild("Vampiric", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVampiric));
+    if (1 == sizeof(maskVampiric))
+        ptree->appendChild("Vampiric", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVampiric));
+    else if (2 == sizeof(maskVampiric))
+        ptree->appendChild("Vampiric", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskVampiric));
+    else
+        ptree->appendChild("Vampiric", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskVampiric));
     Item_Powers maskGuardian_Wind;
     memset(&maskGuardian_Wind, '\0', sizeof(maskGuardian_Wind));
     maskGuardian_Wind.Guardian_Wind = 1;
-    ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGuardian_Wind));
+    if (1 == sizeof(maskGuardian_Wind))
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGuardian_Wind));
+    else if (2 == sizeof(maskGuardian_Wind))
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskGuardian_Wind));
+    else
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskGuardian_Wind));
     Item_Powers maskLightning;
     memset(&maskLightning, '\0', sizeof(maskLightning));
     maskLightning.Lightning = 1;
-    ptree->appendChild("Lightning", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLightning));
+    if (1 == sizeof(maskLightning))
+        ptree->appendChild("Lightning", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLightning));
+    else if (2 == sizeof(maskLightning))
+        ptree->appendChild("Lightning", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLightning));
+    else
+        ptree->appendChild("Lightning", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLightning));
     Item_Powers maskCloak_Of_Fear;
     memset(&maskCloak_Of_Fear, '\0', sizeof(maskCloak_Of_Fear));
     maskCloak_Of_Fear.Cloak_Of_Fear = 1;
-    ptree->appendChild("Cloak_Of_Fear", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCloak_Of_Fear));
+    if (1 == sizeof(maskCloak_Of_Fear))
+        ptree->appendChild("Cloak_Of_Fear", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCloak_Of_Fear));
+    else if (2 == sizeof(maskCloak_Of_Fear))
+        ptree->appendChild("Cloak_Of_Fear", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCloak_Of_Fear));
+    else
+        ptree->appendChild("Cloak_Of_Fear", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCloak_Of_Fear));
     Item_Powers maskDestruction;
     memset(&maskDestruction, '\0', sizeof(maskDestruction));
     maskDestruction.Destruction = 1;
-    ptree->appendChild("Destruction", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDestruction));
+    if (1 == sizeof(maskDestruction))
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDestruction));
+    else if (2 == sizeof(maskDestruction))
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDestruction));
+    else
+        ptree->appendChild("Destruction", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDestruction));
     Item_Powers maskWraith_Form;
     memset(&maskWraith_Form, '\0', sizeof(maskWraith_Form));
     maskWraith_Form.Wraith_Form = 1;
-    ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWraith_Form));
+    if (1 == sizeof(maskWraith_Form))
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWraith_Form));
+    else if (2 == sizeof(maskWraith_Form))
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWraith_Form));
+    else
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWraith_Form));
     Item_Powers maskRegeneration;
     memset(&maskRegeneration, '\0', sizeof(maskRegeneration));
     maskRegeneration.Regeneration = 1;
-    ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    if (1 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    else if (2 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskRegeneration));
+    else
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskRegeneration));
     Item_Powers maskPathfinding;
     memset(&maskPathfinding, '\0', sizeof(maskPathfinding));
     maskPathfinding.Pathfinding = 1;
-    ptree->appendChild("Pathfinding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPathfinding));
+    if (1 == sizeof(maskPathfinding))
+        ptree->appendChild("Pathfinding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPathfinding));
+    else if (2 == sizeof(maskPathfinding))
+        ptree->appendChild("Pathfinding", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPathfinding));
+    else
+        ptree->appendChild("Pathfinding", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPathfinding));
     Item_Powers maskWater_Walking;
     memset(&maskWater_Walking, '\0', sizeof(maskWater_Walking));
     maskWater_Walking.Water_Walking = 1;
-    ptree->appendChild("Water_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWater_Walking));
+    if (1 == sizeof(maskWater_Walking))
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWater_Walking));
+    else if (2 == sizeof(maskWater_Walking))
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWater_Walking));
+    else
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWater_Walking));
     Item_Powers maskResist_Elements;
     memset(&maskResist_Elements, '\0', sizeof(maskResist_Elements));
     maskResist_Elements.Resist_Elements = 1;
-    ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Elements));
+    if (1 == sizeof(maskResist_Elements))
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Elements));
+    else if (2 == sizeof(maskResist_Elements))
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskResist_Elements));
+    else
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskResist_Elements));
     Item_Powers maskElemental_Armour;
     memset(&maskElemental_Armour, '\0', sizeof(maskElemental_Armour));
     maskElemental_Armour.Elemental_Armour = 1;
-    ptree->appendChild("Elemental_Armour", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskElemental_Armour));
+    if (1 == sizeof(maskElemental_Armour))
+        ptree->appendChild("Elemental_Armour", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskElemental_Armour));
+    else if (2 == sizeof(maskElemental_Armour))
+        ptree->appendChild("Elemental_Armour", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskElemental_Armour));
+    else
+        ptree->appendChild("Elemental_Armour", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskElemental_Armour));
     Item_Powers maskDoom_equals_Chaos;
     memset(&maskDoom_equals_Chaos, '\0', sizeof(maskDoom_equals_Chaos));
     maskDoom_equals_Chaos.Doom_equals_Chaos = 1;
-    ptree->appendChild("Doom_equals_Chaos", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDoom_equals_Chaos));
+    if (1 == sizeof(maskDoom_equals_Chaos))
+        ptree->appendChild("Doom_equals_Chaos", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDoom_equals_Chaos));
+    else if (2 == sizeof(maskDoom_equals_Chaos))
+        ptree->appendChild("Doom_equals_Chaos", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDoom_equals_Chaos));
+    else
+        ptree->appendChild("Doom_equals_Chaos", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDoom_equals_Chaos));
     Item_Powers maskStoning;
     memset(&maskStoning, '\0', sizeof(maskStoning));
     maskStoning.Stoning = 1;
-    ptree->appendChild("Stoning", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning));
+    if (1 == sizeof(maskStoning))
+        ptree->appendChild("Stoning", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStoning));
+    else if (2 == sizeof(maskStoning))
+        ptree->appendChild("Stoning", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStoning));
+    else
+        ptree->appendChild("Stoning", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStoning));
     Item_Powers maskEndurance;
     memset(&maskEndurance, '\0', sizeof(maskEndurance));
     maskEndurance.Endurance = 1;
-    ptree->appendChild("Endurance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEndurance));
+    if (1 == sizeof(maskEndurance))
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEndurance));
+    else if (2 == sizeof(maskEndurance))
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskEndurance));
+    else
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskEndurance));
     Item_Powers maskHaste;
     memset(&maskHaste, '\0', sizeof(maskHaste));
     maskHaste.Haste = 1;
-    ptree->appendChild("Haste", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHaste));
+    if (1 == sizeof(maskHaste))
+        ptree->appendChild("Haste", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHaste));
+    else if (2 == sizeof(maskHaste))
+        ptree->appendChild("Haste", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHaste));
+    else
+        ptree->appendChild("Haste", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHaste));
     Item_Powers maskInvisibility;
     memset(&maskInvisibility, '\0', sizeof(maskInvisibility));
     maskInvisibility.Invisibility = 1;
-    ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    if (1 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    else if (2 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskInvisibility));
+    else
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskInvisibility));
     Item_Powers maskDeath;
     memset(&maskDeath, '\0', sizeof(maskDeath));
     maskDeath.Death = 1;
-    ptree->appendChild("Death", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath));
+    if (1 == sizeof(maskDeath))
+        ptree->appendChild("Death", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskDeath));
+    else if (2 == sizeof(maskDeath))
+        ptree->appendChild("Death", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDeath));
+    else
+        ptree->appendChild("Death", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDeath));
     Item_Powers maskFlight;
     memset(&maskFlight, '\0', sizeof(maskFlight));
     maskFlight.Flight = 1;
-    ptree->appendChild("Flight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlight));
+    if (1 == sizeof(maskFlight))
+        ptree->appendChild("Flight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlight));
+    else if (2 == sizeof(maskFlight))
+        ptree->appendChild("Flight", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlight));
+    else
+        ptree->appendChild("Flight", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlight));
     Item_Powers maskResist_Magic;
     memset(&maskResist_Magic, '\0', sizeof(maskResist_Magic));
     maskResist_Magic.Resist_Magic = 1;
-    ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Magic));
+    if (1 == sizeof(maskResist_Magic))
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Magic));
+    else if (2 == sizeof(maskResist_Magic))
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskResist_Magic));
+    else
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskResist_Magic));
     Item_Powers maskMagic_Immunity;
     memset(&maskMagic_Immunity, '\0', sizeof(maskMagic_Immunity));
     maskMagic_Immunity.Magic_Immunity = 1;
-    ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    if (1 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    else if (2 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMagic_Immunity));
+    else
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMagic_Immunity));
     Item_Powers maskFlaming;
     memset(&maskFlaming, '\0', sizeof(maskFlaming));
     maskFlaming.Flaming = 1;
-    ptree->appendChild("Flaming", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlaming));
+    if (1 == sizeof(maskFlaming))
+        ptree->appendChild("Flaming", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlaming));
+    else if (2 == sizeof(maskFlaming))
+        ptree->appendChild("Flaming", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlaming));
+    else
+        ptree->appendChild("Flaming", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlaming));
     Item_Powers maskHoly_Avenger;
     memset(&maskHoly_Avenger, '\0', sizeof(maskHoly_Avenger));
     maskHoly_Avenger.Holy_Avenger = 1;
-    ptree->appendChild("Holy_Avenger", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Avenger));
+    if (1 == sizeof(maskHoly_Avenger))
+        ptree->appendChild("Holy_Avenger", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Avenger));
+    else if (2 == sizeof(maskHoly_Avenger))
+        ptree->appendChild("Holy_Avenger", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHoly_Avenger));
+    else
+        ptree->appendChild("Holy_Avenger", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHoly_Avenger));
     Item_Powers maskTrue_Sight;
     memset(&maskTrue_Sight, '\0', sizeof(maskTrue_Sight));
     maskTrue_Sight.True_Sight = 1;
-    ptree->appendChild("True_Sight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTrue_Sight));
+    if (1 == sizeof(maskTrue_Sight))
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTrue_Sight));
+    else if (2 == sizeof(maskTrue_Sight))
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskTrue_Sight));
+    else
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskTrue_Sight));
     Item_Powers maskPhantasmal;
     memset(&maskPhantasmal, '\0', sizeof(maskPhantasmal));
     maskPhantasmal.Phantasmal = 1;
-    ptree->appendChild("Phantasmal", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPhantasmal));
+    if (1 == sizeof(maskPhantasmal))
+        ptree->appendChild("Phantasmal", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPhantasmal));
+    else if (2 == sizeof(maskPhantasmal))
+        ptree->appendChild("Phantasmal", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPhantasmal));
+    else
+        ptree->appendChild("Phantasmal", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPhantasmal));
     Item_Powers maskPower_Drain;
     memset(&maskPower_Drain, '\0', sizeof(maskPower_Drain));
     maskPower_Drain.Power_Drain = 1;
-    ptree->appendChild("Power_Drain", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPower_Drain));
+    if (1 == sizeof(maskPower_Drain))
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPower_Drain));
+    else if (2 == sizeof(maskPower_Drain))
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPower_Drain));
+    else
+        ptree->appendChild("Power_Drain", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPower_Drain));
     Item_Powers maskBless;
     memset(&maskBless, '\0', sizeof(maskBless));
     maskBless.Bless = 1;
-    ptree->appendChild("Bless", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBless));
+    if (1 == sizeof(maskBless))
+        ptree->appendChild("Bless", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBless));
+    else if (2 == sizeof(maskBless))
+        ptree->appendChild("Bless", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBless));
+    else
+        ptree->appendChild("Bless", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBless));
     Item_Powers maskLion_Heart;
     memset(&maskLion_Heart, '\0', sizeof(maskLion_Heart));
     maskLion_Heart.Lion_Heart = 1;
-    ptree->appendChild("Lion_Heart", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLion_Heart));
+    if (1 == sizeof(maskLion_Heart))
+        ptree->appendChild("Lion_Heart", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLion_Heart));
+    else if (2 == sizeof(maskLion_Heart))
+        ptree->appendChild("Lion_Heart", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLion_Heart));
+    else
+        ptree->appendChild("Lion_Heart", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLion_Heart));
     Item_Powers maskGiant_Strength;
     memset(&maskGiant_Strength, '\0', sizeof(maskGiant_Strength));
     maskGiant_Strength.Giant_Strength = 1;
-    ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGiant_Strength));
+    if (1 == sizeof(maskGiant_Strength))
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGiant_Strength));
+    else if (2 == sizeof(maskGiant_Strength))
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskGiant_Strength));
+    else
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskGiant_Strength));
     Item_Powers maskPlanar_Travel;
     memset(&maskPlanar_Travel, '\0', sizeof(maskPlanar_Travel));
     maskPlanar_Travel.Planar_Travel = 1;
-    ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlanar_Travel));
+    if (1 == sizeof(maskPlanar_Travel))
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlanar_Travel));
+    else if (2 == sizeof(maskPlanar_Travel))
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPlanar_Travel));
+    else
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPlanar_Travel));
     Item_Powers maskMerging;
     memset(&maskMerging, '\0', sizeof(maskMerging));
     maskMerging.Merging = 1;
-    ptree->appendChild("Merging", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMerging));
+    if (1 == sizeof(maskMerging))
+        ptree->appendChild("Merging", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMerging));
+    else if (2 == sizeof(maskMerging))
+        ptree->appendChild("Merging", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMerging));
+    else
+        ptree->appendChild("Merging", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMerging));
     Item_Powers maskRighteousness;
     memset(&maskRighteousness, '\0', sizeof(maskRighteousness));
     maskRighteousness.Righteousness = 1;
-    ptree->appendChild("Righteousness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRighteousness));
+    if (1 == sizeof(maskRighteousness))
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRighteousness));
+    else if (2 == sizeof(maskRighteousness))
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskRighteousness));
+    else
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskRighteousness));
     Item_Powers maskInvulnerability;
     memset(&maskInvulnerability, '\0', sizeof(maskInvulnerability));
     maskInvulnerability.Invulnerability = 1;
-    ptree->appendChild("Invulnerability", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvulnerability));
+    if (1 == sizeof(maskInvulnerability))
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvulnerability));
+    else if (2 == sizeof(maskInvulnerability))
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskInvulnerability));
+    else
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskInvulnerability));
     return ptree;
 }
 
@@ -1701,11 +2381,21 @@ QMoMTreeItemBase* constructTreeItem(Lair_Inhabitant* rhs, const QString& context
     Lair_Inhabitant maskm_Remaining_Nr_of_Inhabitant;
     memset(&maskm_Remaining_Nr_of_Inhabitant, '\0', sizeof(maskm_Remaining_Nr_of_Inhabitant));
     maskm_Remaining_Nr_of_Inhabitant.m_Remaining_Nr_of_Inhabitant = 15;
-    ptree->appendChild("m_Remaining_Nr_of_Inhabitant", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Remaining_Nr_of_Inhabitant));
+    if (1 == sizeof(maskm_Remaining_Nr_of_Inhabitant))
+        ptree->appendChild("m_Remaining_Nr_of_Inhabitant", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Remaining_Nr_of_Inhabitant));
+    else if (2 == sizeof(maskm_Remaining_Nr_of_Inhabitant))
+        ptree->appendChild("m_Remaining_Nr_of_Inhabitant", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_Remaining_Nr_of_Inhabitant));
+    else
+        ptree->appendChild("m_Remaining_Nr_of_Inhabitant", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_Remaining_Nr_of_Inhabitant));
     Lair_Inhabitant maskm_Initial_Nr_of_Inhabitant;
     memset(&maskm_Initial_Nr_of_Inhabitant, '\0', sizeof(maskm_Initial_Nr_of_Inhabitant));
     maskm_Initial_Nr_of_Inhabitant.m_Initial_Nr_of_Inhabitant = 15;
-    ptree->appendChild("m_Initial_Nr_of_Inhabitant", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Initial_Nr_of_Inhabitant));
+    if (1 == sizeof(maskm_Initial_Nr_of_Inhabitant))
+        ptree->appendChild("m_Initial_Nr_of_Inhabitant", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Initial_Nr_of_Inhabitant));
+    else if (2 == sizeof(maskm_Initial_Nr_of_Inhabitant))
+        ptree->appendChild("m_Initial_Nr_of_Inhabitant", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_Initial_Nr_of_Inhabitant));
+    else
+        ptree->appendChild("m_Initial_Nr_of_Inhabitant", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_Initial_Nr_of_Inhabitant));
     return ptree;
 }
 
@@ -2814,35 +3504,75 @@ QMoMTreeItemBase* constructTreeItem(Movement_Flags* rhs, const QString& context)
     Movement_Flags maskCavalry;
     memset(&maskCavalry, '\0', sizeof(maskCavalry));
     maskCavalry.Cavalry = 1;
-    ptree->appendChild("Cavalry", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCavalry));
+    if (1 == sizeof(maskCavalry))
+        ptree->appendChild("Cavalry", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCavalry));
+    else if (2 == sizeof(maskCavalry))
+        ptree->appendChild("Cavalry", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCavalry));
+    else
+        ptree->appendChild("Cavalry", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCavalry));
     Movement_Flags maskSailing;
     memset(&maskSailing, '\0', sizeof(maskSailing));
     maskSailing.Sailing = 1;
-    ptree->appendChild("Sailing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSailing));
+    if (1 == sizeof(maskSailing))
+        ptree->appendChild("Sailing", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSailing));
+    else if (2 == sizeof(maskSailing))
+        ptree->appendChild("Sailing", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSailing));
+    else
+        ptree->appendChild("Sailing", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSailing));
     Movement_Flags maskSwimming;
     memset(&maskSwimming, '\0', sizeof(maskSwimming));
     maskSwimming.Swimming = 1;
-    ptree->appendChild("Swimming", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSwimming));
+    if (1 == sizeof(maskSwimming))
+        ptree->appendChild("Swimming", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSwimming));
+    else if (2 == sizeof(maskSwimming))
+        ptree->appendChild("Swimming", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSwimming));
+    else
+        ptree->appendChild("Swimming", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSwimming));
     Movement_Flags maskFlying;
     memset(&maskFlying, '\0', sizeof(maskFlying));
     maskFlying.Flying = 1;
-    ptree->appendChild("Flying", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlying));
+    if (1 == sizeof(maskFlying))
+        ptree->appendChild("Flying", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlying));
+    else if (2 == sizeof(maskFlying))
+        ptree->appendChild("Flying", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlying));
+    else
+        ptree->appendChild("Flying", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlying));
     Movement_Flags maskTeleporting;
     memset(&maskTeleporting, '\0', sizeof(maskTeleporting));
     maskTeleporting.Teleporting = 1;
-    ptree->appendChild("Teleporting", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTeleporting));
+    if (1 == sizeof(maskTeleporting))
+        ptree->appendChild("Teleporting", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTeleporting));
+    else if (2 == sizeof(maskTeleporting))
+        ptree->appendChild("Teleporting", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskTeleporting));
+    else
+        ptree->appendChild("Teleporting", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskTeleporting));
     Movement_Flags maskForester;
     memset(&maskForester, '\0', sizeof(maskForester));
     maskForester.Forester = 1;
-    ptree->appendChild("Forester", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskForester));
+    if (1 == sizeof(maskForester))
+        ptree->appendChild("Forester", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskForester));
+    else if (2 == sizeof(maskForester))
+        ptree->appendChild("Forester", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskForester));
+    else
+        ptree->appendChild("Forester", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskForester));
     Movement_Flags maskMountaineer;
     memset(&maskMountaineer, '\0', sizeof(maskMountaineer));
     maskMountaineer.Mountaineer = 1;
-    ptree->appendChild("Mountaineer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMountaineer));
+    if (1 == sizeof(maskMountaineer))
+        ptree->appendChild("Mountaineer", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMountaineer));
+    else if (2 == sizeof(maskMountaineer))
+        ptree->appendChild("Mountaineer", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMountaineer));
+    else
+        ptree->appendChild("Mountaineer", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMountaineer));
     Movement_Flags maskMerging;
     memset(&maskMerging, '\0', sizeof(maskMerging));
     maskMerging.Merging = 1;
-    ptree->appendChild("Merging", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMerging));
+    if (1 == sizeof(maskMerging))
+        ptree->appendChild("Merging", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMerging));
+    else if (2 == sizeof(maskMerging))
+        ptree->appendChild("Merging", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMerging));
+    else
+        ptree->appendChild("Merging", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMerging));
     return ptree;
 }
 
@@ -3515,27 +4245,57 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
     Terrain_Flags maskVolcano_producing_for_Owner;
     memset(&maskVolcano_producing_for_Owner, '\0', sizeof(maskVolcano_producing_for_Owner));
     maskVolcano_producing_for_Owner.Volcano_producing_for_Owner = 7;
-    ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVolcano_producing_for_Owner));
+    if (1 == sizeof(maskVolcano_producing_for_Owner))
+        ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskVolcano_producing_for_Owner));
+    else if (2 == sizeof(maskVolcano_producing_for_Owner))
+        ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskVolcano_producing_for_Owner));
+    else
+        ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskVolcano_producing_for_Owner));
     Terrain_Flags maskroad;
     memset(&maskroad, '\0', sizeof(maskroad));
     maskroad.road = 1;
-    ptree->appendChild("road", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskroad));
+    if (1 == sizeof(maskroad))
+        ptree->appendChild("road", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskroad));
+    else if (2 == sizeof(maskroad))
+        ptree->appendChild("road", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskroad));
+    else
+        ptree->appendChild("road", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskroad));
     Terrain_Flags maskenchanted_road;
     memset(&maskenchanted_road, '\0', sizeof(maskenchanted_road));
     maskenchanted_road.enchanted_road = 1;
-    ptree->appendChild("enchanted_road", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskenchanted_road));
+    if (1 == sizeof(maskenchanted_road))
+        ptree->appendChild("enchanted_road", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskenchanted_road));
+    else if (2 == sizeof(maskenchanted_road))
+        ptree->appendChild("enchanted_road", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskenchanted_road));
+    else
+        ptree->appendChild("enchanted_road", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskenchanted_road));
     Terrain_Flags maskcorruption;
     memset(&maskcorruption, '\0', sizeof(maskcorruption));
     maskcorruption.corruption = 1;
-    ptree->appendChild("corruption", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskcorruption));
+    if (1 == sizeof(maskcorruption))
+        ptree->appendChild("corruption", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskcorruption));
+    else if (2 == sizeof(maskcorruption))
+        ptree->appendChild("corruption", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskcorruption));
+    else
+        ptree->appendChild("corruption", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskcorruption));
     Terrain_Flags masku1;
     memset(&masku1, '\0', sizeof(masku1));
     masku1.u1 = 1;
-    ptree->appendChild("u1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku1));
+    if (1 == sizeof(masku1))
+        ptree->appendChild("u1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku1));
+    else if (2 == sizeof(masku1))
+        ptree->appendChild("u1", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku1));
+    else
+        ptree->appendChild("u1", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku1));
     Terrain_Flags masku2;
     memset(&masku2, '\0', sizeof(masku2));
     masku2.u2 = 1;
-    ptree->appendChild("u2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku2));
+    if (1 == sizeof(masku2))
+        ptree->appendChild("u2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku2));
+    else if (2 == sizeof(masku2))
+        ptree->appendChild("u2", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku2));
+    else
+        ptree->appendChild("u2", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku2));
     return ptree;
 }
 
@@ -3595,19 +4355,39 @@ QMoMTreeItemBase* constructTreeItem(Tower_Node_Lair_Flags* rhs, const QString& c
     Tower_Node_Lair_Flags maskm_Prisoner;
     memset(&maskm_Prisoner, '\0', sizeof(maskm_Prisoner));
     maskm_Prisoner.m_Prisoner = 1;
-    ptree->appendChild("m_Prisoner", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Prisoner));
+    if (1 == sizeof(maskm_Prisoner))
+        ptree->appendChild("m_Prisoner", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Prisoner));
+    else if (2 == sizeof(maskm_Prisoner))
+        ptree->appendChild("m_Prisoner", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_Prisoner));
+    else
+        ptree->appendChild("m_Prisoner", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_Prisoner));
     Tower_Node_Lair_Flags maskm_YOU_aware_Inhabitant1;
     memset(&maskm_YOU_aware_Inhabitant1, '\0', sizeof(maskm_YOU_aware_Inhabitant1));
     maskm_YOU_aware_Inhabitant1.m_YOU_aware_Inhabitant1 = 1;
-    ptree->appendChild("m_YOU_aware_Inhabitant1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_YOU_aware_Inhabitant1));
+    if (1 == sizeof(maskm_YOU_aware_Inhabitant1))
+        ptree->appendChild("m_YOU_aware_Inhabitant1", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_YOU_aware_Inhabitant1));
+    else if (2 == sizeof(maskm_YOU_aware_Inhabitant1))
+        ptree->appendChild("m_YOU_aware_Inhabitant1", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_YOU_aware_Inhabitant1));
+    else
+        ptree->appendChild("m_YOU_aware_Inhabitant1", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_YOU_aware_Inhabitant1));
     Tower_Node_Lair_Flags maskm_YOU_aware_Inhabitant2;
     memset(&maskm_YOU_aware_Inhabitant2, '\0', sizeof(maskm_YOU_aware_Inhabitant2));
     maskm_YOU_aware_Inhabitant2.m_YOU_aware_Inhabitant2 = 1;
-    ptree->appendChild("m_YOU_aware_Inhabitant2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_YOU_aware_Inhabitant2));
+    if (1 == sizeof(maskm_YOU_aware_Inhabitant2))
+        ptree->appendChild("m_YOU_aware_Inhabitant2", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_YOU_aware_Inhabitant2));
+    else if (2 == sizeof(maskm_YOU_aware_Inhabitant2))
+        ptree->appendChild("m_YOU_aware_Inhabitant2", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_YOU_aware_Inhabitant2));
+    else
+        ptree->appendChild("m_YOU_aware_Inhabitant2", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_YOU_aware_Inhabitant2));
     Tower_Node_Lair_Flags maskm_Zero;
     memset(&maskm_Zero, '\0', sizeof(maskm_Zero));
     maskm_Zero.m_Zero = 31;
-    ptree->appendChild("m_Zero", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Zero));
+    if (1 == sizeof(maskm_Zero))
+        ptree->appendChild("m_Zero", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskm_Zero));
+    else if (2 == sizeof(maskm_Zero))
+        ptree->appendChild("m_Zero", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskm_Zero));
+    else
+        ptree->appendChild("m_Zero", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskm_Zero));
     return ptree;
 }
 
@@ -3710,131 +4490,291 @@ QMoMTreeItemBase* constructTreeItem(Unit_Enchantment* rhs, const QString& contex
     Unit_Enchantment maskImmolation;
     memset(&maskImmolation, '\0', sizeof(maskImmolation));
     maskImmolation.Immolation = 1;
-    ptree->appendChild("Immolation", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskImmolation));
+    if (1 == sizeof(maskImmolation))
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskImmolation));
+    else if (2 == sizeof(maskImmolation))
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskImmolation));
+    else
+        ptree->appendChild("Immolation", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskImmolation));
     Unit_Enchantment maskGuardian_Wind;
     memset(&maskGuardian_Wind, '\0', sizeof(maskGuardian_Wind));
     maskGuardian_Wind.Guardian_Wind = 1;
-    ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGuardian_Wind));
+    if (1 == sizeof(maskGuardian_Wind))
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGuardian_Wind));
+    else if (2 == sizeof(maskGuardian_Wind))
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskGuardian_Wind));
+    else
+        ptree->appendChild("Guardian_Wind", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskGuardian_Wind));
     Unit_Enchantment maskBerserk;
     memset(&maskBerserk, '\0', sizeof(maskBerserk));
     maskBerserk.Berserk = 1;
-    ptree->appendChild("Berserk", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBerserk));
+    if (1 == sizeof(maskBerserk))
+        ptree->appendChild("Berserk", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBerserk));
+    else if (2 == sizeof(maskBerserk))
+        ptree->appendChild("Berserk", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBerserk));
+    else
+        ptree->appendChild("Berserk", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBerserk));
     Unit_Enchantment maskCloak_of_Fear;
     memset(&maskCloak_of_Fear, '\0', sizeof(maskCloak_of_Fear));
     maskCloak_of_Fear.Cloak_of_Fear = 1;
-    ptree->appendChild("Cloak_of_Fear", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCloak_of_Fear));
+    if (1 == sizeof(maskCloak_of_Fear))
+        ptree->appendChild("Cloak_of_Fear", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskCloak_of_Fear));
+    else if (2 == sizeof(maskCloak_of_Fear))
+        ptree->appendChild("Cloak_of_Fear", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskCloak_of_Fear));
+    else
+        ptree->appendChild("Cloak_of_Fear", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskCloak_of_Fear));
     Unit_Enchantment maskBlack_Channels;
     memset(&maskBlack_Channels, '\0', sizeof(maskBlack_Channels));
     maskBlack_Channels.Black_Channels = 1;
-    ptree->appendChild("Black_Channels", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlack_Channels));
+    if (1 == sizeof(maskBlack_Channels))
+        ptree->appendChild("Black_Channels", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBlack_Channels));
+    else if (2 == sizeof(maskBlack_Channels))
+        ptree->appendChild("Black_Channels", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBlack_Channels));
+    else
+        ptree->appendChild("Black_Channels", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBlack_Channels));
     Unit_Enchantment maskWraith_Form;
     memset(&maskWraith_Form, '\0', sizeof(maskWraith_Form));
     maskWraith_Form.Wraith_Form = 1;
-    ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWraith_Form));
+    if (1 == sizeof(maskWraith_Form))
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWraith_Form));
+    else if (2 == sizeof(maskWraith_Form))
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWraith_Form));
+    else
+        ptree->appendChild("Wraith_Form", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWraith_Form));
     Unit_Enchantment maskRegeneration;
     memset(&maskRegeneration, '\0', sizeof(maskRegeneration));
     maskRegeneration.Regeneration = 1;
-    ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    if (1 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRegeneration));
+    else if (2 == sizeof(maskRegeneration))
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskRegeneration));
+    else
+        ptree->appendChild("Regeneration", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskRegeneration));
     Unit_Enchantment maskPath_Finding;
     memset(&maskPath_Finding, '\0', sizeof(maskPath_Finding));
     maskPath_Finding.Path_Finding = 1;
-    ptree->appendChild("Path_Finding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPath_Finding));
+    if (1 == sizeof(maskPath_Finding))
+        ptree->appendChild("Path_Finding", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPath_Finding));
+    else if (2 == sizeof(maskPath_Finding))
+        ptree->appendChild("Path_Finding", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPath_Finding));
+    else
+        ptree->appendChild("Path_Finding", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPath_Finding));
     Unit_Enchantment maskWater_Walking;
     memset(&maskWater_Walking, '\0', sizeof(maskWater_Walking));
     maskWater_Walking.Water_Walking = 1;
-    ptree->appendChild("Water_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWater_Walking));
+    if (1 == sizeof(maskWater_Walking))
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWater_Walking));
+    else if (2 == sizeof(maskWater_Walking))
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWater_Walking));
+    else
+        ptree->appendChild("Water_Walking", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWater_Walking));
     Unit_Enchantment maskResist_Elements;
     memset(&maskResist_Elements, '\0', sizeof(maskResist_Elements));
     maskResist_Elements.Resist_Elements = 1;
-    ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Elements));
+    if (1 == sizeof(maskResist_Elements))
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Elements));
+    else if (2 == sizeof(maskResist_Elements))
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskResist_Elements));
+    else
+        ptree->appendChild("Resist_Elements", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskResist_Elements));
     Unit_Enchantment maskElemental_Armor;
     memset(&maskElemental_Armor, '\0', sizeof(maskElemental_Armor));
     maskElemental_Armor.Elemental_Armor = 1;
-    ptree->appendChild("Elemental_Armor", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskElemental_Armor));
+    if (1 == sizeof(maskElemental_Armor))
+        ptree->appendChild("Elemental_Armor", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskElemental_Armor));
+    else if (2 == sizeof(maskElemental_Armor))
+        ptree->appendChild("Elemental_Armor", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskElemental_Armor));
+    else
+        ptree->appendChild("Elemental_Armor", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskElemental_Armor));
     Unit_Enchantment maskStone_Skin;
     memset(&maskStone_Skin, '\0', sizeof(maskStone_Skin));
     maskStone_Skin.Stone_Skin = 1;
-    ptree->appendChild("Stone_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStone_Skin));
+    if (1 == sizeof(maskStone_Skin))
+        ptree->appendChild("Stone_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStone_Skin));
+    else if (2 == sizeof(maskStone_Skin))
+        ptree->appendChild("Stone_Skin", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStone_Skin));
+    else
+        ptree->appendChild("Stone_Skin", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStone_Skin));
     Unit_Enchantment maskIron_Skin;
     memset(&maskIron_Skin, '\0', sizeof(maskIron_Skin));
     maskIron_Skin.Iron_Skin = 1;
-    ptree->appendChild("Iron_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIron_Skin));
+    if (1 == sizeof(maskIron_Skin))
+        ptree->appendChild("Iron_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskIron_Skin));
+    else if (2 == sizeof(maskIron_Skin))
+        ptree->appendChild("Iron_Skin", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskIron_Skin));
+    else
+        ptree->appendChild("Iron_Skin", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskIron_Skin));
     Unit_Enchantment maskEndurance;
     memset(&maskEndurance, '\0', sizeof(maskEndurance));
     maskEndurance.Endurance = 1;
-    ptree->appendChild("Endurance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEndurance));
+    if (1 == sizeof(maskEndurance))
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEndurance));
+    else if (2 == sizeof(maskEndurance))
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskEndurance));
+    else
+        ptree->appendChild("Endurance", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskEndurance));
     Unit_Enchantment maskSpell_Lock;
     memset(&maskSpell_Lock, '\0', sizeof(maskSpell_Lock));
     maskSpell_Lock.Spell_Lock = 1;
-    ptree->appendChild("Spell_Lock", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSpell_Lock));
+    if (1 == sizeof(maskSpell_Lock))
+        ptree->appendChild("Spell_Lock", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskSpell_Lock));
+    else if (2 == sizeof(maskSpell_Lock))
+        ptree->appendChild("Spell_Lock", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskSpell_Lock));
+    else
+        ptree->appendChild("Spell_Lock", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskSpell_Lock));
     Unit_Enchantment maskInvisibility;
     memset(&maskInvisibility, '\0', sizeof(maskInvisibility));
     maskInvisibility.Invisibility = 1;
-    ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    if (1 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvisibility));
+    else if (2 == sizeof(maskInvisibility))
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskInvisibility));
+    else
+        ptree->appendChild("Invisibility", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskInvisibility));
     Unit_Enchantment maskWind_Walking;
     memset(&maskWind_Walking, '\0', sizeof(maskWind_Walking));
     maskWind_Walking.Wind_Walking = 1;
-    ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWind_Walking));
+    if (1 == sizeof(maskWind_Walking))
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWind_Walking));
+    else if (2 == sizeof(maskWind_Walking))
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWind_Walking));
+    else
+        ptree->appendChild("Wind_Walking", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWind_Walking));
     Unit_Enchantment maskFlight;
     memset(&maskFlight, '\0', sizeof(maskFlight));
     maskFlight.Flight = 1;
-    ptree->appendChild("Flight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlight));
+    if (1 == sizeof(maskFlight))
+        ptree->appendChild("Flight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlight));
+    else if (2 == sizeof(maskFlight))
+        ptree->appendChild("Flight", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlight));
+    else
+        ptree->appendChild("Flight", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlight));
     Unit_Enchantment maskResist_Magic;
     memset(&maskResist_Magic, '\0', sizeof(maskResist_Magic));
     maskResist_Magic.Resist_Magic = 1;
-    ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Magic));
+    if (1 == sizeof(maskResist_Magic))
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskResist_Magic));
+    else if (2 == sizeof(maskResist_Magic))
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskResist_Magic));
+    else
+        ptree->appendChild("Resist_Magic", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskResist_Magic));
     Unit_Enchantment maskMagic_Immunity;
     memset(&maskMagic_Immunity, '\0', sizeof(maskMagic_Immunity));
     maskMagic_Immunity.Magic_Immunity = 1;
-    ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    if (1 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskMagic_Immunity));
+    else if (2 == sizeof(maskMagic_Immunity))
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskMagic_Immunity));
+    else
+        ptree->appendChild("Magic_Immunity", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskMagic_Immunity));
     Unit_Enchantment maskFlame_Blade;
     memset(&maskFlame_Blade, '\0', sizeof(maskFlame_Blade));
     maskFlame_Blade.Flame_Blade = 1;
-    ptree->appendChild("Flame_Blade", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlame_Blade));
+    if (1 == sizeof(maskFlame_Blade))
+        ptree->appendChild("Flame_Blade", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFlame_Blade));
+    else if (2 == sizeof(maskFlame_Blade))
+        ptree->appendChild("Flame_Blade", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFlame_Blade));
+    else
+        ptree->appendChild("Flame_Blade", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFlame_Blade));
     Unit_Enchantment maskEldritch_Weapon;
     memset(&maskEldritch_Weapon, '\0', sizeof(maskEldritch_Weapon));
     maskEldritch_Weapon.Eldritch_Weapon = 1;
-    ptree->appendChild("Eldritch_Weapon", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEldritch_Weapon));
+    if (1 == sizeof(maskEldritch_Weapon))
+        ptree->appendChild("Eldritch_Weapon", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskEldritch_Weapon));
+    else if (2 == sizeof(maskEldritch_Weapon))
+        ptree->appendChild("Eldritch_Weapon", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskEldritch_Weapon));
+    else
+        ptree->appendChild("Eldritch_Weapon", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskEldritch_Weapon));
     Unit_Enchantment maskTrue_Sight;
     memset(&maskTrue_Sight, '\0', sizeof(maskTrue_Sight));
     maskTrue_Sight.True_Sight = 1;
-    ptree->appendChild("True_Sight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTrue_Sight));
+    if (1 == sizeof(maskTrue_Sight))
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskTrue_Sight));
+    else if (2 == sizeof(maskTrue_Sight))
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskTrue_Sight));
+    else
+        ptree->appendChild("True_Sight", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskTrue_Sight));
     Unit_Enchantment maskHoly_Weapon;
     memset(&maskHoly_Weapon, '\0', sizeof(maskHoly_Weapon));
     maskHoly_Weapon.Holy_Weapon = 1;
-    ptree->appendChild("Holy_Weapon", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Weapon));
+    if (1 == sizeof(maskHoly_Weapon))
+        ptree->appendChild("Holy_Weapon", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Weapon));
+    else if (2 == sizeof(maskHoly_Weapon))
+        ptree->appendChild("Holy_Weapon", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHoly_Weapon));
+    else
+        ptree->appendChild("Holy_Weapon", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHoly_Weapon));
     Unit_Enchantment maskHeroism;
     memset(&maskHeroism, '\0', sizeof(maskHeroism));
     maskHeroism.Heroism = 1;
-    ptree->appendChild("Heroism", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHeroism));
+    if (1 == sizeof(maskHeroism))
+        ptree->appendChild("Heroism", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHeroism));
+    else if (2 == sizeof(maskHeroism))
+        ptree->appendChild("Heroism", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHeroism));
+    else
+        ptree->appendChild("Heroism", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHeroism));
     Unit_Enchantment maskBless;
     memset(&maskBless, '\0', sizeof(maskBless));
     maskBless.Bless = 1;
-    ptree->appendChild("Bless", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBless));
+    if (1 == sizeof(maskBless))
+        ptree->appendChild("Bless", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBless));
+    else if (2 == sizeof(maskBless))
+        ptree->appendChild("Bless", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBless));
+    else
+        ptree->appendChild("Bless", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBless));
     Unit_Enchantment maskLionheart;
     memset(&maskLionheart, '\0', sizeof(maskLionheart));
     maskLionheart.Lionheart = 1;
-    ptree->appendChild("Lionheart", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLionheart));
+    if (1 == sizeof(maskLionheart))
+        ptree->appendChild("Lionheart", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskLionheart));
+    else if (2 == sizeof(maskLionheart))
+        ptree->appendChild("Lionheart", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskLionheart));
+    else
+        ptree->appendChild("Lionheart", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskLionheart));
     Unit_Enchantment maskGiant_Strength;
     memset(&maskGiant_Strength, '\0', sizeof(maskGiant_Strength));
     maskGiant_Strength.Giant_Strength = 1;
-    ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGiant_Strength));
+    if (1 == sizeof(maskGiant_Strength))
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskGiant_Strength));
+    else if (2 == sizeof(maskGiant_Strength))
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskGiant_Strength));
+    else
+        ptree->appendChild("Giant_Strength", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskGiant_Strength));
     Unit_Enchantment maskPlanar_Travel;
     memset(&maskPlanar_Travel, '\0', sizeof(maskPlanar_Travel));
     maskPlanar_Travel.Planar_Travel = 1;
-    ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlanar_Travel));
+    if (1 == sizeof(maskPlanar_Travel))
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskPlanar_Travel));
+    else if (2 == sizeof(maskPlanar_Travel))
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskPlanar_Travel));
+    else
+        ptree->appendChild("Planar_Travel", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskPlanar_Travel));
     Unit_Enchantment maskHoly_Armor;
     memset(&maskHoly_Armor, '\0', sizeof(maskHoly_Armor));
     maskHoly_Armor.Holy_Armor = 1;
-    ptree->appendChild("Holy_Armor", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Armor));
+    if (1 == sizeof(maskHoly_Armor))
+        ptree->appendChild("Holy_Armor", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskHoly_Armor));
+    else if (2 == sizeof(maskHoly_Armor))
+        ptree->appendChild("Holy_Armor", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskHoly_Armor));
+    else
+        ptree->appendChild("Holy_Armor", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskHoly_Armor));
     Unit_Enchantment maskRighteousness;
     memset(&maskRighteousness, '\0', sizeof(maskRighteousness));
     maskRighteousness.Righteousness = 1;
-    ptree->appendChild("Righteousness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRighteousness));
+    if (1 == sizeof(maskRighteousness))
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskRighteousness));
+    else if (2 == sizeof(maskRighteousness))
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskRighteousness));
+    else
+        ptree->appendChild("Righteousness", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskRighteousness));
     Unit_Enchantment maskInvulnerability;
     memset(&maskInvulnerability, '\0', sizeof(maskInvulnerability));
     maskInvulnerability.Invulnerability = 1;
-    ptree->appendChild("Invulnerability", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvulnerability));
+    if (1 == sizeof(maskInvulnerability))
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskInvulnerability));
+    else if (2 == sizeof(maskInvulnerability))
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskInvulnerability));
+    else
+        ptree->appendChild("Invulnerability", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskInvulnerability));
     return ptree;
 }
 
@@ -3887,31 +4827,66 @@ QMoMTreeItemBase* constructTreeItem(Unit_Weapon_Mutation* rhs, const QString& co
     Unit_Weapon_Mutation maskWeapon_Type;
     memset(&maskWeapon_Type, '\0', sizeof(maskWeapon_Type));
     maskWeapon_Type.Weapon_Type = 3;
-    ptree->appendChild("Weapon_Type", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeapon_Type));
+    if (1 == sizeof(maskWeapon_Type))
+        ptree->appendChild("Weapon_Type", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskWeapon_Type));
+    else if (2 == sizeof(maskWeapon_Type))
+        ptree->appendChild("Weapon_Type", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskWeapon_Type));
+    else
+        ptree->appendChild("Weapon_Type", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskWeapon_Type));
     Unit_Weapon_Mutation maskChaos_Channels_Demon_Skin;
     memset(&maskChaos_Channels_Demon_Skin, '\0', sizeof(maskChaos_Channels_Demon_Skin));
     maskChaos_Channels_Demon_Skin.Chaos_Channels_Demon_Skin = 1;
-    ptree->appendChild("Chaos_Channels_Demon_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Demon_Skin));
+    if (1 == sizeof(maskChaos_Channels_Demon_Skin))
+        ptree->appendChild("Chaos_Channels_Demon_Skin", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Demon_Skin));
+    else if (2 == sizeof(maskChaos_Channels_Demon_Skin))
+        ptree->appendChild("Chaos_Channels_Demon_Skin", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskChaos_Channels_Demon_Skin));
+    else
+        ptree->appendChild("Chaos_Channels_Demon_Skin", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskChaos_Channels_Demon_Skin));
     Unit_Weapon_Mutation maskChaos_Channels_Demon_Wings;
     memset(&maskChaos_Channels_Demon_Wings, '\0', sizeof(maskChaos_Channels_Demon_Wings));
     maskChaos_Channels_Demon_Wings.Chaos_Channels_Demon_Wings = 1;
-    ptree->appendChild("Chaos_Channels_Demon_Wings", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Demon_Wings));
+    if (1 == sizeof(maskChaos_Channels_Demon_Wings))
+        ptree->appendChild("Chaos_Channels_Demon_Wings", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Demon_Wings));
+    else if (2 == sizeof(maskChaos_Channels_Demon_Wings))
+        ptree->appendChild("Chaos_Channels_Demon_Wings", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskChaos_Channels_Demon_Wings));
+    else
+        ptree->appendChild("Chaos_Channels_Demon_Wings", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskChaos_Channels_Demon_Wings));
     Unit_Weapon_Mutation maskChaos_Channels_Fiery_Breath;
     memset(&maskChaos_Channels_Fiery_Breath, '\0', sizeof(maskChaos_Channels_Fiery_Breath));
     maskChaos_Channels_Fiery_Breath.Chaos_Channels_Fiery_Breath = 1;
-    ptree->appendChild("Chaos_Channels_Fiery_Breath", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Fiery_Breath));
+    if (1 == sizeof(maskChaos_Channels_Fiery_Breath))
+        ptree->appendChild("Chaos_Channels_Fiery_Breath", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskChaos_Channels_Fiery_Breath));
+    else if (2 == sizeof(maskChaos_Channels_Fiery_Breath))
+        ptree->appendChild("Chaos_Channels_Fiery_Breath", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskChaos_Channels_Fiery_Breath));
+    else
+        ptree->appendChild("Chaos_Channels_Fiery_Breath", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskChaos_Channels_Fiery_Breath));
     Unit_Weapon_Mutation maskUndead;
     memset(&maskUndead, '\0', sizeof(maskUndead));
     maskUndead.Undead = 1;
-    ptree->appendChild("Undead", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskUndead));
+    if (1 == sizeof(maskUndead))
+        ptree->appendChild("Undead", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskUndead));
+    else if (2 == sizeof(maskUndead))
+        ptree->appendChild("Undead", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskUndead));
+    else
+        ptree->appendChild("Undead", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskUndead));
     Unit_Weapon_Mutation maskStasis_initial;
     memset(&maskStasis_initial, '\0', sizeof(maskStasis_initial));
     maskStasis_initial.Stasis_initial = 1;
-    ptree->appendChild("Stasis_initial", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStasis_initial));
+    if (1 == sizeof(maskStasis_initial))
+        ptree->appendChild("Stasis_initial", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStasis_initial));
+    else if (2 == sizeof(maskStasis_initial))
+        ptree->appendChild("Stasis_initial", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStasis_initial));
+    else
+        ptree->appendChild("Stasis_initial", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStasis_initial));
     Unit_Weapon_Mutation maskStasis_lingering;
     memset(&maskStasis_lingering, '\0', sizeof(maskStasis_lingering));
     maskStasis_lingering.Stasis_lingering = 1;
-    ptree->appendChild("Stasis_lingering", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStasis_lingering));
+    if (1 == sizeof(maskStasis_lingering))
+        ptree->appendChild("Stasis_lingering", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskStasis_lingering));
+    else if (2 == sizeof(maskStasis_lingering))
+        ptree->appendChild("Stasis_lingering", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStasis_lingering));
+    else
+        ptree->appendChild("Stasis_lingering", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStasis_lingering));
     return ptree;
 }
 
