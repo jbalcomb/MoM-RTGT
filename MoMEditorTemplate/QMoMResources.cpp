@@ -45,42 +45,49 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
     {
 		qDebug() << MoM::getDateTimeStr() << ">QMoMResources::setGame() begin";
         m_game = game;
-        if (m_colorTable.empty())
-        {
-            (void)createColorTable();
-        }
-        if (m_buildingImages.empty())
-        {
-            (void)createBuildingImages();
-        }
-        if (m_itemImages.empty())
-        {
-            (void)createItemImages();
-        }
-        if (m_lairImages.empty())
-        {
-            (void)createLairImages();
-        }
-        if (m_specialsImages.empty())
-        {
-            (void)createSpecialsImages();
-        }
-        if (m_unitImages.empty())
-        {
-            // UnitImages are created before SpellImages, because SpellImages uses them
-            (void)createUnitImages();
-        }
-        if (m_spellImages.empty())
-        {
-            // UnitImages should already have been created, because SpellImages uses them
-            (void)createSpellImages();
-        }
-        if (m_terrainTypeImages.empty())
-        {
-            (void)createTerrainImages();
-        }
-		qDebug() << MoM::getDateTimeStr() << "<QMoMResources::setGame() end";
+
+        (void)createColorTable();
+
+        (void)createBuildingImages();
+        (void)createItemImages();
+        (void)createLairImages();
+        (void)createMapBackImages();
+        (void)createSpecialsImages();
+        // UnitImages are created before SpellImages, because SpellImages uses them
+        (void)createUnitImages();
+        // UnitImages should already have been created, because SpellImages uses them
+        (void)createSpellImages();
+        (void)createTerrainImages();
+
+        qDebug() << MoM::getDateTimeStr() << "<QMoMResources::setGame() end";
     }
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) const
+{
+    QMoMImagePtr image;
+    unsigned index = -1;
+    switch (bonusDeposit)
+    {
+    case DEPOSIT_Iron_Ore:      index = 78; break;
+    case DEPOSIT_Coal:          index = 79; break;
+    case DEPOSIT_Silver_Ore:    index = 80; break;
+    case DEPOSIT_Gold_Ore:      index = 81; break;
+    case DEPOSIT_Gems:          index = 82; break;
+    case DEPOSIT_Mithril_Ore:   index = 83; break;
+    case DEPOSIT_Adamantium_Ore:    index = 84; break;
+    case DEPOSIT_Quork:         index = 85; break;
+    case DEPOSIT_Crysx:         index = 86; break;
+    case DEPOSIT_Wild_Game:     index = 92; break;
+    case DEPOSIT_Nightshade:    index = 91; break;
+    case DEPOSIT_no_deposit:
+    default:                    break;
+    }
+    if (inRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
+    }
+    return image;
 }
 
 const QMoMImagePtr QMoMResources::getImage(eRace race) const
@@ -175,6 +182,22 @@ bool QMoMResources::createLairImages()
     for (size_t i = 0; i < MoM::eTower_Node_Lair_Type_MAX; ++i)
     {
         m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
+    }
+    return true;
+}
+
+bool QMoMResources::createMapBackImages()
+{
+    if (m_game.isNull())
+        return false;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return false;
+    m_mapBackImages.resize(lbx.getNrRecords());
+    for (size_t i = 0; i < lbx.getNrRecords(); ++i)
+    {
+        m_mapBackImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, toStr(i));
     }
     return true;
 }

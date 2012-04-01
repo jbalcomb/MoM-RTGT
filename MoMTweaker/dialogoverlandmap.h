@@ -29,7 +29,7 @@ public:
     ~DialogOverlandMap();
 
 private:
-    QMoMGamePtr getGame();
+    QMoMGamePtr m_game;
 
     QGraphicsScene* m_sceneArcanus;
     QGraphicsScene* m_sceneMyrror;
@@ -38,6 +38,8 @@ private:
 
 private slots:
     void on_comboBox_Plane_currentIndexChanged(int index);
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
 };
 
 #endif // DIALOGOVERLANDMAP_H

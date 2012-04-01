@@ -59,6 +59,16 @@ public:
         return iconPtr;
     }
 
+    const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const
+    {
+        QMoMImagePtr image;
+        unsigned index = 14 + toUInt(bannerColor);
+        if (inRange(m_mapBackImages, index))
+        {
+            image = m_mapBackImages[index];
+        }
+        return image;
+    }
     const QMoMImagePtr getImage(MoM::eBuilding building) const
 	{
         QMoMImagePtr image;
@@ -68,6 +78,7 @@ public:
 		}
 		return image;
 	}
+    const QMoMImagePtr getImage(MoM::eBonusDeposit bonusDeposit) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const
 	{
         QMoMImagePtr image;
@@ -145,6 +156,7 @@ private:
     bool createBuildingImages();
     bool createItemImages();
     bool createLairImages();
+    bool createMapBackImages();
     bool createSpecialsImages();
     bool createSpellImages();
     bool createTerrainImages();
@@ -164,6 +176,7 @@ private:
     QVector<QMoMImagePtr> m_buildingImages;
     QVector<QMoMImagePtr> m_itemImages;
     QVector<QMoMImagePtr> m_lairImages;
+    QVector<QMoMImagePtr> m_mapBackImages;
     QVector<QMoMImagePtr> m_specialsImages;
     QVector<QMoMImagePtr> m_spellImages;
     QVector<QMoMImagePtr> m_terrainTypeImages;
