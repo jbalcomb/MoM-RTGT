@@ -396,6 +396,7 @@ MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
     BaseAttributes base = getBaseAttributes();
     BaseAttributes bonus = getBonusAttributes();
     BaseAttributes actual = base;
+    bonus.addBonus(m_upAbilities);
     bonus.addBonus(m_upLevel);
 
     if (base.melee != 0)   actual.melee   += bonus.melee;

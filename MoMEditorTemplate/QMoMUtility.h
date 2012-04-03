@@ -16,6 +16,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "MoMCommon.h"
+
 inline QString getDateTimeStr()
 {
     QDate date = QDate::currentDate();
