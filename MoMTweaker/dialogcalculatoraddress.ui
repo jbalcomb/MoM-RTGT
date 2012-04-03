@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>422</width>
-    <height>222</height>
+    <height>193</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,8 +66,9 @@
       </font>
      </property>
      <property name="text">
-      <string>*Currently only converts from EXE (hex-only) to IDA dseg/overlay
-and reverse from the format &quot;ovr123:4567&quot;</string>
+      <string>*Updates when a MoM-field is clicked in the tree view.
+All fields are hex-only.
+IDA has format &quot;dseg:1234&quot; or &quot;ovr123:4567&quot;.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>

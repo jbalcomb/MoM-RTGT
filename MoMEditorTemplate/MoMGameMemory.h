@@ -97,6 +97,7 @@ private:
     virtual Building_Data* getBuilding_Data();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
+    virtual Fortress* getFortresses();
     virtual WizardsExe_Game_Data* getGame_Data_Exe();
     virtual Game_Settings* getGame_Settings();
     virtual eSpell16* getHero_spells();
@@ -117,6 +118,12 @@ private:
 
 
     virtual MoMDataSegment* getDataSegment();
+    virtual const uint8_t* getSeg0Pointer()
+    {
+        if (0 == m_process.get())
+            return 0;
+        return m_process->getSeg0Pointer();
+    }
     virtual uint8_t* getWizardsExeContents()
     {
         if (0 == m_WizardsExe.get())

@@ -19,11 +19,10 @@
 
 #include "mainwindow.h"
 
-DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
+DialogAddUnit::DialogAddUnit(QWidget *parent) :
     QDialog(parent),
 	m_game(),
     m_unit(new MoM::MoMUnit),
-    m_unitModel(unitModel),
     m_updating(false),
     m_labelWidth(),
     m_lineHeight(),
@@ -86,9 +85,6 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
 
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-    // Connect the item model UnitModel to the dialog
-    QObject::connect(m_unitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), this, SLOT(slot_unitChanged(QMoMUnitPtr)));
 
 	slot_gameChanged(MainWindow::getInstance()->getGame());
 }

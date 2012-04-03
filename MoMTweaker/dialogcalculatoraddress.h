@@ -26,10 +26,18 @@ public:
     explicit DialogCalculatorAddress(QWidget *parent = 0);
     ~DialogCalculatorAddress();
 
-    QMoMGamePtr getGame();
     void update();
 
+public slots:
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
+    void slot_addressChanged(const void* momPointer);
+
 private:
+    // CONFIG
+    QMoMGamePtr m_game;
+
+    // STATUS
     Ui::DialogCalculatorAddress *ui;
 
     bool m_updating;

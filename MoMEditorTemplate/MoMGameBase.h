@@ -263,7 +263,11 @@ public:
 
     virtual bool validate() = 0;
 
-//protected:
+//
+// TODO: Make all methods below protected/private
+//
+
+public:
     virtual Available_spell_page* getAvailable_spell_pages()
     {
         return 0;
@@ -280,6 +284,7 @@ public:
     {
         return 0;
     }
+protected:
     virtual eBonusDeposit* getBonusDeposits()
     {
         return 0;
@@ -289,7 +294,12 @@ public:
         return 0;
     }
     virtual City* getCities() = 0;
+public:
     virtual Events_Status* getEvents_Status()
+    {
+        return 0;
+    }
+    virtual Fortress* getFortresses()
     {
         return 0;
     }
@@ -317,16 +327,20 @@ public:
     {
         return 0;
     }
+protected:
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr) = 0;
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
+public:
     virtual uint16_t* getNumber_of_Battle_Units()
     {
         return 0;
     }
+protected:
     virtual uint16_t* getNumber_of_Cities() = 0;
     virtual uint16_t* getNumber_of_Units() = 0;
     virtual uint16_t* getNumber_of_Wizards() = 0;
+public:
     virtual Spell_Data* getSpell_Data()
     {
         return 0;
@@ -335,6 +349,7 @@ public:
     {
         return 0;
     }
+protected:
     virtual eTerrainType* getTerrainTypes()
     {
         return 0;
@@ -344,14 +359,20 @@ public:
     {
         return 0;
     }
+public:
     virtual int8_t* getUnrest_Table(eRace /* homeRace */)
     {
         return 0;
     }
+protected:
     virtual Wizard* getWizards() = 0;
 
-//private:
+public:
     virtual MoMDataSegment* getDataSegment()
+    {
+        return 0;
+    }
+    virtual class MoMExeMagic* getMagicExe()
     {
         return 0;
     }
@@ -359,15 +380,7 @@ public:
     {
         return 0;
     }
-    virtual uint8_t* getWizardsExeContents()
-    {
-        return 0;
-    }
     virtual uint8_t* getMagicExeContents()
-    {
-        return 0;
-    }
-    virtual MoMDataSegment* getWizardsExeDataSegment()
     {
         return 0;
     }
@@ -375,11 +388,15 @@ public:
     {
         return 0;
     }
-    virtual uint8_t* getWizardsOverlay(size_t /* ovlNr */)
+    virtual uint8_t* getMagicOverlay(size_t /* ovlNr */)
     {
         return 0;
     }
-    virtual uint8_t* getMagicOverlay(size_t /* ovlNr */)
+    virtual SaveGame* getSaveGame()
+    {
+        return 0;
+    }
+    virtual const uint8_t* getSeg0Pointer()
     {
         return 0;
     }
@@ -387,7 +404,15 @@ public:
     {
         return 0;
     }
-    virtual class MoMExeMagic* getMagicExe()
+    virtual uint8_t* getWizardsExeContents()
+    {
+        return 0;
+    }
+    virtual MoMDataSegment* getWizardsExeDataSegment()
+    {
+        return 0;
+    }
+    virtual uint8_t* getWizardsOverlay(size_t /* ovlNr */)
     {
         return 0;
     }

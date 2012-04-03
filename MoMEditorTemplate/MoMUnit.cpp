@@ -417,11 +417,11 @@ MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
     bonus.addBonus(m_upAbilities);
     bonus.addBonus(m_upLevel);
 
-    if (base.melee != 0)   actual.melee   += bonus.melee;
-    if (base.defense != 0) actual.defense += bonus.defense;
-    if (base.ranged != 0)  actual.ranged  += bonus.ranged;
-    actual.resistance   += bonus.resistance;
-    actual.hitpoints    += bonus.hitpoints;
+    if (base.melee != 0)        actual.melee        += bonus.melee;
+    if (base.defense != 0)      actual.defense      += bonus.defense;
+    if (base.ranged != 0)       actual.ranged       += bonus.ranged;
+    if (base.resistance != 0)   actual.resistance   += bonus.resistance;
+    if (base.hitpoints != 0)    actual.hitpoints    += bonus.hitpoints;
     actual.toHitMelee   += bonus.toHitMelee;
     actual.toHitRanged  += bonus.toHitRanged;
     actual.toDefend     += bonus.toDefend;

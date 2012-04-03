@@ -54,6 +54,7 @@ private:
 
 private slots:
     void on_comboBox_Plane_currentIndexChanged(int index);
+    void on_verticalSlider_Zoom_valueChanged(int value);
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
     void slot_timerActiveUnit();

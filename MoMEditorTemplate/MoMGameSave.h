@@ -58,6 +58,13 @@ public:
         return &m_SaveGame->m_Map_Attr.m_Events_Status;
     }
 
+    virtual Fortress* getFortresses()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+		return &m_SaveGame->m_Map_Tiles.m_Fortresses[0];
+    }
+
     virtual std::string getGameDirectory();
 
     virtual Game_Data_Save* getGame_Data_Save()
@@ -200,11 +207,9 @@ public:
         return (MoMMagicDataSegment*)m_MagicExe->getDataSegment();
     }
 
-    virtual uint8_t* getWizardsExeContents()
+    virtual MoMExeMagic* getMagicExe()
     {
-        if (0 == m_WizardsExe.get())
-            return 0;
-        return m_WizardsExe->getExeContents();
+        return m_MagicExe.get();
     }
 
     virtual uint8_t* getMagicExeContents()
@@ -216,17 +221,26 @@ public:
 
     virtual uint8_t* getMagicOverlay(size_t ovlNr);
 
-    virtual uint8_t* getWizardsOverlay(size_t ovlNr);
-
-    virtual MoMExeMagic* getMagicExe()
+    virtual SaveGame* getSaveGame()
     {
-        return m_MagicExe.get();
+        if (0 == m_SaveGame.get())
+            return 0;
+        return m_SaveGame.get();
     }
 
     virtual MoMExeWizards* getWizardsExe()
     {
         return m_WizardsExe.get();
     }
+
+    virtual uint8_t* getWizardsExeContents()
+    {
+        if (0 == m_WizardsExe.get())
+            return 0;
+        return m_WizardsExe->getExeContents();
+    }
+
+    virtual uint8_t* getWizardsOverlay(size_t ovlNr);
 
 private:
     std::auto_ptr<SaveGame> m_SaveGame;

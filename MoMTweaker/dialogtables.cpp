@@ -333,17 +333,12 @@ void DialogTables::update_Spell_Data()
 void DialogTables::update_Unit_Types()
 {
     QMoMGamePtr game = getGame();
-    MoM::Unit_Type_Data* unitTypes = 0;
     int ndata = 0;
 
-    if (!game.isNull())
-    {
-        unitTypes = game->getUnit_Types();
-    }
-    if (0 != unitTypes)
-    {
-        ndata = (int)MoM::eUnit_Type_MAX;
-    }
+	if ((0 != game) && (0 != game->getUnit_Type_Data((MoM::eUnit_Type)0)))
+	{
+		ndata = MoM::eUnit_Type_MAX;
+	}
 
     QStringList labels;
     labels << "Nr" << "Race" << "UnitName"
@@ -367,10 +362,12 @@ void DialogTables::update_Unit_Types()
         }
     }
 
-    for (int row = 0; row < ndata; ++row)
+	for (int row = 0; (0 != game) && (row < ndata); ++row)
     {
         int unitTypeNr = row;
-        MoM::Unit_Type_Data* data = &unitTypes[unitTypeNr];
+		MoM::Unit_Type_Data* data = game->getUnit_Type_Data((MoM::eUnit_Type)unitTypeNr);
+		if (0 == data)
+			break;
 
         QColor color = Qt::gray;
         switch (data->m_Race_Code)

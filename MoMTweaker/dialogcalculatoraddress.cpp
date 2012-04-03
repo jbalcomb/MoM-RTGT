@@ -7,7 +7,9 @@
 
 #include <stdio.h>  // sscanf
 
+#include <MoMExeMagic.h>
 #include <MoMExeWizards.h>
+#include <MoMUtility.h>
 #include "mainwindow.h"
 
 #include "dialogcalculatoraddress.h"
@@ -22,23 +24,15 @@ DialogCalculatorAddress::DialogCalculatorAddress(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+
+    slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 DialogCalculatorAddress::~DialogCalculatorAddress()
 {
     delete ui;
-}
-
-QMoMGamePtr DialogCalculatorAddress::getGame()
-{
-	QMoMGamePtr game;
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 != controller)
-	{
-		game = controller->getGame();
-	}
-    return game;
 }
 
 void DialogCalculatorAddress::update()
@@ -49,16 +43,15 @@ void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffs
 {
     if (m_updating)
         return;
-    m_updating = true;
+	MoM::UpdateLock lock(m_updating);
 
     ui->lineEdit_OffsetIDA->clear();
     ui->lineEdit_OffsetMem->clear();
 
-    QMoMGamePtr game = getGame();
     MoM::MoMExeWizards* wizardsExe = 0;
-    if (!game.isNull())
+    if (!m_game.isNull())
     {
-        wizardsExe = game->getWizardsExe();
+        wizardsExe = m_game->getWizardsExe();
     }
 
     bool ok = false;
@@ -75,24 +68,21 @@ void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffs
     {
         ui->lineEdit_OffsetIDA->setText(QString("dseg:%0").arg(dsegOffset, 4, 16, QChar('0')));
     }
-
-    m_updating = false;
 }
 
 void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffset)
 {
     if (m_updating)
         return;
-    m_updating = true;
+    MoM::UpdateLock lock(m_updating);
 
     ui->lineEdit_OffsetExe->clear();
     ui->lineEdit_OffsetMem->clear();
 
-    QMoMGamePtr game = getGame();
     MoM::MoMExeWizards* wizardsExe = 0;
-    if (!game.isNull())
+    if (!m_game.isNull())
     {
-        wizardsExe = game->getWizardsExe();
+        wizardsExe = m_game->getWizardsExe();
     }
 
     size_t exeOffset = 0;
@@ -117,11 +107,87 @@ void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffs
             ui->lineEdit_OffsetExe->setText(QString("%0").arg(exeOffset, 5, 16, QChar('0')));
         }
     }
-
-    m_updating = false;
 }
 
 void DialogCalculatorAddress::on_lineEdit_OffsetMem_textChanged(QString )
 {
 
+}
+
+void DialogCalculatorAddress::slot_gameChanged(const QMoMGamePtr& game)
+{
+    m_game = game;
+    update();
+}
+
+void DialogCalculatorAddress::slot_gameUpdated()
+{
+    update();
+}
+
+void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
+{
+    if (0 == m_game)
+        return;
+
+    // Clear old fields
+    ui->lineEdit_OffsetExe->clear();
+    ui->lineEdit_OffsetIDA->clear();
+    ui->lineEdit_OffsetMem->clear();
+
+    // TODO: Properly distinguish wizards.exe and magic.exe
+
+    QString dosStr;
+    dosStr = QString("void* %0").arg((unsigned long)momPointer, 8, 16, QChar('0'));
+
+    const MoM::MoMDataSegment* dataSegment = m_game->getDataSegment();
+    // TODO: Sharper boundary check on end-of-memory
+    if ((0 != dataSegment) && (momPointer >= dataSegment) && (momPointer < (uint8_t*)dataSegment + 0xFFFFF))
+    {
+        int dsOffset = ((uint8_t*)momPointer - (uint8_t*)dataSegment);
+        dosStr = QString(" ds:%0").arg(dsOffset, 4, 16, QChar('0'));
+
+        // Triggers updates
+        if (dsOffset <= sizeof(MoM::MoMDataSegment))
+		{
+			ui->lineEdit_OffsetIDA->setText(QString("dseg:%0").arg(dsOffset, 4, 16, QChar('0')));
+		}
+    }
+
+    const uint8_t* seg0Pointer = m_game->getSeg0Pointer();
+    if ((0 != seg0Pointer) && (momPointer >= seg0Pointer))
+    {
+        int seg0Offset = ((uint8_t*)momPointer - (uint8_t*)seg0Pointer);
+		// TODO: Sharper boundary check on end-of-memory
+		if (seg0Offset <= 0xFFFFF)
+		{
+			dosStr += QString(" %0:%1").arg(seg0Offset / MoM::gPARAGRAPH_SIZE, 4, 16, QChar('0')).arg(seg0Offset % MoM::gPARAGRAPH_SIZE, 1, 16, QChar('0'));
+		}
+    }
+
+	MoM::MoMExeWizards* wizardsExe = m_game->getWizardsExe();
+    if ((0 != wizardsExe) && (momPointer >= wizardsExe->getExeContents()) && (momPointer < wizardsExe->getExeContents() + wizardsExe->getExeSize()))
+    {
+        int wizardsExeOffset = ((uint8_t*)momPointer - (uint8_t*)wizardsExe->getExeContents());
+        dosStr += QString(" wizards.exe:%0").arg(wizardsExeOffset, 5, 16, QChar('0'));
+
+        // Triggers updates
+        ui->lineEdit_OffsetExe->setText(QString("%0").arg(wizardsExeOffset, 5, 16, QChar('0')));
+    }
+
+    MoM::MoMExeMagic* magicExe = m_game->getMagicExe();
+    if ((0 != magicExe) && (momPointer >= magicExe->getExeContents()) && (momPointer < magicExe->getExeContents() + magicExe->getExeSize()))
+    {
+        int magicExeOffset = ((uint8_t*)momPointer - (uint8_t*)magicExe->getExeContents());
+        dosStr += QString(" magic.exe:%0").arg(magicExeOffset, 5, 16, QChar('0'));
+    }
+
+    MoM::SaveGame* saveGame = m_game->getSaveGame();
+    if ((0 != saveGame) && (momPointer >= saveGame) && (momPointer < saveGame + 1))
+    {
+        int saveGameOffset = ((uint8_t*)momPointer - (uint8_t*)saveGame);
+        dosStr += QString(" save:%0").arg(saveGameOffset, 5, 16, QChar('0'));
+    }
+
+    ui->lineEdit_OffsetDOS->setText(dosStr);
 }
