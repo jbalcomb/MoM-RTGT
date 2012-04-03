@@ -1733,12 +1733,16 @@ void UnitModel::threadUpdateModelData()
                 ptree->appendEmptyRow();
             }
 
+            int nrBattle_Units = 0;
+            int nrEntries = 0;
+
             ptree->child(row, 0)->setData(tr("Battle_Units"), Qt::UserRole);
             const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Battle_Unit;
             ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
             if (0 != game->getNumber_of_Battle_Units())
             {
-                int nrBattle_Units = *game->getNumber_of_Battle_Units();
+                nrBattle_Units = *game->getNumber_of_Battle_Units();
+                nrEntries = nrBattle_Units + 1;
                 ptree->child(row, 2)->setData(tr("NrBattle_Units = %0").arg(nrBattle_Units), Qt::EditRole);
             }
             else
@@ -1748,7 +1752,16 @@ void UnitModel::threadUpdateModelData()
 
             int subrow = 0;
             QMoMTreeItemBase* psubtree = ptree->child(row, 0);
-            update_Battle_Units(psubtree, game, subrow);
+            if (nrEntries > psubtree->rowCount())
+            {
+                beginInsertRows(createIndex(row, 0, psubtree), psubtree->rowCount(), nrEntries - 1);
+                update_Battle_Units(psubtree, game, subrow);
+                endInsertRows();
+            }
+            else
+            {
+                update_Battle_Units(psubtree, game, subrow);
+            }
             removeUnusedRows(row, psubtree, subrow);
 
             row++;

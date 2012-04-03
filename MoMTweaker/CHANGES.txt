@@ -6,8 +6,17 @@ CHANGES IN 0.2.2 (2012-04-03)
 -----------------------------
 
 * Improved mechanism to find MoM in dosbox by a repeated search [Jtm].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/2/
 
+* Fixed number of battle units to go up and/or down when for instance a demon is summoned [Jtm].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/3/
+  
 * Made fortress data editable. It's the last subtree in each Wizard in the tree view [Question].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/4/
+
+* Extended Overland map with terrain, bonus deposits, units, and a context menu to pop up a unit view.
+
+* Extended unit view (dialog Summon) with more extensive information.
 
 
 
