@@ -29,6 +29,14 @@ public:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
+    virtual eBonusDeposit* getBonusDeposit(ePlane plane, int x, int y)
+    {
+        eBonusDeposit* bonusDeposits = getBonusDeposits();
+        if ((0 == bonusDeposits) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (bonusDeposits + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+
     Building_Data* getBuilding_Data(eBuilding building)
     {
         Building_Data* buildingData = getBuilding_Data();
@@ -269,6 +277,10 @@ public:
         return 0;
     }
     virtual Battle_Unit* getBattle_Units()
+    {
+        return 0;
+    }
+    virtual eBonusDeposit* getBonusDeposits()
     {
         return 0;
     }

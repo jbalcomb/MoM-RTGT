@@ -468,18 +468,18 @@ void MainWindow::on_pushButton_Connect_clicked()
         emit signal_gameChanged(newGame);
 	}
 
-    if (ok)
-    {
-        (void) QMessageBox::warning(this,
-            tr("Master of Magic Real-Time Game Tweaker"),
-            tr( "Changes to WIZARDS.EXE and MAGIC.EXE.\n"
-                "\n"
-                "Some of the changes you may make on a connected game HAVE to be saved in a .EXE file to take effect.\n"
-                "Please be aware of this and make a backup of WIZARDS.EXE and MAGIC.EXE to be safe.\n"
-                "Currently no confirmation is asked before changing an .EXE file.\n"
-                "\n"
-                "This is only relevant if you connect to a game and make changes in sections marked 'MODIFIES Wizards.exe' or 'MODIFIES Magic.exe'."));
-    }
+//    if (ok)
+//    {
+//        (void) QMessageBox::warning(this,
+//            tr("Master of Magic Real-Time Game Tweaker"),
+//            tr( "Changes to WIZARDS.EXE and MAGIC.EXE.\n"
+//                "\n"
+//                "Some of the changes you may make on a connected game HAVE to be saved in a .EXE file to take effect.\n"
+//                "Please be aware of this and make a backup of WIZARDS.EXE and MAGIC.EXE to be safe.\n"
+//                "Currently no confirmation is asked before changing an .EXE file.\n"
+//                "\n"
+//                "This is only relevant if you connect to a game and make changes in sections marked 'MODIFIES Wizards.exe' or 'MODIFIES Magic.exe'."));
+//    }
 }
 
 void MainWindow::on_pushButton_Load_clicked()

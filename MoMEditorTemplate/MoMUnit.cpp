@@ -205,108 +205,6 @@ void MoMUnit::changeUnit(Unit* unit)
 }
 
 //
-// BASE ATTRIBUTES
-//
-
-int MoMUnit::getMelee() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Melee;
-    }
-    if (0 != value)
-    {
-        value += m_upAbilities.melee;
-    }
-    if (0 != value)
-    {
-        value += m_upLevel.melee;
-    }
-    if (0 != value)
-    {
-        value += m_upWeaponType.melee;
-    }
-    return value;
-}
-
-int MoMUnit::getRanged() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Ranged;
-    }
-    if (0 != value)
-    {
-        value += m_upAbilities.ranged;
-    }
-    if (0 != value)
-    {
-        value += m_upLevel.ranged;
-    }
-    if (0 != value)
-    {
-        value += m_upWeaponType.ranged;
-    }
-    return value;
-}
-
-int MoMUnit::getArmor() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Defense;
-    }
-    if (0 != value)
-    {
-        value += m_upAbilities.defense;
-    }
-    if (0 != value)
-    {
-        value += m_upLevel.defense;
-    }
-    return value;
-}
-
-int MoMUnit::getResist() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Resistance;
-    }
-    if (0 != value)
-    {
-        value += m_upAbilities.resistance;
-    }
-    if (0 != value)
-    {
-        value += m_upLevel.resistance;
-    }
-    return value;
-}
-
-int MoMUnit::getHits() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_Hitpoints;
-    }
-    if (0 != value)
-    {
-        value += m_upAbilities.hitpoints;
-    }
-    if (0 != value)
-    {
-        value += m_upLevel.hitpoints;
-    }
-    return value;
-}
-
-//
 // OTHER
 //
 
@@ -491,6 +389,32 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 #undef ADDFLAGFEATURE
 
     return mapSpecials;
+}
+
+MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
+{
+    BaseAttributes base = getBaseAttributes();
+    BaseAttributes bonus = getBonusAttributes();
+    BaseAttributes actual = base;
+    bonus.addBonus(m_upLevel);
+
+    if (base.melee != 0)   actual.melee   += bonus.melee;
+    if (base.defense != 0) actual.defense += bonus.defense;
+    if (base.ranged != 0)  actual.ranged  += bonus.ranged;
+    actual.resistance   += bonus.resistance;
+    actual.hitpoints    += bonus.hitpoints;
+    actual.toHitMelee   += bonus.toHitMelee;
+    actual.toHitRanged  += bonus.toHitRanged;
+    actual.toDefend     += bonus.toDefend;
+    actual.moves        += bonus.moves;
+
+    // TODO:
+//    if (0 != m_unit)
+//    {
+//        actual.moves = m_unit->m_Moves_Total / 2.0;
+//    }
+
+    return actual;
 }
 
 MoMUnit::BaseAttributes MoMUnit::getBaseAttributes() const
@@ -710,6 +634,7 @@ int MoMUnit::getLevel() const
     return value;
 }
 
+// TODO: Eliminate using getActualAttributes() instead
 double MoMUnit::getMoves() const
 {
     double value = 0;
@@ -838,41 +763,6 @@ MoMUnit::MapSpecials MoMUnit::getSpellEffects() const
 #undef ADDSPELLFLAGFEATURE
 
     return mapSpecials;
-}
-
-
-int MoMUnit::getToHitMelee() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_To_Hit;
-    }
-    value += m_upAbilities.toHitMelee;
-    value += m_upLevel.toHitMelee;
-    value += m_upWeaponType.toHitMelee;
-    return value;
-}
-
-int MoMUnit::getToHitRanged() const
-{
-    int value = 0;
-    if (0 != m_unitType)
-    {
-        value = m_unitType->m_To_Hit;
-    }
-    value += m_upAbilities.toHitRanged;
-    value += m_upLevel.toHitRanged;
-    value += m_upWeaponType.toHitRanged;
-    return value;
-}
-
-int MoMUnit::getToDefend() const
-{
-    int value = 0;
-    value += m_upAbilities.toDefend;
-    value += m_upLevel.toDefend;
-    return value;
 }
 
 std::string MoMUnit::getUnitName() const
@@ -1015,6 +905,8 @@ void MoMUnit::applyAbilities()
     if (has("Arcane Power X")) { up.ranged += bonus = static_cast<int>(level * 3 / 2); set_special("Arcane Power x", bonus); }
     if (has("Armsmaster"))     { bonus = 2 * level; set_special("Armsmaster", bonus); }
     if (has("Armsmaster X"))   { bonus = static_cast<int>(2 * level * 3 / 2); set_special("Armsmaster x", bonus); }
+    // TODO: According to UnitView in Tweaker, Blademaster does not give a toHitRanged bonus
+    // TODO: Adjust this also in the Battle simulator web pages
     if (has("Blademaster"))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; set_special("Blademaster", bonus); }
     if (has("Blademaster X"))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; set_special("Blademaster x", bonus); }
     if (has("Caster"))         { bonus = static_cast<int>(std::ceil(get_special("Caster") / 2.5 + 0.1) * 2.5 * level + 0.1); set_special("Caster", bonus); }

@@ -65,16 +65,17 @@ public:
     void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
 
-    int getMelee() const;
-    int getRanged() const;
-    int getArmor() const;
-    int getResist() const;
-    int getHits() const;
-    int getToHitMelee() const;
-    int getToHitRanged() const;
-    int getToDefend() const;
+//    int getMelee() const;
+//    int getRanged() const;
+//    int getArmor() const;
+//    int getResist() const;
+//    int getHits() const;
+//    int getToHitMelee() const;
+//    int getToHitRanged() const;
+//    int getToDefend() const;
 
     MapSpecials getAbilityEffects() const;
+    BaseAttributes getActualAttributes() const;
     BaseAttributes getBaseAttributes() const;
     BaseAttributes getBonusAttributes() const;
     int getCastingSkill() const;

@@ -29,6 +29,13 @@ public:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
+    virtual eBonusDeposit* getBonusDeposits()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Attr.m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
+    }
+
     virtual Building_Data* getBuilding_Data()
     {
         if (0 == m_BuilddatLbx.get())

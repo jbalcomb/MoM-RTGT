@@ -187,7 +187,7 @@ bool UnitModel::setData(const QModelIndex& index, const QVariant& value, int rol
 
 void UnitModel::slot_gameChanged(const QMoMGamePtr &game)
 {
-    qDebug() << MoM::getDateTimeStr() << ">UnitModel::slot_gameChanged() begin";
+    qDebug() << getDateTimeStr() << ">UnitModel::slot_gameChanged() begin";
     // Abort an old update if any
     abortUpdate();
 
@@ -202,7 +202,7 @@ void UnitModel::slot_gameChanged(const QMoMGamePtr &game)
     QMoMTreeItemBase::setGame(game);
     startUpdate();
 
-    qDebug() << MoM::getDateTimeStr() << "<UnitModel::slot_gameChanged() end";
+    qDebug() << getDateTimeStr() << "<UnitModel::slot_gameChanged() end";
 }
 
 void UnitModel::slot_gameUpdated()

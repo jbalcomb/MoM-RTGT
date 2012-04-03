@@ -41,8 +41,8 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
 
     // Initalize graphics view with items that are fixed
     QRectF rectf = ui->graphicsView_Unit->rect();
-    m_sceneUnit->setSceneRect(0, 0, rectf.width(), rectf.height());
-    ui->graphicsView_Unit->setSceneRect(0, 0, rectf.width(), rectf.height());
+    m_sceneUnit->setSceneRect(0, 0, rectf.width()-4, rectf.height());
+    ui->graphicsView_Unit->setSceneRect(-4, 0, rectf.width(), rectf.height());
 
 
     // Use a pixmap as reference for coordinate positions
@@ -375,6 +375,9 @@ void DialogAddUnit::update()
 
     // Add new items
 
+    MoM::MoMUnit::BaseAttributes actualAttr = m_unit->getActualAttributes();
+    MoM::MoMUnit::BaseAttributes bonusAttr = m_unit->getBonusAttributes();
+
     const QMoMImagePtr pImage = MoM::QMoMResources::instance().getImage(m_unit->getUnitTypeNr());
     if (0 != pImage)
     {
@@ -431,25 +434,25 @@ void DialogAddUnit::update()
     item->setPos(pos);
     pos.rx() += pixmap.width() + 2;
 
-    if (m_unit->getMelee() && m_unit->getToHitMelee())
+    if (actualAttr.melee && actualAttr.toHitMelee)
     {
-       displayToHit(pos, m_unit->getToHitMelee(), "To Hit Melee");
+       displayToHit(pos, actualAttr.toHitMelee, "To Hit Melee");
     }
     else
     {
         pos.ry() += 10;
     }
-    if (m_unit->getRanged() && m_unit->getToHitRanged())
+    if (actualAttr.ranged && actualAttr.toHitRanged)
     {
-        displayToHit(pos, m_unit->getToHitRanged(), "To Hit Ranged");
+        displayToHit(pos, actualAttr.toHitRanged, "To Hit Ranged");
     }
     else
     {
         pos.ry() += 10;
     }
-    if (m_unit->getArmor() && m_unit->getToDefend())
+    if (actualAttr.defense && actualAttr.toDefend)
     {
-        displayToHit(pos, m_unit->getToDefend(), "To Defend");
+        displayToHit(pos, actualAttr.toDefend, "To Defend");
     }
 
 
@@ -467,7 +470,7 @@ void DialogAddUnit::update()
     case MoM::WEAPON_adamantium:    imageBaseName = "sword_adamantium"; break;
     }
 
-    displayStrength(pos, m_unit->getMelee(), m_unit->getBonusAttributes().melee, imageBaseName);
+    displayStrength(pos, actualAttr.melee, bonusAttr.melee, imageBaseName);
 
     switch (m_unit->getRangedType())
     {
@@ -478,11 +481,11 @@ void DialogAddUnit::update()
     default:                         imageBaseName = "fireball"; break;
     }
 
-    displayStrength(pos, m_unit->getRanged(), m_unit->getBonusAttributes().ranged, imageBaseName);
+    displayStrength(pos, actualAttr.ranged, bonusAttr.ranged, imageBaseName);
 
-    displayStrength(pos, m_unit->getArmor(), m_unit->getBonusAttributes().defense, "shield");
-    displayStrength(pos, m_unit->getResist(), m_unit->getBonusAttributes().resistance, "resistance");
-    displayStrength(pos, m_unit->getHits(), m_unit->getBonusAttributes().hitpoints, "heart");
+    displayStrength(pos, actualAttr.defense, bonusAttr.defense, "shield");
+    displayStrength(pos, actualAttr.resistance, bonusAttr.resistance, "resistance");
+    displayStrength(pos,actualAttr.hitpoints, bonusAttr.hitpoints, "heart");
 
     pos.rx() = 0;
     pos.ry() += m_lineHeight;

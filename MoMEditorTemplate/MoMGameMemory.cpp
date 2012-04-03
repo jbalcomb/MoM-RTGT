@@ -188,6 +188,15 @@ Battle_Unit* MoMGameMemory::getBattle_Units()
     return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
 }
 
+eBonusDeposit* MoMGameMemory::getBonusDeposits()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<eBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_special_terrain_loc_,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
 City* MoMGameMemory::getCities()
 {
     if (0 == m_process.get())

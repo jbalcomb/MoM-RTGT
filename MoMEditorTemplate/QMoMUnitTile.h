@@ -7,45 +7,41 @@
 
 /// \file
 
-#ifndef QMOMMAPTILE_H_
-#define QMOMMAPTILE_H_
+#ifndef QMOMUNITTILE_H_
+#define QMOMUNITTILE_H_
 
 #include <QGraphicsItem>
 
 #include "MoMTemplate.h"
+#include "QMoMSharedPointers.h"
 
 namespace MoM
 {
 
-class QMoMMapTile: public QGraphicsItem
+class QMoMUnitTile: public QGraphicsItem
 {
 public:
-    QMoMMapTile();
-    virtual ~QMoMMapTile();
+    QMoMUnitTile();
+    virtual ~QMoMUnitTile();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    void setBonusDeposit(MoM::eBonusDeposit* bonusDeposit)
+    void setGame(const QMoMGamePtr& game)
     {
-        m_bonusDeposit = bonusDeposit;
+        m_game = game;
     }
-    void setPlane(MoM::ePlane plane)
+    void setUnit(MoM::Unit* unit)
     {
-        m_plane = plane;
-    }
-    void setTerrainType(MoM::eTerrainType* terrainType)
-    {
-        m_terrainType = terrainType;
+        m_unit = unit;
     }
 
 private:
-    MoM::eBonusDeposit* m_bonusDeposit;
-    MoM::ePlane m_plane;
-    MoM::eTerrainType* m_terrainType;
+    QMoMGamePtr m_game;
+    MoM::Unit* m_unit;
 };
 
 }
 
-#endif // QMOMMAPTILE_H
+#endif // QMOMUNITTILE_H

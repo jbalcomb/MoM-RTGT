@@ -41,8 +41,14 @@ typedef QSharedPointer<MoM::MoMGameSave> QMoMGameSavePtr;
 /// \brief Shared pointer to a QIcon
 typedef QSharedPointer<QIcon> QMoMIconPtr;
 
+/// \brief Shared pointer to a QImage
+typedef QSharedPointer<QImage> QMoMImagePtr;
+
 /// \brief Shared pointer to a QMoMLazyIcon
 typedef QSharedPointer<MoM::QMoMLazyIconBase> QMoMLazyIconPtr;
+
+/// \brief Shared pointer to a QTimer
+typedef QSharedPointer<QTimer> QMoMTimerPtr;
 
 /// \brief Shared pointer to a QMoMTreeItemBase
 typedef QSharedPointer<QMoMTreeItemBase> QMoMTreeItemPtr;
@@ -50,7 +56,5 @@ typedef QSharedPointer<QMoMTreeItemBase> QMoMTreeItemPtr;
 /// \brief Shared pointer to a MoMUnit
 typedef QSharedPointer<MoM::MoMUnit> QMoMUnitPtr;
 
-/// \brief Shared pointer to a QImage
-typedef QSharedPointer<QImage> QMoMImagePtr;
 
 #endif // QMOMSHAREDPOINTERS_H

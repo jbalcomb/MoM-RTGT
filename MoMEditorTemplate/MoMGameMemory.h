@@ -93,6 +93,7 @@ private:
     virtual Battlefield* getBattlefield();
     virtual Battle_Unit* getBattle_Unit_View();
     virtual Battle_Unit* getBattle_Units();
+    virtual eBonusDeposit* getBonusDeposits();
     virtual Building_Data* getBuilding_Data();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();

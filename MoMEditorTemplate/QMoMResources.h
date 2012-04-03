@@ -53,7 +53,7 @@ public:
 	}
 
     template<typename T>
-    const QMoMIconPtr getIcon(T t, int scale = 1) const
+    const QMoMIconPtr getIcon(T t, double scale = 1) const
     {
         QMoMIconPtr iconPtr(new QIcon(getPixmap(t, scale)));
         return iconPtr;
@@ -127,13 +127,13 @@ public:
 	}
 
     template<typename T>
-    QPixmap getPixmap(T t, int scale = 1) const
+    QPixmap getPixmap(T t, double scale = 1.0) const
     {
         const QMoMImagePtr pImage = getImage(t);
         QPixmap pixmap;
         if (!pImage.isNull())
         {
-			if (1 != scale)
+            if (1.0 != scale)
 			{
                 QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	            pixmap.convertFromImage(image);

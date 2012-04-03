@@ -11,9 +11,11 @@
 #define DIALOGOVERLANDMAP_H
 
 #include <QDialog>
+#include <QMap>
 
 #include <QMoMSharedPointers.h>
 
+class QGraphicsItem;
 class QGraphicsScene;
 
 namespace Ui {
@@ -29,10 +31,24 @@ public:
     ~DialogOverlandMap();
 
 private:
+    typedef QMap<const void*, QGraphicsItem*> LookupMap;
+
+    QGraphicsItem* lookup(const void* momPtr)
+    {
+        LookupMap::iterator it = m_lookup.find(momPtr);
+        if (m_lookup.end() == it)
+            return 0;
+        else
+            return it.value();
+    }
+
+private:
     QMoMGamePtr m_game;
 
     QGraphicsScene* m_sceneArcanus;
     QGraphicsScene* m_sceneMyrror;
+    LookupMap m_lookup;
+    QMoMTimerPtr m_timer;
 
     Ui::DialogOverlandMap *ui;
 
@@ -40,6 +56,7 @@ private slots:
     void on_comboBox_Plane_currentIndexChanged(int index);
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
+    void slot_timerActiveUnit();
 };
 
 #endif // DIALOGOVERLANDMAP_H

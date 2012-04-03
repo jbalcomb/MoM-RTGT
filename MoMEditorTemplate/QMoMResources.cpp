@@ -43,7 +43,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 {
     if (game.data() != m_game.data())
     {
-		qDebug() << MoM::getDateTimeStr() << ">QMoMResources::setGame() begin";
+        qDebug() << getDateTimeStr() << ">QMoMResources::setGame() begin";
         m_game = game;
 
         (void)createColorTable();
@@ -59,7 +59,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         (void)createSpellImages();
         (void)createTerrainImages();
 
-        qDebug() << MoM::getDateTimeStr() << "<QMoMResources::setGame() end";
+        qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
 }
 

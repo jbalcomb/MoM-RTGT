@@ -8,13 +8,18 @@
 #include <qpainter.h>
 
 #include "QMoMResources.h"
+#include "QMoMUtility.h"
 
 #include "QMoMMapTile.h"
 
 namespace MoM
 {
 
-QMoMMapTile::QMoMMapTile() : m_plane(MoM::PLANE_Arcanum), m_terrainType(0)
+QMoMMapTile::QMoMMapTile() :
+    QGraphicsItem(),
+    m_bonusDeposit(0),
+    m_plane(MoM::PLANE_Arcanum),
+    m_terrainType(0)
 {
 }
 
@@ -54,6 +59,37 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
         painter->setPen(Qt::yellow);
         painter->drawText(boundingRect(), text, QTextOption(Qt::AlignCenter));
+    }
+
+    if (0 != m_bonusDeposit)
+    {
+        QString toolTip;
+        QVector<MoM::eBonusDeposit> vecDeposits;
+        vecDeposits         << DEPOSIT_Iron_Ore
+                            << DEPOSIT_Coal
+                            << DEPOSIT_Silver_Ore
+                            << DEPOSIT_Gold_Ore
+                            << DEPOSIT_Gems
+                            << DEPOSIT_Mithril_Ore
+                            << DEPOSIT_Adamantium_Ore
+                            << DEPOSIT_Quork
+                            << DEPOSIT_Crysx
+                            << DEPOSIT_Wild_Game
+                            << DEPOSIT_Nightshade;
+        for (int index = vecDeposits.size(); index-- > 0;)
+        {
+            MoM::eBonusDeposit deposit = vecDeposits[index];
+            if ((*m_bonusDeposit & deposit) != deposit)
+                continue;
+            const QMoMImagePtr image = QMoMResources::instance().getImage(deposit);
+            if (0 != image)
+            {
+                painter->drawImage(boundingRect(), *image);
+            }
+            toolTip += prettyQStr(deposit);
+            break;
+        }
+        setToolTip(toolTip);
     }
 }
 

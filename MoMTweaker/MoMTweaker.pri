@@ -38,7 +38,8 @@ HEADERS += \
     ../MoMTweaker/mainwindow.h \
     ../MoMTweaker/unitmodel.h \
     ../MoMEditorTemplate/MoMCommon.h \
-    ../MoMEditorTemplate/TeeRedirecter.h
+    ../MoMEditorTemplate/TeeRedirecter.h \
+    ../MoMEditorTemplate/QMoMUnitTile.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -69,7 +70,8 @@ SOURCES += \
     ../MoMTweaker/dialogaddunit.cpp \
     ../MoMTweaker/dialogtools.cpp \
     ../MoMTweaker/mainwindow.cpp \
-    ../MoMTweaker/unitmodel.cpp
+    ../MoMTweaker/unitmodel.cpp \
+    ../MoMEditorTemplate/QMoMUnitTile.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \
