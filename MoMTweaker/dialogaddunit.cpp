@@ -41,8 +41,8 @@ DialogAddUnit::DialogAddUnit(QWidget *parent, UnitModel* unitModel) :
 
     // Initalize graphics view with items that are fixed
     QRectF rectf = ui->graphicsView_Unit->rect();
-    m_sceneUnit->setSceneRect(0, 0, rectf.width()-4, rectf.height());
-    ui->graphicsView_Unit->setSceneRect(-4, 0, rectf.width(), rectf.height());
+    m_sceneUnit->setSceneRect(0, 0, rectf.width()-8, rectf.height());
+    ui->graphicsView_Unit->setSceneRect(-8, 0, rectf.width(), rectf.height());
 
 
     // Use a pixmap as reference for coordinate positions
@@ -185,7 +185,7 @@ void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int
 void DialogAddUnit::displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName)
 {
   // calculate number of normal, lost_normal, gold, and lost_gold icons
-  int normal = strength, lost_normal = 0, gold = bonusStrength, lost_gold = 0;
+  int normal = strength - bonusStrength, lost_normal = 0, gold = bonusStrength, lost_gold = 0;
 //      if (m_unit.bonuses[strength] >= m_unit.penalties[strength])
 //      {
 //         // Bonus at least as large as the penalty - only lost gold
