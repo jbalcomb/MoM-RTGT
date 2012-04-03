@@ -75,13 +75,20 @@ inline unsigned toUInt(const T& t)
     return static_cast<unsigned>(t);
 }
 
+/// \brief Class to set a flag to true while it's in scope.
+///        Other methods can check the flag to see if someone else is updating.
+///        Typically this is to prevent methods from making changes when
+///        unintended Qt events occur.
 class UpdateLock
 {
 public:
+    /// \brief Constructor that set the parameter to true.
+    /// \param updating Flag that is set to true
     UpdateLock(bool& updating) : m_updating(updating)
     {
         m_updating = true;
     }
+    /// \brief Destructor that sets the flag to false again.
     ~UpdateLock()
     {
         m_updating = false;

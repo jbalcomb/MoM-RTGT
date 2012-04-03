@@ -224,6 +224,8 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
     checkUnitChanged<MoM::Hired_Hero>(itemBase);
     checkUnitChanged<MoM::Unit>(itemBase);
     checkUnitChanged<MoM::Unit_Type_Data>(itemBase);
+
+    emit signal_addressChanged(itemBase->getVoidMoMPointer());
 }
 
 template<class T>

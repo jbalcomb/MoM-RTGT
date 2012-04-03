@@ -52,6 +52,13 @@ public:
         return &m_dataSegmentAndUp[0];
     }
 
+    uint8_t* getSeg0Pointer()
+    {
+        if (m_dataSegmentAndUp.empty())
+            return 0;
+        return &m_dataSegmentAndUp[0] - m_dwOffsetDatasegment + m_dwOffsetSegment0;
+    }
+
     std::string getExeFilepath();
 
     size_t getOffset_DS_Code() const
@@ -63,7 +70,7 @@ public:
     {
         if (m_dataSegmentAndUp.empty())
             return 0;
-        uint8_t* pMemory = getDataFromZero() + gPARAGRAPH_SIZE * pointer.segment + pointer.offset;
+        uint8_t* pMemory = getSeg0Pointer() + gPARAGRAPH_SIZE * pointer.segment + pointer.offset;
         if ((pMemory < &m_dataSegmentAndUp[0]) || (pMemory + size > &m_dataSegmentAndUp[0] + m_dataSegmentAndUp.size()))
         {
             // Out of range
@@ -106,13 +113,6 @@ public:
 
 private:
     bool findSEG0(const std::vector<uint8_t>& data);
-
-    uint8_t* getDataFromZero()
-    {
-        if (m_dataSegmentAndUp.empty())
-            return 0;
-        return &m_dataSegmentAndUp[0] - m_dwOffsetDatasegment + m_dwOffsetSegment0;
-    }
 
     static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data);
 

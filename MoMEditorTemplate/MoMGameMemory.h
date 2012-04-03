@@ -118,6 +118,12 @@ private:
 
 
     virtual MoMDataSegment* getDataSegment();
+    virtual const uint8_t* getSeg0Pointer()
+    {
+        if (0 == m_process.get())
+            return 0;
+        return m_process->getSeg0Pointer();
+    }
     virtual uint8_t* getWizardsExeContents()
     {
         if (0 == m_WizardsExe.get())

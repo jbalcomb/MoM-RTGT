@@ -105,6 +105,11 @@ public:
         }
     }
 
+    virtual const void* getVoidMoMPointer() const
+    {
+        return 0;
+    }
+
 private:
 
     void setParent(QMoMTreeItemBase* parent)
@@ -212,7 +217,12 @@ public:
         default:
             break;
         }
-   }
+    }
+
+    virtual const void* getVoidMoMPointer() const
+    {
+        return m_ptr;
+    }
 
 signals:
 
@@ -267,8 +277,12 @@ public:
         default:
             break;
         }
-   }
+    }
 
+    virtual const void* getVoidMoMPointer() const
+    {
+        return m_ptr;
+    }
 signals:
 
 public slots:
@@ -324,8 +338,12 @@ public:
         default:
             break;
         }
-   }
+    }
 
+    virtual const void* getVoidMoMPointer() const
+    {
+        return m_ptr;
+    }
 signals:
 
 public slots:
@@ -351,6 +369,11 @@ public:
         m_ptr(ptr)
     {
     }
+
+	virtual const void* getVoidMoMPointer() const
+	{
+		return m_ptr;
+	}
 
     T* getMoMPointer()
     {

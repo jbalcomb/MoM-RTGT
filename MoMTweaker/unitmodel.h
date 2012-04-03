@@ -51,6 +51,7 @@ public slots:
 
 signals:
     void signal_unitChanged(const QMoMUnitPtr& unit);
+    void signal_addressChanged(const void *momPointer);
 
 private:
 	void abortUpdate();

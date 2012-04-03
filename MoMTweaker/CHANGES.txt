@@ -2,26 +2,33 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.2 (2012-04-03)
+CHANGES IN 0.2.2 (2012-04-04)
 -----------------------------
 
-* Improved mechanism to find MoM in dosbox by a repeated search [Jtm].
-  Ticket: https://sourceforge.net/p/momrtgt/tickets/2/
-
-* Fixed number of battle units to go up and/or down when for instance a demon is summoned [Jtm].
-  Ticket: https://sourceforge.net/p/momrtgt/tickets/3/
+* Speeded up the tree view by implementing lazy icons, meaning the tree view only retrieves icons
+  in a background process when there is spare time.
   
-* Made fortress data editable. It's the last subtree in each Wizard in the tree view [Question].
-  Ticket: https://sourceforge.net/p/momrtgt/tickets/4/
-
 * Extended Overland map with terrain, bonus deposits, units, and a context menu to pop up a unit view.
 
 * Extended unit view (dialog Summon) with more extensive information.
 
+* Updated address calculator to show addresses in DOS, the EXE files, the SAVE files, and IDA.
+  It triggers whenever you click a MoM field in the tree view.
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/5/
+
+* Made fortress data editable. It's the last subtree in each Wizard in the tree view [Question].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/4/
+
+* Fixed number of battle units to go up and/or down when for instance a demon is summoned [Jtm].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/3/
+  
+* Improved mechanism to find MoM in dosbox by a repeated search [Jtm].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/2/
+
 
 
 CHANGES IN 0.2.1 (2012-03-19)
-----------------------------
+-----------------------------
 
 * Turned project into open source project on http://momrtgt.sourceforge.net/
 

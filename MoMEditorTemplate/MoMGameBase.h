@@ -372,11 +372,11 @@ public:
     {
         return 0;
     }
-    virtual MoMMagicDataSegment* getMagicDataSegment()
+    virtual class MoMExeMagic* getMagicExe()
     {
         return 0;
     }
-    virtual uint8_t* getWizardsExeContents()
+    virtual MoMMagicDataSegment* getMagicDataSegment()
     {
         return 0;
     }
@@ -384,15 +384,7 @@ public:
     {
         return 0;
     }
-    virtual MoMDataSegment* getWizardsExeDataSegment()
-    {
-        return 0;
-    }
     virtual MoMMagicDataSegment* getMagicExeDataSegment()
-    {
-        return 0;
-    }
-    virtual uint8_t* getWizardsOverlay(size_t /* ovlNr */)
     {
         return 0;
     }
@@ -400,11 +392,27 @@ public:
     {
         return 0;
     }
+    virtual SaveGame* getSaveGame()
+    {
+        return 0;
+    }
+    virtual const uint8_t* getSeg0Pointer()
+    {
+        return 0;
+    }
     virtual class MoMExeWizards* getWizardsExe()
     {
         return 0;
     }
-    virtual class MoMExeMagic* getMagicExe()
+    virtual uint8_t* getWizardsExeContents()
+    {
+        return 0;
+    }
+    virtual MoMDataSegment* getWizardsExeDataSegment()
+    {
+        return 0;
+    }
+    virtual uint8_t* getWizardsOverlay(size_t /* ovlNr */)
     {
         return 0;
     }
