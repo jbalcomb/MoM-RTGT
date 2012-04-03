@@ -65,15 +65,6 @@ public:
     void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
 
-//    int getMelee() const;
-//    int getRanged() const;
-//    int getArmor() const;
-//    int getResist() const;
-//    int getHits() const;
-//    int getToHitMelee() const;
-//    int getToHitRanged() const;
-//    int getToDefend() const;
-
     MapSpecials getAbilityEffects() const;
     BaseAttributes getActualAttributes() const;
     BaseAttributes getBaseAttributes() const;
@@ -138,6 +129,7 @@ private:
     Unit* m_unit;
     Unit_Type_Data* m_unitType;
 
+    MapSpecials    m_mapAbilities;
     BaseAttributes m_bonuses;
     BaseAttributes m_upAbilities;
     BaseAttributes m_upItems;
