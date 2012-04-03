@@ -18,13 +18,16 @@
 namespace MoM
 {
 
-class QMoMUnitTile: public QGraphicsItem
+class QMoMUnitTile: public QObject, public QGraphicsItem
 {
+    Q_OBJECT
+
 public:
     QMoMUnitTile();
     virtual ~QMoMUnitTile();
 
     QRectF boundingRect() const;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
@@ -36,6 +39,9 @@ public:
     {
         m_unit = unit;
     }
+
+private slots:
+    void slot_actionUnitView();
 
 private:
     QMoMGamePtr m_game;

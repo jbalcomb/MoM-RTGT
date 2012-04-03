@@ -597,8 +597,12 @@ void MainWindow::slot_timerUpdateIcons()
 
 void MainWindow::on_pushButton_AddUnit_clicked()
 {
-    DialogAddUnit* dialog = new DialogAddUnit(this, &m_UnitModel);
+    DialogAddUnit* dialog = new DialogAddUnit(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    // Connect the item model UnitModel to the dialog
+    QObject::connect(&m_UnitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), dialog, SLOT(slot_unitChanged(QMoMUnitPtr)));
+
     dialog->show();
 }
 

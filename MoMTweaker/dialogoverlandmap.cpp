@@ -8,6 +8,8 @@
 #include <QGraphicsScene>
 #include <QTimer>
 
+#include <cmath>
+
 #include "dialogoverlandmap.h"
 #include "ui_dialogoverlandmap.h"
 
@@ -33,6 +35,7 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QRectF rectfTile = MoM::QMoMMapTile().boundingRect();
     m_sceneArcanus->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
     m_sceneMyrror->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
+    ui->graphicsView->setSceneRect(m_sceneArcanus->sceneRect());
 
     ui->comboBox_Plane->setCurrentIndex(1);
 
@@ -159,12 +162,14 @@ void DialogOverlandMap::slot_gameUpdated()
             MoM::Tower_Node_Lair* lair = m_game->getLair(lairNr);
             if (0 == lair)
                 continue;
+            QPixmap pixmapLair = MoM::QMoMResources::instance().getPixmap(lair->m_Type, 1);
             if (MoM::inRange(lair->m_Type, MoM::eTower_Node_Lair_Type_MAX)
-                    && MoM::inRange(lair->m_Plane, MoM::ePlane_MAX))
+                    && MoM::inRange(lair->m_Plane, MoM::ePlane_MAX)
+                    && !pixmapLair.isNull())
             {
-                QPixmap pixmapLair = MoM::QMoMResources::instance().getPixmap(lair->m_Type, 0.5);
                 QGraphicsItem* mapLairItem = scene[lair->m_Plane]->addPixmap(pixmapLair);
                 mapLairItem->setPos(lair->m_XPos * rectfTile.width(), lair->m_YPos * rectfTile.height());
+                mapLairItem->setScale(rectfTile.width() / pixmapLair.width());
                 mapLairItem->setToolTip(prettyQStr(lair->m_Type));
                 m_lookup.insert(lair, mapLairItem);
             }
@@ -185,4 +190,16 @@ void DialogOverlandMap::slot_timerActiveUnit()
     {
         qItem->setVisible(!qItem->isVisible());
     }
+}
+
+void DialogOverlandMap::on_verticalSlider_Zoom_valueChanged(int value)
+{
+    double scale = 1.0 + value / 100.0;
+    if (value < 0)
+    {
+        scale = std::pow(2.0, value / 100.0);
+    }
+
+    ui->graphicsView->resetTransform();
+    ui->graphicsView->scale(scale, scale);
 }

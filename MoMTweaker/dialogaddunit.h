@@ -36,15 +36,17 @@ class DialogAddUnit : public QDialog
     Q_OBJECT
     
 public:
-    explicit DialogAddUnit(QWidget *parent, UnitModel* unitModel);
+    explicit DialogAddUnit(QWidget *parent);
     ~DialogAddUnit();
     
-private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
-    void on_comboBox_Unit_currentIndexChanged(int index);
+public slots:
 	void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
     void slot_unitChanged(const QMoMUnitPtr& unit);
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton *button);
+    void on_comboBox_Unit_currentIndexChanged(int index);
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
@@ -58,7 +60,6 @@ private:
 	// CONFIG
     QMoMGamePtr m_game;
     QSharedPointer<MoM::MoMUnit> m_unit;
-    UnitModel* m_unitModel;
 
 	// STATUS
     bool m_updating;

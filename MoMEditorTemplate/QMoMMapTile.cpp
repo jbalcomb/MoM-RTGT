@@ -7,6 +7,7 @@
 
 #include <qpainter.h>
 
+#include "MoMGenerated.h"
 #include "QMoMResources.h"
 #include "QMoMUtility.h"
 

@@ -17,7 +17,11 @@
    <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QGraphicsView" name="graphicsView"/>
+      <widget class="QGraphicsView" name="graphicsView">
+       <property name="resizeAnchor">
+        <enum>QGraphicsView::AnchorViewCenter</enum>
+       </property>
+      </widget>
      </item>
      <item row="0" column="1">
       <widget class="QGroupBox" name="groupBox">
@@ -167,7 +171,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>200</y>
+          <y>380</y>
           <width>111</width>
           <height>23</height>
          </rect>
@@ -177,6 +181,50 @@
         </property>
         <property name="standardButtons">
          <set>QDialogButtonBox::Close</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="verticalSlider_Zoom">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>200</y>
+          <width>41</width>
+          <height>160</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>-100</number>
+        </property>
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBothSides</enum>
+        </property>
+        <property name="tickInterval">
+         <number>100</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>200</y>
+          <width>30</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Zoom:</string>
         </property>
        </widget>
       </widget>
