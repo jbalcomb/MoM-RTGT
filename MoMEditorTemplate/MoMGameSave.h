@@ -58,6 +58,13 @@ public:
         return &m_SaveGame->m_Map_Attr.m_Events_Status;
     }
 
+    virtual Fortress* getFortresses()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+		return &m_SaveGame->m_Map_Tiles.m_Fortresses[0];
+    }
+
     virtual std::string getGameDirectory();
 
     virtual Game_Data_Save* getGame_Data_Save()

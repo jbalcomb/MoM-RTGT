@@ -97,6 +97,7 @@ private:
     virtual Building_Data* getBuilding_Data();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
+    virtual Fortress* getFortresses();
     virtual WizardsExe_Game_Data* getGame_Data_Exe();
     virtual Game_Settings* getGame_Settings();
     virtual eSpell16* getHero_spells();

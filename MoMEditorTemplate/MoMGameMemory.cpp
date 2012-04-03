@@ -229,6 +229,14 @@ Events_Status* MoMGameMemory::getEvents_Status()
     return derefHeapPointer<Events_Status>(pMoMDataSegment->m_WizardsExe_Pointers.addr_events, 1);
 }
 
+Fortress* MoMGameMemory::getFortresses()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+	return derefHeapPointer<Fortress>(pMoMDataSegment->m_WizardsExe_Pointers.addr_fortress_data, gMAX_WIZARD_RECORDS);
+}
+
 std::string MoMGameMemory::getGameDirectory()
 {
     std::string dir;

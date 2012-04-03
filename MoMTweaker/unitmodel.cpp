@@ -385,7 +385,7 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 
 void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 {
-    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (0 != game->getBuilding_Data()) && (building < MoM::eBuilding_MAX); MoM::inc(building))
+    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (building < MoM::eBuilding_MAX); MoM::inc(building))
     {
         MoM::Building_Data* buildingData = game->getBuilding_Data(building);
         if (0 == buildingData)
@@ -754,23 +754,22 @@ void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr&
 {
     for (int i = 0; (0 != game) && (i < (int)MoM::gMAX_ITEMS); ++i)
     {
-        MoM::Item* pItems = game->getItems();
-        if (0 == pItems)
+		MoM::Item* item = game->getItem(i);
+        if (0 == item)
         {
             break;
         }
-        MoM::Item& item = pItems[i];
         if (row >= ptree->rowCount())
         {
-            ptree->setChild(row, 0, constructTreeItem(&item, ""));
+            ptree->setChild(row, 0, constructTreeItem(item, ""));
 
             ptree->child(row, 2)->setData(QString("Item[%0]").arg(i), Qt::UserRole);
         }
-        ptree->child(row, 0)->setData(toQStr(item.m_Item_Name), Qt::EditRole);
-        if ((MoM::toUInt(item.m_Icon) < MoM::eItem_Icon_MAX) && ((item.m_Cost > 0) || (0 != item.m_Icon)))
+        ptree->child(row, 0)->setData(toQStr(item->m_Item_Name), Qt::EditRole);
+        if ((MoM::toUInt(item->m_Icon) < MoM::eItem_Icon_MAX) && ((item->m_Cost > 0) || (0 != item->m_Icon)))
         {
-            ptree->child(row, 0)->setLazyIcon(item.m_Icon);
-            ptree->child(row, 1)->setData(toQStr(item.m_Item_Type), Qt::UserRole);
+            ptree->child(row, 0)->setLazyIcon(item->m_Icon);
+            ptree->child(row, 1)->setData(toQStr(item->m_Item_Type), Qt::UserRole);
         }
         else
         {
@@ -784,7 +783,7 @@ void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr&
 
 void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 {
-    for (int lairNr = 0; (0 != game) && (0 != game->getLairs()) && (lairNr < (int)MoM::gMAX_NODES_LAIRS_TOWERS); ++lairNr)
+    for (int lairNr = 0; (0 != game) && (lairNr < (int)MoM::gMAX_NODES_LAIRS_TOWERS); ++lairNr)
     {
         MoM::Tower_Node_Lair* lair = game->getLair(lairNr);
         if (0 == lair)
@@ -1043,6 +1042,13 @@ void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
         if (wizardNr >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(wizard, ""));
+
+            QMoMTreeItemBase* subtree = ptree->child(row, 0);
+            MoM::Fortress* fortresses = game->getFortresses();
+            if (0 != fortresses)
+            {
+                subtree->setChild(subtree->rowCount(), 0, constructTreeItem(&fortresses[wizardNr], "Fortress"));
+            }
         }
         ptree->child(wizardNr, 0)->setData(toQStr(wizard->m_Portrait), Qt::UserRole);
         ptree->child(wizardNr, 1)->setData(QString("\"%0\"").arg(toQStr(wizard->m_Name)), Qt::UserRole);
