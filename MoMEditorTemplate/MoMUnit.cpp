@@ -877,8 +877,9 @@ void MoMUnit::applyEffects()
     applyAbilities();
     applyItems();
     applyLevel();
+    applyWeaponType();
 
-    // TODO: other effects
+    // TODO: other effects: spells
 
 	// TODO: change bonus to 0 if unit has no melee, range, or defense.
 }
