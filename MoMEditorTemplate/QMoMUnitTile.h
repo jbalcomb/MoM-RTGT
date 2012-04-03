@@ -21,6 +21,7 @@ namespace MoM
 class QMoMUnitTile: public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
 public:
     QMoMUnitTile();

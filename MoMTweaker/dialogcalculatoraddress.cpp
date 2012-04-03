@@ -144,7 +144,7 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
     // TODO: Sharper boundary check on end-of-memory
     if ((0 != dataSegment) && (momPointer >= dataSegment) && (momPointer < (uint8_t*)dataSegment + 0xFFFFF))
     {
-        int dsOffset = ((uint8_t*)momPointer - (uint8_t*)dataSegment);
+        unsigned dsOffset = ((uint8_t*)momPointer - (uint8_t*)dataSegment);
         dosStr = QString(" ds:%0").arg(dsOffset, 4, 16, QChar('0'));
 
         // Triggers updates
