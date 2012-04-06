@@ -12,6 +12,8 @@ CHANGES IN 0.2.2 (2012-04-04)
 
 * Extended unit view (dialog Summon) with more extensive information.
 
+* Added food bonuses in section EXE:Miscellaneous [Pax Empyrean].
+
 * Updated address calculator to show addresses in DOS, the EXE files, the SAVE files, and IDA.
   It triggers whenever you click a MoM field in the tree view.
   Ticket: https://sourceforge.net/p/momrtgt/tickets/5/

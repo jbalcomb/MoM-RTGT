@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>969</width>
-    <height>609</height>
+    <height>611</height>
    </rect>
   </property>
   <property name="palette">
@@ -116,7 +116,7 @@
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -465,6 +465,9 @@
           </property>
           <property name="text">
            <string>Update tree view</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

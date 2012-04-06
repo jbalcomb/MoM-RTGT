@@ -94,7 +94,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Connect the item model UnitModel to the treeview
     // TODO: Move to new method in UnitModel
     ui->treeView_MoM->setModel(&m_UnitModel);
-    QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)), Qt::QueuedConnection);
+    QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)));
 
     // Make internal connections to handle events centrally
     QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -106,8 +106,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Connect the item model UnitModel to signals from this class
 	if (ui->checkBox_UpdateTree->isChecked())
 	{
-        QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), &m_UnitModel, SLOT(slot_gameChanged(QMoMGamePtr)), Qt::QueuedConnection);
-        QObject::connect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()), Qt::QueuedConnection);
+        QObject::connect(this, SIGNAL(signal_gameChanged(QMoMGamePtr)), &m_UnitModel, SLOT(slot_gameChanged(QMoMGamePtr)));
+        QObject::connect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()));
 	}
 
     // Signal to start with an empty game

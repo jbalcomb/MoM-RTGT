@@ -91,7 +91,7 @@ public:
 
     void setVerbose(bool value)
     {
-        m_verbose = true;
+        m_verbose = value;
     }
 
     bool validPointer(void* pointer, size_t size)

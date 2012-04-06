@@ -1825,17 +1825,19 @@ void UnitModel::threadUpdateModelData()
         uint8_t* ovl117 = 0;
         uint8_t* ovl122 = 0;
         uint8_t* ovl140 = 0;
+        uint8_t* ovl142 = 0;
         uint8_t* ovl164 = 0;
         if (0 != game)
         {
             ovl117 = game->getWizardsOverlay(117);
             ovl122 = game->getWizardsOverlay(122);
             ovl140 = game->getWizardsOverlay(140);
+            ovl142 = game->getWizardsOverlay(142);
             ovl164 = game->getWizardsOverlay(164);
         }
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl140))
+        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
-            nrMiscellaneous = 6;        // TODO: Proper number
+            nrMiscellaneous = 13;        // TODO: Proper number
         }
 
         int oldRowCount = ptree->rowCount();
@@ -1844,10 +1846,11 @@ void UnitModel::threadUpdateModelData()
             beginInsertRows(createIndex(toprow, 0, ptree), oldRowCount, nrMiscellaneous - 1);
         }
 
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl140))
+        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
             if (0 == ptree->rowCount())
             {
+				// 0
                 if (game->getMoM_Version() >= std::string("1.40j"))
                 {
                     ptree->appendChild("City Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));
@@ -1878,8 +1881,38 @@ void UnitModel::threadUpdateModelData()
                 ptree->child(row, 2)->setData("Default 100 turns", Qt::EditRole);
                 row++;
 
+				// 5
                 ptree->appendChild("Max spells of colored unit", new QMoMTreeItem<int8_t>((int8_t*)&ovl117[ 0x0179 ]));
                 ptree->child(row, 2)->setData("Default 40 spells", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Max city size", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl140[ 0x1660 ]));
+                ptree->child(row, 2)->setData("Default 25 pop", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Wild game: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x04E8 ]));
+                ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Granary: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x073C ]));
+                ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Farmer's market: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x0767 ]));
+                ptree->child(row, 2)->setData("Default 3 food/turn", Qt::EditRole);
+                row++;
+
+				// 10
+				ptree->appendChild("Forester's guild: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x06DE ]));
+                ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Animist's guild: food/farmer", new QMoMTreeItem<int16_t>((int16_t*)&ovl142[ 0x0698 ]));
+                ptree->child(row, 2)->setData("Default 3 food/turn", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Race with implicit Animist's guild", new QMoMTreeItem<MoM::eRace>((MoM::eRace*)&ovl142[ 0x065A ]));
+                ptree->child(row, 2)->setData("Default Halfling (6)", Qt::EditRole);
                 row++;
             }
         }
