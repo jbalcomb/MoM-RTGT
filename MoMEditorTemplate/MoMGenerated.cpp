@@ -3744,9 +3744,33 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     }
     os << ")\n";
     os << "m_UNK_2C1A=(\n";
-    for (unsigned i = 0; i < 0x35D0 - 0x2C1A; ++i)
+    for (unsigned i = 0; i < 10; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK_2C1A[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_2C1A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UNK_2C1A[i] << " 0x" << std::hex << rhs.m_UNK_2C1A[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Nr_spell_choices=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Nr_spell_choices[i] << " 0x" << std::hex << rhs.m_Nr_spell_choices[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_UNK_2C40=(\n";
+    for (unsigned i = 0; i < 0x2C6A - 0x2C40; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK_2C40[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_2C40[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Preselected_spell_choices=(\n";
+    for (unsigned i = 0; i < 65; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Preselected_spell_choices[i] << " 0x" << std::hex << (unsigned)rhs.m_Preselected_spell_choices[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_UNK_2CEC=(\n";
+    for (unsigned i = 0; i < 0x35D0 - 0x2CEC; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK_2CEC[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_2CEC[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Hero_Stats_Initializers=(\n";

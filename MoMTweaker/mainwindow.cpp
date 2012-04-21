@@ -1116,10 +1116,10 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
                     //        Caster 40, no ranged attack, fire breath and decent melee
                     data->m_PtrName = offsetSorcerers;
                     data->m_Attribute_Flags.s.Caster_40_MP = true;
-                    data->m_Race_Code = MoM::RACE_Chaos;            // Has to be a color (not arcane) to make Caster_40_MP work
-                    data->m_Attribute_Flags.s.Standard = false;     // Do not display the color-prefix for the name
+//                    data->m_Race_Code = MoM::RACE_Chaos;            // Has to be a color (not arcane) to make Caster_40_MP work
+//                    data->m_Attribute_Flags.s.Standard = false;     // Do not display the color-prefix for the name
                     data->m_Ranged_Type = MoM::RANGED_None;
-                    data->m_Ranged = 0;
+                    data->m_Ranged = 2;
                     data->m_Ranged_Shots = 0;
                     break;
 
@@ -1132,8 +1132,8 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
                     //        Caster 20, weak ranged attack and good melee
                     data->m_PtrName = offsetEnchanters;
                     data->m_Attribute_Flags.s.Caster_20_MP = true;
-                    data->m_Race_Code = MoM::RACE_Nature;           // Has to be a color (not arcane) to make Caster_40_MP work
-                    data->m_Attribute_Flags.s.Standard = false;     // Do not display the color-prefix for the name
+//                    data->m_Race_Code = MoM::RACE_Nature;           // Has to be a color (not arcane) to make Caster_40_MP work
+//                    data->m_Attribute_Flags.s.Standard = false;     // Do not display the color-prefix for the name
                     data->m_Melee = 2;
                     data->m_Ranged = 3;
                     break;

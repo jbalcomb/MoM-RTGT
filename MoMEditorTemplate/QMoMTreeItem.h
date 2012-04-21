@@ -370,6 +370,18 @@ public:
     {
     }
 
+	//template<typename S>
+	//setChild(int row, const QString& label, S* momMemberPtr)
+	//{
+	//	QMoMTreeItem<S>* ptreeItem = dynamic_cast< QMoMTreeItem<S>* >(child(row, 1));
+	//	if (0 == ptreeItem)
+	//	{
+	//		ptreeitem = new QMoMTreeItem<S>(momMemberPtr);
+	//		setChild(row, 1, ptreeitem);
+	//	}
+	//	ptreeitem->setMoMPointer(momMemberPtr);
+	//}
+
 	virtual const void* getVoidMoMPointer() const
 	{
 		return m_ptr;

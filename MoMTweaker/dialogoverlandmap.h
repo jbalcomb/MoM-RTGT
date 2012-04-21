@@ -57,6 +57,7 @@ private slots:
     void on_verticalSlider_Zoom_valueChanged(int value);
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
+    void slot_tileChanged(const MoM::Location& loc);
     void slot_timerActiveUnit();
 };
 

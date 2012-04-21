@@ -7,21 +7,29 @@
 
 #include <QGraphicsScene>
 #include <QTimer>
+#include <QTreeWidgetItem>
 
 #include <cmath>
 
 #include "dialogoverlandmap.h"
 #include "ui_dialogoverlandmap.h"
 
+#include "mainwindow.h"
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
-#include "mainwindow.h"
+#include "MoMTemplate.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
 #include "QMoMUnitTile.h"
 
 using MoM::QMoMResources;
+
+class QTreeItem : public QTreeWidgetItem
+{
+
+};
+
 
 DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QDialog(parent),
@@ -55,6 +63,12 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
 
     slot_gameChanged(MainWindow::getInstance()->getGame());
     m_timer->start(250);
+
+    MoM::Location loc;
+    loc.m_Plane = MoM::PLANE_Arcanum;
+    loc.m_XPos = 23;
+    loc.m_YPos = 31;
+    slot_tileChanged(loc);
 }
 
 DialogOverlandMap::~DialogOverlandMap()
@@ -175,6 +189,20 @@ void DialogOverlandMap::slot_gameUpdated()
             }
         }
     }
+}
+
+void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
+{
+    ui->treeWidget_Tile->clear();
+
+    QTreeItem* qtreeItem;
+    qtreeItem = new QTreeItem;
+    qtreeItem->setText(0, "Location");
+    qtreeItem->setText(1, QString("%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos));
+    ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    qtreeItem = new QTreeItem;
+    qtreeItem->setText(0, "text2");
+    ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
 }
 
 void DialogOverlandMap::slot_timerActiveUnit()

@@ -118,6 +118,10 @@ private:
 
 
     virtual MoMDataSegment* getDataSegment();
+	virtual const class MoMProcess* getMoMProcess() const
+	{
+		return m_process.get();
+	}
     virtual const uint8_t* getSeg0Pointer()
     {
         if (0 == m_process.get())

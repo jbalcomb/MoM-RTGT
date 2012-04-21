@@ -9,6 +9,7 @@
 
 #include <MoMExeMagic.h>
 #include <MoMExeWizards.h>
+#include <MoMProcess.h>
 #include <MoMUtility.h>
 #include "mainwindow.h"
 
@@ -139,18 +140,43 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
 
     QString dosStr;
     dosStr = QString("void* %0").arg((unsigned long)momPointer, 8, 16, QChar('0'));
+	QString memStr;
 
-    const MoM::MoMDataSegment* dataSegment = m_game->getDataSegment();
+	const MoM::MoMProcess* momProcess = m_game->getMoMProcess();
+	if ((0 != momProcess))
+	{
+		memStr = QString("Base=%0 Size=%1 Seg0=%2 DS=%3")
+			.arg((size_t)momProcess->getBaseAddress(), 8, 16, QChar('0'))
+			.arg((size_t)momProcess->getBaseAddressSize(), 8, 16, QChar('0'))
+			.arg((size_t)momProcess->getOffsetSegment0(), 4, 16, QChar('0'))
+			.arg((size_t)momProcess->getOffsetDatasegment(), 4, 16, QChar('0'));
+	}
+
+    const MoM::MoMDataSegment* wizardsDataSegment = m_game->getDataSegment();
     // TODO: Sharper boundary check on end-of-memory
-    if ((0 != dataSegment) && (momPointer >= dataSegment) && (momPointer < (uint8_t*)dataSegment + 0xFFFFF))
+    if ((0 != wizardsDataSegment) && (momPointer >= wizardsDataSegment) && (momPointer < (uint8_t*)wizardsDataSegment + 0xFFFFF))
     {
-        unsigned dsOffset = ((uint8_t*)momPointer - (uint8_t*)dataSegment);
+        unsigned dsOffset = ((uint8_t*)momPointer - (uint8_t*)wizardsDataSegment);
         dosStr = QString(" ds:%0").arg(dsOffset, 4, 16, QChar('0'));
 
         // Triggers updates
         if (dsOffset <= sizeof(MoM::MoMDataSegment))
 		{
 			ui->lineEdit_OffsetIDA->setText(QString("dseg:%0").arg(dsOffset, 4, 16, QChar('0')));
+		}
+    }
+
+    const MoM::MoMMagicDataSegment* magicDataSegment = m_game->getMagicDataSegment();
+    // TODO: Sharper boundary check on end-of-memory
+    if ((0 != magicDataSegment) && (momPointer >= magicDataSegment) && (momPointer < (uint8_t*)magicDataSegment + 0xFFFFF))
+    {
+        unsigned dsOffset = ((uint8_t*)momPointer - (uint8_t*)magicDataSegment);
+        dosStr = QString(" ds:%0").arg(dsOffset, 4, 16, QChar('0'));
+
+        // Triggers updates
+        if (dsOffset <= sizeof(MoM::MoMMagicDataSegment))
+		{
+//			ui->lineEdit_OffsetIDA->setText(QString("dseg:%0").arg(dsOffset, 4, 16, QChar('0')));
 		}
     }
 
@@ -162,6 +188,11 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
 		if (seg0Offset <= 0xFFFFF)
 		{
 			dosStr += QString(" %0:%1").arg(seg0Offset / MoM::gPARAGRAPH_SIZE, 4, 16, QChar('0')).arg(seg0Offset % MoM::gPARAGRAPH_SIZE, 1, 16, QChar('0'));
+			if (0 != momProcess)
+			{
+				size_t memOffset = (size_t)(momProcess->getBaseAddress() + momProcess->getOffsetSegment0() + seg0Offset);
+				memStr = QString("%0 (%1)").arg(memOffset, 8, 16, QChar('0')).arg(memStr);
+			}
 		}
     }
 
@@ -190,4 +221,5 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
     }
 
     ui->lineEdit_OffsetDOS->setText(dosStr);
+	ui->lineEdit_OffsetMem->setText(memStr);
 }

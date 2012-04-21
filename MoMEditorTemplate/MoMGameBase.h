@@ -392,6 +392,10 @@ public:
     {
         return 0;
     }
+	virtual const class MoMProcess* getMoMProcess() const
+	{
+		return 0;
+	}
     virtual SaveGame* getSaveGame()
     {
         return 0;

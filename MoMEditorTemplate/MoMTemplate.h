@@ -3198,9 +3198,12 @@ typedef struct PACKED_STRUCT // Spell_Data
     int8_t          m_Spell_Category;          // 15,   0x000400,   -1, 1);
                             // Spell category?
                             // 4 = Damage spells, spell strength = 0
-                            // 12,23 = Banish, Dispel Evil
-                            // 22 = Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball;
-                            //      spell strength from field + (mana - cost)
+                            // 12 = Dispel Evil
+							// 19 = Chargeable spells: Disenchant
+							// 21 = Chargeable spell: Counter Magic
+                            // 22 = Chargeable spells: Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball;
+                            //      base spell strength + (mana - cost)
+							// 23 = Banish (chargeable?)
     eSpell_Type     m_Section_in_spell_book;    // 16,   0x000400,   -1, 1);
     eRealm_Type     m_Magic_Realm;              // 17,   0x800400,   GetEnum("enum_RealmType"),  1);
     int8_t          m_Casting_eligibility;      // 18,   0x000400,   -1, 1);
@@ -3374,7 +3377,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_unitNr            ;   // 30-31 db ?
     uint8_t                 m_UNK04;          // 32
     uint8_t                 m_web_              ;   // 33 db ?
-    uint8_t                 m_active__;    // 34 db ? Active (0=alive, 4=dead, 6=crackscall) ??
+    uint8_t                 m_active__;    // 34 db ? Active (0=alive, 4=dead, 5=undeaded, 6=crackscall) ??
     ePlayer                 m_Owner             ;   // 35 db ?
     uint8_t                 m_cur_total_damage_GUESS     ;    // 36 db ?
     uint8_t                 m_UNK05[2];       // 37
@@ -4032,7 +4035,12 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
     Wizard_Type_Data    m_Wizard_Types[ePortrait_MAX];  // ds:2AD0
 
-    uint8_t         m_UNK_2C1A[0x35D0 - 0x2C1A];           // ds:2C1A
+    int16_t         m_UNK_2C1A[10];					// ds:2C1A
+    int16_t         m_Nr_spell_choices[10];					// ds:2C2E
+
+    uint8_t         m_UNK_2C40[0x2C6A - 0x2C40];           // ds:2C40
+    uint8_t         m_Preselected_spell_choices[65];       // ds:2C6A
+    uint8_t         m_UNK_2CEC[0x35D0 - 0x2CEC];           // ds:2CEC
 
     Hero_Stats_Initializer  m_Hero_Stats_Initializers[gMAX_HERO_TYPES];  // ds:35D0
 

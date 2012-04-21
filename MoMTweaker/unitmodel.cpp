@@ -336,10 +336,18 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
     for (int i = 0; (i < nrBattle_Units) && (i < (int)MoM::gMAX_BATTLE_UNITS); ++i)
     {
         MoM::Battle_Unit& battleUnit = pBattleUnits[i];
+
         if (row >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(&battleUnit, ""));
         }
+		//QMoMTreeItemSubtree<MoM::Battle_Unit>* pnode = dynamic_cast< QMoMTreeItemSubtree<MoM::Battle_Unit>* >(ptree->child(row, 0));
+		//if (0 == pnode)
+		//{
+		//	pnode = new QMoMTreeItemSubtree<MoM::Battle_Unit>(0);
+		//	ptree->setChild(row, 0, pnode);
+		//}
+		//constructTreeItem(pnode, &battleUnit, "");
 
         QString id;
         int unitNr = battleUnit.m_unitNr;
@@ -1824,6 +1832,7 @@ void UnitModel::threadUpdateModelData()
 
         uint8_t* ovl117 = 0;
         uint8_t* ovl122 = 0;
+        uint8_t* ovl136 = 0;
         uint8_t* ovl140 = 0;
         uint8_t* ovl142 = 0;
         uint8_t* ovl164 = 0;
@@ -1831,13 +1840,14 @@ void UnitModel::threadUpdateModelData()
         {
             ovl117 = game->getWizardsOverlay(117);
             ovl122 = game->getWizardsOverlay(122);
+            ovl136 = game->getWizardsOverlay(136);
             ovl140 = game->getWizardsOverlay(140);
             ovl142 = game->getWizardsOverlay(142);
             ovl164 = game->getWizardsOverlay(164);
         }
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
-            nrMiscellaneous = 13;        // TODO: Proper number
+            nrMiscellaneous = 14;        // TODO: Proper number
         }
 
         int oldRowCount = ptree->rowCount();
@@ -1846,7 +1856,7 @@ void UnitModel::threadUpdateModelData()
             beginInsertRows(createIndex(toprow, 0, ptree), oldRowCount, nrMiscellaneous - 1);
         }
 
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
             if (0 == ptree->rowCount())
             {
@@ -1914,6 +1924,10 @@ void UnitModel::threadUpdateModelData()
 				ptree->appendChild("Race with implicit Animist's guild", new QMoMTreeItem<MoM::eRace>((MoM::eRace*)&ovl142[ 0x065A ]));
                 ptree->child(row, 2)->setData("Default Halfling (6)", Qt::EditRole);
                 row++;
+
+				ptree->appendChild("Max spell pump mana (power of 2)", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl136[ 0x097E ]));
+                ptree->child(row, 2)->setData("Default 2 (max pump=2^2*cost)", Qt::EditRole);
+                row++;
             }
         }
 
@@ -1971,7 +1985,13 @@ void UnitModel::threadUpdateModelData()
 
             if (0 == psubtree->rowCount())
             {
-                psubtree->appendChild("Sorcery_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Sorcery_Picks_Divider));
+				for (int i = 0; i < 10; ++i)
+				{
+					psubtree->appendChild(QString("Nr spells %0 books").arg(i+2), new QMoMTreeItem<int16_t>(&pMagicDataSegment->m_Nr_spell_choices[i]));
+					subrow++;
+				}				
+				
+				psubtree->appendChild("Sorcery_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Sorcery_Picks_Divider));
                 subrow++;
                 psubtree->appendChild("Nature_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Nature_Picks_Divider));
                 subrow++;

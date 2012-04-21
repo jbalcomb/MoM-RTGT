@@ -7,11 +7,13 @@ Linux/
 Release/
 Win32/
 Windows/
+msvc2008/
 
 # Wild cards
 *.log
 *.ncb
 *.o
+*.obj
 *.pdb
 *.pro.user
 *.suo

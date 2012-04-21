@@ -39,6 +39,14 @@ public:
 
     bool findProcessAndData();
 
+    const uint8_t* getBaseAddress() const
+	{
+		return m_lpBaseAddress;
+	}
+    size_t getBaseAddressSize() const
+	{
+		return m_dwBaseAddressSize;
+	}
     const uint8_t* getDatasegmentData() const
     {
         if (m_dataSegmentAndUp.empty())
@@ -51,7 +59,22 @@ public:
             return 0;
         return &m_dataSegmentAndUp[0];
     }
-
+    size_t getOffsetSegment0() const
+	{
+		return m_dwOffsetSegment0;
+	}
+    size_t getOffsetCode() const
+	{
+		return m_dwOffsetCode;
+	}
+    size_t getOffsetDatasegment() const
+	{
+		return m_dwOffsetDatasegment;
+	}
+    void* getProcessHandle() const
+	{
+		return m_hProcess;
+	}
     uint8_t* getSeg0Pointer()
     {
         if (m_dataSegmentAndUp.empty())

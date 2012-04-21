@@ -3277,16 +3277,64 @@ QMoMTreeItemBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString& con
           ptreem_Wizard_Types->appendTree(constructTreeItem(&rhs->m_Wizard_Types[i], oss.str().c_str()), "");
     }
     QMoMTreeItemBase* ptreem_UNK_2C1A = ptree;
-    if (0x35D0 - 0x2C1A > 3)
+    if (10 > 3)
     {
         ptreem_UNK_2C1A = new QMoMTreeItemBase("m_UNK_2C1A");
         ptree->appendTree(ptreem_UNK_2C1A, "");
     }
-    for (unsigned i = 0; i < 0x35D0 - 0x2C1A; ++i)
+    for (unsigned i = 0; i < 10; ++i)
     {
           std::ostringstream oss;
           oss << "m_UNK_2C1A[" << i << "]";
-          ptreem_UNK_2C1A->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK_2C1A[i]));
+          ptreem_UNK_2C1A->appendChild(oss.str().c_str(), new QMoMTreeItem<int16_t>(&rhs->m_UNK_2C1A[i]));
+    }
+    QMoMTreeItemBase* ptreem_Nr_spell_choices = ptree;
+    if (10 > 3)
+    {
+        ptreem_Nr_spell_choices = new QMoMTreeItemBase("m_Nr_spell_choices");
+        ptree->appendTree(ptreem_Nr_spell_choices, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Nr_spell_choices[" << i << "]";
+          ptreem_Nr_spell_choices->appendChild(oss.str().c_str(), new QMoMTreeItem<int16_t>(&rhs->m_Nr_spell_choices[i]));
+    }
+    QMoMTreeItemBase* ptreem_UNK_2C40 = ptree;
+    if (0x2C6A - 0x2C40 > 3)
+    {
+        ptreem_UNK_2C40 = new QMoMTreeItemBase("m_UNK_2C40");
+        ptree->appendTree(ptreem_UNK_2C40, "");
+    }
+    for (unsigned i = 0; i < 0x2C6A - 0x2C40; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_UNK_2C40[" << i << "]";
+          ptreem_UNK_2C40->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK_2C40[i]));
+    }
+    QMoMTreeItemBase* ptreem_Preselected_spell_choices = ptree;
+    if (65 > 3)
+    {
+        ptreem_Preselected_spell_choices = new QMoMTreeItemBase("m_Preselected_spell_choices");
+        ptree->appendTree(ptreem_Preselected_spell_choices, "");
+    }
+    for (unsigned i = 0; i < 65; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Preselected_spell_choices[" << i << "]";
+          ptreem_Preselected_spell_choices->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Preselected_spell_choices[i]));
+    }
+    QMoMTreeItemBase* ptreem_UNK_2CEC = ptree;
+    if (0x35D0 - 0x2CEC > 3)
+    {
+        ptreem_UNK_2CEC = new QMoMTreeItemBase("m_UNK_2CEC");
+        ptree->appendTree(ptreem_UNK_2CEC, "");
+    }
+    for (unsigned i = 0; i < 0x35D0 - 0x2CEC; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_UNK_2CEC[" << i << "]";
+          ptreem_UNK_2CEC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK_2CEC[i]));
     }
     QMoMTreeItemBase* ptreem_Hero_Stats_Initializers = ptree;
     if (gMAX_HERO_TYPES > 3)
