@@ -195,6 +195,14 @@ public:
         return value;
     }
 
+    Race_Data* getRace_Data(eRace race)
+    {
+		MoMDataSegment* dataSegment = getDataSegment();
+        if ((0 == dataSegment) || !inRange(race, eRace_MAX))
+            return 0;
+		return &dataSegment->m_Race_Data[race];
+    }
+
     std::string getRaceName(eRace race);
 
     virtual std::string getSources() const = 0;

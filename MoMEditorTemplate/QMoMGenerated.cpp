@@ -4470,18 +4470,9 @@ QMoMTreeItemBase* constructTreeItem(Unit* rhs, const QString& context)
     ptree->appendTree(constructTreeItem(&rhs->m_Weapon_Mutation, "m_Weapon_Mutation"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_Unit_Enchantment, "m_Unit_Enchantment"), "");
     ptree->appendChild("m_Road_Building_left_to_complete", new QMoMTreeItem<int8_t>(&rhs->m_Road_Building_left_to_complete));
-    QMoMTreeItemBase* ptreem_Road_Building_parms = ptree;
-    if (3 > 3)
-    {
-        ptreem_Road_Building_parms = new QMoMTreeItemBase("m_Road_Building_parms");
-        ptree->appendTree(ptreem_Road_Building_parms, "");
-    }
-    for (unsigned i = 0; i < 3; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_Road_Building_parms[" << i << "]";
-          ptreem_Road_Building_parms->appendChild(oss.str().c_str(), new QMoMTreeItem<int8_t>(&rhs->m_Road_Building_parms[i]));
-    }
+    ptree->appendChild("m_XPos_Road_Building_from", new QMoMTreeItem<int8_t>(&rhs->m_XPos_Road_Building_from));
+    ptree->appendChild("m_YPos_Road_Building_from", new QMoMTreeItem<int8_t>(&rhs->m_YPos_Road_Building_from));
+    ptree->appendChild("m_UNK02", new QMoMTreeItem<int8_t>(&rhs->m_UNK02));
     return ptree;
 }
 

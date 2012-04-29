@@ -29,7 +29,11 @@ public:
     bool applyBuildingQueue(MoMGameBase& game, int cityNr);
     bool applyBuildingQueue(MoMGameBase& game, ePlayer playerNr);
 
-    bool findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units);
+	static bool findCheapestUnitToProduce(MoMGameBase& game, const City& city, eProducing& produce);
+    static bool findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units);
+
+	static bool isBuildingAllowed(MoMGameBase& game, const City& city, eBuilding building);
+	static bool isBuildingPresent(const City& city, eBuilding building);
 
     bool polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr);
 

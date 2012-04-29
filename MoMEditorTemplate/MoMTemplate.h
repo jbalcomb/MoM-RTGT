@@ -2920,13 +2920,15 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_Damage;                   // 11
     uint8_t     m_Grouping;                 // 12
     int8_t      m_Guess_Combat_Enchantment_Flag1; // 13
-    int8_t      m_In_Tower_without_Seal; // 14
+    int8_t      m_In_Tower_without_Seal;	// 14
     int8_t      m_Guess_Combat_Enchantment_Flag3; // 15
-    uint8_t     m_Scouting;                   // 16
+    uint8_t     m_Scouting;                 // 16
     unionUnit_Weapon_Mutation   m_Weapon_Mutation;  // 17
     unionUnit_Enchantment       m_Unit_Enchantment; // 18-1B <format=hex>;
     int8_t      m_Road_Building_left_to_complete;   // 1C
-    int8_t      m_Road_Building_parms[3];           // 1D-1F
+    int8_t      m_XPos_Road_Building_from;  // 1D
+    int8_t      m_YPos_Road_Building_from;  // 1E
+    int8_t      m_UNK02;					// 1F
                                             // SIZE 20
 } Unit; // <read=read_Unit>;
 

@@ -4521,12 +4521,9 @@ std::ostream& operator<<(std::ostream& os, const Unit& rhs)
     os << "m_Weapon_Mutation=" << rhs.m_Weapon_Mutation << "\n";
     os << "m_Unit_Enchantment=" << rhs.m_Unit_Enchantment << "\n";
     os << "m_Road_Building_left_to_complete=" << (int)rhs.m_Road_Building_left_to_complete << " 0x" << std::hex << (int)rhs.m_Road_Building_left_to_complete << std::dec << "\n";
-    os << "m_Road_Building_parms=(\n";
-    for (unsigned i = 0; i < 3; ++i)
-    {
-        os << "[" << i << "] " << (int)rhs.m_Road_Building_parms[i] << " 0x" << std::hex << (int)rhs.m_Road_Building_parms[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_XPos_Road_Building_from=" << (int)rhs.m_XPos_Road_Building_from << " 0x" << std::hex << (int)rhs.m_XPos_Road_Building_from << std::dec << "\n";
+    os << "m_YPos_Road_Building_from=" << (int)rhs.m_YPos_Road_Building_from << " 0x" << std::hex << (int)rhs.m_YPos_Road_Building_from << std::dec << "\n";
+    os << "m_UNK02=" << (int)rhs.m_UNK02 << " 0x" << std::hex << (int)rhs.m_UNK02 << std::dec << "\n";
     os << "}";
     return os;
 }
