@@ -58,9 +58,10 @@ public:
 
     void close();
 
+    void changeUnit(Battle_Unit* battleUnit);
     void changeUnit(eUnit_Type unitTypeNr);
-    void changeUnit(Hired_Hero* hiredHero);
     void changeUnit(Hero_stats* heroStats);
+    void changeUnit(Hired_Hero* hiredHero);
     void changeUnit(Unit_Type_Data* unitType);
     void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
@@ -71,11 +72,13 @@ public:
     BaseAttributes getBonusAttributes() const;
     int getCastingSkill() const;
     std::string getDisplayName() const;
+	int getGazeModifier() const;
     std::string getHeroName() const;
     MapSpecials getItemEffects() const;
     Item* getSlotItem(int itemSlotNr) const;
     eSlot_Type16 getSlotType(int itemSlotNr) const;
     int getLevel() const;
+    std::string getLevelName() const;
     double getMoves() const;
     int getNrFigures() const;
     eRace getRace() const;
@@ -110,6 +113,8 @@ private:
 
     /// \brief (Re)applies effects of level
     void applyLevel();
+
+    void applySpells(const MoMUnit* enemy = 0);
 
     /// \brief (Re)applies effects of weapon type
 	void applyWeaponType();

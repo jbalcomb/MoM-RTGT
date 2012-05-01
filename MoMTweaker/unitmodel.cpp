@@ -220,6 +220,7 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
     // If so, emit a signal
     QMoMTreeItemBase* itemBase = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
 
+    checkUnitChanged<MoM::Battle_Unit>(itemBase);
     checkUnitChanged<MoM::Hero_stats>(itemBase);
     checkUnitChanged<MoM::Hired_Hero>(itemBase);
     checkUnitChanged<MoM::Unit>(itemBase);

@@ -7,7 +7,10 @@ class QMapGraphicsView : public QGraphicsView
 {
 public:
     explicit QMapGraphicsView(QWidget *parent = 0);
-    
+
+protected:
+    void mouseMoveEvent(QMouseEvent* event);
+
 signals:
     
 public slots:

@@ -406,6 +406,7 @@ std::ostream& operator<<(std::ostream& os, const eLevel& rhs)
     case LEVEL_Level_7: os << "LEVEL_Level_7"; break;
     case LEVEL_Level_8: os << "LEVEL_Level_8"; break;
     case LEVEL_Level_9: os << "LEVEL_Level_9"; break;
+    case eLevel_MAX: os << "eLevel_MAX"; break;
     default: os << "<Unknown eLevel>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -3611,7 +3612,20 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_UNK06a[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK06a[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_NameBuffer1a=" << formatCharArray(rhs.m_NameBuffer1a, 0x5E92 - 0x2082) << "\n";
+    os << "m_NameBuffer_2082=" << formatCharArray(rhs.m_NameBuffer_2082, 0x3F46 - 0x2082) << "\n";
+    os << "m_UnitLevelNameOffsets=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitLevelNameOffsets[i] << " 0x" << std::hex << rhs.m_UnitLevelNameOffsets[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_HeroLevelNameOffsets=(\n";
+    for (unsigned i = 0; i < 9; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_HeroLevelNameOffsets[i] << " 0x" << std::hex << rhs.m_HeroLevelNameOffsets[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_NameBuffer_3F64=" << formatCharArray(rhs.m_NameBuffer_3F64, 0x5E92 - 0x3F64) << "\n";
     os << "m_Next_Turn_seed_storage_lo=" << rhs.m_Next_Turn_seed_storage_lo << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_lo << std::dec << "\n";
     os << "m_Next_Turn_seed_storage_hi=" << rhs.m_Next_Turn_seed_storage_hi << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_hi << std::dec << "\n";
     os << "m_UNK_5E96=(\n";

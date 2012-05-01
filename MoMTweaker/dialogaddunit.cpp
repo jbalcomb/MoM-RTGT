@@ -139,7 +139,7 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
     pos.ry() += MoM::Max(pixmapItem.height() + 2, 34);
 }
 
-void DialogAddUnit::displayLevel(QPointF &pos, int level, int experience)
+void DialogAddUnit::displayLevel(QPointF &pos, const std::string& levelName, int level, int experience)
 {
     QGraphicsItem* item = 0;
 
@@ -149,6 +149,10 @@ void DialogAddUnit::displayLevel(QPointF &pos, int level, int experience)
     item->setPos(pos);
 
     QString text = QString("Level %0 (%1 ep)").arg(level).arg(experience);
+    if (!levelName.empty())
+    {
+        text = QString("%0 (level %1 / %2 ep)").arg(levelName.c_str()).arg(level).arg(experience);
+    }
     item = addText(pos + QPointF(pixmap.width() * 4 / 3, 0), text);
 
     pos.ry() += MoM::Max(pixmap.height() + 2, 34);
@@ -489,7 +493,7 @@ void DialogAddUnit::update()
     // Level/XP
     if (0 != m_unit->getLevel())
     {
-        displayLevel(pos, m_unit->getLevel(), m_unit->getXP());
+        displayLevel(pos, m_unit->getLevelName(), m_unit->getLevel(), m_unit->getXP());
     }
 
     // Items

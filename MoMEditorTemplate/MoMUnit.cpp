@@ -110,6 +110,28 @@ void MoMUnit::close()
     m_upWeaponType = BaseAttributes();
 }
 
+void MoMUnit::changeUnit(Battle_Unit *battleUnit)
+{
+    close();
+
+    m_battleUnit = battleUnit;
+
+    if (0 != m_game)
+    {
+        m_unit = m_game->getUnit(battleUnit->m_unitNr);
+
+        if (0 != m_unit)
+        {
+            m_heroStats = m_game->getHero_stats(battleUnit->m_Owner, m_unit->m_Unit_Type);
+            m_hiredHero = m_game->getHired_Hero(m_unit);
+            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
+        }
+//        m_heroStatsInitializer = 0;
+
+        applyEffects();
+    }
+}
+
 void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
 {
     close();
@@ -443,7 +465,7 @@ MoMUnit::BaseAttributes MoMUnit::getBaseAttributes() const
     if (0 != m_unitType)
     {
         base.melee = m_unitType->m_Melee;
-        base.defense = m_unitType->m_Melee;
+		base.defense = m_unitType->m_Defense;
         base.ranged = m_unitType->m_Ranged;
         base.resistance = m_unitType->m_Resistance;
         base.hitpoints = m_unitType->m_Hitpoints;
@@ -469,6 +491,16 @@ std::string MoMUnit::getDisplayName() const
     std::string name = raceName + " " + unitName;
 
     return name;
+}
+
+int MoMUnit::getGazeModifier() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Gaze_Modifier;
+    }
+	return value;
 }
 
 std::string MoMUnit::getHeroName() const
@@ -589,7 +621,7 @@ eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
     {
         value = m_hiredHero->m_Slot_Types[itemSlotNr];
     }
-    else if (0 != m_unitType)
+    else if ((0 != m_unitType) && isHero())
     {
         // TODO: Centralize hero->itemslot code, including the same code in MoMController
 
@@ -651,6 +683,26 @@ int MoMUnit::getLevel() const
         }
     }
     return value;
+}
+
+std::string MoMUnit::getLevelName() const
+{
+    std::string name;
+    MoMDataSegment* dataSegment = 0;
+    int level = getLevel();
+    if ((0 != m_game) && (level > 0) && (0 != (dataSegment = m_game->getDataSegment())))
+    {
+        level--;
+        if (isHero() && (level < ARRAYSIZE(dataSegment->m_HeroLevelNameOffsets)))
+        {
+            name = m_game->getNameByOffset(dataSegment->m_HeroLevelNameOffsets[level]);
+        }
+        else if (level < ARRAYSIZE(dataSegment->m_UnitLevelNameOffsets))
+        {
+            name = m_game->getNameByOffset(dataSegment->m_UnitLevelNameOffsets[level]);
+        }
+    }
+    return name;
 }
 
 // TODO: Eliminate using getActualAttributes() instead
@@ -896,10 +948,46 @@ void MoMUnit::applyEffects()
     applyItems();
     applyLevel();
     applyWeaponType();
+    applySpells();
 
-    // TODO: other effects: spells
-
-	// TODO: change bonus to 0 if unit has no melee, range, or defense.
+    // Check differences with Battle_Unit if available
+    if (0 != m_battleUnit)
+    {
+        BaseAttributes actualAttr = getActualAttributes();
+		std::cout << "Verify battle unit fields" << std::endl;
+		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Attack)
+		{
+            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraAtt=" << (int)m_battleUnit->m_Extra_Attack << std::endl;
+		}
+		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
+		{
+            std::cout << "Ranged calc=" << actualAttr.ranged << " bonus=" << m_bonuses.ranged << " battleUnit=" << (int)m_battleUnit->m_Ranged << " battle.extraRa=" << (int)m_battleUnit->m_Extra_Ranged << std::endl;
+		}
+		if (actualAttr.defense != m_battleUnit->m_Defense || this->m_bonuses.defense != m_battleUnit->m_Extra_Defense)
+		{
+            std::cout << "Defense calc=" << actualAttr.defense << " bonus=" << m_bonuses.defense << " battleUnit=" << (int)m_battleUnit->m_Defense << " battle.extraDf=" << (int)m_battleUnit->m_Extra_Defense << std::endl;
+		}
+		if (actualAttr.toHitMelee != m_battleUnit->m_To_Hit || this->m_bonuses.toHitMelee != m_battleUnit->m_Extra_ToHit_Melee)
+		{
+            std::cout << "ToHit Melee calc=" << actualAttr.toHitMelee << " bonus=" << m_bonuses.toHitMelee << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToMe=" << (int)m_battleUnit->m_Extra_ToHit_Melee << std::endl;
+		}
+		if (actualAttr.toHitRanged != m_battleUnit->m_To_Hit || this->m_bonuses.toHitRanged != m_battleUnit->m_Extra_ToHit_Ranged)
+		{
+            std::cout << "ToHit Ranged calc=" << actualAttr.toHitRanged << " bonus=" << m_bonuses.toHitRanged << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToRa=" << (int)m_battleUnit->m_Extra_ToHit_Ranged << std::endl;
+		}
+		if (actualAttr.toDefend != m_battleUnit->m_Extra_ToDefend)
+		{
+            std::cout << "ToDefend calc=" << actualAttr.toDefend << " bonus=" << m_bonuses.toDefend << " battleUnit=N/A" << " battle.extraToDf=" << (int)m_battleUnit->m_Extra_ToDefend << std::endl;
+		}
+		if (actualAttr.moves != m_battleUnit->m_MoveHalves / 2.0)
+		{
+			std::cout << "Moves calc=" << actualAttr.moves << " get=" << getMoves() << " battleUnit=" << m_battleUnit->m_MoveHalves / 2.0 << std::endl;
+		}
+		if (getGazeModifier() != m_battleUnit->m_Gaze_Modifier)
+		{
+            std::cout << "Gaze calc=" << getGazeModifier() << " battleUnit=" << (int)m_battleUnit->m_Gaze_Modifier << std::endl;
+		}
+    }
 }
 
 void MoMUnit::applyAbilities()
@@ -930,8 +1018,9 @@ void MoMUnit::applyAbilities()
     if (has("Caster"))         { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); set_special("Caster", bonus); }
     if (has("Constitution"))   { up.hitpoints += bonus = level; set_special("Constitution", bonus); }
     if (has("Constitution X")) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); set_special("Constitution X", bonus); }
-    if (has("Leadership"))     { up.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up.ranged += static_cast<int>(bonus / 2); set_special("Leadership", bonus); }
-    if (has("Leadership X"))   { up.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up.ranged += static_cast<int>(bonus / 2); set_special("Leadership X", bonus); }
+	// Treat Leadership bonus as gold bonus, since application depends on highest Leadership in group
+    if (has("Leadership"))     { up_gold.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); set_special("Leadership", bonus); }
+    if (has("Leadership X"))   { up_gold.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); set_special("Leadership X", bonus); }
 
     if (has("Legendary"))      { bonus = 3 * level; set_special("Legendary", bonus); }
     if (has("Legendary X"))    { bonus = static_cast<int>(3 * level * 3 / 2); set_special("Legendary X", bonus); }
@@ -1041,7 +1130,7 @@ void MoMUnit::applyLevel()
 		case 2: up.melee = +1; up.ranged = +1; up.defense = +1; up.resistance = +1; up.hitpoints = +1; break;
 		case 3: up.melee = +2; up.ranged = +2; up.defense = +1; up.resistance = +2; up.hitpoints = +2; up.toHitMelee = +1; break;
 		case 4: up.melee = +3; up.ranged = +3; up.defense = +2; up.resistance = +3; up.hitpoints = +3; up.toHitMelee = +1; break;
-		case 5: up.melee = +4; up.ranged = +4; up.defense = +2; up.resistance = +4; up.hitpoints = +4; up.toHitMelee = +2; break;
+		case 5: up.melee = +4; up.ranged = +4; up.defense = +2; up.resistance = +4; up.hitpoints = +4; up.toHitMelee = +1; break;
 		case 6: up.melee = +5; up.ranged = +5; up.defense = +3; up.resistance = +5; up.hitpoints = +5; up.toHitMelee = +2; break;
 		case 7: up.melee = +6; up.ranged = +6; up.defense = +3; up.resistance = +6; up.hitpoints = +6; up.toHitMelee = +2; break;
 		case 8: up.melee = +7; up.ranged = +7; up.defense = +4; up.resistance = +7; up.hitpoints = +7; up.toHitMelee = +2; break;
@@ -1067,7 +1156,386 @@ void MoMUnit::applyLevel()
 
 //    // Add level bonus where appropriate
 //    this.add_bonus(up);
-//    this.fixedunit.add_bonus(up);
+    //    this.fixedunit.add_bonus(up);
+}
+
+void MoMUnit::applySpells(const MoMUnit *enemy)
+{
+    // TODO: other effects: spells
+
+    /*
+   // Effects taken from [Manual]
+  var up = new BaseAttributes();
+  var dn = new BaseAttributes();
+
+  //
+  // First process spells on which other spells may depend (such as unit_type)
+  //
+
+  if (spell_active("Black Channels"))
+  {
+     if (baseunit.Me) up.Me += +3; if (baseunit.Ra) up.Ra += +1; up.Hp += +1; up.Re += +1; up.Df += +1;
+     add_special("Undead");
+  }
+
+  if (spell_active("Chaos Channel"))
+  {
+     switch (1 * spells[ "Chaos Channel" ])
+     {
+        case 1:  up.Df += +2; break;
+        case 2:  if (!has("Flying"))
+                    add_special("Flying", 2);
+                 else if (get_special("Flying") < 2)
+                    set_special("Flying", 2);
+                 break;
+        case 3:  if (!has("Fire Breath"))
+                    add_special("Fire Breath", 2);
+                 else if (get_special("Fire Breath") < 2)
+                    set_special("Fire Breath", 2);
+                 break;
+     }
+  }
+
+  //
+  // Process the regular spells
+  //
+
+  // "Berserk" is processed last (after other effects on Me and Df)
+
+  // "Black Channels" is processed earlier (before other effects depending on unit_type)
+
+  if (spell_active("Black Prayer"))
+  {
+     if (baseunit.Me) dn.Me += +1; dn.Df += +1; dn.Re += +2;
+  }
+
+  // "Black Sleep" is processed last (after other effects on Me/Ra/Df/Re)
+
+  if (spell_active("Bless"))
+  {
+     if (enemy && (enemy.is_type("Death") || enemy.is_type("Chaos")))
+     {
+        // [Manual] says Df/Re+2, but [Game] and [Strategy Guide] say Df/Re+3.
+        // TODO: Df/Re only against R&G Melee, All Breath, R&G Magic Ranged, R&G Spells
+        up.Df += +3;
+        up.Re += +3;
+     }
+  }
+
+  // "Blur" is processed last (after possible True Sightn)
+
+  // "Chaos Channel" is processed earlier (before other effects depending on unit_type)
+
+  if ((spell_active("Chaos Surge") || enemy && enemy.spell_active("Chaos Surge")) && is_type("Chaos"))
+  {
+     if (baseunit.Me) up.Me += +2; if (baseunit.Ra) up.Ra += +2;
+     // [Strategy Guide]
+     up.Df += +2;
+  }
+
+  if (spell_active("Charm of Life"))
+  {
+     up.Hp += +Math.max(1, Math.floor(Hp / 4));
+  }
+
+  if (spell_active("Cloak of Fear"))
+  {
+     // Each turn each opposing unit must resist (Re +1) or cower in fear (cannot attack, but can still counter)
+  }
+
+  if (spell_active("Darkness") || enemy && enemy.spell_active("Darkness"))
+  {
+     if (is_type("Death"))
+     {
+        if (baseunit.Me) up.Me += +1; up.Df += +1; up.Re += +1;
+     }
+     else if (is_type("Life"))
+     {
+        if (baseunit.Me) dn.Me += +1; dn.Df += +1; dn.Re += +1;
+     }
+  }
+
+  if (spell_active("Eldritch Weapon"))
+  {
+     if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
+  }
+  if (enemy && enemy.spell_active("Eldritch Weapon"))
+  {
+     dn.Tb += +1;                              // The To-Block (Tb) of the enemy is reduced by 1
+  }
+
+  if (spell_active("Elemental Armor"))
+  {
+     // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
+     // up.Df += +10;
+     up.Re += +10;
+  }
+
+  if (spell_active("Flame Blade"))
+  {
+     if (baseunit.Me) up.Me += +2; if (baseunit.Ra && range_type == "Physical" && !has("Rocks")) up.Ra += +2;
+     if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
+  }
+
+  if (spell_active("Flight") && !has("Flying"))
+  {
+     add_special("Flying", 0);                 // ??? amount = landbased move + 1
+  }
+
+  if (spell_active("Giant Strength"))
+  {
+     if (baseunit.Me) up.Me += +1; if (has("Thrown")) up.Ra += +1;
+  }
+
+  if (spell_active("Guardian Wind"))
+  {
+     add_special("Missile Imm");
+  }
+
+  // "Haste" is processed last (after other effects on Me and Ra)
+
+  if (spell_active("High Prayer"))
+  {
+     if (baseunit.Me) up.Me += +2; up.Df += +2; up.Re += +3; up.Th += +1; up.Th_Ra += +1; up.Tb += +1;
+  }
+
+  if (spell_active("Holy Armor"))
+  {
+     up.Df += +2;
+  }
+
+  if (spell_active("Holy Weapon"))
+  {
+     if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
+     up.Th += +1;
+     if (Ra && range_type == "Physical") up.Th_Ra += +1;
+  }
+
+  if (spell_active("Immolation"))
+  {
+     if (has("Immolation"))
+        set_special("Immolation", Math.max(get_special("Immolation"), 4));
+     else
+        add_special("Immolation", 4);
+  }
+
+  if (spell_active("Invisibility"))
+  {
+     add_special("Invisibility");
+  }
+
+  // Actual effect of "Invisibility" is processed last (after possible True Sight)
+
+  if (spell_active("Invulnerability"))
+  {
+     add_special("Weapon Imm");
+  }
+
+  if (spell_active("Iron Skin"))
+  {
+     up.Df += +5;
+  }
+
+  if (spell_active("Lion Heart"))
+  {
+     // [Manual] says Me/Ra/Hp/Re +2, but [Game] shows Me/Ra/Hp/Re +3.
+     if (baseunit.Me) up.Me += +3; if (baseunit.Ra && range_type == "Physical") up.Ra += +3; up.Hp += +3; up.Re += +3;
+  }
+
+  if (spell_active("Magic Immunity"))
+  {
+     add_special("Magic Imm");
+  }
+
+  if (spell_active("Metal Fires"))
+  {
+     if (this.is_type("Normal") && !spell_active("Flame Blade"))
+     {
+        if (baseunit.Me) up.Me += +1; if (baseunit.Ra && range_type == "Physical" && !has("Rocks")) up.Ra += +1;
+        if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
+     }
+  }
+
+  if (spell_active("Prayer"))
+  {
+     // Verified 2010-11-13 with [Tweaker] that Prayer and High Prayer do not stack
+     if (!spell_active("High Prayer"))
+     {
+        up.Th += +1; up.Th_Ra += +1; up.Tb += +1; up.Re += +1;
+     }
+  }
+
+  if (spell_active("Regeneration"))
+  {
+     add_special("Regeneration");
+  }
+
+  if (spell_active("Resist Elements"))
+  {
+     if (!spell_active("Elemental Armor"))
+     {
+        if (enemy && (enemy.is_type("Chaos") || enemy.is_type("Nature")))
+        {
+           // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
+           // Df+=3
+           up.Re += +3;
+        }
+     }
+  }
+
+  if (spell_active("Resist Magic"))
+  {
+     up.Re += +5;
+  }
+
+  if (spell_active("Righteousness"))
+  {
+     // TODO: Df/Re only against All Breath, B&R Magic Ranged, B&R Spells
+     // Df = (50)
+     up.Re += +30;
+  }
+
+  // "Shatter" is processed last (after other effects on Me/Ra/Df/Re)
+
+  if (spell_active("Stone Skin"))
+  {
+     up.Df += +1;
+  }
+
+  if (spell_active("Terror"))
+  {
+     // Each turn the unit must resist (Re +1) or cower in fear (cannot attack, but can still counter)
+  }
+
+  if (spell_active("True Light") || enemy && enemy.spell_active("True Light"))
+  {
+     if (is_type("Life"))
+     {
+        if (baseunit.Me) up.Me += +1; up.Df += +1; up.Re += +1;
+     }
+     else if (is_type("Death"))
+     {
+        if (baseunit.Me) dn.Me += +1; dn.Df += +1; dn.Re += +1;
+     }
+  }
+
+  if (spell_active("True Sight"))
+  {
+     add_special("Illusion Imm");
+  }
+
+  if (spell_active("Vertigo"))
+  {
+     dn.Th += +2;
+     dn.Th_Ra += +2;
+     dn.Df += +1;
+  }
+
+  // "Warp Creature" is processed last (after other effects on Me/Ra/Df/Re)
+
+  if (spell_active("Warp Reality") || enemy && enemy.spell_active("Warp Reality"))
+  {
+     if (!is_type("Chaos")) { dn.Th += +2; dn.Th_Ra += +2; }
+  }
+
+  if (spell_active("Warp Wood"))
+  {
+     if (has("Arrows")) set_special("Arrows", 0);
+     if (has("Bullets")) set_special("Bullets", 0);
+  }
+
+  if (spell_active("Weakness"))
+  {
+     if (baseunit.Me) dn.Me += +2; if (baseunit.Ra && range_type == "Physical" && !has("Rocks")) dn.Ra += +2;
+  }
+
+  // "Web" is processed last (after Flight and Wraith Form)
+
+  if (spell_active("Wrack"))
+  {
+     // each enemy figure resists or loses 1 hp per turn
+  }
+
+  if (spell_active("Wraith Form"))
+  {
+     add_special("Weapon Imm");
+     add_special("Non Corporeal");
+  }
+
+
+  //
+  // Process the spells last that must be processed after other spells
+  //
+
+  if (spell_active("Berserk"))
+  {
+     up.Me += Me; dn.Df += Df;
+  }
+
+  if (spell_active("Black Sleep"))
+  {
+     // Chance to resist initially.
+     // Me, Ra, Df are effective reduced to zero.
+     dn.Me = Me + up.Me;
+     dn.Ra = Ra + up.Ra;
+     dn.Df = Df + up.Df;
+  }
+
+  if (enemy && enemy.spell_active("Blur") && !has("Illusion Imm"))
+  {
+     // TODO: Proper processing: ignore 10% of hits or something like that
+     dn.Th += +1;
+     dn.Th_Ra += +1;
+  }
+
+  if (spell_active("Haste"))
+  {
+     if (baseunit.Me) up.Me += Me; if (baseunit.Ra) up.Ra += Ra;
+  }
+
+  if (enemy && enemy.has("Invisibility") && !has("Illusion Imm"))
+  {
+     dn.Th += +1;
+     dn.Th_Ra += +1;
+  }
+
+  if (spell_active("Shatter"))
+  {
+     // Resist or Me=Ra=1
+     dn.Me = Math.max(0, Me + up.Me - 1);
+     dn.Ra = Math.max(0, Ra + up.Ra - 1);
+  }
+
+  if (spell_active("Warp Creature"))
+  {
+     // Resist at -1 or (Me/2 or Df/2 or Re=0)
+     switch (1 * spells[ "Warp Creature" ])
+     {
+        case 1: dn.Me += Math.ceil(Me / 2); break;
+        case 2: dn.Df += Math.ceil(Df / 2); break;
+        case 3: dn.Re += Re; break;
+     }
+  }
+
+  if (spell_active("Web"))
+  {
+     // Web does not work on Non Corporeal creatures, and can not Web a unit while a previous Web still present
+     if (!has("Non Corporeal") && !has("Web"))
+     {
+        // The web (Df 0) must be destroyed by full combined melee and magic ranged attacks,
+        // before the unit can move again.
+        // The unit can no longer fly for the remainder of the combat
+        add_special("Web", 12);
+        delete_special("Flying");
+     }
+  }
+
+  // Apply spell modifiers where appropriate
+  this.add_bonus(up);
+  this.sub_penalty(dn);
+  this.bonuses.add_bonus(up);
+  this.penalties.add_bonus(dn);
+   */
 }
 
 void MoMUnit::applyWeaponType()

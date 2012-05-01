@@ -310,6 +310,8 @@ enum eLevel ENUMSIZE8
     LEVEL_Level_7 = 6,
     LEVEL_Level_8 = 7,
     LEVEL_Level_9 = 8,
+
+    eLevel_MAX
 };
 
 enum eMagic_Powerful ENUMSIZE16
@@ -3960,7 +3962,12 @@ typedef struct // MoMDataSegment
 
     uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
 
-    char        m_NameBuffer1a[0x5E92 - 0x2082];    // ds:2082 / EXE:2B522
+    char        m_NameBuffer_2082[0x3F46 - 0x2082];    // ds:2082 / EXE:2B522
+
+    uint16_t    m_UnitLevelNameOffsets[6];          // ds:3F46
+    uint16_t    m_HeroLevelNameOffsets[9];          // ds:3F52
+
+    char        m_NameBuffer_3F64[0x5E92 - 0x3F64];    // ds:3F64
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
     uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92

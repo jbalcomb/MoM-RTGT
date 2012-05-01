@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {
     const char* output_filename = "cout_cerr.log";
     std::cout << "Teeing output to " << output_filename << std::endl;
-    TeeRedirecter redirecter(output_filename);
+    TeeRedirecter redirecter(output_filename, true);
 
     // Run application
     QApplication a(argc, argv);

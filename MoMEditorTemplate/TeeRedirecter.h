@@ -43,7 +43,8 @@ protected:
         int r1 = m_sb1->pubsync();
         int r2 = m_sb2->pubsync();
         int rc = 0;
-        if ((r1 != 0) || (r2 != 0))
+		// In Windows cout will fail on sync(), but we want to keep going anyway
+        if ((r1 != 0) && (r2 != 0))
         {
             rc = -1;
         }
