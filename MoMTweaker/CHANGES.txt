@@ -9,8 +9,6 @@ CHANGES IN 0.2.3 (2012-05-01)
   (still need to fix that Sawmill and Miner's guild require forest resp.
   hills/mountains).
   
-* Added food bonuses to EXE:Miscellaneous.
-
 * Fixed and improved unit view (Summon).
 
 
