@@ -1073,11 +1073,12 @@ void MoMUnit::applyItems()
         case ITEMTYPE_Mace:
         case ITEMTYPE_Axe:
             up.melee += item->m_Bonuses.Attack;
+            up.toHitMelee += item->m_Bonuses.To_Hit;
             if (getRangedType() == RANGED_Thrown_Weapons)
             {
                 up.ranged += item->m_Bonuses.Attack;
+                up.toHitRanged += item->m_Bonuses.To_Hit;
             }
-            up.toHitMelee += item->m_Bonuses.To_Hit;
             break;
         case ITEMTYPE_Bow:
             // Presumably missile ranged attack

@@ -2,6 +2,18 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.3 (2012-05-01)
+-----------------------------
+
+* Fixed "apply buildings" to build only allowed buildings and units
+  (still need to fix that Sawmill and Miner's guild require forest resp. hills/mountains).
+  
+* Added food bonuses to EXE:Miscellaneous.
+
+* Fixed and improved unit view (Summon).
+
+
+
 CHANGES IN 0.2.2 (2012-04-04)
 -----------------------------
 
