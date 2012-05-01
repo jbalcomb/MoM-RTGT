@@ -81,6 +81,7 @@ public:
     std::string getLevelName() const;
     double getMoves() const;
     int getNrFigures() const;
+    BaseAttributes getPenaltyAttributes() const;
     eRace getRace() const;
     std::string getRaceName() const;
     eRanged_Type getRangedType() const;
@@ -114,6 +115,7 @@ private:
     /// \brief (Re)applies effects of level
     void applyLevel();
 
+    /// \brief (Re)applies effects of spells
     void applySpells(const MoMUnit* enemy = 0);
 
     /// \brief (Re)applies effects of weapon type
@@ -136,9 +138,12 @@ private:
 
     MapSpecials    m_mapAbilities;
     BaseAttributes m_bonuses;
+    BaseAttributes m_dnSpells;
+    BaseAttributes m_penalties;
     BaseAttributes m_upAbilities;
     BaseAttributes m_upItems;
     BaseAttributes m_upLevel;
+    BaseAttributes m_upSpells;
     BaseAttributes m_upWeaponType;
 };
 

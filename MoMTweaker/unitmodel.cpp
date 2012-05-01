@@ -1832,6 +1832,7 @@ void UnitModel::threadUpdateModelData()
         QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
 
         uint8_t* ovl117 = 0;
+        uint8_t* ovl120 = 0;
         uint8_t* ovl122 = 0;
         uint8_t* ovl136 = 0;
         uint8_t* ovl140 = 0;
@@ -1840,15 +1841,16 @@ void UnitModel::threadUpdateModelData()
         if (0 != game)
         {
             ovl117 = game->getWizardsOverlay(117);
+            ovl120 = game->getWizardsOverlay(120);
             ovl122 = game->getWizardsOverlay(122);
             ovl136 = game->getWizardsOverlay(136);
             ovl140 = game->getWizardsOverlay(140);
             ovl142 = game->getWizardsOverlay(142);
             ovl164 = game->getWizardsOverlay(164);
         }
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
-            nrMiscellaneous = 14;        // TODO: Proper number
+            nrMiscellaneous = 34;        // TODO: Proper number
         }
 
         int oldRowCount = ptree->rowCount();
@@ -1857,7 +1859,7 @@ void UnitModel::threadUpdateModelData()
             beginInsertRows(createIndex(toprow, 0, ptree), oldRowCount, nrMiscellaneous - 1);
         }
 
-        if ((0 != ovl117) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
             if (0 == ptree->rowCount())
             {
@@ -1929,7 +1931,81 @@ void UnitModel::threadUpdateModelData()
 				ptree->appendChild("Max spell pump mana (power of 2)", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl136[ 0x097E ]));
                 ptree->child(row, 2)->setData("Default 2 (max pump=2^2*cost)", Qt::EditRole);
                 row++;
-            }
+
+
+				ptree->appendChild("Sage master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x173F ]));
+                ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
+                row++;
+                // 15
+				ptree->appendChild("Conjurer rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1766 ]));
+                ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
+                row++;
+				ptree->appendChild("Runemaster rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1893 ]));
+                ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Chaos master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x178B ]));
+                ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
+                row++;
+				ptree->appendChild("Min chaos books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1799 ]));
+                ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Added to chaos books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17AA ]));
+                ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
+                row++;
+                // 20
+				ptree->appendChild("Multiplier to chaos books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17AD ]));
+                ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Nature master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x17C8 ]));
+                ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
+                row++;
+				ptree->appendChild("Min nature books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x17D6 ]));
+                ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Added to nature books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17E7 ]));
+                ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Multiplier to nature books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17EA ]));
+                ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+
+                // 25
+				ptree->appendChild("Sorcery master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1805 ]));
+                ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
+                row++;
+				ptree->appendChild("Min sorcery books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1813 ]));
+                ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Added to sorcery books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1824 ]));
+                ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Multiplier to sorcery books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1827 ]));
+                ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+
+ 				ptree->appendChild("Min life books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x183C ]));
+                ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
+                row++;
+                // 30
+				ptree->appendChild("Added to life books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x184D ]));
+                ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Multiplier to life books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1850 ]));
+                ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+
+				ptree->appendChild("Min death books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1865 ]));
+                ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Added to death books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1876 ]));
+                ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
+                row++;
+				ptree->appendChild("Multiplier to death books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1879 ]));
+                ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+           }
         }
 
         if (nrMiscellaneous > oldRowCount)

@@ -9,7 +9,13 @@ CHANGES IN 0.2.3 (2012-05-01)
   (still need to fix that Sawmill and Miner's guild require forest resp.
   hills/mountains).
   
-* Fixed and improved unit view (Summon).
+* Fixed and improved unit view (Summon dialog).
+
+* Added nr of common spells you get for 2 books and up to MEM:Customizer 
+  [letsdance].
+  
+* Added research bonuses to EXE:Miscellaneous [letsdance].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/16/
 
 
 
