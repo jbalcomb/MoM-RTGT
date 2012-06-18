@@ -2,15 +2,17 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.3 (2012-05-01)
+CHANGES IN 0.2.3 (2012-06-18)
 -----------------------------
+
+* Attached help texts (from HELP.LBX) as tooltips to lots of items.
+
+* Fixed and improved unit view (Summon dialog).
 
 * Fixed "apply buildings" to build only allowed buildings and units
   (still need to fix that Sawmill and Miner's guild require forest resp.
   hills/mountains).
   
-* Fixed and improved unit view (Summon dialog).
-
 * Added nr of common spells you get for 2 books and up to MEM:Customizer 
   [letsdance].
   

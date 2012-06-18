@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\MoMCatnip.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\MoMController.cpp"
 				>
 			</File>
@@ -509,6 +513,10 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\MoMEditorTemplate\MoMCatnip.h"
+				>
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\MoMCommon.h"
@@ -2340,7 +2348,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\race\Draconian.gif"
+				RelativePath="..\Resources\units\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2360,7 +2368,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Draconian.gif"
+				RelativePath="..\Resources\race\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3060,7 +3068,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Healer.gif"
+				RelativePath="..\Resources\units\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3080,7 +3088,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Healer.gif"
+				RelativePath="..\Resources\abilities\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3460,7 +3468,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Immolation.gif"
+				RelativePath="..\Resources\abilities\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3480,7 +3488,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Immolation.gif"
+				RelativePath="..\Resources\spells\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4166,7 +4174,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Magic Immunity.gif"
+				RelativePath="..\Resources\abilities\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4186,7 +4194,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Magic Immunity.gif"
+				RelativePath="..\Resources\spells\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5170,7 +5178,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Regeneration.gif"
+				RelativePath="..\Resources\abilities\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5190,7 +5198,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Regeneration.gif"
+				RelativePath="..\Resources\spells\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6610,7 +6618,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Thrown.gif"
+				RelativePath="..\Resources\images\thrown.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6630,7 +6638,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\images\thrown.gif"
+				RelativePath="..\Resources\abilities\Thrown.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7170,7 +7178,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Web.gif"
+				RelativePath="..\Resources\abilities\Web.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7190,7 +7198,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Web.gif"
+				RelativePath="..\Resources\spells\Web.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

@@ -66,6 +66,13 @@ public:
     void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
 
+    Battle_Unit getBattleUnit() const;
+    Hero_stats getHeroStats() const;
+    Hero_Stats_Initializer getHeroStatsInitializer() const;
+    Hired_Hero getHiredHero() const;
+    Unit getUnitInGame() const;
+    Unit_Type_Data getUnitTypeData() const;
+
     MapSpecials getAbilityEffects() const;
     BaseAttributes getActualAttributes() const;
     BaseAttributes getBaseAttributes() const;
@@ -74,7 +81,7 @@ public:
     std::string getDisplayName() const;
 	int getGazeModifier() const;
     std::string getHeroName() const;
-    MapSpecials getItemEffects() const;
+//    MapSpecials getItemEffects() const;
     Item* getSlotItem(int itemSlotNr) const;
     eSlot_Type16 getSlotType(int itemSlotNr) const;
     int getLevel() const;
@@ -85,21 +92,34 @@ public:
     eRace getRace() const;
     std::string getRaceName() const;
     eRanged_Type getRangedType() const;
-    MapSpecials getSpecials() const;
-    MapSpecials getSpellEffects() const;
+    int getSpecial(eHeroAbility heroAbility) const;
+    int getSpecial(eUnitAbility unitAbility) const;
     std::string getUnitName() const;
     eUnit_Type getUnitTypeNr() const;
     int getUpkeep() const;
     eWeaponType getWeaponType() const;
     int getXP() const;
 
+    bool hasMagicalBreathAttack() const;
+    bool hasMagicalGazeAttack() const;
     bool hasMagicalRangedAttack() const;
     bool hasMissileRangedAttack() const;
     bool hasPhysicalRangedAttack() const;
     bool hasThrownRangedAttack() const;
-    bool hasSpecial(const std::string& specialName) const;
+    bool hasSpecial(eHeroAbility heroAbility) const;
+    bool hasSpecial(eItemPower itemPower) const;
+    bool hasSpecial(eUnitAbility unitAbility) const;
+    bool hasSpecial(eUnitEnchantment unitAbility) const;
+    bool hasSpecial(eUnitMutation unitMutation) const;
 
 	bool isHero() const;
+
+    bool setBattleUnit(const Battle_Unit& value);
+    bool setHeroStats(const Hero_stats& value);
+    bool setHeroStatsInitializer(const Hero_Stats_Initializer& value);
+    bool setHiredHero(const Hired_Hero& value);
+    bool setUnitInGame(const Unit& value);
+    bool setUnitTypeData(const Unit_Type_Data& value);
 
 private:
 
@@ -121,6 +141,9 @@ private:
     /// \brief (Re)applies effects of weapon type
 	void applyWeaponType();
 
+    /// \brief Write changed data to the game
+    bool commitData(void* ptr, const void* pNewValue, size_t size);
+ 
     void copyMemberData(const MoMUnit& rhs);
 
     // NOT IMPLEMENTED

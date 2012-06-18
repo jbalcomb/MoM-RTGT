@@ -141,6 +141,29 @@ enum eCity_Size ENUMSIZE8
     CITYSIZE_Capital = 5,
 };
 
+enum eCombatEnchantment
+{
+    COMBATENCHANTMENT_Vertigo = 0,              // 01
+    COMBATENCHANTMENT_Confusion,            // 02
+    COMBATENCHANTMENT_Whirlwind,            // 04
+    COMBATENCHANTMENT_Mind_Storm,           // 08
+    COMBATENCHANTMENT_Shatter,              // 10
+    COMBATENCHANTMENT_Weakness,             // 20
+    COMBATENCHANTMENT_Black_Sleep,          // 40
+    COMBATENCHANTMENT_Warp_Creature_Attack, // 80
+
+    COMBATENCHANTMENT_Warp_Creature_Defense,    // 01
+    COMBATENCHANTMENT_Warp_Creature_Resistance, // 02
+    COMBATENCHANTMENT_Mind_Twist,           // 04
+    COMBATENCHANTMENT_Haste,                // 08
+    COMBATENCHANTMENT_Web,                  // 10
+    COMBATENCHANTMENT_Creature_Binding,     // 20
+    COMBATENCHANTMENT_Possession,           // 40
+    COMBATENCHANTMENT_No_Effect80,          // 80
+
+    eCombatEnchantment_MAX
+};
+
 enum eDifficulty ENUMSIZE16
 {
     DIFFICULTY_Tutorial = 0,
@@ -203,6 +226,862 @@ enum eGrand_Vizier ENUMSIZE16
     eGrand_Vizier__SIZE__ = 0xFFFF
 };
 
+enum eHelpIndex
+{
+    eHelpIndex_NONE = -1,
+
+    HELP_EXIT_SPELL_BOOK = 0,
+    HELP_EARTH_TO_MUD = 1,
+    HELP_RESIST_ELEMENTS = 2,
+    HELP_WALL_OF_STONE = 3,
+    HELP_GIANT_STRENGTH = 4,
+    HELP_WEB = 5,
+    HELP_figure12_WAR_BEARS = 6,
+    HELP_STONE_SKIN = 7,
+    HELP_WATER_WALKING = 8,
+    HELP_figure13_SPRITES = 9,
+    HELP_EARTH_LORE = 10,
+    HELP_CRACKS_CALL = 11,
+    HELP_NATURES_EYE = 12,
+    HELP_ICE_BOLT = 13,
+    HELP_figure13_GIANT_SPIDERS = 14,
+    HELP_CHANGE_TERRAIN = 15,
+    HELP_PATH_FINDING = 16,
+    HELP_figure13_COCKATRICES = 17,
+    HELP_TRANSMUTE = 18,
+    HELP_NATURES_CURES = 19,
+    HELP_figure13_BASILISKS = 20,
+    HELP_ELEMENTAL_ARMOR = 21,
+    HELP_PETRIFY = 22,
+    HELP_figure13_STONE_GIANT = 23,
+    HELP_IRON_SKIN = 24,
+    HELP_ICE_STORM = 25,
+    HELP_EARTHQUAKE = 26,
+    HELP_figure13_GORGONS = 27,
+    HELP_MOVE_FORTRESS = 28,
+    HELP_GAIAS_BLESSING = 29,
+    HELP_figure13_EARTH_ELEMENTAL = 30,
+    HELP_REGENERATION = 31,
+    HELP_figure13_BEHEMOTH = 32,
+    HELP_ENTANGLE = 33,
+    HELP_NATURES_AWARENESS = 34,
+    HELP_CALL_LIGHTNING = 35,
+    HELP_figure13_COLOSSUS = 36,
+    HELP_EARTH_GATE = 37,
+    HELP_HERB_MASTERY = 38,
+    HELP_figure13_GREAT_WYRM = 39,
+    HELP_NATURES_WRATH = 40,
+    HELP_RESIST_MAGIC = 41,
+    HELP_DISPEL_MAGIC_TRUE = 42,
+    HELP_FLOATING_ISLANDS = 43,
+    HELP_GUARDIAN_WIND = 44,
+    HELP_Figure13_PHANTOM_WARRIORS = 45,
+    HELP_CONFUSION = 46,
+    HELP_WORD_OF_RECALL = 47,
+    HELP_COUNTER_MAGIC = 48,
+    HELP_figure14_NAGAS = 49,
+    HELP_PSIONIC_BLAST = 50,
+    HELP_BLUR = 51,
+    HELP_DISENCHANT_TRUE = 52,
+    HELP_VERTIGO = 53,
+    HELP_SPELL_LOCK = 54,
+    HELP_ENCHANT_ROAD = 55,
+    HELP_FLIGHT = 56,
+    HELP_WIND_MASTERY = 57,
+    HELP_SPELL_BLAST = 58,
+    HELP_AURA_OF_MAJESTY = 59,
+    HELP_Figure13_PHANTOM_BEAST = 60,
+    HELP_DISJUNCTION_TRUE = 61,
+    HELP_INVISIBILITY = 62,
+    HELP_WIND_WALKING = 63,
+    HELP_BANISH = 64,
+    HELP_Figure13_STORM_GIANT = 65,
+    HELP_Figure13_AIR_ELEMENTAL = 66,
+    HELP_MIND_STORM = 67,
+    HELP_STASIS = 68,
+    HELP_MAGIC_IMMUNITY = 69,
+    HELP_HASTE = 70,
+    HELP_figure14_DJINN = 71,
+    HELP_SPELL_WARD = 72,
+    HELP_CREATURE_BINDING = 73,
+    HELP_MASS_INVISIBILITY = 74,
+    HELP_GREAT_UNSUMMONING = 75,
+    HELP_SPELL_BINDING = 76,
+    HELP_FLYING_FORTRESS = 77,
+    HELP_Figure14_SKY_DRAKE = 78,
+    HELP_SUPPRESS_MAGIC = 79,
+    HELP_TIME_STOP = 80,
+    HELP_WARP_WOOD = 81,
+    HELP_DISRUPT = 82,
+    HELP_FIRE_BOLT = 83,
+    HELP_figure11_HELL_HOUNDS = 84,
+    HELP_CORRUPTION = 85,
+    HELP_spell_SPECIAL_ELDRITCH_WEAPON = 86,
+    HELP_WALL_OF_FIRE = 87,
+    HELP_spell_SPECIAL_SHATTER = 88,
+    HELP_spell_SPECIAL2_WARP_CREATURE = 89,
+    HELP_figure11_FIRE_ELEMENTAL = 90,
+    HELP_LIGHTNING_BOLT = 91,
+    HELP_Figure11_FIRE_GIANT = 92,
+    HELP_spell_SPECIAL_CHAOS_CHANNELS = 93,
+    HELP_spell_SPECIAL_FLAME_BLADE = 94,
+    HELP_figure11_GARGOYLES = 95,
+    HELP_FIREBALL = 96,
+    HELP_figure11_DOOM_BAT = 97,
+    HELP_RAISE_VOLCANO = 98,
+    HELP_spell_SPECIAL2_IMMOLATION = 99,
+    HELP_Figure11_CHIMERA = 100,
+    HELP_WARP_LIGHTNING = 101,
+    HELP_spell_COMPIX_METAL_FIRES = 102,
+    HELP_figure11_CHAOS_SPAWN = 103,
+    HELP_DOOM_BOLT = 104,
+    HELP_MAGIC_VORTEX = 105,
+    HELP_Figure11_EFREET = 106,
+    HELP_FIRE_STORM = 107,
+    HELP_spell_COMPIX_WARP_REALITY = 108,
+    HELP_FLAME_STRIKE = 109,
+    HELP_CHAOS_RIFT = 110,
+    HELP_Figure11_HYDRA = 111,
+    HELP_DISINTEGRATE = 112,
+    HELP_METEOR_STORM = 113,
+    HELP_GREAT_WASTING = 114,
+    HELP_CALL_CHAOS = 115,
+    HELP_CHAOS_SURGE = 116,
+    HELP_DOOM_MASTERY = 117,
+    HELP_figure11_GREAT_DRAKE = 118,
+    HELP_CALL_THE_VOID = 119,
+    HELP_ARMAGEDON = 120,
+    HELP_BLESS = 121,
+    HELP_STAR_FIRES = 122,
+    HELP_ENDURANCE = 123,
+    HELP_HOLY_WEAPON = 124,
+    HELP_HEALING = 125,
+    HELP_HOLY_ARMOR = 126,
+    HELP_JUST_CAUSE = 127,
+    HELP_TRUE_LIGHT = 128,
+    HELP_figure12_GUARDIAN_SPIRIT = 129,
+    HELP_HEROISM = 130,
+    HELP_TRUE_SIGHT = 131,
+    HELP_PLANE_SHIFT = 132,
+    HELP_RESURRECTION = 133,
+    HELP_DISPEL_EVIL = 134,
+    HELP_PLANAR_SEAL = 135,
+    HELP_Figure12_UNICORNS = 136,
+    HELP_RAISE_DEAD = 137,
+    HELP_PLANAR_TRAVEL = 138,
+    HELP_HEAVENLY_LIGHT = 139,
+    HELP_PRAYER = 140,
+    HELP_LION_HEART = 141,
+    HELP_figures3_INCARNATION = 142,
+    HELP_INVULNERABILITY = 143,
+    HELP_RIGHTEOUSNESS = 144,
+    HELP_PROSPERITY = 145,
+    HELP_ALTAR_OF_BATTLE = 146,
+    HELP_figure12_ANGEL = 147,
+    HELP_STREAM_OF_LIFE = 148,
+    HELP_MASS_HEALING = 149,
+    HELP_HOLY_WORD = 150,
+    HELP_HIGH_PRAYER = 151,
+    HELP_INSPIRATIONS = 152,
+    HELP_ASTRAL_GATE = 153,
+    HELP_HOLY_ARMS = 154,
+    HELP_CONSECRATION = 155,
+    HELP_LIFE_FORCE = 156,
+    HELP_TRANQUILITY = 157,
+    HELP_CRUSADE = 158,
+    HELP_figure12_ARCHANGEL = 159,
+    HELP_CHARM_OF_LIFE = 160,
+    HELP_Figure12_SKELETONS = 161,
+    HELP_spell_SPECIAL_WEAKNESS = 162,
+    HELP_DARK_RITUALS = 163,
+    HELP_spell_SPECIAL_CLOAK_OF_FEAR = 164,
+    HELP_spell_SPECIAL2_BLACK_SLEEP = 165,
+    HELP_Figure12_GHOULS = 166,
+    HELP_LIFE_DRAIN = 167,
+    HELP_TERROR = 168,
+    HELP_spell_COMPIX_DARKNESS = 169,
+    HELP_MANA_LEAK = 170,
+    HELP_DRAIN_POWER = 171,
+    HELP_spell_SPECIAL_POSSESSION = 172,
+    HELP_Figure12_LYCANTHROPY = 173,
+    HELP_spell_COMPIX_BLACK_PRAYER = 174,
+    HELP_spell_SPECIAL_BLACK_CHANNELS = 175,
+    HELP_Figure12_NIGHT_STALKER = 176,
+    HELP_SUBVERSION = 177,
+    HELP_WALL_OF_DARKNESS = 178,
+    HELP_spell_SPECIAL2_BERSERK = 179,
+    HELP_Figure12_SHADOW_DEMONS = 180,
+    HELP_spell_SPECIAL_WRAITH_FORM = 181,
+    HELP_spell_COMPIX_WRACK = 182,
+    HELP_EVIL_PRESENCE = 183,
+    HELP_Figure12_WRAITHS = 184,
+    HELP_CLOUD_OF_SHADOW = 185,
+    HELP_WARP_NODE = 186,
+    HELP_BLACK_WIND = 187,
+    HELP_Figure12_ZOMBIE_MASTERY = 188,
+    HELP_FAMINE = 189,
+    HELP_CURSED_LANDS = 190,
+    HELP_CRUEL_UNMINDING = 191,
+    HELP_WORD_OF_DEATH = 192,
+    HELP_Figure12_DEATH_KNIGHTS = 193,
+    HELP_DEATH_SPELL = 194,
+    HELP_ANIMATE_DEAD = 195,
+    HELP_PESTILENCE = 196,
+    HELP_ETERNAL_NIGHT = 197,
+    HELP_EVIL_OMENS = 198,
+    HELP_DEATH_WISH = 199,
+    HELP_Figure12_DEMON_LORD = 200,
+    HELP_figure11_MAGIC_SPIRIT = 201,
+    HELP_DISPEL_MAGIC = 202,
+    HELP_spell_cityscap_SUMMONING_CIRCLE = 203,
+    HELP_DISENCHANT_AREA = 204,
+    HELP_RECALL_HERO = 205,
+    HELP_DETECT_MAGIC = 206,
+    HELP_ENCHANT_ITEM = 207,
+    HELP_SUMMON_HERO = 208,
+    HELP_AWARENESS = 209,
+    HELP_DISJUNCTION = 210,
+    HELP_CREATE_ARTIFACT = 211,
+    HELP_SUMMON_CHAMPION = 212,
+    HELP_spell_SPELL_OF_MASTERY = 213,
+    HELP_SPECIAL2_PAGE_BACK = 214,
+    HELP_SPECIAL2_PAGE_FORWARD = 215,
+    HELP_MAIN_GAME = 216,
+    HELP_MAIN_SPELLS = 217,
+    HELP_MAIN_ARMIES = 218,
+    HELP_MAIN_CITIES = 219,
+    HELP_MAIN_MAGIC = 220,
+    HELP_MAIN_INFORMATION = 221,
+    HELP_MAIN_PLANE = 222,
+    HELP_MAIN_DONE = 223,
+    HELP_MAIN_PATROL = 224,
+    HELP_MAIN_WAIT = 225,
+    HELP_MAIN_BUILD = 226,
+    HELP_MAIN_PURIFY = 227,
+    HELP_MAIN_MELD = 228,
+    HELP_NEXT_TURN = 229,
+    HELP_REDUCED_MAP = 230,
+    HELP_TOTAL_GOLD = 231,
+    HELP_TOTAL_MANA = 232,
+    HELP_GOLD_INCOME = 233,
+    HELP_FOOD_RESERVE = 234,
+    HELP_MANA_INCOME = 235,
+    HELP_MOVES = 236,
+    HELP_1_REDUCED_MAP = 237,
+    HELP_UNIT_NAME = 238,
+    HELP_UNIT_ENCHANTMENTS = 239,
+    HELP_ARMYLIST_ITEMS = 240,
+    HELP_1_ARMYLIST_OK = 241,
+    HELP_1_UPKEEP = 242,
+    HELP_EMPTY_HERO_SLOT = 243,
+    HELP_ARMYLIST_UP_ARROW = 244,
+    HELP_ARMYLIST_DOWN_ARROW = 245,
+    HELP_ANVIL = 246,
+    HELP_ARMYLIST_ALCHEMY = 247,
+    HELP_2_ARMYLIST_OK = 248,
+    HELP_2_REDUCED_MAP = 249,
+    HELP_2_CITY_NAME = 250,
+    HELP_CITY_ENCHANTMENTS = 251,
+    HELP_RELOAD_OK = 252,
+    HELP_MAIN_WALKING = 253,
+    HELP_MAIN_FORESTER = 254,
+    HELP_MAIN_MOUNTAINEER = 255,
+    HELP_MAIN_FLYING = 256,
+    HELP_MAIN_PATHFINDING = 257,
+    HELP_MAIN_SWIMMING = 258,
+    HELP_MAIN_SAILING = 259,
+    HELP_MAIN_WIND_WALKING = 260,
+    HELP_MAIN_PLANAR_TRAVEL = 261,
+    HELP_MAGIC_GRAY_GEM = 262,
+    HELP_MAGIC_SHATTERED_GEM = 263,
+    HELP_POWER_DISTRIBUTION = 264,
+    HELP_CASTING_SKILL_RATIO = 265,
+    HELP_MANA_POINTS_RATIO = 266,
+    HELP_RESEARCH_RATIO = 267,
+    HELP_MAGIC_ALCHEMY = 268,
+    HELP_3_MAGIC_OK = 269,
+    HELP_3_ENCHANTMENTS = 270,
+    HELP_RELATIONS = 271,
+    HELP_WIZARD_STATISTICS_delete = 272,
+    HELP_SPELL_CASTING_SKILL = 273,
+    HELP_MAGIC_RESERVE = 274,
+    HELP_POWER_BASE = 275,
+    HELP_CASTING_1 = 276,
+    HELP_RESEARCHING = 277,
+    HELP_SUMMON_TO = 278,
+    HELP_BARBARIAN_TOWNSFOLK = 279,
+    HELP_BEASTMEN_TOWNSFOLK = 280,
+    HELP_DARK_ELF_TOWNSFOLK = 281,
+    HELP_DRACONIAN_TOWNSFOLK = 282,
+    HELP_DWARF_TOWNSFOLK = 283,
+    HELP_GNOLL_TOWNSFOLK = 284,
+    HELP_HALFLING_TOWNSFOLK = 285,
+    HELP_HIGH_ELF_TOWNSFOLK = 286,
+    HELP_HIGH_MEN_TOWNSFOLK = 287,
+    HELP_KLACKON_TOWNSFOLK = 288,
+    HELP_LIZARDMEN_TOWNSFOLK = 289,
+    HELP_NOMAD_TOWNSFOLK = 290,
+    HELP_ORC_TOWNSFOLK = 291,
+    HELP_TROLL_TOWNSFOLK = 292,
+    HELP_3_CITY_NAME = 293,
+    HELP_CITY_RESOURCES_delete = 294,
+    HELP_BACKGRND_FOOD = 295,
+    HELP_BACKGRND_PRODUCTION = 296,
+    HELP_BACKGRND_GOLD = 297,
+    HELP_BACKGRND_GOLD_MAINTENANCE = 298,
+    HELP_BACKGRND_MAGICAL_POWER = 299,
+    HELP_BACKGRND_SPELL_RESEARCH = 300,
+    HELP_4_ENCHANTMENTS = 301,
+    HELP_CITY_VIEW = 302,
+    HELP_4_CITY_SCAPE = 303,
+    HELP_PRODUCING = 304,
+    HELP_BACKGRND_BUY = 305,
+    HELP_BACKGRND_CHANGE = 306,
+    HELP_BACKGRND_OK = 307,
+    HELP_BACKGRND_Barbarian_Farmers = 308,
+    HELP_BACKGRND_Barbarian_Workers = 309,
+    HELP_BACKGRND_Barbarian_Rebels = 310,
+    HELP_BACKGRND_Beastmen_Farmers = 311,
+    HELP_BACKGRND_Beastmen_Workers = 312,
+    HELP_BACKGRND_Beastmen_Rebels = 313,
+    HELP_BACKGRND_Dark_Elf_Farmers = 314,
+    HELP_BACKGRND_Dark_Elf_Workers = 315,
+    HELP_BACKGRND_Dark_Elf_Rebels = 316,
+    HELP_BACKGRND_Draconian_Farmers = 317,
+    HELP_BACKGRND_Draconian_Workers = 318,
+    HELP_BACKGRND_Draconian_Rebels = 319,
+    HELP_BACKGRND_Dwarf_Farmers = 320,
+    HELP_BACKGRND_Dwarf_Workers = 321,
+    HELP_BACKGRND_Dwarf_Rebels = 322,
+    HELP_BACKGRND_Gnoll_Farmers = 323,
+    HELP_BACKGRND_Gnoll_Workers = 324,
+    HELP_BACKGRND_Gnoll_Rebels = 325,
+    HELP_BACKGRND_Halfling_Farmers = 326,
+    HELP_BACKGRND_Halfling_Workers = 327,
+    HELP_BACKGRND_Halfling_Rebels = 328,
+    HELP_BACKGRND_High_Elf_Farmers = 329,
+    HELP_BACKGRND_High_Elf_Workers = 330,
+    HELP_BACKGRND_High_Elf_Rebels = 331,
+    HELP_BACKGRND_High_Men_Farmers = 332,
+    HELP_BACKGRND_High_Men_Workers = 333,
+    HELP_BACKGRND_High_Men_Rebels = 334,
+    HELP_BACKGRND_Klackon_Farmers = 335,
+    HELP_BACKGRND_Klackon_Workers = 336,
+    HELP_BACKGRND_Klackon_Rebels = 337,
+    HELP_BACKGRND_Lizardmen_Farmers = 338,
+    HELP_BACKGRND_Lizardmen_Workers = 339,
+    HELP_BACKGRND_Lizardmen_Rebels = 340,
+    HELP_BACKGRND_Nomad_Farmers = 341,
+    HELP_BACKGRND_Nomad_Workers = 342,
+    HELP_BACKGRND_Nomad_Rebels = 343,
+    HELP_BACKGRND_Orc_Farmers = 344,
+    HELP_BACKGRND_Orc_Workers = 345,
+    HELP_BACKGRND_Orc_Rebels = 346,
+    HELP_BACKGRND_Troll_Farmers = 347,
+    HELP_BACKGRND_Troll_Workers = 348,
+    HELP_BACKGRND_Troll_Rebels = 349,
+    HELP_PORTRAIT = 350,
+    HELP_NAME = 351,
+    HELP_STATISTICS = 352,
+    HELP_GOLD = 353,
+    HELP_MANA_1 = 354,
+    HELP_SPELL_RANKS = 355,
+    HELP_SPECIAL_ABILITIES = 356,
+    HELP_HEROES = 357,
+    HELP_PLANE = 358,
+    HELP_MAP = 359,
+    HELP_CLOSE = 360,
+    HELP_CHANGE_PLANES = 361,
+    HELP_MAP_KEY = 362,
+    HELP_POWER_GRAPH = 363,
+    HELP_STATUS = 364,
+    HELP_MAGIC_POWER = 365,
+    HELP_SPELL_RESEARCH = 366,
+    HELP_ARMY_STRENGTH = 367,
+    HELP_ALCHEMY_GOLD = 368,
+    HELP_MAGIC_ALCHEMY_RATIO = 369,
+    HELP_ALCHEMY_POWER = 370,
+    HELP_MAGIC_CANCEL = 371,
+    HELP_MAGIC_ALCHEMY_TOGGLE = 372,
+    HELP_4_MAGIC_OK = 373,
+    HELP_BUILDING_OPTIONS = 374,
+    HELP_UNIT_OPTIONS = 375,
+    HELP_1_CANCEL = 376,
+    HELP_1_OK = 377,
+    HELP_BUILDING_DESCRIPTION = 378,
+    HELP_ALLOWS = 379,
+    HELP_MAINTENANCE = 380,
+    HELP_COST = 381,
+    HELP_UNIT_MOVES = 382,
+    HELP_MELEE = 383,
+    HELP_UNITVIEW_Sword = 384,
+    HELP_UNITVIEW_Magic_Weapon = 385,
+    HELP_UNITVIEW_Mithril_Weapon = 386,
+    HELP_RANGE_1 = 387,
+    HELP_UNITVIEW_THROWN_delete = 388,
+    HELP_UNITVIEW_Bow = 389,
+    HELP_UNITVIEW_Rock = 390,
+    HELP_UNITVIEW_Magical_Attack = 391,
+    HELP_UNITVIEW_MAGICAL_BREATH_delete = 392,
+    HELP_UNITVIEW_ARMOR = 393,
+    HELP_UNITVIEW_RESISTANCE = 394,
+    HELP_UNITVIEW_HITS = 395,
+    HELP_SPECIAL_LARGE_SHIELD = 396,        // Ability_Flags (2nd)
+    HELP_SPECIAL_PLANE_SHIFT = 397,
+    HELP_SPECIAL_WALL_CRUSHER = 398,
+    HELP_SPECIAL_HEALER = 399,
+    HELP_SPECIAL_CREATE_OUTPOST = 400,
+    HELP_SPECIAL_INVISIBILITY_1 = 401,
+    HELP_SPECIAL_CREATE_UNDEAD = 402,
+    HELP_SPECIAL2_LONG_RANGE = 403,
+    HELP_SPECIAL_LAND_CORRUPTION = 404,
+    HELP_SPECIAL_MELD_WITH_NODE = 405,
+    HELP_SPECIAL_NON_CORPOREAL = 406,
+    HELP_SPECIAL_WIND_WALKING_1 = 407,
+    HELP_SPECIAL_REGENERATION = 408,
+    HELP_SPECIAL_PURIFY = 409,
+    HELP_SPECIAL_NEGATE_FIRST_STRIKE = 410, // Ability_Flags (last-ordered)
+    HELP_SPECIAL2_LUCKY = 411,              // Attribute_Flags (3rd)     
+    HELP_SPECIAL_POISON_IMMUNITY = 412,     // Immunity_Flags (last)
+    HELP_SPECIAL_FIRE_IMMUNITY = 413,       // Immunity_Flags (1st)
+    HELP_SPECIAL_STONING_IMMUNITY = 414,    // Immunity_Flags (2nd)
+    HELP_SPECIAL_WEAPON_IMMUNITY = 415,
+    HELP_SPECIAL_MISSILES_IMMUNITY = 416,
+    HELP_SPECIAL_ILLUSIONS_IMMUNITY = 417,
+    HELP_SPECIAL_COLD_IMMUNITY = 418,
+    HELP_SPECIAL_MAGIC_IMMUNITY_1 = 419,
+    HELP_SPECIAL_DEATH_IMMUNITY = 420,      // Immunity_Flags (last-unordered)
+    HELP_SPECIAL_HEALING_SPELL = 421,       // Attribute_Flags
+    HELP_SPECIAL_FIRE_BALL_SPELL = 422,
+    HELP_SPECIAL_DOOMBOLT_SPELL = 423,
+    HELP_SPECIAL_IMMOLATION = 424,
+    HELP_SPECIAL2_CAUSE_FEAR_SPELL = 425,
+    HELP_SPECIAL2_WEB_SPELL = 426,
+    HELP_SPECIAL_RESISTANCE_TO_ALL = 427,
+    HELP_SPECIAL_HOLY_BONUS = 428,          // Attribute_Flags (last-almost ordered)
+    HELP_SPECIAL_ARMOR_PIERCING = 429,      // Attack_Flags (1st)
+    HELP_SPECIAL_FIRST_STRIKE = 430,
+    HELP_SPECIAL_POISON = 431,
+    HELP_SPECIAL_LIFE_STEAL = 432,
+    HELP_SPECIAL2_CHAOS = 433,
+    HELP_SPECIAL2_DESTRUCTION = 434,
+    HELP_SPECIAL_ILLUSION = 435,
+    HELP_SPECIAL_STONING_TOUCH = 436,
+    HELP_SPECIAL2_CAUSE_DEATH = 437,
+    HELP_SPECIAL2_POWER_DRAIN = 438,
+    HELP_SPECIAL2_DISPEL_EVIL = 439,        // Attack_Flags (last-unordered)
+    HELP_SPECIAL_CHAOS_CHANNEL_1 = 440,     // Unit_Weapon_Mutation
+    HELP_SPECIAL_CHAOS_CHANNEL_2 = 441,     // Unit_Weapon_Mutation
+    HELP_SPECIAL_CHAOS_CHANNEL_3 = 442,     // Unit_Weapon_Mutation
+    HELP_SPECIAL2_THROWN = 443,             // Ranged type (100)
+    HELP_SPECIAL2_FIRE_BREATH = 444,
+    HELP_SPECIAL2_LIGHTNING_BREATH = 445,
+    HELP_SPECIAL_STONING_GAZE = 446,
+    HELP_SPECIAL2_DOOM_GAZE = 447,
+    HELP_SPECIAL2_DEATH_GAZE = 448,         // Ranged type (105 - ordered)
+    HELP_SPECIAL2_IMMOLATION = 449,         // Unit_Enchantment (1st)
+    HELP_SPECIAL2_GUARDIAN_WIND = 450,
+    HELP_SPECIAL2_BERSERK = 451,
+    HELP_SPECIAL_CLOAK_OF_FEAR = 452,
+    HELP_SPECIAL_BLACK_CHANNELS = 453,
+    HELP_SPECIAL_WRAITH_FORM = 454,
+    HELP_SPECIAL_REGENERATE = 455,
+    HELP_SPECIAL_PATHFINDING_1 = 456,
+    HELP_SPECIAL_WATER_WALKING = 457,
+    HELP_SPECIAL_ELEMENTAL_ARMOR = 458,
+    HELP_SPECIAL_RESIST_ELEMENTS = 459,
+    HELP_SPECIAL_STONE_SKIN = 460,
+    HELP_SPECIAL_IRON_SKIN = 461,
+    HELP_SPECIAL_ENDURANCE = 462,
+    HELP_SPECIAL2_SPELL_LOCK = 463,
+    HELP_SPECIAL_INVISIBILITY_2 = 464,
+    HELP_SPECIAL_WIND_WALKING_2 = 465,
+    HELP_SPECIAL_FLIGHT = 466,
+    HELP_SPECIAL_RESIST_MAGIC = 467,
+    HELP_SPECIAL_MAGIC_IMMUNITY_2 = 468,
+    HELP_SPECIAL_FLAME_BLADE = 469,
+    HELP_SPECIAL_ELDRITCH_WEAPON = 470,
+    HELP_SPECIAL_TRUE_SIGHT = 471,
+    HELP_SPECIAL_HOLY_WEAPON = 472,
+    HELP_SPECIAL_HEROISM = 473,
+    HELP_SPECIAL_BLESS = 474,
+    HELP_SPECIAL_LION_HEART = 475,
+    HELP_SPECIAL_GIANT_STRENGTH = 476,
+    HELP_SPECIAL_PLANAR_TRAVEL = 477,
+    HELP_SPECIAL_HOLY_ARMOR = 478,
+    HELP_SPECIAL_RIGHTEOUSNESS = 479,
+    HELP_SPECIAL_INVULNERABILITY = 480, // Unit_Enchantment (last-almost ordered)
+    HELP_SPECIAL_VERTIGO = 481,         // Combat_Enchantment (1st)
+    HELP_SPECIAL2_CONFUSION = 482,
+    HELP_SPECIAL2_WHIRLWIND = 483,
+    HELP_SPECIAL2_MIND_STORM = 484,
+    HELP_SPECIAL_SHATTER = 485,
+    HELP_SPECIAL_WEAKNESS = 486,
+    HELP_SPECIAL2_BLACK_SLEEP = 487,
+    HELP_SPECIAL2_WARP_CREATURE_1 = 488,
+    HELP_SPECIAL2_WARP_CREATURE_2 = 489,
+    HELP_SPECIAL2_WARP_CREATURE_3 = 490,
+    HELP_SPECIAL2_MANA_LEAK = 491,
+    HELP_SPECIAL_HASTE = 492,
+    HELP_SPECIAL_WEB = 493,
+    HELP_SPECIAL_CREATURE_BINDING = 494,
+    HELP_SPECIAL_POSSESSION = 495,    // Combat_Enchantment (last-almost ordered)
+    HELP_2_UPKEEP = 496,
+    HELP_UNITVIEW_PAGE_UP = 497,
+    HELP_UNITVIEW_PAGE_DOWN = 498,
+    HELP_DISMISS = 499,
+    HELP_2_OK = 500,
+    HELP_2_CITY_SCAPE = 501,
+    HELP_CITY_GARRISONS = 502,
+    HELP_UNIT_LIST = 503,
+    HELP_BACKGRND_OUTPOST_SIZE_1 = 504,
+    HELP_BACKGRND_OUTPOST_SIZE_2 = 505,
+    HELP_BACKGRND_OUTPOST_SIZE_3 = 506,
+    HELP_OUTPOST_SCAPE = 507,
+    HELP_MAIN_CANCEL_1 = 508,
+    HELP_CASTING_2 = 509,
+    HELP_ROAD_BUILDING = 510,
+    HELP_MAIN_OK = 511,
+    HELP_MAIN_CANCEL_2 = 512,
+    HELP_SURVEY = 513,
+    HELP_MAIN_CANCEL_3 = 514,
+    HELP_hero_SPECIAL_LEADERSHIP = 515,
+    HELP_hero_SPECIAL_LEGENDARY = 516,
+    HELP_hero_SPECIAL_BLADEMASTER = 517,
+    HELP_hero_SPECIAL_ARMSMASTER = 518,
+    HELP_hero_SPECIAL_CONSTITUTION = 519,
+    HELP_hero_SPECIAL_MIGHT = 520,
+    HELP_hero_SPECIAL_ARCANE_POWER = 521,
+    HELP_hero_SPECIAL_SAGE = 522,
+    HELP_hero_SPECIAL_PRAYERMASTER = 523,
+    HELP_hero_SPECIAL_LUCKY = 524,
+    HELP_hero_SPECIAL_CHARMED = 525,
+    HELP_hero_SPECIAL_NOBLE = 526,
+    HELP_unit_SPECIAL_RECRUIT = 527,
+    HELP_unit_SPECIAL_REGULAR = 528,
+    HELP_unit_SPECIAL_VETERAN = 529,
+    HELP_unit_SPECIAL_ELITE = 530,
+    HELP_unit_SPECIAL_ULTRA_ELITE = 531,
+    HELP_unit_SPECIAL_CHAMPION = 532,
+    HELP_hero_SPECIAL_HERO = 533,
+    HELP_hero_SPECIAL_MYRMIDON = 534,
+    HELP_hero_SPECIAL_CAPTAIN = 535,
+    HELP_hero_SPECIAL_COMMANDER = 536,
+    HELP_hero_SPECIAL_CHAMPION = 537,
+    HELP_hero_SPECIAL_LORD = 538,
+    HELP_hero_SPECIAL_GRAND_LORD = 539,
+    HELP_hero_SPECIAL_SUPER_HERO = 540,
+    HELP_hero_SPECIAL_DEMI_GOD = 541,
+    HELP_SPECIAL2_QUIVER = 542,
+    HELP_SPECIAL2_PLUS_TO_HIT = 543,
+    HELP_SPECIAL2_MIN_TO_HIT = 544,
+    HELP_SPECIAL_CONSTRUCTION = 545,
+    HELP_SPECIAL_SCOUTING = 546,
+    HELP_ITEMISC_MERGING_1 = 547,
+    HELP_SPECIAL_TELEPORTING = 548,
+    HELP_SPECIAL_PATHFINDING_2 = 549,
+    HELP_SPECIAL_MOUNTAINEER = 550,
+    HELP_SPECIAL_FORESTER = 551,
+    HELP_SPECIAL2_SUMMON_DEMONS = 552,
+    HELP_SPECIAL2_UNDEAD = 553,
+    HELP_SPECIAL2_STASIS = 554,
+    HELP_SPECIAL_CASTER = 555,
+    HELP_ITEMISC_MAGIC_IMMUNITY = 556,
+    HELP_ITEMISC_REGENERATE = 557,
+    HELP_ITEMISC_HASTE = 558,
+    HELP_ITEMISC_TRUE_SIGHT = 559,
+    HELP_ITEMISC_PATH_FINDING = 560,
+    HELP_ITEMISC_WATER_WALKING = 561,
+    HELP_ITEMISC_BLESS = 562,
+    HELP_ITEMISC_LION_HEART = 563,
+    HELP_ITEMISC_INVISIBILITY = 564,
+    HELP_ITEMISC_PLANAR_TRAVEL = 565,
+    HELP_ITEMISC_ENDURANCE = 566,
+    HELP_ITEMISC_RIGHTEOUSNESS = 567,
+    HELP_ITEMISC_INVULNERABILITY = 568,
+    HELP_ITEMISC_RESIST_ELEMENTS = 569,
+    HELP_ITEMISC_ELEMENTAL_ARMOR = 570,
+    HELP_ITEMISC_CLOAK_OF_FEAR = 571,
+    HELP_ITEMISC_FLIGHT = 572,
+    HELP_ITEMISC_RESIST_MAGIC = 573,
+    HELP_ITEMISC_GUARDIAN_WIND = 574,
+    HELP_ITEMISC_GIANT_STRENGTH = 575,
+    HELP_ITEMISC_MERGING_2 = 576,
+    HELP_ITEMISC_SWORD_SLOT_1 = 577,
+    HELP_ITEMISC_BOW_SLOT_1 = 578,
+    HELP_ITEMISC_STAVE_SWORD_SLOT_1 = 579,
+    HELP_ITEMISC_STAVE_SLOT_1 = 580,
+    HELP_ITEMISC_ARMOR_SLOT_1 = 581,
+    HELP_ITEMISC_MISCELLANEOUS_SLOT_1 = 582,
+    HELP_ITEMISC_SWORD_SLOT_2 = 583,
+    HELP_ITEMISC_BOW_SLOT_2 = 584,
+    HELP_ITEMISC_STAVE_SWORD_SLOT_2 = 585,
+    HELP_ITEMISC_STAVE_SLOT_2 = 586,
+    HELP_ITEMISC_ARMOR_SLOT_2 = 587,
+    HELP_ITEMISC_MISCELLANEOUS_SLOT_2 = 588,
+    HELP_COMPIX_SPELL_BUTTON = 589,
+    HELP_COMPIX_WAIT_BUTTON = 590,
+    HELP_COMPIX_INFO_BUTTON = 591,
+    HELP_COMPIX_AUTO_BUTTON = 592,
+    HELP_COMPIX_FLEE_BUTTON = 593,
+    HELP_COMPIX_DONE_BUTTON = 594,
+    HELP_SKILL = 595,
+    HELP_MANA_2 = 596,
+    HELP_RANGE_2 = 597,
+    HELP_ATTACKER = 598,
+    HELP_DEFENDER = 599,
+    HELP_combat_COMPIX_LIGHT = 600,
+    HELP_combat_COMPIX_DARKNESS = 601,
+    HELP_combat_COMPIX_WARP_REALITY = 602,
+    HELP_combat_COMPIX_BLACK_PRAYER = 603,
+    HELP_combat_COMPIX_WRACK = 604,
+    HELP_combat_COMPIX_METAL_FIRES = 605,
+    HELP_combat_COMPIX_PRAYER = 606,
+    HELP_combat_COMPIX_HIGH_PRAYER = 607,
+    HELP_combat_COMPIX_TERROR = 608,
+    HELP_combat_COMPIX_CALL_LIGHTNING = 609,
+    HELP_combat_COMPIX_COUNTER_MAGIC = 610,
+    HELP_combat_COMPIX_MASS_INVISIBILITY = 611,
+    HELP_combat_COMPIX_DISPELS_NON_SORCERY = 612,
+    HELP_combat_COMPIX_DISPELS_NON_CHAOS = 613,
+    HELP_combat_COMPIX_DISPELS_NON_NATURE = 614,
+    HELP_combat_COMPIX_SORCERY_NODE_AURA = 615,
+    HELP_combat_COMPIX_CHAOS_NODE_AURA = 616,
+    HELP_combat_COMPIX_NATURE_NODE_AURA = 617,
+    HELP_combat_COMPIX_CLOUD_OF_DARKNESS = 618,
+    HELP_combat_COMPIX_HOLY_LIGHT = 619,
+    HELP_combat_COMPIX_CHAOS_SURGE = 620,
+    HELP_combat_COMPIX_ETERNAL_NIGHT = 621,
+    HELP_combat_COMPIX_CRUSADE = 622,
+    HELP_combat_COMPIX_HOLY_ARMS = 623,
+    HELP_combat_COMPIX_CHARM_OF_LIFE = 624,
+    HELP_combat_COMPIX_ZOMBIE_MASTERY = 625,
+    HELP_DAMAGE = 626,
+    HELP_hero_SPECIAL2_AGILE = 627,
+    HELP_CONTINUE = 628,
+    HELP_LOAD = 629,
+    HELP_NEW_GAME = 630,
+    HELP_QUIT_TO_DOS = 631,
+    HELP_COMPIX_ENTANGLE = 632,
+    HELP_LOAD_LOAD_BUTTON = 633,
+    HELP_LOAD_QUIT_BUTTON = 634,
+    HELP_LOAD_SETTINGS_BUTTON = 635,
+    HELP_LOAD_SAVE_BUTTON = 636,
+    HELP_LOAD_OK_BUTTON = 637,
+    HELP_SAVED_GAMES_1 = 638,
+    HELP_SAVED_GAMES_2 = 639,
+    HELP_setup_NEWGAME_OK_BUTTON = 640,
+    HELP_NEWGAME_CANCEL_BUTTON = 641,
+    HELP_DIFFICULTY_LEVEL = 642,
+    HELP_difficulty_INTRO = 643,
+    HELP_difficulty_EASY = 644,
+    HELP_difficulty_NORMAL = 645,
+    HELP_difficulty_HARD = 646,
+    HELP_difficulty_IMPOSSIBLE = 647,
+    HELP_OPPONENTS = 648,
+    HELP_LAND_SIZE = 649,
+    HELP_land_SMALL = 650,
+    HELP_land_MEDIUM = 651,
+    HELP_land_LARGE = 652,
+    HELP_MAGIC_INTENSITY = 653,
+    HELP_nodes_WEAK = 654,
+    HELP_nodes_NORMAL = 655,
+    HELP_nodes_POWERFUL = 656,
+    HELP_SPELL_OF_RETURN = 657,
+    HELP_SELECT_A_BANNER = 658,
+    HELP_MERLIN = 659,
+    HELP_RAVEN = 660,
+    HELP_SHAREE = 661,
+    HELP_LO_PAN = 662,
+    HELP_JAFAR = 663,
+    HELP_OBERIC = 664,
+    HELP_TAURON = 665,
+    HELP_SSSRA = 666,
+    HELP_RJAK = 667,
+    HELP_FREYA = 668,
+    HELP_HORUS = 669,
+    HELP_ARIEL = 670,
+    HELP_TLALOC = 671,
+    HELP_KALI = 672,
+    HELP_CUSTOM = 673,
+    HELP_SELECT_WIZARD_PICTURE = 674,
+    HELP_SOUND_EFFECTS = 675,
+    HELP_BACKGROUND_MUSIC = 676,
+    HELP_EVENT_MUSIC = 677,
+    HELP_CITY_SPELL_EVENTS = 678,
+    HELP_OVERLAND_SPELL_EVENTS = 679,
+    HELP_SUMMONING_EVENTS = 680,
+    HELP_END_OF_TURN_SUMMARY = 681,
+    HELP_AUTOMATIC_ADVICE = 682,
+    HELP_RANDOM_EVENTS = 683,
+    HELP_AUTOMATIC_COMBAT = 684,
+    HELP_REVOLTING_RAIDERS = 685,
+    HELP_MONSTERS_GONE_WILD = 686,
+    HELP_ENEMY_MOVES = 687,
+    HELP_ENEMY_SPELLS = 688,
+    HELP_SPELL_BOOK_ORDERING = 689,
+    HELP_SPELL_ANIMATIONS = 690,
+    HELP_SHOW_NODE_OWNERS = 691,
+    HELP_EXPANDING_HELP = 692,
+    HELP_ALCHEMY = 693,
+    HELP_WARLORD = 694,
+    HELP_CHANNELER = 695,
+    HELP_ARCHMAGE = 696,
+    HELP_ARTIFICER = 697,
+    HELP_CONJURER = 698,
+    HELP_SAGE_MASTER = 699,
+    HELP_MYRRAN = 700,
+    HELP_DIVINE_POWER = 701,
+    HELP_FAMOUS = 702,
+    HELP_RUNEMASTER = 703,
+    HELP_CHARISMATIC = 704,
+    HELP_CHAOS_MASTERY = 705,
+    HELP_NATURE_MASTERY = 706,
+    HELP_SORCERY_MASTERY = 707,
+    HELP_INFERNAL_POWER = 708,
+    HELP_MANA_FOCUSING = 709,
+    HELP_NODE_MASTERY = 710,
+    HELP_MAGIC_PICKS = 711,
+    HELP_play_NEWGAME_OK_BUTTON = 712,
+    HELP_SPECIAL2_GUISE = 713,
+    HELP_cityscap_TRADE_GOODS = 714,
+    HELP_cityscap_HOUSING = 715,
+    HELP_cityscap_BARRACKS = 716,
+    HELP_cityscap_ARMORY = 717,
+    HELP_cityscap_FIGHTERS_GUILD = 718,
+    HELP_cityscap_ARMORERS_GUILD = 719,
+    HELP_cityscap_WAR_COLLEGE = 720,
+    HELP_cityscap_SMITHY = 721,
+    HELP_cityscap_STABLES = 722,
+    HELP_cityscap_ANIMISTS_GUILD = 723,
+    HELP_cityscap_FANTASTIC_STABLE = 724,
+    HELP_cityscap_SHIP_WRIGHTS_GUILD = 725,
+    HELP_cityscap_SHIPYARD = 726,
+    HELP_cityscap_MARITIME_GUILD = 727,
+    HELP_cityscap_SAWMILL = 728,
+    HELP_cityscap_LIBRARY = 729,
+    HELP_cityscap_SAGES_GUILD = 730,
+    HELP_cityscap_ORACLE = 731,
+    HELP_cityscap_ALCHEMISTS_GUILD = 732,
+    HELP_cityscap_UNIVERSITY = 733,
+    HELP_cityscap_WIZARDS_GUILD = 734,
+    HELP_cityscap_SHRINE = 735,
+    HELP_cityscap_TEMPLE = 736,
+    HELP_cityscap_PARTHENON = 737,
+    HELP_cityscap_CATHEDRAL = 738,
+    HELP_cityscap_MARKETPLACE = 739,
+    HELP_cityscap_BANK = 740,
+    HELP_cityscap_MERCHANTS_GUILD = 741,
+    HELP_cityscap_GRANARY = 742,
+    HELP_cityscap_FARMERS_MARKET = 743,
+    HELP_cityscap_FORESTERS_GUILD = 744,
+    HELP_cityscap_BUILDERS_HALL = 745,
+    HELP_cityscap_MECHANICIANS_GUILD = 746,
+    HELP_cityscap_MINERS_GUILD = 747,
+    HELP_CITYSCAP_CITY_WALLS = 748,
+    HELP_cityscap_SUMMONING_CIRCLE = 749,
+    HELP_cityscap_EARTH_GATE = 750,
+    HELP_cityscap_STREAM_OF_LIFE = 751,
+    HELP_cityscap_ASTRAL_GATE = 752,
+    HELP_cityscap_FORTRESS = 753,
+    HELP_cityscap_DARK_RITUALS = 754,
+    HELP_cityscap_ALTAR_OF_BATTLE = 755,
+    HELP_TREATIES = 756,
+    HELP_SCROLL_PAGE_BACK = 757,
+    HELP_SCROLL_PAGE_FORWARD = 758,
+    HELP_spellscr_CANCEL = 759,
+    HELP_EXTRA_MANA_COST = 760,
+    HELP_NONE = 761,
+    HELP_UNITVIEW_Adamantium_Weapon = 762,
+    HELP_TAX_PER_POPULATION = 763,
+    HELP_ADVISORS = 764,
+    HELP_mirror_FAMOUS = 765,
+    HELP_NIGHTSHADE = 766,
+    HELP_COMPIX_MANA_LEAK = 767,
+    HELP_PLAGUE = 768,
+    HELP_POPULATION_BOOM = 769,
+    HELP_BLUE_CONJUNCTION = 770,
+    HELP_RED_CONJUNCTION = 771,
+    HELP_GREEN_CONJUNCTION = 772,
+    HELP_BAD_MOON = 773,
+    HELP_GOOD_MOON = 774,
+    HELP_MANA_SHORT = 775,
+    HELP_POPULATION = 776,
+    HELP_DEATH_SPELLS = 777,
+    HELP_CHAOS_SPELLS = 778,
+    HELP_LIFE_SPELLS = 779,
+    HELP_NATURE_SPELLS = 780,
+    HELP_SORCERY_SPELLS = 781,
+    HELP_MANIACAL = 782,
+    HELP_RUTHLESS = 783,
+    HELP_AGGRESSIVE = 784,
+    HELP_CHAOTIC = 785,
+    HELP_LAWFUL = 786,
+    HELP_PEACEFUL = 787,
+    HELP_PRAGMATIST = 788,
+    HELP_MILITARIST = 789,
+    HELP_THEURGIST = 790,
+    HELP_PERFECTIONIST = 791,
+    HELP_EXPANSIONIST = 792,
+    HELP_WIZARD_PACT = 793,
+    HELP_ALLIANCE = 794,
+    HELP_NO_REPORT = 795,
+    HELP_MOVEMENT_ANIMATIONS = 796,
+    HELP_COMPIX_BLUR = 797,
+    HELP_HALL_OF_FAME = 798,
+    HELP_SPELLS = 799,
+    HELP_TOWNSFOLK = 800,
+    HELP_BANISHED_WIZARDS = 801,
+    HELP_FAME = 802,
+    HELP_YEAR = 803,
+    HELP_score_SPELL_OF_MASTERY = 804,
+    HELP_FINAL_SCORE = 805,
+    HELP_RAZE_CITY = 806,
+
+    eHelpIndex_MAX = 1614
+};
+
+enum eHeroAbility
+{
+    HEROABILITY_Leadership = 0,       // 01
+    HEROABILITY_Leadership_X = 1,     // 02
+    HEROABILITY_2 = 2,                // 04
+    HEROABILITY_Legendary = 3,        // 08
+    HEROABILITY_Legendary_X = 4,      // 10
+    HEROABILITY_5 = 5,                // 20
+    HEROABILITY_Blademaster = 6,      // 40
+    HEROABILITY_Blademaster_X = 7,    // 80
+
+    HEROABILITY_8 = 8,                 // 01
+    HEROABILITY_Armsmaster = 9,        // 02
+    HEROABILITY_Armsmaster_X = 10,     // 04
+    HEROABILITY_11 = 11,               // 08
+    HEROABILITY_Constitution = 12,     // 10
+    HEROABILITY_Constitution_X = 13,   // 20
+    HEROABILITY_14 = 14,               // 40
+    HEROABILITY_Might = 15,            // 80
+
+    HEROABILITY_Might_X = 16,          // 01
+    HEROABILITY_17 = 17,               // 02
+    HEROABILITY_Arcane_Power = 18,     // 04
+    HEROABILITY_Arcane_Power_X = 19,   // 08
+    HEROABILITY_20 = 20,               // 10
+    HEROABILITY_Sage = 21,             // 20
+    HEROABILITY_Sage_X = 22,           // 40
+    HEROABILITY_23 = 23,               // 80
+
+    HEROABILITY_Prayermaster = 24,     // 01
+    HEROABILITY_Prayermaster_X = 25,   // 02
+    HEROABILITY_Agility_X = 26,        // 04
+    HEROABILITY_Lucky = 27,            // 08
+    HEROABILITY_Charmed = 28,          // 10
+    HEROABILITY_Noble = 29,            // 20
+    HEROABILITY_30 = 30,               // 40
+    HEROABILITY_Agility = 31,          // 80
+
+    eHeroAbility_MAX
+};
+
 enum eHero_Level_Status ENUMSIZE16
 {
     HEROLEVELSTATUS_Level_1 = 0,
@@ -232,6 +1111,47 @@ enum eHero_TypeCode ENUMSIZE8
     HEROTYPE_Bow = 1,
     HEROTYPE_Fighter_Wizard = 2,
     HEROTYPE_Wizard = 3
+};
+
+enum eItemPower
+{
+    ITEMPOWER_Vampiric = 0,
+    ITEMPOWER_Guardian_Wind,
+    ITEMPOWER_Lightning,
+    ITEMPOWER_Cloak_Of_Fear,
+    ITEMPOWER_Destruction,
+    ITEMPOWER_Wraith_Form,
+    ITEMPOWER_Regeneration,
+    ITEMPOWER_Pathfinding,
+
+    ITEMPOWER_Water_Walking,
+    ITEMPOWER_Resist_Elements,
+    ITEMPOWER_Elemental_Armour,
+    ITEMPOWER_Doom_equals_Chaos,
+    ITEMPOWER_Stoning,
+    ITEMPOWER_Endurance,
+    ITEMPOWER_Haste,
+    ITEMPOWER_Invisibility,
+
+    ITEMPOWER_Death,
+    ITEMPOWER_Flight,
+    ITEMPOWER_Resist_Magic,
+    ITEMPOWER_Magic_Immunity,
+    ITEMPOWER_Flaming,
+    ITEMPOWER_Holy_Avenger,
+    ITEMPOWER_True_Sight,
+    ITEMPOWER_Phantasmal,
+
+    ITEMPOWER_Power_Drain,
+    ITEMPOWER_Bless,
+    ITEMPOWER_Lion_Heart,
+    ITEMPOWER_Giant_Strength,
+    ITEMPOWER_Planar_Travel,
+    ITEMPOWER_Merging,
+    ITEMPOWER_Righteousness,
+    ITEMPOWER_Invulnerability,
+
+    eItemPower_MAX
 };
 
 enum eItem_Icon ENUMSIZE16
@@ -1376,6 +2296,148 @@ enum eTerrainType ENUMSIZE16
     eTerrainType__SIZE__ = 0xFFFF
 };
 
+enum eUnitAbility
+{
+    eUnitAbility_NONE = -1,
+
+    // Movement_Flags
+    UNITABILITY_Cavalry = 0,          // 01
+    UNITABILITY_Sailing,              // 02
+    UNITABILITY_Swimming,             // 04
+    UNITABILITY_Flying,               // 08
+    UNITABILITY_Teleporting,          // 10
+    UNITABILITY_Forester,             // 20
+    UNITABILITY_Mountaineer,          // 40
+    UNITABILITY_Merging,              // 80
+
+    // Zeroes
+
+    // Immunity_Flags
+    UNITABILITY_Fire_Immunity = 16,   // 01
+    UNITABILITY_Stoning_Immunity,     // 02
+    UNITABILITY_Missiles_Immunity,    // 04
+    UNITABILITY_Illusions_Immunity,   // 08
+    UNITABILITY_Cold_Immunity,        // 10
+    UNITABILITY_Magic_Immunity,       // 20
+    UNITABILITY_Death_Immunity,       // 40
+    UNITABILITY_Poison_Immunity,      // 80
+
+    // Attribute_Flags
+    UNITABILITY_Weapon_Immunity = 24,      // 01
+    UNITABILITY_Flyer,                // 02
+    UNITABILITY_Lucky,                // 04
+    UNITABILITY_Summon_Demons_1,      // 08
+    UNITABILITY_Summon_Demons_2,      // 10
+    UNITABILITY_Caster_20_MP,         // 20
+    UNITABILITY_Caster_40_MP,         // 40
+    UNITABILITY_Standard,             // 80
+
+    UNITABILITY_Healing_Spell,        // 01
+    UNITABILITY_Fire_Ball_Spell,      // 02
+    UNITABILITY_Doombolt_Spell,       // 04
+    UNITABILITY_Immolation,           // 08
+    UNITABILITY_Web_Spell,            // 10
+    UNITABILITY_Cause_Fear_Spell,     // 20
+    UNITABILITY_Resistance_to_All,    // 40
+    UNITABILITY_Holy_Bonus,           // 80
+
+    // Zeroes
+
+    // Ability_Flags
+    UNITABILITY_Summoned_Unit = 48,   // 01
+    UNITABILITY_Large_Shield,         // 02
+    UNITABILITY_Plane_Shift,          // 04
+    UNITABILITY_Wall_Crusher,         // 08
+    UNITABILITY_Healer,               // 10
+    UNITABILITY_Create_Outpost,       // 20
+    UNITABILITY_Invisibility,         // 40
+    UNITABILITY_Create_Undead,        // 80
+
+    UNITABILITY_Long_Range,           // 01
+    UNITABILITY_Land_Corruption,      // 02
+    UNITABILITY_Meld_With_Node,       // 04
+    UNITABILITY_Non_Corporeal,        // 08
+    UNITABILITY_Wind_Walking,         // 10
+    UNITABILITY_Regeneration,         // 20
+    UNITABILITY_Purify,               // 40
+    UNITABILITY_Negate_First_Strike,  // 80
+
+    // Attack_Flags
+    UNITABILITY_Armor_Piercing = 64,  // 01
+    UNITABILITY_First_Strike,         // 02
+    UNITABILITY_Poison_attack,        // 04
+    UNITABILITY_Life_Stealing,        // 08
+    UNITABILITY_Automatic_Damage,     // 10   // Chaos Spawn, Black Sleep
+    UNITABILITY_Destruction,          // 20
+    UNITABILITY_Illusionary_attack,   // 40
+    UNITABILITY_Stoning_Touch,        // 80
+
+    UNITABILITY_No_effect05,          // 01
+    UNITABILITY_Death_Touch,          // 02
+    UNITABILITY_Power_Drain,          // 04
+    UNITABILITY_Dispel_Evil,          // 08
+    UNITABILITY_No_effect04_COMBAT,   // 10
+    UNITABILITY_No_effect03_COMBAT,   // 20
+    UNITABILITY_Eldritch_Weapon_COMBAT,   // 40
+    UNITABILITY_Warp_Lightning_COMBAT,   // 80
+
+    eUnitAbility_MAX
+};
+
+enum eUnitEnchantment
+{
+    UNITENCHANTMENT_Immolation = 0,       // 01
+    UNITENCHANTMENT_Guardian_Wind,    // 02
+    UNITENCHANTMENT_Berserk,          // 04
+    UNITENCHANTMENT_Cloak_of_Fear,    // 08
+    UNITENCHANTMENT_Black_Channels,   // 10
+    UNITENCHANTMENT_Wraith_Form,      // 20
+    UNITENCHANTMENT_Regeneration,     // 40
+    UNITENCHANTMENT_Path_Finding,     // 80
+
+    UNITENCHANTMENT_Water_Walking,    // 01
+    UNITENCHANTMENT_Resist_Elements,  // 02
+    UNITENCHANTMENT_Elemental_Armor,  // 04
+    UNITENCHANTMENT_Stone_Skin,       // 08
+    UNITENCHANTMENT_Iron_Skin,        // 10
+    UNITENCHANTMENT_Endurance,        // 20
+    UNITENCHANTMENT_Spell_Lock,       // 40
+    UNITENCHANTMENT_Invisibility,     // 80
+
+    UNITENCHANTMENT_Wind_Walking,     // 01
+    UNITENCHANTMENT_Flight,           // 02
+    UNITENCHANTMENT_Resist_Magic,     // 04
+    UNITENCHANTMENT_Magic_Immunity,   // 08
+    UNITENCHANTMENT_Flame_Blade,      // 10
+    UNITENCHANTMENT_Eldritch_Weapon,  // 20
+    UNITENCHANTMENT_True_Sight,       // 40
+    UNITENCHANTMENT_Holy_Weapon,      // 80
+
+    UNITENCHANTMENT_Heroism,          // 01
+    UNITENCHANTMENT_Bless,            // 02
+    UNITENCHANTMENT_Lionheart,        // 04
+    UNITENCHANTMENT_Giant_Strength,   // 08
+    UNITENCHANTMENT_Planar_Travel,    // 10
+    UNITENCHANTMENT_Holy_Armor,       // 20
+    UNITENCHANTMENT_Righteousness,    // 40
+    UNITENCHANTMENT_Invulnerability,  // 80
+
+    eUnitEnchantment_MAX
+};
+
+enum eUnitMutation
+{
+    // Left out WeaponType (2 bits)
+    UNITMUTATION_Chaos_Channels_Demon_Skin = 2, // 04
+    UNITMUTATION_Chaos_Channels_Demon_Wings,    // 08
+    UNITMUTATION_Chaos_Channels_Fiery_Breath,   // 10
+    UNITMUTATION_Undead,                        // 20
+    UNITMUTATION_Stasis_initial,                // 40
+    UNITMUTATION_Stasis_lingering,              // 80
+
+    eUnitMutation_MAX
+};
+
 enum eUnit_Active ENUMSIZE8
 {
     UNITACTIVE_awaiting_orders = 0,         //   00=awaiting orders / "I need attention" (will "jump to" this unit when hitting wait)
@@ -2122,14 +3184,14 @@ typedef struct PACKED_STRUCT // Item_Bonuses
 
 typedef struct PACKED_STRUCT Item_Powers
 {
-    uint8_t     Vampiric:1;
-    uint8_t     Guardian_Wind:1;
-    uint8_t     Lightning:1;
-    uint8_t     Cloak_Of_Fear:1;
-    uint8_t     Destruction:1;
-    uint8_t     Wraith_Form:1;
-    uint8_t     Regeneration:1;
-    uint8_t     Pathfinding:1;
+    uint8_t     Vampiric:1;             // 01
+    uint8_t     Guardian_Wind:1;        // 02
+    uint8_t     Lightning:1;            // 04
+    uint8_t     Cloak_Of_Fear:1;        // 08
+    uint8_t     Destruction:1;          // 10
+    uint8_t     Wraith_Form:1;          // 20
+    uint8_t     Regeneration:1;         // 40
+    uint8_t     Pathfinding:1;          // 80
 
     uint8_t     Water_Walking:1;
     uint8_t     Resist_Elements:1;
@@ -4106,6 +5168,14 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
     char            m_Wizards_Name_Shown_2[11];     // ds:FEC2
 } MoMMagicDataSegment;
 
+
+typedef struct PACKED_STRUCT {
+    char title[30];
+    char lbxFile[14];
+    uint16_t lbxIndex;
+    uint16_t zero;
+    char description[1000];
+} HelpLBXentry;
 
 typedef struct PACKED_STRUCT {
     uint8_t     m_Code[4];

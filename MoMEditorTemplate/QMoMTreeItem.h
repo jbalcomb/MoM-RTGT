@@ -105,7 +105,12 @@ public:
         }
     }
 
-    virtual const void* getVoidMoMPointer() const
+    void setToolTip(const QString& toolTip)
+    {
+        m_toolTip = toolTip;
+    }
+
+   virtual const void* getVoidMoMPointer() const
     {
         return 0;
     }
@@ -125,6 +130,7 @@ private:
     int m_row;
     mutable QMoMLazyIconPtr m_icon;
     QString m_data;
+    QString m_toolTip;
     QList< QList<QMoMTreeItemBase*> > m_children;
     Qt::ItemFlags m_flags;
 
@@ -190,7 +196,7 @@ public:
                 return QMoMTreeItemBase::data(role);
             }
         default:
-            return QVariant();
+            return QMoMTreeItemBase::data(role);
         }
     }
 
@@ -260,7 +266,7 @@ public:
 //            return QIcon("images:" + value + ".gif");
             return QMoMTreeItemBase::data(role);
         default:
-            return QVariant();
+            return QMoMTreeItemBase::data(role);
         }
     }
 
@@ -321,7 +327,7 @@ public:
 //            return QIcon("images:" + value + ".gif");
             return QMoMTreeItemBase::data(role);
         default:
-            return QVariant();
+            return QMoMTreeItemBase::data(role);
         }
     }
 

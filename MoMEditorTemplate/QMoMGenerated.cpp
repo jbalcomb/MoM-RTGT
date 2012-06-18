@@ -1509,6 +1509,20 @@ QMoMTreeItemBase* constructTreeItem(Global_Enchantments* rhs, const QString& con
     return ptree;
 }
 
+QMoMTreeItemBase* constructTreeItem(HelpLBXentry* rhs, const QString& context)
+{
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<HelpLBXentry>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    ptree->appendChild("title", new QMoMTreeItem<char[30]>(rhs->title));
+    ptree->appendChild("lbxFile", new QMoMTreeItem<char[14]>(rhs->lbxFile));
+    ptree->appendChild("lbxIndex", new QMoMTreeItem<uint16_t>(&rhs->lbxIndex));
+    ptree->appendChild("zero", new QMoMTreeItem<uint16_t>(&rhs->zero));
+    ptree->appendChild("description", new QMoMTreeItem<char[1000]>(rhs->description));
+    return ptree;
+}
+
 QMoMTreeItemBase* constructTreeItem(Hero_Ability* rhs, const QString& context)
 {
     QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<Hero_Ability>(rhs, context);

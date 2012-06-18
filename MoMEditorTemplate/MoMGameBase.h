@@ -57,6 +57,14 @@ public:
 
     virtual std::string getGameDirectory() = 0;
 
+    std::string getHelpText(eHelpIndex helpTextNr);
+    std::string getHelpText(eHeroAbility heroAbility);
+    std::string getHelpText(eItemPower itemPower);
+    std::string getHelpText(eSpell spell);
+    std::string getHelpText(eUnitAbility unitAbility);
+    std::string getHelpText(eUnitEnchantment unitEnchantment);
+    std::string getHelpText(eUnitMutation unitMutation);
+
     Hero_stats* getHero_stats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
@@ -442,6 +450,7 @@ private:
 
     // STATUS
     std::string m_errorString;
+    std::auto_ptr<class MoMLbxBase> m_HelpLbx;
 };
 
 }

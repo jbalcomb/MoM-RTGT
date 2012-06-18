@@ -30,6 +30,7 @@ QMoMTreeItemBase* constructTreeItem(Fortress* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Game_Data_Save* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Game_Settings* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Global_Enchantments* rhs, const QString& context);
+QMoMTreeItemBase* constructTreeItem(HelpLBXentry* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Hero_Ability* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Hero_Choice* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Hero_Stats_Initializer* rhs, const QString& context);

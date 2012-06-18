@@ -49,11 +49,11 @@ private slots:
     void on_comboBox_Unit_currentIndexChanged(int index);
 
 private:
-    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false);
+    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false, const QString& helpText = "");
 	void displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem);
 	void displayLevel(QPointF& pos, const std::string& levelName, int level, int experience);
-    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir);
-    void displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName);
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir, const QString& helpText = "");
+    void displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName, const QString& helpText);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);
 	void update();
 

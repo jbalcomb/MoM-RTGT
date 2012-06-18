@@ -119,6 +119,8 @@ QVariant QMoMTreeItemBase::data(int role) const
             return QIcon();
         else
             return m_icon->data();
+    case Qt::ToolTipRole:
+        return m_toolTip;
     default:
         return QVariant();
     }

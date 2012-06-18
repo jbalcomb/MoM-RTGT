@@ -226,6 +226,7 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
     checkUnitChanged<MoM::Unit>(itemBase);
     checkUnitChanged<MoM::Unit_Type_Data>(itemBase);
 
+    // Emit a signal for the change in pointer to a MoM item
     emit signal_addressChanged(itemBase->getVoidMoMPointer());
 }
 
@@ -407,6 +408,8 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
 
             ptree->child(row, 0)->setData(prettyQStr(building), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(building);
+            QString toolTip = game->getHelpText((MoM::eHelpIndex)((int)MoM::HELP_cityscap_TRADE_GOODS - (int)MoM::BUILDING_Trade_Goods + (int)building)).c_str();
+            ptree->child(row, 0)->setToolTip(toolTip);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
 //                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
 //                                                    .arg(prettyQStr(lair->m_Status)), Qt::UserRole);
@@ -844,6 +847,11 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 
             ptree->child(row, 0)->setData(prettyQStr((MoM::eRace)row), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(race);
+            QString toolTip = QString(game->getHelpText((MoM::eHelpIndex)(MoM::HELP_BARBARIAN_TOWNSFOLK + raceNr)).c_str()) + "\n"
+                + game->getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Farmers + raceNr)).c_str() + "\n"
+                + game->getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Workers + raceNr)).c_str() + "\n"
+                + game->getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Rebels + raceNr)).c_str();
+            ptree->child(row, 0)->setToolTip(toolTip);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
         }
@@ -871,6 +879,8 @@ void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
 
         ptree->child(spellNr, 0)->setData(prettyQStr(spell), Qt::EditRole);
         ptree->child(spellNr, 0)->setLazyIcon(spell);
+        QString toolTip = game->getHelpText(spell).c_str();
+        ptree->child(row, 0)->setToolTip(toolTip);
 
         if ((spellNr <= MoM::SPELL_Magic_Spirit) && (spellNr - 1) % 10 == 0)
         {
@@ -1053,6 +1063,8 @@ void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
         if (wizardNr >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(wizard, ""));
+            QString toolTip = game->getHelpText((MoM::eHelpIndex)(MoM::HELP_MERLIN + (int)wizard->m_Portrait)).c_str();
+            ptree->child(row, 0)->setToolTip(toolTip);
 
             QMoMTreeItemBase* subtree = ptree->child(row, 0);
             MoM::Fortress* fortresses = game->getFortresses();

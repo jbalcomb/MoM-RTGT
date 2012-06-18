@@ -40,7 +40,8 @@ HEADERS += \
     ../MoMEditorTemplate/MoMCommon.h \
     ../MoMEditorTemplate/TeeRedirecter.h \
     ../MoMEditorTemplate/QMoMUnitTile.h \
-    ../MoMEditorTemplate/QMapGraphicsView.h
+    ../MoMEditorTemplate/QMapGraphicsView.h \
+    ../MoMEditorTemplate/MoMCatnip.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -73,7 +74,8 @@ SOURCES += \
     ../MoMTweaker/mainwindow.cpp \
     ../MoMTweaker/unitmodel.cpp \
     ../MoMEditorTemplate/QMoMUnitTile.cpp \
-    ../MoMEditorTemplate/QMapGraphicsView.cpp
+    ../MoMEditorTemplate/QMapGraphicsView.cpp \
+    ../MoMEditorTemplate/MoMCatnip.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \

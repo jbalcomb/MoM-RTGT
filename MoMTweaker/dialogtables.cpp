@@ -170,6 +170,7 @@ void DialogTables::update_Spell_Data()
         ui->tableWidget->item(row, col++)->setText(QString("%0").arg(spellNr, 3));
 
         ui->tableWidget->item(row, col)->setTextColor(color);
+        ui->tableWidget->item(row, col)->setToolTip(game->getHelpText(spell).c_str());
         ui->tableWidget->item(row, col++)->setText(QString(data->m_SpellName));
 
         ui->tableWidget->item(row, col++)->setText(QString("%0").arg((int)data->m_Spell_desirability, 6));

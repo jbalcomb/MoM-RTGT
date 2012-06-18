@@ -53,7 +53,11 @@ inline T Min(const T& a, const T& b)
     return (a < b ? a : b);
 }
 
+std::string prettyEnumStr(const std::string& str);
+
 std::string replaceUnderscoresBySpaces(const std::string& str);
+
+std::string replaceStrInStr(const std::string& str, const std::string& findStr, const std::string& replaceStr);
 
 template< typename T >
 inline int toInt(const T& t)
@@ -62,7 +66,7 @@ inline int toInt(const T& t)
 }
 
 template< typename T >
-inline std::string toStr(const T& t)
+std::string toStr(const T& t)
 {
     std::ostringstream oss;
     oss << t;

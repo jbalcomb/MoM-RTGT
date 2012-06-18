@@ -9,6 +9,7 @@
 #include <cmath>
 
 #include "MoMGameBase.h"
+#include "MoMGenerated.h"
 #include "MoMUtility.h"
 
 #include "MoMUnit.h"
@@ -259,6 +260,70 @@ void MoMUnit::changeUnit(Unit* unit)
     }
 }
 
+
+Battle_Unit MoMUnit::getBattleUnit() const
+{
+    Battle_Unit value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_battleUnit)
+    {
+        value = *m_battleUnit;
+    }
+    return value;
+}
+Hero_stats MoMUnit::getHeroStats() const
+{
+    Hero_stats value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_heroStats)
+    {
+        value = *m_heroStats;
+    }
+    return value;
+}
+Hero_Stats_Initializer MoMUnit::getHeroStatsInitializer() const
+{
+    Hero_Stats_Initializer value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_heroStatsInitializer)
+    {
+        value = *m_heroStatsInitializer;
+    }
+    return value;
+}
+Hired_Hero MoMUnit::getHiredHero() const
+{
+    Hired_Hero value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_hiredHero)
+    {
+        value = *m_hiredHero;
+    }
+    return value;
+}
+Unit MoMUnit::getUnitInGame() const
+{
+    Unit value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_unit)
+    {
+        value = *m_unit;
+    }
+    return value;
+}
+Unit_Type_Data MoMUnit::getUnitTypeData() const
+{
+    Unit_Type_Data value;
+    memset(&value, '\0', sizeof(value));
+    if (0 != m_unitType)
+    {
+        value = *m_unitType;
+    }
+    return value;
+}
+
+
+
 //
 // OTHER
 //
@@ -270,11 +335,6 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 
     MapSpecials mapSpecials;
 
-#define ADDFLAGFEATURE(m, u, field) \
-    if (u.s.field) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
-    }
 #define ADDMFIELDFEATURE(m, u, field) \
     if (u->m_##field != 0) \
     { \
@@ -283,33 +343,6 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 
     if (0 != m_heroStats)
     {
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Leadership);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Leadership_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Legendary);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Legendary_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Blademaster);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Blademaster_X);
-
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Armsmaster);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Armsmaster_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Constitution);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Constitution_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Might);
-
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Might_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Arcane_Power);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Arcane_Power_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Sage);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Sage_X);
-
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Prayermaster);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Prayermaster_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Agility_X);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Lucky);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Charmed);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Noble);
-        ADDFLAGFEATURE(mapSpecials, m_heroStats->m_Hero_Abilities, Agility);
-
         // Additional fields
         if (m_heroStats->m_Hero_Casting_Skill > 0)
         {
@@ -326,90 +359,33 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 
     if (0 != m_unitType)
     {
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Cavalry);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Sailing);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Swimming);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Flying);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Teleporting);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Forester);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Mountaineer);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Movement_Flags, Merging);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Fire_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Stoning_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Missiles_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Illusions_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Cold_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Magic_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Death_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Immunity_Flags, Poison_Immunity);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Weapon_Immunity);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Lucky);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Summon_Demons_1);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Summon_Demons_2);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Caster_20_MP);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Caster_40_MP);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Standard);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Healing_Spell);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Fire_Ball_Spell);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Doombolt_Spell);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Immolation);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Web_Spell);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Cause_Fear_Spell);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Resistance_to_All);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attribute_Flags, Holy_Bonus);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Summoned_Unit);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Large_Shield);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Plane_Shift);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Wall_Crusher);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Healer);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Create_Outpost);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Invisibility);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Create_Undead);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Long_Range);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Land_Corruption);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Meld_With_Node);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Non_Corporeal);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Wind_Walking);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Regeneration);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Purify);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Ability_Flags, Negate_First_Strike);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Armor_Piercing);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, First_Strike);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Poison_attack);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Life_Stealing);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Automatic_Damage);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Destruction);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Illusionary_attack);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Stoning_Touch);
-
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Death_Touch);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Power_Drain);
-        ADDFLAGFEATURE(mapSpecials, m_unitType->m_Attack_Flags, Dispel_Evil);
-
-
         // Additional fields
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Type);
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Shots);
-        if (m_unitType->m_Ranged_Shots != 0)
+		if (hasMissileRangedAttack())
+		{
+			mapSpecials["Arrows"] = m_unitType->m_Ranged_Shots;
+		}
+        else if (hasMagicalRangedAttack())
         {
-			if (hasMissileRangedAttack())
-			{
-				mapSpecials["Arrows"] = m_unitType->m_Ranged_Shots;
-			}
-			else if (hasMagicalRangedAttack())
-			{
-				mapSpecials["Spells"] = m_unitType->m_Ranged_Shots;
-			}
-			else
-			{
-				mapSpecials["Ranged Shots"] = m_unitType->m_Ranged_Shots;
-			}
+            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = 0;
+            mapSpecials["Spells"] = m_unitType->m_Ranged_Shots;
+        }
+        else if (hasMagicalBreathAttack())
+		{
+            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = 0;
+		}
+        else if (hasMagicalGazeAttack())
+        {
+            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = m_unitType->m_Gaze_Modifier;
+        }
+        else if (m_unitType->m_Ranged_Shots != 0)
+		{
+			mapSpecials["Ranged Shots"] = m_unitType->m_Ranged_Shots;
+		}
+        else
+        {
+            // No ranged attack information
         }
 //        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Cost);
 //        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Building_Required1);
@@ -429,16 +405,9 @@ MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
 		{
             mapSpecials["Magic Weapon"] = 0;
 		}
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Skin);
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Demon_Wings);
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Chaos_Channels_Fiery_Breath);
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Undead);
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Stasis_initial);
-        ADDFLAGFEATURE(mapSpecials, m_unit->m_Weapon_Mutation, Stasis_lingering);
     }
 
 #undef ADDMFIELDFEATURE
-#undef ADDFLAGFEATURE
 
     return mapSpecials;
 }
@@ -526,95 +495,40 @@ std::string MoMUnit::getHeroName() const
     return name;
 }
 
-MoMUnit::MapSpecials MoMUnit::getItemEffects() const
-{
-    MapSpecials mapSpecials;
+//MoMUnit::MapSpecials MoMUnit::getItemEffects() const
+//{
+//    MapSpecials mapSpecials;
 
-#define ADDFLAGFEATURE(m, u, field) \
-    if (u.s.field) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
-    }
-#define ADDFIELDFEATURE(m, u, field) \
-    if (u.field != 0) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u.field; \
-    }
-#define ADDMFIELDFEATURE(m, u, field) \
-    if (u->m_##field != 0) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u->m_##field; \
-    }
+//    for (int itemSlotNr = 0; toUInt(itemSlotNr) < gMAX_ITEMSLOTS; ++itemSlotNr)
+//    {
+//        if ((0 == m_hiredHero) || (0 == m_game))
+//            break;
+//        MoM::Item* item = m_game->getItem(m_hiredHero->m_Items_In_Slot[itemSlotNr]);
+//        if (0 == item)
+//            continue;
 
-    for (int itemSlotNr = 0; toUInt(itemSlotNr) < gMAX_ITEMSLOTS; ++itemSlotNr)
-    {
-        if ((0 == m_hiredHero) || (0 == m_game))
-            break;
-        MoM::Item* item = m_game->getItem(m_hiredHero->m_Items_In_Slot[itemSlotNr]);
-        if (0 == item)
-            continue;
+//        // TODO
+////        ADDMFIELDFEATURE(mapSpecials, item, Item_Name);
+////        ADDMFIELDFEATURE(mapSpecials, item, Icon);
+////        ADDMFIELDFEATURE(mapSpecials, item, Slot_Required);
+////        ADDMFIELDFEATURE(mapSpecials, item, Item_Type);
+////        ADDMFIELDFEATURE(mapSpecials, item, Cost);
 
-        // TODO
-//        ADDMFIELDFEATURE(mapSpecials, item, Item_Name);
-//        ADDMFIELDFEATURE(mapSpecials, item, Icon);
-//        ADDMFIELDFEATURE(mapSpecials, item, Slot_Required);
-//        ADDMFIELDFEATURE(mapSpecials, item, Item_Type);
-//        ADDMFIELDFEATURE(mapSpecials, item, Cost);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Attack);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, To_Hit);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Defense);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Movement_in_halves);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Resistance);
+////        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Spell_Points);
+////        ADDFIELDFEATURE(mapSpecials, -(int)item->m_Bonuses, Spell_Save);
 
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Attack);
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, To_Hit);
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Defense);
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Movement_in_halves);
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Resistance);
-//        ADDFIELDFEATURE(mapSpecials, (int)item->m_Bonuses, Spell_Points);
-//        ADDFIELDFEATURE(mapSpecials, -(int)item->m_Bonuses, Spell_Save);
+////        ADDMFIELDFEATURE(mapSpecials, item, Spell_Number_Charged);
+////        ADDMFIELDFEATURE(mapSpecials, item, Number_Of_Charges);
 
-        ADDMFIELDFEATURE(mapSpecials, item, Spell_Number_Charged);
-        ADDMFIELDFEATURE(mapSpecials, item, Number_Of_Charges);
+//    }
 
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Vampiric);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Guardian_Wind);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Lightning);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Cloak_Of_Fear);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Destruction);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Wraith_Form);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Regeneration);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Pathfinding);
-
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Water_Walking);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Resist_Elements);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Elemental_Armour);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Doom_equals_Chaos);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Stoning);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Endurance);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Haste);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Invisibility);
-
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Death);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Flight);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Resist_Magic);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Magic_Immunity);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Flaming);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Holy_Avenger);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, True_Sight);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Phantasmal);
-
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Power_Drain);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Bless);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Lion_Heart);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Giant_Strength);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Planar_Travel);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Merging);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Righteousness);
-        ADDFLAGFEATURE(mapSpecials, item->m_Bitmask_Powers, Invulnerability);
-    }
-
-#undef ADDMFIELDFEATURE
-#undef ADDFIELDFEATURE
-#undef ADDFLAGFEATURE
-
-    return mapSpecials;
-}
+//    return mapSpecials;
+//}
 
 Item* MoMUnit::getSlotItem(int itemSlotNr) const
 {
@@ -788,70 +702,61 @@ eRanged_Type MoMUnit::getRangedType() const
     return value;
 }
 
-MoMUnit::MapSpecials MoMUnit::getSpecials() const
+int MoMUnit::getSpecial(eHeroAbility heroAbility) const
 {
-    MapSpecials mapSpecials = getAbilityEffects();
-    MapSpecials mapItemEffects = getItemEffects();
-    MapSpecials mapSpellEffects = getSpellEffects();
+    int bonus = 0;
+    int level = getLevel();
+    switch (heroAbility)
+    {
+    case HEROABILITY_Agility:          { bonus = level; break; }
+    case HEROABILITY_Agility_X:        { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Arcane_Power:     { bonus = level; break; }
+    case HEROABILITY_Arcane_Power_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Armsmaster:       { bonus = 2 * level; break; }
+    case HEROABILITY_Armsmaster_X:     { bonus = static_cast<int>(2 * level * 3 / 2); break; }
+    case HEROABILITY_Blademaster:      { bonus = static_cast<int>(level / 2); break; }
+    case HEROABILITY_Blademaster_X:    { bonus = static_cast<int>(level * 3 / 4); break; }
+// TODO
+//    case HEROABILITY_Caster:           { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); break; }
+    case HEROABILITY_Constitution:     { bonus = level; break; }
+    case HEROABILITY_Constitution_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Leadership:       { bonus = static_cast<int>(level / 3); break; }
+    case HEROABILITY_Leadership_X:     { bonus = static_cast<int>(level / 2); break; }
 
-    mapSpecials.insert(mapItemEffects.begin(), mapItemEffects.end());
-    mapSpecials.insert(mapSpellEffects.begin(), mapSpellEffects.end());
+    case HEROABILITY_Legendary:        { bonus = 3 * level; break; }
+    case HEROABILITY_Legendary_X:      { bonus = static_cast<int>(3 * level * 3 / 2); break; }
+    case HEROABILITY_Lucky:            { break; }
+    case HEROABILITY_Might:            { bonus = level; break; }
+    case HEROABILITY_Might_X:          { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Noble:            { break; }
+    case HEROABILITY_Prayermaster:     { bonus = level; break; }
+    case HEROABILITY_Prayermaster_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Sage:             { bonus = 3 * level; break; }
+    case HEROABILITY_Sage_X:           { bonus = static_cast<int>(3 * level * 3 / 2); break; }
 
-    return mapSpecials;
+    default:                           { break; }
+    }
+    return bonus;
 }
 
-MoMUnit::MapSpecials MoMUnit::getSpellEffects() const
+int MoMUnit::getSpecial(eUnitAbility unitAbility) const
 {
-    MapSpecials mapSpecials;
-
-#define ADDSPELLFLAGFEATURE(m, u, field) \
-    if (u.s.field) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = 0; \
-    }
-
-    if (0 != m_unit)
+    int bonus = 0;
+    if (0 == m_unitType)
+        return 0;
+    switch (unitAbility)
     {
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Immolation);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Guardian_Wind);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Berserk);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Cloak_of_Fear);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Black_Channels);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Wraith_Form);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Regeneration);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Path_Finding);
-
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Water_Walking);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Resist_Elements);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Elemental_Armor);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Stone_Skin);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Iron_Skin);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Endurance);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Spell_Lock);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Invisibility);
-
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Wind_Walking);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Flight);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Resist_Magic);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Magic_Immunity);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Flame_Blade);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Eldritch_Weapon);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, True_Sight);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Holy_Weapon);
-
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Heroism);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Bless);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Lionheart);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Giant_Strength);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Planar_Travel);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Holy_Armor);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Righteousness);
-        ADDSPELLFLAGFEATURE(mapSpecials, m_unit->m_Unit_Enchantment, Invulnerability);
+    case UNITABILITY_Holy_Bonus:
+    case UNITABILITY_Resistance_to_All:
+    case UNITABILITY_Poison_attack:
+    case UNITABILITY_Life_Stealing:
+    case UNITABILITY_Stoning_Touch:
+    case UNITABILITY_Death_Touch:
+    case UNITABILITY_Power_Drain:
+    case UNITABILITY_Dispel_Evil:     { bonus = m_unitType->m_Gaze_Modifier; break; }
+    default:                          { break; }
     }
-
-#undef ADDSPELLFLAGFEATURE
-
-    return mapSpecials;
+    return bonus;
 }
 
 std::string MoMUnit::getUnitName() const
@@ -913,10 +818,28 @@ int MoMUnit::getXP() const
     return value;
 }
 
+bool MoMUnit::hasMagicalBreathAttack() const
+{
+    eRanged_Type rangedType = getRangedType();
+    bool value = ((rangedType == MoM::RANGED_Fire_Breath)
+                  || (rangedType == MoM::RANGED_Lightning_Breath));
+    return value;
+}
+
+bool MoMUnit::hasMagicalGazeAttack() const
+{
+    eRanged_Type rangedType = getRangedType();
+    bool value = ((rangedType == MoM::RANGED_Stoning_Gaze)
+                  || (rangedType == MoM::RANGED_Multiple_Gaze)
+                  || (rangedType == MoM::RANGED_Death_Gaze));
+    return value;
+}
+
 bool MoMUnit::hasMagicalRangedAttack() const
 {
     eRanged_Type rangedType = getRangedType();
-    bool value = ((rangedType != MoM::RANGED_None) && !hasPhysicalRangedAttack());
+    bool value = ((rangedType >= MoM::RANGED_Chaos_Magic1_Storm_Giant)
+                  && (rangedType < MoM::RANGED_Thrown_Weapons));
     return value;
 }
 
@@ -942,10 +865,73 @@ bool MoMUnit::hasThrownRangedAttack() const
     return value;
 }
 
-bool MoMUnit::hasSpecial(const std::string& specialName) const
+bool MoMUnit::hasSpecial(eHeroAbility heroAbility) const
 {
-    MapSpecials mapSpecials = getSpecials();
-    return (mapSpecials.find(specialName) != mapSpecials.end());
+    bool value = false;
+    if (m_heroStats != 0)
+    {
+        value = (1 & (m_heroStats->m_Hero_Abilities.bits >> heroAbility));
+    }
+    else if (m_heroStatsInitializer != 0)
+    {
+        value = (1 & (m_heroStatsInitializer->m_Hero_Abilities.bits >> heroAbility));
+    }
+    else
+    {
+        // No hero information
+    }
+    return value;
+}
+
+bool MoMUnit::hasSpecial(eItemPower itemPower) const
+{
+    bool value = false;
+    if ((m_game != 0) && (m_hiredHero != 0))
+    {
+        for (size_t slotNr = 0; !value && (slotNr < gMAX_ITEMSLOTS); ++slotNr)
+        {
+            int16_t itemNr = m_hiredHero->m_Items_In_Slot[slotNr];
+            Item* item = m_game->getItem(itemNr);
+            if (item != 0)
+            {
+                value = (1 & (item->m_Bitmask_Powers.bits >> itemPower));
+            }
+        }
+    }
+    return value;
+}
+
+bool MoMUnit::hasSpecial(eUnitAbility unitAbility) const
+{
+    bool value = false;
+    if (m_unitType != 0)
+    {
+        unsigned offset = unitAbility / 8;
+        unsigned shift = unitAbility % 8;
+        uint8_t* ptr = &m_unitType->m_Movement_Flags.bits;
+        value = (1 & (ptr[offset] >> shift));
+    }
+    return value;
+}
+
+bool MoMUnit::hasSpecial(eUnitEnchantment unitAbility) const
+{
+    bool value = false;
+    if (m_unit != 0)
+    {
+        value = (1 & (m_unit->m_Unit_Enchantment.bits >> unitAbility));
+    }
+    return value;
+}
+
+bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
+{
+    bool value = false;
+    if (m_unit != 0)
+    {
+        value = (1 & (m_unit->m_Weapon_Mutation.bits >> unitMutation));
+    }
+    return value;
 }
 
 bool MoMUnit::isHero() const
@@ -1021,41 +1007,42 @@ void MoMUnit::applyAbilities()
     m_mapAbilities = getAbilityEffects();
 
 #define has(str) (m_mapAbilities.find(str) != m_mapAbilities.end())
-#define get_special(str) m_mapAbilities[str]
+//#define get_special(str) m_mapAbilities[str]
 #define set_special(str, bonus) m_mapAbilities[str] = (bonus)
 
     // Hero specific
-    if (has("Agility"))        { up.defense += bonus = level; set_special("Agility", bonus); }
-    if (has("Agility X"))      { up.defense += bonus = static_cast<int>(level * 3 / 2); set_special("Agility X", bonus); }
-    if (has("Arcane Power"))   { up.ranged += bonus = level; set_special("Arcane Power", bonus); }
-    if (has("Arcane Power X")) { up.ranged += bonus = static_cast<int>(level * 3 / 2); set_special("Arcane Power X", bonus); }
-    if (has("Armsmaster"))     { bonus = 2 * level; set_special("Armsmaster", bonus); }
-    if (has("Armsmaster X"))   { bonus = static_cast<int>(2 * level * 3 / 2); set_special("Armsmaster X", bonus); }
-    if (has("Blademaster"))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; set_special("Blademaster", bonus); }
-    if (has("Blademaster X"))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; set_special("Blademaster X", bonus); }
+    if (hasSpecial(HEROABILITY_Agility))        { up.defense += bonus = level; }
+    if (hasSpecial(HEROABILITY_Agility_X))      { up.defense += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasSpecial(HEROABILITY_Arcane_Power))   { up.ranged += bonus = level; }
+    if (hasSpecial(HEROABILITY_Arcane_Power_X)) { up.ranged += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasSpecial(HEROABILITY_Armsmaster))     { bonus = 2 * level; }
+    if (hasSpecial(HEROABILITY_Armsmaster_X))   { bonus = static_cast<int>(2 * level * 3 / 2); }
+    if (hasSpecial(HEROABILITY_Blademaster))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; }
+    if (hasSpecial(HEROABILITY_Blademaster_X))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; }
     if (has("Caster"))         { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); set_special("Caster", bonus); }
-    if (has("Constitution"))   { up.hitpoints += bonus = level; set_special("Constitution", bonus); }
-    if (has("Constitution X")) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); set_special("Constitution X", bonus); }
+    if (hasSpecial(HEROABILITY_Constitution))   { up.hitpoints += bonus = level; }
+    if (hasSpecial(HEROABILITY_Constitution_X)) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); }
 	// Treat Leadership bonus as gold bonus, since application depends on highest Leadership in group
-    if (has("Leadership"))     { up_gold.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); set_special("Leadership", bonus); }
-    if (has("Leadership X"))   { up_gold.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); set_special("Leadership X", bonus); }
+    if (hasSpecial(HEROABILITY_Leadership))     { up_gold.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
+    if (hasSpecial(HEROABILITY_Leadership_X))   { up_gold.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
 
-    if (has("Legendary"))      { bonus = 3 * level; set_special("Legendary", bonus); }
-    if (has("Legendary X"))    { bonus = static_cast<int>(3 * level * 3 / 2); set_special("Legendary X", bonus); }
-    if (has("Lucky"))          { up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1; up.resistance += +1; }
-    if (has("Might"))          { up.melee += bonus = level; set_special("Might", bonus); }
-    if (has("Might X"))        { up.melee += bonus = static_cast<int>(level * 3 / 2); set_special("Might X", bonus); }
-	if (has("Noble"))          { ; }
-    if (has("Prayermaster"))   { bonus = level; set_special("Prayermaster", bonus); prayer_bonus = Max(prayer_bonus, bonus); }
-    if (has("Prayermaster X")) { bonus = static_cast<int>(level * 3 / 2); set_special("Prayermaster X", bonus); prayer_bonus = Max(prayer_bonus, bonus); }
-    if (has("Sage"))           { bonus = 3 * level; set_special("Sage", bonus); }
-    if (has("Sage X"))         { bonus = static_cast<int>(3 * level * 3 / 2); set_special("Sage X", bonus); }
+    if (hasSpecial(HEROABILITY_Legendary))      { bonus = 3 * level; }
+    if (hasSpecial(HEROABILITY_Legendary_X))    { bonus = static_cast<int>(3 * level * 3 / 2); }
+    if (hasSpecial(HEROABILITY_Lucky))          { up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1; up.resistance += +1; }
+    if (hasSpecial(HEROABILITY_Might))          { up.melee += bonus = level; }
+    if (hasSpecial(HEROABILITY_Might_X))        { up.melee += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasSpecial(HEROABILITY_Noble))          { ; }
+    if (hasSpecial(HEROABILITY_Prayermaster))   { bonus = level; prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasSpecial(HEROABILITY_Prayermaster_X)) { bonus = static_cast<int>(level * 3 / 2); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasSpecial(HEROABILITY_Sage))           { bonus = 3 * level; }
+    if (hasSpecial(HEROABILITY_Sage_X))         { bonus = static_cast<int>(3 * level * 3 / 2);}
 
     // Unit specific
-    if (has("Holy Bonus"))     { bonus = get_special("Holy Bonus"); holy_bonus = Max(holy_bonus, bonus); }
-    if (has("Resistance to All")) { bonus = get_special("Resistance to All"); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasSpecial(UNITABILITY_Holy_Bonus))     { bonus = getSpecial(UNITABILITY_Holy_Bonus); holy_bonus = Max(holy_bonus, bonus); }
+    if (hasSpecial(UNITABILITY_Resistance_to_All)) { bonus = getSpecial(UNITABILITY_Resistance_to_All); prayer_bonus = Max(prayer_bonus, bonus); }
 
 #undef set_special
+//#undef get_special
 #undef has
 
     // Process holy_bonus (highest applies)
@@ -1615,7 +1602,14 @@ void MoMUnit::applyWeaponType()
 	}
 
 	// Add weapon bonus where appropriate
-	m_bonuses.addBonus(up);
+    m_bonuses.addBonus(up);
+}
+
+bool MoMUnit::commitData(void *ptr, const void *pNewValue, size_t size)
+{
+    if ((0 == m_game) || (0 == ptr) || (0 == pNewValue))
+        return false;
+    return m_game->commitData(ptr, pNewValue, size);
 }
 
 void MoMUnit::BaseAttributes::addBonus(const MoMUnit::BaseAttributes& up)
@@ -1630,6 +1624,16 @@ void MoMUnit::BaseAttributes::addBonus(const MoMUnit::BaseAttributes& up)
     toDefend += up.toDefend;
 
     moves += up.moves;
+}
+
+bool MoMUnit::setUnitTypeData(const Unit_Type_Data &value)
+{
+    return commitData(m_unitType, &value, sizeof(value));
+}
+
+bool MoMUnit::setHeroStats(const Hero_stats &value)
+{
+    return commitData(m_heroStats, &value, sizeof(value));
 }
 
 }

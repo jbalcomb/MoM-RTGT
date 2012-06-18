@@ -26,7 +26,7 @@ s#\s*//[^\n]*##gm;
 # Collect structs and unions (also processes embedded enums)
 #
 my %gStructUnions = ();
-while (s#(struct|union|class)[^{]*{((.|\n)*?\n)}\s*(\w+);##m)
+while (s#\b(struct|union|class)\b[^{]*{((.|\n)*?\n)}\s*(\w+);##m)
 {
     my ($classbody, $classname) = ($2, $4);
     process_struct_union($classname, $classbody);
@@ -495,6 +495,7 @@ sub process_enum
     my @enumvalues = ();
     
     # For each line in $enumbody
+    print "enumname = $enumname\n";
     while ($enumbody =~ s#^\s*([^\n]*)\n##)
     {
         my $line = $1;

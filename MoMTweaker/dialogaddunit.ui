@@ -54,8 +54,7 @@
    <item row="1" column="0">
     <widget class="QGraphicsView" name="graphicsView_Unit">
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/images/background_unit.gif);
-color: rgb(225, 215, 74);</string>
+      <string notr="true">background-image: url(:/images/background_unit.gif);</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
