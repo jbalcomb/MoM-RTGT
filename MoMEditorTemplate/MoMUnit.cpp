@@ -25,7 +25,6 @@ MoMUnit::MoMUnit() :
     m_hiredHero(),
     m_unit(),
     m_unitType(),
-    m_mapAbilities(),
 	m_bonuses(),
     m_dnSpells(),
     m_penalties(),
@@ -45,7 +44,6 @@ MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
     m_hiredHero(),
     m_unit(),
     m_unitType(),
-    m_mapAbilities(),
     m_bonuses(),
     m_dnSpells(),
     m_penalties(),
@@ -93,7 +91,6 @@ void MoMUnit::copyMemberData(const MoMUnit& rhs)
     m_hiredHero = rhs.m_hiredHero;
     m_unit = rhs.m_unit;
     m_unitType = rhs.m_unitType;
-    m_mapAbilities = rhs.m_mapAbilities;
     m_bonuses = rhs.m_bonuses;
     m_dnSpells = rhs.m_dnSpells;
     m_penalties = rhs.m_penalties;
@@ -112,7 +109,6 @@ void MoMUnit::close()
     m_hiredHero = 0;
     m_unitType = 0;
     m_unit = 0;
-    m_mapAbilities.clear();
 	m_bonuses = BaseAttributes();
     m_dnSpells = BaseAttributes();
     m_penalties = BaseAttributes();
@@ -328,90 +324,6 @@ Unit_Type_Data MoMUnit::getUnitTypeData() const
 // OTHER
 //
 
-MoMUnit::MapSpecials MoMUnit::getAbilityEffects() const
-{
-    if (!m_mapAbilities.empty())
-        return m_mapAbilities;
-
-    MapSpecials mapSpecials;
-
-#define ADDMFIELDFEATURE(m, u, field) \
-    if (u->m_##field != 0) \
-    { \
-        m[ MoM::replaceUnderscoresBySpaces(#field) ] = u->m_##field; \
-    }
-
-    if (0 != m_heroStats)
-    {
-        // Additional fields
-        if (m_heroStats->m_Hero_Casting_Skill > 0)
-        {
-            mapSpecials["Caster"] = 0;
-        }
-//        for (int spellNr = 0; spellNr < ARRAYSIZE(heroStats.m_Spell); ++spellNr)
-//        {
-//            if (MoM::SPELL_None != heroStats.m_Spell[spellNr])
-//            {
-//                ADDMFIELDFEATURE(qtreeHSFlags, heroStats, Spell[spellNr]);
-//            }
-//        }
-    }
-
-    if (0 != m_unitType)
-    {
-        // Additional fields
-//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Type);
-//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Ranged_Shots);
-		if (hasMissileRangedAttack())
-		{
-			mapSpecials["Arrows"] = m_unitType->m_Ranged_Shots;
-		}
-        else if (hasMagicalRangedAttack())
-        {
-            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = 0;
-            mapSpecials["Spells"] = m_unitType->m_Ranged_Shots;
-        }
-        else if (hasMagicalBreathAttack())
-		{
-            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = 0;
-		}
-        else if (hasMagicalGazeAttack())
-        {
-            mapSpecials[prettyEnumStr(toStr(m_unitType->m_Ranged_Type))] = m_unitType->m_Gaze_Modifier;
-        }
-        else if (m_unitType->m_Ranged_Shots != 0)
-		{
-			mapSpecials["Ranged Shots"] = m_unitType->m_Ranged_Shots;
-		}
-        else
-        {
-            // No ranged attack information
-        }
-//        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Cost);
-//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Building_Required1);
-//        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Hero_TypeCode_or_Building2);
-        if (m_unitType->m_Scouting != 1)
-        {
-            mapSpecials["Scouting"] = m_unitType->m_Scouting;
-        }
-        ADDMFIELDFEATURE(mapSpecials, (unsigned)m_unitType, Transport_Capacity);
-        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Construction);
-        ADDMFIELDFEATURE(mapSpecials, (int)m_unitType, Gaze_Modifier);
-    }
-
-    if (0 != m_unit)
-    {
-		if (m_unit->m_Weapon_Mutation.s.Weapon_Type != MoM::WEAPON_normal)
-		{
-            mapSpecials["Magic Weapon"] = 0;
-		}
-    }
-
-#undef ADDMFIELDFEATURE
-
-    return mapSpecials;
-}
-
 MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
 {
     BaseAttributes base = getBaseAttributes();
@@ -493,6 +405,16 @@ std::string MoMUnit::getHeroName() const
         name = m_hiredHero->m_Hero_name;
     }
     return name;
+}
+
+eHero_TypeCode MoMUnit::getHeroTypeCode() const
+{
+    eHero_TypeCode value = (eHero_TypeCode)-1;
+    if ((0 != m_unitType) && isHero())
+    {
+        value = m_unitType->m_Hero_TypeCode_or_Building2;
+    }
+    return value;
 }
 
 //MoMUnit::MapSpecials MoMUnit::getItemEffects() const
@@ -647,12 +569,42 @@ double MoMUnit::getMoves() const
     return value;
 }
 
-int MoMUnit::getCastingSkill() const
+int MoMUnit::getCastingSkillBase() const
 {
     int value = 0;
     if (0 != m_heroStats)
     {
         value = m_heroStats->m_Hero_Casting_Skill;
+    }
+    return value;
+}
+
+int MoMUnit::getCastingSkillTotal() const
+{
+    int value = getCastingSkillBase();
+    if (getLevel() > 0)
+    {
+        value = static_cast<int>(getLevel() * (1 + getCastingSkillBase()) * 5 / 2);
+    }
+    return value;
+}
+
+int MoMUnit::getConstructionSkill() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Construction;
+    }
+    return value;
+}
+
+int MoMUnit::getCost() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Cost;
     }
     return value;
 }
@@ -692,12 +644,52 @@ std::string MoMUnit::getRaceName() const
     return name;
 }
 
+int MoMUnit::getRangedShots() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Ranged_Shots;
+    }
+    return value;
+}
+
 eRanged_Type MoMUnit::getRangedType() const
 {
     eRanged_Type value = MoM::RANGED_None;
     if (0 != m_unitType)
     {
         value = m_unitType->m_Ranged_Type;
+    }
+    return value;
+}
+
+MoMUnit::ListBuildings MoMUnit::getRequiredBuildings() const
+{
+    ListBuildings value;
+
+    if ((0 != m_unitType) && isNormal())
+    {
+        if ((toUInt(m_unitType->m_Building_Required1) >= BUILDING_Barracks)
+            && (toUInt(m_unitType->m_Building_Required1) < eBuilding_MAX))
+        {
+            value.push_back((eBuilding)m_unitType->m_Building_Required1);
+        }
+        if ((toUInt(m_unitType->m_Hero_TypeCode_or_Building2) >= BUILDING_Barracks)
+            && (toUInt(m_unitType->m_Hero_TypeCode_or_Building2) < eBuilding_MAX))
+        {
+            value.push_back((eBuilding)m_unitType->m_Hero_TypeCode_or_Building2);
+        }
+    }
+    return value;
+}
+
+int MoMUnit::getScouting() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Scouting;
     }
     return value;
 }
@@ -716,8 +708,7 @@ int MoMUnit::getSpecial(eHeroAbility heroAbility) const
     case HEROABILITY_Armsmaster_X:     { bonus = static_cast<int>(2 * level * 3 / 2); break; }
     case HEROABILITY_Blademaster:      { bonus = static_cast<int>(level / 2); break; }
     case HEROABILITY_Blademaster_X:    { bonus = static_cast<int>(level * 3 / 4); break; }
-// TODO
-//    case HEROABILITY_Caster:           { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); break; }
+//    case HEROABILITY_Caster:           { bonus = static_cast<int>(level * (1 + getCastingSkillBase()) * 5 / 2); break; }
     case HEROABILITY_Constitution:     { bonus = level; break; }
     case HEROABILITY_Constitution_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
     case HEROABILITY_Leadership:       { bonus = static_cast<int>(level / 3); break; }
@@ -757,6 +748,16 @@ int MoMUnit::getSpecial(eUnitAbility unitAbility) const
     default:                          { break; }
     }
     return bonus;
+}
+
+int MoMUnit::getTransportCapacity() const
+{
+    int value = 0;
+    if (0 != m_unitType)
+    {
+        value = m_unitType->m_Transport_Capacity;
+    }
+    return value;
 }
 
 std::string MoMUnit::getUnitName() const
@@ -927,7 +928,7 @@ bool MoMUnit::hasSpecial(eUnitEnchantment unitAbility) const
 bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
 {
     bool value = false;
-    if (m_unit != 0)
+    if ((m_unit != 0) && (unitMutation >= UNITMUTATION_Chaos_Channels_Demon_Skin))
     {
         value = (1 & (m_unit->m_Weapon_Mutation.bits >> unitMutation));
     }
@@ -937,7 +938,18 @@ bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
 bool MoMUnit::isHero() const
 {
 	// TODO: A hero only counts as a hero if he occupies a hired hero slot.
-	return (toUInt(getUnitTypeNr()) < gMAX_HERO_TYPES);
+    return (toUInt(getUnitTypeNr()) < gMAX_HERO_TYPES);
+}
+
+bool MoMUnit::isNormal() const
+{
+    return ((toUInt(getUnitTypeNr()) >= gMAX_HERO_TYPES)
+            && (getUnitTypeNr() < UNITTYPE_Arcane_Magic_Spirit));
+}
+
+bool MoMUnit::isSummoned() const
+{
+    return (getUnitTypeNr() >= UNITTYPE_Arcane_Magic_Spirit);
 }
 
 void MoMUnit::setGame(MoMGameBase* game)
@@ -1004,12 +1016,6 @@ void MoMUnit::applyAbilities()
     int holy_bonus = 0;
     int prayer_bonus = 0;
 
-    m_mapAbilities = getAbilityEffects();
-
-#define has(str) (m_mapAbilities.find(str) != m_mapAbilities.end())
-//#define get_special(str) m_mapAbilities[str]
-#define set_special(str, bonus) m_mapAbilities[str] = (bonus)
-
     // Hero specific
     if (hasSpecial(HEROABILITY_Agility))        { up.defense += bonus = level; }
     if (hasSpecial(HEROABILITY_Agility_X))      { up.defense += bonus = static_cast<int>(level * 3 / 2); }
@@ -1019,7 +1025,7 @@ void MoMUnit::applyAbilities()
     if (hasSpecial(HEROABILITY_Armsmaster_X))   { bonus = static_cast<int>(2 * level * 3 / 2); }
     if (hasSpecial(HEROABILITY_Blademaster))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; }
     if (hasSpecial(HEROABILITY_Blademaster_X))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; }
-    if (has("Caster"))         { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); set_special("Caster", bonus); }
+//    if (has("Caster"))         { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); set_special("Caster", bonus); }
     if (hasSpecial(HEROABILITY_Constitution))   { up.hitpoints += bonus = level; }
     if (hasSpecial(HEROABILITY_Constitution_X)) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); }
 	// Treat Leadership bonus as gold bonus, since application depends on highest Leadership in group
@@ -1040,10 +1046,6 @@ void MoMUnit::applyAbilities()
     // Unit specific
     if (hasSpecial(UNITABILITY_Holy_Bonus))     { bonus = getSpecial(UNITABILITY_Holy_Bonus); holy_bonus = Max(holy_bonus, bonus); }
     if (hasSpecial(UNITABILITY_Resistance_to_All)) { bonus = getSpecial(UNITABILITY_Resistance_to_All); prayer_bonus = Max(prayer_bonus, bonus); }
-
-#undef set_special
-//#undef get_special
-#undef has
 
     // Process holy_bonus (highest applies)
     up_gold.melee += holy_bonus;

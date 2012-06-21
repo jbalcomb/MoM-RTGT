@@ -19,6 +19,9 @@
 
 #include "mainwindow.h"
 
+namespace MoM
+{
+
 DialogAddUnit::DialogAddUnit(QWidget *parent) :
     QDialog(parent),
 	m_game(),
@@ -131,11 +134,258 @@ void DialogAddUnit::displayLevel(QPointF &pos, const std::string& levelName, int
     pos.ry() += MoM::Max(pixmap.height() + 2, 34);
 }
 
-void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir, const QString& helpText)
+void DialogAddUnit::displaySectionBasicAttributes(QPointF &pos)
+{
+    MoM::MoMUnit::BaseAttributes actualAttr = m_unit->getActualAttributes();
+    MoM::MoMUnit::BaseAttributes bonusAttr = m_unit->getBonusAttributes();
+
+    QPointF posLabel = pos;
+    posLabel.rx() = 0;
+    QGraphicsSimpleTextItem* textItem = 0;
+    bool fixedText = false;
+
+    textItem = addText(posLabel, "Melee", fixedText, m_game->getHelpText(MoM::HELP_MELEE).c_str());
+    posLabel.ry() += m_lineHeight;
+    textItem = addText(posLabel, "Range", fixedText, m_game->getHelpText(MoM::HELP_RANGE_1).c_str() + QString("\nRANGED TYPE: ") + prettyQStr(m_unit->getRangedType()));
+    posLabel.ry() += m_lineHeight;
+    textItem = addText(posLabel, "Armor", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
+    posLabel.ry() += m_lineHeight;
+    textItem = addText(posLabel, "Resist", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
+    posLabel.ry() += m_lineHeight;
+    textItem = addText(posLabel, "Hits", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
+    posLabel.ry() += m_lineHeight;
+
+    QString imageBaseName;
+    switch (m_unit->getWeaponType())
+    {
+    default:
+    case MoM::WEAPON_normal:        imageBaseName = "sword"; break;
+    case MoM::WEAPON_magic:         imageBaseName = "sword_magic"; break;
+    case MoM::WEAPON_mithril:       imageBaseName = "sword_mithril"; break;
+    case MoM::WEAPON_adamantium:    imageBaseName = "sword_adamantium"; break;
+    }
+
+    pos.rx() = m_labelWidth;
+
+    displayStrength(pos, actualAttr.melee, bonusAttr.melee, imageBaseName, prettyQStr(m_unit->getWeaponType()));
+
+    switch (m_unit->getRangedType())
+    {
+    case MoM::RANGED_Rock:           imageBaseName = "rock"; break;
+    case MoM::RANGED_Arrow:          imageBaseName = "bow"; break;
+    case MoM::RANGED_Bullet:         imageBaseName = "rock"; break;
+    case MoM::RANGED_Thrown_Weapons: imageBaseName = "thrown"; break;
+    default:                         imageBaseName = "fireball"; break;
+    }
+
+    if (m_unit->hasMagicalBreathAttack() || m_unit->hasMagicalGazeAttack())
+    {
+        displayStrength(pos, 0, 0, imageBaseName, prettyQStr(m_unit->getRangedType()));
+    }
+    else
+    {
+        displayStrength(pos, actualAttr.ranged, bonusAttr.ranged, imageBaseName, prettyQStr(m_unit->getRangedType()));
+    }
+
+    displayStrength(pos, actualAttr.defense, bonusAttr.defense, "shield", m_game->getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
+    displayStrength(pos, actualAttr.resistance, bonusAttr.resistance, "resistance", m_game->getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
+    displayStrength(pos,actualAttr.hitpoints, bonusAttr.hitpoints, "heart", m_game->getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
+
+    pos.rx() = 0;
+}
+
+void DialogAddUnit::displaySectionSpecials(QPointF &pos)
+{
+    MoM::MoMUnit::ListBuildings listBuildings = m_unit->getRequiredBuildings();
+    for (size_t i = 0; i < listBuildings.size(); ++i)
+    {
+        displaySpecial(pos, listBuildings[i], 0);
+    }
+
+    MOM_FOREACH(eItemPower, itemPower, eItemPower_MAX)
+    {
+        if (m_unit->hasSpecial(itemPower))
+        {
+            QString specialName = prettyQStr(itemPower);
+            displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(itemPower).c_str());  // TODO: Lookup images for item effects
+        }
+    }
+
+    if (m_unit->hasMissileRangedAttack())
+    {
+        displaySpecial(pos, "Arrows", m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+    }
+    else if (m_unit->hasMagicalRangedAttack() && m_unit->getRangedShots() > 0)
+    {
+        displaySpecial(pos, "Spells", m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+    }
+    else if (m_unit->hasMagicalBreathAttack())
+    {
+        displaySpecial(pos, prettyQStr(m_unit->getRangedType()), m_unit->getActualAttributes().ranged, ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());    // TODO: Lookup images
+    }
+    else if (m_unit->hasMagicalGazeAttack())
+    {
+        int specialValue = m_unit->getGazeModifier();
+        if (m_unit->getRangedType() == RANGED_Multiple_Gaze)
+        {
+            specialValue = m_unit->getActualAttributes().ranged;
+        }
+        displaySpecial(pos, prettyQStr(m_unit->getRangedType()), specialValue, ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+    }
+    else if (m_unit->getRangedShots() > 0)
+    {
+        displaySpecial(pos, prettyQStr(m_unit->getRangedType()), m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+    }
+    else
+    {
+        // No ranged attack information
+    }
+
+    if (m_unit->getCastingSkillBase() > 0)
+    {
+        displaySpecial(pos, "Caster", m_unit->getCastingSkillTotal(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_CASTER).c_str());    // TODO: Lookup images
+    }
+    if (m_unit->getScouting() != 1)
+    {
+        displaySpecial(pos, "Scouting", m_unit->getScouting(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_SCOUTING).c_str());    // TODO: Lookup images
+    }
+    if (m_unit->getConstructionSkill() > 0)
+    {
+        displaySpecial(pos, "Construction", m_unit->getConstructionSkill(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_CONSTRUCTION).c_str());    // TODO: Lookup images
+    }
+
+    MOM_FOREACH(eHeroAbility, heroAbility, eHeroAbility_MAX)
+    {
+        if (m_unit->hasSpecial(heroAbility))
+        {
+            QString specialName = prettyQStr(heroAbility);
+            displaySpecial(pos, specialName, m_unit->getSpecial(heroAbility), ":/abilities/", m_game->getHelpText(heroAbility).c_str());    // TODO: Lookup images
+        }
+    }
+    MOM_FOREACH(eUnitAbility, unitAbility, eUnitAbility_MAX)
+    {
+        if (m_unit->hasSpecial(unitAbility))
+        {
+            QString specialName = prettyQStr(unitAbility);
+            displaySpecial(pos, specialName, m_unit->getSpecial(unitAbility), ":/abilities/", m_game->getHelpText(unitAbility).c_str());    // TODO: Lookup images
+        }
+    }
+    MOM_FOREACH(eUnitMutation, unitMutation, eUnitMutation_MAX)
+    {
+        if (m_unit->hasSpecial(unitMutation))
+        {
+            QString specialName = prettyQStr(unitMutation);
+            displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(unitMutation).c_str());    // TODO: Lookup images
+        }
+    }
+    MOM_FOREACH(eUnitEnchantment, unitEnchantment, eUnitEnchantment_MAX)
+    {
+        if (m_unit->hasSpecial(unitEnchantment))
+        {
+            QString specialName = prettyQStr(unitEnchantment);
+            displaySpecial(pos, specialName, 0, ":/spells/", m_game->getHelpText(unitEnchantment).c_str());    // TODO: Lookup images
+        }
+    }
+}
+
+void DialogAddUnit::displaySectionTop()
+{
+    QGraphicsSimpleTextItem* textItem = 0;
+    bool fixedText = false;
+    QPointF pos(0, m_pictureHeight);
+
+    pos = QPoint(m_labelWidth, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    textItem = addText(pos, "Figures", fixedText);
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, "Moves", fixedText, m_game->getHelpText(MoM::HELP_MOVES).c_str());
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, "Upkeep", fixedText, m_game->getHelpText(MoM::HELP_1_UPKEEP).c_str());
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+
+    const QMoMImagePtr pImage = MoM::QMoMResources::instance().getImage(m_unit->getUnitTypeNr());
+    if (0 != pImage)
+    {
+        QImage image(*pImage);
+        if (image.width() < 32)
+        {
+            image = image.scaled(image.size() * 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
+        QPixmap pixmap;
+        pixmap.convertFromImage(image);
+        QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
+        m_unitSpecificItems.push_back(item);
+        QPointF pos((m_labelWidth - pixmap.width()) / 2, (m_pictureHeight - pixmap.height()) / 2);
+        item->setPos(pos);
+    }
+
+    // Name
+    pos = QPointF(m_labelWidth, 0);
+    QFont fontName(MoM::QMoMResources::g_Font);
+    fontName.setPointSize(20);
+    if (m_unit->getHeroName().empty())
+    {
+        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
+        textItem->setFont(fontName);
+    }
+    else
+    {
+        textItem = addText(pos, QString(m_unit->getHeroName().c_str()));
+        textItem->setFont(fontName);
+        pos.ry() += fontName.pointSize();
+        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
+        textItem->setFont(fontName);
+    }
+
+    // Figures, moves, upkeep
+    pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, QString("%0").arg(m_unit->getMoves(), 0, 'f', 1));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
+    textItem = addText(pos, QString("%0").arg(m_unit->getUpkeep()));
+    textItem->setFont(MoM::QMoMResources::g_FontSmall);
+
+    // To Hit
+    MoM::MoMUnit::BaseAttributes actualAttr = m_unit->getActualAttributes();
+
+    pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    QPixmap pixmap(":images/tohit.gif");
+    QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
+    m_unitSpecificItems.push_back(item);
+    item->setPos(pos);
+    pos.rx() += pixmap.width() + 2;
+
+    if (actualAttr.melee && actualAttr.toHitMelee)
+    {
+       displayToHit(pos, actualAttr.toHitMelee, "To Hit Melee");
+    }
+    else
+    {
+        pos.ry() += 10;
+    }
+    if (actualAttr.ranged && actualAttr.toHitRanged)
+    {
+        displayToHit(pos, actualAttr.toHitRanged, "To Hit Ranged");
+    }
+    else
+    {
+        pos.ry() += 10;
+    }
+    if (actualAttr.defense && actualAttr.toDefend)
+    {
+        displayToHit(pos, actualAttr.toDefend, "To Defend");
+    }
+}
+
+void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QPixmap& pixmap, const QString& helpText)
 {
   QGraphicsItem* item = 0;
 
-  QPixmap pixmap(pixmapDir + specialName + ".gif");
   item = m_sceneUnit->addPixmap(pixmap);
   item->setToolTip(helpText);
   m_unitSpecificItems.push_back(item);
@@ -342,7 +592,7 @@ void DialogAddUnit::slot_unitChanged(const QMoMUnitPtr& unit)
 
 void DialogAddUnit::update()
 {
-    // Remove old items
+    // Remove old QGraphicsItems
     foreach(QGraphicsItem* item, m_unitSpecificItems)
     {
         m_sceneUnit->removeItem(item);
@@ -353,153 +603,15 @@ void DialogAddUnit::update()
     if (0 == m_game)
         return;
 
-    // Add new items
+    // Add new QGraphicsItems
 
-    QGraphicsSimpleTextItem* textItem = 0;
-    QPointF pos(0, m_pictureHeight);
-    bool fixedText = false;
+    // Display top section
+    displaySectionTop();
 
-    pos = QPoint(m_labelWidth, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
-    textItem = addText(pos, "Figures", fixedText);
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
-    textItem = addText(pos, "Moves", fixedText, m_game->getHelpText(MoM::HELP_MOVES).c_str());
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
-    textItem = addText(pos, "Upkeep", fixedText, m_game->getHelpText(MoM::HELP_1_UPKEEP).c_str());
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
-
-    pos = QPoint(0, m_pictureHeight);
-    textItem = addText(pos, "Melee", fixedText, m_game->getHelpText(MoM::HELP_MELEE).c_str());
-    pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Range", fixedText, m_game->getHelpText(MoM::HELP_RANGE_1).c_str() + QString("\nRANGED TYPE: ") + prettyQStr(m_unit->getRangedType()));
-    pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Armor", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
-    pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Resist", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
-    pos.ry() += m_lineHeight;
-    textItem = addText(pos, "Hits", fixedText, m_game->getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
-    pos.ry() += m_lineHeight;
-
-
-    MoM::MoMUnit::BaseAttributes actualAttr = m_unit->getActualAttributes();
-    MoM::MoMUnit::BaseAttributes bonusAttr = m_unit->getBonusAttributes();
-
-    const QMoMImagePtr pImage = MoM::QMoMResources::instance().getImage(m_unit->getUnitTypeNr());
-    if (0 != pImage)
-    {
-        QImage image(*pImage);
-        if (image.width() < 32)
-        {
-            image = image.scaled(image.size() * 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        }
-        QPixmap pixmap;
-        pixmap.convertFromImage(image);
-        QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
-        m_unitSpecificItems.push_back(item);
-        QPointF pos((m_labelWidth - pixmap.width()) / 2, (m_pictureHeight - pixmap.height()) / 2);
-        item->setPos(pos);
-    }
-
-    // Name
-    pos = QPointF(m_labelWidth, 0);
-    QFont fontName(MoM::QMoMResources::g_Font);
-    fontName.setPointSize(20);
-    if (m_unit->getHeroName().empty())
-    {
-        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
-        textItem->setFont(fontName);
-    }
-    else
-    {
-        textItem = addText(pos, QString(m_unit->getHeroName().c_str()));
-        textItem->setFont(fontName);
-        pos.ry() += fontName.pointSize();
-        textItem = addText(pos, QString(m_unit->getDisplayName().c_str()));
-        textItem->setFont(fontName);
-    }
-
-    // Figures, moves, upkeep
-    pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
-    textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
-    textItem = addText(pos, QString("%0").arg(m_unit->getMoves(), 0, 'f', 1));
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-    pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
-    textItem = addText(pos, QString("%0").arg(m_unit->getUpkeep()));
-    textItem->setFont(MoM::QMoMResources::g_FontSmall);
-
-    // To Hit
-    pos = QPointF(ui->graphicsView_Unit->width() * 2 / 3, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
-    QPixmap pixmap(":images/tohit.gif");
-    QGraphicsItem* item = m_sceneUnit->addPixmap(pixmap);
-    m_unitSpecificItems.push_back(item);
-    item->setPos(pos);
-    pos.rx() += pixmap.width() + 2;
-
-    if (actualAttr.melee && actualAttr.toHitMelee)
-    {
-       displayToHit(pos, actualAttr.toHitMelee, "To Hit Melee");
-    }
-    else
-    {
-        pos.ry() += 10;
-    }
-    if (actualAttr.ranged && actualAttr.toHitRanged)
-    {
-        displayToHit(pos, actualAttr.toHitRanged, "To Hit Ranged");
-    }
-    else
-    {
-        pos.ry() += 10;
-    }
-    if (actualAttr.defense && actualAttr.toDefend)
-    {
-        displayToHit(pos, actualAttr.toDefend, "To Defend");
-    }
-
-
-    pos = QPointF(m_labelWidth, m_pictureHeight);
+    QPointF pos = QPointF(0, m_pictureHeight);
 
     // Basic attributes
-
-    QString imageBaseName;
-    switch (m_unit->getWeaponType())
-    {
-    default:
-    case MoM::WEAPON_normal:        imageBaseName = "sword"; break;
-    case MoM::WEAPON_magic:         imageBaseName = "sword_magic"; break;
-    case MoM::WEAPON_mithril:       imageBaseName = "sword_mithril"; break;
-    case MoM::WEAPON_adamantium:    imageBaseName = "sword_adamantium"; break;
-    }
-
-    displayStrength(pos, actualAttr.melee, bonusAttr.melee, imageBaseName, prettyQStr(m_unit->getWeaponType()));
-
-    switch (m_unit->getRangedType())
-    {
-    case MoM::RANGED_Rock:           imageBaseName = "rock"; break;
-    case MoM::RANGED_Arrow:          imageBaseName = "bow"; break;
-    case MoM::RANGED_Bullet:         imageBaseName = "rock"; break;
-    case MoM::RANGED_Thrown_Weapons: imageBaseName = "thrown"; break;
-    default:                         imageBaseName = "fireball"; break;
-    }
-
-    if (m_unit->hasMagicalBreathAttack() || m_unit->hasMagicalGazeAttack())
-    {
-        displayStrength(pos, 0, 0, imageBaseName, prettyQStr(m_unit->getRangedType()));
-    }
-    else
-    {
-        displayStrength(pos, actualAttr.ranged, bonusAttr.ranged, imageBaseName, prettyQStr(m_unit->getRangedType()));
-    }
-
-    displayStrength(pos, actualAttr.defense, bonusAttr.defense, "shield", m_game->getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
-    displayStrength(pos, actualAttr.resistance, bonusAttr.resistance, "resistance", m_game->getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
-    displayStrength(pos,actualAttr.hitpoints, bonusAttr.hitpoints, "heart", m_game->getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
-
-    pos.rx() = 0;
+    displaySectionBasicAttributes(pos);
     pos.ry() += m_lineHeight;
 
     // Level/XP
@@ -515,56 +627,7 @@ void DialogAddUnit::update()
     }
 
     // Abilities, item effects, and spell effects
-    MOM_FOREACH(eItemPower, itemPower, eItemPower_MAX)
-    {
-        if (m_unit->hasSpecial(itemPower))
-        {
-            QString specialName = prettyQStr(itemPower);
-            displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(itemPower).c_str());  // TODO: Lookup images for item effects
-        }
-    }
-    MOM_FOREACH(eHeroAbility, heroAbility, eHeroAbility_MAX)
-    {
-        if (m_unit->hasSpecial(heroAbility))
-        {
-            QString specialName = prettyQStr(heroAbility);
-            displaySpecial(pos, specialName, m_unit->getSpecial(heroAbility), ":/abilities/", m_game->getHelpText(heroAbility).c_str());    // TODO: Lookup images
-        }
-    }
-    MOM_FOREACH(eUnitAbility, unitAbility, eUnitAbility_MAX)
-    {
-        if (m_unit->hasSpecial(unitAbility))
-        {
-            QString specialName = prettyQStr(unitAbility);
-            displaySpecial(pos, specialName, m_unit->getSpecial(unitAbility), ":/abilities/", m_game->getHelpText(unitAbility).c_str());    // TODO: Lookup images
-        }
-    }
-    MOM_FOREACH(eUnitMutation, unitMutation, eUnitMutation_MAX)
-    {
-        if (m_unit->hasSpecial(unitMutation))
-        {
-            QString specialName = prettyQStr(unitMutation);
-            displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(unitMutation).c_str());    // TODO: Lookup images
-        }
-    }
-    MOM_FOREACH(eUnitEnchantment, unitEnchantment, eUnitEnchantment_MAX)
-    {
-        if (m_unit->hasSpecial(unitEnchantment))
-        {
-            QString specialName = prettyQStr(unitEnchantment);
-            displaySpecial(pos, specialName, 0, ":/spells/", m_game->getHelpText(unitEnchantment).c_str());    // TODO: Lookup images
-        }
-    }
-    // TODO: Handle specials below separately and eliminate this code
-    MoM::MoMUnit::MapSpecials mapAbilityEffects(m_unit->getAbilityEffects());
-    if (m_unit->hasMagicalBreathAttack() || m_unit->hasMagicalGazeAttack())
-    {
-        mapAbilityEffects[MoM::prettyEnumStr(toStr(m_unit->getRangedType()))] = actualAttr.ranged;
-    }
-    for (MoM::MoMUnit::MapSpecials::const_iterator it = mapAbilityEffects.begin(); it != mapAbilityEffects.end(); ++it)
-    {
-        QString specialName(it->first.c_str());
-        displaySpecial(pos, specialName, it->second, ":/abilities/");
-    }
+    displaySectionSpecials(pos);
+}
 
 }

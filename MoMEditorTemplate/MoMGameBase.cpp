@@ -352,6 +352,9 @@ std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
         text = std::string(title) + ": " + description;
     }
 
+    // Replace code for newline by actual newline
+    text = replaceStrInStr(text, "\x14", "\n");
+
     // Wrap text within maxwidth
     size_t posStart = 0;
     while (posStart + maxwidth < text.length())
@@ -371,6 +374,11 @@ std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
     return text;
 }
 
+std::string MoMGameBase::getHelpText(eBuilding building)
+{
+    return getHelpText((MoM::eHelpIndex)((int)MoM::HELP_cityscap_TRADE_GOODS - (int)MoM::BUILDING_Trade_Goods + (int)building));
+}
+
 std::string MoMGameBase::getHelpText(eHeroAbility heroAbility)
 {
     std::string value;
@@ -388,6 +396,49 @@ std::string MoMGameBase::getHelpText(eItemPower itemPower)
     {
         value = getHelpText(gTableItemSpecials[itemPower].helpIndex);
     }
+    return value;
+}
+
+std::string MoMGameBase::getHelpText(ePortrait wizardPortrait)
+{
+    return getHelpText((MoM::eHelpIndex)((int)MoM::HELP_MERLIN - (int)PORTRAIT_Merlin + (int)wizardPortrait));
+}
+
+std::string MoMGameBase::getHelpText(eRanged_Type rangedType)
+{
+    eHelpIndex helpIndex = eHelpIndex_NONE;
+
+    switch (rangedType)
+    {
+    case RANGED_None:                   break;
+
+    case RANGED_Rock:                   helpIndex = HELP_UNITVIEW_Rock; break;
+
+    case RANGED_Arrow:
+    case RANGED_Bullet:                 helpIndex = HELP_UNITVIEW_Bow; break;
+
+    case RANGED_Chaos_Magic1_Storm_Giant:
+    case RANGED_Chaos_Magic2_Magician:
+    case RANGED_Sorcery_Magic_Illusionist:
+    case RANGED_Chaos_Magic3_Demon:
+    case RANGED_Nature_Magic1_Wind_Mage:
+    case RANGED_Nature_Magic2_Shamans:
+    case RANGED_Chaos_Magic4_Dark_Elves:
+    case RANGED_Nature_Magic3_Sprites:
+    case RANGED_Nature_Magic4_Druid:    helpIndex = HELP_UNITVIEW_Magical_Attack; break;
+
+    case RANGED_Thrown_Weapons:         helpIndex = HELP_SPECIAL2_THROWN; break;
+    case RANGED_Fire_Breath:            helpIndex = HELP_SPECIAL2_FIRE_BREATH; break;
+    case RANGED_Lightning_Breath:       helpIndex = HELP_SPECIAL2_LIGHTNING_BREATH; break;
+    case RANGED_Stoning_Gaze:           helpIndex = HELP_SPECIAL_STONING_GAZE; break;
+    case RANGED_Multiple_Gaze:          helpIndex = HELP_SPECIAL2_DOOM_GAZE; break;
+    case RANGED_Death_Gaze:             helpIndex = HELP_SPECIAL2_DEATH_GAZE; break;
+
+    default:                            break;
+    }
+
+    std::string value = getHelpText(helpIndex);
+
     return value;
 }
 

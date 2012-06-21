@@ -97,7 +97,7 @@ void QMoMUnitTile::slot_actionUnitView()
     QMoMUnitPtr qUnit(new MoMUnit(m_game.data()));
     qUnit->changeUnit(m_unit);
 
-    DialogAddUnit* dialog = new DialogAddUnit(MainWindow::getInstance());
+    DialogAddUnit* dialog = new MoM::DialogAddUnit(MainWindow::getInstance());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->slot_unitChanged(qUnit);
     dialog->show();

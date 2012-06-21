@@ -2,12 +2,14 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.3 (2012-06-18)
+CHANGES IN 0.2.3 (2012-06-21)
 -----------------------------
 
 * Attached help texts (from HELP.LBX) as tooltips to lots of items.
 
 * Fixed and improved unit view (Summon dialog).
+  In particular added: required buildings, type of ranged attack,
+  help texts.
 
 * Fixed "apply buildings" to build only allowed buildings and units
   (still need to fix that Sawmill and Miner's guild require forest resp.

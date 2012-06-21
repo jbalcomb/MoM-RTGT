@@ -58,8 +58,12 @@ public:
     virtual std::string getGameDirectory() = 0;
 
     std::string getHelpText(eHelpIndex helpTextNr);
+
+    std::string getHelpText(eBuilding building);
     std::string getHelpText(eHeroAbility heroAbility);
     std::string getHelpText(eItemPower itemPower);
+    std::string getHelpText(ePortrait wizardPortrait);
+    std::string getHelpText(eRanged_Type rangedType);
     std::string getHelpText(eSpell spell);
     std::string getHelpText(eUnitAbility unitAbility);
     std::string getHelpText(eUnitEnchantment unitEnchantment);

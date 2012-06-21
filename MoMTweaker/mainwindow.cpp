@@ -599,7 +599,7 @@ void MainWindow::slot_timerUpdateIcons()
 
 void MainWindow::on_pushButton_AddUnit_clicked()
 {
-    DialogAddUnit* dialog = new DialogAddUnit(this);
+    MoM::DialogAddUnit* dialog = new MoM::DialogAddUnit(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
     // Connect the item model UnitModel to the dialog

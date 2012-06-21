@@ -31,6 +31,8 @@ namespace MoM {
     class MoMUnit;
 }
 
+namespace MoM {
+
 class DialogAddUnit : public QDialog
 {
     Q_OBJECT
@@ -50,9 +52,29 @@ private slots:
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false, const QString& helpText = "");
+
 	void displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem);
 	void displayLevel(QPointF& pos, const std::string& levelName, int level, int experience);
-    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir, const QString& helpText = "");
+
+    void displaySectionBasicAttributes(QPointF& pos);
+    void displaySectionSpecials(QPointF& pos);
+    void displaySectionTop();
+
+    template<typename Enum>
+    void displaySpecial(QPointF& pos, const Enum special, int specialValue)
+    {
+        QString specialName = prettyQStr(special);
+        std::string helpText = m_game->getHelpText(special);
+        QPixmap pixmap = QMoMResources::instance().getPixmap(special);
+        displaySpecial(pos, specialName, specialValue, pixmap, helpText.c_str());
+    }
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QString& pixmapDir, const QString& helpText = "")
+    {
+        QPixmap pixmap(pixmapDir + specialName + ".gif");
+        displaySpecial(pos, specialName, specialValue, pixmap, helpText);
+    }
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QPixmap& pixmap, const QString& helpText);
+
     void displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName, const QString& helpText);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);
 	void update();
@@ -71,5 +93,7 @@ private:
     QGraphicsScene* m_sceneUnit;
     Ui::DialogAddUnit *ui;
 };
+
+}
 
 #endif // DIALOGADDUNIT_H

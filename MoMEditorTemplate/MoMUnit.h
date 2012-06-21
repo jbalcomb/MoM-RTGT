@@ -23,6 +23,7 @@ class MoMUnit
 {
 public:
     typedef std::map<std::string, int> MapSpecials;
+    typedef std::vector<eBuilding> ListBuildings;
 
     struct BaseAttributes
     {
@@ -73,14 +74,17 @@ public:
     Unit getUnitInGame() const;
     Unit_Type_Data getUnitTypeData() const;
 
-    MapSpecials getAbilityEffects() const;
     BaseAttributes getActualAttributes() const;
     BaseAttributes getBaseAttributes() const;
     BaseAttributes getBonusAttributes() const;
-    int getCastingSkill() const;
+    int getCastingSkillBase() const;
+    int getCastingSkillTotal() const;
+    int getConstructionSkill() const;
+    int getCost() const;
     std::string getDisplayName() const;
 	int getGazeModifier() const;
     std::string getHeroName() const;
+    eHero_TypeCode getHeroTypeCode() const;
 //    MapSpecials getItemEffects() const;
     Item* getSlotItem(int itemSlotNr) const;
     eSlot_Type16 getSlotType(int itemSlotNr) const;
@@ -91,9 +95,13 @@ public:
     BaseAttributes getPenaltyAttributes() const;
     eRace getRace() const;
     std::string getRaceName() const;
+    int getRangedShots() const;
     eRanged_Type getRangedType() const;
+    ListBuildings getRequiredBuildings() const;
+    int getScouting() const;
     int getSpecial(eHeroAbility heroAbility) const;
     int getSpecial(eUnitAbility unitAbility) const;
+    int getTransportCapacity() const;
     std::string getUnitName() const;
     eUnit_Type getUnitTypeNr() const;
     int getUpkeep() const;
@@ -113,6 +121,8 @@ public:
     bool hasSpecial(eUnitMutation unitMutation) const;
 
 	bool isHero() const;
+    bool isNormal() const;
+    bool isSummoned() const;
 
     bool setBattleUnit(const Battle_Unit& value);
     bool setHeroStats(const Hero_stats& value);
@@ -159,7 +169,6 @@ private:
     Unit* m_unit;
     Unit_Type_Data* m_unitType;
 
-    MapSpecials    m_mapAbilities;
     BaseAttributes m_bonuses;
     BaseAttributes m_dnSpells;
     BaseAttributes m_penalties;
