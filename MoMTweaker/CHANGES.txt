@@ -2,6 +2,14 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.4 (2012--)
+-----------------------------
+
+* Added max books/skills to EXE:Miscellaneous, so you can
+  get more than 13 books and 6 skills [FrancoK].
+
+
+
 CHANGES IN 0.2.3 (2012-06-21)
 -----------------------------
 

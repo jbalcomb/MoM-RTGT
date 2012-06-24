@@ -1843,6 +1843,7 @@ void UnitModel::threadUpdateModelData()
         int row = 0;
         QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
 
+        uint8_t* ovl083 = 0;
         uint8_t* ovl117 = 0;
         uint8_t* ovl120 = 0;
         uint8_t* ovl122 = 0;
@@ -1852,6 +1853,7 @@ void UnitModel::threadUpdateModelData()
         uint8_t* ovl164 = 0;
         if (0 != game)
         {
+            ovl083 = game->getWizardsOverlay(83);
             ovl117 = game->getWizardsOverlay(117);
             ovl120 = game->getWizardsOverlay(120);
             ovl122 = game->getWizardsOverlay(122);
@@ -1860,9 +1862,9 @@ void UnitModel::threadUpdateModelData()
             ovl142 = game->getWizardsOverlay(142);
             ovl164 = game->getWizardsOverlay(164);
         }
-        if ((0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl083) && (0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
-            nrMiscellaneous = 34;        // TODO: Proper number
+            nrMiscellaneous = 39;        // TODO: Proper number
         }
 
         int oldRowCount = ptree->rowCount();
@@ -1871,7 +1873,7 @@ void UnitModel::threadUpdateModelData()
             beginInsertRows(createIndex(toprow, 0, ptree), oldRowCount, nrMiscellaneous - 1);
         }
 
-        if ((0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
+        if ((0 != ovl083) && (0 != ovl117) && (0 != ovl120) && (0 != ovl122) && (0 != ovl136) && (0 != ovl140) && (0 != ovl142) && (0 != ovl164))
         {
             if (0 == ptree->rowCount())
             {
@@ -2016,6 +2018,23 @@ void UnitModel::threadUpdateModelData()
                 row++;
 				ptree->appendChild("Multiplier to death books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1879 ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
+                row++;
+
+                //35
+                ptree->appendChild("Max books condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14c6 ]));
+                ptree->child(row, 2)->setData("Default 12, allowing 13 books", Qt::EditRole);
+                row++;
+                ptree->appendChild("Max books condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14e5 ]));
+                ptree->child(row, 2)->setData("Default 12, allowing 13 books", Qt::EditRole);
+                row++;
+                ptree->appendChild("Max skills condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14c0 ]));
+                ptree->child(row, 2)->setData("Default 5, allowing 6 skills", Qt::EditRole);
+                row++;
+                ptree->appendChild("Max skills condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14da ]));
+                ptree->child(row, 2)->setData("Default 5, allowing 6 skills", Qt::EditRole);
+                row++;
+                ptree->appendChild("Chance book vs skill", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14f0 ]));
+                ptree->child(row, 2)->setData("Default 75%", Qt::EditRole);
                 row++;
            }
         }
