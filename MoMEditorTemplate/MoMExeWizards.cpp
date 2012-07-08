@@ -86,7 +86,7 @@ size_t MoMExeWizards::getNrSpellSaves() const
 MoMExeWizards::SpellSaveEntry MoMExeWizards::getSpellSave(size_t nr)
 {
     const MoMDataSegment* pDataSegment = (const MoMDataSegment*)getDataSegment();
-    if ((0 != pDataSegment) && (pDataSegment->m_MoM_Version >= std::string("v1.40j")))
+    if ((0 != pDataSegment) && (&pDataSegment->m_Copyright_and_Version[34] >= std::string("v1.40j")))
     {
         return gSpellSaveTableV140j[nr];
     }

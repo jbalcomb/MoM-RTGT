@@ -79,6 +79,14 @@ inline unsigned toUInt(const T& t)
     return static_cast<unsigned>(t);
 }
 
+template< typename E >
+inline E succ(const E& e)
+{
+    unsigned u = (unsigned)e;
+    u++;
+    return (E)u;
+}
+
 /// \brief Class to set a flag to true while it's in scope.
 ///        Other methods can check the flag to see if someone else is updating.
 ///        Typically this is to prevent methods from making changes when

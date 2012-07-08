@@ -216,6 +216,24 @@ void MoMUnit::changeUnit(Hero_stats *heroStats)
     }
 }
 
+void MoMUnit::changeUnit(Hero_Stats_Initializer *heroStatsInitializer)
+{
+    close();
+
+    m_heroStatsInitializer = heroStatsInitializer;
+
+    if (0 != m_game)
+    {
+//        m_battleUnit = 0;
+//        m_heroStats = 0;
+//        m_hiredHero = 0;
+//        m_unitType = 0;
+//        m_unit = 0;
+
+        applyEffects();
+    }
+}
+
 void MoMUnit::changeUnit(Unit_Type_Data* unitType)
 {
     close();
@@ -408,6 +426,36 @@ std::string MoMUnit::getHeroName() const
     return name;
 }
 
+MoMUnit::ListSpells MoMUnit::getHeroSpells() const
+{
+    ListSpells value;
+    if (0 != m_heroStats)
+    {
+        for(int i = 0; i < ARRAYSIZE(m_heroStats->m_Spell); ++i)
+        {
+            if (m_heroStats->m_Spell[i] != SPELL_None)
+            {
+                value.push_back(m_heroStats->m_Spell[i]);
+            }
+        }
+    }
+    else if (0 != m_heroStatsInitializer)
+    {
+        for(int i = 0; i < ARRAYSIZE(m_heroStatsInitializer->m_Spell); ++i)
+        {
+            if (m_heroStatsInitializer->m_Spell[i] != SPELL16_None)
+            {
+                value.push_back((eSpell)m_heroStatsInitializer->m_Spell[i]);
+            }
+        }
+    }
+    else
+    {
+        // Nothing to do
+    }
+    return value;
+}
+
 eHero_TypeCode MoMUnit::getHeroTypeCode() const
 {
     eHero_TypeCode value = (eHero_TypeCode)-1;
@@ -576,6 +624,10 @@ int MoMUnit::getCastingSkillBase() const
     if (0 != m_heroStats)
     {
         value = m_heroStats->m_Hero_Casting_Skill;
+    }
+    else if (0 != m_heroStatsInitializer)
+    {
+        value = m_heroStatsInitializer->m_Hero_Casting_Skill;
     }
     return value;
 }
@@ -786,6 +838,14 @@ eUnit_Type MoMUnit::getUnitTypeNr() const
     {
         MoM::MoMGameBase* game = const_cast<MoM::MoMGameBase*>(m_game);
         value = game->getUnitTypeNr(m_unitType);
+    }
+    else if ((0 != m_heroStatsInitializer) && (0 != m_game))
+    {
+        MoM::MoMGameBase* game = const_cast<MoM::MoMGameBase*>(m_game);
+        value = game->getUnitTypeNr(m_heroStatsInitializer);
+    }
+    else
+    {
     }
     return value;
 }

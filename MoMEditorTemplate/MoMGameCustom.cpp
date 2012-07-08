@@ -134,6 +134,14 @@ Game_Settings* MoMGameCustom::getGame_Settings()
     return validateStaticPointer(&pMoMDataSegment->m_Game_Settings, 1);
 }
 
+Hero_Stats_Initializer *MoMGameCustom::getList_Hero_Stats_Initializer()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMMagicDataSegment* pMoMDataSegment = (MoMMagicDataSegment*)m_process->getDatasegmentData();
+    return validateStaticPointer(pMoMDataSegment->m_Hero_Stats_Initializers, gMAX_HERO_TYPES);
+}
+
 MoMMagicDataSegment* MoMGameCustom::getMagicDataSegment()
 {
     if (0 == m_process.get())

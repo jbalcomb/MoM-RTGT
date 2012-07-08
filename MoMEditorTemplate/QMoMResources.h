@@ -98,6 +98,7 @@ public:
 		return image;
 	}
     const QMoMImagePtr getImage(MoM::eRace race) const;
+    const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const
 	{
         QMoMImagePtr image;

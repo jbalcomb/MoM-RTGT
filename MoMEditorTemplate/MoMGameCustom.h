@@ -60,6 +60,7 @@ public:
     {
         return 0;
     }
+    virtual Hero_Stats_Initializer* getList_Hero_Stats_Initializer();
     virtual MoM::Item* getItems()
     {
         return 0;

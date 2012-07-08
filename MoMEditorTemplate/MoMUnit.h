@@ -22,8 +22,8 @@ namespace MoM
 class MoMUnit
 {
 public:
-    typedef std::map<std::string, int> MapSpecials;
     typedef std::vector<eBuilding> ListBuildings;
+    typedef std::vector<eSpell> ListSpells;
 
     struct BaseAttributes
     {
@@ -62,6 +62,7 @@ public:
     void changeUnit(Battle_Unit* battleUnit);
     void changeUnit(eUnit_Type unitTypeNr);
     void changeUnit(Hero_stats* heroStats);
+    void changeUnit(Hero_Stats_Initializer* heroStatsInitializer);
     void changeUnit(Hired_Hero* hiredHero);
     void changeUnit(Unit_Type_Data* unitType);
     void changeUnit(Unit* unit);
@@ -84,6 +85,7 @@ public:
     std::string getDisplayName() const;
 	int getGazeModifier() const;
     std::string getHeroName() const;
+    ListSpells getHeroSpells() const;
     eHero_TypeCode getHeroTypeCode() const;
 //    MapSpecials getItemEffects() const;
     Item* getSlotItem(int itemSlotNr) const;

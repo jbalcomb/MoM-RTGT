@@ -122,6 +122,52 @@ enum eBuilding ENUMSIZE16
     eBuilding__SIZE__ = 0xFFFF
 };
 
+enum eBuilding8 ENUMSIZE8
+{
+    BUILDING8_Not_applicable = 0xFF,
+
+    BUILDING8_None = 0,           // 0
+
+    BUILDING8_Trade_Goods,        // 1
+    BUILDING8_Housing,            // 2
+
+    BUILDING8_Barracks,           // 3
+    BUILDING8_Armory,
+    BUILDING8_Fighters_Guild,
+    BUILDING8_Armorers_Guild,
+    BUILDING8_War_College,
+    BUILDING8_Smithy,
+    BUILDING8_Stable,
+    BUILDING8_Animists_Guild,     // 10
+    BUILDING8_Fantastic_Stable,
+    BUILDING8_Shipwright_Guild,
+    BUILDING8_Ship_Yard,
+    BUILDING8_Maritime_Guild,
+    BUILDING8_Sawmill,
+    BUILDING8_Library,
+    BUILDING8_Sages_Guild,
+    BUILDING8_Oracle,
+    BUILDING8_Alchemist_Guild,
+    BUILDING8_University,         // 20
+    BUILDING8_Wizards_Guild,
+    BUILDING8_Shrine,
+    BUILDING8_Temple,
+    BUILDING8_Parthenon,
+    BUILDING8_Cathedral,
+    BUILDING8_Marketplace,
+    BUILDING8_Bank,
+    BUILDING8_Merchants_Guild,
+    BUILDING8_Granary,
+    BUILDING8_Farmers_Market,     // 30
+    BUILDING8_Foresters_Guild,
+    BUILDING8_Builders_Hall,
+    BUILDING8_Mechanicians_Guild,
+    BUILDING8_Miners_Guild,
+    BUILDING8_City_Walls,         // 35
+
+    eBuilding8_MAX      // 36
+};
+
 enum eBuildingStatus ENUMSIZE8
 {
     BUILDINGSTATUS_Not_Built = 0xFF,
@@ -1110,7 +1156,9 @@ enum eHero_TypeCode ENUMSIZE8
     HEROTYPE_Fighter = 0,
     HEROTYPE_Bow = 1,
     HEROTYPE_Fighter_Wizard = 2,
-    HEROTYPE_Wizard = 3
+    HEROTYPE_Wizard = 3,
+
+    eHero_TypeCode_MAX
 };
 
 enum eItemPower
@@ -1565,9 +1613,9 @@ enum eRace ENUMSIZE8
 };
 
 enum eRandomPickType ENUMSIZE16 {
-    RANDOMPICK_Fighter,
-    RANDOMPICK_Mage,
-    RANDOMPICK_Any,
+    RANDOMPICK_Random_Ftr,
+    RANDOMPICK_Random_Mage,
+    RANDOMPICK_Random_Any,
     eRandomPickType_MAX,
     eRandomPickType__SIZE__ = 0xFFFF,
 };
@@ -1600,6 +1648,8 @@ enum eRanged_Type ENUMSIZE8 {
     RANGED_Stoning_Gaze = 103,              // Basilisk, Gorgons (resistance modifier in byte 17)
     RANGED_Multiple_Gaze = 104,             // Chaos Spawn
     RANGED_Death_Gaze = 105,                // Night stalker (resistance modifier in byte 17)
+
+    eRanged_Type_MAX
 };
 
 enum eRarity
@@ -4288,9 +4338,9 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     uint16_t    m_PtrName;          // 00-01  Pointer to name of unit type (note 1)
     uint8_t     m_Melee;            // 02  Melee attack strength
     uint8_t     m_Ranged;           // 03  Ranged attack strength
-    eRanged_Type    m_Ranged_Type;   // 04  Ranged attack type (table 1)
-    uint8_t     m_Ranged_Shots;      // 05  Ranged attack number of shots
-    uint8_t     m_To_Hit;            // 06  Plus to hit
+    eRanged_Type    m_Ranged_Type;  // 04  Ranged attack type (table 1)
+    uint8_t     m_Ranged_Shots;     // 05  Ranged attack number of shots
+    int8_t      m_To_Hit;           // 06  Plus to hit
     uint8_t     m_Defense;          // 07  Defense
     uint8_t     m_Resistance;       // 08  Resistance
     uint8_t     m_MoveHalves;       // 09  Movement rate (in units of 1/2 MP)
@@ -5039,9 +5089,9 @@ typedef struct // MoMDataSegment
 
     uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];  // ds:6E9E
 
-    uint8_t     m_UNK_6EAC[0x7173 - 0x6EAC];        // ds:6EAC
+    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];        // ds:6EAC
 
-    char        m_MoM_Version[7];                   // ds:7173
+    char        m_Copyright_and_Version[41];        // ds:7151  Offset version is at [34]
 
     uint8_t     m_UNK_717A[0x71E0 - 0x717A];        // ds:717A
 
@@ -5099,71 +5149,80 @@ typedef struct // MoMDataSegment
 
 typedef struct PACKED_STRUCT // MoMMagicDataSegment
 {
-    char            m_DataSegmentStart[47];          // ds:0 / cs:21D10 / EXE:24510
+    char            m_DataSegmentStart[47];         // ds:0 / cs:21D10 / EXE:24510
     // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
 
-    uint8_t         m_UNK_2F[0x2AD0 - 47];           // ds:2F
+    uint8_t         m_UNK_2F[0x2AD0 - 47];          // ds:2F
 
     Wizard_Type_Data    m_Wizard_Types[ePortrait_MAX];  // ds:2AD0
 
     int16_t         m_UNK_2C1A[10];					// ds:2C1A
-    int16_t         m_Nr_spell_choices[10];					// ds:2C2E
 
-    uint8_t         m_UNK_2C40[0x2C6A - 0x2C40];           // ds:2C40
-    uint8_t         m_Preselected_spell_choices[65];       // ds:2C6A
-    uint8_t         m_UNK_2CEC[0x35D0 - 0x2CEC];           // ds:2CEC
+    int16_t         m_Nr_spell_choices[10];			// ds:2C2E
+    uint8_t         m_UNK_2C40[0x2C6A - 0x2C42];    // ds:2C42
+    eSpell16        m_Preselected_spell_choices[65];       // ds:2C6A
+
+    uint8_t         m_UNK_2CEC[0x3067 - 0x2CEC];    // ds:2CEC
+
+    char            m_Copyright1_and_Version[41];   // ds:3067  Offset version is at [34]
+
+    uint8_t         m_UNK_3090[0x35D0 - 0x3090];    // ds:3090
 
     Hero_Stats_Initializer  m_Hero_Stats_Initializers[gMAX_HERO_TYPES];  // ds:35D0
 
-    uint8_t         m_UNK_3846[0x6900 - 0x3846];           // ds:3846
+    uint8_t         m_UNK_3846[0x389A - 0x3846];    // ds:3846
+
+    char            m_Copyright2_and_Version[41];   // ds:389A  Offset version is at [34]
+
+    uint8_t         m_UNK_38C3[0x6900 - 0x38C3];    // ds:38C3
 
     Wizard          m_Wizards[6];                   // ds:6900
 
     eSpell16        m_Spells_selected_of_Realm[150]; // ds:85B0
 
-    uint8_t         m_UNK_86DC[0x87C4 - 0x86DC];       // ds:86DC
+    uint8_t         m_UNK_86DC[0x87C4 - 0x86DC];    // ds:86DC
 
-    WizardsExe_Game_Data    m_Game_Data;        // ds:87C4
+    WizardsExe_Game_Data    m_Game_Data;            // ds:87C4
 
     Game_Settings   m_Game_Settings;                // ds:87D4
 
-    uint8_t         m_UNK_89A6[0x8A14 - 0x89A6];       // ds:89A6
+    uint8_t         m_UNK_89A6[0x8A14 - 0x89A6];    // ds:89A6
 
     eSpell          m_Spell_Selected[eSpell_MAX];   // ds:8A14
 
-    uint8_t         m_UNK_8AEB[0x8D52 - 0x8AEB];       // ds:8AEB
+    uint8_t         m_UNK_8AEB[0x8D52 - 0x8AEB];    // ds:8AEB
 
-    uint16_t        m_Spells_Known_Realm[66];    // ds:8D52
-    uint16_t        m_UNK_8DD6;                        // ds:8DD6
+    uint16_t        m_Spells_Known_Realm[66];       // ds:8D52
+    uint16_t        m_UNK_8DD6;                     // ds:8DD6
     uint16_t        m_Sorcery_Picks_Divider;        // ds:8DD8
     uint16_t        m_Nature_Picks_Divider;         // ds:8DDA
     uint16_t        m_Chaos_Picks_Divider;          // ds:8DDC
     uint16_t        m_Death_Picks_Divider;          // ds:8DDE
     uint16_t        m_Life_Picks_Divider;           // ds:8DE0
 
-    uint16_t        m_UNK_8DE2[2];                     // ds:8DE2
+    uint16_t        m_UNK_8DE2[2];                  // ds:8DE2
 
     uint16_t        m_Spells_Known_Realm_Indexed[15];    // ds:8DE6
 
-    uint8_t         m_UNK_8E04[0x8E48 - 0x8E04];       // ds:8E04
+    uint8_t         m_UNK_8E04[0x8E48 - 0x8E04];    // ds:8E04
 
     ePortrait       m_Select_Wizard_Shown;          // ds:8E48
 
-    uint8_t         m_UNK_8E49[0x8E94 - 0x8E49];       // ds:8E49
+    uint8_t         m_UNK_8E49[0x8E94 - 0x8E49];    // ds:8E49
 
     uint16_t        m_Total_Picks_Left;             // ds:8E94
 
-    uint8_t         m_UNK_8E96[0xAA4A - 0x8E96];       // ds:8E96
+    uint8_t         m_UNK_8E96[0xAA4A - 0x8E96];    // ds:8E96
 
                                                     // ds:AA4A  END DATA SEGMENT (DS)
 
     //    uint8_t     m_PARALIGN09[0x0C];                 // Offset EXE:37EF4 / ds:EA54
 
-    uint8_t         m_UNK_AA4A[0xFE68 - 0xAA4A];       // ds:AA4A
+    uint8_t         m_UNK_AA4A[0xFE68 - 0xAA4A];    // ds:AA4A
 
     char            m_Wizards_Name_Shown_1[11];     // ds:FE68
 
-    uint8_t         m_UNK_FE73[0xFEC2 - 0xFE73];       // ds:FE73
+    uint8_t         m_UNK_FE73[0xFEC2 - 0xFE73];    // ds:FE73
 
     char            m_Wizards_Name_Shown_2[11];     // ds:FEC2
 } MoMMagicDataSegment;

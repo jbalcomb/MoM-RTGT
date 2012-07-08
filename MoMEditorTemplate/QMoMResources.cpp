@@ -96,6 +96,12 @@ const QMoMImagePtr QMoMResources::getImage(eRace race) const
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) const
+{
+    QMoMImagePtr image(new QImage(QString(":/abilities/%0.gif").arg(prettyQStr(randomPickType))));
+    return image;
+}
+
 bool QMoMResources::createColorTable()
 {
     if (m_game.isNull())
@@ -240,10 +246,11 @@ bool QMoMResources::createSpellImages()
     m_spellImages.resize(MoM::eSpell_MAX);
 
     // MONSTER.LBX, UNITS1.LBX, UNITS2.LBX
-    MoM::Spell_Data* spellDataArray = m_game->getSpell_Data();
-    for (MoM::eSpell spell = (MoM::eSpell)0; (0 != spellDataArray) && (spell < MoM::eSpell_MAX); MoM::inc(spell))
+    for (MoM::eSpell spell = (MoM::eSpell)0; spell < MoM::eSpell_MAX; MoM::inc(spell))
     {
-        MoM::Spell_Data* spellData = &spellDataArray[spell];
+        MoM::Spell_Data* spellData = m_game->getSpell_Data(spell);
+        if (0 == spellData)
+            break;
         if ((MoM::SPELLTYPE_Summoning == spellData->m_Section_in_spell_book))
         {
             m_spellImages[spell] = m_unitImages[spellData->m_Unit_Summoned_or_Spell_Strength];
