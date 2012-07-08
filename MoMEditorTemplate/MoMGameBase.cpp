@@ -24,30 +24,6 @@ namespace MoM {
 
 namespace {
 
-//struct HeroSpecial
-//{
-//    eHeroAbility    heroAbility;
-//    eHelpIndex      helpIndex;
-//    std::string     lbxFile;
-//    int             lbxIndex;
-//};
-
-//struct ItemSpecial
-//{
-//    eItemPower      itemPower;
-//    eHelpIndex      helpIndex;
-//    std::string     lbxFile;
-//    int             lbxIndex;
-//};
-
-//struct UnitSpecial
-//{
-//    eUnitAbility    unitAbility;
-//    eHelpIndex      helpIndex;
-//    std::string     lbxFile;
-//    int             lbxIndex;
-//};
-
 template<typename Enum>
 struct Special
 {
@@ -56,11 +32,6 @@ struct Special
     std::string     lbxFile;
     int             lbxIndex;
 };
-
-//Special<eCombatEnchantment> gTableCombatSpecials[eCombatEnchantment_MAX] =
-//{
-//    { UNITABILITY_Cavalry, eHelpIndex_NONE, "MAIN.LBX", 38 },
-//};
 
 Special<eHeroAbility> gTableHeroSpecials[eHeroAbility_MAX] =
 {
@@ -402,6 +373,15 @@ std::string MoMGameBase::getHelpText(eItemPower itemPower)
 std::string MoMGameBase::getHelpText(ePortrait wizardPortrait)
 {
     return getHelpText((MoM::eHelpIndex)((int)MoM::HELP_MERLIN - (int)PORTRAIT_Merlin + (int)wizardPortrait));
+}
+
+std::string MoMGameBase::getHelpText(eRace race)
+{
+    return getHelpText((MoM::eHelpIndex)(MoM::HELP_BARBARIAN_TOWNSFOLK + (int)race)) + "\n"
+        + getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Farmers + (int)race)) + "\n"
+        + getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Workers + (int)race)) + "\n"
+        + getHelpText((MoM::eHelpIndex)(MoM::HELP_BACKGRND_Barbarian_Rebels + (int)race));
+
 }
 
 std::string MoMGameBase::getHelpText(eRanged_Type rangedType)

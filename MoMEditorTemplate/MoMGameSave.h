@@ -88,6 +88,14 @@ public:
         return m_SaveGame->m_List_Hero_stats[playerNr].a;
     }
 
+    virtual Hero_Stats_Initializer* getList_Hero_Stats_Initializer()
+    {
+        MoMMagicDataSegment* pMagicDataSegment = getMagicDataSegment();
+        if (0 == pMagicDataSegment)
+            return 0;
+        return pMagicDataSegment->m_Hero_Stats_Initializers;
+    }
+
     virtual Item* getItems()
     {
         if (0 == m_SaveGame.get())

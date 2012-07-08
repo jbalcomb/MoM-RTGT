@@ -5,6 +5,21 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.4 (2012--)
 -----------------------------
 
+* Made all fields in all tables editable (button "Show tables").
+  Also added a context popup menu.
+  The context menu contains at least "Ctrl+C" that allows you to copy
+  and paste data to for instance Excel.
+  Where applicable the selection(s) can be made from the popup menu
+  (for instance the immunities of a unit).
+  
+* In particular the Unrest table is now editable.
+  To make the changes permanent, load "TERRSTAT.LBX", make the changes,
+  and save it.
+  
+* Extended "Summon" dialog to display more fields under more circumstances.
+  
+* Fixed Customizer (Magic.exe) sections (which were damaged).
+  
 * Added max books/skills to EXE:Miscellaneous, so you can
   get more than 13 books and 6 skills [FrancoK].
 

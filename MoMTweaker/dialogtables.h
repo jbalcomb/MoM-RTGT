@@ -42,6 +42,10 @@ private:
 private slots:
     void on_comboBox_Table_currentIndexChanged(QString );
     void on_tableWidget_clicked(QModelIndex index);
+    void on_tableWidget_customContextMenuRequested(const QPoint &pos);
+
+    void slotCopy();
+    void slotItemAction();
 };
 
 #endif // DIALOGTABLES_H

@@ -114,6 +114,54 @@ std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs)
+{
+    switch (rhs)
+    {
+    case BUILDING8_Not_applicable: os << "BUILDING8_Not_applicable"; break;
+    case BUILDING8_None: os << "BUILDING8_None"; break;
+    case BUILDING8_Trade_Goods: os << "BUILDING8_Trade_Goods"; break;
+    case BUILDING8_Housing: os << "BUILDING8_Housing"; break;
+    case BUILDING8_Barracks: os << "BUILDING8_Barracks"; break;
+    case BUILDING8_Armory: os << "BUILDING8_Armory"; break;
+    case BUILDING8_Fighters_Guild: os << "BUILDING8_Fighters_Guild"; break;
+    case BUILDING8_Armorers_Guild: os << "BUILDING8_Armorers_Guild"; break;
+    case BUILDING8_War_College: os << "BUILDING8_War_College"; break;
+    case BUILDING8_Smithy: os << "BUILDING8_Smithy"; break;
+    case BUILDING8_Stable: os << "BUILDING8_Stable"; break;
+    case BUILDING8_Animists_Guild: os << "BUILDING8_Animists_Guild"; break;
+    case BUILDING8_Fantastic_Stable: os << "BUILDING8_Fantastic_Stable"; break;
+    case BUILDING8_Shipwright_Guild: os << "BUILDING8_Shipwright_Guild"; break;
+    case BUILDING8_Ship_Yard: os << "BUILDING8_Ship_Yard"; break;
+    case BUILDING8_Maritime_Guild: os << "BUILDING8_Maritime_Guild"; break;
+    case BUILDING8_Sawmill: os << "BUILDING8_Sawmill"; break;
+    case BUILDING8_Library: os << "BUILDING8_Library"; break;
+    case BUILDING8_Sages_Guild: os << "BUILDING8_Sages_Guild"; break;
+    case BUILDING8_Oracle: os << "BUILDING8_Oracle"; break;
+    case BUILDING8_Alchemist_Guild: os << "BUILDING8_Alchemist_Guild"; break;
+    case BUILDING8_University: os << "BUILDING8_University"; break;
+    case BUILDING8_Wizards_Guild: os << "BUILDING8_Wizards_Guild"; break;
+    case BUILDING8_Shrine: os << "BUILDING8_Shrine"; break;
+    case BUILDING8_Temple: os << "BUILDING8_Temple"; break;
+    case BUILDING8_Parthenon: os << "BUILDING8_Parthenon"; break;
+    case BUILDING8_Cathedral: os << "BUILDING8_Cathedral"; break;
+    case BUILDING8_Marketplace: os << "BUILDING8_Marketplace"; break;
+    case BUILDING8_Bank: os << "BUILDING8_Bank"; break;
+    case BUILDING8_Merchants_Guild: os << "BUILDING8_Merchants_Guild"; break;
+    case BUILDING8_Granary: os << "BUILDING8_Granary"; break;
+    case BUILDING8_Farmers_Market: os << "BUILDING8_Farmers_Market"; break;
+    case BUILDING8_Foresters_Guild: os << "BUILDING8_Foresters_Guild"; break;
+    case BUILDING8_Builders_Hall: os << "BUILDING8_Builders_Hall"; break;
+    case BUILDING8_Mechanicians_Guild: os << "BUILDING8_Mechanicians_Guild"; break;
+    case BUILDING8_Miners_Guild: os << "BUILDING8_Miners_Guild"; break;
+    case BUILDING8_City_Walls: os << "BUILDING8_City_Walls"; break;
+    case eBuilding8_MAX: os << "eBuilding8_MAX"; break;
+    default: os << "<Unknown eBuilding8>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs)
 {
     switch (rhs)
@@ -1151,6 +1199,7 @@ std::ostream& operator<<(std::ostream& os, const eHero_TypeCode& rhs)
     case HEROTYPE_Bow: os << "HEROTYPE_Bow"; break;
     case HEROTYPE_Fighter_Wizard: os << "HEROTYPE_Fighter_Wizard"; break;
     case HEROTYPE_Wizard: os << "HEROTYPE_Wizard"; break;
+    case eHero_TypeCode_MAX: os << "eHero_TypeCode_MAX"; break;
     default: os << "<Unknown eHero_TypeCode>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -1678,9 +1727,9 @@ std::ostream& operator<<(std::ostream& os, const eRandomPickType& rhs)
 {
     switch (rhs)
     {
-    case RANDOMPICK_Fighter: os << "RANDOMPICK_Fighter"; break;
-    case RANDOMPICK_Mage: os << "RANDOMPICK_Mage"; break;
-    case RANDOMPICK_Any: os << "RANDOMPICK_Any"; break;
+    case RANDOMPICK_Random_Ftr: os << "RANDOMPICK_Random_Ftr"; break;
+    case RANDOMPICK_Random_Mage: os << "RANDOMPICK_Random_Mage"; break;
+    case RANDOMPICK_Random_Any: os << "RANDOMPICK_Random_Any"; break;
     case eRandomPickType_MAX: os << "eRandomPickType_MAX"; break;
     default: os << "<Unknown eRandomPickType>"; break;
     }
@@ -1711,6 +1760,7 @@ std::ostream& operator<<(std::ostream& os, const eRanged_Type& rhs)
     case RANGED_Stoning_Gaze: os << "RANGED_Stoning_Gaze"; break;
     case RANGED_Multiple_Gaze: os << "RANGED_Multiple_Gaze"; break;
     case RANGED_Death_Gaze: os << "RANGED_Death_Gaze"; break;
+    case eRanged_Type_MAX: os << "eRanged_Type_MAX"; break;
     default: os << "<Unknown eRanged_Type>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -4719,12 +4769,12 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     }
     os << ")\n";
     os << "m_UNK_6EAC=(\n";
-    for (unsigned i = 0; i < 0x7173 - 0x6EAC; ++i)
+    for (unsigned i = 0; i < 0x7151 - 0x6EAC; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_UNK_6EAC[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_6EAC[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_MoM_Version=" << formatCharArray(rhs.m_MoM_Version, 7) << "\n";
+    os << "m_Copyright_and_Version=" << formatCharArray(rhs.m_Copyright_and_Version, 41) << "\n";
     os << "m_UNK_717A=(\n";
     for (unsigned i = 0; i < 0x71E0 - 0x717A; ++i)
     {
@@ -4848,7 +4898,7 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     }
     os << ")\n";
     os << "m_UNK_2C40=(\n";
-    for (unsigned i = 0; i < 0x2C6A - 0x2C40; ++i)
+    for (unsigned i = 0; i < 0x2C6A - 0x2C42; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_UNK_2C40[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_2C40[i] << std::dec << ",\n";
     }
@@ -4856,13 +4906,20 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     os << "m_Preselected_spell_choices=(\n";
     for (unsigned i = 0; i < 65; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Preselected_spell_choices[i] << " 0x" << std::hex << (unsigned)rhs.m_Preselected_spell_choices[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Preselected_spell_choices[i] << ",\n";
     }
     os << ")\n";
     os << "m_UNK_2CEC=(\n";
-    for (unsigned i = 0; i < 0x35D0 - 0x2CEC; ++i)
+    for (unsigned i = 0; i < 0x3067 - 0x2CEC; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_UNK_2CEC[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_2CEC[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Copyright1_and_Version=" << formatCharArray(rhs.m_Copyright1_and_Version, 41) << "\n";
+    os << "m_UNK_3090=(\n";
+    for (unsigned i = 0; i < 0x35D0 - 0x3090; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK_3090[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_3090[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Hero_Stats_Initializers=(\n";
@@ -4872,9 +4929,16 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     }
     os << ")\n";
     os << "m_UNK_3846=(\n";
-    for (unsigned i = 0; i < 0x6900 - 0x3846; ++i)
+    for (unsigned i = 0; i < 0x389A - 0x3846; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_UNK_3846[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_3846[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Copyright2_and_Version=" << formatCharArray(rhs.m_Copyright2_and_Version, 41) << "\n";
+    os << "m_UNK_38C3=(\n";
+    for (unsigned i = 0; i < 0x6900 - 0x38C3; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK_38C3[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK_38C3[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Wizards=(\n";
@@ -5805,7 +5869,7 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Ranged=" << (unsigned)rhs.m_Ranged << " 0x" << std::hex << (unsigned)rhs.m_Ranged << std::dec << "\n";
     os << "m_Ranged_Type=" << rhs.m_Ranged_Type << "\n";
     os << "m_Ranged_Shots=" << (unsigned)rhs.m_Ranged_Shots << " 0x" << std::hex << (unsigned)rhs.m_Ranged_Shots << std::dec << "\n";
-    os << "m_To_Hit=" << (unsigned)rhs.m_To_Hit << " 0x" << std::hex << (unsigned)rhs.m_To_Hit << std::dec << "\n";
+    os << "m_To_Hit=" << (int)rhs.m_To_Hit << " 0x" << std::hex << (int)rhs.m_To_Hit << std::dec << "\n";
     os << "m_Defense=" << (unsigned)rhs.m_Defense << " 0x" << std::hex << (unsigned)rhs.m_Defense << std::dec << "\n";
     os << "m_Resistance=" << (unsigned)rhs.m_Resistance << " 0x" << std::hex << (unsigned)rhs.m_Resistance << std::dec << "\n";
     os << "m_MoveHalves=" << (unsigned)rhs.m_MoveHalves << " 0x" << std::hex << (unsigned)rhs.m_MoveHalves << std::dec << "\n";
@@ -7062,6 +7126,53 @@ bool validate(const eBuilding& rhs, const std::string& context)
     case BUILDING_Miners_Guild: break;
     case BUILDING_City_Walls: break;
     default: std::cout << context << ": Unknown eBuilding = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eBuilding8& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case BUILDING8_Not_applicable: break;
+    case BUILDING8_None: break;
+    case BUILDING8_Trade_Goods: break;
+    case BUILDING8_Housing: break;
+    case BUILDING8_Barracks: break;
+    case BUILDING8_Armory: break;
+    case BUILDING8_Fighters_Guild: break;
+    case BUILDING8_Armorers_Guild: break;
+    case BUILDING8_War_College: break;
+    case BUILDING8_Smithy: break;
+    case BUILDING8_Stable: break;
+    case BUILDING8_Animists_Guild: break;
+    case BUILDING8_Fantastic_Stable: break;
+    case BUILDING8_Shipwright_Guild: break;
+    case BUILDING8_Ship_Yard: break;
+    case BUILDING8_Maritime_Guild: break;
+    case BUILDING8_Sawmill: break;
+    case BUILDING8_Library: break;
+    case BUILDING8_Sages_Guild: break;
+    case BUILDING8_Oracle: break;
+    case BUILDING8_Alchemist_Guild: break;
+    case BUILDING8_University: break;
+    case BUILDING8_Wizards_Guild: break;
+    case BUILDING8_Shrine: break;
+    case BUILDING8_Temple: break;
+    case BUILDING8_Parthenon: break;
+    case BUILDING8_Cathedral: break;
+    case BUILDING8_Marketplace: break;
+    case BUILDING8_Bank: break;
+    case BUILDING8_Merchants_Guild: break;
+    case BUILDING8_Granary: break;
+    case BUILDING8_Farmers_Market: break;
+    case BUILDING8_Foresters_Guild: break;
+    case BUILDING8_Builders_Hall: break;
+    case BUILDING8_Mechanicians_Guild: break;
+    case BUILDING8_Miners_Guild: break;
+    case BUILDING8_City_Walls: break;
+    default: std::cout << context << ": Unknown eBuilding8 = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -8539,9 +8650,9 @@ bool validate(const eRandomPickType& rhs, const std::string& context)
     bool ok = true;
     switch (rhs)
     {
-    case RANDOMPICK_Fighter: break;
-    case RANDOMPICK_Mage: break;
-    case RANDOMPICK_Any: break;
+    case RANDOMPICK_Random_Ftr: break;
+    case RANDOMPICK_Random_Mage: break;
+    case RANDOMPICK_Random_Any: break;
     default: std::cout << context << ": Unknown eRandomPickType = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -10407,6 +10518,12 @@ bool validate(const MoMMagicDataSegment& rhs, const std::string& context)
           std::ostringstream oss;
           oss << context << ".m_Wizard_Types[" << i << "]";
           if (!validate(rhs.m_Wizard_Types[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 65; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Preselected_spell_choices[" << i << "]";
+          if (!validate(rhs.m_Preselected_spell_choices[i], oss.str())) ok = false;
     }
     for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
     {

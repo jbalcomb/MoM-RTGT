@@ -63,6 +63,7 @@ public:
     std::string getHelpText(eHeroAbility heroAbility);
     std::string getHelpText(eItemPower itemPower);
     std::string getHelpText(ePortrait wizardPortrait);
+    std::string getHelpText(eRace race);
     std::string getHelpText(eRanged_Type rangedType);
     std::string getHelpText(eSpell spell);
     std::string getHelpText(eUnitAbility unitAbility);
@@ -75,6 +76,13 @@ public:
         if ((0 == listHeroStats) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStats[heroNr];
+    }
+    Hero_Stats_Initializer* getHero_Stats_Initializer(eUnit_Type heroNr)
+    {
+        Hero_Stats_Initializer* listHeroStatsInitializer = getList_Hero_Stats_Initializer();
+        if ((0 == listHeroStatsInitializer) || !inRange(heroNr, gMAX_HERO_TYPES))
+            return 0;
+        return &listHeroStatsInitializer[heroNr];
     }
     Hired_Hero* getHired_Hero(ePlayer playerNr, int slotNr)
     {
@@ -110,7 +118,11 @@ public:
     {
         if (0 != getDataSegment())
         {
-            return getDataSegment()->m_MoM_Version;
+            return &getDataSegment()->m_Copyright_and_Version[34];
+        }
+        else if (0 != this->getMagicDataSegment())
+        {
+            return &getMagicDataSegment()->m_Copyright1_and_Version[34];
         }
         else
         {
@@ -219,6 +231,14 @@ public:
 
     virtual std::string getSources() const = 0;
 
+    Spell_Data* getSpell_Data(eSpell spell)
+    {
+        Spell_Data* spellData = getSpell_Data();
+        if ((0 == spellData) || !inRange(spell, MoM::eSpell_MAX))
+            return 0;
+        return &spellData[spell];
+    }
+
     virtual eTerrainType* getTerrainType(ePlane plane, int x, int y)
     {
         eTerrainType* terrainTypes = getTerrainTypes();
@@ -253,6 +273,17 @@ public:
                 unitTypeNr = (eUnit_Type)value;
                 break;
             }
+        }
+        return unitTypeNr;
+    }
+    eUnit_Type getUnitTypeNr(const Hero_Stats_Initializer* heroStatsInitializer)
+    {
+        eUnit_Type unitTypeNr = (eUnit_Type)-1;
+        Hero_Stats_Initializer* firstHeroStats = getList_Hero_Stats_Initializer();
+        unsigned value = toUInt(heroStatsInitializer - firstHeroStats);
+        if (value < gMAX_HERO_TYPES)
+        {
+            unitTypeNr = (eUnit_Type)value;
         }
         return unitTypeNr;
     }
@@ -349,6 +380,10 @@ public:
     }
 protected:
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr) = 0;
+    virtual Hero_Stats_Initializer* getList_Hero_Stats_Initializer()
+    {
+        return 0;
+    }
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
 public:
@@ -360,11 +395,11 @@ protected:
     virtual uint16_t* getNumber_of_Cities() = 0;
     virtual uint16_t* getNumber_of_Units() = 0;
     virtual uint16_t* getNumber_of_Wizards() = 0;
-public:
     virtual Spell_Data* getSpell_Data()
     {
         return 0;
     }
+public:
     virtual Spells_Cast_in_Battle* getSpells_Cast_in_Battle()
     {
         return 0;

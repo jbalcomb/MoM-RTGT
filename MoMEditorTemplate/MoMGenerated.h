@@ -10,6 +10,7 @@ namespace MoM {
 std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs);
 std::ostream& operator<<(std::ostream& os, const eBonusDeposit& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs);
+std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs);
 std::ostream& operator<<(std::ostream& os, const eCity_Size& rhs);
 std::ostream& operator<<(std::ostream& os, const eCombatEnchantment& rhs);
@@ -153,6 +154,7 @@ std::ostream& operator<<(std::ostream& os, const unionUnit_Weapon_Mutation& rhs)
 bool validate(const eBannerColor& rhs, const std::string& context);
 bool validate(const eBonusDeposit& rhs, const std::string& context);
 bool validate(const eBuilding& rhs, const std::string& context);
+bool validate(const eBuilding8& rhs, const std::string& context);
 bool validate(const eBuildingStatus& rhs, const std::string& context);
 bool validate(const eCity_Size& rhs, const std::string& context);
 bool validate(const eCombatEnchantment& rhs, const std::string& context);

@@ -196,10 +196,69 @@ void DialogAddUnit::displaySectionBasicAttributes(QPointF &pos)
 
 void DialogAddUnit::displaySectionSpecials(QPointF &pos)
 {
+    if (m_unit->getCost() > 0)
+    {
+        QString text = QString("Cost %0").arg(m_unit->getCost());
+        if (m_unit->isHero() && (m_unit->getUnitTypeNr() != UNITTYPE_Chosen))
+        {
+//            ePlayer playerNr = PLAYER_YOU;   // TODO: Other players
+
+            int reqFame = (m_unit->getCost() - 100) / 10;
+//            int curFame = m_game->getWizard(playerNr)->m_Fame;
+//            // TODO: Check effect of Famous+10 and JustCause+10 in the game
+//            // TODO
+//            int nrHeroes = 0; //m_game->getNrHiredHeroes(playerNr);
+//            int nrPossibleHeroes = 10; //countPossibleHeroes(curFame, books);
+//            double chance = (curFame / 25 + 3) / ((nrHeroes + 1) / 2 + 1);
+//            if (m_game->getWizard(playerNr)->m_Skills.s.Famous)
+//            {
+//                chance *= 2;
+//            }
+//            if (chance > 10)
+//            {
+//                chance = 10;
+//            }
+//            if (playerNr != PLAYER_YOU)
+//            {
+//                chance += 10;
+//            }
+
+//            chance = chance * nrPossibleHeroes / (gMAX_HERO_TYPES - 1);
+
+//             When a hero decides to consider you, he looks whether his (cost hero - 100) / 10 is less than or equal to your fame.
+//            And also if you have Life books or Death books (if the hero is the Priestess, the Paladin, the Black Knight, or the Necromancer).
+//            If you don't meet his requirements he passes you over.
+
+            text = QString("Cost %0 gold (fame %1)").arg(m_unit->getCost()).arg(reqFame);
+        }
+        else if (m_unit->isNormal())
+        {
+            text = QString("Cost %0 production").arg(m_unit->getCost());
+        }
+        else if (m_unit->isSummoned() || (m_unit->getUnitTypeNr() != UNITTYPE_Chosen))
+        {
+            // TODO: Unit cost is NOT the casting cost.
+            //       We should look up the casting cost and mention that.
+            //       For now: just leave it out
+//            text = QString("Cost %0 (casting %1)").arg(m_unit->getCost());
+        }
+        else
+        {
+            // Nothing left
+        }
+        displaySpecial(pos, text, 0, QPixmap(), "");
+    }
+
     MoM::MoMUnit::ListBuildings listBuildings = m_unit->getRequiredBuildings();
     for (size_t i = 0; i < listBuildings.size(); ++i)
     {
         displaySpecial(pos, listBuildings[i], 0);
+    }
+
+    MoM::MoMUnit::ListSpells listSpells = m_unit->getHeroSpells();
+    for (size_t i = 0; i < listSpells.size(); ++i)
+    {
+        displaySpecial(pos, listSpells[i], 0);
     }
 
     MOM_FOREACH(eItemPower, itemPower, eItemPower_MAX)
@@ -245,7 +304,7 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
     {
         displaySpecial(pos, "Caster", m_unit->getCastingSkillTotal(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_CASTER).c_str());    // TODO: Lookup images
     }
-    if (m_unit->getScouting() != 1)
+    if (m_unit->getScouting() > 1)
     {
         displaySpecial(pos, "Scouting", m_unit->getScouting(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_SCOUTING).c_str());    // TODO: Lookup images
     }
@@ -254,6 +313,12 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
         displaySpecial(pos, "Construction", m_unit->getConstructionSkill(), ":/abilities/", m_game->getHelpText(MoM::HELP_SPECIAL_CONSTRUCTION).c_str());    // TODO: Lookup images
     }
 
+    MoM::Hero_Stats_Initializer stats = m_unit->getHeroStatsInitializer();
+    if (stats.m_Nr_Random_picks > 0)
+    {
+        QString specialName = prettyQStr(stats.m_Random_pick_type);
+        displaySpecial(pos, specialName, stats.m_Nr_Random_picks, ":/abilities/");
+    }
     MOM_FOREACH(eHeroAbility, heroAbility, eHeroAbility_MAX)
     {
         if (m_unit->hasSpecial(heroAbility))
