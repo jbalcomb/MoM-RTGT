@@ -24,7 +24,7 @@ DialogTables::DialogTables(QWidget *parent) :
 
     ui->comboBox_Table->setCurrentIndex(2);
 
-    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
+    // TODO: Make the signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
 DialogTables::~DialogTables()
