@@ -5426,6 +5426,23 @@ QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QString& co
     return ptree;
 }
 
+QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data140m* rhs, const QString& context)
+{
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<WizardsExe_Game_Data140m>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    ptree->appendChild("m_UnitNr_Active", new QMoMTreeItem<uint16_t>(&rhs->m_UnitNr_Active));
+    ptree->appendChild("m_Current_Turn", new QMoMTreeItem<uint16_t>(&rhs->m_Current_Turn));
+    ptree->appendChild("m_Number_of_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Units));
+    ptree->appendChild("m_Number_of_Cities", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Cities));
+    ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty140m>(&rhs->m_Difficulty));
+    ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful140m>(&rhs->m_Magic_Powerful_setting));
+    ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size140m>(&rhs->m_Land_Size_setting));
+    ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Wizards));
+    return ptree;
+}
+
 QMoMTreeItemBase* constructTreeItem(WizardsExe_Pointers* rhs, const QString& context)
 {
     QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<WizardsExe_Pointers>(rhs, context);

@@ -12,14 +12,18 @@ CHANGES IN 0.2.4 (2012--)
   Where applicable the selection(s) can be made from the popup menu
   (for instance the immunities of a unit).
   
-* In particular the Unrest table is now editable.
+* In particular the Unrest table is now editable. [letsdance]
   To make the changes permanent, load "TERRSTAT.LBX", make the changes,
   and save it.
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/17/
   
 * Extended "Summon" dialog to display more fields under more circumstances.
   
 * Fixed Customizer (Magic.exe) sections (which were damaged).
   
+* Fixed <Unknown eMagic Powerful> (4) in Insecticide 1.40m+ [FrancoK]
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/18/
+
 * Added max books/skills to EXE:Miscellaneous, so you can
   get more than 13 books and 6 skills [FrancoK].
 

@@ -77,6 +77,7 @@ QMoMTreeItemBase* constructTreeItem(Upkeep_Enchantments* rhs, const QString& con
 QMoMTreeItemBase* constructTreeItem(Wizard* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Wizard_Type_Data* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QString& context);
+QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data140m* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(WizardsExe_Pointers* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(WizardsExe_Save_Name* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionAbility_Flags* rhs, const QString& context);

@@ -222,6 +222,17 @@ enum eDifficulty ENUMSIZE16
     eDifficulty__SIZE__ = 0xFFFF
 };
 
+enum eDifficulty140m ENUMSIZE16
+{
+    DIFFICULTY140M_Easy = 0,
+    DIFFICULTY140M_Normal = 1,
+    DIFFICULTY140M_Hard = 2,
+    DIFFICULTY140M_Extreme = 3,
+    DIFFICULTY140M_Impossible = 4,
+
+    eDifficulty140m_MAX = 5
+};
+
 enum eEvent
 {
     EVENT_Meteor              = 0,
@@ -1267,6 +1278,17 @@ enum eLand_Size ENUMSIZE16
     eLand_Size__SIZE__ = 0xFFFF
 };
 
+enum eLand_Size140m ENUMSIZE16
+{
+    LANDSIZE140M_Small,
+    LANDSIZE140M_Medium,
+    LANDSIZE140M_Large,
+    LANDSIZE140M_Huge,
+
+    eLand_Size140m_MAX,
+    eLand_Size140m__SIZE__ = 0xFFFF
+};
+
 enum eLevel ENUMSIZE8
 {
     LEVEL_Level_1 = 0,
@@ -1288,7 +1310,20 @@ enum eMagic_Powerful ENUMSIZE16
     MAGICPOWERFUL_Normal,
     MAGICPOWERFUL_Powerful,
 
+    eMagic_Powerful_MAX,
     eMagic_Powerful_Size__SIZE__ = 0xFFFF
+};
+
+enum eMagic_Powerful140m ENUMSIZE16
+{
+    MAGICPOWERFUL140M_0_5,
+    MAGICPOWERFUL140M_1_0,
+    MAGICPOWERFUL140M_1_5,
+    MAGICPOWERFUL140M_2_0,
+    MAGICPOWERFUL140M_2_5,
+
+    eMagic_Powerful140m_MAX,
+    eMagic_Powerful140m_Size__SIZE__ = 0xFFFF
 };
 
 enum eTower_Node_Lair_Status ENUMSIZE8
@@ -4612,6 +4647,22 @@ typedef struct PACKED_STRUCT // WizardsExe_Game_Data
     uint16_t        m_Number_of_Wizards;    // 0E in Wizard Table (including YOU, 2 ... 5)
                                             // SIZE 10 ds:BD9E
 } WizardsExe_Game_Data;
+
+typedef struct PACKED_STRUCT // WizardsExe_Game_Data140m
+{                                           // ds:BD8E
+    // Game status
+    uint16_t        m_UnitNr_Active;        // 00
+    uint16_t        m_Current_Turn;         // 02 year is 1400 + Turn/12, month is Turn%12
+    uint16_t        m_Number_of_Units;      // 04 in Unit Instance Table (0 ... 1000, out of a maximum of 1000)
+    uint16_t        m_Number_of_Cities;     // 06 in City Table (0 ... 100, of out of a maximum of 100)
+
+    // Game choices
+    eDifficulty140m     m_Difficulty;           // 08
+    eMagic_Powerful140m m_Magic_Powerful_setting;   // 0A
+    eLand_Size140m      m_Land_Size_setting;    // 0C
+    uint16_t        m_Number_of_Wizards;    // 0E in Wizard Table (including YOU, 2 ... 5)
+                                            // SIZE 10 ds:BD9E
+} WizardsExe_Game_Data140m;
 
 typedef struct PACKED_STRUCT // WizardsExe_Save_Name
 {

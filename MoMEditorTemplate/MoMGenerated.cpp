@@ -235,6 +235,22 @@ std::ostream& operator<<(std::ostream& os, const eDifficulty& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eDifficulty140m& rhs)
+{
+    switch (rhs)
+    {
+    case DIFFICULTY140M_Easy: os << "DIFFICULTY140M_Easy"; break;
+    case DIFFICULTY140M_Normal: os << "DIFFICULTY140M_Normal"; break;
+    case DIFFICULTY140M_Hard: os << "DIFFICULTY140M_Hard"; break;
+    case DIFFICULTY140M_Extreme: os << "DIFFICULTY140M_Extreme"; break;
+    case DIFFICULTY140M_Impossible: os << "DIFFICULTY140M_Impossible"; break;
+    case eDifficulty140m_MAX: os << "eDifficulty140m_MAX"; break;
+    default: os << "<Unknown eDifficulty140m>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eEvent& rhs)
 {
     switch (rhs)
@@ -1372,6 +1388,21 @@ std::ostream& operator<<(std::ostream& os, const eLand_Size& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eLand_Size140m& rhs)
+{
+    switch (rhs)
+    {
+    case LANDSIZE140M_Small: os << "LANDSIZE140M_Small"; break;
+    case LANDSIZE140M_Medium: os << "LANDSIZE140M_Medium"; break;
+    case LANDSIZE140M_Large: os << "LANDSIZE140M_Large"; break;
+    case LANDSIZE140M_Huge: os << "LANDSIZE140M_Huge"; break;
+    case eLand_Size140m_MAX: os << "eLand_Size140m_MAX"; break;
+    default: os << "<Unknown eLand_Size140m>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eLevel& rhs)
 {
     switch (rhs)
@@ -1399,7 +1430,24 @@ std::ostream& operator<<(std::ostream& os, const eMagic_Powerful& rhs)
     case MAGICPOWERFUL_Weak: os << "MAGICPOWERFUL_Weak"; break;
     case MAGICPOWERFUL_Normal: os << "MAGICPOWERFUL_Normal"; break;
     case MAGICPOWERFUL_Powerful: os << "MAGICPOWERFUL_Powerful"; break;
+    case eMagic_Powerful_MAX: os << "eMagic_Powerful_MAX"; break;
     default: os << "<Unknown eMagic_Powerful>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eMagic_Powerful140m& rhs)
+{
+    switch (rhs)
+    {
+    case MAGICPOWERFUL140M_0_5: os << "MAGICPOWERFUL140M_0_5"; break;
+    case MAGICPOWERFUL140M_1_0: os << "MAGICPOWERFUL140M_1_0"; break;
+    case MAGICPOWERFUL140M_1_5: os << "MAGICPOWERFUL140M_1_5"; break;
+    case MAGICPOWERFUL140M_2_0: os << "MAGICPOWERFUL140M_2_0"; break;
+    case MAGICPOWERFUL140M_2_5: os << "MAGICPOWERFUL140M_2_5"; break;
+    case eMagic_Powerful140m_MAX: os << "eMagic_Powerful140m_MAX"; break;
+    default: os << "<Unknown eMagic_Powerful140m>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -6232,6 +6280,21 @@ std::ostream& operator<<(std::ostream& os, const WizardsExe_Game_Data& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const WizardsExe_Game_Data140m& rhs)
+{
+    os << "{\n";
+    os << "m_UnitNr_Active=" << rhs.m_UnitNr_Active << " 0x" << std::hex << rhs.m_UnitNr_Active << std::dec << "\n";
+    os << "m_Current_Turn=" << rhs.m_Current_Turn << " 0x" << std::hex << rhs.m_Current_Turn << std::dec << "\n";
+    os << "m_Number_of_Units=" << rhs.m_Number_of_Units << " 0x" << std::hex << rhs.m_Number_of_Units << std::dec << "\n";
+    os << "m_Number_of_Cities=" << rhs.m_Number_of_Cities << " 0x" << std::hex << rhs.m_Number_of_Cities << std::dec << "\n";
+    os << "m_Difficulty=" << rhs.m_Difficulty << "\n";
+    os << "m_Magic_Powerful_setting=" << rhs.m_Magic_Powerful_setting << "\n";
+    os << "m_Land_Size_setting=" << rhs.m_Land_Size_setting << "\n";
+    os << "m_Number_of_Wizards=" << rhs.m_Number_of_Wizards << " 0x" << std::hex << rhs.m_Number_of_Wizards << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const WizardsExe_Pointers& rhs)
 {
     os << "{\n";
@@ -7244,6 +7307,21 @@ bool validate(const eDifficulty& rhs, const std::string& context)
     case DIFFICULTY_Hard: break;
     case DIFFICULTY_Impossible: break;
     default: std::cout << context << ": Unknown eDifficulty = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eDifficulty140m& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case DIFFICULTY140M_Easy: break;
+    case DIFFICULTY140M_Normal: break;
+    case DIFFICULTY140M_Hard: break;
+    case DIFFICULTY140M_Extreme: break;
+    case DIFFICULTY140M_Impossible: break;
+    default: std::cout << context << ": Unknown eDifficulty140m = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -8300,6 +8378,20 @@ bool validate(const eLand_Size& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eLand_Size140m& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case LANDSIZE140M_Small: break;
+    case LANDSIZE140M_Medium: break;
+    case LANDSIZE140M_Large: break;
+    case LANDSIZE140M_Huge: break;
+    default: std::cout << context << ": Unknown eLand_Size140m = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eLevel& rhs, const std::string& context)
 {
     bool ok = true;
@@ -8328,6 +8420,21 @@ bool validate(const eMagic_Powerful& rhs, const std::string& context)
     case MAGICPOWERFUL_Normal: break;
     case MAGICPOWERFUL_Powerful: break;
     default: std::cout << context << ": Unknown eMagic_Powerful = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eMagic_Powerful140m& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case MAGICPOWERFUL140M_0_5: break;
+    case MAGICPOWERFUL140M_1_0: break;
+    case MAGICPOWERFUL140M_1_5: break;
+    case MAGICPOWERFUL140M_2_0: break;
+    case MAGICPOWERFUL140M_2_5: break;
+    default: std::cout << context << ": Unknown eMagic_Powerful140m = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -11053,6 +11160,15 @@ bool validate(const Wizard_Type_Data& rhs, const std::string& context)
 }
 
 bool validate(const WizardsExe_Game_Data& rhs, const std::string& context)
+{
+    bool ok = true;
+    if (!validate(rhs.m_Difficulty, context + ".m_Difficulty")) ok = false;
+    if (!validate(rhs.m_Magic_Powerful_setting, context + ".m_Magic_Powerful_setting")) ok = false;
+    if (!validate(rhs.m_Land_Size_setting, context + ".m_Land_Size_setting")) ok = false;
+    return ok;
+}
+
+bool validate(const WizardsExe_Game_Data140m& rhs, const std::string& context)
 {
     bool ok = true;
     if (!validate(rhs.m_Difficulty, context + ".m_Difficulty")) ok = false;
