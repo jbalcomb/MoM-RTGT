@@ -30,24 +30,13 @@ public:
     QMoMResources(const QMoMGamePtr& game);
     virtual ~QMoMResources();
 
-    static void createInstance(const QMoMGamePtr& game)
-    {
-        delete m_instance;
-        m_instance = new QMoMResources(game);
-    }
+    static void createInstance(const QMoMGamePtr& game);
 
-    static QMoMResources& instance()
-    {
-        if (0 == m_instance)
-        {
-            m_instance = new QMoMResources(QMoMGamePtr());
-        }
-        return *m_instance;
-    }
+    static QMoMResources& instance();
 
     void setGame(const QMoMGamePtr& game);
 
-	const QVector<QRgb>& GetColorTable()
+    const QVector<QRgb>& getColorTable()
 	{
 		return m_colorTable;
 	}
@@ -59,73 +48,17 @@ public:
         return iconPtr;
     }
 
-    const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const
-    {
-        QMoMImagePtr image;
-        unsigned index = 14 + toUInt(bannerColor);
-        if (inRange(m_mapBackImages, index))
-        {
-            image = m_mapBackImages[index];
-        }
-        return image;
-    }
-    const QMoMImagePtr getImage(MoM::eBuilding building) const
-	{
-        QMoMImagePtr image;
-		if (inRange(m_buildingImages, building))
-		{
-            image = m_buildingImages[building];
-		}
-		return image;
-	}
+    const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const;
     const QMoMImagePtr getImage(MoM::eBonusDeposit bonusDeposit) const;
-    const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const
-	{
-        QMoMImagePtr image;
-        if (inRange(m_itemImages, itemIcon))
-		{
-            image = m_itemImages[itemIcon];
-		}
-		return image;
-	}
-    const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const
-	{
-        QMoMImagePtr image;
-        if (inRange(m_lairImages, lair))
-		{
-            image = m_lairImages[lair];
-		}
-		return image;
-	}
+    const QMoMImagePtr getImage(MoM::eBuilding building) const;
+    const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
+    const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
-    const QMoMImagePtr getImage(MoM::eSpell spell) const
-	{
-        QMoMImagePtr image;
-        if (inRange(m_spellImages, spell))
-		{
-            image = m_spellImages[spell];
-		}
-		return image;
-	}
-    const QMoMImagePtr getImage(MoM::eTerrainType terrain) const
-	{
-        QMoMImagePtr image;
-        if (inRange(m_terrainTypeImages, terrain))
-		{
-            image = m_terrainTypeImages[terrain];
-		}
-		return image;
-	}
-    const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const
-	{
-        QMoMImagePtr image;
-        if (inRange(m_unitImages, unitType))
-		{
-            image = m_unitImages[unitType];
-		}
-		return image;
-	}
+    const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
+    const QMoMImagePtr getImage(MoM::eSpell spell) const;
+    const QMoMImagePtr getImage(MoM::eTerrainType terrain) const;
+    const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const;
 
     template<typename T>
     QPixmap getPixmap(T t, double scale = 1.0) const
@@ -155,16 +88,14 @@ private:
     bool createColorTable();
 
     bool createBuildingImages();
-    bool createItemImages();
     bool createLairImages();
-    bool createMapBackImages();
-    bool createSpecialsImages();
+    bool createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
     bool createSpellImages();
     bool createTerrainImages();
     bool createUnitImages();
 
 	template<typename T>
-    bool inRange(const QVector<QMoMImagePtr>& v, T t) const
+    bool inVectorRange(const QVector<QMoMImagePtr>& v, T t) const
 	{
 		return (static_cast<unsigned>(t) < static_cast<unsigned>(v.size()));
 	}
@@ -175,10 +106,11 @@ private:
 
     QVector<QRgb> m_colorTable;
     QVector<QMoMImagePtr> m_buildingImages;
-    QVector<QMoMImagePtr> m_itemImages;
+    QVector<QMoMImagePtr> m_itemiscImages;
+    QVector<QMoMImagePtr> m_itemsImages;
     QVector<QMoMImagePtr> m_lairImages;
     QVector<QMoMImagePtr> m_mapBackImages;
-    QVector<QMoMImagePtr> m_specialsImages;
+    QVector<QMoMImagePtr> m_specialImages;
     QVector<QMoMImagePtr> m_spellImages;
     QVector<QMoMImagePtr> m_terrainTypeImages;
     QVector<QMoMImagePtr> m_unitImages;

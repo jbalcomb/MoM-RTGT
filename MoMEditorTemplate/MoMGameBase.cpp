@@ -296,29 +296,50 @@ int MoMGameBase::getCostToProduce(eProducing producing)
 	return buildingCost;
 }
 
-std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
+const HelpLBXentry* MoMGameBase::getHelpEntry(eHelpIndex helpTextNr)
 {
-    const size_t maxwidth = 60;
-
     if (0 == m_HelpLbx.get())
     {
         m_HelpLbx.reset(new MoMLbxBase);
         // Only try to load once and ignore result.
         // We'll check if it's there when we use it.
-        (void)m_HelpLbx->load(this->getGameDirectory() + "/HELP.LBX");
+        if (m_HelpLbx->load(this->getGameDirectory() + "/" + "HELP.LBX"))
+        {
+            const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
+            std::cout << "HelpLBXentries" << std::endl;
+            for (size_t i = 0; i < MoM::eHelpIndex_MAX; ++i)
+            {
+                std::cout << i << "\t" << helpLbxEntries[i].title << "\t" << helpLbxEntries[i].lbxFile << "\t" << helpLbxEntries[i].lbxIndex << std::endl;
+            }
+        }
     }
     if (m_HelpLbx->getNrRecords() < 3)
     {
-        return "(HELP.LBX is not available)";
+        return 0;
     }
 
-    std::string text;
+    const HelpLBXentry* helpEntry = 0;
     if ((helpTextNr >= 0) && (helpTextNr < eHelpIndex_MAX))
     {
         // TODO: Check ranges
         const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
-        const char* title = helpLbxEntries[helpTextNr].title;
-        const char* description = helpLbxEntries[helpTextNr].description;
+        helpEntry = &helpLbxEntries[helpTextNr];
+    }
+
+    return helpEntry;
+}
+
+std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
+{
+    const size_t maxwidth = 60;
+
+    const HelpLBXentry* helpEntry = getHelpEntry(helpTextNr);
+
+    std::string text;
+    if (0 != helpEntry)
+    {
+        const char* title = helpEntry->title;
+        const char* description = helpEntry->description;
 
         text = std::string(title) + ": " + description;
     }
@@ -419,6 +440,17 @@ std::string MoMGameBase::getHelpText(eRanged_Type rangedType)
 
     std::string value = getHelpText(helpIndex);
 
+    return value;
+}
+
+const HelpLBXentry* MoMGameBase::getHelpEntry(eSpell spell)
+{
+    const HelpLBXentry* value = 0;
+    if ((spell >= 1) && (spell < eSpell_MAX))
+    {
+        eHelpIndex helpIndex = (MoM::eHelpIndex)(0 + spell);
+        value = getHelpEntry(helpIndex);
+    }
     return value;
 }
 

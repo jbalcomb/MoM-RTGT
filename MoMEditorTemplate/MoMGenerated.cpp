@@ -1933,6 +1933,7 @@ std::ostream& operator<<(std::ostream& os, const eSlot_Type16& rhs)
     case SLOT16_Staff_Wand: os << "SLOT16_Staff_Wand"; break;
     case SLOT16_Armor_Shield: os << "SLOT16_Armor_Shield"; break;
     case SLOT16_Amulet: os << "SLOT16_Amulet"; break;
+    case eSlot_Type16_MAX: os << "eSlot_Type16_MAX"; break;
     default: os << "<Unknown eSlot_Type16>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -3235,7 +3236,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Buildings_Required1_UNK=" << (unsigned)rhs.m_Buildings_Required1_UNK << " 0x" << std::hex << (unsigned)rhs.m_Buildings_Required1_UNK << std::dec << "\n";
     os << "m_Current_Figures=" << (unsigned)rhs.m_Current_Figures << " 0x" << std::hex << (unsigned)rhs.m_Current_Figures << std::dec << "\n";
     os << "m_graphics_ID_GUESS=" << (unsigned)rhs.m_graphics_ID_GUESS << " 0x" << std::hex << (unsigned)rhs.m_graphics_ID_GUESS << std::dec << "\n";
-    os << "m_UNK01=" << (unsigned)rhs.m_UNK01 << " 0x" << std::hex << (unsigned)rhs.m_UNK01 << std::dec << "\n";
+    os << "m_UNK0F=" << (unsigned)rhs.m_UNK0F << " 0x" << std::hex << (unsigned)rhs.m_UNK0F << std::dec << "\n";
     os << "m_Hitpoints_per_Figure=" << (unsigned)rhs.m_Hitpoints_per_Figure << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints_per_Figure << std::dec << "\n";
     os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Transport_Capacity_GUESS=" << (unsigned)rhs.m_Transport_Capacity_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity_GUESS << std::dec << "\n";
@@ -3259,15 +3260,15 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Item_Attack_Flags=" << rhs.m_Item_Attack_Flags << "\n";
     os << "m_Flags2_UnitEnchantment=" << rhs.m_Flags2_UnitEnchantment << "\n";
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
-    os << "m_UNK04=" << (unsigned)rhs.m_UNK04 << " 0x" << std::hex << (unsigned)rhs.m_UNK04 << std::dec << "\n";
+    os << "m_UNK32=" << (unsigned)rhs.m_UNK32 << " 0x" << std::hex << (unsigned)rhs.m_UNK32 << std::dec << "\n";
     os << "m_web_=" << (unsigned)rhs.m_web_ << " 0x" << std::hex << (unsigned)rhs.m_web_ << std::dec << "\n";
     os << "m_active__=" << (unsigned)rhs.m_active__ << " 0x" << std::hex << (unsigned)rhs.m_active__ << std::dec << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
     os << "m_cur_total_damage_GUESS=" << (unsigned)rhs.m_cur_total_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_total_damage_GUESS << std::dec << "\n";
-    os << "m_UNK05=(\n";
+    os << "m_UNK37=(\n";
     for (unsigned i = 0; i < 2; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK05[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK05[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK37[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK37[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_cur_figure_damage_GUESS=" << (unsigned)rhs.m_cur_figure_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_figure_damage_GUESS << std::dec << "\n";
@@ -3277,37 +3278,36 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Current_mana_=" << (unsigned)rhs.m_Current_mana_ << " 0x" << std::hex << (unsigned)rhs.m_Current_mana_ << std::dec << "\n";
     os << "m_Item_nr_charges_=" << (unsigned)rhs.m_Item_nr_charges_ << " 0x" << std::hex << (unsigned)rhs.m_Item_nr_charges_ << std::dec << "\n";
     os << "m_Poison_strength_=" << (unsigned)rhs.m_Poison_strength_ << " 0x" << std::hex << (unsigned)rhs.m_Poison_strength_ << std::dec << "\n";
-    os << "m_UNK07a=" << (unsigned)rhs.m_UNK07a << " 0x" << std::hex << (unsigned)rhs.m_UNK07a << std::dec << "\n";
+    os << "m_UNK43=" << (unsigned)rhs.m_UNK43 << " 0x" << std::hex << (unsigned)rhs.m_UNK43 << std::dec << "\n";
     os << "m_xPos=" << rhs.m_xPos << " 0x" << std::hex << rhs.m_xPos << std::dec << "\n";
     os << "m_yPos=" << rhs.m_yPos << " 0x" << std::hex << rhs.m_yPos << std::dec << "\n";
     os << "m_xPosHeaded=" << rhs.m_xPosHeaded << " 0x" << std::hex << rhs.m_xPosHeaded << std::dec << "\n";
     os << "m_yPosHeaded=" << rhs.m_yPosHeaded << " 0x" << std::hex << rhs.m_yPosHeaded << std::dec << "\n";
-    os << "m_UNK07b=(\n";
+    os << "m_UNK4C=(\n";
     for (unsigned i = 0; i < 8; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK07b[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK07b[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK4C[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK4C[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Status=" << rhs.m_Status << "\n";
-    os << "m_UNK08=" << (unsigned)rhs.m_UNK08 << " 0x" << std::hex << (unsigned)rhs.m_UNK08 << std::dec << "\n";
+    os << "m_UNK55=" << (unsigned)rhs.m_UNK55 << " 0x" << std::hex << (unsigned)rhs.m_UNK55 << std::dec << "\n";
     os << "m_Confused_State=" << (int)rhs.m_Confused_State << " 0x" << std::hex << (int)rhs.m_Confused_State << std::dec << "\n";
-    os << "m_UNK09a=(\n";
+    os << "m_UNK57=(\n";
     for (unsigned i = 0; i < 13; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK09a[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK09a[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK57[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK57[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Extra_Attack=" << (unsigned)rhs.m_Extra_Attack << " 0x" << std::hex << (unsigned)rhs.m_Extra_Attack << std::dec << "\n";
+    os << "m_Extra_Melee=" << (unsigned)rhs.m_Extra_Melee << " 0x" << std::hex << (unsigned)rhs.m_Extra_Melee << std::dec << "\n";
     os << "m_Extra_Ranged=" << (unsigned)rhs.m_Extra_Ranged << " 0x" << std::hex << (unsigned)rhs.m_Extra_Ranged << std::dec << "\n";
     os << "m_Extra_Defense=" << (unsigned)rhs.m_Extra_Defense << " 0x" << std::hex << (unsigned)rhs.m_Extra_Defense << std::dec << "\n";
     os << "m_Extra_Resistance=" << (unsigned)rhs.m_Extra_Resistance << " 0x" << std::hex << (unsigned)rhs.m_Extra_Resistance << std::dec << "\n";
     os << "m_Extra_Hitpoints=" << (unsigned)rhs.m_Extra_Hitpoints << " 0x" << std::hex << (unsigned)rhs.m_Extra_Hitpoints << std::dec << "\n";
-    os << "m_UNK09b=(\n";
-    for (unsigned i = 0; i < 5; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK09b[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK09b[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_Lost_Melee=" << (unsigned)rhs.m_Lost_Melee << " 0x" << std::hex << (unsigned)rhs.m_Lost_Melee << std::dec << "\n";
+    os << "m_Lost_Ranged=" << (unsigned)rhs.m_Lost_Ranged << " 0x" << std::hex << (unsigned)rhs.m_Lost_Ranged << std::dec << "\n";
+    os << "m_Lost_Defense=" << (unsigned)rhs.m_Lost_Defense << " 0x" << std::hex << (unsigned)rhs.m_Lost_Defense << std::dec << "\n";
+    os << "m_Lost_Resistance=" << (unsigned)rhs.m_Lost_Resistance << " 0x" << std::hex << (unsigned)rhs.m_Lost_Resistance << std::dec << "\n";
+    os << "m_UNUSED6D=" << (unsigned)rhs.m_UNUSED6D << " 0x" << std::hex << (unsigned)rhs.m_UNUSED6D << std::dec << "\n";
     os << "}";
     return os;
 }

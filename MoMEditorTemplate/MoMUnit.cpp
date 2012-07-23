@@ -1031,9 +1031,9 @@ void MoMUnit::applyEffects()
     {
         BaseAttributes actualAttr = getActualAttributes();
 		std::cout << "Verify battle unit fields" << std::endl;
-		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Attack)
+		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Melee)
 		{
-            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraAtt=" << (int)m_battleUnit->m_Extra_Attack << std::endl;
+            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraMe=" << (int)m_battleUnit->m_Extra_Melee << std::endl;
 		}
 		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
 		{

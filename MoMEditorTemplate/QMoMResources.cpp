@@ -39,6 +39,21 @@ QMoMResources::~QMoMResources()
 {
 }
 
+void QMoMResources::createInstance(const QMoMGamePtr &game)
+{
+    delete m_instance;
+    m_instance = new QMoMResources(game);
+}
+
+QMoMResources &QMoMResources::instance()
+{
+    if (0 == m_instance)
+    {
+        m_instance = new QMoMResources(QMoMGamePtr());
+    }
+    return *m_instance;
+}
+
 void QMoMResources::setGame(const QMoMGamePtr& game)
 {
     if (game.data() != m_game.data())
@@ -49,18 +64,30 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         (void)createColorTable();
 
         (void)createBuildingImages();
-        (void)createItemImages();
+        (void)createLbxImages("ITEMISC", m_itemiscImages);
+        (void)createLbxImages("ITEMS", m_itemsImages);
         (void)createLairImages();
-        (void)createMapBackImages();
-        (void)createSpecialsImages();
+        (void)createLbxImages("MAPBACK", m_mapBackImages);
+        (void)createLbxImages("SPECIAL", m_specialImages);
         // UnitImages are created before SpellImages, because SpellImages uses them
         (void)createUnitImages();
-        // UnitImages should already have been created, because SpellImages uses them
+        // m_specialImages and UnitImages should already have been created, because SpellImages uses them
         (void)createSpellImages();
         (void)createTerrainImages();
 
         qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eBannerColor bannerColor) const
+{
+    QMoMImagePtr image;
+    unsigned index = 14 + toUInt(bannerColor);
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
+    }
+    return image;
 }
 
 const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) const
@@ -83,9 +110,39 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) cons
     case DEPOSIT_no_deposit:
     default:                    break;
     }
-    if (inRange(m_mapBackImages, index))
+    if (inVectorRange(m_mapBackImages, index))
     {
         image = m_mapBackImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_buildingImages, building))
+    {
+        image = m_buildingImages[building];
+    }
+    return image;
+}
+
+const QMoMImagePtr  QMoMResources::getImage(MoM::eItem_Icon itemIcon) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_itemsImages, itemIcon))
+    {
+        image = m_itemsImages[itemIcon];
+    }
+    return image;
+}
+
+const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_lairImages, lair))
+    {
+        image = m_lairImages[lair];
     }
     return image;
 }
@@ -99,6 +156,62 @@ const QMoMImagePtr QMoMResources::getImage(eRace race) const
 const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) const
 {
     QMoMImagePtr image(new QImage(QString(":/abilities/%0.gif").arg(prettyQStr(randomPickType))));
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eSlot_Type16 slotType) const
+{
+    static const int lookupItemisc[MoM::eSlot_Type16_MAX] =
+    {
+        -1,
+        27, // SLOT16_Sword = 1,
+        28, // SLOT16_Bow = 2,
+        29, // SLOT16_Sword_Staff_Wand = 3,
+        30, // SLOT16_Staff_Wand = 4,
+        32, // SLOT16_Armor_Shield = 5,
+        31, // SLOT16_Amulet = 6,
+    };
+
+    int index = -1;
+    if (MoM::toUInt(slotType) < ARRAYSIZE(lookupItemisc))
+    {
+        index = lookupItemisc[slotType];
+    }
+    QMoMImagePtr image;
+    if (inVectorRange(m_itemiscImages, index))
+    {
+        image = m_itemiscImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eSpell spell) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_spellImages, spell))
+    {
+        image = m_spellImages[spell];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_terrainTypeImages, terrain))
+    {
+        image = m_terrainTypeImages[terrain];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_unitImages, unitType))
+    {
+        image = m_unitImages[unitType];
+    }
     return image;
 }
 
@@ -158,24 +271,6 @@ bool QMoMResources::createBuildingImages()
     return true;
 }
 
-bool QMoMResources::createItemImages()
-{
-    if (m_game.isNull())
-        return false;
-    std::string itemsLbxFile = m_game->getGameDirectory() + "/" + "ITEMS.LBX";
-    MoM::MoMLbxBase itemsLbx;
-    if (!itemsLbx.load(itemsLbxFile))
-        return false;
-    m_itemImages.resize(itemsLbx.getNrRecords());
-    for (size_t i = 0; i < itemsLbx.getNrRecords(); ++i)
-    {
-        m_itemImages[i] = MoM::convertLbxToImage(itemsLbx.getRecord(i), m_colorTable, toStr((MoM::eItem_Icon)i));
-//        QImageWriter w(QString("item%0.png").arg(i));
-//        w.write(m_itemImages[i]);
-    }
-    return true;
-}
-
 bool QMoMResources::createLairImages()
 {
     if (m_game.isNull())
@@ -192,34 +287,18 @@ bool QMoMResources::createLairImages()
     return true;
 }
 
-bool QMoMResources::createMapBackImages()
+bool QMoMResources::createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages)
 {
     if (m_game.isNull())
         return false;
-    std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxTitle + ".LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return false;
-    m_mapBackImages.resize(lbx.getNrRecords());
+    vecImages.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
-        m_mapBackImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, toStr(i));
-    }
-    return true;
-}
-
-bool QMoMResources::createSpecialsImages()
-{
-    if (m_game.isNull())
-        return false;
-    std::string lbxFile = m_game->getGameDirectory() + "/" + "SPECIAL.LBX";
-    MoM::MoMLbxBase lbx;
-    if (!lbx.load(lbxFile))
-        return false;
-    m_specialsImages.resize(lbx.getNrRecords());
-    for (size_t i = 0; i < lbx.getNrRecords(); ++i)
-    {
-        m_specialsImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, "special " + toStr(i));
+        vecImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, lbxTitle + toStr(i));
     }
     return true;
 }
@@ -248,10 +327,20 @@ bool QMoMResources::createSpellImages()
     // MONSTER.LBX, UNITS1.LBX, UNITS2.LBX
     for (MoM::eSpell spell = (MoM::eSpell)0; spell < MoM::eSpell_MAX; MoM::inc(spell))
     {
+        const HelpLBXentry* helpEntry = m_game->getHelpEntry(spell);
+        if (0 != helpEntry)
+        {
+            if (std::string(helpEntry->lbxFile) == std::string("SPECIAL.LBX"))
+            {
+                if (inVectorRange(m_specialImages, helpEntry->lbxIndex))
+                {
+                    m_spellImages[spell] = m_specialImages[helpEntry->lbxIndex];
+                }
+            }
+        }
+
         MoM::Spell_Data* spellData = m_game->getSpell_Data(spell);
-        if (0 == spellData)
-            break;
-        if ((MoM::SPELLTYPE_Summoning == spellData->m_Section_in_spell_book))
+        if ((0 != spellData) && (MoM::SPELLTYPE_Summoning == spellData->m_Section_in_spell_book))
         {
             m_spellImages[spell] = m_unitImages[spellData->m_Unit_Summoned_or_Spell_Strength];
         }
@@ -345,6 +434,86 @@ bool QMoMResources::createSpellImages()
     m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(39), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Awareness;
     m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), m_colorTable, toStr(spell));
+
+
+    //600	LIGHT	COMPIX.LBX	5
+    //601	DARKNESS	COMPIX.LBX	6
+    //602	WARP REALITY	COMPIX.LBX	7
+    //603	BLACK PRAYER	COMPIX.LBX	8
+    //604	WRACK	COMPIX.LBX	9
+    //605	METAL FIRES	COMPIX.LBX	10
+    //606	PRAYER	COMPIX.LBX	11
+    //607	HIGH PRAYER	COMPIX.LBX	12
+    //608	TERROR	COMPIX.LBX	13
+    //609	CALL LIGHTNING	COMPIX.LBX	14
+    //610	COUNTER MAGIC	COMPIX.LBX	15
+    //611	MASS INVISIBILITY	COMPIX.LBX	41
+    //612	DISPELS NON-SORCERY	COMPIX.LBX	54
+    //613	DISPELS NON-CHAOS	COMPIX.LBX	47
+    //614	DISPELS NON-NATURE	COMPIX.LBX	52
+    //615	SORCERY NODE AURA	COMPIX.LBX	55
+    //616	CHAOS NODE AURA	COMPIX.LBX	48
+    //617	NATURE NODE AURA	COMPIX.LBX	53
+    //618	CLOUD OF DARKNESS	COMPIX.LBX	50
+    //619	HOLY LIGHT	COMPIX.LBX	44
+    //620	CHAOS SURGE	COMPIX.LBX	46
+    //621	ETERNAL NIGHT	COMPIX.LBX	49
+    //622	CRUSADE	COMPIX.LBX	42
+    //623	HOLY ARMS	COMPIX.LBX	43
+    //624	CHARM OF LIFE	COMPIX.LBX	45
+    //625	ZOMBIE MASTERY	COMPIX.LBX	51
+
+    //632	ENTANGLE	COMPIX.LBX	60
+
+
+    //449	IMMOLATION	SPECIAL2.LBX	6
+    //450	GUARDIAN WIND	SPECIAL2.LBX	7
+    //451	BERSERK	SPECIAL2.LBX	17
+    //452	CLOAK OF FEAR	SPECIAL.LBX	97
+    //453	BLACK CHANNELS	SPECIAL.LBX	67
+    //454	WRAITH FORM	SPECIAL.LBX	68
+    //455	REGENERATE	SPECIAL.LBX	69
+    //456	PATHFINDING	SPECIAL.LBX	70
+    //457	WATER WALKING	SPECIAL.LBX	71
+    //458	ELEMENTAL ARMOR	SPECIAL.LBX	73
+    //459	RESIST ELEMENTS	SPECIAL.LBX	72
+    //460	STONE SKIN	SPECIAL.LBX	74
+    //461	IRON SKIN	SPECIAL.LBX	75
+    //462	ENDURANCE	SPECIAL.LBX	76
+    //463	SPELL LOCK	SPECIAL2.LBX	8
+    //464	INVISIBILITY	SPECIAL.LBX	78
+    //465	WIND WALKING	SPECIAL.LBX	79
+    //466	FLIGHT	SPECIAL.LBX	80
+    //467	RESIST MAGIC	SPECIAL.LBX	81
+    //468	MAGIC IMMUNITY	SPECIAL.LBX	82
+    //469	FLAME BLADE	SPECIAL.LBX	83
+    //470	ELDRITCH WEAPON	SPECIAL.LBX	84
+    //471	TRUE SIGHT	SPECIAL.LBX	85
+    //472	HOLY WEAPON	SPECIAL.LBX	86
+    //473	HEROISM	SPECIAL.LBX	87
+    //474	BLESS	SPECIAL.LBX	88
+    //475	LION HEART	SPECIAL.LBX	89
+    //476	GIANT STRENGTH	SPECIAL.LBX	65
+    //477	PLANAR TRAVEL	SPECIAL.LBX	91
+    //478	HOLY ARMOR	SPECIAL.LBX	92
+    //479	RIGHTEOUSNESS	SPECIAL.LBX	93
+    //480	INVULNERABILITY	SPECIAL.LBX	94
+    //481	VERTIGO	SPECIAL.LBX	101
+    //482	CONFUSION	SPECIAL2.LBX	0
+    //483	WHIRLWIND	SPECIAL2.LBX	1
+    //484	MIND STORM	SPECIAL2.LBX	2
+    //485	SHATTER	SPECIAL.LBX	95
+    //486	WEAKNESS	SPECIAL.LBX	96
+    //487	BLACK SLEEP	SPECIAL2.LBX	3
+    //488	WARP CREATURE	SPECIAL2.LBX	11
+    //489	WARP CREATURE	SPECIAL2.LBX	12
+    //490	WARP CREATURE	SPECIAL2.LBX	13
+    //491	MANA LEAK	SPECIAL2.LBX	10
+    //492	HASTE	SPECIAL.LBX	77
+    //493	WEB	SPECIAL.LBX	99
+    //494	CREATURE BINDING	SPECIAL.LBX	100
+    //495	POSSESSION	SPECIAL.LBX	98
+
 
     return true;
 }

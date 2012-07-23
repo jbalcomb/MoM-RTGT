@@ -57,6 +57,7 @@ public:
 
     virtual std::string getGameDirectory() = 0;
 
+    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
     std::string getHelpText(eHelpIndex helpTextNr);
 
     std::string getHelpText(eBuilding building);
@@ -65,6 +66,7 @@ public:
     std::string getHelpText(ePortrait wizardPortrait);
     std::string getHelpText(eRace race);
     std::string getHelpText(eRanged_Type rangedType);
+    const HelpLBXentry* getHelpEntry(eSpell spell);
     std::string getHelpText(eSpell spell);
     std::string getHelpText(eUnitAbility unitAbility);
     std::string getHelpText(eUnitEnchantment unitEnchantment);

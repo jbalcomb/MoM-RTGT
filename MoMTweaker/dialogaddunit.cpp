@@ -91,10 +91,14 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
     QPointF tmpPos = pos;
     QGraphicsItem* item = 0;
 
-    // TODO: Slot type icon
-	QString strSlotType = prettyQStr(slotType) + ":  ";
-    item = addText(tmpPos, strSlotType);
-    tmpPos.rx() += item->boundingRect().width();
+    QPixmap pixmapSlot = MoM::QMoMResources::instance().getPixmap(slotType, 2.0);
+    if (!pixmapSlot.isNull())
+    {
+        QGraphicsItem* item = m_sceneUnit->addPixmap(pixmapSlot);
+        m_unitSpecificItems.push_back(item);
+        item->setPos(tmpPos);
+        tmpPos.rx() += pixmapSlot.width() * 4 / 3;
+    }
 
 	QPixmap pixmapItem;
 	if (0 != momItem)
