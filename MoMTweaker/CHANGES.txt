@@ -2,7 +2,7 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.4 (2012--)
+CHANGES IN 0.2.4 (2012-08-02)
 -----------------------------
 
 * Added Anthony's spell-category information to the table of spells [Anthony].
