@@ -340,9 +340,9 @@ bool QMoMResources::createSpellImages()
         }
 
         MoM::Spell_Data* spellData = m_game->getSpell_Data(spell);
-        if ((0 != spellData) && (MoM::SPELLTYPE_Summoning == spellData->m_Section_in_spell_book))
+        if ((0 != spellData) && (MoM::SPELLCATEGORY_Normal_summon == spellData->m_Spell_Category))
         {
-            m_spellImages[spell] = m_unitImages[spellData->m_Unit_Summoned_or_Spell_Strength];
+            m_spellImages[spell] = m_unitImages[ spellData->m_Parameters[0] ];
         }
     }
 

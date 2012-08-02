@@ -305,12 +305,13 @@ const HelpLBXentry* MoMGameBase::getHelpEntry(eHelpIndex helpTextNr)
         // We'll check if it's there when we use it.
         if (m_HelpLbx->load(this->getGameDirectory() + "/" + "HELP.LBX"))
         {
-            const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
-            std::cout << "HelpLBXentries" << std::endl;
-            for (size_t i = 0; i < MoM::eHelpIndex_MAX; ++i)
-            {
-                std::cout << i << "\t" << helpLbxEntries[i].title << "\t" << helpLbxEntries[i].lbxFile << "\t" << helpLbxEntries[i].lbxIndex << std::endl;
-            }
+            // TODO: Remove
+            //const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
+            //std::cout << "HelpLBXentries" << std::endl;
+            //for (size_t i = 0; i < MoM::eHelpIndex_MAX; ++i)
+            //{
+            //    std::cout << i << "\t" << helpLbxEntries[i].title << "\t" << helpLbxEntries[i].lbxFile << "\t" << helpLbxEntries[i].lbxIndex << std::endl;
+            //}
         }
     }
     if (m_HelpLbx->getNrRecords() < 3)

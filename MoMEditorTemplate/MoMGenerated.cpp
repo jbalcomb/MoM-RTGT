@@ -2408,6 +2408,38 @@ std::ostream& operator<<(std::ostream& os, const eSpell16& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eSpellCategory& rhs)
+{
+    switch (rhs)
+    {
+    case SPELLCATEGORY_Normal_summon: os << "SPELLCATEGORY_Normal_summon"; break;
+    case SPELLCATEGORY_Unit_enchantment: os << "SPELLCATEGORY_Unit_enchantment"; break;
+    case SPELLCATEGORY_Friendly_City_enchantment: os << "SPELLCATEGORY_Friendly_City_enchantment"; break;
+    case SPELLCATEGORY_Hostile_City_enchantment: os << "SPELLCATEGORY_Hostile_City_enchantment"; break;
+    case SPELLCATEGORY_Fixed_damage: os << "SPELLCATEGORY_Fixed_damage"; break;
+    case SPELLCATEGORY_Special: os << "SPELLCATEGORY_Special"; break;
+    case SPELLCATEGORY_Target_wizard: os << "SPELLCATEGORY_Target_wizard"; break;
+    case SPELLCATEGORY_Global_enchantment: os << "SPELLCATEGORY_Global_enchantment"; break;
+    case SPELLCATEGORY_Battle: os << "SPELLCATEGORY_Battle"; break;
+    case SPELLCATEGORY_Create_item: os << "SPELLCATEGORY_Create_item"; break;
+    case SPELLCATEGORY_Destroy_unit: os << "SPELLCATEGORY_Destroy_unit"; break;
+    case SPELLCATEGORY_Resistable_Combat_enchantment: os << "SPELLCATEGORY_Resistable_Combat_enchantment"; break;
+    case SPELLCATEGORY_Unresistable_Combat_enchantment: os << "SPELLCATEGORY_Unresistable_Combat_enchantment"; break;
+    case SPELLCATEGORY_Mundane_Unit_enchantment: os << "SPELLCATEGORY_Mundane_Unit_enchantment"; break;
+    case SPELLCATEGORY_Mundane_Combat_enchantment: os << "SPELLCATEGORY_Mundane_Combat_enchantment"; break;
+    case SPELLCATEGORY_Dispel: os << "SPELLCATEGORY_Dispel"; break;
+    case SPELLCATEGORY_Disenchant: os << "SPELLCATEGORY_Disenchant"; break;
+    case SPELLCATEGORY_Disjunction: os << "SPELLCATEGORY_Disjunction"; break;
+    case SPELLCATEGORY_Counter: os << "SPELLCATEGORY_Counter"; break;
+    case SPELLCATEGORY_Variable_damage: os << "SPELLCATEGORY_Variable_damage"; break;
+    case SPELLCATEGORY_Banish: os << "SPELLCATEGORY_Banish"; break;
+    case eSpellCategory_MAX: os << "eSpellCategory_MAX"; break;
+    default: os << "<Unknown eSpellCategory>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eSpellKnown& rhs)
 {
     switch (rhs)
@@ -3096,9 +3128,9 @@ std::ostream& operator<<(std::ostream& os, const Attack_Flags& rhs)
     {
     os << "Stoning_Touch=" << (unsigned)rhs.Stoning_Touch << "\n";
     }
-    if (0 != rhs.No_effect05)
+    if (0 != rhs.No_effect01)
     {
-    os << "No_effect05=" << (unsigned)rhs.No_effect05 << "\n";
+    os << "No_effect01=" << (unsigned)rhs.No_effect01 << "\n";
     }
     if (0 != rhs.Death_Touch)
     {
@@ -3112,13 +3144,13 @@ std::ostream& operator<<(std::ostream& os, const Attack_Flags& rhs)
     {
     os << "Dispel_Evil=" << (unsigned)rhs.Dispel_Evil << "\n";
     }
-    if (0 != rhs.No_effect04_COMBAT)
+    if (0 != rhs.Ball_COMBAT)
     {
-    os << "No_effect04_COMBAT=" << (unsigned)rhs.No_effect04_COMBAT << "\n";
+    os << "Ball_COMBAT=" << (unsigned)rhs.Ball_COMBAT << "\n";
     }
-    if (0 != rhs.No_effect03_COMBAT)
+    if (0 != rhs.No_effect20_COMBAT)
     {
-    os << "No_effect03_COMBAT=" << (unsigned)rhs.No_effect03_COMBAT << "\n";
+    os << "No_effect20_COMBAT=" << (unsigned)rhs.No_effect20_COMBAT << "\n";
     }
     if (0 != rhs.Eldritch_Weapon_COMBAT)
     {
@@ -3524,14 +3556,14 @@ std::ostream& operator<<(std::ostream& os, const Building_Data& rhs)
     os << "m_Produces_Veterans=" << rhs.m_Produces_Veterans << "\n";
     os << "m_Produces_Magic_Weapons=" << rhs.m_Produces_Magic_Weapons << "\n";
     os << "m_Upkeep_yield=" << rhs.m_Upkeep_yield << " 0x" << std::hex << rhs.m_Upkeep_yield << std::dec << "\n";
-    os << "m_Food_and_pop_bonus=" << rhs.m_Food_and_pop_bonus << " 0x" << std::hex << rhs.m_Food_and_pop_bonus << std::dec << "\n";
+    os << "m_Food_and_pop_related=" << rhs.m_Food_and_pop_related << " 0x" << std::hex << rhs.m_Food_and_pop_related << std::dec << "\n";
     os << "m_Zero_24=" << rhs.m_Zero_24 << " 0x" << std::hex << rhs.m_Zero_24 << std::dec << "\n";
     os << "m_Unk_26=" << rhs.m_Unk_26 << " 0x" << std::hex << rhs.m_Unk_26 << std::dec << "\n";
-    os << "m_Mana_produced=" << rhs.m_Mana_produced << " 0x" << std::hex << rhs.m_Mana_produced << std::dec << "\n";
-    os << "m_Unk_2A=" << rhs.m_Unk_2A << " 0x" << std::hex << rhs.m_Unk_2A << std::dec << "\n";
+    os << "m_Temple_related=" << rhs.m_Temple_related << " 0x" << std::hex << rhs.m_Temple_related << std::dec << "\n";
+    os << "m_Research_related=" << rhs.m_Research_related << " 0x" << std::hex << rhs.m_Research_related << std::dec << "\n";
     os << "m_Building_cost=" << rhs.m_Building_cost << " 0x" << std::hex << rhs.m_Building_cost << std::dec << "\n";
     os << "m_Zero_2E=" << rhs.m_Zero_2E << " 0x" << std::hex << rhs.m_Zero_2E << std::dec << "\n";
-    os << "m_Unk_30=" << rhs.m_Unk_30 << " 0x" << std::hex << rhs.m_Unk_30 << std::dec << "\n";
+    os << "m_Animation_related=" << rhs.m_Animation_related << " 0x" << std::hex << rhs.m_Animation_related << std::dec << "\n";
     os << "m_Unk_32=" << rhs.m_Unk_32 << " 0x" << std::hex << rhs.m_Unk_32 << std::dec << "\n";
     os << "}";
     return os;
@@ -5272,7 +5304,7 @@ std::ostream& operator<<(std::ostream& os, const Spell_Data& rhs)
     os << "{\n";
     os << "m_SpellName=" << formatCharArray(rhs.m_SpellName, 19) << "\n";
     os << "m_Spell_desirability=" << rhs.m_Spell_desirability << " 0x" << std::hex << rhs.m_Spell_desirability << std::dec << "\n";
-    os << "m_Spell_Category=" << (int)rhs.m_Spell_Category << " 0x" << std::hex << (int)rhs.m_Spell_Category << std::dec << "\n";
+    os << "m_Spell_Category=" << rhs.m_Spell_Category << "\n";
     os << "m_Section_in_spell_book=" << rhs.m_Section_in_spell_book << "\n";
     os << "m_Magic_Realm=" << rhs.m_Magic_Realm << "\n";
     os << "m_Casting_eligibility=" << (int)rhs.m_Casting_eligibility << " 0x" << std::hex << (int)rhs.m_Casting_eligibility << std::dec << "\n";
@@ -5280,9 +5312,12 @@ std::ostream& operator<<(std::ostream& os, const Spell_Data& rhs)
     os << "m_Casting_cost=" << rhs.m_Casting_cost << " 0x" << std::hex << rhs.m_Casting_cost << std::dec << "\n";
     os << "m_Research_cost=" << rhs.m_Research_cost << " 0x" << std::hex << rhs.m_Research_cost << std::dec << "\n";
     os << "m_Sound_effect_when_casting_spell=" << rhs.m_Sound_effect_when_casting_spell << " 0x" << std::hex << rhs.m_Sound_effect_when_casting_spell << std::dec << "\n";
-    os << "m_Unit_Summoned_or_Spell_Strength=" << rhs.m_Unit_Summoned_or_Spell_Strength << "\n";
-    os << "m_Immunity_Flags=" << rhs.m_Immunity_Flags << "\n";
-    os << "m_Attack_Flags=" << rhs.m_Attack_Flags << "\n";
+    os << "m_Parameters=(\n";
+    for (unsigned i = 0; i < 4; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Parameters[i] << " 0x" << std::hex << (unsigned)rhs.m_Parameters[i] << std::dec << ",\n";
+    }
+    os << ")\n";
     os << "}";
     return os;
 }
@@ -9380,6 +9415,37 @@ bool validate(const eSpell16& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eSpellCategory& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case SPELLCATEGORY_Normal_summon: break;
+    case SPELLCATEGORY_Unit_enchantment: break;
+    case SPELLCATEGORY_Friendly_City_enchantment: break;
+    case SPELLCATEGORY_Hostile_City_enchantment: break;
+    case SPELLCATEGORY_Fixed_damage: break;
+    case SPELLCATEGORY_Special: break;
+    case SPELLCATEGORY_Target_wizard: break;
+    case SPELLCATEGORY_Global_enchantment: break;
+    case SPELLCATEGORY_Battle: break;
+    case SPELLCATEGORY_Create_item: break;
+    case SPELLCATEGORY_Destroy_unit: break;
+    case SPELLCATEGORY_Resistable_Combat_enchantment: break;
+    case SPELLCATEGORY_Unresistable_Combat_enchantment: break;
+    case SPELLCATEGORY_Mundane_Unit_enchantment: break;
+    case SPELLCATEGORY_Mundane_Combat_enchantment: break;
+    case SPELLCATEGORY_Dispel: break;
+    case SPELLCATEGORY_Disenchant: break;
+    case SPELLCATEGORY_Disjunction: break;
+    case SPELLCATEGORY_Counter: break;
+    case SPELLCATEGORY_Variable_damage: break;
+    case SPELLCATEGORY_Banish: break;
+    default: std::cout << context << ": Unknown eSpellCategory = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eSpellKnown& rhs, const std::string& context)
 {
     bool ok = true;
@@ -10762,11 +10828,9 @@ bool validate(const Skills& rhs, const std::string& context)
 bool validate(const Spell_Data& rhs, const std::string& context)
 {
     bool ok = true;
+    if (!validate(rhs.m_Spell_Category, context + ".m_Spell_Category")) ok = false;
     if (!validate(rhs.m_Section_in_spell_book, context + ".m_Section_in_spell_book")) ok = false;
     if (!validate(rhs.m_Magic_Realm, context + ".m_Magic_Realm")) ok = false;
-    if (!validate(rhs.m_Unit_Summoned_or_Spell_Strength, context + ".m_Unit_Summoned_or_Spell_Strength")) ok = false;
-    if (!validate(rhs.m_Immunity_Flags, context + ".m_Immunity_Flags")) ok = false;
-    if (!validate(rhs.m_Attack_Flags, context + ".m_Attack_Flags")) ok = false;
     return ok;
 }
 

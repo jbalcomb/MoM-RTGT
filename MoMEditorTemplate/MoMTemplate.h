@@ -1791,6 +1791,67 @@ enum eSlot_Type16 ENUMSIZE16
     eSlot_Type16__SIZE__ = 0xFFFF
 };
 
+enum eSpellCategory ENUMSIZE8
+{
+    SPELLCATEGORY_Normal_summon = 0x00,     // normal summoning spell (all but hero/champion/torin). Byte 0x20 contains the creature summoned, 21-23 are blank.
+    SPELLCATEGORY_Unit_enchantment = 0x01,  // enchantment that can be cast on a friendly unit. Bytes 0x20-0x23 contain the mask for the enchantment applied (same as bytes 0x18-0x1B in the unit data structure in the save file). While no current spells do this, it is possible to set more than one bit; doing so will apply both spells, and will also prevent casting if either spell is already on the unit.
+    SPELLCATEGORY_Friendly_City_enchantment = 0x02,  // enchantment hits a friendly city. Byte 0x20 contains the code for the city enchantment, in the same order as for city enchantments in the save file, but starts at 0 (0x00 is wall of fire, 0x18 is altar of battle).
+    SPELLCATEGORY_Hostile_City_enchantment = 0x03,  // enchantment hits a hostile city. Byte 0x20 is the same as above.
+    SPELLCATEGORY_Fixed_damage = 0x04,      // non-moddable damaging spell. Byte 0x20 is the magnitude, 0x21 is the immunity flags that apply (same as for monsters), 0x22 and 0x23 are attack flags (same as for monsters, but for byte 0x23, 0x80, listed as no effect for monsters, makes it act like warp lightning, and 0x10 makes it act like fireball. Neither flag seems to apply to critter attacks, though I haven't tried all possible combinations. Not all attack flags work for spells).
+    SPELLCATEGORY_Special = 0x05,           // unusual spells. I haven't been able to determine how they're parsed, and there are a lot of them.
+    SPELLCATEGORY_Target_wizard = 0x06,     // spells that target one wizard. 0x20 appears to be the effect (there are only four spells in this category: spell blast, cruel unminding, drain power, subversion).
+    SPELLCATEGORY_Global_enchantment = 0x09,// global enchantment. Byte 0x20 contains the code for the global enchantment, in the same order as for global enchantments in the save file, but starts at 0 (0x00 is eternal night, 0x17 is awareness).
+    SPELLCATEGORY_Battle = 0x0a,            // combat globals (affect all units). Mostly, it's twice the number of the enchantment (if you want, you can add +1, and apply spells to the other side), but the instants (Call Chaos, Death Spell, Holy Word, Mass Healing, Flame Strike) would appear to be special case coded. If byte 0x21 is set, it seems to just make the spell not work in most cases (cloning flame strike does not work). Enchantment codes are:
+                                            //    00: true light
+                                            //    02: darkness
+                                            //    04: warp reality
+                                            //    06: black prayer
+                                            //    08: wrack
+                                            //    0a: metal fires
+                                            //    0c: prayer
+                                            //    0e: high prayer
+                                            //    10: terror
+                                            //    12: call lightning
+                                            //    14: counter magic (which is a different bit; probably says moddable/not moddable)
+                                            //    16: mass invisibility
+                                            //    18: entangle
+                                            //    1a: mana leak
+                                            //    1c: blur
+    SPELLCATEGORY_Create_item = 0x0b,       // enchant item and create artifact.
+    SPELLCATEGORY_Destroy_unit = 0x0c,      // spells that destroy a unit. Byte 0x21 looks like it may be a normal immunity byte, as it's 0x22 for petrify, 0x20 for disintegrate, but there's missing information here.
+    SPELLCATEGORY_Resistable_Combat_enchantment = 0x0d,// hostile (resisted) combat enchantments. Bytes 0x20-0x21 are a mask for what effect is created:
+                                            //    0x0001: Warp Creature (Defense)
+                                            //    0x0002: Warp Creature (Resistance)
+                                            //    0x0004: Mind Twist, which is a status effect that uses the text for Mana Leak. The actual effect is apparently -1 to hit, -1 resistance (either won't reduce below 0, or the UI doesn't show negative attack modifiers).
+                                            //    0x0008: Haste (yeah, it's not a negative effect). It looks like combat-only enchantments use a different set of bits.
+                                            //    0x0010: Web. Applies the debuff, but either does nothing, or only removes flight (cannot determine on my test monster).
+                                            //    0x0020: Creature Binding. Puts a counter on the unit, but doesn't actually change allegiance.
+                                            //    0x0040: Possession. Puts a counter on the unit, but doesn't actually change allegiance.
+                                            //    0x0080: No Apparent Effect
+                                            //    0x0100: Vertigo
+                                            //    0x0200: Confusion
+                                            //    0x0400: Whirlwind (???) Puts a whirlwind counter on the unit, no apparent effect (may be related to magic vortex)
+                                            //    0x0800: Mind Storm
+                                            //    0x1000: Shatter
+                                            //    0x2000: Weakness
+                                            //    0x4000: Black Sleep
+                                            //    0x8000: Warp Creature (-50% attack)
+    SPELLCATEGORY_Unresistable_Combat_enchantment = 0x0e,   // hostile (un-resisted) combat enchantments. Otherwise as 0x0d
+    SPELLCATEGORY_Mundane_Unit_enchantment = 0x0f,          // friendly unit enchantment that only works on mundane units. Otherwise identical to 0x01.
+    SPELLCATEGORY_Mundane_Combat_enchantment = 0x10,        // hostile (resisted) combat enchantments that only work on mundane units.
+    SPELLCATEGORY_Dispel = 0x12,            // dispel magic, dispel magic true. Max cost = base cost * 5.
+    SPELLCATEGORY_Disenchant = 0x13,        // disenchant area, disenchant true. Max cost = base cost * 5.
+    SPELLCATEGORY_Disjunction = 0x14,       // disjunction, disjunction true. Max cost = base cost * 5.
+    SPELLCATEGORY_Counter = 0x15,           // counter magic. Max cost = base cost * 5. Functions otherwise like 0x0a, so it's likely that other area spells could be modded, though effects would likely be undefined.
+    SPELLCATEGORY_Variable_damage = 0x16,   // variable cost damage spells; max cost = base cost * 5. Otherwise identical to 0x04. The extra effect per extra mana spent is probably determined by the flags, it isn't coded here.
+                                            // Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball
+                                            //      base spell strength + (mana - cost)
+    SPELLCATEGORY_Banish = 0x17,
+
+    eSpellCategory_MAX
+};
+
+
 enum eSpellKnown ENUMSIZE8
 {
     SPELLKNOWN_unknown = 0,
@@ -2967,14 +3028,14 @@ typedef struct PACKED_STRUCT // Building_Data
     eYesNo16            m_Produces_Veterans;    // 1C
     eYesNo16            m_Produces_Magic_Weapons;   // 1E
     int16_t             m_Upkeep_yield;         // 20
-    uint16_t            m_Food_and_pop_bonus;   // 22
+    uint16_t            m_Food_and_pop_related; // 22
     uint16_t            m_Zero_24;              // 24
     uint16_t            m_Unk_26;               // 26
-    uint16_t            m_Mana_produced;        // 28
-    uint16_t            m_Unk_2A;               // 2A
+    uint16_t            m_Temple_related;       // 28
+    uint16_t            m_Research_related;     // 2A
     uint16_t            m_Building_cost;        // 2C
     uint16_t            m_Zero_2E;              // 2E
-    uint16_t            m_Unk_30;               // 30
+    uint16_t            m_Animation_related;    // 30
     uint16_t            m_Unk_32;               // 32
                                                 // SIZE 34
 } Building_Data;
@@ -4261,23 +4322,23 @@ typedef struct PACKED_STRUCT // Attribute_Flags
 
 typedef struct PACKED_STRUCT // Ability_Flags
 {
-    uint8_t     Summoned_Unit:1;      // 01
-    uint8_t     Large_Shield:1;     // 02
-    uint8_t     Plane_Shift:1;      // 04
-    uint8_t     Wall_Crusher:1;     // 08
-    uint8_t     Healer:1;       // 10
+    uint8_t     Summoned_Unit:1;        // 01
+    uint8_t     Large_Shield:1;         // 02
+    uint8_t     Plane_Shift:1;          // 04
+    uint8_t     Wall_Crusher:1;         // 08
+    uint8_t     Healer:1;               // 10
     uint8_t     Create_Outpost:1;       // 20
-    uint8_t     Invisibility:1;     // 40
+    uint8_t     Invisibility:1;         // 40
     uint8_t     Create_Undead:1;        // 80
 
-    uint8_t     Long_Range:1;       // 01
-    uint8_t     Land_Corruption:1;        // 02
+    uint8_t     Long_Range:1;           // 01
+    uint8_t     Land_Corruption:1;      // 02
     uint8_t     Meld_With_Node:1;       // 04
     uint8_t     Non_Corporeal:1;        // 08
-    uint8_t     Wind_Walking:1;     // 10
-    uint8_t     Regeneration:1;     // 20
-    uint8_t     Purify:1;       // 40
-    uint8_t     Negate_First_Strike:1;      // 80
+    uint8_t     Wind_Walking:1;         // 10
+    uint8_t     Regeneration:1;         // 20
+    uint8_t     Purify:1;               // 40
+    uint8_t     Negate_First_Strike:1;  // 80
 } Ability_Flags;
 
 typedef struct PACKED_STRUCT // Attack_Flags
@@ -4291,14 +4352,14 @@ typedef struct PACKED_STRUCT // Attack_Flags
     uint8_t     Illusionary_attack:1;   // 40
     uint8_t     Stoning_Touch:1;        // 80
 
-    uint8_t     No_effect05:1;          // 01
+    uint8_t     No_effect01:1;          // 01
     uint8_t     Death_Touch:1;          // 02
     uint8_t     Power_Drain:1;          // 04
     uint8_t     Dispel_Evil:1;          // 08
-    uint8_t     No_effect04_COMBAT:1;          // 10
-    uint8_t     No_effect03_COMBAT:1;          // 20
-    uint8_t     Eldritch_Weapon_COMBAT:1;      // 40
-    uint8_t     Warp_Lightning_COMBAT:1;          // 80
+    uint8_t     Ball_COMBAT:1;          // 10
+    uint8_t     No_effect20_COMBAT:1;   // 20
+    uint8_t     Eldritch_Weapon_COMBAT:1;   // 40
+    uint8_t     Warp_Lightning_COMBAT:1;// 80
 } Attack_Flags;
 
 typedef union // unionMovement_Flags;
@@ -4348,15 +4409,7 @@ typedef struct PACKED_STRUCT // Spell_Data
 {
     char            m_SpellName[19];            // 00 ",    0X0,    0x50000400, 0x0,    19);
     int16_t         m_Spell_desirability;       // 13,   0x10000400, -1, 2);
-    int8_t          m_Spell_Category;           // 15,   0x000400,   -1, 1);
-                            // Spell category?
-                            // 4 = Damage spells, spell strength = 0
-                            // 12 = Dispel Evil
-							// 19 = Chargeable spells: Disenchant
-							// 21 = Chargeable spell: Counter Magic
-                            // 22 = Chargeable spells: Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball;
-                            //      base spell strength + (mana - cost)
-							// 23 = Banish (chargeable?)
+    eSpellCategory  m_Spell_Category;           // 15,   0x000400,   -1, 1);
     eSpell_Type     m_Section_in_spell_book;    // 16,   0x000400,   -1, 1);
     eRealm_Type     m_Magic_Realm;              // 17,   0x800400,   GetEnum("enum_RealmType"),  1);
     int8_t          m_Casting_eligibility;      // 18,   0x000400,   -1, 1);
@@ -4364,9 +4417,10 @@ typedef struct PACKED_STRUCT // Spell_Data
     uint16_t        m_Casting_cost;             // 1A,   0x10000400, -1, 2);
     uint16_t        m_Research_cost;            // 1C,   0x10000400, -1, 2);
     int16_t         m_Sound_effect_when_casting_spell;  // 1E,   0x10000400, -1, 2);
-    eUnit_Type      m_Unit_Summoned_or_Spell_Strength;            // 20,   0x000400,   -1, 1);
-    unionImmunity_Flags m_Immunity_Flags;       // 21,   0x800400,   GetEnum("enum_AtrributeFlags"), 1);
-    unionAttack_Flags   m_Attack_Flags;         // 22,   0x10800400, GetEnum("enum_AttackFlags"),    2);
+    uint8_t         m_Parameters[4];            // 20-23
+//    eUnit_Type      m_Unit_Summoned_or_Spell_Strength;            // 20,   0x000400,   -1, 1);
+//    unionImmunity_Flags m_Immunity_Flags;       // 21,   0x800400,   GetEnum("enum_AtrributeFlags"), 1);
+//    unionAttack_Flags   m_Attack_Flags;         // 22,   0x10800400, GetEnum("enum_AttackFlags"),    2);
                                                 // SIZE 24
 } Spell_Data;
 

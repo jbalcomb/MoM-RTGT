@@ -5,6 +5,8 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.4 (2012--)
 -----------------------------
 
+* Added Anthony's spell-category information to the table of spells [Anthony].
+
 * Made all fields in all tables editable (button "Show tables").
   Also added a context popup menu.
   The context menu contains at least "Ctrl+C" that allows you to copy

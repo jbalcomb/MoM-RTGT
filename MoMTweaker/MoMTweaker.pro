@@ -33,6 +33,7 @@ TARGET = MoMTweaker
 DESTDIR = $${COMPILER}/bin
 
 QT += core gui
+QT += xml
 CONFIG += debug
 
 #DEFINES += QT_LARGEFILE_SUPPORT
@@ -51,4 +52,8 @@ include(MoMTweaker.pri)
 # Additional platform specific sources
 SOURCES += \
     ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
-    ./main.cpp
+    ./main.cpp \
+    QMoMTreeCustomExtensions.cpp
+
+HEADERS += \
+    QMoMTreeCustomExtensions.h

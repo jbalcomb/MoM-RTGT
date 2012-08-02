@@ -242,15 +242,15 @@ QMoMTreeItemBase* constructTreeItem(Attack_Flags* rhs, const QString& context)
         ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskStoning_Touch));
     else
         ptree->appendChild("Stoning_Touch", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskStoning_Touch));
-    Attack_Flags maskNo_effect05;
-    memset(&maskNo_effect05, '\0', sizeof(maskNo_effect05));
-    maskNo_effect05.No_effect05 = 1;
-    if (1 == sizeof(maskNo_effect05))
-        ptree->appendChild("No_effect05", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect05));
-    else if (2 == sizeof(maskNo_effect05))
-        ptree->appendChild("No_effect05", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect05));
+    Attack_Flags maskNo_effect01;
+    memset(&maskNo_effect01, '\0', sizeof(maskNo_effect01));
+    maskNo_effect01.No_effect01 = 1;
+    if (1 == sizeof(maskNo_effect01))
+        ptree->appendChild("No_effect01", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect01));
+    else if (2 == sizeof(maskNo_effect01))
+        ptree->appendChild("No_effect01", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect01));
     else
-        ptree->appendChild("No_effect05", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect05));
+        ptree->appendChild("No_effect01", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect01));
     Attack_Flags maskDeath_Touch;
     memset(&maskDeath_Touch, '\0', sizeof(maskDeath_Touch));
     maskDeath_Touch.Death_Touch = 1;
@@ -278,24 +278,24 @@ QMoMTreeItemBase* constructTreeItem(Attack_Flags* rhs, const QString& context)
         ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskDispel_Evil));
     else
         ptree->appendChild("Dispel_Evil", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskDispel_Evil));
-    Attack_Flags maskNo_effect04_COMBAT;
-    memset(&maskNo_effect04_COMBAT, '\0', sizeof(maskNo_effect04_COMBAT));
-    maskNo_effect04_COMBAT.No_effect04_COMBAT = 1;
-    if (1 == sizeof(maskNo_effect04_COMBAT))
-        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect04_COMBAT));
-    else if (2 == sizeof(maskNo_effect04_COMBAT))
-        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect04_COMBAT));
+    Attack_Flags maskBall_COMBAT;
+    memset(&maskBall_COMBAT, '\0', sizeof(maskBall_COMBAT));
+    maskBall_COMBAT.Ball_COMBAT = 1;
+    if (1 == sizeof(maskBall_COMBAT))
+        ptree->appendChild("Ball_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskBall_COMBAT));
+    else if (2 == sizeof(maskBall_COMBAT))
+        ptree->appendChild("Ball_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskBall_COMBAT));
     else
-        ptree->appendChild("No_effect04_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect04_COMBAT));
-    Attack_Flags maskNo_effect03_COMBAT;
-    memset(&maskNo_effect03_COMBAT, '\0', sizeof(maskNo_effect03_COMBAT));
-    maskNo_effect03_COMBAT.No_effect03_COMBAT = 1;
-    if (1 == sizeof(maskNo_effect03_COMBAT))
-        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect03_COMBAT));
-    else if (2 == sizeof(maskNo_effect03_COMBAT))
-        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect03_COMBAT));
+        ptree->appendChild("Ball_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskBall_COMBAT));
+    Attack_Flags maskNo_effect20_COMBAT;
+    memset(&maskNo_effect20_COMBAT, '\0', sizeof(maskNo_effect20_COMBAT));
+    maskNo_effect20_COMBAT.No_effect20_COMBAT = 1;
+    if (1 == sizeof(maskNo_effect20_COMBAT))
+        ptree->appendChild("No_effect20_COMBAT", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskNo_effect20_COMBAT));
+    else if (2 == sizeof(maskNo_effect20_COMBAT))
+        ptree->appendChild("No_effect20_COMBAT", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNo_effect20_COMBAT));
     else
-        ptree->appendChild("No_effect03_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect03_COMBAT));
+        ptree->appendChild("No_effect20_COMBAT", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNo_effect20_COMBAT));
     Attack_Flags maskEldritch_Weapon_COMBAT;
     memset(&maskEldritch_Weapon_COMBAT, '\0', sizeof(maskEldritch_Weapon_COMBAT));
     maskEldritch_Weapon_COMBAT.Eldritch_Weapon_COMBAT = 1;
@@ -944,14 +944,14 @@ QMoMTreeItemBase* constructTreeItem(Building_Data* rhs, const QString& context)
     ptree->appendChild("m_Produces_Veterans", new QMoMTreeItem<eYesNo16>(&rhs->m_Produces_Veterans));
     ptree->appendChild("m_Produces_Magic_Weapons", new QMoMTreeItem<eYesNo16>(&rhs->m_Produces_Magic_Weapons));
     ptree->appendChild("m_Upkeep_yield", new QMoMTreeItem<int16_t>(&rhs->m_Upkeep_yield));
-    ptree->appendChild("m_Food_and_pop_bonus", new QMoMTreeItem<uint16_t>(&rhs->m_Food_and_pop_bonus));
+    ptree->appendChild("m_Food_and_pop_related", new QMoMTreeItem<uint16_t>(&rhs->m_Food_and_pop_related));
     ptree->appendChild("m_Zero_24", new QMoMTreeItem<uint16_t>(&rhs->m_Zero_24));
     ptree->appendChild("m_Unk_26", new QMoMTreeItem<uint16_t>(&rhs->m_Unk_26));
-    ptree->appendChild("m_Mana_produced", new QMoMTreeItem<uint16_t>(&rhs->m_Mana_produced));
-    ptree->appendChild("m_Unk_2A", new QMoMTreeItem<uint16_t>(&rhs->m_Unk_2A));
+    ptree->appendChild("m_Temple_related", new QMoMTreeItem<uint16_t>(&rhs->m_Temple_related));
+    ptree->appendChild("m_Research_related", new QMoMTreeItem<uint16_t>(&rhs->m_Research_related));
     ptree->appendChild("m_Building_cost", new QMoMTreeItem<uint16_t>(&rhs->m_Building_cost));
     ptree->appendChild("m_Zero_2E", new QMoMTreeItem<uint16_t>(&rhs->m_Zero_2E));
-    ptree->appendChild("m_Unk_30", new QMoMTreeItem<uint16_t>(&rhs->m_Unk_30));
+    ptree->appendChild("m_Animation_related", new QMoMTreeItem<uint16_t>(&rhs->m_Animation_related));
     ptree->appendChild("m_Unk_32", new QMoMTreeItem<uint16_t>(&rhs->m_Unk_32));
     return ptree;
 }
@@ -3915,7 +3915,7 @@ QMoMTreeItemBase* constructTreeItem(Spell_Data* rhs, const QString& context)
 
     ptree->appendChild("m_SpellName", new QMoMTreeItem<char[19]>(rhs->m_SpellName));
     ptree->appendChild("m_Spell_desirability", new QMoMTreeItem<int16_t>(&rhs->m_Spell_desirability));
-    ptree->appendChild("m_Spell_Category", new QMoMTreeItem<int8_t>(&rhs->m_Spell_Category));
+    ptree->appendChild("m_Spell_Category", new QMoMTreeItem<eSpellCategory>(&rhs->m_Spell_Category));
     ptree->appendChild("m_Section_in_spell_book", new QMoMTreeItem<eSpell_Type>(&rhs->m_Section_in_spell_book));
     ptree->appendChild("m_Magic_Realm", new QMoMTreeItem<eRealm_Type>(&rhs->m_Magic_Realm));
     ptree->appendChild("m_Casting_eligibility", new QMoMTreeItem<int8_t>(&rhs->m_Casting_eligibility));
@@ -3923,9 +3923,18 @@ QMoMTreeItemBase* constructTreeItem(Spell_Data* rhs, const QString& context)
     ptree->appendChild("m_Casting_cost", new QMoMTreeItem<uint16_t>(&rhs->m_Casting_cost));
     ptree->appendChild("m_Research_cost", new QMoMTreeItem<uint16_t>(&rhs->m_Research_cost));
     ptree->appendChild("m_Sound_effect_when_casting_spell", new QMoMTreeItem<int16_t>(&rhs->m_Sound_effect_when_casting_spell));
-    ptree->appendChild("m_Unit_Summoned_or_Spell_Strength", new QMoMTreeItem<eUnit_Type>(&rhs->m_Unit_Summoned_or_Spell_Strength));
-    ptree->appendTree(constructTreeItem(&rhs->m_Immunity_Flags, "m_Immunity_Flags"), "");
-    ptree->appendTree(constructTreeItem(&rhs->m_Attack_Flags, "m_Attack_Flags"), "");
+    QMoMTreeItemBase* ptreem_Parameters = ptree;
+    if (4 > 3)
+    {
+        ptreem_Parameters = new QMoMTreeItemBase("m_Parameters");
+        ptree->appendTree(ptreem_Parameters, "");
+    }
+    for (unsigned i = 0; i < 4; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Parameters[" << i << "]";
+          ptreem_Parameters->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Parameters[i]));
+    }
     return ptree;
 }
 

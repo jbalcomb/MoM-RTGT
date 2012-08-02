@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;.\..\MoMEditorTemplate;."
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;.\..\MoMEditorTemplate;."
 				PreprocessorDefinitions="UNICODE;WIN32;_CRT_SECURE_NO_WARNINGS;QT_LARGEFILE_SUPPORT;QT_THREAD_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
@@ -59,7 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtXml4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="false"
@@ -111,7 +111,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;.\..\MoMEditorTemplate;."
+				AdditionalIncludeDirectories="&quot;.\GeneratedFiles&quot;;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;.\..\MoMEditorTemplate&quot;"
 				PreprocessorDefinitions="UNICODE;WIN32;_CRT_SECURE_NO_WARNINGS;QT_LARGEFILE_SUPPORT;QT_THREAD_SUPPORT;QT_CORE_LIB;QT_GUI_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -285,6 +285,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QMoMTreeCustomExtensions.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\QMoMTreeItem.cpp"
 				>
 			</File>
@@ -315,7 +319,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogaddunit.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -326,7 +330,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogaddunit.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -341,7 +345,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogbuildingqueues.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -352,7 +356,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogbuildingqueues.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -367,7 +371,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogcalculatoraddress.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -378,7 +382,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogcalculatoraddress.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -393,7 +397,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogoverlandmap.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -404,7 +408,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogoverlandmap.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -419,7 +423,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogselectinitialspells.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -430,7 +434,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogselectinitialspells.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -445,7 +449,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtables.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -456,7 +460,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtables.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -471,7 +475,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtools.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -482,7 +486,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtools.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -497,7 +501,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing mainwindow.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -508,7 +512,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing mainwindow.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -607,6 +611,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QMoMTreeCustomExtensions.h"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\QMoMTreeItem.h"
 				>
 			</File>
@@ -619,7 +627,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing QMoMUnitTile.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -630,7 +638,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing QMoMUnitTile.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -649,7 +657,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing unitmodel.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -660,7 +668,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing unitmodel.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -1288,7 +1296,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\race\Barbarian.gif"
+				RelativePath="..\Resources\units\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1308,7 +1316,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Barbarian.gif"
+				RelativePath="..\Resources\race\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1728,6 +1736,46 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Caster 20 MP.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Caster 40 MP.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\abilities\Caster.gif"
 				>
 				<FileConfiguration
@@ -1808,7 +1856,67 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Chaos Channels Demon Skin.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Chaos Channels Demon Wings.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\spells\Chaos Channels Demon Wings.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Chaos Channels Fiery Breath.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2028,6 +2136,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Confusion.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\abilities\Constitution X.gif"
 				>
 				<FileConfiguration
@@ -2148,6 +2276,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Creature Binding.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\race\Dark Elf.gif"
 				>
 				<FileConfiguration
@@ -2228,6 +2376,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Death Touch.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\images\Death.gif"
 				>
 				<FileConfiguration
@@ -2288,7 +2456,47 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Destruction.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\abilities\Dispel Evil.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Dispel Evil.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2529,6 +2737,26 @@
 			</File>
 			<File
 				RelativePath="..\Resources\units\Elven Archer.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Endurance.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3208,6 +3436,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Heroism.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\race\High Elf.gif"
 				>
 				<FileConfiguration
@@ -3468,7 +3716,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Immolation.gif"
+				RelativePath="..\Resources\abilities\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3488,7 +3736,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Immolation.gif"
+				RelativePath="..\Resources\spells\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3517,7 +3765,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);..\Resources\abilities\Agility X.gif;..\Resources\abilities\Agility.gif;..\Resources\abilities\Arcane Power X.gif;..\Resources\abilities\Arcane Power.gif;..\Resources\abilities\Armor Piercing.gif;..\Resources\abilities\Armsmaster X.gif;..\Resources\abilities\Armsmaster.gif;..\Resources\abilities\Arrows.gif;..\Resources\abilities\Blademaster X.gif;..\Resources\abilities\Blademaster.gif;..\Resources\abilities\Bullets.gif;..\Resources\abilities\Caster.gif;..\Resources\abilities\Cause Fear Spell.gif;..\Resources\abilities\Charmed.gif;..\Resources\abilities\Cold Immunity.gif;..\Resources\abilities\Constitution.gif;..\Resources\abilities\Constitution X.gif;..\Resources\abilities\Construction.gif;..\Resources\abilities\Create Outpost.gif;..\Resources\abilities\Create Undead.gif;..\Resources\abilities\Death Gaze.gif;..\Resources\abilities\Death Immunity.gif;..\Resources\abilities\Dispel Evil.gif;..\Resources\abilities\Doom Gaze.gif;..\Resources\abilities\Doombolt Spell.gif;..\Resources\abilities\Fire Ball Spell.gif;..\Resources\abilities\Fire Breath.gif;..\Resources\abilities\Fire Immunity.gif;..\Resources\abilities\First Strike.gif;..\Resources\abilities\Flying.gif;..\Resources\abilities\Forester.gif;..\Resources\abilities\Healer.gif;..\Resources\abilities\Healing Spell.gif;..\Resources\abilities\Holy Bonus.gif;..\Resources\abilities\Illusions Immunity.gif;..\Resources\abilities\Illusionary attack.gif;..\Resources\abilities\Immolation.gif;..\Resources\abilities\Invisibility.gif;..\Resources\abilities\Large Shield.gif;..\Resources\abilities\Leadership X.gif;..\Resources\abilities\Leadership.gif;..\Resources\abilities\Legendary X.gif;..\Resources\abilities\Legendary.gif;..\Resources\abilities\Life Stealing.gif;..\Resources\abilities\Lightning.gif;..\Resources\abilities\Long Range.gif;..\Resources\abilities\Lucky.gif;..\Resources\abilities\Magic Immunity.gif;..\Resources\abilities\Magic Ranged.gif;..\Resources\abilities\Magic Weapon.gif;..\Resources\abilities\Meld With Node.gif;..\Resources\abilities\Merging.gif;..\Resources\abilities\Might X.gif;..\Resources\abilities\Might.gif;..\Resources\abilities\Missiles Immunity.gif;..\Resources\abilities\Mountaineer.gif;..\Resources\abilities\Negate First Strike.gif;..\Resources\abilities\Noble.gif;..\Resources\abilities\Non Corporeal.gif;..\Resources\abilities\Pathfinding.gif;..\Resources\abilities\Plane Shift.gif;..\Resources\abilities\Poison Immunity.gif;..\Resources\abilities\Poison attack.gif;..\Resources\abilities\Prayermaster X.gif;..\Resources\abilities\Prayermaster.gif;..\Resources\abilities\Purify.gif;..\Resources\abilities\Random Any.gif;..\Resources\abilities\Random Ftr.gif;..\Resources\abilities\Random Mage.gif;..\Resources\abilities\Regeneration.gif;..\Resources\abilities\Resistance to All.gif;..\Resources\abilities\Rocks.gif;..\Resources\abilities\Sage X.gif;..\Resources\abilities\Sage.gif;..\Resources\abilities\Sailing.gif;..\Resources\abilities\Scout.gif;..\Resources\abilities\Stoning Gaze.gif;..\Resources\abilities\Stoning Immunity.gif;..\Resources\abilities\Stoning Touch.gif;..\Resources\abilities\Summon Demons.gif;..\Resources\abilities\Swimming.gif;..\Resources\abilities\Teleporting.gif;..\Resources\abilities\Thrown.gif;..\Resources\abilities\Undead.gif;..\Resources\abilities\Wall Crusher.gif;..\Resources\abilities\Weapon Immunity.gif;..\Resources\abilities\Web Spell.gif;..\Resources\abilities\Web.gif;..\Resources\abilities\Wind Walking.gif;..\Resources\images\background_screen.gif;..\Resources\images\background_unit.gif;..\Resources\images\bow_gold.gif;..\Resources\images\bow_gold_lost.gif;..\Resources\images\bow_normal.gif;..\Resources\images\bow_normal_lost.gif;..\Resources\images\elite.gif;..\Resources\images\fireball_gold.gif;..\Resources\images\fireball_gold_lost.gif;..\Resources\images\fireball_normal.gif;..\Resources\images\fireball_normal_lost.gif;..\Resources\images\firebreath.gif;..\Resources\images\grandlord.gif;..\Resources\images\hand.cur;..\Resources\images\hand.gif;..\Resources\images\heart_gold.gif;..\Resources\images\heart_gold_lost.gif;..\Resources\images\heart_normal.gif;..\Resources\images\heart_normal_lost.gif;..\Resources\images\ranged_unknown.gif;..\Resources\images\recruit.gif;..\Resources\images\regular.gif;..\Resources\images\resistance_gold.gif;..\Resources\images\resistance_gold_lost.gif;..\Resources\images\resistance_normal.gif;..\Resources\images\resistance_normal_lost.gif;..\Resources\images\rock_gold.gif;..\Resources\images\rock_gold_lost.gif;..\Resources\images\rock_normal.gif;..\Resources\images\rock_normal_lost.gif;..\Resources\images\shield_gold.gif;..\Resources\images\shield_gold_lost.gif;..\Resources\images\shield_normal.gif;..\Resources\images\shield_normal_lost.gif;..\Resources\images\superhero.gif;..\Resources\images\sword_adamantium_gold.gif;..\Resources\images\sword_adamantium_gold_lost.gif;..\Resources\images\sword_adamantium_normal.gif;..\Resources\images\sword_adamantium_normal_lost.gif;..\Resources\images\sword_gold.gif;..\Resources\images\sword_gold_lost.gif;..\Resources\images\sword_magic_gold.gif;..\Resources\images\sword_magic_gold_lost.gif;..\Resources\images\sword_magic_normal.gif;..\Resources\images\sword_magic_normal_lost.gif;..\Resources\images\sword_mithril_gold.gif;..\Resources\images\sword_mithril_gold_lost.gif;..\Resources\images\sword_mithril_normal.gif;..\Resources\images\sword_mithril_normal_lost.gif;..\Resources\images\sword_normal.gif;..\Resources\images\sword_normal_lost.gif;..\Resources\images\thrown.gif;..\Resources\images\tohit.gif;..\Resources\images\tohit_lost.gif;..\Resources\images\ultraelite.gif;..\Resources\images\veteran.gif;..\Resources\images\Arcane.gif;..\Resources\images\Arrow.gif;..\Resources\images\Attack.gif;..\Resources\images\Bullet.gif;..\Resources\images\Chaos.gif;..\Resources\images\Death.gif;..\Resources\images\Hitpoints.gif;..\Resources\images\Hitpoints per Figure.gif;..\Resources\images\Level 1.gif;..\Resources\images\Level 2.gif;..\Resources\images\Level 3.gif;..\Resources\images\Level 4.gif;..\Resources\images\Level 5.gif;..\Resources\images\Level 6.gif;..\Resources\images\Level 7.gif;..\Resources\images\Level 8.gif;..\Resources\images\Level 9.gif;..\Resources\images\Life.gif;..\Resources\images\Melee.gif;..\Resources\images\Nature.gif;..\Resources\images\Ranged.gif;..\Resources\images\Defense.gif;..\Resources\images\Resistance.gif;..\Resources\images\Sorcery.gif;..\Resources\images\To Hit.gif;..\Resources\race\Barbarian.gif;..\Resources\race\Beastmen.gif;..\Resources\race\Dark Elf.gif;..\Resources\race\Draconian.gif;..\Resources\race\Dwarven.gif;..\Resources\race\Gnoll.gif;..\Resources\race\Halfling.gif;..\Resources\race\High Elf.gif;..\Resources\race\High Men.gif;..\Resources\race\Klackon.gif;..\Resources\race\Lizardman.gif;..\Resources\race\Nomad.gif;..\Resources\race\Orc.gif;..\Resources\race\Troll.gif;..\Resources\spells\Berserk.gif;..\Resources\spells\Black Channels.gif;..\Resources\spells\Black Prayer.gif;..\Resources\spells\Black Sleep.gif;..\Resources\spells\Bless.gif;..\Resources\spells\Blur.gif;..\Resources\spells\Chaos Channels Demon Wings.gif;..\Resources\spells\Chaos Channels Demon Skin.gif;..\Resources\spells\Chaos Channels Fiery Breath.gif;..\Resources\spells\Chaos Channels.gif;..\Resources\spells\Chaos Surge.gif;..\Resources\spells\Charm of Life.gif;..\Resources\spells\Cloak of Fear.gif;..\Resources\spells\Counter Magic.gif;..\Resources\spells\Darkness.gif;..\Resources\spells\Eldritch Weapon.gif;..\Resources\spells\Elemental Armor.gif;..\Resources\spells\Flame Blade.gif;..\Resources\spells\Flight.gif;..\Resources\spells\Giant Strength.gif;..\Resources\spells\Guardian Wind.gif;..\Resources\spells\Haste.gif;..\Resources\spells\High Prayer.gif;..\Resources\spells\Holy Armor.gif;..\Resources\spells\Holy Weapon.gif;..\Resources\spells\Immolation.gif;..\Resources\spells\Invisibility.gif;..\Resources\spells\Invulnerability.gif;..\Resources\spells\Iron Skin.gif;..\Resources\spells\Lionheart.gif;..\Resources\spells\Magic Immunity.gif;..\Resources\spells\Metal Fires.gif;..\Resources\spells\Path Finding.gif;..\Resources\spells\Prayer.gif;..\Resources\spells\Regeneration.gif;..\Resources\spells\Resist Elements.gif;..\Resources\spells\Resist Magic.gif;..\Resources\spells\Righteousness.gif;..\Resources\spells\Shatter.gif;..\Resources\spells\Stone Skin.gif;..\Resources\spells\Terror.gif;..\Resources\spells\True Light.gif;..\Resources\spells\True Sight.gif;..\Resources\spells\Vertigo.gif;..\Resources\spells\Warp Creature.gif;..\Resources\spells\Warp Reality.gif;..\Resources\spells\Warp Wood.gif;..\Resources\spells\Weakness.gif;..\Resources\spells\Web.gif;..\Resources\spells\Wrack.gif;..\Resources\spells\Wraith Form.gif;..\Resources\heroes\aerie.gif;..\Resources\heroes\allora.gif;..\Resources\heroes\aureus.gif;..\Resources\heroes\bahgtru.gif;..\Resources\heroes\brax.gif;..\Resources\heroes\bshan.gif;..\Resources\heroes\catwalk.jpg;..\Resources\heroes\elana.gif;..\Resources\heroes\fang.gif;..\Resources\heroes\greyfar.gif;..\Resources\heroes\gunthar.gif;..\Resources\heroes\jaer.gif;..\Resources\heroes\lucern.png;..\Resources\heroes\malleus.gif;..\Resources\heroes\marcus.gif;..\Resources\heroes\morgana.gif;..\Resources\heroes\mortu.gif;..\Resources\heroes\mystic_x.gif;..\Resources\heroes\rakir.gif;..\Resources\heroes\ravashak.gif;..\Resources\heroes\reywind.gif;..\Resources\heroes\roland.gif;..\Resources\heroes\serena.gif;..\Resources\heroes\shalla.gif;..\Resources\heroes\shin_bo.gif;..\Resources\heroes\shuri.gif;..\Resources\heroes\sir_hrld.gif;..\Resources\heroes\spyder.gif;..\Resources\heroes\stryke.gif;..\Resources\heroes\taki.gif;..\Resources\heroes\theria.gif;..\Resources\heroes\torin.gif;..\Resources\heroes\tumu.gif;..\Resources\heroes\valana.gif;..\Resources\heroes\warrax.gif;..\Resources\heroes\yramrag.gif;..\Resources\heroes\zaldron.gif;..\Resources\units\Amazon.gif;..\Resources\units\Assassin.gif;..\Resources\units\Barbarian.gif;..\Resources\units\Bard.gif;..\Resources\units\Beastmaster.gif;..\Resources\units\Black Knight.gif;..\Resources\units\Chaos Warrior.gif;..\Resources\units\Chosen.gif;..\Resources\units\Dervish.gif;..\Resources\units\Draconian.gif;..\Resources\units\Druid.gif;..\Resources\units\Dwarf.gif;..\Resources\units\Elven Archer.gif;..\Resources\units\Golden One.gif;..\Resources\units\Healer.gif;..\Resources\units\Huntress.gif;..\Resources\units\Illusionist.gif;..\Resources\units\Knight.gif;..\Resources\units\Magician.gif;..\Resources\units\Unknown.gif;..\Resources\units\Necromancer.gif;..\Resources\units\Ninja.gif;..\Resources\units\Orc Warrior.gif;..\Resources\units\Paladin.gif;..\Resources\units\Priestess.gif;..\Resources\units\Ranger.gif;..\Resources\units\Rogue.gif;..\Resources\units\Sage.gif;..\Resources\units\Serena.jpg;..\Resources\units\Swordsman.gif;..\Resources\units\Thief.gif;..\Resources\units\War Monk.gif;..\Resources\units\Warlock.gif;..\Resources\units\Warrior Mage.gif;..\Resources\units\Wind Mage.gif;..\Resources\units\Witch.gif;..\Resources\wizards\Ariel.gif;..\Resources\wizards\Freya.gif;..\Resources\wizards\Horus.gif;..\Resources\wizards\Jafar.gif;..\Resources\wizards\Kali.gif;..\Resources\wizards\Lo Pan.gif;..\Resources\wizards\Merlin.gif;..\Resources\wizards\Oberic.gif;..\Resources\wizards\Raven.gif;..\Resources\wizards\Rjak.gif;..\Resources\wizards\Sharee.gif;..\Resources\wizards\Sssra.gif;..\Resources\wizards\Tauron.gif;..\Resources\wizards\Tlaloc.gif"
+						AdditionalDependencies="$(InputPath);..\Resources\abilities\Agility X.gif;..\Resources\abilities\Agility.gif;..\Resources\abilities\Arcane Power X.gif;..\Resources\abilities\Arcane Power.gif;..\Resources\abilities\Armor Piercing.gif;..\Resources\abilities\Armsmaster X.gif;..\Resources\abilities\Armsmaster.gif;..\Resources\abilities\Arrows.gif;..\Resources\abilities\Blademaster X.gif;..\Resources\abilities\Blademaster.gif;..\Resources\abilities\Bullets.gif;..\Resources\abilities\Caster.gif;..\Resources\abilities\Caster 20 MP.gif;..\Resources\abilities\Caster 40 MP.gif;..\Resources\abilities\Cause Fear Spell.gif;..\Resources\abilities\Charmed.gif;..\Resources\abilities\Chaos Channels Demon Wings.gif;..\Resources\abilities\Chaos Channels Demon Skin.gif;..\Resources\abilities\Chaos Channels Fiery Breath.gif;..\Resources\abilities\Cold Immunity.gif;..\Resources\abilities\Constitution.gif;..\Resources\abilities\Constitution X.gif;..\Resources\abilities\Construction.gif;..\Resources\abilities\Create Outpost.gif;..\Resources\abilities\Create Undead.gif;..\Resources\abilities\Death Gaze.gif;..\Resources\abilities\Death Immunity.gif;..\Resources\abilities\Death Touch.gif;..\Resources\abilities\Destruction.gif;..\Resources\abilities\Dispel Evil.gif;..\Resources\abilities\Doom Gaze.gif;..\Resources\abilities\Doombolt Spell.gif;..\Resources\abilities\Fire Ball Spell.gif;..\Resources\abilities\Fire Breath.gif;..\Resources\abilities\Fire Immunity.gif;..\Resources\abilities\First Strike.gif;..\Resources\abilities\Flying.gif;..\Resources\abilities\Forester.gif;..\Resources\abilities\Healer.gif;..\Resources\abilities\Healing Spell.gif;..\Resources\abilities\Holy Bonus.gif;..\Resources\abilities\Illusions Immunity.gif;..\Resources\abilities\Illusionary attack.gif;..\Resources\abilities\Immolation.gif;..\Resources\abilities\Invisibility.gif;..\Resources\abilities\Land Corruption.gif;..\Resources\abilities\Large Shield.gif;..\Resources\abilities\Leadership X.gif;..\Resources\abilities\Leadership.gif;..\Resources\abilities\Legendary X.gif;..\Resources\abilities\Legendary.gif;..\Resources\abilities\Life Stealing.gif;..\Resources\abilities\Lightning.gif;..\Resources\abilities\Long Range.gif;..\Resources\abilities\Lucky.gif;..\Resources\abilities\Lucky_Hero.gif;..\Resources\abilities\Magic Immunity.gif;..\Resources\abilities\Magic Ranged.gif;..\Resources\abilities\Magic Weapon.gif;..\Resources\abilities\Meld With Node.gif;..\Resources\abilities\Merging.gif;..\Resources\abilities\Might X.gif;..\Resources\abilities\Might.gif;..\Resources\abilities\Missiles Immunity.gif;..\Resources\abilities\Mountaineer.gif;..\Resources\abilities\Negate First Strike.gif;..\Resources\abilities\Noble.gif;..\Resources\abilities\Non Corporeal.gif;..\Resources\abilities\Pathfinding.gif;..\Resources\abilities\Plane Shift.gif;..\Resources\abilities\Poison Immunity.gif;..\Resources\abilities\Poison attack.gif;..\Resources\abilities\Power Drain.gif;..\Resources\abilities\Prayermaster X.gif;..\Resources\abilities\Prayermaster.gif;..\Resources\abilities\Purify.gif;..\Resources\abilities\Random Any.gif;..\Resources\abilities\Random Ftr.gif;..\Resources\abilities\Random Mage.gif;..\Resources\abilities\Regeneration.gif;..\Resources\abilities\Resistance to All.gif;..\Resources\abilities\Rocks.gif;..\Resources\abilities\Sage X.gif;..\Resources\abilities\Sage.gif;..\Resources\abilities\Sailing.gif;..\Resources\abilities\Scouting.gif;..\Resources\abilities\Stoning Gaze.gif;..\Resources\abilities\Stoning Immunity.gif;..\Resources\abilities\Stoning Touch.gif;..\Resources\abilities\Summon Demons.gif;..\Resources\abilities\Summon Demons 1.gif;..\Resources\abilities\Summon Demons 2.gif;..\Resources\abilities\Swimming.gif;..\Resources\abilities\Teleporting.gif;..\Resources\abilities\Thrown.gif;..\Resources\abilities\Undead.gif;..\Resources\abilities\Wall Crusher.gif;..\Resources\abilities\Weapon Immunity.gif;..\Resources\abilities\Web Spell.gif;..\Resources\abilities\Web.gif;..\Resources\abilities\Wind Walking.gif;..\Resources\images\background_screen.gif;..\Resources\images\background_unit.gif;..\Resources\images\bow_gold.gif;..\Resources\images\bow_gold_lost.gif;..\Resources\images\bow_normal.gif;..\Resources\images\bow_normal_lost.gif;..\Resources\images\elite.gif;..\Resources\images\fireball_gold.gif;..\Resources\images\fireball_gold_lost.gif;..\Resources\images\fireball_normal.gif;..\Resources\images\fireball_normal_lost.gif;..\Resources\images\firebreath.gif;..\Resources\images\grandlord.gif;..\Resources\images\hand.cur;..\Resources\images\hand.gif;..\Resources\images\heart_gold.gif;..\Resources\images\heart_gold_lost.gif;..\Resources\images\heart_normal.gif;..\Resources\images\heart_normal_lost.gif;..\Resources\images\ranged_unknown.gif;..\Resources\images\recruit.gif;..\Resources\images\regular.gif;..\Resources\images\resistance_gold.gif;..\Resources\images\resistance_gold_lost.gif;..\Resources\images\resistance_normal.gif;..\Resources\images\resistance_normal_lost.gif;..\Resources\images\rock_gold.gif;..\Resources\images\rock_gold_lost.gif;..\Resources\images\rock_normal.gif;..\Resources\images\rock_normal_lost.gif;..\Resources\images\shield_gold.gif;..\Resources\images\shield_gold_lost.gif;..\Resources\images\shield_normal.gif;..\Resources\images\shield_normal_lost.gif;..\Resources\images\superhero.gif;..\Resources\images\sword_adamantium_gold.gif;..\Resources\images\sword_adamantium_gold_lost.gif;..\Resources\images\sword_adamantium_normal.gif;..\Resources\images\sword_adamantium_normal_lost.gif;..\Resources\images\sword_gold.gif;..\Resources\images\sword_gold_lost.gif;..\Resources\images\sword_magic_gold.gif;..\Resources\images\sword_magic_gold_lost.gif;..\Resources\images\sword_magic_normal.gif;..\Resources\images\sword_magic_normal_lost.gif;..\Resources\images\sword_mithril_gold.gif;..\Resources\images\sword_mithril_gold_lost.gif;..\Resources\images\sword_mithril_normal.gif;..\Resources\images\sword_mithril_normal_lost.gif;..\Resources\images\sword_normal.gif;..\Resources\images\sword_normal_lost.gif;..\Resources\images\thrown.gif;..\Resources\images\thrown_gold.gif;..\Resources\images\thrown_normal.gif;..\Resources\images\tohit.gif;..\Resources\images\tohit_lost.gif;..\Resources\images\ultraelite.gif;..\Resources\images\veteran.gif;..\Resources\images\Arcane.gif;..\Resources\images\Arrow.gif;..\Resources\images\Attack.gif;..\Resources\images\Bullet.gif;..\Resources\images\Chaos.gif;..\Resources\images\Death.gif;..\Resources\images\Hitpoints.gif;..\Resources\images\Hitpoints per Figure.gif;..\Resources\images\Level 1.gif;..\Resources\images\Level 2.gif;..\Resources\images\Level 3.gif;..\Resources\images\Level 4.gif;..\Resources\images\Level 5.gif;..\Resources\images\Level 6.gif;..\Resources\images\Level 7.gif;..\Resources\images\Level 8.gif;..\Resources\images\Level 9.gif;..\Resources\images\Life.gif;..\Resources\images\Melee.gif;..\Resources\images\Nature.gif;..\Resources\images\Ranged.gif;..\Resources\images\Defense.gif;..\Resources\images\Resistance.gif;..\Resources\images\Sorcery.gif;..\Resources\images\To Hit.gif;..\Resources\race\Barbarian.gif;..\Resources\race\Beastmen.gif;..\Resources\race\Dark Elf.gif;..\Resources\race\Draconian.gif;..\Resources\race\Dwarven.gif;..\Resources\race\Gnoll.gif;..\Resources\race\Halfling.gif;..\Resources\race\High Elf.gif;..\Resources\race\High Men.gif;..\Resources\race\Klackon.gif;..\Resources\race\Lizardman.gif;..\Resources\race\Nomad.gif;..\Resources\race\Orc.gif;..\Resources\race\Troll.gif;..\Resources\spells\Berserk.gif;..\Resources\spells\Black Channels.gif;..\Resources\spells\Black Prayer.gif;..\Resources\spells\Black Sleep.gif;..\Resources\spells\Bless.gif;..\Resources\spells\Blur.gif;..\Resources\spells\Chaos Channels.gif;..\Resources\spells\Chaos Surge.gif;..\Resources\spells\Charm of Life.gif;..\Resources\spells\Cloak of Fear.gif;..\Resources\spells\Confusion.gif;..\Resources\spells\Counter Magic.gif;..\Resources\spells\Creature Binding.gif;..\Resources\spells\Darkness.gif;..\Resources\spells\Dispel Evil.gif;..\Resources\spells\Eldritch Weapon.gif;..\Resources\spells\Elemental Armor.gif;..\Resources\spells\Endurance.gif;..\Resources\spells\Flame Blade.gif;..\Resources\spells\Flight.gif;..\Resources\spells\Giant Strength.gif;..\Resources\spells\Guardian Wind.gif;..\Resources\spells\Haste.gif;..\Resources\spells\Heroism.gif;..\Resources\spells\High Prayer.gif;..\Resources\spells\Holy Armor.gif;..\Resources\spells\Holy Weapon.gif;..\Resources\spells\Immolation.gif;..\Resources\spells\Invisibility.gif;..\Resources\spells\Invulnerability.gif;..\Resources\spells\Iron Skin.gif;..\Resources\spells\Lionheart.gif;..\Resources\spells\Magic Immunity.gif;..\Resources\spells\Metal Fires.gif;..\Resources\spells\Mind Storm.gif;..\Resources\spells\Mind Twist.gif;..\Resources\spells\Path Finding.gif;..\Resources\spells\Planar Travel.gif;..\Resources\spells\Possession.gif;..\Resources\spells\Prayer.gif;..\Resources\spells\Regeneration.gif;..\Resources\spells\Resist Elements.gif;..\Resources\spells\Resist Magic.gif;..\Resources\spells\Righteousness.gif;..\Resources\spells\Shatter.gif;..\Resources\spells\Spell Lock.gif;..\Resources\spells\Stone Skin.gif;..\Resources\spells\Terror.gif;..\Resources\spells\True Light.gif;..\Resources\spells\True Sight.gif;..\Resources\spells\Vertigo.gif;..\Resources\spells\Warp Creature.gif;..\Resources\spells\Warp Creature Attack.gif;..\Resources\spells\Warp Creature Defense.gif;..\Resources\spells\Warp Creature Resistance.gif;..\Resources\spells\Warp Reality.gif;..\Resources\spells\Warp Wood.gif;..\Resources\spells\Water Walking.gif;..\Resources\spells\Weakness.gif;..\Resources\spells\Web.gif;..\Resources\spells\Whirlwind.gif;..\Resources\spells\Wind Walking.gif;..\Resources\spells\Wrack.gif;..\Resources\spells\Wraith Form.gif;..\Resources\heroes\aerie.gif;..\Resources\heroes\allora.gif;..\Resources\heroes\aureus.gif;..\Resources\heroes\bahgtru.gif;..\Resources\heroes\brax.gif;..\Resources\heroes\bshan.gif;..\Resources\heroes\catwalk.jpg;..\Resources\heroes\elana.gif;..\Resources\heroes\fang.gif;..\Resources\heroes\greyfar.gif;..\Resources\heroes\gunthar.gif;..\Resources\heroes\jaer.gif;..\Resources\heroes\lucern.png;..\Resources\heroes\malleus.gif;..\Resources\heroes\marcus.gif;..\Resources\heroes\morgana.gif;..\Resources\heroes\mortu.gif;..\Resources\heroes\mystic_x.gif;..\Resources\heroes\rakir.gif;..\Resources\heroes\ravashak.gif;..\Resources\heroes\reywind.gif;..\Resources\heroes\roland.gif;..\Resources\heroes\serena.gif;..\Resources\heroes\shalla.gif;..\Resources\heroes\shin_bo.gif;..\Resources\heroes\shuri.gif;..\Resources\heroes\sir_hrld.gif;..\Resources\heroes\spyder.gif;..\Resources\heroes\stryke.gif;..\Resources\heroes\taki.gif;..\Resources\heroes\theria.gif;..\Resources\heroes\torin.gif;..\Resources\heroes\tumu.gif;..\Resources\heroes\valana.gif;..\Resources\heroes\warrax.gif;..\Resources\heroes\yramrag.gif;..\Resources\heroes\zaldron.gif;..\Resources\units\Amazon.gif;..\Resources\units\Assassin.gif;..\Resources\units\Barbarian.gif;..\Resources\units\Bard.gif;..\Resources\units\Beastmaster.gif;..\Resources\units\Black Knight.gif;..\Resources\units\Chaos Warrior.gif;..\Resources\units\Chosen.gif;..\Resources\units\Dervish.gif;..\Resources\units\Draconian.gif;..\Resources\units\Druid.gif;..\Resources\units\Dwarf.gif;..\Resources\units\Elven Archer.gif;..\Resources\units\Golden One.gif;..\Resources\units\Healer.gif;..\Resources\units\Huntress.gif;..\Resources\units\Illusionist.gif;..\Resources\units\Knight.gif;..\Resources\units\Magician.gif;..\Resources\units\Unknown.gif;..\Resources\units\Necromancer.gif;..\Resources\units\Ninja.gif;..\Resources\units\Orc Warrior.gif;..\Resources\units\Paladin.gif;..\Resources\units\Priestess.gif;..\Resources\units\Ranger.gif;..\Resources\units\Rogue.gif;..\Resources\units\Sage.gif;..\Resources\units\Serena.jpg;..\Resources\units\Swordsman.gif;..\Resources\units\Thief.gif;..\Resources\units\War Monk.gif;..\Resources\units\Warlock.gif;..\Resources\units\Warrior Mage.gif;..\Resources\units\Wind Mage.gif;..\Resources\units\Witch.gif;..\Resources\wizards\Ariel.gif;..\Resources\wizards\Freya.gif;..\Resources\wizards\Horus.gif;..\Resources\wizards\Jafar.gif;..\Resources\wizards\Kali.gif;..\Resources\wizards\Lo Pan.gif;..\Resources\wizards\Merlin.gif;..\Resources\wizards\Oberic.gif;..\Resources\wizards\Raven.gif;..\Resources\wizards\Rjak.gif;..\Resources\wizards\Sharee.gif;..\Resources\wizards\Sssra.gif;..\Resources\wizards\Tauron.gif;..\Resources\wizards\Tlaloc.gif"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -3528,7 +3776,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);..\Resources\abilities\Agility X.gif;..\Resources\abilities\Agility.gif;..\Resources\abilities\Arcane Power X.gif;..\Resources\abilities\Arcane Power.gif;..\Resources\abilities\Armor Piercing.gif;..\Resources\abilities\Armsmaster X.gif;..\Resources\abilities\Armsmaster.gif;..\Resources\abilities\Arrows.gif;..\Resources\abilities\Blademaster X.gif;..\Resources\abilities\Blademaster.gif;..\Resources\abilities\Bullets.gif;..\Resources\abilities\Caster.gif;..\Resources\abilities\Cause Fear Spell.gif;..\Resources\abilities\Charmed.gif;..\Resources\abilities\Cold Immunity.gif;..\Resources\abilities\Constitution.gif;..\Resources\abilities\Constitution X.gif;..\Resources\abilities\Construction.gif;..\Resources\abilities\Create Outpost.gif;..\Resources\abilities\Create Undead.gif;..\Resources\abilities\Death Gaze.gif;..\Resources\abilities\Death Immunity.gif;..\Resources\abilities\Dispel Evil.gif;..\Resources\abilities\Doom Gaze.gif;..\Resources\abilities\Doombolt Spell.gif;..\Resources\abilities\Fire Ball Spell.gif;..\Resources\abilities\Fire Breath.gif;..\Resources\abilities\Fire Immunity.gif;..\Resources\abilities\First Strike.gif;..\Resources\abilities\Flying.gif;..\Resources\abilities\Forester.gif;..\Resources\abilities\Healer.gif;..\Resources\abilities\Healing Spell.gif;..\Resources\abilities\Holy Bonus.gif;..\Resources\abilities\Illusions Immunity.gif;..\Resources\abilities\Illusionary attack.gif;..\Resources\abilities\Immolation.gif;..\Resources\abilities\Invisibility.gif;..\Resources\abilities\Large Shield.gif;..\Resources\abilities\Leadership X.gif;..\Resources\abilities\Leadership.gif;..\Resources\abilities\Legendary X.gif;..\Resources\abilities\Legendary.gif;..\Resources\abilities\Life Stealing.gif;..\Resources\abilities\Lightning.gif;..\Resources\abilities\Long Range.gif;..\Resources\abilities\Lucky.gif;..\Resources\abilities\Magic Immunity.gif;..\Resources\abilities\Magic Ranged.gif;..\Resources\abilities\Magic Weapon.gif;..\Resources\abilities\Meld With Node.gif;..\Resources\abilities\Merging.gif;..\Resources\abilities\Might X.gif;..\Resources\abilities\Might.gif;..\Resources\abilities\Missiles Immunity.gif;..\Resources\abilities\Mountaineer.gif;..\Resources\abilities\Negate First Strike.gif;..\Resources\abilities\Noble.gif;..\Resources\abilities\Non Corporeal.gif;..\Resources\abilities\Pathfinding.gif;..\Resources\abilities\Plane Shift.gif;..\Resources\abilities\Poison Immunity.gif;..\Resources\abilities\Poison attack.gif;..\Resources\abilities\Prayermaster X.gif;..\Resources\abilities\Prayermaster.gif;..\Resources\abilities\Purify.gif;..\Resources\abilities\Random Any.gif;..\Resources\abilities\Random Ftr.gif;..\Resources\abilities\Random Mage.gif;..\Resources\abilities\Regeneration.gif;..\Resources\abilities\Resistance to All.gif;..\Resources\abilities\Rocks.gif;..\Resources\abilities\Sage X.gif;..\Resources\abilities\Sage.gif;..\Resources\abilities\Sailing.gif;..\Resources\abilities\Scout.gif;..\Resources\abilities\Stoning Gaze.gif;..\Resources\abilities\Stoning Immunity.gif;..\Resources\abilities\Stoning Touch.gif;..\Resources\abilities\Summon Demons.gif;..\Resources\abilities\Swimming.gif;..\Resources\abilities\Teleporting.gif;..\Resources\abilities\Thrown.gif;..\Resources\abilities\Undead.gif;..\Resources\abilities\Wall Crusher.gif;..\Resources\abilities\Weapon Immunity.gif;..\Resources\abilities\Web Spell.gif;..\Resources\abilities\Web.gif;..\Resources\abilities\Wind Walking.gif;..\Resources\images\background_screen.gif;..\Resources\images\background_unit.gif;..\Resources\images\bow_gold.gif;..\Resources\images\bow_gold_lost.gif;..\Resources\images\bow_normal.gif;..\Resources\images\bow_normal_lost.gif;..\Resources\images\elite.gif;..\Resources\images\fireball_gold.gif;..\Resources\images\fireball_gold_lost.gif;..\Resources\images\fireball_normal.gif;..\Resources\images\fireball_normal_lost.gif;..\Resources\images\firebreath.gif;..\Resources\images\grandlord.gif;..\Resources\images\hand.cur;..\Resources\images\hand.gif;..\Resources\images\heart_gold.gif;..\Resources\images\heart_gold_lost.gif;..\Resources\images\heart_normal.gif;..\Resources\images\heart_normal_lost.gif;..\Resources\images\ranged_unknown.gif;..\Resources\images\recruit.gif;..\Resources\images\regular.gif;..\Resources\images\resistance_gold.gif;..\Resources\images\resistance_gold_lost.gif;..\Resources\images\resistance_normal.gif;..\Resources\images\resistance_normal_lost.gif;..\Resources\images\rock_gold.gif;..\Resources\images\rock_gold_lost.gif;..\Resources\images\rock_normal.gif;..\Resources\images\rock_normal_lost.gif;..\Resources\images\shield_gold.gif;..\Resources\images\shield_gold_lost.gif;..\Resources\images\shield_normal.gif;..\Resources\images\shield_normal_lost.gif;..\Resources\images\superhero.gif;..\Resources\images\sword_adamantium_gold.gif;..\Resources\images\sword_adamantium_gold_lost.gif;..\Resources\images\sword_adamantium_normal.gif;..\Resources\images\sword_adamantium_normal_lost.gif;..\Resources\images\sword_gold.gif;..\Resources\images\sword_gold_lost.gif;..\Resources\images\sword_magic_gold.gif;..\Resources\images\sword_magic_gold_lost.gif;..\Resources\images\sword_magic_normal.gif;..\Resources\images\sword_magic_normal_lost.gif;..\Resources\images\sword_mithril_gold.gif;..\Resources\images\sword_mithril_gold_lost.gif;..\Resources\images\sword_mithril_normal.gif;..\Resources\images\sword_mithril_normal_lost.gif;..\Resources\images\sword_normal.gif;..\Resources\images\sword_normal_lost.gif;..\Resources\images\thrown.gif;..\Resources\images\tohit.gif;..\Resources\images\tohit_lost.gif;..\Resources\images\ultraelite.gif;..\Resources\images\veteran.gif;..\Resources\images\Arcane.gif;..\Resources\images\Arrow.gif;..\Resources\images\Attack.gif;..\Resources\images\Bullet.gif;..\Resources\images\Chaos.gif;..\Resources\images\Death.gif;..\Resources\images\Hitpoints.gif;..\Resources\images\Hitpoints per Figure.gif;..\Resources\images\Level 1.gif;..\Resources\images\Level 2.gif;..\Resources\images\Level 3.gif;..\Resources\images\Level 4.gif;..\Resources\images\Level 5.gif;..\Resources\images\Level 6.gif;..\Resources\images\Level 7.gif;..\Resources\images\Level 8.gif;..\Resources\images\Level 9.gif;..\Resources\images\Life.gif;..\Resources\images\Melee.gif;..\Resources\images\Nature.gif;..\Resources\images\Ranged.gif;..\Resources\images\Defense.gif;..\Resources\images\Resistance.gif;..\Resources\images\Sorcery.gif;..\Resources\images\To Hit.gif;..\Resources\race\Barbarian.gif;..\Resources\race\Beastmen.gif;..\Resources\race\Dark Elf.gif;..\Resources\race\Draconian.gif;..\Resources\race\Dwarven.gif;..\Resources\race\Gnoll.gif;..\Resources\race\Halfling.gif;..\Resources\race\High Elf.gif;..\Resources\race\High Men.gif;..\Resources\race\Klackon.gif;..\Resources\race\Lizardman.gif;..\Resources\race\Nomad.gif;..\Resources\race\Orc.gif;..\Resources\race\Troll.gif;..\Resources\spells\Berserk.gif;..\Resources\spells\Black Channels.gif;..\Resources\spells\Black Prayer.gif;..\Resources\spells\Black Sleep.gif;..\Resources\spells\Bless.gif;..\Resources\spells\Blur.gif;..\Resources\spells\Chaos Channels Demon Wings.gif;..\Resources\spells\Chaos Channels Demon Skin.gif;..\Resources\spells\Chaos Channels Fiery Breath.gif;..\Resources\spells\Chaos Channels.gif;..\Resources\spells\Chaos Surge.gif;..\Resources\spells\Charm of Life.gif;..\Resources\spells\Cloak of Fear.gif;..\Resources\spells\Counter Magic.gif;..\Resources\spells\Darkness.gif;..\Resources\spells\Eldritch Weapon.gif;..\Resources\spells\Elemental Armor.gif;..\Resources\spells\Flame Blade.gif;..\Resources\spells\Flight.gif;..\Resources\spells\Giant Strength.gif;..\Resources\spells\Guardian Wind.gif;..\Resources\spells\Haste.gif;..\Resources\spells\High Prayer.gif;..\Resources\spells\Holy Armor.gif;..\Resources\spells\Holy Weapon.gif;..\Resources\spells\Immolation.gif;..\Resources\spells\Invisibility.gif;..\Resources\spells\Invulnerability.gif;..\Resources\spells\Iron Skin.gif;..\Resources\spells\Lionheart.gif;..\Resources\spells\Magic Immunity.gif;..\Resources\spells\Metal Fires.gif;..\Resources\spells\Path Finding.gif;..\Resources\spells\Prayer.gif;..\Resources\spells\Regeneration.gif;..\Resources\spells\Resist Elements.gif;..\Resources\spells\Resist Magic.gif;..\Resources\spells\Righteousness.gif;..\Resources\spells\Shatter.gif;..\Resources\spells\Stone Skin.gif;..\Resources\spells\Terror.gif;..\Resources\spells\True Light.gif;..\Resources\spells\True Sight.gif;..\Resources\spells\Vertigo.gif;..\Resources\spells\Warp Creature.gif;..\Resources\spells\Warp Reality.gif;..\Resources\spells\Warp Wood.gif;..\Resources\spells\Weakness.gif;..\Resources\spells\Web.gif;..\Resources\spells\Wrack.gif;..\Resources\spells\Wraith Form.gif;..\Resources\heroes\aerie.gif;..\Resources\heroes\allora.gif;..\Resources\heroes\aureus.gif;..\Resources\heroes\bahgtru.gif;..\Resources\heroes\brax.gif;..\Resources\heroes\bshan.gif;..\Resources\heroes\catwalk.jpg;..\Resources\heroes\elana.gif;..\Resources\heroes\fang.gif;..\Resources\heroes\greyfar.gif;..\Resources\heroes\gunthar.gif;..\Resources\heroes\jaer.gif;..\Resources\heroes\lucern.png;..\Resources\heroes\malleus.gif;..\Resources\heroes\marcus.gif;..\Resources\heroes\morgana.gif;..\Resources\heroes\mortu.gif;..\Resources\heroes\mystic_x.gif;..\Resources\heroes\rakir.gif;..\Resources\heroes\ravashak.gif;..\Resources\heroes\reywind.gif;..\Resources\heroes\roland.gif;..\Resources\heroes\serena.gif;..\Resources\heroes\shalla.gif;..\Resources\heroes\shin_bo.gif;..\Resources\heroes\shuri.gif;..\Resources\heroes\sir_hrld.gif;..\Resources\heroes\spyder.gif;..\Resources\heroes\stryke.gif;..\Resources\heroes\taki.gif;..\Resources\heroes\theria.gif;..\Resources\heroes\torin.gif;..\Resources\heroes\tumu.gif;..\Resources\heroes\valana.gif;..\Resources\heroes\warrax.gif;..\Resources\heroes\yramrag.gif;..\Resources\heroes\zaldron.gif;..\Resources\units\Amazon.gif;..\Resources\units\Assassin.gif;..\Resources\units\Barbarian.gif;..\Resources\units\Bard.gif;..\Resources\units\Beastmaster.gif;..\Resources\units\Black Knight.gif;..\Resources\units\Chaos Warrior.gif;..\Resources\units\Chosen.gif;..\Resources\units\Dervish.gif;..\Resources\units\Draconian.gif;..\Resources\units\Druid.gif;..\Resources\units\Dwarf.gif;..\Resources\units\Elven Archer.gif;..\Resources\units\Golden One.gif;..\Resources\units\Healer.gif;..\Resources\units\Huntress.gif;..\Resources\units\Illusionist.gif;..\Resources\units\Knight.gif;..\Resources\units\Magician.gif;..\Resources\units\Unknown.gif;..\Resources\units\Necromancer.gif;..\Resources\units\Ninja.gif;..\Resources\units\Orc Warrior.gif;..\Resources\units\Paladin.gif;..\Resources\units\Priestess.gif;..\Resources\units\Ranger.gif;..\Resources\units\Rogue.gif;..\Resources\units\Sage.gif;..\Resources\units\Serena.jpg;..\Resources\units\Swordsman.gif;..\Resources\units\Thief.gif;..\Resources\units\War Monk.gif;..\Resources\units\Warlock.gif;..\Resources\units\Warrior Mage.gif;..\Resources\units\Wind Mage.gif;..\Resources\units\Witch.gif;..\Resources\wizards\Ariel.gif;..\Resources\wizards\Freya.gif;..\Resources\wizards\Horus.gif;..\Resources\wizards\Jafar.gif;..\Resources\wizards\Kali.gif;..\Resources\wizards\Lo Pan.gif;..\Resources\wizards\Merlin.gif;..\Resources\wizards\Oberic.gif;..\Resources\wizards\Raven.gif;..\Resources\wizards\Rjak.gif;..\Resources\wizards\Sharee.gif;..\Resources\wizards\Sssra.gif;..\Resources\wizards\Tauron.gif;..\Resources\wizards\Tlaloc.gif"
+						AdditionalDependencies="$(InputPath);..\Resources\abilities\Agility X.gif;..\Resources\abilities\Agility.gif;..\Resources\abilities\Arcane Power X.gif;..\Resources\abilities\Arcane Power.gif;..\Resources\abilities\Armor Piercing.gif;..\Resources\abilities\Armsmaster X.gif;..\Resources\abilities\Armsmaster.gif;..\Resources\abilities\Arrows.gif;..\Resources\abilities\Blademaster X.gif;..\Resources\abilities\Blademaster.gif;..\Resources\abilities\Bullets.gif;..\Resources\abilities\Caster.gif;..\Resources\abilities\Caster 20 MP.gif;..\Resources\abilities\Caster 40 MP.gif;..\Resources\abilities\Cause Fear Spell.gif;..\Resources\abilities\Charmed.gif;..\Resources\abilities\Chaos Channels Demon Wings.gif;..\Resources\abilities\Chaos Channels Demon Skin.gif;..\Resources\abilities\Chaos Channels Fiery Breath.gif;..\Resources\abilities\Cold Immunity.gif;..\Resources\abilities\Constitution.gif;..\Resources\abilities\Constitution X.gif;..\Resources\abilities\Construction.gif;..\Resources\abilities\Create Outpost.gif;..\Resources\abilities\Create Undead.gif;..\Resources\abilities\Death Gaze.gif;..\Resources\abilities\Death Immunity.gif;..\Resources\abilities\Death Touch.gif;..\Resources\abilities\Destruction.gif;..\Resources\abilities\Dispel Evil.gif;..\Resources\abilities\Doom Gaze.gif;..\Resources\abilities\Doombolt Spell.gif;..\Resources\abilities\Fire Ball Spell.gif;..\Resources\abilities\Fire Breath.gif;..\Resources\abilities\Fire Immunity.gif;..\Resources\abilities\First Strike.gif;..\Resources\abilities\Flying.gif;..\Resources\abilities\Forester.gif;..\Resources\abilities\Healer.gif;..\Resources\abilities\Healing Spell.gif;..\Resources\abilities\Holy Bonus.gif;..\Resources\abilities\Illusions Immunity.gif;..\Resources\abilities\Illusionary attack.gif;..\Resources\abilities\Immolation.gif;..\Resources\abilities\Invisibility.gif;..\Resources\abilities\Land Corruption.gif;..\Resources\abilities\Large Shield.gif;..\Resources\abilities\Leadership X.gif;..\Resources\abilities\Leadership.gif;..\Resources\abilities\Legendary X.gif;..\Resources\abilities\Legendary.gif;..\Resources\abilities\Life Stealing.gif;..\Resources\abilities\Lightning.gif;..\Resources\abilities\Long Range.gif;..\Resources\abilities\Lucky.gif;..\Resources\abilities\Lucky_Hero.gif;..\Resources\abilities\Magic Immunity.gif;..\Resources\abilities\Magic Ranged.gif;..\Resources\abilities\Magic Weapon.gif;..\Resources\abilities\Meld With Node.gif;..\Resources\abilities\Merging.gif;..\Resources\abilities\Might X.gif;..\Resources\abilities\Might.gif;..\Resources\abilities\Missiles Immunity.gif;..\Resources\abilities\Mountaineer.gif;..\Resources\abilities\Negate First Strike.gif;..\Resources\abilities\Noble.gif;..\Resources\abilities\Non Corporeal.gif;..\Resources\abilities\Pathfinding.gif;..\Resources\abilities\Plane Shift.gif;..\Resources\abilities\Poison Immunity.gif;..\Resources\abilities\Poison attack.gif;..\Resources\abilities\Power Drain.gif;..\Resources\abilities\Prayermaster X.gif;..\Resources\abilities\Prayermaster.gif;..\Resources\abilities\Purify.gif;..\Resources\abilities\Random Any.gif;..\Resources\abilities\Random Ftr.gif;..\Resources\abilities\Random Mage.gif;..\Resources\abilities\Regeneration.gif;..\Resources\abilities\Resistance to All.gif;..\Resources\abilities\Rocks.gif;..\Resources\abilities\Sage X.gif;..\Resources\abilities\Sage.gif;..\Resources\abilities\Sailing.gif;..\Resources\abilities\Scouting.gif;..\Resources\abilities\Stoning Gaze.gif;..\Resources\abilities\Stoning Immunity.gif;..\Resources\abilities\Stoning Touch.gif;..\Resources\abilities\Summon Demons.gif;..\Resources\abilities\Summon Demons 1.gif;..\Resources\abilities\Summon Demons 2.gif;..\Resources\abilities\Swimming.gif;..\Resources\abilities\Teleporting.gif;..\Resources\abilities\Thrown.gif;..\Resources\abilities\Undead.gif;..\Resources\abilities\Wall Crusher.gif;..\Resources\abilities\Weapon Immunity.gif;..\Resources\abilities\Web Spell.gif;..\Resources\abilities\Web.gif;..\Resources\abilities\Wind Walking.gif;..\Resources\images\background_screen.gif;..\Resources\images\background_unit.gif;..\Resources\images\bow_gold.gif;..\Resources\images\bow_gold_lost.gif;..\Resources\images\bow_normal.gif;..\Resources\images\bow_normal_lost.gif;..\Resources\images\elite.gif;..\Resources\images\fireball_gold.gif;..\Resources\images\fireball_gold_lost.gif;..\Resources\images\fireball_normal.gif;..\Resources\images\fireball_normal_lost.gif;..\Resources\images\firebreath.gif;..\Resources\images\grandlord.gif;..\Resources\images\hand.cur;..\Resources\images\hand.gif;..\Resources\images\heart_gold.gif;..\Resources\images\heart_gold_lost.gif;..\Resources\images\heart_normal.gif;..\Resources\images\heart_normal_lost.gif;..\Resources\images\ranged_unknown.gif;..\Resources\images\recruit.gif;..\Resources\images\regular.gif;..\Resources\images\resistance_gold.gif;..\Resources\images\resistance_gold_lost.gif;..\Resources\images\resistance_normal.gif;..\Resources\images\resistance_normal_lost.gif;..\Resources\images\rock_gold.gif;..\Resources\images\rock_gold_lost.gif;..\Resources\images\rock_normal.gif;..\Resources\images\rock_normal_lost.gif;..\Resources\images\shield_gold.gif;..\Resources\images\shield_gold_lost.gif;..\Resources\images\shield_normal.gif;..\Resources\images\shield_normal_lost.gif;..\Resources\images\superhero.gif;..\Resources\images\sword_adamantium_gold.gif;..\Resources\images\sword_adamantium_gold_lost.gif;..\Resources\images\sword_adamantium_normal.gif;..\Resources\images\sword_adamantium_normal_lost.gif;..\Resources\images\sword_gold.gif;..\Resources\images\sword_gold_lost.gif;..\Resources\images\sword_magic_gold.gif;..\Resources\images\sword_magic_gold_lost.gif;..\Resources\images\sword_magic_normal.gif;..\Resources\images\sword_magic_normal_lost.gif;..\Resources\images\sword_mithril_gold.gif;..\Resources\images\sword_mithril_gold_lost.gif;..\Resources\images\sword_mithril_normal.gif;..\Resources\images\sword_mithril_normal_lost.gif;..\Resources\images\sword_normal.gif;..\Resources\images\sword_normal_lost.gif;..\Resources\images\thrown.gif;..\Resources\images\thrown_gold.gif;..\Resources\images\thrown_normal.gif;..\Resources\images\tohit.gif;..\Resources\images\tohit_lost.gif;..\Resources\images\ultraelite.gif;..\Resources\images\veteran.gif;..\Resources\images\Arcane.gif;..\Resources\images\Arrow.gif;..\Resources\images\Attack.gif;..\Resources\images\Bullet.gif;..\Resources\images\Chaos.gif;..\Resources\images\Death.gif;..\Resources\images\Hitpoints.gif;..\Resources\images\Hitpoints per Figure.gif;..\Resources\images\Level 1.gif;..\Resources\images\Level 2.gif;..\Resources\images\Level 3.gif;..\Resources\images\Level 4.gif;..\Resources\images\Level 5.gif;..\Resources\images\Level 6.gif;..\Resources\images\Level 7.gif;..\Resources\images\Level 8.gif;..\Resources\images\Level 9.gif;..\Resources\images\Life.gif;..\Resources\images\Melee.gif;..\Resources\images\Nature.gif;..\Resources\images\Ranged.gif;..\Resources\images\Defense.gif;..\Resources\images\Resistance.gif;..\Resources\images\Sorcery.gif;..\Resources\images\To Hit.gif;..\Resources\race\Barbarian.gif;..\Resources\race\Beastmen.gif;..\Resources\race\Dark Elf.gif;..\Resources\race\Draconian.gif;..\Resources\race\Dwarven.gif;..\Resources\race\Gnoll.gif;..\Resources\race\Halfling.gif;..\Resources\race\High Elf.gif;..\Resources\race\High Men.gif;..\Resources\race\Klackon.gif;..\Resources\race\Lizardman.gif;..\Resources\race\Nomad.gif;..\Resources\race\Orc.gif;..\Resources\race\Troll.gif;..\Resources\spells\Berserk.gif;..\Resources\spells\Black Channels.gif;..\Resources\spells\Black Prayer.gif;..\Resources\spells\Black Sleep.gif;..\Resources\spells\Bless.gif;..\Resources\spells\Blur.gif;..\Resources\spells\Chaos Channels.gif;..\Resources\spells\Chaos Surge.gif;..\Resources\spells\Charm of Life.gif;..\Resources\spells\Cloak of Fear.gif;..\Resources\spells\Confusion.gif;..\Resources\spells\Counter Magic.gif;..\Resources\spells\Creature Binding.gif;..\Resources\spells\Darkness.gif;..\Resources\spells\Dispel Evil.gif;..\Resources\spells\Eldritch Weapon.gif;..\Resources\spells\Elemental Armor.gif;..\Resources\spells\Endurance.gif;..\Resources\spells\Flame Blade.gif;..\Resources\spells\Flight.gif;..\Resources\spells\Giant Strength.gif;..\Resources\spells\Guardian Wind.gif;..\Resources\spells\Haste.gif;..\Resources\spells\Heroism.gif;..\Resources\spells\High Prayer.gif;..\Resources\spells\Holy Armor.gif;..\Resources\spells\Holy Weapon.gif;..\Resources\spells\Immolation.gif;..\Resources\spells\Invisibility.gif;..\Resources\spells\Invulnerability.gif;..\Resources\spells\Iron Skin.gif;..\Resources\spells\Lionheart.gif;..\Resources\spells\Magic Immunity.gif;..\Resources\spells\Metal Fires.gif;..\Resources\spells\Mind Storm.gif;..\Resources\spells\Mind Twist.gif;..\Resources\spells\Path Finding.gif;..\Resources\spells\Planar Travel.gif;..\Resources\spells\Possession.gif;..\Resources\spells\Prayer.gif;..\Resources\spells\Regeneration.gif;..\Resources\spells\Resist Elements.gif;..\Resources\spells\Resist Magic.gif;..\Resources\spells\Righteousness.gif;..\Resources\spells\Shatter.gif;..\Resources\spells\Spell Lock.gif;..\Resources\spells\Stone Skin.gif;..\Resources\spells\Terror.gif;..\Resources\spells\True Light.gif;..\Resources\spells\True Sight.gif;..\Resources\spells\Vertigo.gif;..\Resources\spells\Warp Creature.gif;..\Resources\spells\Warp Creature Attack.gif;..\Resources\spells\Warp Creature Defense.gif;..\Resources\spells\Warp Creature Resistance.gif;..\Resources\spells\Warp Reality.gif;..\Resources\spells\Warp Wood.gif;..\Resources\spells\Water Walking.gif;..\Resources\spells\Weakness.gif;..\Resources\spells\Web.gif;..\Resources\spells\Whirlwind.gif;..\Resources\spells\Wind Walking.gif;..\Resources\spells\Wrack.gif;..\Resources\spells\Wraith Form.gif;..\Resources\heroes\aerie.gif;..\Resources\heroes\allora.gif;..\Resources\heroes\aureus.gif;..\Resources\heroes\bahgtru.gif;..\Resources\heroes\brax.gif;..\Resources\heroes\bshan.gif;..\Resources\heroes\catwalk.jpg;..\Resources\heroes\elana.gif;..\Resources\heroes\fang.gif;..\Resources\heroes\greyfar.gif;..\Resources\heroes\gunthar.gif;..\Resources\heroes\jaer.gif;..\Resources\heroes\lucern.png;..\Resources\heroes\malleus.gif;..\Resources\heroes\marcus.gif;..\Resources\heroes\morgana.gif;..\Resources\heroes\mortu.gif;..\Resources\heroes\mystic_x.gif;..\Resources\heroes\rakir.gif;..\Resources\heroes\ravashak.gif;..\Resources\heroes\reywind.gif;..\Resources\heroes\roland.gif;..\Resources\heroes\serena.gif;..\Resources\heroes\shalla.gif;..\Resources\heroes\shin_bo.gif;..\Resources\heroes\shuri.gif;..\Resources\heroes\sir_hrld.gif;..\Resources\heroes\spyder.gif;..\Resources\heroes\stryke.gif;..\Resources\heroes\taki.gif;..\Resources\heroes\theria.gif;..\Resources\heroes\torin.gif;..\Resources\heroes\tumu.gif;..\Resources\heroes\valana.gif;..\Resources\heroes\warrax.gif;..\Resources\heroes\yramrag.gif;..\Resources\heroes\zaldron.gif;..\Resources\units\Amazon.gif;..\Resources\units\Assassin.gif;..\Resources\units\Barbarian.gif;..\Resources\units\Bard.gif;..\Resources\units\Beastmaster.gif;..\Resources\units\Black Knight.gif;..\Resources\units\Chaos Warrior.gif;..\Resources\units\Chosen.gif;..\Resources\units\Dervish.gif;..\Resources\units\Draconian.gif;..\Resources\units\Druid.gif;..\Resources\units\Dwarf.gif;..\Resources\units\Elven Archer.gif;..\Resources\units\Golden One.gif;..\Resources\units\Healer.gif;..\Resources\units\Huntress.gif;..\Resources\units\Illusionist.gif;..\Resources\units\Knight.gif;..\Resources\units\Magician.gif;..\Resources\units\Unknown.gif;..\Resources\units\Necromancer.gif;..\Resources\units\Ninja.gif;..\Resources\units\Orc Warrior.gif;..\Resources\units\Paladin.gif;..\Resources\units\Priestess.gif;..\Resources\units\Ranger.gif;..\Resources\units\Rogue.gif;..\Resources\units\Sage.gif;..\Resources\units\Serena.jpg;..\Resources\units\Swordsman.gif;..\Resources\units\Thief.gif;..\Resources\units\War Monk.gif;..\Resources\units\Warlock.gif;..\Resources\units\Warrior Mage.gif;..\Resources\units\Wind Mage.gif;..\Resources\units\Witch.gif;..\Resources\wizards\Ariel.gif;..\Resources\wizards\Freya.gif;..\Resources\wizards\Horus.gif;..\Resources\wizards\Jafar.gif;..\Resources\wizards\Kali.gif;..\Resources\wizards\Lo Pan.gif;..\Resources\wizards\Merlin.gif;..\Resources\wizards\Oberic.gif;..\Resources\wizards\Raven.gif;..\Resources\wizards\Rjak.gif;..\Resources\wizards\Sharee.gif;..\Resources\wizards\Sssra.gif;..\Resources\wizards\Tauron.gif;..\Resources\wizards\Tlaloc.gif"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -3695,6 +3943,26 @@
 			</File>
 			<File
 				RelativePath="..\Resources\units\Knight.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Land Corruption.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4174,6 +4442,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Lucky_Hero.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\spells\Magic Immunity.gif"
 				>
 				<FileConfiguration
@@ -4435,6 +4723,46 @@
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Might.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Mind Storm.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Mind Twist.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4818,6 +5146,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Planar Travel.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\abilities\Plane Shift.gif"
 				>
 				<FileConfiguration
@@ -4859,6 +5207,46 @@
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Poison Immunity.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Possession.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Power Drain.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5698,6 +6086,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Scouting.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\heroes\serena.gif"
 				>
 				<FileConfiguration
@@ -5958,6 +6366,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Spell Lock.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\heroes\spyder.gif"
 				>
 				<FileConfiguration
@@ -6079,6 +6507,46 @@
 			</File>
 			<File
 				RelativePath="..\Resources\heroes\stryke.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Summon Demons 1.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\abilities\Summon Demons 2.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6618,6 +7086,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\images\thrown.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\abilities\Thrown.gif"
 				>
 				<FileConfiguration
@@ -6638,7 +7126,27 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\images\thrown.gif"
+				RelativePath="..\Resources\images\thrown_gold.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\images\thrown_normal.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7018,6 +7526,66 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Warp Creature Attack.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Warp Creature Defense.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Warp Creature Resistance.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\spells\Warp Creature.gif"
 				>
 				<FileConfiguration
@@ -7118,6 +7686,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\spells\Water Walking.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\spells\Weakness.gif"
 				>
 				<FileConfiguration
@@ -7178,6 +7766,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Resources\abilities\Web.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Resources\spells\Web.gif"
 				>
 				<FileConfiguration
@@ -7198,7 +7806,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Web.gif"
+				RelativePath="..\Resources\spells\Whirlwind.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7239,6 +7847,26 @@
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Wind Walking.gif"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

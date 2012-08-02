@@ -18,7 +18,9 @@
 #include <MoMExeWizards.h>
 #include <QMoMGenerated.h>
 #include <QMoMUtility.h>
+
 #include "QMoMResources.h"
+#include "QMoMTreeCustomExtensions.h"
 
 #include "unitmodel.h"
 
@@ -589,6 +591,42 @@ void update_Cities(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 
         ++row;
     }
+}
+
+void update_Custom_extensions(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+{
+    // TODO
+//    if (0 == game)
+//        return;
+//    MoM::Battle_Unit* pBattle_Unit_View = game->getBattle_Unit_View();
+//    if (0 == pBattle_Unit_View)
+//        return;
+
+//    if (row >= ptree->rowCount())
+//    {
+//        ptree->setChild(row, 0, constructTreeItem(pBattle_Unit_View, ""));
+//    }
+//    QString id;
+//    int unitNr = pBattle_Unit_View->m_unitNr;
+//    if ((unitNr >= 0) && (unitNr < game->getNrUnits()) && (unitNr < (int)MoM::gMAX_UNITS))
+//    {
+//        MoM::Unit* unit = game->getUnit(unitNr);
+//        if (0 != unit)
+//        {
+//            id = toQStr(unit->m_Unit_Type);
+//        }
+//    }
+//    else
+//    {
+//        id = toQStr(pBattle_Unit_View->m_Race_Code);
+//    }
+//    ptree->child(row, 0)->setData(id, Qt::UserRole);
+//    ptree->child(row, 1)->setData(toQStr(pBattle_Unit_View->m_Owner), Qt::UserRole);
+//    ptree->child(row, 2)->setData(QString(), Qt::EditRole);
+
+//    ++row;
+    //QMoMTreeCustomExtensions parser;
+    //parser.load("C:/GIT/momrtgt-code/xml/momrtgt.xml");
 }
 
 void update_Events(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
@@ -2295,6 +2333,24 @@ void UnitModel::threadUpdateModelData()
 
         MoM::eSpell16* hero_spells = game->getHero_spells();
         MoM::eSpell16& spell = *hero_spells;
+    }
+
+    {
+        if (toprow == parentItem->rowCount())
+        {
+            parentItem->appendEmptyRow();
+        }
+
+        parentItem->child(toprow, 0)->setData(tr("Custom extensions"), Qt::UserRole);
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
+        parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
+
+        int row = 0;
+        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        update_Custom_extensions(ptree, game, row);
+        removeUnusedRows(toprow, ptree, row);
+
+        toprow++;
     }
 
     emit dataChanged(index(0, 0), index(parentItem->rowCount() - 1, m_columnCount - 1));
