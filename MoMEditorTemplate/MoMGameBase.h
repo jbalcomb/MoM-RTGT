@@ -29,14 +29,6 @@ public:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
-    virtual eBonusDeposit* getBonusDeposit(ePlane plane, int x, int y)
-    {
-        eBonusDeposit* bonusDeposits = getBonusDeposits();
-        if ((0 == bonusDeposits) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
-            return 0;
-        return (bonusDeposits + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
-    }
-
     Building_Data* getBuilding_Data(eBuilding building)
     {
         Building_Data* buildingData = getBuilding_Data();
@@ -241,12 +233,73 @@ public:
         return &spellData[spell];
     }
 
-    virtual eTerrainType* getTerrainType(ePlane plane, int x, int y)
+    eTerrainBonusDeposit* getTerrainBonus(const Location& loc)
     {
-        eTerrainType* terrainTypes = getTerrainTypes();
-		if ((0 == terrainTypes) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+        return getTerrainBonus(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    eTerrainBonusDeposit* getTerrainBonus(ePlane plane, int x, int y)
+    {
+        eTerrainBonusDeposit* data = getTerrain_Bonuses();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
             return 0;
-        return (terrainTypes + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    Terrain_Changes* getTerrainChange(const Location& loc)
+    {
+        return getTerrainChange(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    Terrain_Changes* getTerrainChange(ePlane plane, int x, int y)
+    {
+        Terrain_Changes* data = getTerrain_Changes();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    uint8_t* getTerrainExplored(const Location& loc)
+    {
+        return getTerrainExplored(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    uint8_t* getTerrainExplored(ePlane plane, int x, int y)
+    {
+        uint8_t* data = getTerrain_Explored();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    uint8_t* getTerrainLandMassID(const Location& loc)
+    {
+        return getTerrainLandMassID(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    uint8_t* getTerrainLandMassID(ePlane plane, int x, int y)
+    {
+        uint8_t* data = getTerrain_LandMassID();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    int8_t* getTerrainMovement(const Location& loc, eMovement movement)
+    {
+        return getTerrainMovement(loc.m_Plane, loc.m_XPos, loc.m_YPos, movement);
+    }
+    int8_t* getTerrainMovement(ePlane plane, int x, int y, eMovement movement)
+    {
+        Map_Movement* data = getTerrain_Movements();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS) || !inRange(movement, MoM::eMovement_MAX))
+            return 0;
+        MapRow_Movement* mapRow = &data[plane].m_Unused_Row[0];
+        mapRow += static_cast<unsigned>(movement) * gMAX_MAP_ROWS;
+        return &mapRow[y].m_Moves[x];
+    }
+    eTerrainType* getTerrainType(const Location& loc)
+    {
+        return getTerrainType(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    eTerrainType* getTerrainType(ePlane plane, int x, int y)
+    {
+        eTerrainType* data = getTerrain_Types();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
 
     Unit* getUnit(int unitNr)
@@ -338,10 +391,6 @@ public:
         return 0;
     }
 protected:
-    virtual eBonusDeposit* getBonusDeposits()
-    {
-        return 0;
-    }
     virtual Building_Data* getBuilding_Data()
     {
         return 0;
@@ -407,10 +456,31 @@ public:
         return 0;
     }
 protected:
-    virtual eTerrainType* getTerrainTypes()
+    virtual eTerrainBonusDeposit* getTerrain_Bonuses()
     {
         return 0;
     }
+    virtual Terrain_Changes* getTerrain_Changes()
+    {
+        return 0;
+    }
+    virtual uint8_t* getTerrain_Explored()
+    {
+        return 0;
+    }
+    virtual uint8_t* getTerrain_LandMassID()
+    {
+        return 0;
+    }
+    virtual Map_Movement* getTerrain_Movements()
+    {
+        return 0;
+    }
+    virtual eTerrainType* getTerrain_Types()
+    {
+        return 0;
+    }
+
     virtual Unit* getUnits() = 0;
     virtual Unit_Type_Data* getUnit_Types()
     {

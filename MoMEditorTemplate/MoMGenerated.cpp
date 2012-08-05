@@ -44,28 +44,6 @@ std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const eBonusDeposit& rhs)
-{
-    switch (rhs)
-    {
-    case DEPOSIT_no_deposit: os << "DEPOSIT_no_deposit"; break;
-    case DEPOSIT_Iron_Ore: os << "DEPOSIT_Iron_Ore"; break;
-    case DEPOSIT_Coal: os << "DEPOSIT_Coal"; break;
-    case DEPOSIT_Silver_Ore: os << "DEPOSIT_Silver_Ore"; break;
-    case DEPOSIT_Gold_Ore: os << "DEPOSIT_Gold_Ore"; break;
-    case DEPOSIT_Gems: os << "DEPOSIT_Gems"; break;
-    case DEPOSIT_Mithril_Ore: os << "DEPOSIT_Mithril_Ore"; break;
-    case DEPOSIT_Adamantium_Ore: os << "DEPOSIT_Adamantium_Ore"; break;
-    case DEPOSIT_Quork: os << "DEPOSIT_Quork"; break;
-    case DEPOSIT_Crysx: os << "DEPOSIT_Crysx"; break;
-    case DEPOSIT_Wild_Game: os << "DEPOSIT_Wild_Game"; break;
-    case DEPOSIT_Nightshade: os << "DEPOSIT_Nightshade"; break;
-    default: os << "<Unknown eBonusDeposit>"; break;
-    }
-    os << " (" << (unsigned)rhs << ")";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
 {
     switch (rhs)
@@ -1453,6 +1431,23 @@ std::ostream& operator<<(std::ostream& os, const eMagic_Powerful140m& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eMovement& rhs)
+{
+    switch (rhs)
+    {
+    case MOVEMENT_Unused: os << "MOVEMENT_Unused"; break;
+    case MOVEMENT_Walking: os << "MOVEMENT_Walking"; break;
+    case MOVEMENT_Forester: os << "MOVEMENT_Forester"; break;
+    case MOVEMENT_Mountaineer: os << "MOVEMENT_Mountaineer"; break;
+    case MOVEMENT_Swimming: os << "MOVEMENT_Swimming"; break;
+    case MOVEMENT_Sailing: os << "MOVEMENT_Sailing"; break;
+    case eMovement_MAX: os << "eMovement_MAX"; break;
+    default: os << "<Unknown eMovement>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eNode_Type& rhs)
 {
     switch (rhs)
@@ -2499,6 +2494,28 @@ std::ostream& operator<<(std::ostream& os, const eTax_Rate& rhs)
     case TAX_30_gold_75_unrest: os << "TAX_30_gold_75_unrest"; break;
     case eTax_Rate_MAX: os << "eTax_Rate_MAX"; break;
     default: os << "<Unknown eTax_Rate>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eTerrainBonusDeposit& rhs)
+{
+    switch (rhs)
+    {
+    case DEPOSIT_no_deposit: os << "DEPOSIT_no_deposit"; break;
+    case DEPOSIT_Iron_Ore: os << "DEPOSIT_Iron_Ore"; break;
+    case DEPOSIT_Coal: os << "DEPOSIT_Coal"; break;
+    case DEPOSIT_Silver_Ore: os << "DEPOSIT_Silver_Ore"; break;
+    case DEPOSIT_Gold_Ore: os << "DEPOSIT_Gold_Ore"; break;
+    case DEPOSIT_Gems: os << "DEPOSIT_Gems"; break;
+    case DEPOSIT_Mithril_Ore: os << "DEPOSIT_Mithril_Ore"; break;
+    case DEPOSIT_Adamantium_Ore: os << "DEPOSIT_Adamantium_Ore"; break;
+    case DEPOSIT_Quork: os << "DEPOSIT_Quork"; break;
+    case DEPOSIT_Crysx: os << "DEPOSIT_Crysx"; break;
+    case DEPOSIT_Wild_Game: os << "DEPOSIT_Wild_Game"; break;
+    case DEPOSIT_Nightshade: os << "DEPOSIT_Nightshade"; break;
+    default: os << "<Unknown eTerrainBonusDeposit>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -4555,13 +4572,13 @@ std::ostream& operator<<(std::ostream& os, const MapRow_Terrain& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const MapRow_Terrain_Flags& rhs)
+std::ostream& operator<<(std::ostream& os, const MapRow_Terrain_Changes& rhs)
 {
     os << "{\n";
-    os << "m_Terrain_Flags=(\n";
+    os << "m_Terrain_Changes=(\n";
     for (unsigned i = 0; i < 60; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Terrain_Flags[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_Terrain_Changes[i] << ",\n";
     }
     os << ")\n";
     os << "}";
@@ -4598,16 +4615,16 @@ std::ostream& operator<<(std::ostream& os, const Map_Attr& rhs)
     os << "m_Arcanus_Movement=" << rhs.m_Arcanus_Movement << "\n";
     os << "m_Myrror_Movement=" << rhs.m_Myrror_Movement << "\n";
     os << "m_Events_Status=" << rhs.m_Events_Status << "\n";
-    os << "m_Arcanus_Terrain_Flags_Row=(\n";
+    os << "m_Arcanus_Terrain_Changes_Row=(\n";
     for (unsigned i = 0; i < 40; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Arcanus_Terrain_Flags_Row[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_Arcanus_Terrain_Changes_Row[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Myrror_Terrain_Flags_Row=(\n";
+    os << "m_Myrror_Terrain_Changes_Row=(\n";
     for (unsigned i = 0; i < 40; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Myrror_Terrain_Flags_Row[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_Myrror_Terrain_Changes_Row[i] << ",\n";
     }
     os << ")\n";
     os << "}";
@@ -5641,7 +5658,7 @@ std::ostream& operator<<(std::ostream& os, const Spells_Known& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Terrain_Flags& rhs)
+std::ostream& operator<<(std::ostream& os, const Terrain_Changes& rhs)
 {
     os << "{\n";
     if (0 != rhs.Volcano_producing_for_Owner)
@@ -6924,23 +6941,23 @@ std::ostream& operator<<(std::ostream& os, const WizardsExe_Pointers& rhs)
     os << "word_4073A=" << rhs.word_4073A << " 0x" << std::hex << rhs.word_4073A << std::dec << "\n";
     os << "dword_4073C=" << rhs.dword_4073C << "\n";
     os << "dword_40740=" << rhs.dword_40740 << "\n";
-    os << "addr_terrain_cost_GUESS=" << rhs.addr_terrain_cost_GUESS << "\n";
+    os << "addr_Terrain_Movements=" << rhs.addr_Terrain_Movements << "\n";
     os << "dword_40748=" << rhs.dword_40748 << "\n";
     os << "dword_4074C=" << rhs.dword_4074C << "\n";
-    os << "addr_terrain_scouted_loc=" << rhs.addr_terrain_scouted_loc << "\n";
-    os << "addr_changed_terrain_loc=" << rhs.addr_changed_terrain_loc << "\n";
-    os << "addr_special_terrain_loc_=" << rhs.addr_special_terrain_loc_ << "\n";
+    os << "addr_Terrain_Explored=" << rhs.addr_Terrain_Explored << "\n";
+    os << "addr_Terrain_Changes=" << rhs.addr_Terrain_Changes << "\n";
+    os << "addr_Terrain_Bonuses=" << rhs.addr_Terrain_Bonuses << "\n";
     os << "addr_Cities=" << rhs.addr_Cities << "\n";
     os << "addr_Lairs_data=" << rhs.addr_Lairs_data << "\n";
     os << "addr_tower_attr=" << rhs.addr_tower_attr << "\n";
     os << "addr_fortress_data=" << rhs.addr_fortress_data << "\n";
     os << "addr_Nodes_Attr=" << rhs.addr_Nodes_Attr << "\n";
-    os << "addr_Continent_=" << rhs.addr_Continent_ << "\n";
+    os << "addr_Terrain_LandMassID=" << rhs.addr_Terrain_LandMassID << "\n";
     os << "word_40774=" << rhs.word_40774 << " 0x" << std::hex << rhs.word_40774 << std::dec << "\n";
     os << "word_40776=" << rhs.word_40776 << " 0x" << std::hex << rhs.word_40776 << std::dec << "\n";
     os << "word_40778=" << rhs.word_40778 << " 0x" << std::hex << rhs.word_40778 << std::dec << "\n";
     os << "word_4077A=" << rhs.word_4077A << " 0x" << std::hex << rhs.word_4077A << std::dec << "\n";
-    os << "addr_TerrainTypes=" << rhs.addr_TerrainTypes << "\n";
+    os << "addr_Terrain_Types=" << rhs.addr_Terrain_Types << "\n";
     os << "addr_Unrest_Table=(\n";
     for (unsigned i = 0; i < gMAX_RACES; ++i)
     {
@@ -7155,28 +7172,6 @@ bool validate(const eBannerColor& rhs, const std::string& context)
     case BANNER_Yellow: break;
     case BANNER_Brown: break;
     default: std::cout << context << ": Unknown eBannerColor = " << (int)rhs << "\n"; ok = false; break;
-    }
-    return ok;
-}
-
-bool validate(const eBonusDeposit& rhs, const std::string& context)
-{
-    bool ok = true;
-    switch (rhs)
-    {
-    case DEPOSIT_no_deposit: break;
-    case DEPOSIT_Iron_Ore: break;
-    case DEPOSIT_Coal: break;
-    case DEPOSIT_Silver_Ore: break;
-    case DEPOSIT_Gold_Ore: break;
-    case DEPOSIT_Gems: break;
-    case DEPOSIT_Mithril_Ore: break;
-    case DEPOSIT_Adamantium_Ore: break;
-    case DEPOSIT_Quork: break;
-    case DEPOSIT_Crysx: break;
-    case DEPOSIT_Wild_Game: break;
-    case DEPOSIT_Nightshade: break;
-    default: std::cout << context << ": Unknown eBonusDeposit = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -8474,6 +8469,22 @@ bool validate(const eMagic_Powerful140m& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eMovement& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case MOVEMENT_Unused: break;
+    case MOVEMENT_Walking: break;
+    case MOVEMENT_Forester: break;
+    case MOVEMENT_Mountaineer: break;
+    case MOVEMENT_Swimming: break;
+    case MOVEMENT_Sailing: break;
+    default: std::cout << context << ": Unknown eMovement = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eNode_Type& rhs, const std::string& context)
 {
     bool ok = true;
@@ -9507,6 +9518,28 @@ bool validate(const eTax_Rate& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eTerrainBonusDeposit& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case DEPOSIT_no_deposit: break;
+    case DEPOSIT_Iron_Ore: break;
+    case DEPOSIT_Coal: break;
+    case DEPOSIT_Silver_Ore: break;
+    case DEPOSIT_Gold_Ore: break;
+    case DEPOSIT_Gems: break;
+    case DEPOSIT_Mithril_Ore: break;
+    case DEPOSIT_Adamantium_Ore: break;
+    case DEPOSIT_Quork: break;
+    case DEPOSIT_Crysx: break;
+    case DEPOSIT_Wild_Game: break;
+    case DEPOSIT_Nightshade: break;
+    default: std::cout << context << ": Unknown eTerrainBonusDeposit = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eTerrainType& rhs, const std::string& context)
 {
     bool ok = true;
@@ -10446,14 +10479,14 @@ bool validate(const MapRow_Terrain& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const MapRow_Terrain_Flags& rhs, const std::string& context)
+bool validate(const MapRow_Terrain_Changes& rhs, const std::string& context)
 {
     bool ok = true;
     for (unsigned i = 0; i < 60; ++i)
     {
           std::ostringstream oss;
-          oss << context << ".m_Terrain_Flags[" << i << "]";
-          if (!validate(rhs.m_Terrain_Flags[i], oss.str())) ok = false;
+          oss << context << ".m_Terrain_Changes[" << i << "]";
+          if (!validate(rhs.m_Terrain_Changes[i], oss.str())) ok = false;
     }
     return ok;
 }
@@ -10491,14 +10524,14 @@ bool validate(const Map_Attr& rhs, const std::string& context)
     for (unsigned i = 0; i < 40; ++i)
     {
           std::ostringstream oss;
-          oss << context << ".m_Arcanus_Terrain_Flags_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Terrain_Flags_Row[i], oss.str())) ok = false;
+          oss << context << ".m_Arcanus_Terrain_Changes_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Terrain_Changes_Row[i], oss.str())) ok = false;
     }
     for (unsigned i = 0; i < 40; ++i)
     {
           std::ostringstream oss;
-          oss << context << ".m_Myrror_Terrain_Flags_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_Terrain_Flags_Row[i], oss.str())) ok = false;
+          oss << context << ".m_Myrror_Terrain_Changes_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_Terrain_Changes_Row[i], oss.str())) ok = false;
     }
     return ok;
 }
@@ -11061,7 +11094,7 @@ bool validate(const Spells_Known& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const Terrain_Flags& rhs, const std::string& context)
+bool validate(const Terrain_Changes& rhs, const std::string& context)
 {
     bool ok = true;
     return ok;
@@ -11272,19 +11305,19 @@ bool validate(const WizardsExe_Pointers& rhs, const std::string& context)
     if (!validate(rhs.dword_40730, context + ".dword_40730")) ok = false;
     if (!validate(rhs.dword_4073C, context + ".dword_4073C")) ok = false;
     if (!validate(rhs.dword_40740, context + ".dword_40740")) ok = false;
-    if (!validate(rhs.addr_terrain_cost_GUESS, context + ".addr_terrain_cost_GUESS")) ok = false;
+    if (!validate(rhs.addr_Terrain_Movements, context + ".addr_Terrain_Movements")) ok = false;
     if (!validate(rhs.dword_40748, context + ".dword_40748")) ok = false;
     if (!validate(rhs.dword_4074C, context + ".dword_4074C")) ok = false;
-    if (!validate(rhs.addr_terrain_scouted_loc, context + ".addr_terrain_scouted_loc")) ok = false;
-    if (!validate(rhs.addr_changed_terrain_loc, context + ".addr_changed_terrain_loc")) ok = false;
-    if (!validate(rhs.addr_special_terrain_loc_, context + ".addr_special_terrain_loc_")) ok = false;
+    if (!validate(rhs.addr_Terrain_Explored, context + ".addr_Terrain_Explored")) ok = false;
+    if (!validate(rhs.addr_Terrain_Changes, context + ".addr_Terrain_Changes")) ok = false;
+    if (!validate(rhs.addr_Terrain_Bonuses, context + ".addr_Terrain_Bonuses")) ok = false;
     if (!validate(rhs.addr_Cities, context + ".addr_Cities")) ok = false;
     if (!validate(rhs.addr_Lairs_data, context + ".addr_Lairs_data")) ok = false;
     if (!validate(rhs.addr_tower_attr, context + ".addr_tower_attr")) ok = false;
     if (!validate(rhs.addr_fortress_data, context + ".addr_fortress_data")) ok = false;
     if (!validate(rhs.addr_Nodes_Attr, context + ".addr_Nodes_Attr")) ok = false;
-    if (!validate(rhs.addr_Continent_, context + ".addr_Continent_")) ok = false;
-    if (!validate(rhs.addr_TerrainTypes, context + ".addr_TerrainTypes")) ok = false;
+    if (!validate(rhs.addr_Terrain_LandMassID, context + ".addr_Terrain_LandMassID")) ok = false;
+    if (!validate(rhs.addr_Terrain_Types, context + ".addr_Terrain_Types")) ok = false;
     for (unsigned i = 0; i < gMAX_RACES; ++i)
     {
           std::ostringstream oss;

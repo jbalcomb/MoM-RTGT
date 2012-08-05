@@ -398,7 +398,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
 
         ok = game->commitData(spareNameBuffer, spareNameBuffer, (size_t)(spareNames - spareNameBuffer));
 
-        for (int unitTypeNr = 35; MoM::toUInt(unitTypeNr) < MoM::eUnit_Type_MAX; ++unitTypeNr)
+        for (int unitTypeNr = 0; MoM::toUInt(unitTypeNr) < MoM::eUnit_Type_MAX; ++unitTypeNr)
         {
             MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(unitTypeNr);
             MoM::Unit_Type_Data* data = game->getUnit_Type_Data(unitType);
@@ -461,7 +461,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
 //                data->m_MoveHalves = 8;
 //			}
 
-            data->m_MoveHalves += 2;
+            data->m_MoveHalves += 1;
 
             //
             // Normal units

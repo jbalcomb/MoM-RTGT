@@ -21,7 +21,9 @@
 #include "MoMTemplate.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
+#include "QMoMTreeItem.h"
 #include "QMoMUnitTile.h"
+#include "QOverlandMapScene.h"
 
 using MoM::QMoMResources;
 
@@ -30,19 +32,15 @@ class QTreeItem : public QTreeWidgetItem
 
 };
 
-
 DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QDialog(parent),
-    m_sceneArcanus(new QGraphicsScene),
-    m_sceneMyrror(new QGraphicsScene),
+    m_sceneArcanus(new QOverlandMapScene(MoM::PLANE_Arcanum)),
+    m_sceneMyrror(new QOverlandMapScene(MoM::PLANE_Myrror)),
     m_timer(new QTimer),
     ui(new Ui::DialogOverlandMap)
 {
     ui->setupUi(this);
 
-    QRectF rectfTile = MoM::QMoMMapTile().boundingRect();
-    m_sceneArcanus->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
-    m_sceneMyrror->setSceneRect(0, 0, MoM::gMAX_MAP_COLS * rectfTile.width(), MoM::gMAX_MAP_ROWS * rectfTile.height());
     ui->graphicsView->setSceneRect(m_sceneArcanus->sceneRect());
 
     ui->comboBox_Plane->setCurrentIndex(1);
@@ -52,23 +50,27 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Update view when checkbox is clicked
-    QObject::connect(ui->checkBox_BonusDeposits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_EnemyUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(ui->checkBox_Explored, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_Lairs, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_Terrain, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(ui->checkBox_TerrainBonuses, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(ui->checkBox_TerrainChanges, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_YourUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+
+    // Update view when items are inspected
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileChanged(MoM::Location,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileChanged(MoM::Location,QList<QGraphicsItem*>)));
 
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
 
+    // Force initialization
     slot_gameChanged(MainWindow::getInstance()->getGame());
-    m_timer->start(250);
 
-    MoM::Location loc;
-    loc.m_Plane = MoM::PLANE_Arcanum;
-    loc.m_XPos = 23;
-    loc.m_YPos = 31;
-    slot_tileChanged(loc);
+    // Start timer
+    m_timer->start(250);
 }
 
 DialogOverlandMap::~DialogOverlandMap()
@@ -116,24 +118,32 @@ void DialogOverlandMap::slot_gameUpdated()
 
     // Add fixed map tiles
     // Show terrain
-    if (ui->checkBox_Terrain->isChecked())
+    for (MoM::ePlane plane = (MoM::ePlane)0; MoM::toUInt(plane) < MoM::ePlane_MAX; MoM::inc(plane))
     {
-        for (MoM::ePlane plane = (MoM::ePlane)0; MoM::toUInt(plane) < MoM::ePlane_MAX; MoM::inc(plane))
+        for (int y = 0; y < (int)MoM::gMAX_MAP_ROWS; ++y)
         {
-            for (int y = 0; y < (int)MoM::gMAX_MAP_ROWS; ++y)
+            for (int x = 0; x < (int)MoM::gMAX_MAP_COLS; ++x)
             {
-                for (int x = 0; x < (int)MoM::gMAX_MAP_COLS; ++x)
+                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile;
+                mapTile->setPlane(plane);
+                if (ui->checkBox_Terrain->isChecked())
                 {
-                    MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile;
-                    mapTile->setPlane(plane);
                     mapTile->setTerrainType(m_game->getTerrainType(plane, x, y));
-                    if (ui->checkBox_BonusDeposits->isChecked())
-                    {
-                        mapTile->setBonusDeposit(m_game->getBonusDeposit(plane, x, y));
-                    }
-                    mapTile->setPos(x * rectfTile.width(), y * rectfTile.height());
-                    scene[plane]->addItem(mapTile);
                 }
+                if (ui->checkBox_TerrainBonuses->isChecked())
+                {
+                    mapTile->setTerrainBonus(m_game->getTerrainBonus(plane, x, y));
+                }
+                if (ui->checkBox_TerrainChanges->isChecked())
+                {
+                    mapTile->setTerrainChange(m_game->getTerrainChange(plane, x, y));
+                }
+                if (ui->checkBox_Explored->isChecked())
+                {
+                    mapTile->setTerrainExplored(m_game->getTerrainExplored(plane, x, y));
+                }
+                mapTile->setPos(x * rectfTile.width(), y * rectfTile.height());
+                scene[plane]->addItem(mapTile);
             }
         }
     }
@@ -189,10 +199,34 @@ void DialogOverlandMap::slot_gameUpdated()
             }
         }
     }
+
+    // Show cities
+    if (ui->checkBox_Cities->isChecked())
+    {
+        for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (MoM::toUInt(cityNr) < MoM::gMAX_CITIES); ++cityNr)
+        {
+            MoM::City* city = m_game->getCity(cityNr);
+            if (0 == city)
+                continue;
+            QPixmap pixmapCity = MoM::QMoMResources::instance().getPixmap(city->m_Size, 1);
+            if (MoM::inRange(city->m_Plane, MoM::ePlane_MAX)
+                    && !pixmapCity.isNull())
+            {
+                QGraphicsItem* mapCityItem = scene[city->m_Plane]->addPixmap(pixmapCity);
+                // city pixmap has to be about twice as big as a regular tile to fit properly
+                mapCityItem->setPos((city->m_XPos - 0.5) * rectfTile.width(), (city->m_YPos - 0.5) * rectfTile.height());
+                mapCityItem->setScale(2 * rectfTile.width() / pixmapCity.width());
+                mapCityItem->setToolTip(QString("%0 \"%1\"").arg(prettyQStr(city->m_Race)).arg(city->m_City_Name));
+                m_lookup.insert(city, mapCityItem);
+            }
+        }
+    }
+
 }
 
-void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
+void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems)
 {
+    qDebug() << QString("slot_tileChanged(%0:(%1,%2), %3 items").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos).arg(graphicItems.count());
     ui->treeWidget_Tile->clear();
 
     QTreeItem* qtreeItem;
@@ -200,9 +234,93 @@ void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
     qtreeItem->setText(0, "Location");
     qtreeItem->setText(1, QString("%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos));
     ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    qtreeItem = new QTreeItem;
-    qtreeItem->setText(0, "text2");
-    ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+
+    if (0 != m_game->getTerrainType(loc))
+    {
+        qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "TerrainType");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainType(loc)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainBonus(loc))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "TerrainBonus");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainBonus(loc)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainChange(loc))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "TerrainChange");
+        qtreeItem->setText(1, prettyQStr(*(uint8_t*)m_game->getTerrainChange(loc)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainExplored(loc))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "Explored");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainExplored(loc)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainLandMassID(loc))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "LandMassID");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainLandMassID(loc)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveUnused");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveWalk");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveForester");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveMountaineer");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveSwimming");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing))
+    {
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, "MoveSailing");
+        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
+   
+    for (int i = 0; i < graphicItems.count(); ++i)
+    {
+        QGraphicsItem* graphicsItem = graphicItems[i];
+        QTreeItem* qtreeItem = new QTreeItem;
+        qtreeItem->setText(0, QString("Item[%0]").arg(i));
+        qtreeItem->setText(1, graphicsItem->toolTip());
+        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    }
 }
 
 void DialogOverlandMap::slot_timerActiveUnit()

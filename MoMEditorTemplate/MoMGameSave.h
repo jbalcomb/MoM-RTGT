@@ -29,13 +29,6 @@ public:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
-    virtual eBonusDeposit* getBonusDeposits()
-    {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Map_Attr.m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
-    }
-
     virtual Building_Data* getBuilding_Data()
     {
         if (0 == m_BuilddatLbx.get())
@@ -150,7 +143,37 @@ public:
         return (Spell_Data*)(data + 4);
     }
 
-    virtual eTerrainType* getTerrainTypes()
+    virtual eTerrainBonusDeposit* getTerrain_Bonuses()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Attr.m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
+    }
+    virtual Terrain_Changes* getTerrain_Changes()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Attr.m_Arcanus_Terrain_Changes_Row[0].m_Terrain_Changes[0];
+    }
+    virtual uint8_t* getTerrain_Explored()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Attr.m_Arcanus_Exploration_Row[0].m_Explored[0];
+    }
+    virtual uint8_t* getTerrain_LandMassID()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Tiles.m_Arcanus_LandMassID_Row[0].m_LandMassID[0];
+    }
+    virtual Map_Movement* getTerrain_Movements()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Attr.m_Arcanus_Movement;
+    }
+    virtual eTerrainType* getTerrain_Types()
     {
         if (0 == m_SaveGame.get())
             return 0;

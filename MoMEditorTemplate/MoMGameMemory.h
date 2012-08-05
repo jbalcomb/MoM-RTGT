@@ -93,7 +93,6 @@ private:
     virtual Battlefield* getBattlefield();
     virtual Battle_Unit* getBattle_Unit_View();
     virtual Battle_Unit* getBattle_Units();
-    virtual eBonusDeposit* getBonusDeposits();
     virtual Building_Data* getBuilding_Data();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
@@ -110,7 +109,14 @@ private:
     virtual uint16_t* getNumber_of_Wizards();
     virtual Spell_Data* getSpell_Data();
     virtual Spells_Cast_in_Battle* getSpells_Cast_in_Battle();
-    virtual eTerrainType* getTerrainTypes();
+
+    virtual eTerrainBonusDeposit* getTerrain_Bonuses();
+    virtual Terrain_Changes* getTerrain_Changes();
+    virtual uint8_t* getTerrain_Explored();
+    virtual uint8_t* getTerrain_LandMassID();
+    virtual Map_Movement* getTerrain_Movements();
+    virtual eTerrainType* getTerrain_Types();
+
     virtual Unit* getUnits();
     virtual Unit_Type_Data* getUnit_Types();
     virtual int8_t* getUnrest_Table(eRace homeRace);

@@ -52,8 +52,4 @@ include(MoMTweaker.pri)
 # Additional platform specific sources
 SOURCES += \
     ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
-    ./main.cpp \
-    QMoMTreeCustomExtensions.cpp
-
-HEADERS += \
-    QMoMTreeCustomExtensions.h
+    ./main.cpp

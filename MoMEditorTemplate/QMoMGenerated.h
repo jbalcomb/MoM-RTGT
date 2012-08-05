@@ -50,7 +50,7 @@ QMoMTreeItemBase* constructTreeItem(MapRow_Exploration* rhs, const QString& cont
 QMoMTreeItemBase* constructTreeItem(MapRow_LandMassID* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Movement* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Terrain* rhs, const QString& context);
-QMoMTreeItemBase* constructTreeItem(MapRow_Terrain_Flags* rhs, const QString& context);
+QMoMTreeItemBase* constructTreeItem(MapRow_Terrain_Changes* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Map_Attr* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Map_Movement* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Map_Tiles* rhs, const QString& context);
@@ -64,7 +64,7 @@ QMoMTreeItemBase* constructTreeItem(Skills* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Spell_Data* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Spells_Cast_in_Battle* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Spells_Known* rhs, const QString& context);
-QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context);
+QMoMTreeItemBase* constructTreeItem(Terrain_Changes* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Tower_Attr* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Tower_Node_Lair* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Tower_Node_Lair_Flags* rhs, const QString& context);

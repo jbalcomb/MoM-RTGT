@@ -2,6 +2,16 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.5 (2012--)
+-----------------------------
+
+* Added tax unrest table to Game data.
+
+* Completed map view to show everything it should.
+  Moving the mouse over a tile will show what's there.
+
+
+
 CHANGES IN 0.2.4 (2012-08-02)
 -----------------------------
 

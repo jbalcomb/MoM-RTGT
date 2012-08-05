@@ -11,6 +11,7 @@
 #define DIALOGOVERLANDMAP_H
 
 #include <QDialog>
+#include <QList>
 #include <QMap>
 
 #include <QMoMSharedPointers.h>
@@ -45,8 +46,8 @@ private:
 private:
     QMoMGamePtr m_game;
 
-    QGraphicsScene* m_sceneArcanus;
-    QGraphicsScene* m_sceneMyrror;
+    class QOverlandMapScene* m_sceneArcanus;
+    class QOverlandMapScene* m_sceneMyrror;
     LookupMap m_lookup;
     QMoMTimerPtr m_timer;
 
@@ -57,7 +58,7 @@ private slots:
     void on_verticalSlider_Zoom_valueChanged(int value);
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
-    void slot_tileChanged(const MoM::Location& loc);
+    void slot_tileChanged(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems);
     void slot_timerActiveUnit();
 };
 

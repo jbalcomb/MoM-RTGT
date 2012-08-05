@@ -188,15 +188,6 @@ Battle_Unit* MoMGameMemory::getBattle_Units()
     return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
 }
 
-eBonusDeposit* MoMGameMemory::getBonusDeposits()
-{
-    if (0 == m_process.get())
-        return 0;
-    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_special_terrain_loc_,
-            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
-}
-
 City* MoMGameMemory::getCities()
 {
     if (0 == m_process.get())
@@ -380,12 +371,57 @@ Spells_Cast_in_Battle* MoMGameMemory::getSpells_Cast_in_Battle()
     return derefHeapPointer<Spells_Cast_in_Battle>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Spells_Cast_in_Battle, 1);
 }
 
-eTerrainType* MoMGameMemory::getTerrainTypes()
+eTerrainBonusDeposit* MoMGameMemory::getTerrain_Bonuses()
 {
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_WizardsExe_Pointers.addr_TerrainTypes,
+    return derefHeapPointer<eTerrainBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Bonuses,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+Terrain_Changes* MoMGameMemory::getTerrain_Changes()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Terrain_Changes>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Changes,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+uint8_t* MoMGameMemory::getTerrain_Explored()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Explored,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+uint8_t* MoMGameMemory::getTerrain_LandMassID()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_LandMassID,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+Map_Movement* MoMGameMemory::getTerrain_Movements()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Movements,
+            ePlane_MAX * sizeof(Map_Movement));
+}
+
+eTerrainType* MoMGameMemory::getTerrain_Types()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Types,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 

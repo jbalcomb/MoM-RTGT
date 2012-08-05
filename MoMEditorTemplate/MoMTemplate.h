@@ -59,22 +59,6 @@ enum eBannerColor ENUMSIZE16
     eBannerColor__SIZE__ = 0xFFFF
 };
 
-enum eBonusDeposit ENUMSIZE8
-{
-    DEPOSIT_no_deposit = 0x00,
-    DEPOSIT_Iron_Ore = 0x01, // (-5% unit cost)
-    DEPOSIT_Coal = 0x02, // (-10% unit cost)
-    DEPOSIT_Silver_Ore = 0x03, // (+2 gold)
-    DEPOSIT_Gold_Ore = 0x04, // (+3 gold)
-    DEPOSIT_Gems = 0x05, // (+5 gold)
-    DEPOSIT_Mithril_Ore = 0x06, // (+1 mana)
-    DEPOSIT_Adamantium_Ore = 0x07, // (+2 mana)
-    DEPOSIT_Quork = 0x08, // (+3 mana)
-    DEPOSIT_Crysx = 0x09, // (+5 mana)
-    DEPOSIT_Wild_Game = 0x40, // (+2 food)
-    DEPOSIT_Nightshade = 0x80, // (50 strength dispel)
-};
-
 enum eBuilding ENUMSIZE16
 {
     BUILDING_Not_applicable = 0xFFFF,
@@ -1326,6 +1310,18 @@ enum eMagic_Powerful140m ENUMSIZE16
     eMagic_Powerful140m_Size__SIZE__ = 0xFFFF
 };
 
+enum eMovement
+{
+    MOVEMENT_Unused,
+    MOVEMENT_Walking,
+    MOVEMENT_Forester,
+    MOVEMENT_Mountaineer,
+    MOVEMENT_Swimming,
+    MOVEMENT_Sailing,
+
+    eMovement_MAX
+};
+
 enum eTower_Node_Lair_Status ENUMSIZE8
 {
     LAIRSTATUS_popped = 0,
@@ -2391,6 +2387,49 @@ enum eTax_Rate ENUMSIZE16
     eTax_Rate__SIZE__ = 0xFFFF
 };
 
+enum eTerrainBonusDeposit ENUMSIZE8
+{
+    DEPOSIT_no_deposit = 0x00,
+    DEPOSIT_Iron_Ore = 0x01, // (-5% unit cost)
+    DEPOSIT_Coal = 0x02, // (-10% unit cost)
+    DEPOSIT_Silver_Ore = 0x03, // (+2 gold)
+    DEPOSIT_Gold_Ore = 0x04, // (+3 gold)
+    DEPOSIT_Gems = 0x05, // (+5 gold)
+    DEPOSIT_Mithril_Ore = 0x06, // (+1 mana)
+    DEPOSIT_Adamantium_Ore = 0x07, // (+2 mana)
+    DEPOSIT_Quork = 0x08, // (+3 mana)
+    DEPOSIT_Crysx = 0x09, // (+5 mana)
+    DEPOSIT_Wild_Game = 0x40, // (+2 food)
+    DEPOSIT_Nightshade = 0x80, // (50 strength dispel)
+};
+
+enum eTerrainCategory
+{
+    TERRAINCATEGORY_Ocean = 0,
+    TERRAINCATEGORY_Grasslands = 1,
+    TERRAINCATEGORY_Forest = 2,
+    TERRAINCATEGORY_Mountain = 3,
+    TERRAINCATEGORY_Desert = 4,
+    TERRAINCATEGORY_Swamp = 5,
+    TERRAINCATEGORY_Tundra = 6,
+    TERRAINCATEGORY_Shore = 7,
+    TERRAINCATEGORY_RiverMouth = 8,
+    TERRAINCATEGORY_Hills = 10,
+    TERRAINCATEGORY_Plains = 11,
+    TERRAINCATEGORY_River = 12,
+    TERRAINCATEGORY_Volcano = 13,
+
+    eTerrainCategory_MAX
+};
+
+enum eTerrainChange
+{
+    TERRAINCHANGE_Volcano_owner = 0x07, // 07 //1 MP/turn for Wizard 1 (YOU) through 5, 0 = no one
+    TERRAINCHANGE_Road = 0x08,
+    TERRAINCHANGE_Enchanted_Road = 0x10,
+    TERRAINCHANGE_Corruption = 0x20,
+};
+
 enum eTerrainType ENUMSIZE16
 {
     ocean = 0x0000,
@@ -3449,7 +3488,7 @@ typedef struct PACKED_STRUCT // Location
 
 typedef struct PACKED_STRUCT // MapRow_Bonus
 {
-    eBonusDeposit   m_Bonus_Deposit[60];
+    eTerrainBonusDeposit   m_Bonus_Deposit[60];
 } MapRow_Bonus;
 
 
@@ -3477,7 +3516,7 @@ typedef struct PACKED_STRUCT // MapRow_Terrain
 } MapRow_Terrain;
 
 
-typedef struct PACKED_STRUCT // Terrain_Flags
+typedef struct PACKED_STRUCT // Terrain_Changes
 {
     uint8_t     Volcano_producing_for_Owner:3;  // 07 //1 MP/turn for Wizard 1 (YOU) through 5, 0 = no one
     uint8_t     road:1;                         // 08
@@ -3485,13 +3524,13 @@ typedef struct PACKED_STRUCT // Terrain_Flags
     uint8_t     corruption:1;                   // 20
     uint8_t     u1:1;                           // 40
     uint8_t     u2:1;                           // 80
-} Terrain_Flags; // <read=read_Terrain_Flags>;
+} Terrain_Changes; // <read=read_Terrain_Changes>;
 
 
-typedef struct PACKED_STRUCT // MapRow_Terrain_Flags
+typedef struct PACKED_STRUCT // MapRow_Terrain_Changes
 {
-    Terrain_Flags   m_Terrain_Flags[60];
-} MapRow_Terrain_Flags;
+    Terrain_Changes   m_Terrain_Changes[60];
+} MapRow_Terrain_Changes;
 
 
 typedef struct PACKED_STRUCT // Map_Movement
@@ -3624,8 +3663,8 @@ typedef struct PACKED_STRUCT // Map_Attr
     Map_Movement            m_Arcanus_Movement;
     Map_Movement            m_Myrror_Movement;
     Events_Status           m_Events_Status;
-    MapRow_Terrain_Flags    m_Arcanus_Terrain_Flags_Row[40];
-    MapRow_Terrain_Flags    m_Myrror_Terrain_Flags_Row[40];
+    MapRow_Terrain_Changes  m_Arcanus_Terrain_Changes_Row[40];
+    MapRow_Terrain_Changes  m_Myrror_Terrain_Changes_Row[40];
 } Map_Attr;
 
 
@@ -5085,23 +5124,23 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_4073A  ; // 9C9A
     EXE_Reloc   dword_4073C ; // 9C9C
     EXE_Reloc   dword_40740 ; // 9CA0
-    EXE_Reloc   addr_terrain_cost_GUESS   ; // 9CA4
+    EXE_Reloc   addr_Terrain_Movements   ; // 9CA4
     EXE_Reloc   dword_40748 ; // 9CA8
     EXE_Reloc   dword_4074C ; // 9CAC
-    EXE_Reloc   addr_terrain_scouted_loc    ; // 9CB0
-    EXE_Reloc   addr_changed_terrain_loc  ; // 9CB4
-    EXE_Reloc   addr_special_terrain_loc_    ; // 9CB8
+    EXE_Reloc   addr_Terrain_Explored    ; // 9CB0
+    EXE_Reloc   addr_Terrain_Changes  ; // 9CB4
+    EXE_Reloc   addr_Terrain_Bonuses    ; // 9CB8
     EXE_Reloc   addr_Cities ; // 9CBC
     EXE_Reloc   addr_Lairs_data   ; // 9CC0
     EXE_Reloc   addr_tower_attr ; // 9CC4
     EXE_Reloc   addr_fortress_data    ; // 9CC8
     EXE_Reloc   addr_Nodes_Attr    ; // 9CCC
-    EXE_Reloc   addr_Continent_  ; // 9CD0
+    EXE_Reloc   addr_Terrain_LandMassID  ; // 9CD0
     uint16_t    word_40774  ; // 9CD4
     uint16_t    word_40776  ; // 9CD6
     uint16_t    word_40778  ; // 9CD8
     uint16_t    word_4077A  ; // 9CDA
-    EXE_Reloc   addr_TerrainTypes ; // 9CDC
+    EXE_Reloc   addr_Terrain_Types ; // 9CDC
     EXE_Reloc   addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
     uint16_t    word_407B8  ; // 9D18
     uint16_t    word_407BA  ; // 9D1A

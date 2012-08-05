@@ -37,11 +37,13 @@ HEADERS += \
     ../MoMTweaker/dialogtools.h \
     ../MoMTweaker/mainwindow.h \
     ../MoMTweaker/unitmodel.h \
+    ../MoMTweaker/QMoMTreeCustomExtensions.h \
     ../MoMEditorTemplate/MoMCommon.h \
     ../MoMEditorTemplate/TeeRedirecter.h \
     ../MoMEditorTemplate/QMoMUnitTile.h \
     ../MoMEditorTemplate/QMapGraphicsView.h \
-    ../MoMEditorTemplate/MoMCatnip.h
+    ../MoMEditorTemplate/MoMCatnip.h \
+    ../MoMEditorTemplate/QOverlandMapScene.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -73,9 +75,11 @@ SOURCES += \
     ../MoMTweaker/dialogtools.cpp \
     ../MoMTweaker/mainwindow.cpp \
     ../MoMTweaker/unitmodel.cpp \
+    ../MoMTweaker/QMoMTreeCustomExtensions.cpp \
     ../MoMEditorTemplate/QMoMUnitTile.cpp \
     ../MoMEditorTemplate/QMapGraphicsView.cpp \
-    ../MoMEditorTemplate/MoMCatnip.cpp
+    ../MoMEditorTemplate/MoMCatnip.cpp \
+    ../MoMEditorTemplate/QOverlandMapScene.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \

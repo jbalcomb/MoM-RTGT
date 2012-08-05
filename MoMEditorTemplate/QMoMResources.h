@@ -49,14 +49,16 @@ public:
     }
 
     const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const;
-    const QMoMImagePtr getImage(MoM::eBonusDeposit bonusDeposit) const;
     const QMoMImagePtr getImage(MoM::eBuilding building) const;
+    const QMoMImagePtr getImage(MoM::eCity_Size citySize) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const;
+    const QMoMImagePtr getImage(MoM::eTerrainBonusDeposit bonusDeposit) const;
+    const QMoMImagePtr getImage(MoM::eTerrainChange terrainChange, int roadDirection = 0) const;
     const QMoMImagePtr getImage(MoM::eTerrainType terrain) const;
     const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const;
 

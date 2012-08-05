@@ -657,7 +657,12 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
         statusBar()->showMessage(tr("Catnip mod applied"));
         (void)QMessageBox::warning(this,
             tr("Catnip mod"),
-            tr("Catnip mod applied"));
+            tr( "Catnip mod applied\n"
+                "\n"
+                "1. All units have an additional half move\n"
+                "2. The heroes have alternative slots (and a couple of changes)\n"
+                "3. Magicians, priests, and shamen have been renamed and have different abilities\n"
+            ));
     }
 
     controller->update();

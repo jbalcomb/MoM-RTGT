@@ -2473,7 +2473,7 @@ QMoMTreeItemBase* constructTreeItem(MapRow_Bonus* rhs, const QString& context)
     {
           std::ostringstream oss;
           oss << "m_Bonus_Deposit[" << i << "]";
-          ptreem_Bonus_Deposit->appendChild(oss.str().c_str(), new QMoMTreeItem<eBonusDeposit>(&rhs->m_Bonus_Deposit[i]));
+          ptreem_Bonus_Deposit->appendChild(oss.str().c_str(), new QMoMTreeItem<eTerrainBonusDeposit>(&rhs->m_Bonus_Deposit[i]));
     }
     return ptree;
 }
@@ -2542,18 +2542,18 @@ QMoMTreeItemBase* constructTreeItem(MapRow_Terrain* rhs, const QString& context)
     return ptree;
 }
 
-QMoMTreeItemBase* constructTreeItem(MapRow_Terrain_Flags* rhs, const QString& context)
+QMoMTreeItemBase* constructTreeItem(MapRow_Terrain_Changes* rhs, const QString& context)
 {
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<MapRow_Terrain_Flags>(rhs, context);
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<MapRow_Terrain_Changes>(rhs, context);
     if (0 == rhs)
         return ptree;
 
-    QMoMTreeItemBase* ptreem_Terrain_Flags = ptree;
+    QMoMTreeItemBase* ptreem_Terrain_Changes = ptree;
     for (unsigned i = 0; i < 60; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Terrain_Flags[" << i << "]";
-          ptreem_Terrain_Flags->appendTree(constructTreeItem(&rhs->m_Terrain_Flags[i], oss.str().c_str()), "");
+          oss << "m_Terrain_Changes[" << i << "]";
+          ptreem_Terrain_Changes->appendTree(constructTreeItem(&rhs->m_Terrain_Changes[i], oss.str().c_str()), "");
     }
     return ptree;
 }
@@ -2615,29 +2615,29 @@ QMoMTreeItemBase* constructTreeItem(Map_Attr* rhs, const QString& context)
     ptree->appendTree(constructTreeItem(&rhs->m_Arcanus_Movement, "m_Arcanus_Movement"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_Myrror_Movement, "m_Myrror_Movement"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_Events_Status, "m_Events_Status"), "");
-    QMoMTreeItemBase* ptreem_Arcanus_Terrain_Flags_Row = ptree;
+    QMoMTreeItemBase* ptreem_Arcanus_Terrain_Changes_Row = ptree;
     if (40 > 3)
     {
-        ptreem_Arcanus_Terrain_Flags_Row = new QMoMTreeItemBase("m_Arcanus_Terrain_Flags_Row");
-        ptree->appendTree(ptreem_Arcanus_Terrain_Flags_Row, "");
+        ptreem_Arcanus_Terrain_Changes_Row = new QMoMTreeItemBase("m_Arcanus_Terrain_Changes_Row");
+        ptree->appendTree(ptreem_Arcanus_Terrain_Changes_Row, "");
     }
     for (unsigned i = 0; i < 40; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Arcanus_Terrain_Flags_Row[" << i << "]";
-          ptreem_Arcanus_Terrain_Flags_Row->appendTree(constructTreeItem(&rhs->m_Arcanus_Terrain_Flags_Row[i], oss.str().c_str()), "");
+          oss << "m_Arcanus_Terrain_Changes_Row[" << i << "]";
+          ptreem_Arcanus_Terrain_Changes_Row->appendTree(constructTreeItem(&rhs->m_Arcanus_Terrain_Changes_Row[i], oss.str().c_str()), "");
     }
-    QMoMTreeItemBase* ptreem_Myrror_Terrain_Flags_Row = ptree;
+    QMoMTreeItemBase* ptreem_Myrror_Terrain_Changes_Row = ptree;
     if (40 > 3)
     {
-        ptreem_Myrror_Terrain_Flags_Row = new QMoMTreeItemBase("m_Myrror_Terrain_Flags_Row");
-        ptree->appendTree(ptreem_Myrror_Terrain_Flags_Row, "");
+        ptreem_Myrror_Terrain_Changes_Row = new QMoMTreeItemBase("m_Myrror_Terrain_Changes_Row");
+        ptree->appendTree(ptreem_Myrror_Terrain_Changes_Row, "");
     }
     for (unsigned i = 0; i < 40; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Myrror_Terrain_Flags_Row[" << i << "]";
-          ptreem_Myrror_Terrain_Flags_Row->appendTree(constructTreeItem(&rhs->m_Myrror_Terrain_Flags_Row[i], oss.str().c_str()), "");
+          oss << "m_Myrror_Terrain_Changes_Row[" << i << "]";
+          ptreem_Myrror_Terrain_Changes_Row->appendTree(constructTreeItem(&rhs->m_Myrror_Terrain_Changes_Row[i], oss.str().c_str()), "");
     }
     return ptree;
 }
@@ -4351,13 +4351,13 @@ QMoMTreeItemBase* constructTreeItem(Spells_Known* rhs, const QString& context)
     return ptree;
 }
 
-QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
+QMoMTreeItemBase* constructTreeItem(Terrain_Changes* rhs, const QString& context)
 {
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<Terrain_Flags>(rhs, context);
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<Terrain_Changes>(rhs, context);
     if (0 == rhs)
         return ptree;
 
-    Terrain_Flags maskVolcano_producing_for_Owner;
+    Terrain_Changes maskVolcano_producing_for_Owner;
     memset(&maskVolcano_producing_for_Owner, '\0', sizeof(maskVolcano_producing_for_Owner));
     maskVolcano_producing_for_Owner.Volcano_producing_for_Owner = 7;
     if (1 == sizeof(maskVolcano_producing_for_Owner))
@@ -4366,7 +4366,7 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
         ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskVolcano_producing_for_Owner));
     else
         ptree->appendChild("Volcano_producing_for_Owner", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskVolcano_producing_for_Owner));
-    Terrain_Flags maskroad;
+    Terrain_Changes maskroad;
     memset(&maskroad, '\0', sizeof(maskroad));
     maskroad.road = 1;
     if (1 == sizeof(maskroad))
@@ -4375,7 +4375,7 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
         ptree->appendChild("road", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskroad));
     else
         ptree->appendChild("road", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskroad));
-    Terrain_Flags maskenchanted_road;
+    Terrain_Changes maskenchanted_road;
     memset(&maskenchanted_road, '\0', sizeof(maskenchanted_road));
     maskenchanted_road.enchanted_road = 1;
     if (1 == sizeof(maskenchanted_road))
@@ -4384,7 +4384,7 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
         ptree->appendChild("enchanted_road", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskenchanted_road));
     else
         ptree->appendChild("enchanted_road", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskenchanted_road));
-    Terrain_Flags maskcorruption;
+    Terrain_Changes maskcorruption;
     memset(&maskcorruption, '\0', sizeof(maskcorruption));
     maskcorruption.corruption = 1;
     if (1 == sizeof(maskcorruption))
@@ -4393,7 +4393,7 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
         ptree->appendChild("corruption", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskcorruption));
     else
         ptree->appendChild("corruption", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskcorruption));
-    Terrain_Flags masku1;
+    Terrain_Changes masku1;
     memset(&masku1, '\0', sizeof(masku1));
     masku1.u1 = 1;
     if (1 == sizeof(masku1))
@@ -4402,7 +4402,7 @@ QMoMTreeItemBase* constructTreeItem(Terrain_Flags* rhs, const QString& context)
         ptree->appendChild("u1", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku1));
     else
         ptree->appendChild("u1", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku1));
-    Terrain_Flags masku2;
+    Terrain_Changes masku2;
     memset(&masku2, '\0', sizeof(masku2));
     masku2.u2 = 1;
     if (1 == sizeof(masku2))
@@ -6366,23 +6366,23 @@ QMoMTreeItemBase* constructTreeItem(WizardsExe_Pointers* rhs, const QString& con
     ptree->appendChild("word_4073A", new QMoMTreeItem<uint16_t>(&rhs->word_4073A));
     ptree->appendTree(constructTreeItem(&rhs->dword_4073C, "dword_4073C"), "");
     ptree->appendTree(constructTreeItem(&rhs->dword_40740, "dword_40740"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_terrain_cost_GUESS, "addr_terrain_cost_GUESS"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Movements, "addr_Terrain_Movements"), "");
     ptree->appendTree(constructTreeItem(&rhs->dword_40748, "dword_40748"), "");
     ptree->appendTree(constructTreeItem(&rhs->dword_4074C, "dword_4074C"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_terrain_scouted_loc, "addr_terrain_scouted_loc"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_changed_terrain_loc, "addr_changed_terrain_loc"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_special_terrain_loc_, "addr_special_terrain_loc_"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Explored, "addr_Terrain_Explored"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Changes, "addr_Terrain_Changes"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Bonuses, "addr_Terrain_Bonuses"), "");
     ptree->appendTree(constructTreeItem(&rhs->addr_Cities, "addr_Cities"), "");
     ptree->appendTree(constructTreeItem(&rhs->addr_Lairs_data, "addr_Lairs_data"), "");
     ptree->appendTree(constructTreeItem(&rhs->addr_tower_attr, "addr_tower_attr"), "");
     ptree->appendTree(constructTreeItem(&rhs->addr_fortress_data, "addr_fortress_data"), "");
     ptree->appendTree(constructTreeItem(&rhs->addr_Nodes_Attr, "addr_Nodes_Attr"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Continent_, "addr_Continent_"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_LandMassID, "addr_Terrain_LandMassID"), "");
     ptree->appendChild("word_40774", new QMoMTreeItem<uint16_t>(&rhs->word_40774));
     ptree->appendChild("word_40776", new QMoMTreeItem<uint16_t>(&rhs->word_40776));
     ptree->appendChild("word_40778", new QMoMTreeItem<uint16_t>(&rhs->word_40778));
     ptree->appendChild("word_4077A", new QMoMTreeItem<uint16_t>(&rhs->word_4077A));
-    ptree->appendTree(constructTreeItem(&rhs->addr_TerrainTypes, "addr_TerrainTypes"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Types, "addr_Terrain_Types"), "");
     QMoMTreeItemBase* ptreeaddr_Unrest_Table = ptree;
     if (gMAX_RACES > 3)
     {

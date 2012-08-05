@@ -16,12 +16,17 @@
 namespace MoM
 {
 
+int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
+
 QMoMMapTile::QMoMMapTile() :
     QGraphicsItem(),
-    m_bonusDeposit(0),
     m_plane(MoM::PLANE_Arcanum),
+    m_terrainBonus(0),
+    m_terrainChange(0),
+    m_terrainExplored(0),
     m_terrainType(0)
 {
+    setAcceptHoverEvents(true);
 }
 
 QMoMMapTile::~QMoMMapTile()
@@ -50,22 +55,11 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 			painter->drawImage(boundingRect(), *image);
 		}
     }
-    else
-    {
-        QString text = ".";
-        if (0 != m_terrainType)
-        {
-            text = QString::number(static_cast<int> (*m_terrainType));
-        }
 
-        painter->setPen(Qt::yellow);
-        painter->drawText(boundingRect(), text, QTextOption(Qt::AlignCenter));
-    }
-
-    if (0 != m_bonusDeposit)
+    if (0 != m_terrainBonus)
     {
         QString toolTip;
-        QVector<MoM::eBonusDeposit> vecDeposits;
+        QVector<MoM::eTerrainBonusDeposit> vecDeposits;
         vecDeposits         << DEPOSIT_Iron_Ore
                             << DEPOSIT_Coal
                             << DEPOSIT_Silver_Ore
@@ -79,8 +73,8 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
                             << DEPOSIT_Nightshade;
         for (int index = vecDeposits.size(); index-- > 0;)
         {
-            MoM::eBonusDeposit deposit = vecDeposits[index];
-            if ((*m_bonusDeposit & deposit) != deposit)
+            MoM::eTerrainBonusDeposit deposit = vecDeposits[index];
+            if ((*m_terrainBonus & deposit) != deposit)
                 continue;
             const QMoMImagePtr image = QMoMResources::instance().getImage(deposit);
             if (0 != image)
@@ -91,6 +85,70 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
             break;
         }
         setToolTip(toolTip);
+    }
+
+    if (0 != m_terrainChange)
+    {
+        if (m_terrainChange->Volcano_producing_for_Owner)
+        {
+            const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Volcano_owner);
+            if (0 != image)
+            {
+                painter->drawImage(boundingRect(), *image);
+            }
+        }
+        if (m_terrainChange->road)
+        {
+            for (int roadDirection = 0; roadDirection <= 8; ++roadDirection)
+            {
+                if (m_terrainChange[ gRoadDirectionOffset[roadDirection] ].road || m_terrainChange[ gRoadDirectionOffset[roadDirection] ].enchanted_road)
+                {
+                    const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Road, roadDirection);
+                    if (0 != image)
+                    {
+                        painter->drawImage(boundingRect(), *image);
+                    }
+                }
+            }
+        }
+        if (m_terrainChange->enchanted_road)
+        {
+            for (int roadDirection = 0; roadDirection <= 8; ++roadDirection)
+            {
+                if (m_terrainChange[ gRoadDirectionOffset[roadDirection] ].road || m_terrainChange[ gRoadDirectionOffset[roadDirection] ].enchanted_road)
+                {
+                    const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Enchanted_Road, roadDirection);
+                    if (0 != image)
+                    {
+                        painter->drawImage(boundingRect(), *image);
+                    }
+                }
+            }
+        }
+        if (m_terrainChange->corruption)
+        {
+            const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Corruption);
+            if (0 != image)
+            {
+                painter->drawImage(boundingRect(), *image);
+            }
+        }
+    }
+
+    if (0 != m_terrainExplored)
+    {
+        if (*m_terrainExplored == 0)
+        {
+            // Not explored
+            painter->setPen(QPen());
+            painter->setBrush(QBrush(Qt::black));
+            painter->drawRect(boundingRect());
+        }
+        else
+        {
+            // (Partially) explored
+            // Nothing to do
+        }
     }
 }
 

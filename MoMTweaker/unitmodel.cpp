@@ -274,15 +274,7 @@ void update_Battlefield(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& r
         ptree->setChild(row, 0, constructTreeItem(pBattlefield, ""));
     }
     ptree->child(row, 0)->setData(toQStr("Battlefield"), Qt::UserRole);
-    if ((0 != game) && (0 != game->getDataSegment()))
-    {
-        const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Battlefield;
-        ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
-    }
-    else
-    {
-        ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-    }
+    ptree->child(row, 1)->setData(QString(), Qt::EditRole);
     ptree->child(row, 2)->setData(QString(), Qt::EditRole);
 
     ++row;
@@ -671,7 +663,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        if (game->getMoM_Version() >= std::string("1.40m"))
+        if (game->getMoM_Version() >= std::string("v1.40m"))
         {
             ptree->setChild(row, 0, constructTreeItem((MoM::WizardsExe_Game_Data140m*)game->getGame_Data_Exe(), ""));
         }
@@ -730,29 +722,22 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
         }
     }
     ++row;
-/*
+
     if (row >= ptree->rowCount())
     {
-        ptree->appendChild(QString("Game_State"), new TreeItem<MoM::eGameState> (&dataSegment->m_WizardsExe_Pointers.w_Game_flow));
-        ptree->appendChild(QString("Kyrub_dseg:9294"), new TreeItem<int16_t> (&dataSegment->m_WizardsExe_Pointers.w_kyrub_dseg_9294));
-        ptree->appendChild(QString("Kyrub_dseg:9296"), new TreeItem<int16_t> (&dataSegment->m_WizardsExe_Pointers.w_kyrub_dseg_9296));
-    }
-    row += 3;
-*/
-    if (row >= ptree->rowCount())
-    {
-        QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("Stack Segment");
+        QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("Tax");
         ptree->appendTree(psubtree, "");
     }
-    ptree->child(row, 0)->setData(QString("Stack Segment"), Qt::EditRole);
-    ptree->child(row, 1)->setData(QString(), Qt::EditRole);
+    ptree->child(row, 0)->setData(QString("Tax unrest table"), Qt::EditRole);
+    ptree->child(row, 1)->setData(QString("Unrest"), Qt::EditRole);
     ptree->child(row, 2)->setData(QString(), Qt::EditRole);
-    for (int subrow = 0; (0 != dataSegment) && (subrow < 0x400); ++subrow)
+    for (int subrow = 0; (0 != dataSegment) && (subrow < ARRAYSIZE(dataSegment->m_Tax_Unrest_Table)); ++subrow)
     {
         QMoMTreeItemBase* psubtree = ptree->child(row, 0);
         if (subrow >= psubtree->rowCount())
         {
-            psubtree->appendChild(QString("Stack[%0]").arg(2 * (0x7C00 + subrow), 4, 16), new QMoMTreeItem<uint16_t> ((uint16_t*)&dataSegment->m_DataSegmentStart + 0x7C00 + subrow));
+            MoM::eTax_Rate taxRate = (MoM::eTax_Rate)subrow;
+            psubtree->appendChild(prettyQStr(taxRate), new QMoMTreeItem<uint16_t> ((uint16_t*)&dataSegment->m_Tax_Unrest_Table[taxRate]));
         }
     }
     ++row;
@@ -960,15 +945,7 @@ void update_Spells_Cast_in_Battle(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
         ptree->setChild(row, 0, constructTreeItem(pSpells_Cast_in_Battle, ""));
     }
     ptree->child(row, 0)->setData(toQStr("Spells_Cast_in_Battle"), Qt::UserRole);
-    if ((0 != game) && (0 != game->getDataSegment()))
-    {
-        const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Spells_Cast_in_Battle;
-        ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
-    }
-    else
-    {
-        ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-    }
+    ptree->child(row, 1)->setData(QString(), Qt::EditRole);
     ptree->child(row, 2)->setData(QString(), Qt::EditRole);
 
     ++row;
@@ -1196,15 +1173,7 @@ void UnitModel::threadUpdateModelData()
 //        }
         int nrBuildings = 0;
         parentItem->child(toprow, 0)->setData(tr("Buildings"), Qt::UserRole);
-        if ((0 != game) && (0 != game->getDataSegment()))
-        {
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Building_Data;
-            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        }
-        else
-        {
-            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        }
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         if (0 == game)
         {
             parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
@@ -1312,15 +1281,7 @@ void UnitModel::threadUpdateModelData()
 
         int nrLairs = 0;
         parentItem->child(toprow, 0)->setData(tr("Lairs"), Qt::UserRole);
-        if ((0 != game) && (0 != game->getDataSegment()))
-        {
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Lairs_data;
-            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        }
-        else
-        {
-            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        }
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         if (0 == game)
         {
             parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
@@ -1356,16 +1317,7 @@ void UnitModel::threadUpdateModelData()
 
         int nrCities = 0;
         parentItem->child(toprow, 0)->setData(tr("Cities"), Qt::UserRole);
-
-        if ((0 != game) && (0 != game->getDataSegment()))
-        {
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Cities;
-            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        }
-        else
-        {
-            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        }
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         if (0 == game)
         {
             parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
@@ -1401,16 +1353,7 @@ void UnitModel::threadUpdateModelData()
 
 //        int nrCities = 0;
         parentItem->child(toprow, 0)->setData(tr("Events"), Qt::UserRole);
-
-        if ((0 != game) && (0 != game->getDataSegment()))
-        {
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_events;
-            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        }
-        else
-        {
-            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        }
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
         int row = 0;
@@ -1519,15 +1462,7 @@ void UnitModel::threadUpdateModelData()
                 ptree->appendEmptyRow();
             }
             ptree->child(row, 0)->setData(tr("Hero Stats (YOU)"), Qt::UserRole);
-            if ((0 != game) && (0 != game->getDataSegment()))
-            {
-                const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Hero_stat[MoM::PLAYER_YOU];
-                ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
-            }
-            else
-            {
-                ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-            }
+            ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             if (0 == game)
             {
                 ptree->child(row, 2)->setData(QString(), Qt::EditRole);
@@ -1575,15 +1510,7 @@ void UnitModel::threadUpdateModelData()
                 ptree->appendEmptyRow();
             }
             ptree->child(row, 0)->setData(tr("Units in Game"), Qt::UserRole);
-            if ((0 != game) && (0 != game->getDataSegment()))
-            {
-                const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Units;
-                ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
-            }
-            else
-            {
-                ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-            }
+            ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             if (0 == game)
             {
                 ptree->child(row, 2)->setData(QString(), Qt::EditRole);
@@ -1677,15 +1604,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             ptree->child(row, 0)->setData(QString("Spell Data"), Qt::EditRole);
-            if ((0 != game) && (0 != game->getDataSegment()))
-            {
-                const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Spell_Data;
-                ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
-            }
-            else
-            {
-                ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-            }
+            ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Memory only"), Qt::EditRole);
 
             int subrow = 0;
@@ -1860,15 +1779,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         parentItem->child(toprow, 0)->setData(tr("Current Unit View"), Qt::UserRole);
-        if ((0 != game) && (0 != game->getDataSegment()))
-        {
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Battle_Unit_View;
-            parentItem->child(toprow, 1)->setData(toQStr(addr), Qt::EditRole);
-        }
-        else
-        {
-            parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        }
+        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
         int row = 0;
@@ -1928,7 +1839,7 @@ void UnitModel::threadUpdateModelData()
             if (0 == ptree->rowCount())
             {
 				// 0
-                if (game->getMoM_Version() >= std::string("1.40j"))
+                if (game->getMoM_Version() >= std::string("v1.40j"))
                 {
                     ptree->appendChild("City Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));
                     ptree->child(row, 2)->setData("Default +3 shields", Qt::EditRole);

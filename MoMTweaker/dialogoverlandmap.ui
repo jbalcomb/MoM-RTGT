@@ -46,17 +46,17 @@
        <property name="title">
         <string/>
        </property>
-       <widget class="QCheckBox" name="checkBox_BonusDeposits">
+       <widget class="QCheckBox" name="checkBox_TerrainBonuses">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>50</y>
+          <y>130</y>
           <width>101</width>
           <height>17</height>
          </rect>
         </property>
         <property name="text">
-         <string>Bonus deposits</string>
+         <string>Terrain bonuses</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -66,7 +66,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>80</y>
+          <y>90</y>
           <width>70</width>
           <height>17</height>
          </rect>
@@ -98,7 +98,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>140</y>
+          <y>170</y>
           <width>91</width>
           <height>17</height>
          </rect>
@@ -114,7 +114,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>170</y>
+          <y>190</y>
           <width>91</width>
           <height>17</height>
          </rect>
@@ -225,6 +225,54 @@
         </property>
         <property name="text">
          <string>Zoom:</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_TerrainChanges">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>150</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Terrain changes</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_Cities">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>50</y>
+          <width>70</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Cities</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_Explored">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>70</y>
+          <width>70</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Explored</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>

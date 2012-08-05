@@ -90,39 +90,24 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBannerColor bannerColor) const
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) const
-{
-    QMoMImagePtr image;
-    unsigned index = -1;
-    switch (bonusDeposit)
-    {
-    case DEPOSIT_Iron_Ore:      index = 78; break;
-    case DEPOSIT_Coal:          index = 79; break;
-    case DEPOSIT_Silver_Ore:    index = 80; break;
-    case DEPOSIT_Gold_Ore:      index = 81; break;
-    case DEPOSIT_Gems:          index = 82; break;
-    case DEPOSIT_Mithril_Ore:   index = 83; break;
-    case DEPOSIT_Adamantium_Ore:    index = 84; break;
-    case DEPOSIT_Quork:         index = 85; break;
-    case DEPOSIT_Crysx:         index = 86; break;
-    case DEPOSIT_Wild_Game:     index = 92; break;
-    case DEPOSIT_Nightshade:    index = 91; break;
-    case DEPOSIT_no_deposit:
-    default:                    break;
-    }
-    if (inVectorRange(m_mapBackImages, index))
-    {
-        image = m_mapBackImages[index];
-    }
-    return image;
-}
-
 const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
 {
     QMoMImagePtr image;
     if (inVectorRange(m_buildingImages, building))
     {
         image = m_buildingImages[building];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize) const
+{
+    QMoMImagePtr image;
+    unsigned index = 20;
+    // TODO: Different sizes (problem: multiple images with same index)
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
     }
     return image;
 }
@@ -191,6 +176,52 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eSpell spell) const
     if (inVectorRange(m_spellImages, spell))
     {
         image = m_spellImages[spell];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainBonusDeposit bonusDeposit) const
+{
+    QMoMImagePtr image;
+    unsigned index = -1;
+    switch (bonusDeposit)
+    {
+    case DEPOSIT_Iron_Ore:      index = 78; break;
+    case DEPOSIT_Coal:          index = 79; break;
+    case DEPOSIT_Silver_Ore:    index = 80; break;
+    case DEPOSIT_Gold_Ore:      index = 81; break;
+    case DEPOSIT_Gems:          index = 82; break;
+    case DEPOSIT_Mithril_Ore:   index = 83; break;
+    case DEPOSIT_Adamantium_Ore:    index = 84; break;
+    case DEPOSIT_Quork:         index = 85; break;
+    case DEPOSIT_Crysx:         index = 86; break;
+    case DEPOSIT_Wild_Game:     index = 92; break;
+    case DEPOSIT_Nightshade:    index = 91; break;
+    case DEPOSIT_no_deposit:
+    default:                    break;
+    }
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainChange terrainChange, int roadDirection) const
+{
+    QMoMImagePtr image;
+    unsigned index = -1;
+    switch (terrainChange)
+    {
+    case TERRAINCHANGE_Volcano_owner:   index = 77; break;
+    case TERRAINCHANGE_Road:            index = 45 + roadDirection; break;  // 45-53
+    case TERRAINCHANGE_Enchanted_Road:  index = 54 + roadDirection; break;  // 54-62
+    case TERRAINCHANGE_Corruption:      index = 76; break;
+    default:                    break;
+    }
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
     }
     return image;
 }
