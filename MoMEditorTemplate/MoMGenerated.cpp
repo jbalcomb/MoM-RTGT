@@ -148,6 +148,7 @@ std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs)
     case BUILDINGSTATUS_Replaced: os << "BUILDINGSTATUS_Replaced"; break;
     case BUILDINGSTATUS_Built: os << "BUILDINGSTATUS_Built"; break;
     case BUILDINGSTATUS_Destroyed: os << "BUILDINGSTATUS_Destroyed"; break;
+    case eBuildingStatus_MAX: os << "eBuildingStatus_MAX"; break;
     default: os << "<Unknown eBuildingStatus>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -164,6 +165,7 @@ std::ostream& operator<<(std::ostream& os, const eCity_Size& rhs)
     case CITYSIZE_Town: os << "CITYSIZE_Town"; break;
     case CITYSIZE_City: os << "CITYSIZE_City"; break;
     case CITYSIZE_Capital: os << "CITYSIZE_Capital"; break;
+    case eCity_Size_MAX: os << "eCity_Size_MAX"; break;
     default: os << "<Unknown eCity_Size>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -1728,6 +1730,7 @@ std::ostream& operator<<(std::ostream& os, const eProducing& rhs)
     case PRODUCING_Troll_Settlers: os << "PRODUCING_Troll_Settlers"; break;
     case PRODUCING_Troll_War_Trolls: os << "PRODUCING_Troll_War_Trolls"; break;
     case PRODUCING_Troll_War_Mammoths: os << "PRODUCING_Troll_War_Mammoths"; break;
+    case eProducing_MAX: os << "eProducing_MAX"; break;
     default: os << "<Unknown eProducing>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2513,9 +2516,55 @@ std::ostream& operator<<(std::ostream& os, const eTerrainBonusDeposit& rhs)
     case DEPOSIT_Adamantium_Ore: os << "DEPOSIT_Adamantium_Ore"; break;
     case DEPOSIT_Quork: os << "DEPOSIT_Quork"; break;
     case DEPOSIT_Crysx: os << "DEPOSIT_Crysx"; break;
+    case DEPOSIT_Unk10: os << "DEPOSIT_Unk10"; break;
+    case DEPOSIT_Unk20: os << "DEPOSIT_Unk20"; break;
     case DEPOSIT_Wild_Game: os << "DEPOSIT_Wild_Game"; break;
     case DEPOSIT_Nightshade: os << "DEPOSIT_Nightshade"; break;
+    case eTerrainBonusDeposit_MAX: os << "eTerrainBonusDeposit_MAX"; break;
     default: os << "<Unknown eTerrainBonusDeposit>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eTerrainCategory& rhs)
+{
+    switch (rhs)
+    {
+    case TERRAINCATEGORY_Ocean: os << "TERRAINCATEGORY_Ocean"; break;
+    case TERRAINCATEGORY_Grasslands: os << "TERRAINCATEGORY_Grasslands"; break;
+    case TERRAINCATEGORY_Forest: os << "TERRAINCATEGORY_Forest"; break;
+    case TERRAINCATEGORY_Mountain: os << "TERRAINCATEGORY_Mountain"; break;
+    case TERRAINCATEGORY_Desert: os << "TERRAINCATEGORY_Desert"; break;
+    case TERRAINCATEGORY_Swamp: os << "TERRAINCATEGORY_Swamp"; break;
+    case TERRAINCATEGORY_Tundra: os << "TERRAINCATEGORY_Tundra"; break;
+    case TERRAINCATEGORY_Shore: os << "TERRAINCATEGORY_Shore"; break;
+    case TERRAINCATEGORY_RiverMouth: os << "TERRAINCATEGORY_RiverMouth"; break;
+    case TERRAINCATEGORY_Hills: os << "TERRAINCATEGORY_Hills"; break;
+    case TERRAINCATEGORY_Plains: os << "TERRAINCATEGORY_Plains"; break;
+    case TERRAINCATEGORY_River: os << "TERRAINCATEGORY_River"; break;
+    case TERRAINCATEGORY_Volcano: os << "TERRAINCATEGORY_Volcano"; break;
+    case eTerrainCategory_MAX: os << "eTerrainCategory_MAX"; break;
+    default: os << "<Unknown eTerrainCategory>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eTerrainChange& rhs)
+{
+    switch (rhs)
+    {
+    case TERRAINCHANGE_Volcano_you: os << "TERRAINCHANGE_Volcano_you"; break;
+    case TERRAINCHANGE_Volcano_player1: os << "TERRAINCHANGE_Volcano_player1"; break;
+    case TERRAINCHANGE_Volcano_player3: os << "TERRAINCHANGE_Volcano_player3"; break;
+    case TERRAINCHANGE_Road: os << "TERRAINCHANGE_Road"; break;
+    case TERRAINCHANGE_Enchanted_Road: os << "TERRAINCHANGE_Enchanted_Road"; break;
+    case TERRAINCHANGE_Corruption: os << "TERRAINCHANGE_Corruption"; break;
+    case TERRAINCHANGE_Unk40: os << "TERRAINCHANGE_Unk40"; break;
+    case TERRAINCHANGE_NoRoad80: os << "TERRAINCHANGE_NoRoad80"; break;
+    case eTerrainChange_MAX: os << "eTerrainChange_MAX"; break;
+    default: os << "<Unknown eTerrainChange>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -2525,8 +2574,8 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
 {
     switch (rhs)
     {
-    case ocean: os << "ocean"; break;
-    case Bug_terrain_like_grasslands: os << "Bug_terrain_like_grasslands"; break;
+    case ocean1: os << "ocean1"; break;
+    case grasslands0: os << "grasslands0"; break;
     case shore1_first: os << "shore1_first"; break;
     case shore1_last: os << "shore1_last"; break;
     case grasslands1: os << "grasslands1"; break;
@@ -2539,18 +2588,19 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case forest_w_nature_node: os << "forest_w_nature_node"; break;
     case volcano_w_chaos_node: os << "volcano_w_chaos_node"; break;
     case hills1: os << "hills1"; break;
-    case grasslands2_first: os << "grasslands2_first"; break;
-    case grasslands2_last: os << "grasslands2_last"; break;
-    case desert2_first: os << "desert2_first"; break;
-    case desert2_last: os << "desert2_last"; break;
-    case swamp2_first: os << "swamp2_first"; break;
-    case swamp2_last: os << "swamp2_last"; break;
-    case volcano: os << "volcano"; break;
+    case grasslands2: os << "grasslands2"; break;
     case grasslands3: os << "grasslands3"; break;
-    case tundra2_first: os << "tundra2_first"; break;
-    case tundra2_last: os << "tundra2_last"; break;
-    case forest2_first: os << "forest2_first"; break;
-    case forest2_last: os << "forest2_last"; break;
+    case desert2: os << "desert2"; break;
+    case desert3: os << "desert3"; break;
+    case desert4: os << "desert4"; break;
+    case swamp2: os << "swamp2"; break;
+    case swamp3: os << "swamp3"; break;
+    case volcano: os << "volcano"; break;
+    case grasslands4: os << "grasslands4"; break;
+    case tundra2: os << "tundra2"; break;
+    case tundra3: os << "tundra3"; break;
+    case forest2: os << "forest2"; break;
+    case forest3: os << "forest3"; break;
     case river1_first: os << "river1_first"; break;
     case river1_last: os << "river1_last"; break;
     case shore2_first: os << "shore2_first"; break;
@@ -2563,15 +2613,14 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case mountain2_last: os << "mountain2_last"; break;
     case hills2_first: os << "hills2_first"; break;
     case hills2_last: os << "hills2_last"; break;
-    case desert3_first: os << "desert3_first"; break;
-    case desert3_last: os << "desert3_last"; break;
+    case desert5_first: os << "desert5_first"; break;
+    case desert5_last: os << "desert5_last"; break;
     case shore4_first: os << "shore4_first"; break;
     case shore4_last: os << "shore4_last"; break;
-    case ocean_first: os << "ocean_first"; break;
-    case ocean_last: os << "ocean_last"; break;
-    case Bug_terrain_like_tundra: os << "Bug_terrain_like_tundra"; break;
-    case tundra3_first: os << "tundra3_first"; break;
-    case tundra3_last: os << "tundra3_last"; break;
+    case ocean2: os << "ocean2"; break;
+    case ocean3: os << "ocean3"; break;
+    case tundra4_first: os << "tundra4_first"; break;
+    case tundra4_last: os << "tundra4_last"; break;
     case eTerrainType_MAX: os << "eTerrainType_MAX"; break;
     default: os << "<Unknown eTerrainType>"; break;
     }
@@ -2585,6 +2634,7 @@ std::ostream& operator<<(std::ostream& os, const eTower_Node_Lair_Status& rhs)
     {
     case LAIRSTATUS_popped: os << "LAIRSTATUS_popped"; break;
     case LAIRSTATUS_intact: os << "LAIRSTATUS_intact"; break;
+    case eTower_Node_Lair_Status_MAX: os << "eTower_Node_Lair_Status_MAX"; break;
     default: os << "<Unknown eTower_Node_Lair_Status>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2755,6 +2805,7 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Active& rhs)
     {
     case UNITACTIVE_awaiting_orders: os << "UNITACTIVE_awaiting_orders"; break;
     case UNITACTIVE_finished: os << "UNITACTIVE_finished"; break;
+    case eUnit_Active_MAX: os << "eUnit_Active_MAX"; break;
     default: os << "<Unknown eUnit_Active>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2771,7 +2822,7 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Status& rhs)
     case UNITSTATUS_going_to_XY: os << "UNITSTATUS_going_to_XY"; break;
     case UNITSTATUS_reached_destination: os << "UNITSTATUS_reached_destination"; break;
     case UNITSTATUS_wait: os << "UNITSTATUS_wait"; break;
-    case UNITSTATUS_unkUnitStatus16: os << "UNITSTATUS_unkUnitStatus16"; break;
+    case eUnit_Status_MAX: os << "eUnit_Status_MAX"; break;
     default: os << "<Unknown eUnit_Status>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -5677,13 +5728,13 @@ std::ostream& operator<<(std::ostream& os, const Terrain_Changes& rhs)
     {
     os << "corruption=" << (unsigned)rhs.corruption << "\n";
     }
-    if (0 != rhs.u1)
+    if (0 != rhs.unknown40)
     {
-    os << "u1=" << (unsigned)rhs.u1 << "\n";
+    os << "unknown40=" << (unsigned)rhs.unknown40 << "\n";
     }
-    if (0 != rhs.u2)
+    if (0 != rhs.no_road80)
     {
-    os << "u2=" << (unsigned)rhs.u2 << "\n";
+    os << "no_road80=" << (unsigned)rhs.no_road80 << "\n";
     }
     os << "}";
     return os;
@@ -6132,24 +6183,19 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_BannerColor=" << rhs.m_BannerColor << "\n";
     os << "m_Personality=" << rhs.m_Personality << "\n";
     os << "m_Objective=" << rhs.m_Objective << "\n";
-    os << "m_UNK01=(\n";
+    os << "m_UNK01C=(\n";
     for (unsigned i = 0; i < 8; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK01[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK01[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK01C[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK01C[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Fame=" << rhs.m_Fame << " 0x" << std::hex << rhs.m_Fame << std::dec << "\n";
     os << "m_Power_Base=" << rhs.m_Power_Base << " 0x" << std::hex << rhs.m_Power_Base << std::dec << "\n";
-    os << "m_UNK02a=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK02a[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK02a[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_UNK028=" << rhs.m_UNK028 << " 0x" << std::hex << rhs.m_UNK028 << std::dec << "\n";
     os << "m_Research_Percentage=" << (unsigned)rhs.m_Research_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Research_Percentage << std::dec << "\n";
     os << "m_Mana_Percentage=" << (unsigned)rhs.m_Mana_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Mana_Percentage << std::dec << "\n";
     os << "m_Skill_Percentage=" << (unsigned)rhs.m_Skill_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Skill_Percentage << std::dec << "\n";
-    os << "m_UNK02b=" << (unsigned)rhs.m_UNK02b << " 0x" << std::hex << (unsigned)rhs.m_UNK02b << std::dec << "\n";
+    os << "m_UNK02D=" << (unsigned)rhs.m_UNK02D << " 0x" << std::hex << (unsigned)rhs.m_UNK02D << std::dec << "\n";
     os << "m_X_Coordinate_of_Summoning_Circle=" << rhs.m_X_Coordinate_of_Summoning_Circle << " 0x" << std::hex << rhs.m_X_Coordinate_of_Summoning_Circle << std::dec << "\n";
     os << "m_Y_Coordinate_of_Summoning_Circle=" << rhs.m_Y_Coordinate_of_Summoning_Circle << " 0x" << std::hex << rhs.m_Y_Coordinate_of_Summoning_Circle << std::dec << "\n";
     os << "m_Plane_of_Summoning_Circle=" << rhs.m_Plane_of_Summoning_Circle << "\n";
@@ -6160,23 +6206,22 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_Research_Spell_candidates[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK03a=(\n";
+    os << "m_UNK044=(\n";
     for (unsigned i = 0; i < 4; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK03a[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK03a[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK044[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK044[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_048=" << rhs.m_UNK_048 << " 0x" << std::hex << rhs.m_UNK_048 << std::dec << "\n";
-    os << "m_UNK03b=(\n";
+    os << "m_UNK048=" << rhs.m_UNK048 << " 0x" << std::hex << rhs.m_UNK048 << std::dec << "\n";
+    os << "m_UNK04A=(\n";
     for (unsigned i = 0; i < 4; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK03b[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK03b[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK04A[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK04A[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Cost_Left_of_Spell_being_cast=" << rhs.m_Cost_Left_of_Spell_being_cast << " 0x" << std::hex << rhs.m_Cost_Left_of_Spell_being_cast << std::dec << "\n";
     os << "m_Initial_Cost_of_Spell_being_cast=" << rhs.m_Initial_Cost_of_Spell_being_cast << " 0x" << std::hex << rhs.m_Initial_Cost_of_Spell_being_cast << std::dec << "\n";
     os << "m_Spell_being_cast=" << rhs.m_Spell_being_cast << "\n";
-    os << "m_Zero02=" << (unsigned)rhs.m_Zero02 << " 0x" << std::hex << (unsigned)rhs.m_Zero02 << std::dec << "\n";
     os << "m_Unused_Casting_Skill_available_this_turn=" << rhs.m_Unused_Casting_Skill_available_this_turn << " 0x" << std::hex << rhs.m_Unused_Casting_Skill_available_this_turn << std::dec << "\n";
     os << "m_Nominal_Casting_Skill_available_this_turn=" << rhs.m_Nominal_Casting_Skill_available_this_turn << " 0x" << std::hex << rhs.m_Nominal_Casting_Skill_available_this_turn << std::dec << "\n";
     os << "m_Tax_Rate=" << rhs.m_Tax_Rate << "\n";
@@ -6192,12 +6237,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_Heroes_hired_by_wizard[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK06=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK06[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK06[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_UNK11E=" << rhs.m_UNK11E << " 0x" << std::hex << rhs.m_UNK11E << std::dec << "\n";
     os << "m_Items_in_Slots=(\n";
     for (unsigned i = 0; i < 4; ++i)
     {
@@ -6210,22 +6250,22 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << (int)rhs.m_Contacted[i] << " 0x" << std::hex << (int)rhs.m_Contacted[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07a_Relation=(\n";
+    os << "m_UNK_12E_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK07a_Relation[i] << " 0x" << std::hex << rhs.m_UNK07a_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UNK_12E_Relation[i] << " 0x" << std::hex << rhs.m_UNK_12E_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07b_Relation=(\n";
+    os << "m_UNK_13A_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK07b_Relation[i] << " 0x" << std::hex << rhs.m_UNK07b_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UNK_13A_Relation[i] << " 0x" << std::hex << rhs.m_UNK_13A_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07c_Relation=(\n";
+    os << "m_UNK_146_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK07c_Relation[i] << " 0x" << std::hex << rhs.m_UNK07c_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UNK_146_Relation[i] << " 0x" << std::hex << rhs.m_UNK_146_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Current_Wizard_Relations=(\n";
@@ -6240,28 +6280,28 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_War_Status[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07d=(\n";
+    os << "m_UNK_15E=(\n";
     for (unsigned i = 0; i < 0x24; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK07d[i] << " 0x" << std::hex << (int)rhs.m_UNK07d[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_UNK_15E[i] << " 0x" << std::hex << (int)rhs.m_UNK_15E[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07e_Relation=(\n";
+    os << "m_UNK_182_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK07e_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK07e_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_UNK_182_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK_182_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07f_Relation=(\n";
+    os << "m_UNK_188_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK07f_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK07f_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_UNK_188_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK_188_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK07g=(\n";
+    os << "m_UNK_18E=(\n";
     for (unsigned i = 0; i < 0xCC; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK07g[i] << " 0x" << std::hex << (int)rhs.m_UNK07g[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_UNK_18E[i] << " 0x" << std::hex << (int)rhs.m_UNK_18E[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Researching_Left=" << rhs.m_Researching_Left << " 0x" << std::hex << rhs.m_Researching_Left << std::dec << "\n";
@@ -6269,16 +6309,16 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_Wizard_Casting_Skill=" << rhs.m_Wizard_Casting_Skill << " 0x" << std::hex << rhs.m_Wizard_Casting_Skill << std::dec << "\n";
     os << "m_Researching_Spell=" << rhs.m_Researching_Spell << "\n";
     os << "m_Spells_Known=" << rhs.m_Spells_Known << "\n";
-    os << "m_UNK09a=(\n";
+    os << "m_UNK33A=(\n";
     for (unsigned i = 0; i < 26; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK09a[i] << " 0x" << std::hex << (int)rhs.m_UNK09a[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_UNK33A[i] << " 0x" << std::hex << (int)rhs.m_UNK33A[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_354=" << (int)rhs.m_UNK_354 << " 0x" << std::hex << (int)rhs.m_UNK_354 << std::dec << "\n";
-    os << "m_UNK_355=" << (int)rhs.m_UNK_355 << " 0x" << std::hex << (int)rhs.m_UNK_355 << std::dec << "\n";
+    os << "m_UNK354=" << (int)rhs.m_UNK354 << " 0x" << std::hex << (int)rhs.m_UNK354 << std::dec << "\n";
+    os << "m_UNK355=" << (int)rhs.m_UNK355 << " 0x" << std::hex << (int)rhs.m_UNK355 << std::dec << "\n";
     os << "m_Gold_Coins=" << rhs.m_Gold_Coins << " 0x" << std::hex << rhs.m_Gold_Coins << std::dec << "\n";
-    os << "m_UNK09b=" << rhs.m_UNK09b << " 0x" << std::hex << rhs.m_UNK09b << std::dec << "\n";
+    os << "m_UNK358=" << rhs.m_UNK358 << " 0x" << std::hex << rhs.m_UNK358 << std::dec << "\n";
     os << "m_Astrologer_Magic_Power=" << rhs.m_Astrologer_Magic_Power << " 0x" << std::hex << rhs.m_Astrologer_Magic_Power << std::dec << "\n";
     os << "m_Astrologer_Spell_Research=" << rhs.m_Astrologer_Spell_Research << " 0x" << std::hex << rhs.m_Astrologer_Spell_Research << std::dec << "\n";
     os << "m_Astrologer_Army_Strength=" << rhs.m_Astrologer_Army_Strength << " 0x" << std::hex << rhs.m_Astrologer_Army_Strength << std::dec << "\n";
@@ -6290,15 +6330,15 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     }
     os << ")\n";
     os << "m_Global_Enchantments=" << rhs.m_Global_Enchantments << "\n";
-    os << "m_UNK11=(\n";
+    os << "m_UNK49A=(\n";
     for (unsigned i = 0; i < 42; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK11[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK11[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_UNK49A[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK49A[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Books_Color=" << rhs.m_Books_Color << "\n";
-    os << "m_Zero04=" << (unsigned)rhs.m_Zero04 << " 0x" << std::hex << (unsigned)rhs.m_Zero04 << std::dec << "\n";
-    os << "m_UNK12=" << rhs.m_UNK12 << " 0x" << std::hex << rhs.m_UNK12 << std::dec << "\n";
+    os << "m_Zero4C5=" << (unsigned)rhs.m_Zero4C5 << " 0x" << std::hex << (unsigned)rhs.m_Zero4C5 << std::dec << "\n";
+    os << "m_UNK4C6=" << rhs.m_UNK4C6 << " 0x" << std::hex << rhs.m_UNK4C6 << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -6941,9 +6981,9 @@ std::ostream& operator<<(std::ostream& os, const WizardsExe_Pointers& rhs)
     os << "word_4073A=" << rhs.word_4073A << " 0x" << std::hex << rhs.word_4073A << std::dec << "\n";
     os << "dword_4073C=" << rhs.dword_4073C << "\n";
     os << "dword_40740=" << rhs.dword_40740 << "\n";
-    os << "addr_Terrain_Movements=" << rhs.addr_Terrain_Movements << "\n";
+    os << "addr_terrain_cost_=" << rhs.addr_terrain_cost_ << "\n";
     os << "dword_40748=" << rhs.dword_40748 << "\n";
-    os << "dword_4074C=" << rhs.dword_4074C << "\n";
+    os << "addr_Terrain_Movement=" << rhs.addr_Terrain_Movement << "\n";
     os << "addr_Terrain_Explored=" << rhs.addr_Terrain_Explored << "\n";
     os << "addr_Terrain_Changes=" << rhs.addr_Terrain_Changes << "\n";
     os << "addr_Terrain_Bonuses=" << rhs.addr_Terrain_Bonuses << "\n";
@@ -9533,9 +9573,52 @@ bool validate(const eTerrainBonusDeposit& rhs, const std::string& context)
     case DEPOSIT_Adamantium_Ore: break;
     case DEPOSIT_Quork: break;
     case DEPOSIT_Crysx: break;
+    case DEPOSIT_Unk10: break;
+    case DEPOSIT_Unk20: break;
     case DEPOSIT_Wild_Game: break;
     case DEPOSIT_Nightshade: break;
     default: std::cout << context << ": Unknown eTerrainBonusDeposit = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eTerrainCategory& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case TERRAINCATEGORY_Ocean: break;
+    case TERRAINCATEGORY_Grasslands: break;
+    case TERRAINCATEGORY_Forest: break;
+    case TERRAINCATEGORY_Mountain: break;
+    case TERRAINCATEGORY_Desert: break;
+    case TERRAINCATEGORY_Swamp: break;
+    case TERRAINCATEGORY_Tundra: break;
+    case TERRAINCATEGORY_Shore: break;
+    case TERRAINCATEGORY_RiverMouth: break;
+    case TERRAINCATEGORY_Hills: break;
+    case TERRAINCATEGORY_Plains: break;
+    case TERRAINCATEGORY_River: break;
+    case TERRAINCATEGORY_Volcano: break;
+    default: std::cout << context << ": Unknown eTerrainCategory = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eTerrainChange& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case TERRAINCHANGE_Volcano_you: break;
+    case TERRAINCHANGE_Volcano_player1: break;
+    case TERRAINCHANGE_Volcano_player3: break;
+    case TERRAINCHANGE_Road: break;
+    case TERRAINCHANGE_Enchanted_Road: break;
+    case TERRAINCHANGE_Corruption: break;
+    case TERRAINCHANGE_Unk40: break;
+    case TERRAINCHANGE_NoRoad80: break;
+    default: std::cout << context << ": Unknown eTerrainChange = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -9736,7 +9819,6 @@ bool validate(const eUnit_Status& rhs, const std::string& context)
     case UNITSTATUS_going_to_XY: break;
     case UNITSTATUS_reached_destination: break;
     case UNITSTATUS_wait: break;
-    case UNITSTATUS_unkUnitStatus16: break;
     default: std::cout << context << ": Unknown eUnit_Status = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -11305,9 +11387,9 @@ bool validate(const WizardsExe_Pointers& rhs, const std::string& context)
     if (!validate(rhs.dword_40730, context + ".dword_40730")) ok = false;
     if (!validate(rhs.dword_4073C, context + ".dword_4073C")) ok = false;
     if (!validate(rhs.dword_40740, context + ".dword_40740")) ok = false;
-    if (!validate(rhs.addr_Terrain_Movements, context + ".addr_Terrain_Movements")) ok = false;
+    if (!validate(rhs.addr_terrain_cost_, context + ".addr_terrain_cost_")) ok = false;
     if (!validate(rhs.dword_40748, context + ".dword_40748")) ok = false;
-    if (!validate(rhs.dword_4074C, context + ".dword_4074C")) ok = false;
+    if (!validate(rhs.addr_Terrain_Movement, context + ".addr_Terrain_Movement")) ok = false;
     if (!validate(rhs.addr_Terrain_Explored, context + ".addr_Terrain_Explored")) ok = false;
     if (!validate(rhs.addr_Terrain_Changes, context + ".addr_Terrain_Changes")) ok = false;
     if (!validate(rhs.addr_Terrain_Bonuses, context + ".addr_Terrain_Bonuses")) ok = false;

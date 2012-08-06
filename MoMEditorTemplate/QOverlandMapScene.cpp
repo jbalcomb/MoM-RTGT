@@ -5,6 +5,9 @@
 
 #include "QOverlandMapScene.h"
 
+namespace MoM
+{
+
 QOverlandMapScene::QOverlandMapScene(MoM::ePlane plane, QObject *parent) :
     QGraphicsScene(parent),
     m_plane(plane)
@@ -21,6 +24,18 @@ void QOverlandMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
     QRectF rectfTile = MoM::QMoMMapTile().boundingRect();
     MoM::Location loc = { event->scenePos().x() / rectfTile.width(), event->scenePos().y() / rectfTile.height(), m_plane };
+
+    emit signal_tileChanged(loc);
+}
+
+void QOverlandMapScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << QString("QOverlandMapScene::mousePressEvent(QGraphicsSceneMouseEvent* event: pos=(%0,%1), scenePos=(%2,%3))")
+        .arg(event->pos().x()).arg(event->pos().y()).arg(event->scenePos().x()).arg(event->scenePos().y());
+    QGraphicsScene::mousePressEvent(event);
+
+    QRectF rectfTile = MoM::QMoMMapTile().boundingRect();
+    MoM::Location loc = { event->scenePos().x() / rectfTile.width(), event->scenePos().y() / rectfTile.height(), m_plane };
     QList<QGraphicsItem*> sceneItems = items(Qt::AscendingOrder);
     QList<QGraphicsItem*> curItems;
     for (int i = 0; i < sceneItems.count(); ++i)
@@ -30,5 +45,7 @@ void QOverlandMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
             curItems.push_back(sceneItems.at(i));
         }
     }
-    emit signal_tileChanged(loc, curItems);
+    emit signal_tileSelected(loc, curItems);
+}
+
 }

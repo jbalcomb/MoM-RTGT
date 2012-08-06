@@ -5,6 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
+#include <cassert>
 #include <iostream>
 
 #include "QMoMLbx.h"
@@ -18,12 +19,13 @@ uint gTRANSPARENT_COLOR = 0;
 uint gSHADOW_COLOR = 239;
 }
 
-bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
+bool convertImagesToLbx(const QVector<QMoMImagePtr>& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
 {
     if (images.empty())
         return false;
 
-    const QImage& image0 = images[0];
+    assert(0 != images[0]);
+    const QImage& image0 = *images[0];
     dataBuffer.resize(65536); // Upper bound
     uint8_t* data = &dataBuffer[0];
     size_t dataOffset = 0;
@@ -42,7 +44,8 @@ bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dat
     *ptr++ = '\x01';       // Identify frame
     for (int imageNr = 0; imageNr < images.size(); ++imageNr)
     {
-        const QImage& image = images[imageNr];
+        assert(0 != images[imageNr]);
+        const QImage& image = *images[imageNr];
 
         // TODO: check width, height
         // TODO: check encoding is 8-bit indexed (assumed to be corresponding to the default palette)
@@ -113,7 +116,7 @@ bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dat
     return true;
 }
 
-bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTable, QVector<QImage>& images, const std::string& context)
+bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTable, QVector<QMoMImagePtr>& images, const std::string& context)
 {
     if (0 == data)
         return false;
@@ -166,8 +169,8 @@ bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTa
     // Create images
     for (int imageNr = 0; imageNr < nimages; ++imageNr)
     {
-        images[imageNr] = QImage(width, height, QImage::Format_Indexed8);
-        QImage& image = images[imageNr];
+        images[imageNr] = QMoMImagePtr(new QImage(width, height, QImage::Format_Indexed8));
+        QImage& image = *images[imageNr];
 
         // Set color table
         image.setColorTable(colorTable);

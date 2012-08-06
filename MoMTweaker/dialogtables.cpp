@@ -57,8 +57,6 @@ protected:
     QMoMGamePtr m_game;
 };
 
-typedef QSharedPointer<QMoMTableWidgetItemBase> QMoMTableWidgetItemPtr;
-
 ///////////////////////////////////////////
 
 template<typename Number>
@@ -111,7 +109,7 @@ void NumberTableWidgetItem<Number>::setData(int role, const QVariant &value)
 template<typename Number>
 QString NumberTableWidgetItem<Number>::toString() const
 {
-    QString result = QString("%0").arg(*m_ptr);
+    QString result = QString("%0").arg((int)*m_ptr);
     switch (m_showNumber)
     {
     case SHOWNUMBER_normal:

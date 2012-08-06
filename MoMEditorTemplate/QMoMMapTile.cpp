@@ -89,14 +89,14 @@ void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     if (0 != m_terrainChange)
     {
-        if (m_terrainChange->Volcano_producing_for_Owner)
-        {
-            const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Volcano_owner);
-            if (0 != image)
-            {
-                painter->drawImage(boundingRect(), *image);
-            }
-        }
+        //if (m_terrainChange->Volcano_producing_for_Owner)
+        //{
+        //    const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Volcano_owner);
+        //    if (0 != image)
+        //    {
+        //        painter->drawImage(boundingRect(), *image);
+        //    }
+        //}
         if (m_terrainChange->road)
         {
             for (int roadDirection = 0; roadDirection <= 8; ++roadDirection)

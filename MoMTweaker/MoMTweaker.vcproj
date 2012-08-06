@@ -257,6 +257,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\MoMTerrain.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\MoMUnit.cpp"
 				>
 			</File>
@@ -580,6 +584,10 @@
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\MoMTemplate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\MoMEditorTemplate\MoMTerrain.h"
 				>
 			</File>
 			<File

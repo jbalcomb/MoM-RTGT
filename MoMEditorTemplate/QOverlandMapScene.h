@@ -7,6 +7,9 @@ class QGraphicsItem;
 
 #include <MoMTemplate.h>
 
+namespace MoM
+{
+
 class QOverlandMapScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -15,14 +18,18 @@ public:
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 public slots:
 
 signals:
-    void signal_tileChanged(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems);
+    void signal_tileChanged(const MoM::Location& loc);
+    void signal_tileSelected(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems);
 
 private:
     MoM::ePlane m_plane;
 };
+
+}
 
 #endif // QOVERLANDMAPSCENE_H

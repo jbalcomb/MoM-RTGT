@@ -64,6 +64,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         (void)createColorTable();
 
         (void)createBuildingImages();
+        (void)createCitySizeImages();
         (void)createLbxImages("ITEMISC", m_itemiscImages);
         (void)createLbxImages("ITEMS", m_itemsImages);
         (void)createLairImages();
@@ -103,11 +104,14 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
 const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize) const
 {
     QMoMImagePtr image;
-    unsigned index = 20;
-    // TODO: Different sizes (problem: multiple images with same index)
-    if (inVectorRange(m_mapBackImages, index))
+    int index = (int)citySize - 1;
+    if (index < 0)
     {
-        image = m_mapBackImages[index];
+        index = 0;  // Treat outpost as hamlet
+    }
+    if (inVectorRange(m_citySizeImages, index))
+    {
+        image = m_citySizeImages[index];
     }
     return image;
 }
@@ -213,7 +217,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainChange terrainChange, in
     unsigned index = -1;
     switch (terrainChange)
     {
-    case TERRAINCHANGE_Volcano_owner:   index = 77; break;
+//    case TERRAINCHANGE_Volcano_owner:   index = 77; break;
     case TERRAINCHANGE_Road:            index = 45 + roadDirection; break;  // 45-53
     case TERRAINCHANGE_Enchanted_Road:  index = 54 + roadDirection; break;  // 54-62
     case TERRAINCHANGE_Corruption:      index = 76; break;
@@ -299,6 +303,18 @@ bool QMoMResources::createBuildingImages()
         }
         m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), m_colorTable, toStr(building));
     }
+    return true;
+}
+
+bool QMoMResources::createCitySizeImages()
+{
+    if (m_game.isNull())
+        return false;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return false;
+    MoM::convertLbxToImages(lbx.getRecord(20), m_colorTable, m_citySizeImages, "city sizes");
     return true;
 }
 

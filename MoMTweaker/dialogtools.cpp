@@ -290,20 +290,20 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     colorTable[232] = qRgb(0, 255, 0);    // Treat GREEN RGB(0, 255, 0) as SHADOW (232 or 239??)
 
     // Load Centaur Scouts
-    QImage image;
+    QMoMImagePtr image(new QImage);
     if (ok)
     {
-        ok = image.load("UNITS2_000_000.png");
+        ok = image->load("UNITS2_000_000.png");
     }
 
     if (ok)
     {
-        image = image.convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor);
+        QImage saveImage = image->convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor);
 
         // TODO: Remove verification
-        image.save("UNIT_Centaur_Scouts.png");
-        std::cout << "pixel(1,5) = " << (int)image.pixelIndex(1,5) << " pixel(1,6) = " << (int)image.pixelIndex(1,6) << std::endl;
-//        ui->label_Image->setPixmap(QPixmap::fromImage(image));
+        saveImage.save("UNIT_Centaur_Scouts.png");
+        std::cout << "pixel(1,5) = " << (int)saveImage.pixelIndex(1,5) << " pixel(1,6) = " << (int)saveImage.pixelIndex(1,6) << std::endl;
+//        ui->label_Image->setPixmap(QPixmap::fromImage(saveImage));
     }
 
     // Load UNITS2.LBX
@@ -323,7 +323,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Replace UNITS2/0 by Lucern/FIGURES4_077_001
-    const QVector<QImage> images(1, image);
+    const QVector<QMoMImagePtr> images(1, image);
     std::vector<uint8_t> dataBuffer;
     if (ok)
     {
@@ -338,7 +338,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     // Replace FIGURES9/0-8 by Lucern/FIGURES4_072-079 (4 images each)
     for (int direction = 0; direction < 8; ++direction)
     {
-        QVector<QImage> images(4);
+        QVector<QMoMImagePtr> images(4);
         for (int movement = 0; movement < 4; ++movement)
         {
             QImage image;
@@ -349,7 +349,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
             }
             if (ok)
             {
-                images[movement] = image.convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor);
+                images[movement] = QMoMImagePtr(new QImage(image.convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor)));
             }
         }
         std::vector<uint8_t> dataBuffer;

@@ -6,6 +6,7 @@
 // ---------------------------------------------------------------------------
 
 #include <QGraphicsScene>
+#include <QMenu>
 #include <QTimer>
 #include <QTreeWidgetItem>
 
@@ -14,23 +15,392 @@
 #include "dialogoverlandmap.h"
 #include "ui_dialogoverlandmap.h"
 
+#include "dialogcalculatoraddress.h"
 #include "mainwindow.h"
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
 #include "MoMTemplate.h"
+#include "MoMTerrain.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
 #include "QMoMTreeItem.h"
 #include "QMoMUnitTile.h"
 #include "QOverlandMapScene.h"
 
-using MoM::QMoMResources;
-
-class QTreeItem : public QTreeWidgetItem
+namespace MoM
 {
 
+class QTreeItemBase : public QTreeWidgetItem
+{
+public:
+    enum { COL_Feature, COL_Value, COL_Comment };
+
+    QTreeItemBase(const QMoMGamePtr& game, const QString& feature, const QString& value) :
+        QTreeWidgetItem(),
+        m_game(game)
+    {
+        setText(COL_Feature, feature);
+        setText(COL_Value, value);
+    }
+    virtual void* getMoMPointer() const
+    {
+        return 0;
+    }
+    virtual QList<QAction*> requestActions(QObject* parent)
+    {
+        return QList<QAction*>();
+    }
+    virtual void slotAction()
+    {
+    }
+    virtual QString toString() const
+    {
+        return QTreeWidgetItem::text(COL_Value);
+    }
+protected:
+    QMoMGamePtr m_game;
 };
+
+///////////////////////////////////////////
+
+template<typename Number>
+class NumberTreeItem : public QTreeItemBase
+{
+public:
+    NumberTreeItem(const QMoMGamePtr& game, const QString& feature, Number* t, Number mask = 0);
+    virtual void setData(int column, int role, const QVariant &value);
+    virtual QString toString() const;
+    virtual void* getMoMPointer() const
+    {
+        return m_ptr;
+    }
+private:
+    Number* m_ptr;
+    Number m_mask;
+    unsigned m_shift;
+};
+
+
+template<typename Number>
+NumberTreeItem<Number>::NumberTreeItem(const QMoMGamePtr& game, const QString& feature, Number* t, Number mask) :
+    QTreeItemBase(game, feature, ""),
+    m_ptr(t),
+    m_mask(mask),
+    m_shift(0)
+{
+    for (unsigned i = 0; (0 != mask) && (i < 32); ++i)
+    {
+        if (((mask >> i) << i) != mask)
+        {
+            break;
+        }
+        m_shift = i;
+    }
+    setFlags(flags() | Qt::ItemIsEditable);
+    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
+}
+
+template<typename Number>
+void NumberTreeItem<Number>::setData(int column, int role, const QVariant &value)
+{
+    if ((COL_Value == column) && (Qt::EditRole == role))
+    {
+        Number newValue = static_cast<Number>(value.toInt());
+        if (0 != m_mask)
+        {
+            unsigned tmp = ((unsigned)*m_ptr & ~m_mask);
+            newValue = static_cast<Number>(tmp | (((unsigned)value.toInt() << m_shift) & m_mask));
+        }
+        (void)m_game->commitData(m_ptr, &newValue, sizeof(Number));
+        QTreeItemBase::setData(COL_Value, role, toString());
+    }
+    else
+    {
+        QTreeItemBase::setData(column, role, value);
+    }
+}
+
+template<typename Number>
+QString NumberTreeItem<Number>::toString() const
+{
+    Number value = *m_ptr;
+    if (0 != m_mask)
+    {
+        value =static_cast<Number>(((unsigned)*m_ptr & m_mask) >> m_shift);
+    }
+    return toQStr(value);
+}
+
+/////////////////////////////////////////
+
+template<typename Enum>
+class EnumTreeItem : public QTreeItemBase
+{
+public:
+    EnumTreeItem(const QMoMGamePtr& game, const QString& feature, Enum* e, Enum max);
+
+    virtual void* getMoMPointer() const
+    {
+        return m_ptr;
+    }
+
+    virtual void setData(int column, int role, const QVariant &value);
+
+    virtual QList<QAction*> requestActions(QObject* parent);
+    virtual void slotAction();
+
+    virtual QString toString() const;
+
+private:
+    void addAction(Enum e);
+    void updateIcon(Enum e);
+
+    // Configuration
+    Enum* m_ptr;
+    Enum m_max;
+
+    // Status
+
+    // Keep track of the action group
+    // m_actionGroup is deleted by its parent (the context menu)
+    QActionGroup* m_actionGroup;
+};
+
+template<typename Enum>
+EnumTreeItem<Enum>::EnumTreeItem(const QMoMGamePtr& game, const QString& feature, Enum* e, Enum max) :
+    QTreeItemBase(game, feature, ""),
+    m_ptr(e),
+    m_max(max),
+    m_actionGroup(0)
+{
+    setFlags(flags() | Qt::ItemIsEditable);
+    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
+    updateIcon(*m_ptr);
+}
+
+template<typename Enum>
+void EnumTreeItem<Enum>::setData(int column, int role, const QVariant &value)
+{
+    if ((COL_Value == column) && (Qt::EditRole == role))
+    {
+        Enum newValue = static_cast<Enum> (value.toInt());
+        (void)m_game->commitData(m_ptr, &newValue, sizeof(Enum));
+        QTreeItemBase::setData(COL_Value, role, toString());
+        updateIcon(*m_ptr);
+    }
+    else
+    {
+        QTreeItemBase::setData(column, role, value);
+    }
+}
+
+template<typename Enum>
+QList<QAction*> EnumTreeItem<Enum>::requestActions(QObject* parent)
+{
+    m_actionGroup = new QActionGroup(parent);
+
+    for (Enum e = (Enum)0; e < m_max; MoM::inc(e))
+    {
+        addAction(e);
+    }
+
+    return m_actionGroup->actions();
+}
+
+template<typename Enum>
+void EnumTreeItem<Enum>::slotAction()
+{
+    QAction* action = m_actionGroup->checkedAction();
+    setData(COL_Value, Qt::EditRole, action->data());
+}
+
+template<typename Enum>
+QString EnumTreeItem<Enum>::toString() const
+{
+    QString str = prettyQStr(*m_ptr);
+    return str;
+}
+
+// Private
+
+template<typename Enum>
+void EnumTreeItem<Enum>::addAction(Enum e)
+{
+    assert(m_actionGroup != 0);
+
+    QString name = prettyQStr(e);
+    if (!name.isEmpty() && (name[0] == '<') && (e != *m_ptr))
+    {
+        // Skip <Unknown> entries, unless one of them is selected
+    }
+    else
+    {
+        QAction* action = new QAction(name, m_actionGroup);
+        QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
+        if (!iconPtr.isNull())
+        {
+            action->setIcon(*iconPtr);
+        }
+        action->setCheckable(true);
+        action->setData(QVariant((int)e));
+        if (e == *m_ptr)
+        {
+            action->setChecked(true);
+        }
+    }
+}
+
+template<typename Enum>
+void EnumTreeItem<Enum>::updateIcon(Enum e)
+{
+    QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
+    if (!iconPtr.isNull())
+    {
+        QTreeItemBase::setIcon(COL_Value, *iconPtr);
+    }
+}
+
+/////////////////////////////////////////
+
+template<typename Bitmask, typename Enum>
+class BitmaskTreeItem : public QTreeItemBase
+{
+public:
+    BitmaskTreeItem(const QMoMGamePtr& game, const QString& feature, Bitmask* bitmask, Enum min, Enum max);
+
+    virtual void* getMoMPointer() const
+    {
+        return m_ptr;
+    }
+
+    virtual void setData(int column, int role, const QVariant &value);
+
+    virtual QList<QAction*> requestActions(QObject* parent);
+    virtual void slotAction();
+
+    virtual QString toString();
+
+private:
+    void addAction(Enum e);
+    bool has(Enum e) const;
+
+    // Configuration
+    Bitmask* m_ptr;
+    Enum m_min;
+    Enum m_max;
+
+    // Status
+
+    // Keep track of the action group
+    // m_actionGroup is deleted by its parent (the context menu)
+    QActionGroup* m_actionGroup;
+};
+
+template<typename Bitmask, typename Enum>
+BitmaskTreeItem<Bitmask, Enum>::BitmaskTreeItem(const QMoMGamePtr& game, const QString& feature, Bitmask* bitmask, Enum min, Enum max) :
+    QTreeItemBase(game, feature, ""),
+    m_ptr(bitmask),
+    m_min(min),
+    m_max(max),
+    m_actionGroup()
+{
+    setFlags(flags() | Qt::ItemIsEditable);
+    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
+}
+
+template<typename Bitmask, typename Enum>
+void BitmaskTreeItem<Bitmask, Enum>::setData(int column, int role, const QVariant &value)
+{
+    if ((COL_Value == column) && (Qt::EditRole == role))
+    {
+        Bitmask newValue = static_cast<Bitmask>(value.toUInt());
+        (void)m_game->commitData(m_ptr, &newValue, sizeof(Bitmask));
+        QTreeItemBase::setData(COL_Value, role, toString());
+    }
+    else
+    {
+        QTreeItemBase::setData(column, role, value);
+    }
+}
+
+template<typename Bitmask, typename Enum>
+void BitmaskTreeItem<Bitmask, Enum>::addAction(Enum e)
+{
+    assert(m_actionGroup != 0);
+
+    QString name = prettyQStr(e);
+    if (!name.isEmpty() && (name[0] == '<') && !has(e))
+    {
+        // Skip <Unknown> entries, unless one of them is selected
+    }
+    else
+    {
+        QAction* action = new QAction(name, m_actionGroup);
+        action->setCheckable(true);
+        action->setData(QVariant((int)e));
+        if (has(e))
+        {
+            action->setChecked(true);
+        }
+    }
+}
+
+template<typename Bitmask, typename Enum>
+QList<QAction*> BitmaskTreeItem<Bitmask, Enum>::requestActions(QObject* parent)
+{
+    m_actionGroup = new QActionGroup(parent);
+    m_actionGroup->setExclusive(false);
+    for (Enum e = m_min; e < m_max; MoM::inc(e))
+    {
+        addAction(e);
+    }
+    return m_actionGroup->actions();
+}
+
+template<typename Bitmask, typename Enum>
+void BitmaskTreeItem<Bitmask, Enum>::slotAction()
+{
+    Bitmask bitmask = 0;
+    Enum e = m_min;
+    for (int i = 0; i < m_actionGroup->actions().count(); ++i, MoM::inc(e))
+    {
+        if (m_actionGroup->actions().at(i)->isChecked())
+        {
+            bitmask |= (1 << i);
+        }
+    }
+    setData(COL_Value, Qt::EditRole, QVariant((unsigned)bitmask));
+}
+
+template<typename Bitmask, typename Enum>
+bool BitmaskTreeItem<Bitmask, Enum>::has(Enum e) const
+{
+    Bitmask mask = (1 << ((unsigned)e - (unsigned)m_min));
+    return ((*m_ptr & mask) != 0);
+}
+
+template<typename Bitmask, typename Enum>
+QString BitmaskTreeItem<Bitmask, Enum>::toString()
+{
+    QString result;
+    for (Enum e = m_min; e < m_max; MoM::inc(e))
+    {
+        if (has(e))
+        {
+            if (!result.isEmpty())
+            {
+                result += ", ";
+            }
+            QString name = prettyQStr(e);
+            name.replace("Immunity", "Imm");
+            result += name;
+        }
+    }
+    return result;
+}
+
+///////////////////////////////////////////
 
 DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QDialog(parent),
@@ -52,7 +422,7 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     // Update view when checkbox is clicked
     QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_EnemyUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_Explored, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+    QObject::connect(ui->checkBox_ExploredOnly, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_Lairs, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_Terrain, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_TerrainBonuses, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
@@ -60,8 +430,10 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QObject::connect(ui->checkBox_YourUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
 
     // Update view when items are inspected
-    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileChanged(MoM::Location,QList<QGraphicsItem*>)));
-    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileChanged(MoM::Location,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
 
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
@@ -80,6 +452,183 @@ DialogOverlandMap::~DialogOverlandMap()
     delete m_sceneArcanus;
 }
 
+void DialogOverlandMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
+{
+    MoM::City* city = momTerrain.getCity();
+    if (0 != city)
+    {
+        int cityNr = (int)(city - m_game->getCity(0));
+        Fortress* fortresses = m_game->getFortresses();
+        Fortress* fortress = 0;
+        if ((0 != fortresses) && equalLocation(fortresses[city->m_Owner], momTerrain.getLocation()))
+        {
+            fortress = &fortresses[city->m_Owner];
+        }
+
+        QString text = QString("%0 \"%1\"").arg(prettyQStr(city->m_Race)).arg(city->m_City_Name);
+        if (0 != fortress)
+        {
+            text += ", fortress";
+        }
+        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game,
+            QString("City[%0]").arg(cityNr),
+            text);
+        treeWidget->addTopLevelItem(qtreeItem);
+
+//        ptree->appendChild("m_City_Name", new QMoMTreeItem<char[14]>(rhs->m_City_Name));
+        qtreeItem->addChild(new EnumTreeItem<eRace>(m_game, "Race", &city->m_Race, eRace_MAX));
+        qtreeItem->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &city->m_Owner, ePlayer_MAX));
+        qtreeItem->addChild(new EnumTreeItem<eCity_Size>(m_game, "Size", &city->m_Size, eCity_Size_MAX));
+
+//        ptree->appendChild("m_Population", new QMoMTreeItem<uint8_t>(&rhs->m_Population));
+//        ptree->appendChild("m_Number_of_farmers_allocated", new QMoMTreeItem<uint8_t>(&rhs->m_Number_of_farmers_allocated));
+//        ptree->appendChild("m_PopulationDekaPop", new QMoMTreeItem<uint8_t>(&rhs->m_PopulationDekaPop));
+//        ptree->appendChild("m_Player_as_bitmask_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_Player_as_bitmask_GUESS));
+        qtreeItem->addChild(new EnumTreeItem<eProducing>(m_game, "Producing", &city->m_Producing, eProducing_MAX));
+//        ptree->appendTree(constructTreeItem(&rhs->m_Building_Status, "m_Building_Status"), "");
+//        ptree->appendTree(constructTreeItem(&rhs->m_City_Enchantments, "m_City_Enchantments"), "");
+//        ptree->appendChild("m_Nightshade", new QMoMTreeItem<eYesNo8>(&rhs->m_Nightshade));
+//        ptree->appendChild("m_Hammers", new QMoMTreeItem<uint8_t>(&rhs->m_Hammers));
+        qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "HammersAccumulated", &city->m_HammersAccumulated));
+//        ptree->appendChild("m_Coins", new QMoMTreeItem<uint8_t>(&rhs->m_Coins));
+//        ptree->appendChild("m_Maintenance", new QMoMTreeItem<uint8_t>(&rhs->m_Maintenance));
+//        ptree->appendChild("m_Mana_cr", new QMoMTreeItem<uint8_t>(&rhs->m_Mana_cr));
+//        ptree->appendChild("m_Research", new QMoMTreeItem<uint8_t>(&rhs->m_Research));
+//        ptree->appendChild("m_Food_Produced", new QMoMTreeItem<uint8_t>(&rhs->m_Food_Produced));
+//        ptree->appendChild("m_Road_Connection_GUESS", new QMoMTreeItem<int8_t>(&rhs->m_Road_Connection_GUESS));
+    }
+}
+
+void DialogOverlandMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
+{
+    MoM::Tower_Node_Lair* lair = momTerrain.getLair();
+    if (0 != lair)
+    {
+        int lairNr = (int)(lair - m_game->getLair(0));
+        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game,
+            QString("Lair[%0]").arg(lairNr),
+            QString("%0").arg(prettyQStr(lair->m_Type)));
+        treeWidget->addTopLevelItem(qtreeItem);
+
+        qtreeItem->addChild(new EnumTreeItem<eTower_Node_Lair_Status>(m_game, "Status", &lair->m_Status, eTower_Node_Lair_Status_MAX));
+        qtreeItem->addChild(new EnumTreeItem<eTower_Node_Lair_Type>(m_game, "Type", &lair->m_Type, eTower_Node_Lair_Type_MAX));
+
+        qtreeItem->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Inhabitant1", &lair->m_Inhabitant1.m_Inhabitant, eUnit_Type_MAX));
+        qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Initial1", (uint16_t*)&lair->m_Inhabitant1, 0xF000));
+        qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Remaining1", (uint16_t*)&lair->m_Inhabitant1, 0x0F00));
+        qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Aware1", (uint8_t*)&lair->m_Flags, 0x02));
+        if ((eUnit_Type)0 != lair->m_Inhabitant2.m_Inhabitant)
+        {
+            qtreeItem->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Inhabitant2", &lair->m_Inhabitant2.m_Inhabitant, eUnit_Type_MAX));
+            qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Initial2", (uint16_t*)&lair->m_Inhabitant2, 0xF000));
+            qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Remaining2", (uint16_t*)&lair->m_Inhabitant2, 0x0F00));
+            qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Aware2", (uint8_t*)&lair->m_Flags, 0x04));
+        }
+        if (0 != lair->m_Reward_Gold)
+        {
+            qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Reward Gold", &lair->m_Reward_Gold));
+        }
+        if (0 != lair->m_Reward_Mana)
+        {
+            qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "Reward Mana", &lair->m_Reward_Mana));
+        }
+        qtreeItem->addChild(new EnumTreeItem<eReward_Specials>(m_game, "Reward Specials", &lair->m_Reward_Specials, eReward_Specials_MAX));
+        qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "PrisonerPresent", (uint8_t*)&lair->m_Flags, 0x01));
+        for (unsigned i = 0; (i < lair->m_Item_Rewards) && (i < 3); ++i)
+        {
+            if (lair->m_Item_Value[i] != 0)
+            {
+                qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, QString("Item Value[%0]").arg(i), &lair->m_Item_Value[i]));
+            }
+        }
+    }
+}
+
+void DialogOverlandMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrain)
+{
+    const Location& loc = momTerrain.getLocation();
+
+    treeWidget->addTopLevelItem(new QTreeItemBase(m_game,
+        "Location",
+        QString("%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos)));
+
+    QTreeItemBase* qtreeTerrain = new QTreeItemBase(m_game, "Terrain", "");
+    ui->treeWidget_Tile->addTopLevelItem(qtreeTerrain);
+    if (0 != m_game->getTerrainType(loc))
+    {
+        MoM::eTerrainType terrainType = *m_game->getTerrainType(loc);
+        QString text = QString("%0 (%1)")
+                .arg(prettyQStr(MoM::MoMTerrain::getTerrainCategory(terrainType)))
+                .arg((int)terrainType);
+        if ((0 != m_game->getTerrainBonus(loc)) && (MoM::DEPOSIT_no_deposit != *m_game->getTerrainBonus(loc)))
+        {
+            text += ", " + prettyQStr(*m_game->getTerrainBonus(loc));
+        }
+        qtreeTerrain->setText(1, text);
+    }
+
+    if (0 != m_game->getTerrainType(loc))
+    {
+        qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainType>(m_game, "TerrainType", m_game->getTerrainType(loc), MoM::eTerrainType_MAX));
+    }
+    if (0 != m_game->getTerrainBonus(loc))
+    {
+        qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainBonusDeposit>(m_game, "TerrainBonus", m_game->getTerrainBonus(loc), MoM::eTerrainBonusDeposit_MAX));
+    }
+    if (0 != m_game->getTerrainChange(loc))
+    {
+        qtreeTerrain->addChild(new BitmaskTreeItem<uint8_t, MoM::eTerrainChange>(m_game, "TerrainChange", (uint8_t*)m_game->getTerrainChange(loc), (MoM::eTerrainChange)0, MoM::eTerrainChange_MAX));
+    }
+    if (0 != m_game->getTerrainExplored(loc))
+    {
+        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "Explored", m_game->getTerrainExplored(loc)));
+    }
+    if (0 != m_game->getTerrainLandMassID(loc))
+    {
+        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "LandMassID", m_game->getTerrainLandMassID(loc)));
+    }
+    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+    {
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveUnused", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveWalk", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveForester", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester)));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveMountaineer", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer)));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSwimming", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSailing", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
+    }
+}
+
+void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
+{
+    assert(0 != unit);
+    int unitNr = (int)(unit - m_game->getUnit(0));
+    QString text = QString("%0").arg(prettyQStr(unit->m_Unit_Type));
+    if (0 != unit->m_Weapon_Mutation.s.Weapon_Type)
+    {
+        text += ", " + prettyQStr((eWeaponType)unit->m_Weapon_Mutation.s.Weapon_Type);
+    }
+    QTreeItemBase* qtreeUnit = new QTreeItemBase(m_game,
+        QString("unit[%0]").arg(unitNr),
+        text);
+    treeWidgetItem->addChild(qtreeUnit);
+
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesTotal", &unit->m_Moves_Total));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesLeft", &unit->m_Moves_Left));
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Active>(m_game, "Active", &unit->m_Active, eUnit_Active_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status>(m_game, "Status", &unit->m_Status, eUnit_Status_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eLevel>(m_game, "Level", &unit->m_Level, eLevel_MAX));
+    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "Experience", &unit->m_Experience));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Damage", &unit->m_Damage));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "Grouping", &unit->m_Grouping));
+    if (1 != unit->m_Scouting)
+    {
+        qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "Scouting", &unit->m_Scouting));
+    }
+//    ptree->appendTree(constructTreeItem(&rhs->m_Weapon_Mutation, "m_Weapon_Mutation"), "");
+    qtreeUnit->addChild(new BitmaskTreeItem<uint32_t, eUnitEnchantment>(m_game, "Enchantments", &unit->m_Unit_Enchantment.bits, (eUnitEnchantment)0, eUnitEnchantment_MAX));
+}
+
 void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
 {
     switch (index)
@@ -93,6 +642,60 @@ void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
     default:
         ui->graphicsView->setScene(0);
         break;
+    }
+}
+
+void DialogOverlandMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
+{
+    qDebug() << "on_treeWidget_Tile_customContextMenuRequested" << pos;
+    QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
+
+    QMenu contextMenu;
+    QAction* action = contextMenu.addAction("Address calculator");
+    action->connect(action, SIGNAL(triggered()), this, SLOT(slot_addressCalculator()));
+
+    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
+        if (!actions.isEmpty())
+        {
+            contextMenu.addSeparator();
+        }
+        contextMenu.addActions(actions);
+        foreach(QAction* action, actions)
+        {
+            connect(action, SIGNAL(triggered()), this, SLOT(slot_itemAction()));
+        }
+    }
+
+    contextMenu.exec(ui->treeWidget_Tile->mapToGlobal(pos));
+}
+
+void DialogOverlandMap::on_verticalSlider_Zoom_valueChanged(int value)
+{
+    double scale = 1.0 + value / 100.0;
+    if (value < 0)
+    {
+        scale = std::pow(2.0, value / 100.0);
+    }
+
+    ui->graphicsView->resetTransform();
+    ui->graphicsView->scale(scale, scale);
+}
+
+void DialogOverlandMap::slot_addressCalculator()
+{
+    DialogCalculatorAddress* dialog = new DialogCalculatorAddress(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+//    QObject::connect(this, SIGNAL(signal_addressChanged(const void*)), dialog, SLOT(slot_addressChanged(const void*)));
+    dialog->show();
+
+    QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
+    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        dialog->slot_addressChanged(pMoMItem->getMoMPointer());
     }
 }
 
@@ -138,7 +741,7 @@ void DialogOverlandMap::slot_gameUpdated()
                 {
                     mapTile->setTerrainChange(m_game->getTerrainChange(plane, x, y));
                 }
-                if (ui->checkBox_Explored->isChecked())
+                if (ui->checkBox_ExploredOnly->isChecked())
                 {
                     mapTile->setTerrainExplored(m_game->getTerrainExplored(plane, x, y));
                 }
@@ -224,102 +827,46 @@ void DialogOverlandMap::slot_gameUpdated()
 
 }
 
-void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems)
+void DialogOverlandMap::slot_itemAction()
 {
-    qDebug() << QString("slot_tileChanged(%0:(%1,%2), %3 items").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos).arg(graphicItems.count());
+    QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
+    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        pMoMItem->slotAction();
+    }
+}
+
+void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
+{
+    qDebug() << QString("slot_tileChanged(%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos);
+}
+
+void DialogOverlandMap::slot_tileSelected(const MoM::Location &loc, const QList<QGraphicsItem *> &graphicItems)
+{
+    qDebug() << QString("slot_tileSelected(%0:(%1,%2), %3 items").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos).arg(graphicItems.count());
+
     ui->treeWidget_Tile->clear();
 
-    QTreeItem* qtreeItem;
-    qtreeItem = new QTreeItem;
-    qtreeItem->setText(0, "Location");
-    qtreeItem->setText(1, QString("%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos));
-    ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+    MoM::MoMTerrain momTerrain(m_game.data());
+    momTerrain.setLocation(loc);
 
-    if (0 != m_game->getTerrainType(loc))
+    addTerrainSubtree(ui->treeWidget_Tile, momTerrain);
+    addLairSubtree(ui->treeWidget_Tile, momTerrain);
+    addCitySubtree(ui->treeWidget_Tile, momTerrain);
+
+    std::vector<int> units = momTerrain.getUnits();
+    if (units.size() > 0)
     {
-        qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "TerrainType");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainType(loc)));
+        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game, 
+            QString("Units"), 
+            QString("%0 (player %1)").arg(units.size()).arg(prettyQStr(m_game->getUnit(units[0])->m_Owner)));
         ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainBonus(loc))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "TerrainBonus");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainBonus(loc)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainChange(loc))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "TerrainChange");
-        qtreeItem->setText(1, prettyQStr(*(uint8_t*)m_game->getTerrainChange(loc)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainExplored(loc))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "Explored");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainExplored(loc)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainLandMassID(loc))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "LandMassID");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainLandMassID(loc)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveUnused");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveWalk");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveForester");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveMountaineer");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveSwimming");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing))
-    {
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, "MoveSailing");
-        qtreeItem->setText(1, prettyQStr(*m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
-    }
-   
-    for (int i = 0; i < graphicItems.count(); ++i)
-    {
-        QGraphicsItem* graphicsItem = graphicItems[i];
-        QTreeItem* qtreeItem = new QTreeItem;
-        qtreeItem->setText(0, QString("Item[%0]").arg(i));
-        qtreeItem->setText(1, graphicsItem->toolTip());
-        ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
+
+        for (size_t i = 0; i < units.size(); ++i)
+        {
+            addUnitSubtree(qtreeItem, m_game->getUnit(units[i]));
+        }
     }
 }
 
@@ -338,14 +885,4 @@ void DialogOverlandMap::slot_timerActiveUnit()
     }
 }
 
-void DialogOverlandMap::on_verticalSlider_Zoom_valueChanged(int value)
-{
-    double scale = 1.0 + value / 100.0;
-    if (value < 0)
-    {
-        scale = std::pow(2.0, value / 100.0);
-    }
-
-    ui->graphicsView->resetTransform();
-    ui->graphicsView->scale(scale, scale);
 }

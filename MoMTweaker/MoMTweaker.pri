@@ -43,7 +43,8 @@ HEADERS += \
     ../MoMEditorTemplate/QMoMUnitTile.h \
     ../MoMEditorTemplate/QMapGraphicsView.h \
     ../MoMEditorTemplate/MoMCatnip.h \
-    ../MoMEditorTemplate/QOverlandMapScene.h
+    ../MoMEditorTemplate/QOverlandMapScene.h \
+    ../MoMEditorTemplate/MoMTerrain.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -79,7 +80,8 @@ SOURCES += \
     ../MoMEditorTemplate/QMoMUnitTile.cpp \
     ../MoMEditorTemplate/QMapGraphicsView.cpp \
     ../MoMEditorTemplate/MoMCatnip.cpp \
-    ../MoMEditorTemplate/QOverlandMapScene.cpp
+    ../MoMEditorTemplate/QOverlandMapScene.cpp \
+    ../MoMEditorTemplate/MoMTerrain.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \

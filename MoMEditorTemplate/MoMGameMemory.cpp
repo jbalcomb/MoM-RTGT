@@ -412,8 +412,8 @@ Map_Movement* MoMGameMemory::getTerrain_Movements()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Movements,
-            ePlane_MAX * sizeof(Map_Movement));
+    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Movement,
+            ePlane_MAX);
 }
 
 eTerrainType* MoMGameMemory::getTerrain_Types()

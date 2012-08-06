@@ -158,6 +158,8 @@ enum eBuildingStatus ENUMSIZE8
     BUILDINGSTATUS_Replaced = 0,
     BUILDINGSTATUS_Built = 1,
     BUILDINGSTATUS_Destroyed = 2,
+
+    eBuildingStatus_MAX,
     eBuildingStatus__SIZE__ = 0xFF
 };
 
@@ -169,6 +171,8 @@ enum eCity_Size ENUMSIZE8
     CITYSIZE_Town = 3,
     CITYSIZE_City = 4,
     CITYSIZE_Capital = 5,
+
+    eCity_Size_MAX
 };
 
 enum eCombatEnchantment
@@ -1326,6 +1330,8 @@ enum eTower_Node_Lair_Status ENUMSIZE8
 {
     LAIRSTATUS_popped = 0,
     LAIRSTATUS_intact = 1,
+
+    eTower_Node_Lair_Status_MAX
 }; 
 
 enum eTower_Node_Lair_Type ENUMSIZE8
@@ -1609,6 +1615,7 @@ enum eProducing ENUMSIZE16
     PRODUCING_Troll_War_Trolls,
     PRODUCING_Troll_War_Mammoths,
     
+    eProducing_MAX,
     eProducing__SIZE__ = 0xFFFF
 };
 
@@ -1647,6 +1654,7 @@ enum eRandomPickType ENUMSIZE16 {
     RANDOMPICK_Random_Ftr,
     RANDOMPICK_Random_Mage,
     RANDOMPICK_Random_Any,
+
     eRandomPickType_MAX,
     eRandomPickType__SIZE__ = 0xFFFF,
 };
@@ -2399,8 +2407,12 @@ enum eTerrainBonusDeposit ENUMSIZE8
     DEPOSIT_Adamantium_Ore = 0x07, // (+2 mana)
     DEPOSIT_Quork = 0x08, // (+3 mana)
     DEPOSIT_Crysx = 0x09, // (+5 mana)
+    DEPOSIT_Unk10 = 0x10,
+    DEPOSIT_Unk20 = 0x20,
     DEPOSIT_Wild_Game = 0x40, // (+2 food)
     DEPOSIT_Nightshade = 0x80, // (50 strength dispel)
+
+    eTerrainBonusDeposit_MAX
 };
 
 enum eTerrainCategory
@@ -2424,16 +2436,23 @@ enum eTerrainCategory
 
 enum eTerrainChange
 {
-    TERRAINCHANGE_Volcano_owner = 0x07, // 07 //1 MP/turn for Wizard 1 (YOU) through 5, 0 = no one
-    TERRAINCHANGE_Road = 0x08,
-    TERRAINCHANGE_Enchanted_Road = 0x10,
-    TERRAINCHANGE_Corruption = 0x20,
+    TERRAINCHANGE_Volcano_you = 0,      // 07 //1 MP/turn for Wizard 1 (YOU) through 5, 0 = no one
+    TERRAINCHANGE_Volcano_player1 = 1,  // 07
+    TERRAINCHANGE_Volcano_player3 = 2,  // 07
+
+    TERRAINCHANGE_Road = 3,             // 08
+    TERRAINCHANGE_Enchanted_Road = 4,   // 10 // Only visible if 'road' is also set
+    TERRAINCHANGE_Corruption = 5,       // 20
+    TERRAINCHANGE_Unk40 = 6,            // 40
+    TERRAINCHANGE_NoRoad80 = 7,         // 80
+
+    eTerrainChange_MAX
 };
 
 enum eTerrainType ENUMSIZE16
 {
-    ocean = 0x0000,
-    Bug_terrain_like_grasslands = 0x0001,
+    ocean1 = 0x0000,
+    grasslands0 = 0x0001,
     shore1_first = 0x0002, //  160 various joining configurations
     shore1_last = 0x00A1,
     grasslands1 = 0x00A2,
@@ -2446,18 +2465,19 @@ enum eTerrainType ENUMSIZE16
     forest_w_nature_node = 0x00A9,
     volcano_w_chaos_node = 0x00AA,
     hills1 = 0x00AB,
-    grasslands2_first = 0x00AC,
-    grasslands2_last = 0x00AD,
-    desert2_first = 0x00AE,
-    desert2_last = 0x00B0,
-    swamp2_first = 0x00B1,
-    swamp2_last = 0x00B2,
+    grasslands2 = 0x00AC,
+    grasslands3 = 0x00AD,
+    desert2 = 0x00AE,
+    desert3 = 0x00AF,
+    desert4 = 0x00B0,
+    swamp2 = 0x00B1,
+    swamp3 = 0x00B2,
     volcano = 0x00B3,
-    grasslands3 = 0x00B4,
-    tundra2_first = 0x00B5,
-    tundra2_last = 0x00B6,
-    forest2_first = 0x00B7,
-    forest2_last = 0x00B8,
+    grasslands4 = 0x00B4,
+    tundra2 = 0x00B5,
+    tundra3 = 0x00B6,
+    forest2 = 0x00B7,
+    forest3 = 0x00B8,
     river1_first = 0x00B9, //  river mouth if adjacent to shore
     river1_last = 0x00C4,
     shore2_first = 0x00C5, //  4 river joined large lake
@@ -2470,15 +2490,15 @@ enum eTerrainType ENUMSIZE16
     mountain2_last = 0x0112,
     hills2_first = 0x0113, //  various joining configurations
     hills2_last = 0x0123,
-    desert3_first = 0x0124,    //  various joining configurations
-    desert3_last = 0x01C3,
+    desert5_first = 0x0124,    //  various joining configurations
+    desert5_last = 0x01C3,
     shore4_first = 0x01C4, //  various joining configurations, including some river outlets
     shore4_last = 0x0258,
-    ocean_first = 0x0259,
-    ocean_last = 0x0260,
-    Bug_terrain_like_tundra = 0x0261,
-    tundra3_first = 0x0262,    //  various joining configurations
-    tundra3_last = 0x02F9,
+    ocean2 = 0x0259,
+    ocean3 = 0x0260,
+    tundra4_first = 0x0261,     //  various joining configurations
+    tundra4_last = 0x02F9,
+
     eTerrainType_MAX,
     eTerrainType__SIZE__ = 0xFFFF
 };
@@ -2629,6 +2649,8 @@ enum eUnit_Active ENUMSIZE8
 {
     UNITACTIVE_awaiting_orders = 0,         //   00=awaiting orders / "I need attention" (will "jump to" this unit when hitting wait)
     UNITACTIVE_finished = 1,                //   01=finished (won't "jump to" this unit when hitting wait)
+
+    eUnit_Active_MAX,
     eUnit_Active_SIZE__ = 0xFF
 };
 
@@ -2644,7 +2666,7 @@ enum eUnit_Status ENUMSIZE8
                                             //      the SAVE game does not record if we are traversing UP or DOWN the units!
                                             //   ??=building road
                                             //   ??=purifying
-    UNITSTATUS_unkUnitStatus16 = 16,        //   16=??
+    eUnit_Status_MAX,
     UNITSTATUS_eUnit_Status_SIZE__ = 0xFF
 };
 
@@ -2980,7 +3002,9 @@ enum eWar_Status ENUMSIZE8
     WARSTATUS_None = 0,
     WARSTATUS_Wizard_Pact = 1,
     WARSTATUS_Alliance = 2,
-    WARSTATUS_War = 3
+    WARSTATUS_War = 3,
+
+    eWar_Status_MAX
 };
 
 enum eWeaponType ENUMSIZE8
@@ -2989,6 +3013,8 @@ enum eWeaponType ENUMSIZE8
     WEAPON_magic = 1,
     WEAPON_mithril = 2,
     WEAPON_adamantium = 3,
+
+    eWeaponType_MAX
 };
 
 enum eYesNo16 ENUMSIZE16
@@ -3520,10 +3546,10 @@ typedef struct PACKED_STRUCT // Terrain_Changes
 {
     uint8_t     Volcano_producing_for_Owner:3;  // 07 //1 MP/turn for Wizard 1 (YOU) through 5, 0 = no one
     uint8_t     road:1;                         // 08
-    uint8_t     enchanted_road:1;               // 10
+    uint8_t     enchanted_road:1;               // 10   // Only visible if 'road' is also set
     uint8_t     corruption:1;                   // 20
-    uint8_t     u1:1;                           // 40
-    uint8_t     u2:1;                           // 80
+    uint8_t     unknown40:1;                           // 40
+    uint8_t     no_road80:1;                           // 80
 } Terrain_Changes; // <read=read_Terrain_Changes>;
 
 
@@ -4007,26 +4033,25 @@ typedef struct PACKED_STRUCT // Wizard
     eBannerColor    m_BannerColor;                      // 016 (0-4)
     ePersonality    m_Personality;                      // 018 (0-5)
     eObjective      m_Objective;                        // 01A (0-4)
-    uint8_t         m_UNK01[8];                         // 01C
+    uint8_t         m_UNK01C[8];                         // 01C
     uint16_t        m_Fame;                             // 024
     uint16_t        m_Power_Base;                       // 026
-    uint8_t         m_UNK02a[2];                        // 028
+    uint16_t        m_UNK028;                           // 028  // Seems to related to prod/mana terrain bonus types
     uint8_t         m_Research_Percentage;              // 02A
     uint8_t         m_Mana_Percentage;                  // 02B
     uint8_t         m_Skill_Percentage;                 // 02C
-    uint8_t         m_UNK02b;                           // 02D
+    uint8_t         m_UNK02D;                           // 02D
     int16_t         m_X_Coordinate_of_Summoning_Circle; // 02E (0-59)
     int16_t         m_Y_Coordinate_of_Summoning_Circle; // 030 (0-59)
     ePlane          m_Plane_of_Summoning_Circle;        // 032 (0-1)
     uint8_t         m_Zero01;
     eSpell16        m_Research_Spell_candidates[8];     // 034
-    uint8_t         m_UNK03a[4];                        // 044
-    uint16_t        m_UNK_048;                          // 048
-    uint8_t         m_UNK03b[4];                        // 04A
+    uint8_t         m_UNK044[4];                        // 044
+    uint16_t        m_UNK048;                           // 048
+    uint8_t         m_UNK04A[4];                        // 04A
     uint16_t        m_Cost_Left_of_Spell_being_cast;    // 04E
     uint16_t        m_Initial_Cost_of_Spell_being_cast; // 050
-    eSpell          m_Spell_being_cast;                 // 052
-    uint8_t         m_Zero02;                           //
+    eSpell16        m_Spell_being_cast;                 // 052
     int16_t         m_Unused_Casting_Skill_available_this_turn;     // 054
     int16_t         m_Nominal_Casting_Skill_available_this_turn;    // 056
     eTax_Rate       m_Tax_Rate;                         // 058
@@ -4037,12 +4062,12 @@ typedef struct PACKED_STRUCT // Wizard
     int16_t         m_Number_of_Spellbooks_Death;       //
     unionSkills     m_Skills;                           // 064
     Hired_Hero      m_Heroes_hired_by_wizard[gMAX_HIRED_HEROES];    // 076 six slots
-    uint8_t         m_UNK06[2];                         // 11E
+    uint16_t        m_UNK11E;                           // 11E
     int16_t         m_Items_in_Slots[4];                // 120 (See below)
     int8_t          m_Contacted[6];                     // 128
-    int16_t         m_UNK07a_Relation[6];               // 12E
-    int16_t         m_UNK07b_Relation[6];               // 13A
-    int16_t         m_UNK07c_Relation[6];               // 146
+    int16_t         m_UNK_12E_Relation[6];              // 12E
+    int16_t         m_UNK_13A_Relation[6];              // 13A
+    int16_t         m_UNK_146_Relation[6];              // 146
     int8_t          m_Current_Wizard_Relations[6];      // 152
                                                         //    Notes:
                                                         //    Minimum -100 (if below, game resets to this).
@@ -4064,21 +4089,21 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //    Harmony   100...119
                                                         //    No Treaty 120...127
     eWar_Status     m_War_Status[6];                    // 158 (0=None, 1=Wizard Pact, 2=Alliance, 3+=War)
-    int8_t          m_UNK07d[0x24];                     // 15E
-    int8_t          m_UNK07e_Relation[6];               // 182
-    int8_t          m_UNK07f_Relation[6];               // 188
-    int8_t          m_UNK07g[0xCC];                     // 18E
+    int8_t          m_UNK_15E[0x24];                    // 15E
+    int8_t          m_UNK_182_Relation[6];              // 182
+    int8_t          m_UNK_188_Relation[6];              // 188
+    int8_t          m_UNK_18E[0xCC];                    // 18E
     int16_t         m_Researching_Left;                 // 25A
     int16_t         m_Mana_Crystals;                    // 25C
     int32_t         m_Wizard_Casting_Skill;             // 25E <read=read_Wizard_Casting_Skill>;
                                                         //     (actual skill is square root of value stored here, rounded up)
     eSpell          m_Researching_Spell;                // 262
     Spells_Known    m_Spells_Known;                     // 263 Spells (0-3) (None-Na-So-Ch-Li-De-Ar)
-    int8_t          m_UNK09a[26];                       // 33A
-    int8_t          m_UNK_354;                          // 354
-    int8_t          m_UNK_355;                          // 355
+    int8_t          m_UNK33A[26];                       // 33A
+    int8_t          m_UNK354;                           // 354
+    int8_t          m_UNK355;                           // 355
     int16_t         m_Gold_Coins;                       // 356
-    int16_t         m_UNK09b;                           // 358
+    int16_t         m_UNK358;                           // 358
     uint16_t        m_Astrologer_Magic_Power;           // 35A (0-200)
     uint16_t        m_Astrologer_Spell_Research;        // 35C (0-200)
     uint16_t        m_Astrologer_Army_Strength;         // 35E (0-200)
@@ -4087,10 +4112,10 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
-    uint8_t         m_UNK11[42];                        // 49A
+    uint8_t         m_UNK49A[42];                       // 49A
     eRealm_Type     m_Books_Color;                      // 4C4
-    uint8_t         m_Zero04;                           // 
-    uint16_t        m_UNK12;                            // 4C6
+    uint8_t         m_Zero4C5;                          // 
+    uint16_t        m_UNK4C6;                           // 4C6
                                                         // SIZE 4C8
 } Wizard; // <read=read_Wizard>;
 
@@ -5124,9 +5149,9 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_4073A  ; // 9C9A
     EXE_Reloc   dword_4073C ; // 9C9C
     EXE_Reloc   dword_40740 ; // 9CA0
-    EXE_Reloc   addr_Terrain_Movements   ; // 9CA4
+    EXE_Reloc   addr_terrain_cost_   ; // 9CA4
     EXE_Reloc   dword_40748 ; // 9CA8
-    EXE_Reloc   dword_4074C ; // 9CAC
+    EXE_Reloc   addr_Terrain_Movement ; // 9CAC
     EXE_Reloc   addr_Terrain_Explored    ; // 9CB0
     EXE_Reloc   addr_Terrain_Changes  ; // 9CB4
     EXE_Reloc   addr_Terrain_Bonuses    ; // 9CB8

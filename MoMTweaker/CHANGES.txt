@@ -5,12 +5,21 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.5 (2012--)
 -----------------------------
 
-* Added tax unrest table to Game data.
-
 * Completed map view to show everything it should.
-  Moving the mouse over a tile will show what's there.
+  Clicking on a tile will show what's there.
+  It also allows you to change the fields of the tile's contents.
 
+* Adjusted the Catnip mod to display what is changed, which is:
+  1. All units get an extra half move.
+  2. Heroes get dedicated slots (and a couple of changes).
+  3. Magicians, priests, and shamen are renamed and get different abilities.
+  TBH, this is not what Catwalk intended, but these are ideas I found
+  fun to implement. ;)
+  Btw, quitting MoM and continuing discards all changes.
 
+* Added tax unrest table to Game data [Anthony].
+
+  
 
 CHANGES IN 0.2.4 (2012-08-02)
 -----------------------------

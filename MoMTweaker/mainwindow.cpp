@@ -625,7 +625,7 @@ void MainWindow::on_pushButton_ShowTables_clicked()
 
 void MainWindow::on_pushButton_Map_clicked()
 {
-    DialogOverlandMap* dialog = new DialogOverlandMap(this);
+    MoM::DialogOverlandMap* dialog = new MoM::DialogOverlandMap(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

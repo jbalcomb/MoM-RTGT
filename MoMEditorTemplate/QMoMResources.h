@@ -61,7 +61,13 @@ public:
     const QMoMImagePtr getImage(MoM::eTerrainChange terrainChange, int roadDirection = 0) const;
     const QMoMImagePtr getImage(MoM::eTerrainType terrain) const;
     const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const;
-
+    template<typename T>
+    const QMoMImagePtr getImage(T t) const
+    {
+        // Default match for getImage()
+        return QMoMImagePtr(); 
+    }
+ 
     template<typename T>
     QPixmap getPixmap(T t, double scale = 1.0) const
     {
@@ -90,6 +96,7 @@ private:
     bool createColorTable();
 
     bool createBuildingImages();
+    bool createCitySizeImages();
     bool createLairImages();
     bool createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
     bool createSpellImages();
@@ -108,6 +115,7 @@ private:
 
     QVector<QRgb> m_colorTable;
     QVector<QMoMImagePtr> m_buildingImages;
+    QVector<QMoMImagePtr> m_citySizeImages;
     QVector<QMoMImagePtr> m_itemiscImages;
     QVector<QMoMImagePtr> m_itemsImages;
     QVector<QMoMImagePtr> m_lairImages;
