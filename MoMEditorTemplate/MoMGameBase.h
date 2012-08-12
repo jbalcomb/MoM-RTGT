@@ -27,6 +27,18 @@ public:
         return m_errorString;
     }
 
+    virtual bool load(const char*)
+    {
+        setErrorString("not implemented");
+        return false;
+    }
+
+    virtual bool save(const char*)
+    {
+        setErrorString("not implemented");
+        return false;
+    }
+
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
     Building_Data* getBuilding_Data(eBuilding building)
@@ -124,7 +136,7 @@ public:
             return nullVersion;
         }
     }
-    virtual const char* getNameByOffset(uint16_t /*offset*/)
+    virtual const char* getNameByOffset(DS_Offset /*offset*/)
     {
         return 0;
     }

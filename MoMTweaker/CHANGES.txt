@@ -5,7 +5,14 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.5 (2012--)
 -----------------------------
 
-* Completed map view to show everything it should.
+* Added an LBX editor (click Tools / LBX editor) [Anthony,Aureustgo,FrancoK].
+  When you load an LBX file with pictures, those will be shown in the 
+  top view.
+  Simultaneously the bottom view shows the bitmaps (png gif bmp jpg)
+  that are in the same directory.
+  If you click "Replace" the LBX file is overwritten.
+
+* Completed the overland map view to show everything it should.
   Clicking on a tile will show what's there.
   It also allows you to change the fields of the tile's contents.
 

@@ -98,6 +98,9 @@ typedef struct PACKED_STRUCT // EXE_Reloc
   uint16_t segment;
 } EXE_Reloc;
 
+/// \brief Typedef for a field representing an offset in the datasegment
+typedef uint16_t DS_Offset;
+
 typedef struct PACKED_STRUCT // BorlandSegmentEntry
 {
     uint16_t    base;

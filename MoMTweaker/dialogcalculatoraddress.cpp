@@ -48,6 +48,7 @@ void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffs
 
     ui->lineEdit_OffsetIDA->clear();
     ui->lineEdit_OffsetMem->clear();
+    ui->lineEdit_CurrentValue->clear();
 
     MoM::MoMExeWizards* wizardsExe = 0;
     if (!m_game.isNull())
@@ -69,6 +70,12 @@ void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(QString sExeOffs
     {
         ui->lineEdit_OffsetIDA->setText(QString("dseg:%0").arg(dsegOffset, 4, 16, QChar('0')));
     }
+
+    if ((0 != wizardsExe) && (exeOffset > 0) && (exeOffset + sizeof(uint16_t) <= wizardsExe->getExeSize()))
+    {
+        const uint8_t* pointer = wizardsExe->getExeContents() + exeOffset;
+        updateCurrentValue(pointer);
+    }
 }
 
 void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffset)
@@ -79,6 +86,7 @@ void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffs
 
     ui->lineEdit_OffsetExe->clear();
     ui->lineEdit_OffsetMem->clear();
+    ui->lineEdit_CurrentValue->clear();
 
     MoM::MoMExeWizards* wizardsExe = 0;
     if (!m_game.isNull())
@@ -108,11 +116,20 @@ void DialogCalculatorAddress::on_lineEdit_OffsetIDA_textChanged(QString sIdaOffs
             ui->lineEdit_OffsetExe->setText(QString("%0").arg(exeOffset, 5, 16, QChar('0')));
         }
     }
+
+    if ((0 != wizardsExe) && (exeOffset > 0) && (exeOffset + sizeof(uint16_t) <= wizardsExe->getExeSize()))
+    {
+        const uint8_t* pointer = wizardsExe->getExeContents() + exeOffset;
+        updateCurrentValue(pointer);
+    }
 }
 
 void DialogCalculatorAddress::on_lineEdit_OffsetMem_textChanged(QString )
 {
-
+    // TODO
+    ui->lineEdit_OffsetExe->clear();
+    ui->lineEdit_OffsetIDA->clear();
+    ui->lineEdit_CurrentValue->clear();
 }
 
 void DialogCalculatorAddress::slot_gameChanged(const QMoMGamePtr& game)
@@ -135,6 +152,7 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
     ui->lineEdit_OffsetExe->clear();
     ui->lineEdit_OffsetIDA->clear();
     ui->lineEdit_OffsetMem->clear();
+    ui->lineEdit_CurrentValue->clear();
 
     // TODO: Properly distinguish wizards.exe and magic.exe
 
@@ -222,4 +240,22 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
 
     ui->lineEdit_OffsetDOS->setText(dosStr);
 	ui->lineEdit_OffsetMem->setText(memStr);
+
+    updateCurrentValue((const uint8_t*)momPointer);
+}
+
+void DialogCalculatorAddress::updateCurrentValue(const uint8_t* pointer)
+{
+    QString textCurrentValue;
+    if (0 != pointer)
+    {
+        uint8_t lo = *pointer;
+        uint8_t hi = *(pointer + 1);
+        int16_t value = *(const int16_t*)pointer;
+        textCurrentValue = QString("%0h %1h / %2 %3 / %4")
+                .arg((unsigned)lo, 2, 16, QChar('0')).arg((unsigned)hi, 2, 16, QChar('0'))
+                .arg((int)(int8_t)lo).arg((int)(int8_t)hi)
+                .arg((int)value);
+    }
+    ui->lineEdit_CurrentValue->setText(textCurrentValue);
 }

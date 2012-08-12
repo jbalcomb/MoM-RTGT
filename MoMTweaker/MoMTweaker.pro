@@ -37,6 +37,7 @@ QT += xml
 CONFIG += debug
 
 #DEFINES += QT_LARGEFILE_SUPPORT
+DEFINES += _CRT_SECURE_NO_WARNINGS
 INCLUDEPATH += ./GeneratedFiles \
     ./GeneratedFiles/Debug \
     . \

@@ -34,6 +34,9 @@ public slots:
     void slot_addressChanged(const void* momPointer);
 
 private:
+    void updateCurrentValue(const uint8_t* pointer);
+
+private:
     // CONFIG
     QMoMGamePtr m_game;
 

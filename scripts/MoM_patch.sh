@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -xe
 
 # Function
 APPLYPATCH=0
@@ -8,12 +8,7 @@ CREATEPATCH=0
 BASELINEDIR=
 WORKDIR=
 PATCHFILE=
-
-FILES="\
-    magic.EXE\
-    wizards.EXE\
-    SPELLDAT.LBX"
-
+FILES=
 
 usage() {
     printf "USAGE:\n"
@@ -42,7 +37,7 @@ create_patch() {
         echo "Process files '$BASELINEDIR/$FILE' and '$WORKDIR/$FILE'"
         xxd -g1 $BASELINEDIR/$FILE $BASELINEDIR/$FILE.xxd
         xxd -g1 $WORKDIR/$FILE $WORKDIR/$FILE.xxd
-        diff -Naur $BASELINEDIR/$FILE.xxd $WORKDIR/$FILE.xxd >> $PATCHFILE
+        diff -Naur $BASELINEDIR/$FILE.xxd $WORKDIR/$FILE.xxd >> $PATCHFILE || true
         rm $BASELINEDIR/$FILE.xxd
         rm $WORKDIR/$FILE.xxd
     done
@@ -51,6 +46,9 @@ create_patch() {
 }
 
 apply_patch() {
+
+    cp $PATCHFILE $WORKDIR
+    cd "$WORKDIR"
 
     for FILE in $FILES ; do
         echo "Prepare file '$FILE'"
@@ -97,6 +95,8 @@ if [ "$CREATEPATCH" = "1" ]; then
     [ -z "$BASELINEDIR" ] && echo "Please specify a -f <from-dir>" && exit 1
     [ -z "$WORKDIR" ] && echo "Please specify a -t <to-dir>" && exit 1
     [ -z "$PATCHFILE" ] && echo "Please specify a -p <patchfile>" && exit 1
+    FILES=`ls $WORKDIR`
+    echo "FILES=$FILES"
     create_patch
 fi
 
@@ -104,7 +104,7 @@ if [ "$APPLYPATCH" = "1" ]; then
     [ -n "$BASELINEDIR" ] && echo "Please do NOT specify a -f <from-dir>" && exit 1
     [ -z "$WORKDIR" ] && echo "Please do specify a -t <to-dir>" && exit 1
     [ -z "$PATCHFILE" ] && echo "Please specify a -p <patchfile>" && exit 1
-    cd "$WORKDIR" || exit 1
+    FILES=`grep -o '[^/]*\.xxd' $PATCHFILE | grep -o '^[^.]*\.[^.]*' | sort -u`
+    echo "FILES=$FILES"
     apply_patch
 fi
-

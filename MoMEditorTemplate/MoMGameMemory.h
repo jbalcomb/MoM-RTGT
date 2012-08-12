@@ -35,7 +35,7 @@ public:
 
     virtual eGameState* getGameState();
     virtual uint16_t* getGameTurn();
-    virtual const char* getNameByOffset(uint16_t offset);
+    virtual const char* getNameByOffset(DS_Offset offset);
 
     virtual std::string getSources() const
     {
@@ -47,10 +47,10 @@ public:
         return ((0 != m_process.get()) && m_process->isOpen());
     }
 
-    virtual bool readData()
-    {
-        return ((0 != m_process.get()) && m_process->readData());
-    }
+    virtual bool readData();
+
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
 
     virtual bool validate();
 
@@ -114,7 +114,10 @@ private:
     virtual Terrain_Changes* getTerrain_Changes();
     virtual uint8_t* getTerrain_Explored();
     virtual uint8_t* getTerrain_LandMassID();
-    virtual Map_Movement* getTerrain_Movements();
+    // TODO: Weird. It appears that the terrain-movements are all zero in memory.
+    //       Presumably they are swapped out or something.
+    //       Either way, we can't do anything with it.
+//    virtual Map_Movement* getTerrain_Movements();
     virtual eTerrainType* getTerrain_Types();
 
     virtual Unit* getUnits();

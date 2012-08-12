@@ -204,7 +204,7 @@ Special<eUnitAbility> gTableUnitSpecials[eUnitAbility_MAX] =
     { UNITABILITY_Death_Touch, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_Power_Drain, HELP_SPECIAL2_POWER_DRAIN, "SPECIAL2.LBX", 31 },
     { UNITABILITY_Dispel_Evil, HELP_SPECIAL2_DISPEL_EVIL, "SPECIAL.LBX", 22 },
-    { UNITABILITY_No_effect04_COMBAT, eHelpIndex_NONE, "", -1 },
+    { UNITABILITY_Ball_COMBAT, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_No_effect03_COMBAT, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_Eldritch_Weapon_COMBAT, HELP_SPECIAL_ELDRITCH_WEAPON, "SPECIAL.LBX", 84 },
     { UNITABILITY_Warp_Lightning_COMBAT, eHelpIndex_NONE, "", -1 },

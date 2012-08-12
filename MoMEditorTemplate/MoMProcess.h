@@ -110,7 +110,11 @@ public:
             && !m_dataSegmentAndUp.empty());
     }
 
+    bool load(const char* filename);
+
     bool readData();
+
+    bool save(const char* filename);
 
     void setVerbose(bool value)
     {

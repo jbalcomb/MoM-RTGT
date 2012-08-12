@@ -20,8 +20,8 @@ public:
     MoMGameSave();
     virtual ~MoMGameSave();
 
-    bool load(const char* filename);
-    bool save(const char* filename);
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
 
     bool addLair();
     bool findYourFirstUnit(int& unitNr);
@@ -103,7 +103,7 @@ public:
         return m_SaveGame->m_Map_Tiles.m_Arcanus_Towers;
     }
 
-    virtual const char* getNameByOffset(uint16_t offset)
+    virtual const char* getNameByOffset(DS_Offset offset)
     {
         char* namebuffer = (char*)getDataSegment();
         if (0 == namebuffer)

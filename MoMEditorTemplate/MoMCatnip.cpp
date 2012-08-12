@@ -366,7 +366,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
 
         // TODO: Large Shield is +3 or +4
 
-        uint16_t spareNameOffset = 0xEA60;   // Spare room in Stack Segment
+        DS_Offset spareNameOffset = 0xEA60;   // Spare room in Stack Segment
         uint16_t size = 0;
         char* spareNameBuffer = const_cast<char*>(game->getNameByOffset(spareNameOffset));
         char* spareNames = spareNameBuffer;

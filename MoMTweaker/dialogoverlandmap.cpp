@@ -478,9 +478,9 @@ void DialogOverlandMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momT
 //        ptree->appendChild("m_City_Name", new QMoMTreeItem<char[14]>(rhs->m_City_Name));
         qtreeItem->addChild(new EnumTreeItem<eRace>(m_game, "Race", &city->m_Race, eRace_MAX));
         qtreeItem->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &city->m_Owner, ePlayer_MAX));
+        qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Population", &city->m_Population));
         qtreeItem->addChild(new EnumTreeItem<eCity_Size>(m_game, "Size", &city->m_Size, eCity_Size_MAX));
 
-//        ptree->appendChild("m_Population", new QMoMTreeItem<uint8_t>(&rhs->m_Population));
 //        ptree->appendChild("m_Number_of_farmers_allocated", new QMoMTreeItem<uint8_t>(&rhs->m_Number_of_farmers_allocated));
 //        ptree->appendChild("m_PopulationDekaPop", new QMoMTreeItem<uint8_t>(&rhs->m_PopulationDekaPop));
 //        ptree->appendChild("m_Player_as_bitmask_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_Player_as_bitmask_GUESS));
@@ -613,6 +613,7 @@ void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* un
     treeWidgetItem->addChild(qtreeUnit);
 
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &unit->m_Owner, ePlayer_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesTotal", &unit->m_Moves_Total));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesLeft", &unit->m_Moves_Left));
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Active>(m_game, "Active", &unit->m_Active, eUnit_Active_MAX));

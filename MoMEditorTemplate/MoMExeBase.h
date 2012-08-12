@@ -48,6 +48,8 @@ public:
         return m_filename;
     }
 
+    bool getExeOffsetData(size_t exeOffset, const void* pNewValue, size_t size);
+
     uint8_t* getDataSegment()
     {
         return m_DataSegment;

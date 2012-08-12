@@ -5,6 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string.h>     // memcmp()
@@ -80,8 +81,6 @@ bool MoMProcess::readData()
         return false;
     if (0 == m_dwOffsetDatasegment)
         return false;
-    if (0 == m_dwOffsetDatasegment)
-        return false;
     if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
         return false;
 
@@ -107,6 +106,43 @@ bool MoMProcess::readData()
     }
 
     return ok;
+}
+
+bool MoMProcess::load(const char *filename)
+{
+    std::ifstream ifs(filename, std::ios_base::binary);
+
+    bool ok = ifs.good();
+
+    // TODO: Try and get updating the MoM memory to work (now DOSBox plunks out of existance)
+    //       For now: break the connection with a quick hack
+    if (ok)
+    {
+        m_lpBaseAddress = NULL;
+    }
+
+    // TODO: Check mismatch in size
+    if (ok)
+    {
+        ifs.read(reinterpret_cast<char*>(&m_dataSegmentAndUp[0]), m_dataSegmentAndUp.size());
+        ok = ifs.good();
+    }
+
+//    if (ok)
+//    {
+//        ok = writeData(&m_dataSegmentAndUp[0], m_dataSegmentAndUp.size());
+//    }
+
+    return ok;
+}
+
+bool MoMProcess::save(const char *filename)
+{
+    std::ofstream ofs(filename, std::ios_base::binary);
+
+    ofs.write(reinterpret_cast<const char*>(&m_dataSegmentAndUp[0]), m_dataSegmentAndUp.size());
+
+    return ofs.good();
 }
 
 }

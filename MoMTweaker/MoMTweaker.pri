@@ -44,7 +44,8 @@ HEADERS += \
     ../MoMEditorTemplate/QMapGraphicsView.h \
     ../MoMEditorTemplate/MoMCatnip.h \
     ../MoMEditorTemplate/QOverlandMapScene.h \
-    ../MoMEditorTemplate/MoMTerrain.h
+    ../MoMEditorTemplate/MoMTerrain.h \
+    dialoglbxeditor.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -81,7 +82,8 @@ SOURCES += \
     ../MoMEditorTemplate/QMapGraphicsView.cpp \
     ../MoMEditorTemplate/MoMCatnip.cpp \
     ../MoMEditorTemplate/QOverlandMapScene.cpp \
-    ../MoMEditorTemplate/MoMTerrain.cpp
+    ../MoMEditorTemplate/MoMTerrain.cpp \
+    dialoglbxeditor.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \
@@ -91,6 +93,7 @@ FORMS += \
     ../MoMTweaker/dialogtables.ui \
     ../MoMTweaker/dialogoverlandmap.ui \
     ../MoMTweaker/dialogaddunit.ui \
-    ../MoMTweaker/dialogtools.ui
+    ../MoMTweaker/dialogtools.ui \
+    dialoglbxeditor.ui
 
 RESOURCES += ../Resources/InteractiveGameTweaker.qrc

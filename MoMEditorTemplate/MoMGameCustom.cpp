@@ -152,7 +152,7 @@ MoMMagicDataSegment* MoMGameCustom::getMagicDataSegment()
     return pDataSegment;
 }
 
-const char* MoMGameCustom::getNameByOffset(uint16_t offset)
+const char* MoMGameCustom::getNameByOffset(DS_Offset offset)
 {
     if (0 == m_process.get())
         return 0;

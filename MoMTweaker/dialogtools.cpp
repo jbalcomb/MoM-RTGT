@@ -23,6 +23,7 @@
 
 // Local
 #include "dialogbuildingqueues.h"
+#include "dialoglbxeditor.h"
 #include "dialogselectinitialspells.h"
 #include "mainwindow.h"
 
@@ -94,6 +95,13 @@ void DialogTools::on_pushButton_Validate_clicked()
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
     DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+}
+
+void DialogTools::on_pushButton_LbxEditor_clicked()
+{
+    DialogLbxEditor* dialog = new DialogLbxEditor(MainWindow::getInstance());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

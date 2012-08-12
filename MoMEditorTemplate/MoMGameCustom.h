@@ -28,7 +28,7 @@ public:
 
     virtual std::string getGameDirectory();
 
-    virtual const char* getNameByOffset(uint16_t offset);
+    virtual const char* getNameByOffset(DS_Offset offset);
 
     virtual bool isOpen() const
     {

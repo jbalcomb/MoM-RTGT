@@ -69,7 +69,16 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         (void)createLbxImages("ITEMS", m_itemsImages);
         (void)createLairImages();
         (void)createLbxImages("MAPBACK", m_mapBackImages);
+
         (void)createLbxImages("SPECIAL", m_specialImages);
+        QVector<QMoMImagePtr> special2Images;
+        (void)createLbxImages("SPECIAL2", special2Images);
+        m_specialImages.resize(120 + special2Images.size());
+        for(int i = 0; i < special2Images.size(); ++i)
+        {
+            m_specialImages[120 + i] = special2Images[i];
+        }
+
         // UnitImages are created before SpellImages, because SpellImages uses them
         (void)createUnitImages();
         // m_specialImages and UnitImages should already have been created, because SpellImages uses them
@@ -382,6 +391,13 @@ bool QMoMResources::createSpellImages()
                 if (inVectorRange(m_specialImages, helpEntry->lbxIndex))
                 {
                     m_spellImages[spell] = m_specialImages[helpEntry->lbxIndex];
+                }
+            }
+            else if (std::string(helpEntry->lbxFile) == std::string("SPECIAL2.LBX"))
+            {
+                if (inVectorRange(m_specialImages, 120 + helpEntry->lbxIndex))
+                {
+                    m_spellImages[spell] = m_specialImages[120 + helpEntry->lbxIndex];
                 }
             }
         }
