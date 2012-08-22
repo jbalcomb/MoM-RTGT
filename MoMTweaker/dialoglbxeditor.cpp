@@ -21,6 +21,11 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     ui->graphicsView_LbxImage->setScene(m_sceneLbx);
     ui->graphicsView_BitmapImage->setScene(m_sceneBitmap);
 
+    ui->comboBox_LbxIndex->clear();
+    ui->comboBox_LbxIndex->addItem("(Index in LBX file)");
+    ui->comboBox_FileIndex->clear();
+    ui->comboBox_FileIndex->addItem("(Images in directory containing the tweaker)");
+
     m_filedialogLoad.setWindowTitle(tr("Open LBX file"));
     m_filedialogLoad.setNameFilter(tr("LBX files (*.lbx)"));
     m_filedialogLoad.setAcceptMode(QFileDialog::AcceptOpen);
@@ -32,11 +37,32 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
 #else // Linux
     m_filedialogLoad.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
 #endif
+
+    m_bitmapDirectory = QApplication::applicationDirPath();
+    listBitmapFiles(m_bitmapDirectory);
 }
 
 DialogLbxEditor::~DialogLbxEditor()
 {
     delete ui;
+}
+
+QString DialogLbxEditor::constructFrameFilename(const QString& bitmapFilename, int frameNr)
+{
+    QString frameFilename = bitmapFilename;
+    if (frameNr > 0)
+    {
+        int indexExt = frameFilename.lastIndexOf(QChar('.'));
+        if ((indexExt > 0) && (frameFilename[indexExt - 1] == '0'))
+        {
+            frameFilename[indexExt - 1] = QChar('0' + frameNr);
+        }
+        else
+        {
+            frameFilename.clear();
+        }
+    }
+    return frameFilename;
 }
 
 void DialogLbxEditor::loadLbx(const QString& filename)
@@ -100,32 +126,65 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
     // Track converted image for later use
     m_bitmapAnimation.clear();
 
-    // Load bitmap into an Animation
-    QMoMImagePtr origImage(new QImage(bitmapFilename));
-    Animation animation;
-    animation.append(origImage);
-
-    if ((0 != origImage) && (origImage->width() > 0) && (!m_colorTable.isEmpty()))
+    int nframes = 1;
+    int lbxIndex = ui->comboBox_LbxIndex->currentIndex();
+    if ((lbxIndex >= 0) && (lbxIndex < m_lbxAnimations.count()) && (m_lbxAnimations[lbxIndex].count() > 1))
     {
-        // Convert image to MoM format
-
-        // Adjust color table for proper color matching
-        QVector<QRgb> colorTable(m_colorTable);
-        colorTable.resize(244);
-        colorTable[0] = qRgb(255, 0, 255);  // Treat MAGENTA RGB(255, 0, 255) as TRANSPARENT!
-        colorTable[232] = qRgb(0, 255, 0);    // Treat GREEN RGB(0, 255, 0) as SHADOW (232 or 239??)
-
-        // Convert image
-        QMoMImagePtr saveImage(new QImage(origImage->convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor)));
-
-        // Track converted image for later use
-        m_bitmapAnimation.append(saveImage);
-
-        // Show (fow now) the converted image together with the original image in the graphics view
-        animation.append(saveImage);
+        nframes = m_lbxAnimations[lbxIndex].count();
     }
 
-    updateImage(ui->graphicsView_BitmapImage, animation);
+    // Load bitmap(s) into an Animation
+    Animation origAnimation;
+    int height = 0;
+    for (int frameNr = 0; frameNr < nframes; ++frameNr)
+    {
+        QString frameFilename = constructFrameFilename(bitmapFilename, frameNr);
+        if (frameFilename.isEmpty())
+        {
+            break;
+        }
+        QMoMImagePtr origImage(new QImage(frameFilename));
+        origAnimation.append(origImage);
+        if (origImage->height() > height)
+        {
+            height = origImage->height();
+        }
+    }
+
+    Animation convertedAnimation;
+    for (int frameNr = 0; frameNr < origAnimation.count(); ++frameNr)
+    {
+        QMoMImagePtr origImage = origAnimation[frameNr];
+
+        if ((0 != origImage) && (origImage->width() > 0) && (!m_colorTable.isEmpty()))
+        {
+            // Convert image to MoM format
+
+            // Adjust color table for proper color matching
+            QVector<QRgb> colorTable(m_colorTable);
+            colorTable.resize(244);
+            colorTable[0] = qRgb(255, 0, 255);  // Treat MAGENTA RGB(255, 0, 255) as TRANSPARENT!
+            colorTable[232] = qRgb(0, 255, 0);    // Treat GREEN RGB(0, 255, 0) as SHADOW (232 or 239??)
+
+            // Convert image
+            QMoMImagePtr saveImage(new QImage(origImage->convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor)));
+
+            convertedAnimation.append(saveImage);
+        }
+    }
+
+    std::vector<uint8_t> dataBuffer;
+    (void)MoM::convertImagesToLbx(convertedAnimation, dataBuffer, "LbxEditor");
+
+    // Track converted image for later use
+    if (dataBuffer.size() > 0)
+    {
+        (void)MoM::convertLbxToImages(&dataBuffer[0], m_colorTable, m_bitmapAnimation, "LbxEditor");
+    }
+
+    // Show the converted image(s) together with the original image(s) in the graphics view
+    updateImage(ui->graphicsView_BitmapImage, origAnimation);
+    updateImage(ui->graphicsView_BitmapImage, m_bitmapAnimation, 1, false);
 }
 
 void DialogLbxEditor::updateLbxImage(int lbxIndex)
@@ -139,11 +198,24 @@ void DialogLbxEditor::updateLbxImage(int lbxIndex)
     updateImage(ui->graphicsView_LbxImage, curAnimation);
 }
 
-void DialogLbxEditor::updateImage(QGraphicsView *view, const Animation& curAnimation)
+void DialogLbxEditor::updateImage(QGraphicsView *view, const Animation& curAnimation, int line, bool clearImage)
 {
-    view->scene()->clear();
-    QPointF pos(0, 0);
+    if (clearImage)
+    {
+        view->scene()->clear();
+    }
 
+    int height = 0;
+    for(int i = 0; i < curAnimation.count(); ++i)
+    {
+        const QMoMImagePtr& curImage = curAnimation[i];
+        if ((0 != curImage) && (curImage->height() > height))
+        {
+            height = curImage->height();
+        }
+    }
+
+    QPointF pos;
     for(int i = 0; i < curAnimation.count(); ++i)
     {
         const QMoMImagePtr& curImage = curAnimation[i];
@@ -162,6 +234,7 @@ void DialogLbxEditor::updateImage(QGraphicsView *view, const Animation& curAnima
         QGraphicsItem* itemRect = view->scene()->addRect(pixmap.rect(), QPen(Qt::NoPen), QBrush(QColor(255, 128, 255, 255)));
         QGraphicsItem* itemPixmap = view->scene()->addPixmap(pixmap);
 
+        pos.setY(line * scale * (height + 4));
         itemRect->setPos(pos);
         itemPixmap->setPos(pos);
 
@@ -172,6 +245,7 @@ void DialogLbxEditor::updateImage(QGraphicsView *view, const Animation& curAnima
 void DialogLbxEditor::listBitmapFiles(const QString &directory)
 {
     ui->comboBox_FileIndex->clear();
+    ui->comboBox_FileIndex->addItem(QString("(Images in '%0')").arg(directory));
     QDir subdirs(directory);
     subdirs.setFilter(QDir::AllDirs | QDir::NoDotDot);
     foreach(QString subdir, subdirs.entryList())
@@ -202,12 +276,6 @@ void DialogLbxEditor::on_pushButton_Load_clicked()
         m_lbxDirectory = QFileInfo(filename).absoluteDir().absolutePath();
 
         loadLbx(filename);
-
-        if (m_bitmapDirectory.isEmpty())
-        {
-            m_bitmapDirectory = m_lbxDirectory;
-        }
-        listBitmapFiles(m_bitmapDirectory);
     }
 }
 
@@ -216,12 +284,11 @@ void DialogLbxEditor::on_pushButton_Replace_clicked()
 {
     int lbxIndex = ui->comboBox_LbxIndex->currentIndex();
 
-    if ((lbxIndex < 0) || (lbxIndex >= m_lbxAnimations.count()) || (1 != m_lbxAnimations[lbxIndex].count()) || (1 != m_bitmapAnimation.count()))
+    if ((lbxIndex < 0) || (lbxIndex >= m_lbxAnimations.count()) || (m_lbxAnimations[lbxIndex].count() != m_bitmapAnimation.count()))
     {
         (void)QMessageBox::warning(this,
             tr("Replace LBX"),
-            tr("Please replace a single image.\n"
-            "At this time replacing animations is not supported."));
+            tr("Please select an LBX set of images and replace them by the same number"));
         return;
     }
 

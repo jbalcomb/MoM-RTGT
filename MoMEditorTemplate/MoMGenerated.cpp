@@ -38,6 +38,7 @@ std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs)
     case BANNER_Red: os << "BANNER_Red"; break;
     case BANNER_Yellow: os << "BANNER_Yellow"; break;
     case BANNER_Brown: os << "BANNER_Brown"; break;
+    case eBannerColor_MAX: os << "eBannerColor_MAX"; break;
     default: os << "<Unknown eBannerColor>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2853,18 +2854,45 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Active& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const eUnit_Status& rhs)
+std::ostream& operator<<(std::ostream& os, const eUnit_Status16& rhs)
 {
     switch (rhs)
     {
-    case UNITSTATUS_ready: os << "UNITSTATUS_ready"; break;
-    case UNITSTATUS_patrol: os << "UNITSTATUS_patrol"; break;
-    case UNITSTATUS_building_road_in_place: os << "UNITSTATUS_building_road_in_place"; break;
-    case UNITSTATUS_going_to_XY: os << "UNITSTATUS_going_to_XY"; break;
-    case UNITSTATUS_reached_destination: os << "UNITSTATUS_reached_destination"; break;
-    case UNITSTATUS_wait: os << "UNITSTATUS_wait"; break;
-    case eUnit_Status_MAX: os << "eUnit_Status_MAX"; break;
-    default: os << "<Unknown eUnit_Status>"; break;
+    case UNITSTATUS16_ready: os << "UNITSTATUS16_ready"; break;
+    case UNITSTATUS16_patrol: os << "UNITSTATUS16_patrol"; break;
+    case UNITSTATUS16_building_road_in_place: os << "UNITSTATUS16_building_road_in_place"; break;
+    case UNITSTATUS16_going_to_XY: os << "UNITSTATUS16_going_to_XY"; break;
+    case UNITSTATUS16_reached_destination: os << "UNITSTATUS16_reached_destination"; break;
+    case UNITSTATUS16_wait: os << "UNITSTATUS16_wait"; break;
+    case UNITSTATUS16_melee: os << "UNITSTATUS16_melee"; break;
+    case UNITSTATUS16_unclear101: os << "UNITSTATUS16_unclear101"; break;
+    case UNITSTATUS16_shoot: os << "UNITSTATUS16_shoot"; break;
+    case UNITSTATUS16_unclear103: os << "UNITSTATUS16_unclear103"; break;
+    case UNITSTATUS16_doom_bolt: os << "UNITSTATUS16_doom_bolt"; break;
+    case UNITSTATUS16_fireball: os << "UNITSTATUS16_fireball"; break;
+    case UNITSTATUS16_move_GUESS: os << "UNITSTATUS16_move_GUESS"; break;
+    case UNITSTATUS16_cast_spell_107: os << "UNITSTATUS16_cast_spell_107"; break;
+    case UNITSTATUS16_cast_spell_108: os << "UNITSTATUS16_cast_spell_108"; break;
+    case UNITSTATUS16_summon_demon: os << "UNITSTATUS16_summon_demon"; break;
+    case eUnit_Status16_MAX: os << "eUnit_Status16_MAX"; break;
+    default: os << "<Unknown eUnit_Status16>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eUnit_Status8& rhs)
+{
+    switch (rhs)
+    {
+    case UNITSTATUS8_ready: os << "UNITSTATUS8_ready"; break;
+    case UNITSTATUS8_patrol: os << "UNITSTATUS8_patrol"; break;
+    case UNITSTATUS8_building_road_in_place: os << "UNITSTATUS8_building_road_in_place"; break;
+    case UNITSTATUS8_going_to_XY: os << "UNITSTATUS8_going_to_XY"; break;
+    case UNITSTATUS8_reached_destination: os << "UNITSTATUS8_reached_destination"; break;
+    case UNITSTATUS8_wait: os << "UNITSTATUS8_wait"; break;
+    case eUnit_Status8_MAX: os << "eUnit_Status8_MAX"; break;
+    default: os << "<Unknown eUnit_Status8>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -3421,7 +3449,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Current_mana_=" << (unsigned)rhs.m_Current_mana_ << " 0x" << std::hex << (unsigned)rhs.m_Current_mana_ << std::dec << "\n";
     os << "m_Item_nr_charges_=" << (unsigned)rhs.m_Item_nr_charges_ << " 0x" << std::hex << (unsigned)rhs.m_Item_nr_charges_ << std::dec << "\n";
     os << "m_Poison_strength_=" << (unsigned)rhs.m_Poison_strength_ << " 0x" << std::hex << (unsigned)rhs.m_Poison_strength_ << std::dec << "\n";
-    os << "m_UNK43=" << (unsigned)rhs.m_UNK43 << " 0x" << std::hex << (unsigned)rhs.m_UNK43 << std::dec << "\n";
+    os << "m_Target_BattleUnitID=" << (unsigned)rhs.m_Target_BattleUnitID << " 0x" << std::hex << (unsigned)rhs.m_Target_BattleUnitID << std::dec << "\n";
     os << "m_xPos=" << rhs.m_xPos << " 0x" << std::hex << rhs.m_xPos << std::dec << "\n";
     os << "m_yPos=" << rhs.m_yPos << " 0x" << std::hex << rhs.m_yPos << std::dec << "\n";
     os << "m_xPosHeaded=" << rhs.m_xPosHeaded << " 0x" << std::hex << rhs.m_xPosHeaded << std::dec << "\n";
@@ -3433,7 +3461,6 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     }
     os << ")\n";
     os << "m_Status=" << rhs.m_Status << "\n";
-    os << "m_UNK55=" << (unsigned)rhs.m_UNK55 << " 0x" << std::hex << (unsigned)rhs.m_UNK55 << std::dec << "\n";
     os << "m_Confused_State=" << (int)rhs.m_Confused_State << " 0x" << std::hex << (int)rhs.m_Confused_State << std::dec << "\n";
     os << "m_UNK57=(\n";
     for (unsigned i = 0; i < 13; ++i)
@@ -10004,18 +10031,44 @@ bool validate(const eUnit_Active& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const eUnit_Status& rhs, const std::string& context)
+bool validate(const eUnit_Status16& rhs, const std::string& context)
 {
     bool ok = true;
     switch (rhs)
     {
-    case UNITSTATUS_ready: break;
-    case UNITSTATUS_patrol: break;
-    case UNITSTATUS_building_road_in_place: break;
-    case UNITSTATUS_going_to_XY: break;
-    case UNITSTATUS_reached_destination: break;
-    case UNITSTATUS_wait: break;
-    default: std::cout << context << ": Unknown eUnit_Status = " << (int)rhs << "\n"; ok = false; break;
+    case UNITSTATUS16_ready: break;
+    case UNITSTATUS16_patrol: break;
+    case UNITSTATUS16_building_road_in_place: break;
+    case UNITSTATUS16_going_to_XY: break;
+    case UNITSTATUS16_reached_destination: break;
+    case UNITSTATUS16_wait: break;
+    case UNITSTATUS16_melee: break;
+    case UNITSTATUS16_unclear101: break;
+    case UNITSTATUS16_shoot: break;
+    case UNITSTATUS16_unclear103: break;
+    case UNITSTATUS16_doom_bolt: break;
+    case UNITSTATUS16_fireball: break;
+    case UNITSTATUS16_move_GUESS: break;
+    case UNITSTATUS16_cast_spell_107: break;
+    case UNITSTATUS16_cast_spell_108: break;
+    case UNITSTATUS16_summon_demon: break;
+    default: std::cout << context << ": Unknown eUnit_Status16 = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eUnit_Status8& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case UNITSTATUS8_ready: break;
+    case UNITSTATUS8_patrol: break;
+    case UNITSTATUS8_building_road_in_place: break;
+    case UNITSTATUS8_going_to_XY: break;
+    case UNITSTATUS8_reached_destination: break;
+    case UNITSTATUS8_wait: break;
+    default: std::cout << context << ": Unknown eUnit_Status8 = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }

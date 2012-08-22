@@ -56,6 +56,8 @@ enum eBannerColor ENUMSIZE16
     BANNER_Red = 3,
     BANNER_Yellow = 4,
     BANNER_Brown = 5,
+
+    eBannerColor_MAX,
     eBannerColor__SIZE__ = 0xFFFF
 };
 
@@ -2695,20 +2697,48 @@ enum eUnit_Active ENUMSIZE8
     eUnit_Active_SIZE__ = 0xFF
 };
 
-enum eUnit_Status ENUMSIZE8
+enum eUnit_Status8 ENUMSIZE8
 {
-    UNITSTATUS_ready = 0,                   //   00=ready
-    UNITSTATUS_patrol = 1,                  //   01=patrol
-    UNITSTATUS_building_road_in_place = 2,  //   02=building road (in place)
-    UNITSTATUS_going_to_XY = 3,             //   03=going to X,Y destination (could be building road too, see 0x1C)
-    UNITSTATUS_reached_destination = 4,     //   04=reached destination & expended (0x07 == 01)
+    UNITSTATUS8_ready = 0,                   //   00=ready
+    UNITSTATUS8_patrol = 1,                  //   01=patrol
+    UNITSTATUS8_building_road_in_place = 2,  //   02=building road (in place)
+    UNITSTATUS8_going_to_XY = 3,             //   03=going to X,Y destination (could be building road too, see 0x1C)
+    UNITSTATUS8_reached_destination = 4,     //   04=reached destination & expended (0x07 == 01)
                                             //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
-    UNITSTATUS_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
+    UNITSTATUS8_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
                                             //      the SAVE game does not record if we are traversing UP or DOWN the units!
                                             //   ??=building road
                                             //   ??=purifying
-    eUnit_Status_MAX,
-    UNITSTATUS_eUnit_Status_SIZE__ = 0xFF
+    eUnit_Status8_MAX,
+    UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
+};
+
+enum eUnit_Status16 ENUMSIZE16
+{
+    UNITSTATUS16_ready = 0,                     //   00=ready
+    UNITSTATUS16_patrol = 1,                    //   01=patrol
+    UNITSTATUS16_building_road_in_place = 2,    //   02=building road (in place)
+    UNITSTATUS16_going_to_XY = 3,               //   03=going to X,Y destination (could be building road too, see 0x1C)
+    UNITSTATUS16_reached_destination = 4,       //   04=reached destination & expended (0x07 == 01)
+                                                //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
+    UNITSTATUS16_wait = 5,                      //   05=wait until all other units have had a chance to go (then clears all flags)
+                                                //      the SAVE game does not record if we are traversing UP or DOWN the units!
+                                                //   ??=building road
+                                                //   ??=purifying
+
+    UNITSTATUS16_melee = 100,                   // Unit_strategy_exe()  
+    UNITSTATUS16_unclear101 = 101,
+    UNITSTATUS16_shoot = 102,
+    UNITSTATUS16_unclear103 = 103,
+    UNITSTATUS16_doom_bolt = 104,
+    UNITSTATUS16_fireball = 105,
+    UNITSTATUS16_move_GUESS = 106,
+    UNITSTATUS16_cast_spell_107 = 107,
+    UNITSTATUS16_cast_spell_108 = 108,
+    UNITSTATUS16_summon_demon = 109,
+
+    eUnit_Status16_MAX,
+    UNITSTATUS16_eUnit_Status_SIZE__ = 0xFFFF
 };
 
 enum eUnit_Type ENUMSIZE8
@@ -4229,7 +4259,7 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_Moves_Left;               // 08 Moves Left (in 1/2 moves)
     int8_t      m_XPos_of_destination;      // 09 X-Pos of destination (should be 0 if status is not GOING TO)
     int8_t      m_YPos_of_destination;      // 0A Y-Pos of destination (should be 0 if status is not GOING TO)
-    eUnit_Status    m_Status;               // 0B Status (0-5)
+    eUnit_Status8   m_Status;               // 0B Status (0-5)
     eLevel      m_Level;                    // 0C Level (Units: 0-5; Heroes: 0-8; Summon (other than Torin): 0)
     int8_t      m_UNK01;                    // 0D ?? 00
     int16_t     m_Experience;               // 0E-0F Experience (should match level or level will be lowered)
@@ -4706,7 +4736,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_Current_mana_;    // 40 db ?
     uint8_t                 m_Item_nr_charges_; // 41 db ?
     uint8_t                 m_Poison_strength_; // 42 db ?
-    uint8_t                 m_UNK43;            // 43
+    uint8_t                 m_Target_BattleUnitID;  // 43
     uint16_t                m_xPos;             // 44-45 db
     uint16_t                m_yPos;             // 46-47 db
     uint16_t                m_xPosHeaded;       // 48-49 db
@@ -4719,8 +4749,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
                                                 // 51
                                                 // 52
                                                 // 53
-    eUnit_Status            m_Status;           // 54 Status (0=ready, 4=reached destination)
-    uint8_t                 m_UNK55;            // 55
+    eUnit_Status16          m_Status;           // 54 Status (0=ready, 4=reached destination)
     int8_t                  m_Confused_State;   // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
     uint8_t                 m_UNK57[13];        // 57
                                                 // 58

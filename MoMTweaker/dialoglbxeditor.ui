@@ -41,6 +41,11 @@
      <height>21</height>
     </rect>
    </property>
+   <item>
+    <property name="text">
+     <string>(index in LBX file)</string>
+    </property>
+   </item>
   </widget>
   <widget class="QPushButton" name="pushButton_Load">
    <property name="geometry">
@@ -70,7 +75,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Load</string>
+    <string>Load LBX</string>
    </property>
    <property name="icon">
     <iconset resource="../Resources/InteractiveGameTweaker.qrc">
@@ -86,9 +91,9 @@
   <widget class="QPushButton" name="pushButton_Replace">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>264</x>
      <y>530</y>
-     <width>185</width>
+     <width>191</width>
      <height>40</height>
     </rect>
    </property>
@@ -111,7 +116,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Replace</string>
+    <string>Replace in LBX</string>
    </property>
    <property name="icon">
     <iconset resource="../Resources/InteractiveGameTweaker.qrc">
@@ -152,6 +157,11 @@
      <height>21</height>
     </rect>
    </property>
+   <item>
+    <property name="text">
+     <string>(images in directory containing LBX file)</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <resources>

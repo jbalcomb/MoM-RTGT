@@ -587,7 +587,11 @@ void DialogOverlandMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& m
     {
         qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "LandMassID", m_game->getTerrainLandMassID(loc)));
     }
-    if (0 != m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+    if (0 == m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+    {
+        qtreeTerrain->addChild(new QTreeItemBase(m_game, "Moves", "(Not accessible->no road effect)"));
+    }
+    else
     {
         qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveUnused", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
         qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveWalk", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
@@ -617,7 +621,9 @@ void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* un
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesTotal", &unit->m_Moves_Total));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "HalfMovesLeft", &unit->m_Moves_Left));
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Active>(m_game, "Active", &unit->m_Active, eUnit_Active_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status>(m_game, "Status", &unit->m_Status, eUnit_Status_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status8>(m_game, "Status", &unit->m_Status, eUnit_Status8_MAX));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "destXPos", &unit->m_XPos_of_destination));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "destYPos", &unit->m_YPos_of_destination));
     qtreeUnit->addChild(new EnumTreeItem<eLevel>(m_game, "Level", &unit->m_Level, eLevel_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "Experience", &unit->m_Experience));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Damage", &unit->m_Damage));
@@ -628,6 +634,13 @@ void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* un
     }
 //    ptree->appendTree(constructTreeItem(&rhs->m_Weapon_Mutation, "m_Weapon_Mutation"), "");
     qtreeUnit->addChild(new BitmaskTreeItem<uint32_t, eUnitEnchantment>(m_game, "Enchantments", &unit->m_Unit_Enchantment.bits, (eUnitEnchantment)0, eUnitEnchantment_MAX));
+    if (unit->m_Road_Building_left_to_complete > 0)
+    {
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "roadLeft", &unit->m_Road_Building_left_to_complete));
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromXPos", &unit->m_XPos_Road_Building_from));
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromYPos", &unit->m_YPos_Road_Building_from));
+    }
+
 }
 
 void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
@@ -812,7 +825,7 @@ void DialogOverlandMap::slot_gameUpdated()
             MoM::City* city = m_game->getCity(cityNr);
             if (0 == city)
                 continue;
-            QPixmap pixmapCity = MoM::QMoMResources::instance().getPixmap(city->m_Size, 1);
+            QPixmap pixmapCity = MoM::QMoMResources::instance().getPixmap(city->m_Size, 1, m_game->getWizard(city->m_Owner)->m_BannerColor);
             if (MoM::inRange(city->m_Plane, MoM::ePlane_MAX)
                     && !pixmapCity.isNull())
             {

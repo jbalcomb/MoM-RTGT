@@ -110,7 +110,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize) const
+const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBannerColor bannerColor) const
 {
     QMoMImagePtr image;
     int index = (int)citySize - 1;
@@ -120,7 +120,14 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize) const
     }
     if (inVectorRange(m_citySizeImages, index))
     {
-        image = m_citySizeImages[index];
+        image = QMoMImagePtr(new QImage(*m_citySizeImages[index]));
+        
+        int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
+        
+        for (int i = 0; i < 3; ++i)
+        {
+            image->setColor(216 + i, image->color(startColor[bannerColor] + i));
+        }
     }
     return image;
 }

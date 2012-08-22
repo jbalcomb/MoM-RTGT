@@ -2,7 +2,7 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.5 (2012--)
+CHANGES IN 0.2.5 (2012-08-22)
 -----------------------------
 
 * Added an LBX editor (click Tools / LBX editor) [Anthony,Aureustgo,FrancoK].
@@ -11,6 +11,7 @@ CHANGES IN 0.2.5 (2012--)
   Simultaneously the bottom view shows the bitmaps (png gif bmp jpg)
   that are in the same directory.
   If you click "Replace" the LBX file is overwritten.
+  To see the effect, MoM needs to be restarted (quit & continue).
 
 * Completed the overland map view to show everything it should.
   Clicking on a tile will show what's there.

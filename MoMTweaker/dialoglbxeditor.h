@@ -25,10 +25,11 @@ public:
 private:
     typedef QVector<QMoMImagePtr> Animation;
 
+    QString constructFrameFilename(const QString& bitmapFilename, int frameNr);
     void loadBitmap(const QString& filename);
     void loadLbx(const QString& filename);
     void updateBitmapImage(const QString& bitmapfilename);
-    void updateImage(QGraphicsView* view, const Animation& curAnimation);
+    void updateImage(QGraphicsView* view, const Animation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);
     void listBitmapFiles(const QString& directory);
 

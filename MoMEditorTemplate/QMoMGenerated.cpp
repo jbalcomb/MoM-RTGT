@@ -562,7 +562,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_Current_mana_", new QMoMTreeItem<uint8_t>(&rhs->m_Current_mana_));
     ptree->appendChild("m_Item_nr_charges_", new QMoMTreeItem<uint8_t>(&rhs->m_Item_nr_charges_));
     ptree->appendChild("m_Poison_strength_", new QMoMTreeItem<uint8_t>(&rhs->m_Poison_strength_));
-    ptree->appendChild("m_UNK43", new QMoMTreeItem<uint8_t>(&rhs->m_UNK43));
+    ptree->appendChild("m_Target_BattleUnitID", new QMoMTreeItem<uint8_t>(&rhs->m_Target_BattleUnitID));
     ptree->appendChild("m_xPos", new QMoMTreeItem<uint16_t>(&rhs->m_xPos));
     ptree->appendChild("m_yPos", new QMoMTreeItem<uint16_t>(&rhs->m_yPos));
     ptree->appendChild("m_xPosHeaded", new QMoMTreeItem<uint16_t>(&rhs->m_xPosHeaded));
@@ -579,8 +579,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
           oss << "m_UNK4C[" << i << "]";
           ptreem_UNK4C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK4C[i]));
     }
-    ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status>(&rhs->m_Status));
-    ptree->appendChild("m_UNK55", new QMoMTreeItem<uint8_t>(&rhs->m_UNK55));
+    ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status16>(&rhs->m_Status));
     ptree->appendChild("m_Confused_State", new QMoMTreeItem<int8_t>(&rhs->m_Confused_State));
     QMoMTreeItemBase* ptreem_UNK57 = ptree;
     if (13 > 3)
@@ -4673,7 +4672,7 @@ QMoMTreeItemBase* constructTreeItem(Unit* rhs, const QString& context)
     ptree->appendChild("m_Moves_Left", new QMoMTreeItem<int8_t>(&rhs->m_Moves_Left));
     ptree->appendChild("m_XPos_of_destination", new QMoMTreeItem<int8_t>(&rhs->m_XPos_of_destination));
     ptree->appendChild("m_YPos_of_destination", new QMoMTreeItem<int8_t>(&rhs->m_YPos_of_destination));
-    ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status>(&rhs->m_Status));
+    ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status8>(&rhs->m_Status));
     ptree->appendChild("m_Level", new QMoMTreeItem<eLevel>(&rhs->m_Level));
     ptree->appendChild("m_UNK01", new QMoMTreeItem<int8_t>(&rhs->m_UNK01));
     ptree->appendChild("m_Experience", new QMoMTreeItem<int16_t>(&rhs->m_Experience));

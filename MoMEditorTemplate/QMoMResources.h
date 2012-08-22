@@ -50,7 +50,7 @@ public:
 
     const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const;
     const QMoMImagePtr getImage(MoM::eBuilding building) const;
-    const QMoMImagePtr getImage(MoM::eCity_Size citySize) const;
+    const QMoMImagePtr getImage(MoM::eCity_Size citySize, MoM::eBannerColor banner = MoM::BANNER_Blue) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
@@ -72,6 +72,26 @@ public:
     QPixmap getPixmap(T t, double scale = 1.0) const
     {
         const QMoMImagePtr pImage = getImage(t);
+        QPixmap pixmap;
+        if (!pImage.isNull())
+        {
+            if (1.0 != scale)
+			{
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	            pixmap.convertFromImage(image);
+			}
+			else
+			{
+	            pixmap.convertFromImage(*pImage);
+			}
+        }
+        return pixmap;
+    }
+
+    template<typename T>
+    QPixmap getPixmap(T t, double scale, MoM::eBannerColor banner) const
+    {
+        const QMoMImagePtr pImage = getImage(t, banner);
         QPixmap pixmap;
         if (!pImage.isNull())
         {
