@@ -134,7 +134,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
     }
 
     // Load bitmap(s) into an Animation
-    Animation origAnimation;
+    MoM::QMoMAnimation origAnimation;
     int height = 0;
     for (int frameNr = 0; frameNr < nframes; ++frameNr)
     {
@@ -151,7 +151,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
         }
     }
 
-    Animation convertedAnimation;
+    MoM::QMoMAnimation convertedAnimation;
     for (int frameNr = 0; frameNr < origAnimation.count(); ++frameNr)
     {
         QMoMImagePtr origImage = origAnimation[frameNr];
@@ -161,7 +161,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
             // Convert image to MoM format
 
             // Adjust color table for proper color matching
-            QVector<QRgb> colorTable(m_colorTable);
+            MoM::QMoMPalette colorTable(m_colorTable);
             colorTable.resize(244);
             colorTable[0] = qRgb(255, 0, 255);  // Treat MAGENTA RGB(255, 0, 255) as TRANSPARENT!
             colorTable[232] = qRgb(0, 255, 0);    // Treat GREEN RGB(0, 255, 0) as SHADOW (232 or 239??)
@@ -189,7 +189,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
 
 void DialogLbxEditor::updateLbxImage(int lbxIndex)
 {
-    Animation curAnimation;
+    MoM::QMoMAnimation curAnimation;
     if ((lbxIndex >= 0) && (lbxIndex < m_lbxAnimations.count()))
     {
         curAnimation = m_lbxAnimations[lbxIndex];
@@ -198,7 +198,7 @@ void DialogLbxEditor::updateLbxImage(int lbxIndex)
     updateImage(ui->graphicsView_LbxImage, curAnimation);
 }
 
-void DialogLbxEditor::updateImage(QGraphicsView *view, const Animation& curAnimation, int line, bool clearImage)
+void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation& curAnimation, int line, bool clearImage)
 {
     if (clearImage)
     {

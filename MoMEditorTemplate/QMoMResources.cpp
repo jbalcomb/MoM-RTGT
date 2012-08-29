@@ -63,42 +63,17 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         (void)createColorTable();
 
-        (void)createBuildingImages();
-        (void)createCitySizeImages();
+        createBuildingImages();
+        createCitySizeImages();
+        createFigureImages();
+        createLbxImages("ITEMISC", m_itemiscImages);
+        createLbxImages("ITEMS", m_itemsImages);
+        createLairImages();
+        createLbxImages("MAPBACK", m_mapBackImages);
 
-        int firstUnused = 0;
-        // Reserve fir 16 files with max 120 images per file
-        int sizeReserved = 16 * 120;
-        m_figureImages.resize(sizeReserved);
-        for (int fileNr = 1; fileNr <= 16; ++fileNr)
-        {
-            std::string lbxTitle;
-            if (fileNr < 10)
-            {
-                lbxTitle = "FIGURES" + toStr(fileNr);
-            }
-            else
-            {
-                lbxTitle = "FIGURE" + toStr(fileNr);
-            }
-            QVector<QMoMImagePtr> tmpImages;
-            (void)createLbxImages(lbxTitle, tmpImages);
-            for(int i = 0; (i < tmpImages.size()) && (firstUnused + i < sizeReserved); ++i)
-            {
-                m_figureImages[firstUnused + i] = tmpImages[i];
-            }
-            firstUnused += tmpImages.size();
-        }
-        m_figureImages.resize(firstUnused);
-
-        (void)createLbxImages("ITEMISC", m_itemiscImages);
-        (void)createLbxImages("ITEMS", m_itemsImages);
-        (void)createLairImages();
-        (void)createLbxImages("MAPBACK", m_mapBackImages);
-
-        (void)createLbxImages("SPECIAL", m_specialImages);
+        createLbxImages("SPECIAL", m_specialImages);
         QVector<QMoMImagePtr> special2Images;
-        (void)createLbxImages("SPECIAL2", special2Images);
+        createLbxImages("SPECIAL2", special2Images);
         m_specialImages.resize(120 + special2Images.size());
         for(int i = 0; i < special2Images.size(); ++i)
         {
@@ -106,10 +81,11 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         }
 
         // UnitImages are created before SpellImages, because SpellImages uses them
-        (void)createUnitImages();
+        createUnitImages();
         // m_specialImages and UnitImages should already have been created, because SpellImages uses them
-        (void)createSpellImages();
-        (void)createTerrainImages();
+        createSpellImages();
+        createLbxImages("CMBGRASS", m_terrainBattleImages);
+        createTerrainImages();
 
         qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
@@ -146,15 +122,22 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBanne
     }
     if (inVectorRange(m_citySizeImages, index))
     {
-        image = QMoMImagePtr(new QImage(*m_citySizeImages[index]));
-        
+        image = m_citySizeImages[index];
+
+    }
+
+    // TODO: Centralize + check if color in range of palette
+    if ((BANNER_Green != bannerColor) && (0 != image))
+    {
+        image = QMoMImagePtr(new QImage(*image));
         int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
-        
+
         for (int i = 0; i < 3; ++i)
         {
             image->setColor(216 + i, image->color(startColor[bannerColor] + i));
         }
     }
+
     return image;
 }
 
@@ -226,6 +209,16 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eSpell spell) const
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainBattle terrain) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_terrainBattleImages, terrain))
+    {
+        image = m_terrainBattleImages[terrain];
+    }
+    return image;
+}
+
 const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainBonusDeposit bonusDeposit) const
 {
     QMoMImagePtr image;
@@ -282,15 +275,26 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading) const
+const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading, MoM::eBannerColor bannerColor) const
 {
     QMoMImagePtr image;
     if (heading >= 0 && heading < 8)
     {
         int figureIndex = (int)unitType * 8 + heading;
-        if (inVectorRange(m_figureImages, figureIndex))
+        if (inVectorRange(m_figureAnimations, figureIndex) && m_figureAnimations[figureIndex].size() >= 4)
         {
-            image = m_figureImages[figureIndex];
+            image = m_figureAnimations[figureIndex].at(1);
+        }
+
+        // TODO: Centralize + check if colors in range of palette
+        if ((BANNER_Green != bannerColor) && (0 != image))
+        {
+            image = QMoMImagePtr(new QImage(*image));
+            int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
+            for (int i = 0; i < 3; ++i)
+            {
+                image->setColor(216 + i, image->color(startColor[bannerColor] + i));
+            }
         }
     }
     else
@@ -300,6 +304,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
             image = m_unitImages[unitType];
         }
     }
+
     return image;
 }
 
@@ -319,14 +324,14 @@ bool QMoMResources::createColorTable()
     return true;
 }
 
-bool QMoMResources::createBuildingImages()
+void QMoMResources::createBuildingImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
+        return;
     m_buildingImages.resize(lbx.getNrRecords());
     for (MoM::eBuilding building = (MoM::eBuilding)1; building < MoM::eBuilding_MAX; MoM::inc(building))
     {
@@ -356,59 +361,98 @@ bool QMoMResources::createBuildingImages()
         }
         m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), m_colorTable, toStr(building));
     }
-    return true;
 }
 
-bool QMoMResources::createCitySizeImages()
+void QMoMResources::createCitySizeImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
+        return;
     MoM::convertLbxToImages(lbx.getRecord(20), m_colorTable, m_citySizeImages, "city sizes");
-    return true;
 }
 
-bool QMoMResources::createLairImages()
+void QMoMResources::createFigureImages()
+{
+    int firstUnused = 0;
+    // Reserve fir 16 files with max 120 images per file
+    int sizeReserved = 16 * 120;
+    m_figureAnimations.resize(sizeReserved);
+    for (int fileNr = 1; fileNr <= 16; ++fileNr)
+    {
+        std::string lbxTitle;
+        if (fileNr < 10)
+        {
+            lbxTitle = "FIGURES" + toStr(fileNr);
+        }
+        else
+        {
+            lbxTitle = "FIGURE" + toStr(fileNr);
+        }
+        QVector<QMoMAnimation> tmpAnimations;
+        (void)createLbxAnimations(lbxTitle, tmpAnimations);
+        for(int i = 0; (i < tmpAnimations.size()) && (firstUnused + i < sizeReserved); ++i)
+        {
+            m_figureAnimations[firstUnused + i] = tmpAnimations[i];
+        }
+        firstUnused += tmpAnimations.size();
+    }
+    m_figureAnimations.resize(firstUnused);
+}
+
+void QMoMResources::createLairImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lairsLbxFile = m_game->getGameDirectory() + "/" + "RELOAD.LBX";
     MoM::MoMLbxBase lairsLbx;
     if (!lairsLbx.load(lairsLbxFile))
-        return false;
+        return;
     m_lairImages.resize(MoM::eTower_Node_Lair_Type_MAX);
     for (size_t i = 0; i < MoM::eTower_Node_Lair_Type_MAX; ++i)
     {
         m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
     }
-    return true;
 }
 
-bool QMoMResources::createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages)
+void QMoMResources::createLbxAnimations(const std::string& lbxTitle, QVector<QMoMAnimation>& vecAnimations)
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lbxFile = m_game->getGameDirectory() + "/" + lbxTitle + ".LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
+        return;
+    vecAnimations.resize(lbx.getNrRecords());
+    for (size_t i = 0; i < lbx.getNrRecords(); ++i)
+    {
+        (void)MoM::convertLbxToImages(lbx.getRecord(i), m_colorTable, vecAnimations[i], lbxTitle + toStr(i));
+    }
+}
+
+void QMoMResources::createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages)
+{
+    if (m_game.isNull())
+        return;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxTitle + ".LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return;
     vecImages.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
         vecImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, lbxTitle + toStr(i));
     }
-    return true;
 }
 
-bool QMoMResources::createSpellImages()
+void QMoMResources::createSpellImages()
 {
     // PRE: UnitImages should already have been created, because SpellImages uses them
 
     if (m_game.isNull())
-        return false;
+        return;
     std::string cityscapLbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
     std::string specfxLbxFile = m_game->getGameDirectory() + "/" + "SPECFX.LBX";
@@ -416,11 +460,11 @@ bool QMoMResources::createSpellImages()
     MoM::MoMLbxBase monsterLbx;
     MoM::MoMLbxBase specfxLbx;
     if (!cityscapLbx.load(cityscapLbxFile))
-        return false;
+        return;
     if (!monsterLbx.load(monsterLbxFile))
-        return false;
+        return;
     if (!specfxLbx.load(specfxLbxFile))
-        return false;
+        return;
 
     m_spellImages.resize(MoM::eSpell_MAX);
 
@@ -620,19 +664,16 @@ bool QMoMResources::createSpellImages()
     //493	WEB	SPECIAL.LBX	99
     //494	CREATURE BINDING	SPECIAL.LBX	100
     //495	POSSESSION	SPECIAL.LBX	98
-
-
-    return true;
 }
 
-bool QMoMResources::createTerrainImages()
+void QMoMResources::createTerrainImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string terrainLbxFile = m_game->getGameDirectory() + "/" + "TERRAIN.LBX";
     MoM::MoMLbxBase terrainLbx;
     if (!terrainLbx.load(terrainLbxFile))
-        return false;
+        return;
     // TODO: Why does the bitmap data in TERRAIN.LBX start 192 bytes later
     uint8_t* data = terrainLbx.getRecord(0) + 192;
     m_terrainTypeImages.resize(2 * MoM::eTerrainType_MAX);
@@ -717,13 +758,12 @@ bool QMoMResources::createTerrainImages()
 
         m_terrainTypeImages[MoM::eTerrainType_MAX + terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, m_colorTable, toStr(terrainNr) + "-" + toStr(i));
     }
-    return true;
 }
 
-bool QMoMResources::createUnitImages()
+void QMoMResources::createUnitImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string units1LbxFile = m_game->getGameDirectory() + "/" + "UNITS1.LBX";
     std::string units2LbxFile = m_game->getGameDirectory() + "/" + "UNITS2.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
@@ -731,11 +771,11 @@ bool QMoMResources::createUnitImages()
     MoM::MoMLbxBase units2Lbx;
     MoM::MoMLbxBase monsterLbx;
     if (!units1Lbx.load(units1LbxFile))
-        return false;
+        return;
     if (!units2Lbx.load(units2LbxFile))
-        return false;
+        return;
     if (!monsterLbx.load(monsterLbxFile))
-        return false;
+        return;
 
     m_unitImages.resize(MoM::eUnit_Type_MAX);
 
@@ -799,8 +839,6 @@ bool QMoMResources::createUnitImages()
             m_unitImages[unitType] = MoM::convertLbxToImage(monsterLbx.getRecord(i), m_colorTable, toStr(unitType));
         }
     }
-
-    return true;
 }
 
 }

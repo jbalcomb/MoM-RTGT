@@ -13,6 +13,7 @@
 #include <QStandardItem>
 
 #include "MoMGameBase.h"
+#include "QMoMLazyIcon.h"
 #include "QMoMResources.h"
 #include "QMoMSharedPointers.h"
 #include "QMoMUtility.h"

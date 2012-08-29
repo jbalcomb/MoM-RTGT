@@ -150,125 +150,6 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
     update();
 }
 
-/*
-bool replaceUnitGraphics(MoM::eUnit_Type unitType, const std::string& unitFilename, const std::string& figuresFilename)
-{
-    std::string gameDirectory = m_game->getGameDirectory();
-
-    // Load FONTS.LBX (TODO: needs centralization)
-    QVector<QRgb> colorTable(256);
-    std::string fontsLbxFile = gameDirectory + "/" + "FONTS.LBX";
-    MoM::MoMLbxBase fontsLbx;
-    bool ok = fontsLbx.load(fontsLbxFile);
-    if (ok)
-    {
-        const uint8_t* dataPalette = fontsLbx.getRecord(2);
-        MoM::convertLbxToPalette(dataPalette, colorTable);
-    }
-
-    // Adjust color table for proper color matching
-    colorTable.resize(244);
-    colorTable[0] = qRgb(255, 0, 255);  // Treat MAGENTA RGB(255, 0, 255) as TRANSPARENT!
-    colorTable[232] = qRgb(0, 255, 0);    // Treat GREEN RGB(0, 255, 0) as SHADOW (232 or 239??)
-
-    char buf[256];
-
-    sprintf(buf, "UNITS%d.LBX", 1 + (int)unitType / 120);
-    std::string unitsLbxFile = gameDirectory + "/" + buf;
-
-    int figuresFileNr = 1 + (int)unitType * 8 / 120;
-    if (figuresFileNr < 10)
-    {
-        sprintf(buf, "FIGURES%d.LBX", figuresFileNr);
-    }
-    else
-    {
-        sprintf(buf, "FIGURE%d.LBX", figuresFileNr);
-    }
-    std::string figuresLbxFile = gameDirectory + "/" + buf;
-
-    // Load UNITSX.LBX
-    MoM::MoMLbxBase unitsLbx;
-    if (ok)
-    {
-        ok = unitsLbx.load(unitsLbxFile);
-    }
-
-    // Load FIGUREXX.LBX
-    MoM::MoMLbxBase figuresLbx;
-    if (ok)
-    {
-        ok = figuresLbx.load(figuresLbxFile);
-    }
-
-    // Replace UNITS2/0 by Lucern/FIGURES4_077_001
-    // Load unit bitmap
-    QImage image;
-    if (ok)
-    {
-        ok = image.load(unitFilename.c_str());
-    }
-    if (ok)
-    {
-        image = image.convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor);
-    }
-    std::vector<uint8_t> dataBuffer;
-    if (ok)
-    {
-        ok = MoM::convertImageToLbx(image, dataBuffer, "LucernMod");
-    }
-
-    if (ok)
-    {
-        ok = unitsLbx.replaceRecord(0, dataBuffer);
-    }
-
-    // Replace FIGURES9/0-8 by Lucern/FIGURES4_072-079 (4 images each)
-    for (int direction = 0; direction < 8; ++direction)
-    {
-        QVector<QImage> images(4);
-        for (int movement = 0; movement < 4; ++movement)
-        {
-            QImage image;
-            QString filename = QString("%0_%1_%2.png")
-                    .arg(figuresFilename.c_str())
-                    .arg(72 + direction, 3, 10, QChar('0'))
-                    .arg(movement, 3, 10, QChar('0'));
-            if (ok)
-            {
-                ok = image.load(filename);
-            }
-            if (ok)
-            {
-                images[movement] = image.convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor);
-            }
-        }
-        std::vector<uint8_t> dataBuffer;
-        if (ok)
-        {
-            ok = MoM::convertImagesToLbx(images, dataBuffer, "LucernMod");
-        }
-        if (ok)
-        {
-            ok = figuresLbx.replaceRecord(0 + direction, dataBuffer);
-        }
-    }
-
-    // Save UNITSX.LBX
-    if (ok)
-    {
-        ok = unitsLbx.save(unitsLbx.getFilename());
-    }
-
-    // Save FIGUREXX.LBX
-    if (ok)
-    {
-        ok = figuresLbx.save(figuresLbx.getFilename());
-    }
-
-    return ok;
-}
-*/
 void DialogTools::on_pushButton_LucernMod_clicked()
 {
     MainWindow* controller = MainWindow::getInstance();
@@ -282,7 +163,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Load FONTS.LBX (TODO: needs centralization)
-    QVector<QRgb> colorTable(256);
+    MoM::QMoMPalette colorTable(256);
     std::string fontsLbxFile = game->getGameDirectory() + "/" + "FONTS.LBX";
     MoM::MoMLbxBase fontsLbx;
     bool ok = fontsLbx.load(fontsLbxFile);
@@ -331,7 +212,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Replace UNITS2/0 by Lucern/FIGURES4_077_001
-    const QVector<QMoMImagePtr> images(1, image);
+    const MoM::QMoMAnimation images(1, image);
     std::vector<uint8_t> dataBuffer;
     if (ok)
     {
@@ -346,7 +227,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     // Replace FIGURES9/0-8 by Lucern/FIGURES4_072-079 (4 images each)
     for (int direction = 0; direction < 8; ++direction)
     {
-        QVector<QMoMImagePtr> images(4);
+        MoM::QMoMAnimation images(4);
         for (int movement = 0; movement < 4; ++movement)
         {
             QImage image;

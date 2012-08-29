@@ -108,7 +108,7 @@ MoMTerrain::MoMTerrain(MoMGameBase* game) :
 {
 }
 
-void MoMTerrain::setLocation(const Location &loc)
+void MoMTerrain::setLocation(const MoMLocation &loc)
 {
     m_location = loc;
 }

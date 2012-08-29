@@ -12,6 +12,7 @@
 
 #include <QGraphicsItem>
 
+#include "MoMLocation.h"
 #include "MoMTemplate.h"
 
 namespace MoM
@@ -20,20 +21,29 @@ namespace MoM
 class QMoMMapTile : public QGraphicsItem
 {
 public:
-    QMoMMapTile(bool isBattlefield);
+    explicit QMoMMapTile(const MoM::MoMLocation& location);
     virtual ~QMoMMapTile();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    MoM::ePlane getPlane() const
+    const MoM::MoMLocation& getLocation() const
     {
-        return m_plane;
+        return m_location;
     }
-    void setPlane(MoM::ePlane plane)
+    void setLocation(MoM::MoMLocation& location)
     {
-        m_plane = plane;
+        m_location = location;
+    }
+
+    MoM::eTerrainBattle* getTerrainBattle() const
+    {
+        return m_terrainBattle;
+    }
+    void setTerrainBattle(MoM::eTerrainBattle* terrainBattle)
+    {
+        m_terrainBattle = terrainBattle;
     }
 
     MoM::eTerrainBonusDeposit* getTerrainBonus() const
@@ -75,12 +85,12 @@ public:
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *)
     {
-        qDebug() << "QMoMMapTile::hoverEnterEvent(event)";
+//        qDebug() << "QMoMMapTile::hoverEnterEvent(event)";
     }
 
 private:
-    bool m_isBattlefield;
-    MoM::ePlane m_plane;
+    MoM::MoMLocation m_location;
+    MoM::eTerrainBattle* m_terrainBattle;
     MoM::eTerrainBonusDeposit* m_terrainBonus;
     MoM::Terrain_Changes* m_terrainChange;
     uint8_t* m_terrainExplored;

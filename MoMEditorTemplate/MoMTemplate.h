@@ -2438,6 +2438,17 @@ enum eTax_Rate ENUMSIZE16
     eTax_Rate__SIZE__ = 0xFFFF
 };
 
+enum eTerrainBattle ENUMSIZE16
+{
+    TERRAINBATTLE_firstbasic = 0,
+    TERRAINBATTLE_lastbasic = 47,
+    TERRAINBATTLE_firstextra = 48,
+    TERRAINBATTLE_lastextra = 57,
+
+    eTerrainBattle_MAX,
+    eTerrainBattle__SIZE__ = 0xFFFF
+};
+
 enum eTerrainBonusDeposit ENUMSIZE8
 {
     DEPOSIT_no_deposit = 0x00,
@@ -3106,8 +3117,8 @@ enum eYesNo8 ENUMSIZE8
 // CONSTANTS
 //
 
-static const unsigned gMAX_BATTLE_COLS = 20;
-static const unsigned gMAX_BATTLE_ROWS = 20;
+static const unsigned gMAX_BATTLE_COLS = 21;
+static const unsigned gMAX_BATTLE_ROWS = 22;
 static const unsigned gMAX_BATTLE_UNITS = 18;
 static const unsigned gMAX_CITIES = 100;
 static const unsigned gMAX_HERO_TYPES = 35;
@@ -3576,14 +3587,6 @@ typedef union // unionList_Hero_stats
     Hero_stats      a[gMAX_HERO_TYPES];
     List_Hero_stats s;
 } unionList_Hero_stats;
-
-typedef struct PACKED_STRUCT // Location
-{
-    uint8_t         m_XPos;         // 00
-    uint8_t         m_YPos;         // 01
-    ePlane          m_Plane;        // 02
-                                    // SIZE 03
-} Location;
 
 typedef struct PACKED_STRUCT // MapRow_Bonus
 {
@@ -4609,7 +4612,7 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
 
 typedef struct PACKED_STRUCT // Battlefield
 {
-    uint16_t    m_Terrain[462];             // 0        // Map is 22 rows by 11 columns, corresponding to 22 x 21 squares (lines of 21 bytes/words)
+    eTerrainBattle  m_Terrain[462];             // 0        // Map is 22 rows by 11 columns, corresponding to 22 x 21 squares (lines of 21 bytes/words)
     uint8_t field_39C[462];             // 39C
     uint8_t field_56A[462];             // 56A
     uint8_t     m_Movement_walking[462];    // 738

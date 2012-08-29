@@ -8,6 +8,7 @@ class QGraphicsScene;
 class QGraphicsView;
 
 #include "MoMLbxBase.h"
+#include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
 
 namespace Ui {
@@ -23,13 +24,11 @@ public:
     ~DialogLbxEditor();
 
 private:
-    typedef QVector<QMoMImagePtr> Animation;
-
     QString constructFrameFilename(const QString& bitmapFilename, int frameNr);
     void loadBitmap(const QString& filename);
     void loadLbx(const QString& filename);
     void updateBitmapImage(const QString& bitmapfilename);
-    void updateImage(QGraphicsView* view, const Animation& curAnimation, int line = 0, bool clearImage = true);
+    void updateImage(QGraphicsView* view, const MoM::QMoMAnimation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);
     void listBitmapFiles(const QString& directory);
 
@@ -45,15 +44,15 @@ private:
 private:
     QGraphicsScene* m_sceneBitmap;
     QGraphicsScene* m_sceneLbx;
-    QVector<QRgb> m_colorTable;
+    MoM::QMoMPalette m_colorTable;
     QString m_bitmapDirectory;
     QString m_lbxDirectory;
     QString m_bitmapFilename;
     QString m_lbxFilename;
     QFileDialog m_filedialogLoad;
     MoM::MoMLbxBase m_lbx;
-    QVector<Animation> m_lbxAnimations;
-    Animation m_bitmapAnimation;
+    QVector<MoM::QMoMAnimation> m_lbxAnimations;
+    MoM::QMoMAnimation m_bitmapAnimation;
 };
 
 

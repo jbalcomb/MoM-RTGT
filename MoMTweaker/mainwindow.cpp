@@ -34,7 +34,7 @@
 // Local
 #include "dialogaddunit.h"
 #include "dialogcalculatoraddress.h"
-#include "dialogoverlandmap.h"
+#include "dialogmap.h"
 #include "dialogtables.h"
 #include "dialogtools.h"
 
@@ -490,7 +490,7 @@ void MainWindow::on_pushButton_ShowTables_clicked()
 
 void MainWindow::on_pushButton_Map_clicked()
 {
-    MoM::DialogOverlandMap* dialog = new MoM::DialogOverlandMap(this);
+    MoM::DialogMap* dialog = new MoM::DialogMap(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }

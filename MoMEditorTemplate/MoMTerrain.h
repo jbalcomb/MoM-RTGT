@@ -11,11 +11,11 @@ class MoMTerrain
 public:
     explicit MoMTerrain(MoMGameBase* game);
 
-    const Location& getLocation() const
+    const MoMLocation& getLocation() const
     {
         return m_location;
     }
-    void setLocation(const Location& loc);
+    void setLocation(const MoMLocation& loc);
 
     City* getCity();
     Tower_Node_Lair* getLair();
@@ -25,7 +25,7 @@ public:
 
 private:
     MoMGameBase* m_game;
-    Location m_location;
+    MoMLocation m_location;
 };
 
 }

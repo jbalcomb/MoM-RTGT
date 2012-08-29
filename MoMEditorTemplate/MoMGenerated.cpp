@@ -2544,6 +2544,21 @@ std::ostream& operator<<(std::ostream& os, const eTax_Rate& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eTerrainBattle& rhs)
+{
+    switch (rhs)
+    {
+    case TERRAINBATTLE_firstbasic: os << "TERRAINBATTLE_firstbasic"; break;
+    case TERRAINBATTLE_lastbasic: os << "TERRAINBATTLE_lastbasic"; break;
+    case TERRAINBATTLE_firstextra: os << "TERRAINBATTLE_firstextra"; break;
+    case TERRAINBATTLE_lastextra: os << "TERRAINBATTLE_lastextra"; break;
+    case eTerrainBattle_MAX: os << "eTerrainBattle_MAX"; break;
+    default: os << "<Unknown eTerrainBattle>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eTerrainBonusDeposit& rhs)
 {
     switch (rhs)
@@ -3488,7 +3503,7 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
     os << "m_Terrain=(\n";
     for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Terrain[i] << " 0x" << std::hex << rhs.m_Terrain[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Terrain[i] << ",\n";
     }
     os << ")\n";
     os << "field_39C=(\n";
@@ -4602,16 +4617,6 @@ std::ostream& operator<<(std::ostream& os, const List_Hero_stats& rhs)
     os << "Necromancer=" << rhs.Necromancer << "\n";
     os << "Chaos_Warrior=" << rhs.Chaos_Warrior << "\n";
     os << "Chosen=" << rhs.Chosen << "\n";
-    os << "}";
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Location& rhs)
-{
-    os << "{\n";
-    os << "m_XPos=" << (unsigned)rhs.m_XPos << " 0x" << std::hex << (unsigned)rhs.m_XPos << std::dec << "\n";
-    os << "m_YPos=" << (unsigned)rhs.m_YPos << " 0x" << std::hex << (unsigned)rhs.m_YPos << std::dec << "\n";
-    os << "m_Plane=" << rhs.m_Plane << "\n";
     os << "}";
     return os;
 }
@@ -9759,6 +9764,20 @@ bool validate(const eTax_Rate& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eTerrainBattle& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case TERRAINBATTLE_firstbasic: break;
+    case TERRAINBATTLE_lastbasic: break;
+    case TERRAINBATTLE_firstextra: break;
+    case TERRAINBATTLE_lastextra: break;
+    default: std::cout << context << ": Unknown eTerrainBattle = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eTerrainBonusDeposit& rhs, const std::string& context)
 {
     bool ok = true;
@@ -10364,6 +10383,12 @@ bool validate(const Battle_Unit& rhs, const std::string& context)
 bool validate(const Battlefield& rhs, const std::string& context)
 {
     bool ok = true;
+    for (unsigned i = 0; i < 462; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Terrain[" << i << "]";
+          if (!validate(rhs.m_Terrain[i], oss.str())) ok = false;
+    }
     if (!validate(rhs.m_City_Walls, context + ".m_City_Walls")) ok = false;
     if (!validate(rhs.m_Wall_of_Fire, context + ".m_Wall_of_Fire")) ok = false;
     if (!validate(rhs.m_Wall_of_Darkness, context + ".m_Wall_of_Darkness")) ok = false;
@@ -10746,13 +10771,6 @@ bool validate(const List_Hero_stats& rhs, const std::string& context)
     if (!validate(rhs.Necromancer, context + ".Necromancer")) ok = false;
     if (!validate(rhs.Chaos_Warrior, context + ".Chaos_Warrior")) ok = false;
     if (!validate(rhs.Chosen, context + ".Chosen")) ok = false;
-    return ok;
-}
-
-bool validate(const Location& rhs, const std::string& context)
-{
-    bool ok = true;
-    if (!validate(rhs.m_Plane, context + ".m_Plane")) ok = false;
     return ok;
 }
 

@@ -622,7 +622,7 @@ QMoMTreeItemBase* constructTreeItem(Battlefield* rhs, const QString& context)
     {
           std::ostringstream oss;
           oss << "m_Terrain[" << i << "]";
-          ptreem_Terrain->appendChild(oss.str().c_str(), new QMoMTreeItem<uint16_t>(&rhs->m_Terrain[i]));
+          ptreem_Terrain->appendChild(oss.str().c_str(), new QMoMTreeItem<eTerrainBattle>(&rhs->m_Terrain[i]));
     }
     QMoMTreeItemBase* ptreefield_39C = ptree;
     if (462 > 3)
@@ -2448,18 +2448,6 @@ QMoMTreeItemBase* constructTreeItem(List_Hero_stats* rhs, const QString& context
     ptree->appendTree(constructTreeItem(&rhs->Necromancer, "Necromancer"), "");
     ptree->appendTree(constructTreeItem(&rhs->Chaos_Warrior, "Chaos_Warrior"), "");
     ptree->appendTree(constructTreeItem(&rhs->Chosen, "Chosen"), "");
-    return ptree;
-}
-
-QMoMTreeItemBase* constructTreeItem(Location* rhs, const QString& context)
-{
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<Location>(rhs, context);
-    if (0 == rhs)
-        return ptree;
-
-    ptree->appendChild("m_XPos", new QMoMTreeItem<uint8_t>(&rhs->m_XPos));
-    ptree->appendChild("m_YPos", new QMoMTreeItem<uint8_t>(&rhs->m_YPos));
-    ptree->appendChild("m_Plane", new QMoMTreeItem<ePlane>(&rhs->m_Plane));
     return ptree;
 }
 

@@ -7,13 +7,14 @@
 
 /// \file
 
-#ifndef DIALOGOVERLANDMAP_H
-#define DIALOGOVERLANDMAP_H
+#ifndef DIALOGMAP_H
+#define DIALOGMAP_H
 
 #include <QDialog>
 #include <QList>
 #include <QMap>
 
+#include <MoMLocation.h>
 #include <MoMTemplate.h>
 #include <QMoMSharedPointers.h>
 
@@ -27,26 +28,15 @@ namespace Ui {
 namespace MoM
 {
 
-class DialogOverlandMap : public QDialog
+class DialogMap : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogOverlandMap(QWidget *parent = 0);
-    ~DialogOverlandMap();
+    explicit DialogMap(QWidget *parent = 0);
+    ~DialogMap();
 
 private:
-    typedef QMap<const void*, QGraphicsItem*> LookupMap;
-
-    QGraphicsItem* lookup(const void* momPtr)
-    {
-        LookupMap::iterator it = m_lookup.find(momPtr);
-        if (m_lookup.end() == it)
-            return 0;
-        else
-            return it.value();
-    }
-
     void addBattleUnitSubtree(class QTreeWidget* treeWidget, Battle_Unit* battleUnit);
     void addCitySubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
     void addLairSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
@@ -56,10 +46,9 @@ private:
 private:
     QMoMGamePtr m_game;
 
-    class QOverlandMapScene* m_sceneArcanus;
-    class QOverlandMapScene* m_sceneMyrror;
-    class QOverlandMapScene* m_sceneBattle;
-    LookupMap m_lookup;
+    class QMoMMapScene* m_sceneArcanus;
+    class QMoMMapScene* m_sceneMyrror;
+    class QMoMMapScene* m_sceneBattle;
     QMoMTimerPtr m_timer;
 
     Ui::DialogOverlandMap *ui;
@@ -72,11 +61,11 @@ private slots:
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
     void slot_itemAction();
-    void slot_tileChanged(const MoM::Location& loc);
-    void slot_tileSelected(const MoM::Location& loc, const QList<QGraphicsItem*>& graphicItems);
+    void slot_tileChanged(const MoM::MoMLocation& loc);
+    void slot_tileSelected(const MoM::MoMLocation& loc, const QList<QGraphicsItem*>& graphicItems);
     void slot_timerActiveUnit();
 };
 
 }
 
-#endif // DIALOGOVERLANDMAP_H
+#endif // DIALOGMAP_H

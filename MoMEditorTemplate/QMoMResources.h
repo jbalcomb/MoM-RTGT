@@ -16,6 +16,7 @@
 #include <qvector.h>
 
 #include "MoMTemplate.h"
+#include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM {
@@ -36,7 +37,7 @@ public:
 
     void setGame(const QMoMGamePtr& game);
 
-    const QVector<QRgb>& getColorTable()
+    const QMoMPalette& getColorTable()
 	{
 		return m_colorTable;
 	}
@@ -50,17 +51,18 @@ public:
 
     const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const;
     const QMoMImagePtr getImage(MoM::eBuilding building) const;
-    const QMoMImagePtr getImage(MoM::eCity_Size citySize, MoM::eBannerColor banner = MoM::BANNER_Blue) const;
+    const QMoMImagePtr getImage(MoM::eCity_Size citySize, MoM::eBannerColor banner = MoM::BANNER_Green) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const;
+    const QMoMImagePtr getImage(MoM::eTerrainBattle terrain) const;
     const QMoMImagePtr getImage(MoM::eTerrainBonusDeposit bonusDeposit) const;
     const QMoMImagePtr getImage(MoM::eTerrainChange terrainChange, int roadDirection = 0) const;
     const QMoMImagePtr getImage(MoM::eTerrainType terrain) const;
-    const QMoMImagePtr getImage(MoM::eUnit_Type unitType, int heading = -1) const;
+    const QMoMImagePtr getImage(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
     template<typename T>
     const QMoMImagePtr getImage(T) const
     {
@@ -115,16 +117,18 @@ public:
 private:
     bool createColorTable();
 
-    bool createBuildingImages();
-    bool createCitySizeImages();
-    bool createLairImages();
-    bool createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
-    bool createSpellImages();
-    bool createTerrainImages();
-    bool createUnitImages();
+    void createBuildingImages();
+    void createCitySizeImages();
+    void createFigureImages();
+    void createLairImages();
+    void createLbxAnimations(const std::string& lbxTitle, QVector<QMoMAnimation>& vecAnimations);
+    void createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
+    void createSpellImages();
+    void createTerrainImages();
+    void createUnitImages();
 
-	template<typename T>
-    bool inVectorRange(const QVector<QMoMImagePtr>& v, T t) const
+    template<typename T, typename S>
+    bool inVectorRange(const QVector<S>& v, T t) const
 	{
 		return (static_cast<unsigned>(t) < static_cast<unsigned>(v.size()));
 	}
@@ -133,163 +137,19 @@ private:
 
     QMoMGamePtr m_game;
 
-    QVector<QRgb> m_colorTable;
+    QMoMPalette m_colorTable;
     QVector<QMoMImagePtr> m_buildingImages;
     QVector<QMoMImagePtr> m_citySizeImages;
-    QVector<QMoMImagePtr> m_figureImages;
+    QVector<QMoMAnimation> m_figureAnimations;
     QVector<QMoMImagePtr> m_itemiscImages;
     QVector<QMoMImagePtr> m_itemsImages;
     QVector<QMoMImagePtr> m_lairImages;
     QVector<QMoMImagePtr> m_mapBackImages;
     QVector<QMoMImagePtr> m_specialImages;
     QVector<QMoMImagePtr> m_spellImages;
+    QVector<QMoMImagePtr> m_terrainBattleImages;
     QVector<QMoMImagePtr> m_terrainTypeImages;
     QVector<QMoMImagePtr> m_unitImages;
-};
-
-class QMoMLazyIconBase
-{
-public:
-    explicit QMoMLazyIconBase()
-    {
-    }
-    virtual ~QMoMLazyIconBase()
-    {
-    }
-    virtual const QIcon data() const = 0;
-    virtual bool resolve() = 0;
-};
-
-template<class T>
-class QMoMLazyIcon : public QMoMLazyIconBase
-{
-public:
-    explicit QMoMLazyIcon(const T& t, int scale = 1) :
-        QMoMLazyIconBase(),
-        m_ref(t),
-        m_scale(scale),
-        m_icon(),
-        m_resolved(false)
-    {
-    }
-    const QIcon data() const
-    {
-        if (m_icon.isNull())
-            return QIcon();
-        else
-            return *m_icon;
-    }
-    bool resolve()
-    {
-        bool resolution = false;
-        if (!m_resolved)
-        {
-            m_icon = QMoMResources::instance().getIcon(m_ref, m_scale);
-            m_resolved = true;
-            resolution = (!m_icon.isNull() && !m_icon->isNull());
-        }
-        return resolution;
-    }
-    void setData(const T& t)
-    {
-        if (m_ref != t)
-        {
-            m_ref = t;
-            m_resolved = false;
-            m_icon.clear();
-        }
-    }
-
-private:
-    T m_ref;
-    int m_scale;
-    QMoMIconPtr m_icon;
-    bool m_resolved;
-};
-
-template<>
-class QMoMLazyIcon<QString> : public QMoMLazyIconBase
-{
-public:
-    explicit QMoMLazyIcon(const QString& ref = QString()) :
-        QMoMLazyIconBase(),
-        m_ref(ref),
-        m_icon(),
-        m_resolved(false)
-    {
-    }
-    const QIcon data() const
-    {
-        if (m_icon.isNull())
-            return QIcon();
-        else
-            return *m_icon;
-    }
-    bool resolve()
-    {
-        bool resolution = false;
-        if (!m_resolved)
-        {
-            m_icon = QMoMIconPtr(new QIcon(m_ref));
-            m_resolved = true;
-            resolution = (!m_icon.isNull() && !m_icon->isNull());
-        }
-        return resolution;
-    }
-    void setData(const QString& ref)
-    {
-        if (m_ref != ref)
-        {
-            m_ref = ref;
-            m_resolved = false;
-            m_icon.clear();
-        }
-    }
-private:
-    QString m_ref;
-    QMoMIconPtr m_icon;
-    bool m_resolved;
-};
-
-template<>
-class QMoMLazyIcon<QIcon> : public QMoMLazyIconBase
-{
-public:
-    explicit QMoMLazyIcon(const QIcon& ref) :
-        QMoMLazyIconBase(),
-        m_ref(ref),
-        m_icon(),
-        m_resolved(false)
-    {
-    }
-    const QIcon data() const
-    {
-        if (m_icon.isNull())
-            return QIcon();
-        else
-            return *m_icon;
-    }
-    bool resolve()
-    {
-        bool resolution = false;
-        if (!m_resolved)
-        {
-            m_icon = QMoMIconPtr(new QIcon(m_ref));
-            m_resolved = true;
-            resolution = (!m_icon.isNull() && !m_icon->isNull());
-        }
-        return resolution;
-    }
-    void setData(const QIcon& ref)
-    {
-        m_ref = ref;
-        m_resolved = false;
-        m_icon.clear();
-    }
-private:
-    QIcon m_ref;
-    QMoMIconPtr m_icon;
-    bool m_resolved;
 };
 
 }

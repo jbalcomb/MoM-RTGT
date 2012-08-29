@@ -12,8 +12,8 @@
 
 #include <cmath>
 
-#include "dialogoverlandmap.h"
-#include "ui_dialogoverlandmap.h"
+#include "dialogmap.h"
+#include "ui_dialogmap.h"
 
 #include "dialogcalculatoraddress.h"
 #include "mainwindow.h"
@@ -26,7 +26,7 @@
 #include "QMoMResources.h"
 #include "QMoMTreeItem.h"
 #include "QMoMUnitTile.h"
-#include "QOverlandMapScene.h"
+#include "QMoMMapScene.h"
 
 namespace MoM
 {
@@ -402,11 +402,11 @@ QString BitmaskTreeItem<Bitmask, Enum>::toString()
 
 ///////////////////////////////////////////
 
-DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
+DialogMap::DialogMap(QWidget *parent) :
     QDialog(parent),
-    m_sceneArcanus(new QOverlandMapScene(MoM::PLANE_Arcanum, false)),
-    m_sceneMyrror(new QOverlandMapScene(MoM::PLANE_Myrror, false)),
-    m_sceneBattle(new QOverlandMapScene(MoM::ePlane_MAX, true)),
+    m_sceneArcanus(new QMoMMapScene(MoM::PLANE_Arcanum, false)),
+    m_sceneMyrror(new QMoMMapScene(MoM::PLANE_Myrror, false)),
+    m_sceneBattle(new QMoMMapScene(MoM::ePlane_MAX, true)),
     m_timer(new QTimer),
     ui(new Ui::DialogOverlandMap)
 {
@@ -429,12 +429,12 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QObject::connect(ui->checkBox_YourUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
 
     // Update view when items are inspected
-    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
-    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
-    QObject::connect(m_sceneBattle, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
-    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
-    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
-    QObject::connect(m_sceneBattle, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
 
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
@@ -446,14 +446,14 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     m_timer->start(250);
 }
 
-DialogOverlandMap::~DialogOverlandMap()
+DialogMap::~DialogMap()
 {
     delete ui;
     delete m_sceneMyrror;
     delete m_sceneArcanus;
 }
 
-void DialogOverlandMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
+void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
 {
     assert(0 != battleUnit);
     int battleUnitNr = (int)(battleUnit - m_game->getBattle_Units());
@@ -488,7 +488,7 @@ void DialogOverlandMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Uni
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "WeaponType", &battleUnit->m_Weapon_Type_Plus_1));
 }
 
-void DialogOverlandMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
+void DialogMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
 {
     MoM::City* city = momTerrain.getCity();
     if (0 != city)
@@ -535,7 +535,7 @@ void DialogOverlandMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momT
     }
 }
 
-void DialogOverlandMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
+void DialogMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
 {
     MoM::Tower_Node_Lair* lair = momTerrain.getLair();
     if (0 != lair)
@@ -580,9 +580,9 @@ void DialogOverlandMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momT
     }
 }
 
-void DialogOverlandMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrain)
+void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrain)
 {
-    const Location& loc = momTerrain.getLocation();
+    const MoMLocation& loc = momTerrain.getLocation();
 
     treeWidget->addTopLevelItem(new QTreeItemBase(m_game,
         "Location",
@@ -638,7 +638,7 @@ void DialogOverlandMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& m
     }
 }
 
-void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
+void DialogMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
 {
     assert(0 != unit);
     int unitNr = (int)(unit - m_game->getUnit(0));
@@ -679,7 +679,7 @@ void DialogOverlandMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* un
 
 }
 
-void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
+void DialogMap::on_comboBox_Plane_currentIndexChanged(int index)
 {
     switch (index)
     {
@@ -698,7 +698,7 @@ void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
     }
 }
 
-void DialogOverlandMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
+void DialogMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
 {
     qDebug() << "on_treeWidget_Tile_customContextMenuRequested" << pos;
     QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
@@ -725,7 +725,7 @@ void DialogOverlandMap::on_treeWidget_Tile_customContextMenuRequested(const QPoi
     contextMenu.exec(ui->treeWidget_Tile->mapToGlobal(pos));
 }
 
-void DialogOverlandMap::on_verticalSlider_Zoom_valueChanged(int value)
+void DialogMap::on_verticalSlider_Zoom_valueChanged(int value)
 {
     double scale = 1.0 + value / 100.0;
     if (value < 0)
@@ -737,7 +737,7 @@ void DialogOverlandMap::on_verticalSlider_Zoom_valueChanged(int value)
     ui->graphicsView->scale(scale, scale);
 }
 
-void DialogOverlandMap::slot_addressCalculator()
+void DialogMap::slot_addressCalculator()
 {
     DialogCalculatorAddress* dialog = new DialogCalculatorAddress(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -752,37 +752,33 @@ void DialogOverlandMap::slot_addressCalculator()
     }
 }
 
-void DialogOverlandMap::slot_gameChanged(const QMoMGamePtr& game)
+void DialogMap::slot_gameChanged(const QMoMGamePtr& game)
 {
     m_game = game;
 
     slot_gameUpdated();
 }
 
-void DialogOverlandMap::slot_gameUpdated()
+void DialogMap::slot_gameUpdated()
 {
     // Reset game
     m_sceneArcanus->clear();
     m_sceneMyrror->clear();
     m_sceneBattle->clear();
-    m_lookup.clear();
 
     if (m_game.isNull())
         return;
 
-    QGraphicsScene* scene[MoM::ePlane_MAX] = { m_sceneArcanus, m_sceneMyrror };
-    QRectF rectfTile = MoM::QMoMMapTile(false).boundingRect();
+    QMoMMapScene* scene[MoM::ePlane_MAX] = { m_sceneArcanus, m_sceneMyrror };
 
-    // Add fixed map tiles
-    // Show terrain
+    // Show overland terrain
     for (MoM::ePlane plane = (MoM::ePlane)0; MoM::toUInt(plane) < MoM::ePlane_MAX; MoM::inc(plane))
     {
         for (int y = 0; y < (int)MoM::gMAX_MAP_ROWS; ++y)
         {
             for (int x = 0; x < (int)MoM::gMAX_MAP_COLS; ++x)
             {
-                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile(false);
-                mapTile->setPlane(plane);
+                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile(MoMLocation(x, y, plane, MoMLocation::MAP_overland));
                 if (ui->checkBox_Terrain->isChecked())
                 {
                     mapTile->setTerrainType(m_game->getTerrainType(plane, x, y));
@@ -799,8 +795,7 @@ void DialogOverlandMap::slot_gameUpdated()
                 {
                     mapTile->setTerrainExplored(m_game->getTerrainExplored(plane, x, y));
                 }
-                mapTile->setPos(x * rectfTile.width(), y * rectfTile.height());
-                scene[plane]->addItem(mapTile);
+                scene[plane]->addItemAtLocation(mapTile, mapTile->getLocation());
             }
         }
     }
@@ -828,16 +823,15 @@ void DialogOverlandMap::slot_gameUpdated()
             unitTile->setGame(m_game);
             unitTile->setUnit(momUnit);
 
-            scene[unit->m_Plane]->addItem(unitTile);
-            unitTile->setPos(unit->m_XPos * rectfTile.width(), unit->m_YPos * rectfTile.height());
+            scene[unit->m_Plane]->addItemAtLocation(unitTile, MoMLocation(*unit, MoMLocation::MAP_overland));
             unitTile->setToolTip(momUnit->getDisplayName().c_str());
-            m_lookup.insert(unit, unitTile);
         }
     }
 
     // Show lairs
     if (ui->checkBox_Lairs->isChecked())
     {
+        QRectF rectfTile = MoM::QMoMMapTile(MoMLocation()).boundingRect();
         for (int lairNr = 0; (MoM::toUInt(lairNr) < MoM::gMAX_NODES_LAIRS_TOWERS); ++lairNr)
         {
             MoM::Tower_Node_Lair* lair = m_game->getLair(lairNr);
@@ -848,11 +842,9 @@ void DialogOverlandMap::slot_gameUpdated()
                     && MoM::inRange(lair->m_Plane, MoM::ePlane_MAX)
                     && !pixmapLair.isNull())
             {
-                QGraphicsItem* mapLairItem = scene[lair->m_Plane]->addPixmap(pixmapLair);
-                mapLairItem->setPos(lair->m_XPos * rectfTile.width(), lair->m_YPos * rectfTile.height());
+                QGraphicsItem* mapLairItem = scene[lair->m_Plane]->addPixmapAtLocation(pixmapLair, MoMLocation(*lair, MoMLocation::MAP_overland));
                 mapLairItem->setScale(rectfTile.width() / pixmapLair.width());
                 mapLairItem->setToolTip(prettyQStr(lair->m_Type));
-                m_lookup.insert(lair, mapLairItem);
             }
         }
     }
@@ -860,6 +852,7 @@ void DialogOverlandMap::slot_gameUpdated()
     // Show cities
     if (ui->checkBox_Cities->isChecked())
     {
+        QRectF rectfTile = MoM::QMoMMapTile(MoMLocation()).boundingRect();
         for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (MoM::toUInt(cityNr) < MoM::gMAX_CITIES); ++cityNr)
         {
             MoM::City* city = m_game->getCity(cityNr);
@@ -870,26 +863,41 @@ void DialogOverlandMap::slot_gameUpdated()
             if (MoM::inRange(city->m_Plane, MoM::ePlane_MAX)
                     && !pixmapCity.isNull())
             {
-                QGraphicsItem* mapCityItem = scene[city->m_Plane]->addPixmap(pixmapCity);
+                QGraphicsItem* mapCityItem = scene[city->m_Plane]->addPixmapAtLocation(pixmapCity, MoMLocation(*city, MoMLocation::MAP_overland));
                 // city pixmap has to be about twice as big as a regular tile to fit properly
                 mapCityItem->setPos((city->m_XPos - 0.5) * rectfTile.width(), (city->m_YPos - 0.5) * rectfTile.height());
                 mapCityItem->setScale(2 * rectfTile.width() / pixmapCity.width());
                 mapCityItem->setToolTip(QString("%0 \"%1\"").arg(prettyQStr(city->m_Race)).arg(city->m_City_Name));
-                m_lookup.insert(city, mapCityItem);
             }
         }
     }
 
-    // Show battle units
+    Battlefield* battlefield = m_game->getBattlefield();
     MoM::Battle_Unit* battleUnits = m_game->getBattle_Units();
     uint16_t* pnrBattleUnits = m_game->getNumber_of_Battle_Units();
-    if ((0 != battleUnits) && (0 != pnrBattleUnits))
+    if ((0 != m_game->getBattlefield()) && (0 != battleUnits) && (0 != pnrBattleUnits))
     {
+        // Show battle terrain
+        for (int y = 0; y < (int)MoM::gMAX_BATTLE_ROWS; ++y)
+        {
+            for (int x = 0; x < (int)MoM::gMAX_BATTLE_COLS; ++x)
+            {
+                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile(MoMLocation(x, y, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle));
+                if (ui->checkBox_Terrain->isChecked())
+                {
+                    int index = x + y * gMAX_BATTLE_COLS;
+                    mapTile->setTerrainBattle(&battlefield->m_Terrain[index]);
+                }
+                m_sceneBattle->addItemAtLocation(mapTile, mapTile->getLocation());
+            }
+        }
+
+        // Show battle units
         int nrBattleUnits = *pnrBattleUnits;
-        QRectF rectfTile = MoM::QMoMMapTile(true).boundingRect();
         for (int battleUnitNr = 0; (battleUnits) && (battleUnitNr < nrBattleUnits) && (battleUnitNr < MoM::gMAX_BATTLE_UNITS); ++battleUnitNr)
         {
             MoM::Battle_Unit* battleUnit = &battleUnits[battleUnitNr];
+            MoMLocation loc(battleUnit->m_xPos, battleUnit->m_yPos, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle);
 
             QMoMUnitPtr momUnit(new MoMUnit(m_game.data()));
             momUnit->changeUnit(battleUnit);
@@ -898,12 +906,11 @@ void DialogOverlandMap::slot_gameUpdated()
             unitTile->setGame(m_game);
             unitTile->setUnit(momUnit);
 
-            m_sceneBattle->addItem(unitTile);
-            unitTile->setPos(battleUnit->m_xPos * rectfTile.width(), battleUnit->m_yPos * rectfTile.height());
+            m_sceneBattle->addItemAtLocation(unitTile, loc);
             unitTile->setToolTip(momUnit->getDisplayName().c_str());
-            m_lookup.insert(battleUnit, unitTile);
 
-            QPointF pos(battleUnit->m_xPos * rectfTile.width(), battleUnit->m_yPos * rectfTile.height());
+            QPointF pos;
+            m_sceneBattle->convertLocationToScenePos(loc, pos);
             QGraphicsSimpleTextItem* textItem = m_sceneBattle->addSimpleText(QString("%0").arg(battleUnitNr));
             textItem->setFont(QMoMResources::g_FontSmall);
             pos.ry() -= textItem->boundingRect().height() / 4;
@@ -912,7 +919,7 @@ void DialogOverlandMap::slot_gameUpdated()
             QString text = prettyQStr(battleUnit->m_Status);
             textItem = m_sceneBattle->addSimpleText(QString("%0").arg(text[0]));
             textItem->setFont(QMoMResources::g_FontSmall);
-            pos.rx() = (battleUnit->m_xPos + 1) * rectfTile.width() - textItem->boundingRect().width();
+            pos.rx() += textItem->boundingRect().width() + 4;
             textItem->setPos(pos);
 
             pos.ry() += textItem->boundingRect().height();
@@ -920,14 +927,14 @@ void DialogOverlandMap::slot_gameUpdated()
             textItem->setFont(QMoMResources::g_FontSmall);
             textItem->setPos(pos);
 
-            QPointF ptBegin((battleUnit->m_xPos + 0.5) * rectfTile.width(), (battleUnit->m_yPos + 0.5) * rectfTile.height());
-            QPointF ptEnd((battleUnit->m_xPosHeaded + 0.5) * rectfTile.width(), (battleUnit->m_yPosHeaded + 0.5) * rectfTile.height());
-            m_sceneBattle->addLine(QLineF(ptBegin, ptEnd), QPen(Qt::darkRed));
+//            QPointF ptBegin((battleUnit->m_xPos + 0.5) * rectfTile.width(), (battleUnit->m_yPos + 0.5) * rectfTile.height());
+//            QPointF ptEnd((battleUnit->m_xPosHeaded + 0.5) * rectfTile.width(), (battleUnit->m_yPosHeaded + 0.5) * rectfTile.height());
+//            m_sceneBattle->addLine(QLineF(ptBegin, ptEnd), QPen(Qt::darkRed));
         }
     }
 }
 
-void DialogOverlandMap::slot_itemAction()
+void DialogMap::slot_itemAction()
 {
     QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
     QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
@@ -937,12 +944,12 @@ void DialogOverlandMap::slot_itemAction()
     }
 }
 
-void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
+void DialogMap::slot_tileChanged(const MoM::MoMLocation& loc)
 {
     ui->label_Location->setText(QString("Location: (%1,%2)").arg(loc.m_XPos).arg(loc.m_YPos));
 }
 
-void DialogOverlandMap::slot_tileSelected(const MoM::Location &loc, const QList<QGraphicsItem *> &graphicItems)
+void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc, const QList<QGraphicsItem *> &graphicItems)
 {
     qDebug() << QString("slot_tileSelected(%0:(%1,%2), %3 items").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos).arg(graphicItems.count());
 
@@ -982,7 +989,7 @@ void DialogOverlandMap::slot_tileSelected(const MoM::Location &loc, const QList<
     }
 }
 
-void DialogOverlandMap::slot_timerActiveUnit()
+void DialogMap::slot_timerActiveUnit()
 {
     if (m_game.isNull() || (0 == m_game->getGame_Data_Exe()))
         return;
@@ -990,11 +997,12 @@ void DialogOverlandMap::slot_timerActiveUnit()
     MoM::Unit* unit = m_game->getUnit(unitNrActive);
     if (0 == unit)
         return;
-    QGraphicsItem* qItem = lookup(unit);
-    if (0 != qItem)
-    {
-        qItem->setVisible(!qItem->isVisible());
-    }
+    // TODO
+//    QGraphicsItem* qItem = lookup(unit);
+//    if (0 != qItem)
+//    {
+//        qItem->setVisible(!qItem->isVisible());
+//    }
 }
 
 }

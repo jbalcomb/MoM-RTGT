@@ -41,7 +41,7 @@ void dumpnl(const uint8_t* ptr, unsigned n)
 
 }
 
-bool convertImagesToLbx(const QVector<QMoMImagePtr>& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
+bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
 {
     if (images.empty())
         return false;
@@ -145,7 +145,7 @@ bool convertImagesToLbx(const QVector<QMoMImagePtr>& images, std::vector<uint8_t
     return true;
 }
 
-bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTable, QVector<QMoMImagePtr>& images, const std::string& context)
+bool convertLbxToImages(const uint8_t* data, const QMoMPalette& defaultColorTable, QMoMAnimation& images, const std::string& context)
 {
     if (0 == data)
         return false;
@@ -162,7 +162,7 @@ bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTa
     uint16_t firstPaletteColorIndex = 0;
     uint16_t paletteColorCount = 255;
 
-    QVector<QRgb> colorTable(defaultColorTable);
+    QMoMPalette colorTable(defaultColorTable);
 
 //std::cout << "Images: context=" << context << "\n"
 //    << " width=" << (unsigned)width
@@ -361,7 +361,7 @@ dumpnl(0, 0);
     return ok;
 }
 
-void convertLbxToPalette(const uint8_t* dataPalette, QVector<QRgb>& colorTable)
+void convertLbxToPalette(const uint8_t* dataPalette, QMoMPalette& colorTable)
 {
     for (int i = 0; i < 256; ++i)
     {

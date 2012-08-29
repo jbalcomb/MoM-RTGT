@@ -45,7 +45,6 @@ QMoMTreeItemBase* constructTreeItem(LBXHEADER* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Lair_Inhabitant* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Lbx_EMS_info* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(List_Hero_stats* rhs, const QString& context);
-QMoMTreeItemBase* constructTreeItem(Location* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Bonus* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Exploration* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_LandMassID* rhs, const QString& context);

@@ -1043,44 +1043,44 @@ void MoMUnit::applyEffects()
     applyWeaponType();
     applySpells();
 
-    // Check differences with Battle_Unit if available
-    if (0 != m_battleUnit)
-    {
-        BaseAttributes actualAttr = getActualAttributes();
-		std::cout << "Verify battle unit fields" << std::endl;
-		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Melee)
-		{
-            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraMe=" << (int)m_battleUnit->m_Extra_Melee << std::endl;
-		}
-		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
-		{
-            std::cout << "Ranged calc=" << actualAttr.ranged << " bonus=" << m_bonuses.ranged << " battleUnit=" << (int)m_battleUnit->m_Ranged << " battle.extraRa=" << (int)m_battleUnit->m_Extra_Ranged << std::endl;
-		}
-		if (actualAttr.defense != m_battleUnit->m_Defense || this->m_bonuses.defense != m_battleUnit->m_Extra_Defense)
-		{
-            std::cout << "Defense calc=" << actualAttr.defense << " bonus=" << m_bonuses.defense << " battleUnit=" << (int)m_battleUnit->m_Defense << " battle.extraDf=" << (int)m_battleUnit->m_Extra_Defense << std::endl;
-		}
-		if (actualAttr.toHitMelee != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Melee || this->m_bonuses.toHitMelee != m_battleUnit->m_Extra_ToHit_Melee)
-		{
-            std::cout << "ToHit Melee calc=" << actualAttr.toHitMelee << " bonus=" << m_bonuses.toHitMelee << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToMe=" << (int)m_battleUnit->m_Extra_ToHit_Melee << std::endl;
-		}
-		if (actualAttr.toHitRanged != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Ranged || this->m_bonuses.toHitRanged != m_battleUnit->m_Extra_ToHit_Ranged)
-		{
-            std::cout << "ToHit Ranged calc=" << actualAttr.toHitRanged << " bonus=" << m_bonuses.toHitRanged << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToRa=" << (int)m_battleUnit->m_Extra_ToHit_Ranged << std::endl;
-		}
-		if (actualAttr.toDefend != m_battleUnit->m_Extra_ToDefend)
-		{
-            std::cout << "ToDefend calc=" << actualAttr.toDefend << " bonus=" << m_bonuses.toDefend << " battleUnit=N/A" << " battle.extraToDf=" << (int)m_battleUnit->m_Extra_ToDefend << std::endl;
-		}
-		if (actualAttr.moves != m_battleUnit->m_MoveHalves / 2.0)
-		{
-			std::cout << "Moves calc=" << actualAttr.moves << " get=" << getMoves() << " battleUnit=" << m_battleUnit->m_MoveHalves / 2.0 << std::endl;
-		}
-		if (getGazeModifier() != m_battleUnit->m_Gaze_Modifier)
-		{
-            std::cout << "Gaze calc=" << getGazeModifier() << " battleUnit=" << (int)m_battleUnit->m_Gaze_Modifier << std::endl;
-		}
-    }
+//    // Check differences with Battle_Unit if available
+//    if (0 != m_battleUnit)
+//    {
+//        BaseAttributes actualAttr = getActualAttributes();
+//		std::cout << "Verify battle unit fields" << std::endl;
+//		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Melee)
+//		{
+//            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraMe=" << (int)m_battleUnit->m_Extra_Melee << std::endl;
+//		}
+//		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
+//		{
+//            std::cout << "Ranged calc=" << actualAttr.ranged << " bonus=" << m_bonuses.ranged << " battleUnit=" << (int)m_battleUnit->m_Ranged << " battle.extraRa=" << (int)m_battleUnit->m_Extra_Ranged << std::endl;
+//		}
+//		if (actualAttr.defense != m_battleUnit->m_Defense || this->m_bonuses.defense != m_battleUnit->m_Extra_Defense)
+//		{
+//            std::cout << "Defense calc=" << actualAttr.defense << " bonus=" << m_bonuses.defense << " battleUnit=" << (int)m_battleUnit->m_Defense << " battle.extraDf=" << (int)m_battleUnit->m_Extra_Defense << std::endl;
+//		}
+//		if (actualAttr.toHitMelee != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Melee || this->m_bonuses.toHitMelee != m_battleUnit->m_Extra_ToHit_Melee)
+//		{
+//            std::cout << "ToHit Melee calc=" << actualAttr.toHitMelee << " bonus=" << m_bonuses.toHitMelee << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToMe=" << (int)m_battleUnit->m_Extra_ToHit_Melee << std::endl;
+//		}
+//		if (actualAttr.toHitRanged != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Ranged || this->m_bonuses.toHitRanged != m_battleUnit->m_Extra_ToHit_Ranged)
+//		{
+//            std::cout << "ToHit Ranged calc=" << actualAttr.toHitRanged << " bonus=" << m_bonuses.toHitRanged << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToRa=" << (int)m_battleUnit->m_Extra_ToHit_Ranged << std::endl;
+//		}
+//		if (actualAttr.toDefend != m_battleUnit->m_Extra_ToDefend)
+//		{
+//            std::cout << "ToDefend calc=" << actualAttr.toDefend << " bonus=" << m_bonuses.toDefend << " battleUnit=N/A" << " battle.extraToDf=" << (int)m_battleUnit->m_Extra_ToDefend << std::endl;
+//		}
+//		if (actualAttr.moves != m_battleUnit->m_MoveHalves / 2.0)
+//		{
+//			std::cout << "Moves calc=" << actualAttr.moves << " get=" << getMoves() << " battleUnit=" << m_battleUnit->m_MoveHalves / 2.0 << std::endl;
+//		}
+//		if (getGazeModifier() != m_battleUnit->m_Gaze_Modifier)
+//		{
+//            std::cout << "Gaze calc=" << getGazeModifier() << " battleUnit=" << (int)m_battleUnit->m_Gaze_Modifier << std::endl;
+//		}
+//    }
 }
 
 void MoMUnit::applyAbilities()

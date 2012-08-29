@@ -117,7 +117,8 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
 	eProducing produce = PRODUCING_None;
 
     std::vector<int> unitsInCity;
-    Location location = { city->m_XPos, city->m_YPos, city->m_Plane };
+//    MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane, false);
+    MoMLocation location(*city, MoMLocation::MAP_overland);
     (void)findUnitsAtLocation(game, location, unitsInCity);
 
     // TODO: Remove this spell enchantment ;)
@@ -326,7 +327,7 @@ bool MoMController::findCheapestUnitToProduce(MoMGameBase& game, const City& cit
 	return found;
 }
 
-bool MoMController::findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units)
+bool MoMController::findUnitsAtLocation(MoMGameBase& game, const MoMLocation& location, std::vector<int>& units)
 {
     units.clear();
 

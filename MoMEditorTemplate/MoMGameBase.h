@@ -10,6 +10,7 @@
 #ifndef MOMGAMEBASE_H
 #define MOMGAMEBASE_H
 
+#include "MoMLocation.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
 
@@ -245,7 +246,7 @@ public:
         return &spellData[spell];
     }
 
-    eTerrainBonusDeposit* getTerrainBonus(const Location& loc)
+    eTerrainBonusDeposit* getTerrainBonus(const MoMLocation& loc)
     {
         return getTerrainBonus(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
@@ -256,7 +257,7 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    Terrain_Changes* getTerrainChange(const Location& loc)
+    Terrain_Changes* getTerrainChange(const MoMLocation& loc)
     {
         return getTerrainChange(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
@@ -267,7 +268,7 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    uint8_t* getTerrainExplored(const Location& loc)
+    uint8_t* getTerrainExplored(const MoMLocation& loc)
     {
         return getTerrainExplored(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
@@ -278,7 +279,7 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    uint8_t* getTerrainLandMassID(const Location& loc)
+    uint8_t* getTerrainLandMassID(const MoMLocation& loc)
     {
         return getTerrainLandMassID(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
@@ -289,7 +290,7 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    int8_t* getTerrainMovement(const Location& loc, eMovement movement)
+    int8_t* getTerrainMovement(const MoMLocation& loc, eMovement movement)
     {
         return getTerrainMovement(loc.m_Plane, loc.m_XPos, loc.m_YPos, movement);
     }
@@ -302,7 +303,7 @@ public:
         mapRow += static_cast<unsigned>(movement) * gMAX_MAP_ROWS;
         return &mapRow[y].m_Moves[x];
     }
-    eTerrainType* getTerrainType(const Location& loc)
+    eTerrainType* getTerrainType(const MoMLocation& loc)
     {
         return getTerrainType(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }

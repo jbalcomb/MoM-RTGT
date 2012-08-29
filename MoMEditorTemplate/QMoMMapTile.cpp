@@ -18,10 +18,10 @@ namespace MoM
 
 int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
 
-QMoMMapTile::QMoMMapTile(bool isBattlefield) :
+QMoMMapTile::QMoMMapTile(const MoM::MoMLocation& location) :
     QGraphicsItem(),
-    m_isBattlefield(isBattlefield),
-    m_plane(MoM::PLANE_Arcanum),
+    m_location(location),
+    m_terrainBattle(0),
     m_terrainBonus(0),
     m_terrainChange(0),
     m_terrainExplored(0),
@@ -36,9 +36,10 @@ QMoMMapTile::~QMoMMapTile()
 
 QRectF QMoMMapTile::boundingRect() const
 {
-    if (m_isBattlefield)
+    if (MoMLocation::MAP_battle == m_location.m_Map)
     {
-        return QRectF(0, 0, 28, 30);
+//        return QRectF(0, 0, 28, 30);
+        return QRectF(0, 0, 30, 16);
     }
     else
     {
@@ -51,7 +52,7 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
     if (0 != m_terrainType)
     {
         int iTerrainType = (int) *m_terrainType;
-        if (MoM::PLANE_Myrror == m_plane)
+        if (MoM::PLANE_Myrror == m_location.m_Plane)
         {
             iTerrainType += MoM::eTerrainType_MAX;
         }
@@ -61,6 +62,15 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
 		{
 			painter->drawImage(boundingRect(), *image);
 		}
+    }
+
+    if (0 != m_terrainBattle)
+    {
+        const QMoMImagePtr image = QMoMResources::instance().getImage(*m_terrainBattle);
+        if (0 != image)
+        {
+            painter->drawImage(boundingRect(), *image);
+        }
     }
 
     if (0 != m_terrainBonus)

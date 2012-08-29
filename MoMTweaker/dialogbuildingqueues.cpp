@@ -125,7 +125,7 @@ void DialogBuildingQueues::update()
 		QString buildingCost = QString("%0").arg(m_game->getCostToProduce(city->m_Producing));
 
         std::vector<int> unitsInCity;
-        MoM::Location location = { city->m_XPos, city->m_YPos, city->m_Plane };
+        MoM::MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane);
         (void)momController.findUnitsAtLocation(*m_game, location, unitsInCity);
         int garrisonSize = unitsInCity.size();
 

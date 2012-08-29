@@ -57,6 +57,7 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
 {
     if (0 != m_momUnit)
     {
+        // Calculate heading
         int heading = -1;
         if (m_isBattlefield)
         {
@@ -65,24 +66,34 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
             if ((0 != dx) || (0 != dy))
             {
                 double angle = atan2((double)dy, (double)dx);
-                heading = (int)(angle * 4 / 3.14159 + 2.5 + 10) - 10;
+                heading = (int)(angle * 4 / 3.14159 + 3.5 + 10) - 10;
                 if (heading < 0)
                 {
                     heading += 8;
                 }
             }
         }
-        const QMoMImagePtr imageUnit = QMoMResources::instance().getImage(m_momUnit->getUnitTypeNr(), heading);
-        QMoMImagePtr imageBack;
+
         MoM::Wizard* wizard = 0;
         if (0 != m_game)
         {
             wizard = m_game->getWizard(m_momUnit->getOwner());
         }
+
+        // Get unit image
+        eBannerColor banner = BANNER_Green;
+        if (0 != wizard)
+        {
+            banner = wizard->m_BannerColor;
+        }
+        const QMoMImagePtr imageUnit = QMoMResources::instance().getImage(m_momUnit->getUnitTypeNr(), heading, banner);
+        QMoMImagePtr imageBack;
         if (!m_isBattlefield && (0 != wizard))
         {
             imageBack = MoM::QMoMResources::instance().getImage(wizard->m_BannerColor);
         }
+
+        // Paint unit image
         if (0 != imageBack)
 		{
             painter->drawImage(boundingRect(), *imageBack);

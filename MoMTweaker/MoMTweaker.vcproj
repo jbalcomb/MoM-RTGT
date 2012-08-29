@@ -185,7 +185,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\dialogoverlandmap.cpp"
+				RelativePath=".\dialogmap.cpp"
 				>
 			</File>
 			<File
@@ -285,6 +285,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\QMoMMapScene.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\QMoMMapTile.cpp"
 				>
 			</File>
@@ -306,10 +310,6 @@
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\QMoMUtility.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\MoMEditorTemplate\QOverlandMapScene.cpp"
 				>
 			</File>
 			<File
@@ -427,15 +427,15 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\dialogoverlandmap.h"
+				RelativePath=".\dialogmap.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing dialogoverlandmap.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						Description="Moc&apos;ing dialogmap.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -445,8 +445,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing dialogoverlandmap.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						Description="Moc&apos;ing dialogmap.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -641,6 +641,32 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\QMoMMapScene.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing QMoMMapScene.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing QMoMMapScene.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\QMoMMapTile.h"
 				>
 			</File>
@@ -689,32 +715,6 @@
 			<File
 				RelativePath="..\MoMEditorTemplate\QMoMUtility.h"
 				>
-			</File>
-			<File
-				RelativePath="..\MoMEditorTemplate\QOverlandMapScene.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing QOverlandMapScene.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing QOverlandMapScene.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_XML_LIB &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.&quot; &quot;-I$(QTDIR)\include\QtXml&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\unitmodel.h"
@@ -827,7 +827,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\dialogoverlandmap.ui"
+				RelativePath=".\dialogmap.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1364,7 +1364,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Barbarian.gif"
+				RelativePath="..\Resources\race\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1384,7 +1384,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\race\Barbarian.gif"
+				RelativePath="..\Resources\units\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1904,7 +1904,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Chaos Channels Demon Skin.gif"
+				RelativePath="..\Resources\abilities\Chaos Channels Demon Skin.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1924,7 +1924,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Chaos Channels Demon Skin.gif"
+				RelativePath="..\Resources\spells\Chaos Channels Demon Skin.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1984,7 +1984,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Chaos Channels Fiery Breath.gif"
+				RelativePath="..\Resources\spells\Chaos Channels Fiery Breath.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2004,7 +2004,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Chaos Channels Fiery Breath.gif"
+				RelativePath="..\Resources\abilities\Chaos Channels Fiery Breath.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2544,7 +2544,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Dispel Evil.gif"
+				RelativePath="..\Resources\spells\Dispel Evil.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2564,7 +2564,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Dispel Evil.gif"
+				RelativePath="..\Resources\abilities\Dispel Evil.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3364,7 +3364,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Healer.gif"
+				RelativePath="..\Resources\units\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3384,7 +3384,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Healer.gif"
+				RelativePath="..\Resources\abilities\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3784,7 +3784,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Immolation.gif"
+				RelativePath="..\Resources\spells\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -3804,7 +3804,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Immolation.gif"
+				RelativePath="..\Resources\abilities\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4530,7 +4530,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Magic Immunity.gif"
+				RelativePath="..\Resources\abilities\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -4550,7 +4550,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Magic Immunity.gif"
+				RelativePath="..\Resources\spells\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5634,7 +5634,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Regeneration.gif"
+				RelativePath="..\Resources\abilities\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -5654,7 +5654,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Regeneration.gif"
+				RelativePath="..\Resources\spells\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6074,7 +6074,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Sage.gif"
+				RelativePath="..\Resources\units\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -6094,7 +6094,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Sage.gif"
+				RelativePath="..\Resources\abilities\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7914,7 +7914,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Wind Walking.gif"
+				RelativePath="..\Resources\spells\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -7934,7 +7934,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Wind Walking.gif"
+				RelativePath="..\Resources\abilities\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -8093,7 +8093,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogoverlandmap.h"
+				RelativePath=".\GeneratedFiles\ui_dialogmap.h"
 				>
 			</File>
 			<File
@@ -8166,7 +8166,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_dialogoverlandmap.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_dialogmap.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -8226,7 +8226,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_QMoMUnitTile.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_QMoMMapScene.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -8238,7 +8238,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_QOverlandMapScene.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_QMoMUnitTile.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -8316,7 +8316,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_dialogoverlandmap.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_dialogmap.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8376,7 +8376,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_QMoMUnitTile.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_QMoMMapScene.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -8388,7 +8388,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_QOverlandMapScene.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_QMoMUnitTile.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
