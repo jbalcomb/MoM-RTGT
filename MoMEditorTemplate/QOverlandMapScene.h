@@ -14,7 +14,7 @@ class QOverlandMapScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    QOverlandMapScene(MoM::ePlane plane, QObject *parent = 0);
+    QOverlandMapScene(MoM::ePlane plane, bool isBattlefield, QObject *parent = 0);
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -28,6 +28,7 @@ signals:
 
 private:
     MoM::ePlane m_plane;
+    bool m_isBattlefield;
 };
 
 }

@@ -47,7 +47,7 @@ public:
     {
         return 0;
     }
-    virtual QList<QAction*> requestActions(QObject* parent)
+    virtual QList<QAction*> requestActions(QObject*)
     {
         return QList<QAction*>();
     }
@@ -404,14 +404,13 @@ QString BitmaskTreeItem<Bitmask, Enum>::toString()
 
 DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     QDialog(parent),
-    m_sceneArcanus(new QOverlandMapScene(MoM::PLANE_Arcanum)),
-    m_sceneMyrror(new QOverlandMapScene(MoM::PLANE_Myrror)),
+    m_sceneArcanus(new QOverlandMapScene(MoM::PLANE_Arcanum, false)),
+    m_sceneMyrror(new QOverlandMapScene(MoM::PLANE_Myrror, false)),
+    m_sceneBattle(new QOverlandMapScene(MoM::ePlane_MAX, true)),
     m_timer(new QTimer),
     ui(new Ui::DialogOverlandMap)
 {
     ui->setupUi(this);
-
-    ui->graphicsView->setSceneRect(m_sceneArcanus->sceneRect());
 
     ui->comboBox_Plane->setCurrentIndex(1);
 
@@ -432,8 +431,10 @@ DialogOverlandMap::DialogOverlandMap(QWidget *parent) :
     // Update view when items are inspected
     QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
     QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileChanged(MoM::Location)), this, SLOT(slot_tileChanged(MoM::Location)));
     QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
     QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileSelected(MoM::Location,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::Location,QList<QGraphicsItem*>)));
 
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
@@ -450,6 +451,41 @@ DialogOverlandMap::~DialogOverlandMap()
     delete ui;
     delete m_sceneMyrror;
     delete m_sceneArcanus;
+}
+
+void DialogOverlandMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
+{
+    assert(0 != battleUnit);
+    int battleUnitNr = (int)(battleUnit - m_game->getBattle_Units());
+    Unit* unit = m_game->getUnit(battleUnit->m_unitNr);
+    if (0 == unit)
+        return;
+    QString text = QString("%0").arg(prettyQStr(unit->m_Unit_Type));
+    if (battleUnit->m_Weapon_Type_Plus_1 > 1)
+    {
+        text += ", " + prettyQStr((eWeaponType)(battleUnit->m_Weapon_Type_Plus_1 - 1));
+    }
+    QTreeItemBase* qtreeUnit = new QTreeItemBase(m_game,
+                                 QString("battle[%0] unit[%1]").arg(battleUnitNr).arg(battleUnit->m_unitNr),
+                                 text);
+    treeWidget->addTopLevelItem(qtreeUnit);
+
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &battleUnit->m_Owner, ePlayer_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<uint8_t>(m_game, "Active", &battleUnit->m_active__, eUnit_Active_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status16>(m_game, "Status", &battleUnit->m_Status, eUnit_Status16_MAX));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TargetID", &battleUnit->m_Target_BattleUnitID));
+    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPos", &battleUnit->m_xPos));
+    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPos", &battleUnit->m_yPos));
+    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPosHeaded", &battleUnit->m_xPosHeaded));
+    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPosHeaded", &battleUnit->m_yPosHeaded));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HalfMovesLeft", &battleUnit->m_MoveHalves));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "CurFigures", &battleUnit->m_Current_Figures));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HP figure", &battleUnit->m_Hitpoints_per_Figure));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "TotDamage", &battleUnit->m_cur_total_damage_GUESS));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "FigDamage", &battleUnit->m_cur_figure_damage_GUESS));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Suppression", &battleUnit->m_Suppression));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "WeaponType", &battleUnit->m_Weapon_Type_Plus_1));
 }
 
 void DialogOverlandMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
@@ -653,6 +689,9 @@ void DialogOverlandMap::on_comboBox_Plane_currentIndexChanged(int index)
     case 2:
         ui->graphicsView->setScene(m_sceneMyrror);
         break;
+    case 3:
+        ui->graphicsView->setScene(m_sceneBattle);
+        break;
     default:
         ui->graphicsView->setScene(0);
         break;
@@ -725,13 +764,14 @@ void DialogOverlandMap::slot_gameUpdated()
     // Reset game
     m_sceneArcanus->clear();
     m_sceneMyrror->clear();
+    m_sceneBattle->clear();
     m_lookup.clear();
 
     if (m_game.isNull())
         return;
 
     QGraphicsScene* scene[MoM::ePlane_MAX] = { m_sceneArcanus, m_sceneMyrror };
-    QRectF rectfTile = MoM::QMoMMapTile().boundingRect();
+    QRectF rectfTile = MoM::QMoMMapTile(false).boundingRect();
 
     // Add fixed map tiles
     // Show terrain
@@ -741,7 +781,7 @@ void DialogOverlandMap::slot_gameUpdated()
         {
             for (int x = 0; x < (int)MoM::gMAX_MAP_COLS; ++x)
             {
-                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile;
+                MoM::QMoMMapTile* mapTile = new MoM::QMoMMapTile(false);
                 mapTile->setPlane(plane);
                 if (ui->checkBox_Terrain->isChecked())
                 {
@@ -781,16 +821,16 @@ void DialogOverlandMap::slot_gameUpdated()
             if (!ui->checkBox_EnemyUnits->isChecked() && (unit->m_Owner != MoM::PLAYER_YOU))
                 continue;
 
-            MoM::MoMUnit momUnit(m_game.data());
-            momUnit.changeUnit(unit);
+            QMoMUnitPtr momUnit(new MoMUnit(m_game.data()));
+            momUnit->changeUnit(unit);
 
             MoM::QMoMUnitTile* unitTile = new MoM::QMoMUnitTile;
             unitTile->setGame(m_game);
-            unitTile->setUnit(unit);
+            unitTile->setUnit(momUnit);
 
             scene[unit->m_Plane]->addItem(unitTile);
             unitTile->setPos(unit->m_XPos * rectfTile.width(), unit->m_YPos * rectfTile.height());
-            unitTile->setToolTip(momUnit.getDisplayName().c_str());
+            unitTile->setToolTip(momUnit->getDisplayName().c_str());
             m_lookup.insert(unit, unitTile);
         }
     }
@@ -823,9 +863,10 @@ void DialogOverlandMap::slot_gameUpdated()
         for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (MoM::toUInt(cityNr) < MoM::gMAX_CITIES); ++cityNr)
         {
             MoM::City* city = m_game->getCity(cityNr);
-            if (0 == city)
+            Wizard* wizard = m_game->getWizard(city->m_Owner);
+            if ((0 == city) || (0 == wizard))
                 continue;
-            QPixmap pixmapCity = MoM::QMoMResources::instance().getPixmap(city->m_Size, 1, m_game->getWizard(city->m_Owner)->m_BannerColor);
+            QPixmap pixmapCity = MoM::QMoMResources::instance().getPixmap(city->m_Size, 1, wizard->m_BannerColor);
             if (MoM::inRange(city->m_Plane, MoM::ePlane_MAX)
                     && !pixmapCity.isNull())
             {
@@ -839,6 +880,51 @@ void DialogOverlandMap::slot_gameUpdated()
         }
     }
 
+    // Show battle units
+    MoM::Battle_Unit* battleUnits = m_game->getBattle_Units();
+    uint16_t* pnrBattleUnits = m_game->getNumber_of_Battle_Units();
+    if ((0 != battleUnits) && (0 != pnrBattleUnits))
+    {
+        int nrBattleUnits = *pnrBattleUnits;
+        QRectF rectfTile = MoM::QMoMMapTile(true).boundingRect();
+        for (int battleUnitNr = 0; (battleUnits) && (battleUnitNr < nrBattleUnits) && (battleUnitNr < MoM::gMAX_BATTLE_UNITS); ++battleUnitNr)
+        {
+            MoM::Battle_Unit* battleUnit = &battleUnits[battleUnitNr];
+
+            QMoMUnitPtr momUnit(new MoMUnit(m_game.data()));
+            momUnit->changeUnit(battleUnit);
+
+            MoM::QMoMUnitTile* unitTile = new MoM::QMoMUnitTile(true);
+            unitTile->setGame(m_game);
+            unitTile->setUnit(momUnit);
+
+            m_sceneBattle->addItem(unitTile);
+            unitTile->setPos(battleUnit->m_xPos * rectfTile.width(), battleUnit->m_yPos * rectfTile.height());
+            unitTile->setToolTip(momUnit->getDisplayName().c_str());
+            m_lookup.insert(battleUnit, unitTile);
+
+            QPointF pos(battleUnit->m_xPos * rectfTile.width(), battleUnit->m_yPos * rectfTile.height());
+            QGraphicsSimpleTextItem* textItem = m_sceneBattle->addSimpleText(QString("%0").arg(battleUnitNr));
+            textItem->setFont(QMoMResources::g_FontSmall);
+            pos.ry() -= textItem->boundingRect().height() / 4;
+            textItem->setPos(pos);
+
+            QString text = prettyQStr(battleUnit->m_Status);
+            textItem = m_sceneBattle->addSimpleText(QString("%0").arg(text[0]));
+            textItem->setFont(QMoMResources::g_FontSmall);
+            pos.rx() = (battleUnit->m_xPos + 1) * rectfTile.width() - textItem->boundingRect().width();
+            textItem->setPos(pos);
+
+            pos.ry() += textItem->boundingRect().height();
+            textItem = m_sceneBattle->addSimpleText(QString("%0").arg((int)battleUnit->m_Target_BattleUnitID));
+            textItem->setFont(QMoMResources::g_FontSmall);
+            textItem->setPos(pos);
+
+            QPointF ptBegin((battleUnit->m_xPos + 0.5) * rectfTile.width(), (battleUnit->m_yPos + 0.5) * rectfTile.height());
+            QPointF ptEnd((battleUnit->m_xPosHeaded + 0.5) * rectfTile.width(), (battleUnit->m_yPosHeaded + 0.5) * rectfTile.height());
+            m_sceneBattle->addLine(QLineF(ptBegin, ptEnd), QPen(Qt::darkRed));
+        }
+    }
 }
 
 void DialogOverlandMap::slot_itemAction()
@@ -853,7 +939,7 @@ void DialogOverlandMap::slot_itemAction()
 
 void DialogOverlandMap::slot_tileChanged(const MoM::Location& loc)
 {
-    qDebug() << QString("slot_tileChanged(%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos);
+    ui->label_Location->setText(QString("Location: (%1,%2)").arg(loc.m_XPos).arg(loc.m_YPos));
 }
 
 void DialogOverlandMap::slot_tileSelected(const MoM::Location &loc, const QList<QGraphicsItem *> &graphicItems)
@@ -880,6 +966,18 @@ void DialogOverlandMap::slot_tileSelected(const MoM::Location &loc, const QList<
         for (size_t i = 0; i < units.size(); ++i)
         {
             addUnitSubtree(qtreeItem, m_game->getUnit(units[i]));
+        }
+    }
+
+    if ((loc.m_Plane == ePlane_MAX) && (0 != m_game->getNumber_of_Battle_Units()) && (0 != m_game->getBattle_Units()))
+    {
+        for (int battleUnitNr = 0; (battleUnitNr < *m_game->getNumber_of_Battle_Units()) && (battleUnitNr < gMAX_BATTLE_UNITS); ++battleUnitNr)
+        {
+            Battle_Unit* battleUnit = m_game->getBattle_Units() + battleUnitNr;
+            if ((loc.m_XPos == battleUnit->m_xPos) && (loc.m_YPos == battleUnit->m_yPos))
+            {
+                addBattleUnitSubtree(ui->treeWidget_Tile, battleUnit);
+            }
         }
     }
 }

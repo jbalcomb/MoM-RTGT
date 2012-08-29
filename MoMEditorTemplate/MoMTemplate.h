@@ -1371,17 +1371,17 @@ enum eTower_Node_Lair_Status ENUMSIZE8
 enum eTower_Node_Lair_Type ENUMSIZE8
 {
     // As yet this list is incomplete
-    LAIRTYPE_Tower = 0,
+    LAIRTYPE_Tower = 0,             // random color if a book is awarded
     LAIRTYPE_Chaos_node = 1,
     LAIRTYPE_Nature_node = 2,
     LAIRTYPE_Sorcery_node = 3,
-    LAIRTYPE_Mysterious_cave = 4,
-    LAIRTYPE_Dungeon = 5,
-    LAIRTYPE_Ancient_temple = 6,
-    LAIRTYPE_Abandoned_keep = 7,
-    LAIRTYPE_Monster_lair = 8,
-    LAIRTYPE_Ruins = 9,
-    LAIRTYPE_Fallen_temple = 10,
+    LAIRTYPE_Mysterious_cave = 4,   // random color if a book is awarded
+    LAIRTYPE_Dungeon = 5,           // death book if a book is awarded
+    LAIRTYPE_Ancient_temple = 6,    // life book if a book is awarded
+    LAIRTYPE_Abandoned_keep = 7,    // death book if a book is awarded
+    LAIRTYPE_Monster_lair = 8,      // random color if a book is awarded
+    LAIRTYPE_Ruins = 9,             // death book if a book is awarded
+    LAIRTYPE_Fallen_temple = 10,    // life book if a book is awarded
 
     eTower_Node_Lair_Type_MAX
 };
@@ -2727,12 +2727,12 @@ enum eUnit_Status16 ENUMSIZE16
                                                 //   ??=purifying
 
     UNITSTATUS16_melee = 100,                   // Unit_strategy_exe()  
-    UNITSTATUS16_unclear101 = 101,
-    UNITSTATUS16_shoot = 102,
-    UNITSTATUS16_unclear103 = 103,
+    UNITSTATUS16_shoot = 101,
+    UNITSTATUS16_unclear_102 = 102,
+    UNITSTATUS16_unclear_103 = 103,
     UNITSTATUS16_doom_bolt = 104,
     UNITSTATUS16_fireball = 105,
-    UNITSTATUS16_move_GUESS = 106,
+    UNITSTATUS16_healing_GUESS106 = 106,
     UNITSTATUS16_cast_spell_107 = 107,
     UNITSTATUS16_cast_spell_108 = 108,
     UNITSTATUS16_summon_demon = 109,
@@ -3106,6 +3106,8 @@ enum eYesNo8 ENUMSIZE8
 // CONSTANTS
 //
 
+static const unsigned gMAX_BATTLE_COLS = 20;
+static const unsigned gMAX_BATTLE_ROWS = 20;
 static const unsigned gMAX_BATTLE_UNITS = 18;
 static const unsigned gMAX_CITIES = 100;
 static const unsigned gMAX_HERO_TYPES = 35;
@@ -4607,37 +4609,35 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
 
 typedef struct PACKED_STRUCT // Battlefield
 {
-    uint8_t field_0[924]; // 0
-    uint8_t field_39C; // 39C
-    uint8_t field_39D[461]; // 39D
-    uint8_t field_56A; // 56A
-    uint8_t field_56B[235]; // 56B
-    uint8_t field_656; // 656
-    uint8_t field_657; // 657
-    uint8_t field_658; // 658
-    uint8_t field_659[18]; // 659
-    uint8_t field_66B; // 66B
-    uint8_t field_66C; // 66C
-    uint8_t field_66D; // 66D
-    uint8_t field_66E[18]; // 66E
-    uint8_t field_680; // 680
-    uint8_t field_681; // 681
-    uint8_t field_682; // 682
-    uint8_t field_683; // 683
-    uint8_t field_684[180]; // 684
-    uint16_t field_738; // 738
-    uint8_t field_73A[668]; // 73A
-    uint16_t field_9D6_Merging_Teleporting; // 9D6
-    uint8_t field_9D8[252]; // 9D8
-    uint16_t field_AD4; // AD4
-    uint8_t field_AD6[460]; // AD6
-    uint16_t field_CA2_sail; // CA2
-    uint8_t field_CA4[460]; // CA4
-    uint16_t field_E70; // E70
-    uint8_t field_E72[600]; // E72
-    uint16_t field_10CA; // 10CA
-    uint8_t field_10CC[1062]; // 10CC
-    uint16_t field_14F2; // 14F2
+    uint16_t    m_Terrain[462];             // 0        // Map is 22 rows by 11 columns, corresponding to 22 x 21 squares (lines of 21 bytes/words)
+    uint8_t field_39C[462];             // 39C
+    uint8_t field_56A[462];             // 56A
+    uint8_t     m_Movement_walking[462];    // 738
+    uint8_t     m_Movement_merging_teleporting_fly[462]; // 9D6
+    uint8_t     m_Movement_unused[462];     // AD4
+    uint8_t     m_Movement_sailing[462];    // CA2
+    uint16_t    field_E70_Nr_extra_terrain_pics_GUESS; // E70
+    uint16_t field_E72[100]; // E72
+    uint16_t field_F3A[100]; // F3A
+    uint16_t    field_1002_extra_terrain_pics_GUESS[100]; // 1002
+    uint16_t    field_10CA_Nr; // 10CA
+    uint8_t field_10CC[100]; // 10CC
+    uint8_t field_1130[100]; // 1130
+    uint8_t field_1194[100]; // 1194
+    uint8_t field_11F8[762]; // 11F
+    uint16_t    m_Central_structure;            // 14F2 // 0=No Central tower,
+                                                        // 1=outpost,
+                                                        // 2=city grid,
+                                                        // 3=wizard's tower
+                                                        // 4=small tower (lair type?)
+                                                        // 5=tower between the planes
+                                                        // 6=cave,
+                                                        // 7=temple,
+                                                        // 8=medium tower (lair type?),
+                                                        // 9=sorcery node,
+                                                        // 10=chaos node,
+                                                        // 11=nature node
+                                                        // 12=ruins??
     uint16_t field_14F4; // 14F4
     uint16_t field_14F6; // 14F6
     uint8_t field_14F8[30]; // 14F8
@@ -4645,31 +4645,13 @@ typedef struct PACKED_STRUCT // Battlefield
     uint8_t field_1518[30]; // 1518
     uint16_t field_1536; // 1536
     uint8_t field_1538[30]; // 1538
-    uint16_t field_City_Walls;          // 1556 // 00=No City Walls, 01=City Walls
-    uint16_t field_Wall_is_whole[16];   // 1558 // 00=No Wall, 01=Whole Wall, 02=Broken Wall
-    uint16_t field_Wall_of_Fire;        // 1578
-    uint16_t field_Wall_of_Darkness;    // 157A
-    uint16_t field_157C_plane_GUESS;    // 157C
-    uint16_t field_157E; // 157E
-    uint16_t field_1580; // 1580
-    uint16_t field_1582; // 1582
-    uint8_t field_Cloud_of_Shadow_GUESS; // 1584
-    uint8_t field_1585; // 1585
-    uint8_t field_1586; // 1586
-    uint8_t field_1587; // 1587
-    uint8_t field_1588; // 1588
-    uint8_t field_1589; // 1589
-    uint8_t field_158A; // 158A
-    uint8_t field_158B; // 158B
-    uint8_t field_158C; // 158C
-    uint8_t field_158D; // 158D
-    uint8_t field_158E; // 158E
-    uint8_t field_158F; // 158F
-    uint8_t field_1590; // 1590
-    uint8_t field_1591; // 1591
-    uint8_t field_1592; // 1592
-    uint8_t field_Heavenly_Light_GUESS; // 1593
-                        // SIZE 1594
+    eYesNo16    m_City_Walls;               // 1556 // 00=No City Walls, 01=City Walls
+    uint16_t    m_Wall_is_whole[16];        // 1558 // 00=No Wall, 01=Whole Wall, 02=Broken Wall
+    eYesNo16    m_Wall_of_Fire;             // 1578
+    eYesNo16    m_Wall_of_Darkness;         // 157A
+    int16_t     m_Plane;                    // 157C
+    City_Enchantments m_City_Enchantments;  // 157E
+                                            // SIZE 159C
 } Battlefield;
 
 typedef struct PACKED_STRUCT // Battle_Unit
@@ -4729,18 +4711,18 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_cur_total_damage_GUESS;   // 36 db ?
     uint8_t                 m_UNK37[2];         // 37
                                                 // 38
-    uint8_t                 m_cur_figure_damage_GUESS;    // 39 db ?
+    int8_t                  m_cur_figure_damage_GUESS;    // 39 db ?
     unionUnit_Enchantment   m_Flags1_UnitEnchantment;       // 3A-3D db
-    uint8_t                 m_Suppression;      // 3E db ?
-    uint8_t                 m_Mana_points;      // 3F db ?
-    uint8_t                 m_Current_mana_;    // 40 db ?
-    uint8_t                 m_Item_nr_charges_; // 41 db ?
-    uint8_t                 m_Poison_strength_; // 42 db ?
-    uint8_t                 m_Target_BattleUnitID;  // 43
-    uint16_t                m_xPos;             // 44-45 db
-    uint16_t                m_yPos;             // 46-47 db
-    uint16_t                m_xPosHeaded;       // 48-49 db
-    uint16_t                m_yPosHeaded;       // 4A-4B db
+    int8_t                  m_Suppression;      // 3E db ?
+    int8_t                  m_Mana_points;      // 3F db ?
+    int8_t                  m_Current_mana_;    // 40 db ?
+    int8_t                  m_Item_nr_charges_; // 41 db ?
+    int8_t                  m_Poison_strength_; // 42 db ?
+    int8_t                  m_Target_BattleUnitID;  // 43
+    int16_t                 m_xPos;             // 44-45 db
+    int16_t                 m_yPos;             // 46-47 db
+    int16_t                 m_xPosHeaded;       // 48-49 db
+    int16_t                 m_yPosHeaded;       // 4A-4B db
     uint8_t                 m_UNK4C[8];         // 4C
                                                 // 4D
                                                 // 4E

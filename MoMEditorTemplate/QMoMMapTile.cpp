@@ -18,8 +18,9 @@ namespace MoM
 
 int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
 
-QMoMMapTile::QMoMMapTile() :
+QMoMMapTile::QMoMMapTile(bool isBattlefield) :
     QGraphicsItem(),
+    m_isBattlefield(isBattlefield),
     m_plane(MoM::PLANE_Arcanum),
     m_terrainBonus(0),
     m_terrainChange(0),
@@ -35,11 +36,17 @@ QMoMMapTile::~QMoMMapTile()
 
 QRectF QMoMMapTile::boundingRect() const
 {
-    return QRectF(0, 0, 20, 18);
+    if (m_isBattlefield)
+    {
+        return QRectF(0, 0, 28, 30);
+    }
+    else
+    {
+        return QRectF(0, 0, 20, 18);
+    }
 }
 
-void QMoMMapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-           QWidget *widget)
+void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     if (0 != m_terrainType)
     {

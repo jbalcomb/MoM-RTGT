@@ -2,14 +2,22 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.6 (2012--)
+-----------------------------
+
+* Added an battlefield map.
+
+
+
 CHANGES IN 0.2.5 (2012-08-22)
 -----------------------------
 
 * Added an LBX editor (click Tools / LBX editor) [Anthony,Aureustgo,FrancoK].
   When you load an LBX file with pictures, those will be shown in the 
   top view.
-  Simultaneously the bottom view shows the bitmaps (png gif bmp jpg)
-  that are in the same directory.
+  The bottom view shows the bitmaps (png gif bmp jpg)
+  that are in the directory of the tweaker, or one directory lower.
+  I have included a couple of images that you can use.
   If you click "Replace" the LBX file is overwritten.
   To see the effect, MoM needs to be restarted (quit & continue).
 

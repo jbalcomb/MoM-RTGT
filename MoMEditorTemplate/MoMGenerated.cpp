@@ -2865,12 +2865,12 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Status16& rhs)
     case UNITSTATUS16_reached_destination: os << "UNITSTATUS16_reached_destination"; break;
     case UNITSTATUS16_wait: os << "UNITSTATUS16_wait"; break;
     case UNITSTATUS16_melee: os << "UNITSTATUS16_melee"; break;
-    case UNITSTATUS16_unclear101: os << "UNITSTATUS16_unclear101"; break;
     case UNITSTATUS16_shoot: os << "UNITSTATUS16_shoot"; break;
-    case UNITSTATUS16_unclear103: os << "UNITSTATUS16_unclear103"; break;
+    case UNITSTATUS16_unclear_102: os << "UNITSTATUS16_unclear_102"; break;
+    case UNITSTATUS16_unclear_103: os << "UNITSTATUS16_unclear_103"; break;
     case UNITSTATUS16_doom_bolt: os << "UNITSTATUS16_doom_bolt"; break;
     case UNITSTATUS16_fireball: os << "UNITSTATUS16_fireball"; break;
-    case UNITSTATUS16_move_GUESS: os << "UNITSTATUS16_move_GUESS"; break;
+    case UNITSTATUS16_healing_GUESS106: os << "UNITSTATUS16_healing_GUESS106"; break;
     case UNITSTATUS16_cast_spell_107: os << "UNITSTATUS16_cast_spell_107"; break;
     case UNITSTATUS16_cast_spell_108: os << "UNITSTATUS16_cast_spell_108"; break;
     case UNITSTATUS16_summon_demon: os << "UNITSTATUS16_summon_demon"; break;
@@ -3442,14 +3442,14 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_UNK37[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK37[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_cur_figure_damage_GUESS=" << (unsigned)rhs.m_cur_figure_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_figure_damage_GUESS << std::dec << "\n";
+    os << "m_cur_figure_damage_GUESS=" << (int)rhs.m_cur_figure_damage_GUESS << " 0x" << std::hex << (int)rhs.m_cur_figure_damage_GUESS << std::dec << "\n";
     os << "m_Flags1_UnitEnchantment=" << rhs.m_Flags1_UnitEnchantment << "\n";
-    os << "m_Suppression=" << (unsigned)rhs.m_Suppression << " 0x" << std::hex << (unsigned)rhs.m_Suppression << std::dec << "\n";
-    os << "m_Mana_points=" << (unsigned)rhs.m_Mana_points << " 0x" << std::hex << (unsigned)rhs.m_Mana_points << std::dec << "\n";
-    os << "m_Current_mana_=" << (unsigned)rhs.m_Current_mana_ << " 0x" << std::hex << (unsigned)rhs.m_Current_mana_ << std::dec << "\n";
-    os << "m_Item_nr_charges_=" << (unsigned)rhs.m_Item_nr_charges_ << " 0x" << std::hex << (unsigned)rhs.m_Item_nr_charges_ << std::dec << "\n";
-    os << "m_Poison_strength_=" << (unsigned)rhs.m_Poison_strength_ << " 0x" << std::hex << (unsigned)rhs.m_Poison_strength_ << std::dec << "\n";
-    os << "m_Target_BattleUnitID=" << (unsigned)rhs.m_Target_BattleUnitID << " 0x" << std::hex << (unsigned)rhs.m_Target_BattleUnitID << std::dec << "\n";
+    os << "m_Suppression=" << (int)rhs.m_Suppression << " 0x" << std::hex << (int)rhs.m_Suppression << std::dec << "\n";
+    os << "m_Mana_points=" << (int)rhs.m_Mana_points << " 0x" << std::hex << (int)rhs.m_Mana_points << std::dec << "\n";
+    os << "m_Current_mana_=" << (int)rhs.m_Current_mana_ << " 0x" << std::hex << (int)rhs.m_Current_mana_ << std::dec << "\n";
+    os << "m_Item_nr_charges_=" << (int)rhs.m_Item_nr_charges_ << " 0x" << std::hex << (int)rhs.m_Item_nr_charges_ << std::dec << "\n";
+    os << "m_Poison_strength_=" << (int)rhs.m_Poison_strength_ << " 0x" << std::hex << (int)rhs.m_Poison_strength_ << std::dec << "\n";
+    os << "m_Target_BattleUnitID=" << (int)rhs.m_Target_BattleUnitID << " 0x" << std::hex << (int)rhs.m_Target_BattleUnitID << std::dec << "\n";
     os << "m_xPos=" << rhs.m_xPos << " 0x" << std::hex << rhs.m_xPos << std::dec << "\n";
     os << "m_yPos=" << rhs.m_yPos << " 0x" << std::hex << rhs.m_yPos << std::dec << "\n";
     os << "m_xPosHeaded=" << rhs.m_xPosHeaded << " 0x" << std::hex << rhs.m_xPosHeaded << std::dec << "\n";
@@ -3485,97 +3485,93 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
 std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
 {
     os << "{\n";
-    os << "field_0=(\n";
-    for (unsigned i = 0; i < 924; ++i)
+    os << "m_Terrain=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_0[i] << " 0x" << std::hex << (unsigned)rhs.field_0[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Terrain[i] << " 0x" << std::hex << rhs.m_Terrain[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_39C=" << (unsigned)rhs.field_39C << " 0x" << std::hex << (unsigned)rhs.field_39C << std::dec << "\n";
-    os << "field_39D=(\n";
-    for (unsigned i = 0; i < 461; ++i)
+    os << "field_39C=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_39D[i] << " 0x" << std::hex << (unsigned)rhs.field_39D[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.field_39C[i] << " 0x" << std::hex << (unsigned)rhs.field_39C[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_56A=" << (unsigned)rhs.field_56A << " 0x" << std::hex << (unsigned)rhs.field_56A << std::dec << "\n";
-    os << "field_56B=(\n";
-    for (unsigned i = 0; i < 235; ++i)
+    os << "field_56A=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_56B[i] << " 0x" << std::hex << (unsigned)rhs.field_56B[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.field_56A[i] << " 0x" << std::hex << (unsigned)rhs.field_56A[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_656=" << (unsigned)rhs.field_656 << " 0x" << std::hex << (unsigned)rhs.field_656 << std::dec << "\n";
-    os << "field_657=" << (unsigned)rhs.field_657 << " 0x" << std::hex << (unsigned)rhs.field_657 << std::dec << "\n";
-    os << "field_658=" << (unsigned)rhs.field_658 << " 0x" << std::hex << (unsigned)rhs.field_658 << std::dec << "\n";
-    os << "field_659=(\n";
-    for (unsigned i = 0; i < 18; ++i)
+    os << "m_Movement_walking=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_659[i] << " 0x" << std::hex << (unsigned)rhs.field_659[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Movement_walking[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_walking[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_66B=" << (unsigned)rhs.field_66B << " 0x" << std::hex << (unsigned)rhs.field_66B << std::dec << "\n";
-    os << "field_66C=" << (unsigned)rhs.field_66C << " 0x" << std::hex << (unsigned)rhs.field_66C << std::dec << "\n";
-    os << "field_66D=" << (unsigned)rhs.field_66D << " 0x" << std::hex << (unsigned)rhs.field_66D << std::dec << "\n";
-    os << "field_66E=(\n";
-    for (unsigned i = 0; i < 18; ++i)
+    os << "m_Movement_merging_teleporting_fly=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_66E[i] << " 0x" << std::hex << (unsigned)rhs.field_66E[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Movement_merging_teleporting_fly[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_merging_teleporting_fly[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_680=" << (unsigned)rhs.field_680 << " 0x" << std::hex << (unsigned)rhs.field_680 << std::dec << "\n";
-    os << "field_681=" << (unsigned)rhs.field_681 << " 0x" << std::hex << (unsigned)rhs.field_681 << std::dec << "\n";
-    os << "field_682=" << (unsigned)rhs.field_682 << " 0x" << std::hex << (unsigned)rhs.field_682 << std::dec << "\n";
-    os << "field_683=" << (unsigned)rhs.field_683 << " 0x" << std::hex << (unsigned)rhs.field_683 << std::dec << "\n";
-    os << "field_684=(\n";
-    for (unsigned i = 0; i < 180; ++i)
+    os << "m_Movement_unused=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_684[i] << " 0x" << std::hex << (unsigned)rhs.field_684[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Movement_unused[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_unused[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_738=" << rhs.field_738 << " 0x" << std::hex << rhs.field_738 << std::dec << "\n";
-    os << "field_73A=(\n";
-    for (unsigned i = 0; i < 668; ++i)
+    os << "m_Movement_sailing=(\n";
+    for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_73A[i] << " 0x" << std::hex << (unsigned)rhs.field_73A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Movement_sailing[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_sailing[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_9D6_Merging_Teleporting=" << rhs.field_9D6_Merging_Teleporting << " 0x" << std::hex << rhs.field_9D6_Merging_Teleporting << std::dec << "\n";
-    os << "field_9D8=(\n";
-    for (unsigned i = 0; i < 252; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.field_9D8[i] << " 0x" << std::hex << (unsigned)rhs.field_9D8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "field_AD4=" << rhs.field_AD4 << " 0x" << std::hex << rhs.field_AD4 << std::dec << "\n";
-    os << "field_AD6=(\n";
-    for (unsigned i = 0; i < 460; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.field_AD6[i] << " 0x" << std::hex << (unsigned)rhs.field_AD6[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "field_CA2_sail=" << rhs.field_CA2_sail << " 0x" << std::hex << rhs.field_CA2_sail << std::dec << "\n";
-    os << "field_CA4=(\n";
-    for (unsigned i = 0; i < 460; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.field_CA4[i] << " 0x" << std::hex << (unsigned)rhs.field_CA4[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "field_E70=" << rhs.field_E70 << " 0x" << std::hex << rhs.field_E70 << std::dec << "\n";
+    os << "field_E70_Nr_extra_terrain_pics_GUESS=" << rhs.field_E70_Nr_extra_terrain_pics_GUESS << " 0x" << std::hex << rhs.field_E70_Nr_extra_terrain_pics_GUESS << std::dec << "\n";
     os << "field_E72=(\n";
-    for (unsigned i = 0; i < 600; ++i)
+    for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_E72[i] << " 0x" << std::hex << (unsigned)rhs.field_E72[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.field_E72[i] << " 0x" << std::hex << rhs.field_E72[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_10CA=" << rhs.field_10CA << " 0x" << std::hex << rhs.field_10CA << std::dec << "\n";
+    os << "field_F3A=(\n";
+    for (unsigned i = 0; i < 100; ++i)
+    {
+        os << "[" << i << "] " << rhs.field_F3A[i] << " 0x" << std::hex << rhs.field_F3A[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "field_1002_extra_terrain_pics_GUESS=(\n";
+    for (unsigned i = 0; i < 100; ++i)
+    {
+        os << "[" << i << "] " << rhs.field_1002_extra_terrain_pics_GUESS[i] << " 0x" << std::hex << rhs.field_1002_extra_terrain_pics_GUESS[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "field_10CA_Nr=" << rhs.field_10CA_Nr << " 0x" << std::hex << rhs.field_10CA_Nr << std::dec << "\n";
     os << "field_10CC=(\n";
-    for (unsigned i = 0; i < 1062; ++i)
+    for (unsigned i = 0; i < 100; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.field_10CC[i] << " 0x" << std::hex << (unsigned)rhs.field_10CC[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_14F2=" << rhs.field_14F2 << " 0x" << std::hex << rhs.field_14F2 << std::dec << "\n";
+    os << "field_1130=(\n";
+    for (unsigned i = 0; i < 100; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.field_1130[i] << " 0x" << std::hex << (unsigned)rhs.field_1130[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "field_1194=(\n";
+    for (unsigned i = 0; i < 100; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.field_1194[i] << " 0x" << std::hex << (unsigned)rhs.field_1194[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "field_11F8=(\n";
+    for (unsigned i = 0; i < 762; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.field_11F8[i] << " 0x" << std::hex << (unsigned)rhs.field_11F8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Central_structure=" << rhs.m_Central_structure << " 0x" << std::hex << rhs.m_Central_structure << std::dec << "\n";
     os << "field_14F4=" << rhs.field_14F4 << " 0x" << std::hex << rhs.field_14F4 << std::dec << "\n";
     os << "field_14F6=" << rhs.field_14F6 << " 0x" << std::hex << rhs.field_14F6 << std::dec << "\n";
     os << "field_14F8=(\n";
@@ -3598,35 +3594,17 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
         os << "[" << i << "] " << (unsigned)rhs.field_1538[i] << " 0x" << std::hex << (unsigned)rhs.field_1538[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_City_Walls=" << rhs.field_City_Walls << " 0x" << std::hex << rhs.field_City_Walls << std::dec << "\n";
-    os << "field_Wall_is_whole=(\n";
+    os << "m_City_Walls=" << rhs.m_City_Walls << "\n";
+    os << "m_Wall_is_whole=(\n";
     for (unsigned i = 0; i < 16; ++i)
     {
-        os << "[" << i << "] " << rhs.field_Wall_is_whole[i] << " 0x" << std::hex << rhs.field_Wall_is_whole[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Wall_is_whole[i] << " 0x" << std::hex << rhs.m_Wall_is_whole[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_Wall_of_Fire=" << rhs.field_Wall_of_Fire << " 0x" << std::hex << rhs.field_Wall_of_Fire << std::dec << "\n";
-    os << "field_Wall_of_Darkness=" << rhs.field_Wall_of_Darkness << " 0x" << std::hex << rhs.field_Wall_of_Darkness << std::dec << "\n";
-    os << "field_157C_plane_GUESS=" << rhs.field_157C_plane_GUESS << " 0x" << std::hex << rhs.field_157C_plane_GUESS << std::dec << "\n";
-    os << "field_157E=" << rhs.field_157E << " 0x" << std::hex << rhs.field_157E << std::dec << "\n";
-    os << "field_1580=" << rhs.field_1580 << " 0x" << std::hex << rhs.field_1580 << std::dec << "\n";
-    os << "field_1582=" << rhs.field_1582 << " 0x" << std::hex << rhs.field_1582 << std::dec << "\n";
-    os << "field_Cloud_of_Shadow_GUESS=" << (unsigned)rhs.field_Cloud_of_Shadow_GUESS << " 0x" << std::hex << (unsigned)rhs.field_Cloud_of_Shadow_GUESS << std::dec << "\n";
-    os << "field_1585=" << (unsigned)rhs.field_1585 << " 0x" << std::hex << (unsigned)rhs.field_1585 << std::dec << "\n";
-    os << "field_1586=" << (unsigned)rhs.field_1586 << " 0x" << std::hex << (unsigned)rhs.field_1586 << std::dec << "\n";
-    os << "field_1587=" << (unsigned)rhs.field_1587 << " 0x" << std::hex << (unsigned)rhs.field_1587 << std::dec << "\n";
-    os << "field_1588=" << (unsigned)rhs.field_1588 << " 0x" << std::hex << (unsigned)rhs.field_1588 << std::dec << "\n";
-    os << "field_1589=" << (unsigned)rhs.field_1589 << " 0x" << std::hex << (unsigned)rhs.field_1589 << std::dec << "\n";
-    os << "field_158A=" << (unsigned)rhs.field_158A << " 0x" << std::hex << (unsigned)rhs.field_158A << std::dec << "\n";
-    os << "field_158B=" << (unsigned)rhs.field_158B << " 0x" << std::hex << (unsigned)rhs.field_158B << std::dec << "\n";
-    os << "field_158C=" << (unsigned)rhs.field_158C << " 0x" << std::hex << (unsigned)rhs.field_158C << std::dec << "\n";
-    os << "field_158D=" << (unsigned)rhs.field_158D << " 0x" << std::hex << (unsigned)rhs.field_158D << std::dec << "\n";
-    os << "field_158E=" << (unsigned)rhs.field_158E << " 0x" << std::hex << (unsigned)rhs.field_158E << std::dec << "\n";
-    os << "field_158F=" << (unsigned)rhs.field_158F << " 0x" << std::hex << (unsigned)rhs.field_158F << std::dec << "\n";
-    os << "field_1590=" << (unsigned)rhs.field_1590 << " 0x" << std::hex << (unsigned)rhs.field_1590 << std::dec << "\n";
-    os << "field_1591=" << (unsigned)rhs.field_1591 << " 0x" << std::hex << (unsigned)rhs.field_1591 << std::dec << "\n";
-    os << "field_1592=" << (unsigned)rhs.field_1592 << " 0x" << std::hex << (unsigned)rhs.field_1592 << std::dec << "\n";
-    os << "field_Heavenly_Light_GUESS=" << (unsigned)rhs.field_Heavenly_Light_GUESS << " 0x" << std::hex << (unsigned)rhs.field_Heavenly_Light_GUESS << std::dec << "\n";
+    os << "m_Wall_of_Fire=" << rhs.m_Wall_of_Fire << "\n";
+    os << "m_Wall_of_Darkness=" << rhs.m_Wall_of_Darkness << "\n";
+    os << "m_Plane=" << rhs.m_Plane << " 0x" << std::hex << rhs.m_Plane << std::dec << "\n";
+    os << "m_City_Enchantments=" << rhs.m_City_Enchantments << "\n";
     os << "}";
     return os;
 }
@@ -10043,12 +10021,12 @@ bool validate(const eUnit_Status16& rhs, const std::string& context)
     case UNITSTATUS16_reached_destination: break;
     case UNITSTATUS16_wait: break;
     case UNITSTATUS16_melee: break;
-    case UNITSTATUS16_unclear101: break;
     case UNITSTATUS16_shoot: break;
-    case UNITSTATUS16_unclear103: break;
+    case UNITSTATUS16_unclear_102: break;
+    case UNITSTATUS16_unclear_103: break;
     case UNITSTATUS16_doom_bolt: break;
     case UNITSTATUS16_fireball: break;
-    case UNITSTATUS16_move_GUESS: break;
+    case UNITSTATUS16_healing_GUESS106: break;
     case UNITSTATUS16_cast_spell_107: break;
     case UNITSTATUS16_cast_spell_108: break;
     case UNITSTATUS16_summon_demon: break;
@@ -10386,6 +10364,10 @@ bool validate(const Battle_Unit& rhs, const std::string& context)
 bool validate(const Battlefield& rhs, const std::string& context)
 {
     bool ok = true;
+    if (!validate(rhs.m_City_Walls, context + ".m_City_Walls")) ok = false;
+    if (!validate(rhs.m_Wall_of_Fire, context + ".m_Wall_of_Fire")) ok = false;
+    if (!validate(rhs.m_Wall_of_Darkness, context + ".m_Wall_of_Darkness")) ok = false;
+    if (!validate(rhs.m_City_Enchantments, context + ".m_City_Enchantments")) ok = false;
     return ok;
 }
 

@@ -47,6 +47,7 @@ private:
             return it.value();
     }
 
+    void addBattleUnitSubtree(class QTreeWidget* treeWidget, Battle_Unit* battleUnit);
     void addCitySubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
     void addLairSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
     void addTerrainSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
@@ -57,6 +58,7 @@ private:
 
     class QOverlandMapScene* m_sceneArcanus;
     class QOverlandMapScene* m_sceneMyrror;
+    class QOverlandMapScene* m_sceneBattle;
     LookupMap m_lookup;
     QMoMTimerPtr m_timer;
 

@@ -60,9 +60,9 @@ public:
     const QMoMImagePtr getImage(MoM::eTerrainBonusDeposit bonusDeposit) const;
     const QMoMImagePtr getImage(MoM::eTerrainChange terrainChange, int roadDirection = 0) const;
     const QMoMImagePtr getImage(MoM::eTerrainType terrain) const;
-    const QMoMImagePtr getImage(MoM::eUnit_Type unitType) const;
+    const QMoMImagePtr getImage(MoM::eUnit_Type unitType, int heading = -1) const;
     template<typename T>
-    const QMoMImagePtr getImage(T t) const
+    const QMoMImagePtr getImage(T) const
     {
         // Default match for getImage()
         return QMoMImagePtr(); 
@@ -136,6 +136,7 @@ private:
     QVector<QRgb> m_colorTable;
     QVector<QMoMImagePtr> m_buildingImages;
     QVector<QMoMImagePtr> m_citySizeImages;
+    QVector<QMoMImagePtr> m_figureImages;
     QVector<QMoMImagePtr> m_itemiscImages;
     QVector<QMoMImagePtr> m_itemsImages;
     QVector<QMoMImagePtr> m_lairImages;

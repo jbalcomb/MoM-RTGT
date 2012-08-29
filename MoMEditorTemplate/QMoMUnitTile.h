@@ -13,6 +13,7 @@
 #include <QGraphicsItem>
 
 #include "MoMTemplate.h"
+#include "MoMUnit.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM
@@ -24,7 +25,7 @@ class QMoMUnitTile: public QObject, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 
 public:
-    QMoMUnitTile();
+    QMoMUnitTile(bool isBattlefield = false);
     virtual ~QMoMUnitTile();
 
     QRectF boundingRect() const;
@@ -36,9 +37,9 @@ public:
     {
         m_game = game;
     }
-    void setUnit(MoM::Unit* unit)
+    void setUnit(const QMoMUnitPtr& momUnit)
     {
-        m_unit = unit;
+        m_momUnit = momUnit;
     }
 
 private slots:
@@ -46,7 +47,8 @@ private slots:
 
 private:
     QMoMGamePtr m_game;
-    MoM::Unit* m_unit;
+    QMoMUnitPtr m_momUnit;
+    bool m_isBattlefield;
 };
 
 }

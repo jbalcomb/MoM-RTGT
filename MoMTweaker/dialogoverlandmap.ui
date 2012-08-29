@@ -20,11 +20,20 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QMapGraphicsView" name="graphicsView">
+      <property name="backgroundBrush">
+       <brush brushstyle="DiagCrossPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>170</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </property>
       <property name="resizeAnchor">
        <enum>QGraphicsView::AnchorViewCenter</enum>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QGroupBox" name="groupBox">
@@ -169,6 +178,11 @@
             <string>Myrror</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Battle</string>
+           </property>
+          </item>
          </widget>
          <widget class="QDialogButtonBox" name="buttonBox">
           <property name="geometry">
@@ -276,6 +290,19 @@
           </property>
           <property name="checked">
            <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_Location">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>210</y>
+            <width>141</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Location:</string>
           </property>
          </widget>
         </widget>

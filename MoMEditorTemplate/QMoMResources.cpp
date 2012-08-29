@@ -65,6 +65,32 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         (void)createBuildingImages();
         (void)createCitySizeImages();
+
+        int firstUnused = 0;
+        // Reserve fir 16 files with max 120 images per file
+        int sizeReserved = 16 * 120;
+        m_figureImages.resize(sizeReserved);
+        for (int fileNr = 1; fileNr <= 16; ++fileNr)
+        {
+            std::string lbxTitle;
+            if (fileNr < 10)
+            {
+                lbxTitle = "FIGURES" + toStr(fileNr);
+            }
+            else
+            {
+                lbxTitle = "FIGURE" + toStr(fileNr);
+            }
+            QVector<QMoMImagePtr> tmpImages;
+            (void)createLbxImages(lbxTitle, tmpImages);
+            for(int i = 0; (i < tmpImages.size()) && (firstUnused + i < sizeReserved); ++i)
+            {
+                m_figureImages[firstUnused + i] = tmpImages[i];
+            }
+            firstUnused += tmpImages.size();
+        }
+        m_figureImages.resize(firstUnused);
+
         (void)createLbxImages("ITEMISC", m_itemiscImages);
         (void)createLbxImages("ITEMS", m_itemsImages);
         (void)createLairImages();
@@ -256,12 +282,23 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType) const
+const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading) const
 {
     QMoMImagePtr image;
-    if (inVectorRange(m_unitImages, unitType))
+    if (heading >= 0 && heading < 8)
     {
-        image = m_unitImages[unitType];
+        int figureIndex = (int)unitType * 8 + heading;
+        if (inVectorRange(m_figureImages, figureIndex))
+        {
+            image = m_figureImages[figureIndex];
+        }
+    }
+    else
+    {
+        if (inVectorRange(m_unitImages, unitType))
+        {
+            image = m_unitImages[unitType];
+        }
     }
     return image;
 }

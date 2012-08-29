@@ -20,7 +20,7 @@ namespace MoM
 class QMoMMapTile : public QGraphicsItem
 {
 public:
-    QMoMMapTile();
+    QMoMMapTile(bool isBattlefield);
     virtual ~QMoMMapTile();
 
     QRectF boundingRect() const;
@@ -73,12 +73,13 @@ public:
     }
 
 protected:
-    void hoverEnterEvent(QGraphicsSceneHoverEvent * event)
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *)
     {
         qDebug() << "QMoMMapTile::hoverEnterEvent(event)";
     }
 
 private:
+    bool m_isBattlefield;
     MoM::ePlane m_plane;
     MoM::eTerrainBonusDeposit* m_terrainBonus;
     MoM::Terrain_Changes* m_terrainChange;

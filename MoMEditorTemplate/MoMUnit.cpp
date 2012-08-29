@@ -36,7 +36,7 @@ MoMUnit::MoMUnit() :
 {
 }
 
-MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
+MoMUnit::MoMUnit(MoMGameBase *game) :
     m_game(),
     m_battleUnit(),
     m_heroStats(),
@@ -667,6 +667,23 @@ int MoMUnit::getNrFigures() const
     if (0 != m_unitType)
     {
         value = m_unitType->m_Nr_Figures;
+    }
+    return value;
+}
+
+ePlayer MoMUnit::getOwner() const
+{
+    ePlayer value = (ePlayer)-1;
+    if (0 != m_unit)
+    {
+        value = m_unit->m_Owner;
+    }
+    else if (0 != m_battleUnit)
+    {
+        value = m_battleUnit->m_Owner;
+    }
+    else
+    {
     }
     return value;
 }
