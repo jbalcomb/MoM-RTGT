@@ -16,7 +16,7 @@
 namespace MoM
 {
 
-int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
+const int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
 
 QMoMMapTile::QMoMMapTile(const MoM::MoMLocation& location) :
     QGraphicsItem(),
@@ -38,8 +38,7 @@ QRectF QMoMMapTile::boundingRect() const
 {
     if (MoMLocation::MAP_battle == m_location.m_Map)
     {
-//        return QRectF(0, 0, 28, 30);
-        return QRectF(0, 0, 30, 16);
+        return QRectF(-30/2, -16, 30, 16);
     }
     else
     {

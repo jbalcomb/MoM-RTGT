@@ -8,6 +8,9 @@
 namespace MoM
 {
 
+const int gBATTLE_SQUARE_WIDTH = 32;
+const int gBATTLE_SQUARE_HEIGHT = 8;
+
 QMoMMapScene::QMoMMapScene(MoM::ePlane plane, bool isBattlefield, QObject *parent) :
     QGraphicsScene(parent),
     m_plane(plane),
@@ -16,7 +19,7 @@ QMoMMapScene::QMoMMapScene(MoM::ePlane plane, bool isBattlefield, QObject *paren
     QRectF rectfTile = MoM::QMoMMapTile(MoMLocation()).boundingRect();
     if (m_isBattlefield)
     {
-        setSceneRect(0, 0, 11 * 32, 22 * 8);
+        setSceneRect(0, 0, (11 - 1) * gBATTLE_SQUARE_WIDTH, (22 - 1) * gBATTLE_SQUARE_HEIGHT);
     }
     else
     {
@@ -37,6 +40,10 @@ QGraphicsPixmapItem* QMoMMapScene::addPixmapAtLocation(const QPixmap& pixmap, co
     QGraphicsPixmapItem* item = addPixmap(pixmap);
     QPointF scenePos;
     convertLocationToScenePos(location, scenePos);
+    if (m_isBattlefield)
+    {
+        item->setOffset(- pixmap.width() / 2, -pixmap.height());
+    }
     item->setPos(scenePos);
     return item;
 }
@@ -62,8 +69,8 @@ void QMoMMapScene::convertLocationToScenePos(const MoMLocation& location, QPoint
 
     if (m_isBattlefield)
     {
-        double xpel = (x - y + 9) / 2.0 * 32;
-        double ypel = (x + y - 10) * 8;
+        double xpel = (x - y + 11) / 2.0 * gBATTLE_SQUARE_WIDTH;
+        double ypel = (x + y - 8) * gBATTLE_SQUARE_HEIGHT;
 
         scenePos = QPointF(xpel, ypel);
     }
@@ -82,8 +89,8 @@ void QMoMMapScene::convertScenePosToLocation(const QPointF& scenePos, MoMLocatio
         // ypos = 9 - xpel / 32 + ypel / 16
         double xpel = scenePos.x();
         double ypel = scenePos.y();
-        int8_t xpos = (int8_t)(xpel / 32 + ypel / 16);
-        int8_t ypos = (int8_t)(9 - xpel / 32 + ypel / 16);
+        int8_t xpos = (int8_t)(xpel / gBATTLE_SQUARE_WIDTH + ypel / (gBATTLE_SQUARE_HEIGHT * 2) - 0.5);
+        int8_t ypos = (int8_t)(10.5 - xpel / gBATTLE_SQUARE_WIDTH + ypel / (gBATTLE_SQUARE_HEIGHT * 2));
         location = MoM::MoMLocation(xpos, ypos, m_plane, MoMLocation::MAP_battle);
     }
     else

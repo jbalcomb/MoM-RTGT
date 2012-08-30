@@ -156,6 +156,30 @@ std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eCentralStructure& rhs)
+{
+    switch (rhs)
+    {
+    case CENTRALSTRUCTURE_none: os << "CENTRALSTRUCTURE_none"; break;
+    case CENTRALSTRUCTURE_outpost: os << "CENTRALSTRUCTURE_outpost"; break;
+    case CENTRALSTRUCTURE_city_grid: os << "CENTRALSTRUCTURE_city_grid"; break;
+    case CENTRALSTRUCTURE_wizards_fortress: os << "CENTRALSTRUCTURE_wizards_fortress"; break;
+    case CENTRALSTRUCTURE_small_tower: os << "CENTRALSTRUCTURE_small_tower"; break;
+    case CENTRALSTRUCTURE_tower_between_planes: os << "CENTRALSTRUCTURE_tower_between_planes"; break;
+    case CENTRALSTRUCTURE_cave: os << "CENTRALSTRUCTURE_cave"; break;
+    case CENTRALSTRUCTURE_temple: os << "CENTRALSTRUCTURE_temple"; break;
+    case CENTRALSTRUCTURE_medium_tower: os << "CENTRALSTRUCTURE_medium_tower"; break;
+    case CENTRALSTRUCTURE_sorcery_node: os << "CENTRALSTRUCTURE_sorcery_node"; break;
+    case CENTRALSTRUCTURE_chaos_node: os << "CENTRALSTRUCTURE_chaos_node"; break;
+    case CENTRALSTRUCTURE_nature_node: os << "CENTRALSTRUCTURE_nature_node"; break;
+    case CENTRALSTRUCTURE_ruins: os << "CENTRALSTRUCTURE_ruins"; break;
+    case eCentralStructure_MAX: os << "eCentralStructure_MAX"; break;
+    default: os << "<Unknown eCentralStructure>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eCityEnchantments& rhs)
 {
     switch (rhs)
@@ -188,6 +212,22 @@ std::ostream& operator<<(std::ostream& os, const eCityEnchantments& rhs)
     case CITYENCH_Nightshade: os << "CITYENCH_Nightshade"; break;
     case eCityEnchantments_MAX: os << "eCityEnchantments_MAX"; break;
     default: os << "<Unknown eCityEnchantments>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eCityWall& rhs)
+{
+    switch (rhs)
+    {
+    case CITYWALL_type1_first: os << "CITYWALL_type1_first"; break;
+    case CITYWALL_type2_first: os << "CITYWALL_type2_first"; break;
+    case CITYWALL_type3_first: os << "CITYWALL_type3_first"; break;
+    case CITYWALL_walloffire_first: os << "CITYWALL_walloffire_first"; break;
+    case CITYWALL_wallofdarkness_first: os << "CITYWALL_wallofdarkness_first"; break;
+    case eCityWall_MAX: os << "eCityWall_MAX"; break;
+    default: os << "<Unknown eCityWall>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -2889,6 +2929,7 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Status16& rhs)
     case UNITSTATUS16_cast_spell_107: os << "UNITSTATUS16_cast_spell_107"; break;
     case UNITSTATUS16_cast_spell_108: os << "UNITSTATUS16_cast_spell_108"; break;
     case UNITSTATUS16_summon_demon: os << "UNITSTATUS16_summon_demon"; break;
+    case UNITSTATUS16_flee_150: os << "UNITSTATUS16_flee_150"; break;
     case eUnit_Status16_MAX: os << "eUnit_Status16_MAX"; break;
     default: os << "<Unknown eUnit_Status16>"; break;
     }
@@ -3448,7 +3489,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
     os << "m_UNK32=" << (unsigned)rhs.m_UNK32 << " 0x" << std::hex << (unsigned)rhs.m_UNK32 << std::dec << "\n";
     os << "m_web_=" << (unsigned)rhs.m_web_ << " 0x" << std::hex << (unsigned)rhs.m_web_ << std::dec << "\n";
-    os << "m_active__=" << (unsigned)rhs.m_active__ << " 0x" << std::hex << (unsigned)rhs.m_active__ << std::dec << "\n";
+    os << "m_Active=" << (unsigned)rhs.m_Active << " 0x" << std::hex << (unsigned)rhs.m_Active << std::dec << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
     os << "m_cur_total_damage_GUESS=" << (unsigned)rhs.m_cur_total_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_total_damage_GUESS << std::dec << "\n";
     os << "m_UNK37=(\n";
@@ -3469,18 +3510,17 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_yPos=" << rhs.m_yPos << " 0x" << std::hex << rhs.m_yPos << std::dec << "\n";
     os << "m_xPosHeaded=" << rhs.m_xPosHeaded << " 0x" << std::hex << rhs.m_xPosHeaded << std::dec << "\n";
     os << "m_yPosHeaded=" << rhs.m_yPosHeaded << " 0x" << std::hex << rhs.m_yPosHeaded << std::dec << "\n";
-    os << "m_UNK4C=(\n";
-    for (unsigned i = 0; i < 8; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK4C[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK4C[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_UNK4C_display_GUESS=" << rhs.m_UNK4C_display_GUESS << " 0x" << std::hex << rhs.m_UNK4C_display_GUESS << std::dec << "\n";
+    os << "m_UNK4E=" << rhs.m_UNK4E << " 0x" << std::hex << rhs.m_UNK4E << std::dec << "\n";
+    os << "m_UNK50=" << rhs.m_UNK50 << " 0x" << std::hex << rhs.m_UNK50 << std::dec << "\n";
+    os << "m_UNK52_sound_GUESS=" << rhs.m_UNK52_sound_GUESS << " 0x" << std::hex << rhs.m_UNK52_sound_GUESS << std::dec << "\n";
     os << "m_Status=" << rhs.m_Status << "\n";
     os << "m_Confused_State=" << (int)rhs.m_Confused_State << " 0x" << std::hex << (int)rhs.m_Confused_State << std::dec << "\n";
-    os << "m_UNK57=(\n";
-    for (unsigned i = 0; i < 13; ++i)
+    os << "m_UNK57=" << (unsigned)rhs.m_UNK57 << " 0x" << std::hex << (unsigned)rhs.m_UNK57 << std::dec << "\n";
+    os << "m_UNK58=(\n";
+    for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK57[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK57[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UNK58[i] << " 0x" << std::hex << rhs.m_UNK58[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Extra_Melee=" << (unsigned)rhs.m_Extra_Melee << " 0x" << std::hex << (unsigned)rhs.m_Extra_Melee << std::dec << "\n";
@@ -3586,7 +3626,7 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
         os << "[" << i << "] " << (unsigned)rhs.field_11F8[i] << " 0x" << std::hex << (unsigned)rhs.field_11F8[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Central_structure=" << rhs.m_Central_structure << " 0x" << std::hex << rhs.m_Central_structure << std::dec << "\n";
+    os << "m_Central_structure=" << rhs.m_Central_structure << "\n";
     os << "field_14F4=" << rhs.field_14F4 << " 0x" << std::hex << rhs.field_14F4 << std::dec << "\n";
     os << "field_14F6=" << rhs.field_14F6 << " 0x" << std::hex << rhs.field_14F6 << std::dec << "\n";
     os << "field_14F8=(\n";
@@ -5090,38 +5130,69 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "m_UnitView_nrLines=" << rhs.m_UnitView_nrLines << " 0x" << std::hex << rhs.m_UnitView_nrLines << std::dec << "\n";
     os << "m_addr_UnitView_Lines=" << rhs.m_addr_UnitView_Lines << "\n";
     os << "m_Unk_C196=(\n";
-    for (unsigned i = 0; i < 0xC588 - 0xC196; ++i)
+    for (unsigned i = 0; i < 0xC524 - 0xC196; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C196[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C196[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Nr_Battle_Units=" << rhs.m_Nr_Battle_Units << " 0x" << std::hex << rhs.m_Nr_Battle_Units << std::dec << "\n";
-    os << "m_UNK08b=(\n";
-    for (unsigned i = 0; i < 0xC8FA - 0xC58A; ++i)
+    os << "m_Battlefield_battleUnitIDs=(\n";
+    for (unsigned i = 0; i < 22; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK08b[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK08b[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Battlefield_battleUnitIDs[i] << " 0x" << std::hex << rhs.m_Battlefield_battleUnitIDs[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_C550=(\n";
+    for (unsigned i = 0; i < 0xC588 - 0xC550; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C550[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C550[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Nr_Battle_Units=" << rhs.m_Nr_Battle_Units << " 0x" << std::hex << rhs.m_Nr_Battle_Units << std::dec << "\n";
+    os << "m_Unk_C58A=(\n";
+    for (unsigned i = 0; i < 0xC8B4 - 0xC58A; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C58A[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C58A[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Battlefield_flags=" << rhs.m_Battlefield_flags << " 0x" << std::hex << rhs.m_Battlefield_flags << std::dec << "\n";
+    os << "m_Unk_C8B6=(\n";
+    for (unsigned i = 0; i < 0xC8FA - 0xC8B6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C8B6[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C8B6[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_offset_Available_spell_pages=" << rhs.m_offset_Available_spell_pages << " 0x" << std::hex << rhs.m_offset_Available_spell_pages << std::dec << "\n";
-    os << "m_UNK08c=(\n";
+    os << "m_Unk_C8FC=(\n";
     for (unsigned i = 0; i < 0xC910 - 0xC8FC; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK08c[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK08c[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C8FC[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C8FC[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_addr_Hero_Spells=" << rhs.m_addr_Hero_Spells << "\n";
     os << "m_Nr_available_spell_pages=" << rhs.m_Nr_available_spell_pages << " 0x" << std::hex << rhs.m_Nr_available_spell_pages << std::dec << "\n";
-    os << "m_UNK08d=(\n";
+    os << "m_Unk_C916=(\n";
     for (unsigned i = 0; i < 0xC924 - 0xC916; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK08d[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK08d[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C916[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C916[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_First_visible_available_spell_page=" << rhs.m_First_visible_available_spell_page << " 0x" << std::hex << rhs.m_First_visible_available_spell_page << std::dec << "\n";
     os << "m_Unk_C926=(\n";
-    for (unsigned i = 0; i < 0xE5FC - 0xC926; ++i)
+    for (unsigned i = 0; i < 0xD49A - 0xC926; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C926[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C926[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_NEAR_HEAP=(\n";
+    for (unsigned i = 0; i < 0x1130; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_NEAR_HEAP[i] << " 0x" << std::hex << (unsigned)rhs.m_NEAR_HEAP[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_E5CA=(\n";
+    for (unsigned i = 0; i < 0xE5FC - 0xE5CA; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E5CA[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E5CA[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_lbx_filenames_x_0C=(\n";
@@ -7494,6 +7565,29 @@ bool validate(const eBuildingStatus& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eCentralStructure& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case CENTRALSTRUCTURE_none: break;
+    case CENTRALSTRUCTURE_outpost: break;
+    case CENTRALSTRUCTURE_city_grid: break;
+    case CENTRALSTRUCTURE_wizards_fortress: break;
+    case CENTRALSTRUCTURE_small_tower: break;
+    case CENTRALSTRUCTURE_tower_between_planes: break;
+    case CENTRALSTRUCTURE_cave: break;
+    case CENTRALSTRUCTURE_temple: break;
+    case CENTRALSTRUCTURE_medium_tower: break;
+    case CENTRALSTRUCTURE_sorcery_node: break;
+    case CENTRALSTRUCTURE_chaos_node: break;
+    case CENTRALSTRUCTURE_nature_node: break;
+    case CENTRALSTRUCTURE_ruins: break;
+    default: std::cout << context << ": Unknown eCentralStructure = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eCityEnchantments& rhs, const std::string& context)
 {
     bool ok = true;
@@ -7526,6 +7620,21 @@ bool validate(const eCityEnchantments& rhs, const std::string& context)
     case CITYENCH_Altar_of_Battle: break;
     case CITYENCH_Nightshade: break;
     default: std::cout << context << ": Unknown eCityEnchantments = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eCityWall& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case CITYWALL_type1_first: break;
+    case CITYWALL_type2_first: break;
+    case CITYWALL_type3_first: break;
+    case CITYWALL_walloffire_first: break;
+    case CITYWALL_wallofdarkness_first: break;
+    default: std::cout << context << ": Unknown eCityWall = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -10049,6 +10158,7 @@ bool validate(const eUnit_Status16& rhs, const std::string& context)
     case UNITSTATUS16_cast_spell_107: break;
     case UNITSTATUS16_cast_spell_108: break;
     case UNITSTATUS16_summon_demon: break;
+    case UNITSTATUS16_flee_150: break;
     default: std::cout << context << ": Unknown eUnit_Status16 = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -10389,6 +10499,7 @@ bool validate(const Battlefield& rhs, const std::string& context)
           oss << context << ".m_Terrain[" << i << "]";
           if (!validate(rhs.m_Terrain[i], oss.str())) ok = false;
     }
+    if (!validate(rhs.m_Central_structure, context + ".m_Central_structure")) ok = false;
     if (!validate(rhs.m_City_Walls, context + ".m_City_Walls")) ok = false;
     if (!validate(rhs.m_Wall_of_Fire, context + ".m_Wall_of_Fire")) ok = false;
     if (!validate(rhs.m_Wall_of_Darkness, context + ".m_Wall_of_Darkness")) ok = false;

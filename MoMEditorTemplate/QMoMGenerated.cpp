@@ -540,7 +540,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_unitNr", new QMoMTreeItem<int16_t>(&rhs->m_unitNr));
     ptree->appendChild("m_UNK32", new QMoMTreeItem<uint8_t>(&rhs->m_UNK32));
     ptree->appendChild("m_web_", new QMoMTreeItem<uint8_t>(&rhs->m_web_));
-    ptree->appendChild("m_active__", new QMoMTreeItem<uint8_t>(&rhs->m_active__));
+    ptree->appendChild("m_Active", new QMoMTreeItem<uint8_t>(&rhs->m_Active));
     ptree->appendChild("m_Owner", new QMoMTreeItem<ePlayer>(&rhs->m_Owner));
     ptree->appendChild("m_cur_total_damage_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_cur_total_damage_GUESS));
     QMoMTreeItemBase* ptreem_UNK37 = ptree;
@@ -567,31 +567,24 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_yPos", new QMoMTreeItem<int16_t>(&rhs->m_yPos));
     ptree->appendChild("m_xPosHeaded", new QMoMTreeItem<int16_t>(&rhs->m_xPosHeaded));
     ptree->appendChild("m_yPosHeaded", new QMoMTreeItem<int16_t>(&rhs->m_yPosHeaded));
-    QMoMTreeItemBase* ptreem_UNK4C = ptree;
-    if (8 > 3)
-    {
-        ptreem_UNK4C = new QMoMTreeItemBase("m_UNK4C");
-        ptree->appendTree(ptreem_UNK4C, "");
-    }
-    for (unsigned i = 0; i < 8; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_UNK4C[" << i << "]";
-          ptreem_UNK4C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK4C[i]));
-    }
+    ptree->appendChild("m_UNK4C_display_GUESS", new QMoMTreeItem<uint16_t>(&rhs->m_UNK4C_display_GUESS));
+    ptree->appendChild("m_UNK4E", new QMoMTreeItem<uint16_t>(&rhs->m_UNK4E));
+    ptree->appendChild("m_UNK50", new QMoMTreeItem<uint16_t>(&rhs->m_UNK50));
+    ptree->appendChild("m_UNK52_sound_GUESS", new QMoMTreeItem<uint16_t>(&rhs->m_UNK52_sound_GUESS));
     ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status16>(&rhs->m_Status));
     ptree->appendChild("m_Confused_State", new QMoMTreeItem<int8_t>(&rhs->m_Confused_State));
-    QMoMTreeItemBase* ptreem_UNK57 = ptree;
-    if (13 > 3)
+    ptree->appendChild("m_UNK57", new QMoMTreeItem<uint8_t>(&rhs->m_UNK57));
+    QMoMTreeItemBase* ptreem_UNK58 = ptree;
+    if (6 > 3)
     {
-        ptreem_UNK57 = new QMoMTreeItemBase("m_UNK57");
-        ptree->appendTree(ptreem_UNK57, "");
+        ptreem_UNK58 = new QMoMTreeItemBase("m_UNK58");
+        ptree->appendTree(ptreem_UNK58, "");
     }
-    for (unsigned i = 0; i < 13; ++i)
+    for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_UNK57[" << i << "]";
-          ptreem_UNK57->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK57[i]));
+          oss << "m_UNK58[" << i << "]";
+          ptreem_UNK58->appendChild(oss.str().c_str(), new QMoMTreeItem<uint16_t>(&rhs->m_UNK58[i]));
     }
     ptree->appendChild("m_Extra_Melee", new QMoMTreeItem<uint8_t>(&rhs->m_Extra_Melee));
     ptree->appendChild("m_Extra_Ranged", new QMoMTreeItem<uint8_t>(&rhs->m_Extra_Ranged));
@@ -782,7 +775,7 @@ QMoMTreeItemBase* constructTreeItem(Battlefield* rhs, const QString& context)
           oss << "field_11F8[" << i << "]";
           ptreefield_11F8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->field_11F8[i]));
     }
-    ptree->appendChild("m_Central_structure", new QMoMTreeItem<uint16_t>(&rhs->m_Central_structure));
+    ptree->appendChild("m_Central_structure", new QMoMTreeItem<eCentralStructure>(&rhs->m_Central_structure));
     ptree->appendChild("field_14F4", new QMoMTreeItem<uint16_t>(&rhs->field_14F4));
     ptree->appendChild("field_14F6", new QMoMTreeItem<uint16_t>(&rhs->field_14F6));
     QMoMTreeItemBase* ptreefield_14F8 = ptree;
@@ -3289,69 +3282,130 @@ QMoMTreeItemBase* constructTreeItem(MoMDataSegment* rhs, const QString& context)
     ptree->appendChild("m_UnitView_nrLines", new QMoMTreeItem<uint16_t>(&rhs->m_UnitView_nrLines));
     ptree->appendTree(constructTreeItem(&rhs->m_addr_UnitView_Lines, "m_addr_UnitView_Lines"), "");
     QMoMTreeItemBase* ptreem_Unk_C196 = ptree;
-    if (0xC588 - 0xC196 > 3)
+    if (0xC524 - 0xC196 > 3)
     {
         ptreem_Unk_C196 = new QMoMTreeItemBase("m_Unk_C196");
         ptree->appendTree(ptreem_Unk_C196, "");
     }
-    for (unsigned i = 0; i < 0xC588 - 0xC196; ++i)
+    for (unsigned i = 0; i < 0xC524 - 0xC196; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_C196[" << i << "]";
           ptreem_Unk_C196->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C196[i]));
     }
-    ptree->appendChild("m_Nr_Battle_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Nr_Battle_Units));
-    QMoMTreeItemBase* ptreem_UNK08b = ptree;
-    if (0xC8FA - 0xC58A > 3)
+    QMoMTreeItemBase* ptreem_Battlefield_battleUnitIDs = ptree;
+    if (22 > 3)
     {
-        ptreem_UNK08b = new QMoMTreeItemBase("m_UNK08b");
-        ptree->appendTree(ptreem_UNK08b, "");
+        ptreem_Battlefield_battleUnitIDs = new QMoMTreeItemBase("m_Battlefield_battleUnitIDs");
+        ptree->appendTree(ptreem_Battlefield_battleUnitIDs, "");
     }
-    for (unsigned i = 0; i < 0xC8FA - 0xC58A; ++i)
+    for (unsigned i = 0; i < 22; ++i)
     {
           std::ostringstream oss;
-          oss << "m_UNK08b[" << i << "]";
-          ptreem_UNK08b->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK08b[i]));
+          oss << "m_Battlefield_battleUnitIDs[" << i << "]";
+          ptreem_Battlefield_battleUnitIDs->appendChild(oss.str().c_str(), new QMoMTreeItem<uint16_t>(&rhs->m_Battlefield_battleUnitIDs[i]));
+    }
+    QMoMTreeItemBase* ptreem_Unk_C550 = ptree;
+    if (0xC588 - 0xC550 > 3)
+    {
+        ptreem_Unk_C550 = new QMoMTreeItemBase("m_Unk_C550");
+        ptree->appendTree(ptreem_Unk_C550, "");
+    }
+    for (unsigned i = 0; i < 0xC588 - 0xC550; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C550[" << i << "]";
+          ptreem_Unk_C550->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C550[i]));
+    }
+    ptree->appendChild("m_Nr_Battle_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Nr_Battle_Units));
+    QMoMTreeItemBase* ptreem_Unk_C58A = ptree;
+    if (0xC8B4 - 0xC58A > 3)
+    {
+        ptreem_Unk_C58A = new QMoMTreeItemBase("m_Unk_C58A");
+        ptree->appendTree(ptreem_Unk_C58A, "");
+    }
+    for (unsigned i = 0; i < 0xC8B4 - 0xC58A; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C58A[" << i << "]";
+          ptreem_Unk_C58A->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C58A[i]));
+    }
+    ptree->appendChild("m_Battlefield_flags", new QMoMTreeItem<uint16_t>(&rhs->m_Battlefield_flags));
+    QMoMTreeItemBase* ptreem_Unk_C8B6 = ptree;
+    if (0xC8FA - 0xC8B6 > 3)
+    {
+        ptreem_Unk_C8B6 = new QMoMTreeItemBase("m_Unk_C8B6");
+        ptree->appendTree(ptreem_Unk_C8B6, "");
+    }
+    for (unsigned i = 0; i < 0xC8FA - 0xC8B6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C8B6[" << i << "]";
+          ptreem_Unk_C8B6->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C8B6[i]));
     }
     ptree->appendChild("m_offset_Available_spell_pages", new QMoMTreeItem<uint16_t>(&rhs->m_offset_Available_spell_pages));
-    QMoMTreeItemBase* ptreem_UNK08c = ptree;
+    QMoMTreeItemBase* ptreem_Unk_C8FC = ptree;
     if (0xC910 - 0xC8FC > 3)
     {
-        ptreem_UNK08c = new QMoMTreeItemBase("m_UNK08c");
-        ptree->appendTree(ptreem_UNK08c, "");
+        ptreem_Unk_C8FC = new QMoMTreeItemBase("m_Unk_C8FC");
+        ptree->appendTree(ptreem_Unk_C8FC, "");
     }
     for (unsigned i = 0; i < 0xC910 - 0xC8FC; ++i)
     {
           std::ostringstream oss;
-          oss << "m_UNK08c[" << i << "]";
-          ptreem_UNK08c->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK08c[i]));
+          oss << "m_Unk_C8FC[" << i << "]";
+          ptreem_Unk_C8FC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C8FC[i]));
     }
     ptree->appendTree(constructTreeItem(&rhs->m_addr_Hero_Spells, "m_addr_Hero_Spells"), "");
     ptree->appendChild("m_Nr_available_spell_pages", new QMoMTreeItem<uint16_t>(&rhs->m_Nr_available_spell_pages));
-    QMoMTreeItemBase* ptreem_UNK08d = ptree;
+    QMoMTreeItemBase* ptreem_Unk_C916 = ptree;
     if (0xC924 - 0xC916 > 3)
     {
-        ptreem_UNK08d = new QMoMTreeItemBase("m_UNK08d");
-        ptree->appendTree(ptreem_UNK08d, "");
+        ptreem_Unk_C916 = new QMoMTreeItemBase("m_Unk_C916");
+        ptree->appendTree(ptreem_Unk_C916, "");
     }
     for (unsigned i = 0; i < 0xC924 - 0xC916; ++i)
     {
           std::ostringstream oss;
-          oss << "m_UNK08d[" << i << "]";
-          ptreem_UNK08d->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK08d[i]));
+          oss << "m_Unk_C916[" << i << "]";
+          ptreem_Unk_C916->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C916[i]));
     }
     ptree->appendChild("m_First_visible_available_spell_page", new QMoMTreeItem<uint16_t>(&rhs->m_First_visible_available_spell_page));
     QMoMTreeItemBase* ptreem_Unk_C926 = ptree;
-    if (0xE5FC - 0xC926 > 3)
+    if (0xD49A - 0xC926 > 3)
     {
         ptreem_Unk_C926 = new QMoMTreeItemBase("m_Unk_C926");
         ptree->appendTree(ptreem_Unk_C926, "");
     }
-    for (unsigned i = 0; i < 0xE5FC - 0xC926; ++i)
+    for (unsigned i = 0; i < 0xD49A - 0xC926; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_C926[" << i << "]";
           ptreem_Unk_C926->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C926[i]));
+    }
+    QMoMTreeItemBase* ptreem_NEAR_HEAP = ptree;
+    if (0x1130 > 3)
+    {
+        ptreem_NEAR_HEAP = new QMoMTreeItemBase("m_NEAR_HEAP");
+        ptree->appendTree(ptreem_NEAR_HEAP, "");
+    }
+    for (unsigned i = 0; i < 0x1130; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_NEAR_HEAP[" << i << "]";
+          ptreem_NEAR_HEAP->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_NEAR_HEAP[i]));
+    }
+    QMoMTreeItemBase* ptreem_Unk_E5CA = ptree;
+    if (0xE5FC - 0xE5CA > 3)
+    {
+        ptreem_Unk_E5CA = new QMoMTreeItemBase("m_Unk_E5CA");
+        ptree->appendTree(ptreem_Unk_E5CA, "");
+    }
+    for (unsigned i = 0; i < 0xE5FC - 0xE5CA; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_E5CA[" << i << "]";
+          ptreem_Unk_E5CA->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_E5CA[i]));
     }
     QMoMTreeItemBase* ptreem_lbx_filenames_x_0C = ptree;
     if (0x10 > 3)

@@ -609,6 +609,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\MoMEditorTemplate\MoMLocation.h"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMEditorTemplate\MoMProcess.h"
 				>
 			</File>
@@ -634,6 +638,10 @@
 			</File>
 			<File
 				RelativePath="..\MoMEditorTemplate\QMoMGenerated.h"
+				>
+			</File>
+			<File
+				RelativePath="..\MoMEditorTemplate\QMoMLazyIcon.h"
 				>
 			</File>
 			<File

@@ -65,6 +65,8 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         createBuildingImages();
         createCitySizeImages();
+        createLbxImages("CMBTCITY", m_cmbtcityImages);
+        createLbxAnimations("CITYWALL", m_citywallAnimations);
         createFigureImages();
         createLbxImages("ITEMISC", m_itemiscImages);
         createLbxImages("ITEMS", m_itemsImages);
@@ -112,6 +114,38 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(MoM::eCentralStructure structure) const
+{
+    static const int lookup[MoM::eCentralStructure_MAX] =
+    {
+        -1, // CENTRALSTRUCTURE_none,
+        18, // CENTRALSTRUCTURE_outpost,
+        0,  // CENTRALSTRUCTURE_city_grid,
+        17, // CENTRALSTRUCTURE_wizards_fortress,
+        21, // CENTRALSTRUCTURE_small_tower,
+        20, // CENTRALSTRUCTURE_tower_between_planes,
+        19, // CENTRALSTRUCTURE_cave,
+        23, // CENTRALSTRUCTURE_temple,
+        22, // CENTRALSTRUCTURE_medium_tower,
+        66, // CENTRALSTRUCTURE_sorcery_node,   ANIMATION
+        120,// CENTRALSTRUCTURE_chaos_node,     ANIMATION   ??
+        65, // CENTRALSTRUCTURE_nature_node,    ANIMATION
+        121,// CENTRALSTRUCTURE_ruins,
+    };
+
+    int index = -1;
+    if (MoM::toUInt(structure) < ARRAYSIZE(lookup))
+    {
+        index = lookup[structure];
+    }
+    QMoMImagePtr image;
+    if (inVectorRange(m_cmbtcityImages, index))
+    {
+        image = m_cmbtcityImages[index];
+    }
+    return image;
+}
+
 const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBannerColor bannerColor) const
 {
     QMoMImagePtr image;
@@ -138,6 +172,16 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBanne
         }
     }
 
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eCityWall wall, bool broken) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_citywallAnimations, wall) && (m_citywallAnimations[wall].size() >= 2))
+    {
+        image = m_citywallAnimations[wall].at((int)broken);
+    }
     return image;
 }
 

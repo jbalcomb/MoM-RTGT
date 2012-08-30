@@ -472,7 +472,7 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
 
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
     qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &battleUnit->m_Owner, ePlayer_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<uint8_t>(m_game, "Active", &battleUnit->m_active__, eUnit_Active_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<uint8_t>(m_game, "Active", &battleUnit->m_Active, eUnit_Active_MAX));
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Status16>(m_game, "Status", &battleUnit->m_Status, eUnit_Status16_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TargetID", &battleUnit->m_Target_BattleUnitID));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPos", &battleUnit->m_xPos));
@@ -863,10 +863,12 @@ void DialogMap::slot_gameUpdated()
             if (MoM::inRange(city->m_Plane, MoM::ePlane_MAX)
                     && !pixmapCity.isNull())
             {
-                QGraphicsItem* mapCityItem = scene[city->m_Plane]->addPixmapAtLocation(pixmapCity, MoMLocation(*city, MoMLocation::MAP_overland));
-                // city pixmap has to be about twice as big as a regular tile to fit properly
-                mapCityItem->setPos((city->m_XPos - 0.5) * rectfTile.width(), (city->m_YPos - 0.5) * rectfTile.height());
-                mapCityItem->setScale(2 * rectfTile.width() / pixmapCity.width());
+                QGraphicsPixmapItem* mapCityItem = scene[city->m_Plane]->addPixmapAtLocation(pixmapCity, MoMLocation(*city, MoMLocation::MAP_overland));
+                // city pixmap is about twice as big as a regular tile
+                QPointF offset = mapCityItem->offset();
+                offset.rx() += (rectfTile.width() - pixmapCity.width()) / 2;
+                offset.ry() += (rectfTile.height() - pixmapCity.height()) / 2;
+                mapCityItem->setOffset(offset);
                 mapCityItem->setToolTip(QString("%0 \"%1\"").arg(prettyQStr(city->m_Race)).arg(city->m_City_Name));
             }
         }
@@ -911,9 +913,10 @@ void DialogMap::slot_gameUpdated()
 
             QPointF pos;
             m_sceneBattle->convertLocationToScenePos(loc, pos);
+            pos.rx() -= 16;
+            pos.ry() -= 30;
             QGraphicsSimpleTextItem* textItem = m_sceneBattle->addSimpleText(QString("%0").arg(battleUnitNr));
             textItem->setFont(QMoMResources::g_FontSmall);
-            pos.ry() -= textItem->boundingRect().height() / 4;
             textItem->setPos(pos);
 
             QString text = prettyQStr(battleUnit->m_Status);
@@ -922,15 +925,94 @@ void DialogMap::slot_gameUpdated()
             pos.rx() += textItem->boundingRect().width() + 4;
             textItem->setPos(pos);
 
-            pos.ry() += textItem->boundingRect().height();
-            textItem = m_sceneBattle->addSimpleText(QString("%0").arg((int)battleUnit->m_Target_BattleUnitID));
-            textItem->setFont(QMoMResources::g_FontSmall);
-            textItem->setPos(pos);
-
-//            QPointF ptBegin((battleUnit->m_xPos + 0.5) * rectfTile.width(), (battleUnit->m_yPos + 0.5) * rectfTile.height());
-//            QPointF ptEnd((battleUnit->m_xPosHeaded + 0.5) * rectfTile.width(), (battleUnit->m_yPosHeaded + 0.5) * rectfTile.height());
-//            m_sceneBattle->addLine(QLineF(ptBegin, ptEnd), QPen(Qt::darkRed));
+            if (MoM::toUInt(battleUnit->m_Target_BattleUnitID) < (unsigned)nrBattleUnits)
+            {
+                MoM::Battle_Unit* targetUnit = &battleUnits[battleUnit->m_Target_BattleUnitID];
+                MoMLocation locTarget(targetUnit->m_xPos, targetUnit->m_yPos, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle);
+                QPointF ptBegin;
+                QPointF ptEnd;
+                m_sceneBattle->convertLocationToScenePos(loc, ptBegin);
+                m_sceneBattle->convertLocationToScenePos(locTarget, ptEnd);
+                ptBegin.ry() -= 8;
+                ptEnd.ry() -= 8;
+                m_sceneBattle->addLine(QLineF(ptBegin, ptEnd), QPen(Qt::darkRed));
+            }
         }
+
+        // Central structure at (6,11)
+        // City walls between (5,10) and (8,13)
+        // Gate at (8,12)
+
+        static const MoMLocation wallLocations[14] =
+        {
+            MoMLocation(5, 10),
+            MoMLocation(5, 11),
+            MoMLocation(5, 12),
+            MoMLocation(5, 13),
+            MoMLocation(6, 10),
+            MoMLocation(7, 10),
+            MoMLocation(8, 10),
+            MoMLocation(6, 13),
+            MoMLocation(7, 13),
+            MoMLocation(8, 13),
+            MoMLocation(8, 11),
+            MoMLocation(8, 12), // Gate
+
+            MoMLocation(5, 13), // Extra for fire/darkness
+            MoMLocation(8, 10), // Extra for fire/darkness
+        };
+
+        if (battlefield->m_City_Walls)
+        {
+            for (int i = 0; i < 12; ++i)
+            {
+                MoM::eCityWall wall = (MoM::eCityWall)i;
+                MoMLocation loc = wallLocations[i];
+                int wholeIndex = (loc.m_XPos - 5) + (loc.m_YPos - 10) * 4;
+                if (0 != battlefield->m_Wall_is_whole[wholeIndex])
+                {
+                    bool broken = (2 == battlefield->m_Wall_is_whole[wholeIndex]);
+                    QPixmap pixmapWall = MoM::QMoMResources::instance().getPixmap(wall, 1, broken);
+                    (void)m_sceneBattle->addPixmapAtLocation(pixmapWall, wallLocations[i]);
+                }
+            }
+        }
+        if (battlefield->m_Wall_of_Fire)
+        {
+            for (int i = 0; i < 14; ++i)
+            {
+                MoM::eCityWall wall = (MoM::eCityWall)(i + CITYWALL_walloffire_first);
+                QPixmap pixmapWall = MoM::QMoMResources::instance().getPixmap(wall);
+                (void)m_sceneBattle->addPixmapAtLocation(pixmapWall, wallLocations[i]);
+            }
+        }
+        if (battlefield->m_Wall_of_Darkness)
+        {
+            for (int i = 0; i < 14; ++i)
+            {
+                MoM::eCityWall wall = (MoM::eCityWall)(i + CITYWALL_wallofdarkness_first);
+                QPixmap pixmapWall = MoM::QMoMResources::instance().getPixmap(wall);
+                (void)m_sceneBattle->addPixmapAtLocation(pixmapWall, wallLocations[i]);
+            }
+        }
+
+        QPixmap pixmapStructure = MoM::QMoMResources::instance().getPixmap(battlefield->m_Central_structure);
+        QGraphicsPixmapItem* itemStructure = m_sceneBattle->addPixmapAtLocation(pixmapStructure, MoMLocation(6, 11, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle));
+        QPointF offset = itemStructure->offset();
+        if (MoM::CENTRALSTRUCTURE_city_grid == battlefield->m_Central_structure)
+        {
+            offset.ry() += 2 * 16;
+        }
+        else if ((MoM::CENTRALSTRUCTURE_sorcery_node == battlefield->m_Central_structure)
+                 || (MoM::CENTRALSTRUCTURE_nature_node == battlefield->m_Central_structure))
+        {
+            offset.ry() += 16;
+        }
+        else
+        {
+        }
+        itemStructure->setOffset(offset);
+
     }
 }
 

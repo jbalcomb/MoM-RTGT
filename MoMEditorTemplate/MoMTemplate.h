@@ -165,6 +165,26 @@ enum eBuildingStatus ENUMSIZE8
     eBuildingStatus__SIZE__ = 0xFF
 };
 
+enum eCentralStructure ENUMSIZE16
+{
+    CENTRALSTRUCTURE_none,
+    CENTRALSTRUCTURE_outpost,
+    CENTRALSTRUCTURE_city_grid,
+    CENTRALSTRUCTURE_wizards_fortress,
+    CENTRALSTRUCTURE_small_tower,
+    CENTRALSTRUCTURE_tower_between_planes,
+    CENTRALSTRUCTURE_cave,
+    CENTRALSTRUCTURE_temple,
+    CENTRALSTRUCTURE_medium_tower,
+    CENTRALSTRUCTURE_sorcery_node,
+    CENTRALSTRUCTURE_chaos_node,
+    CENTRALSTRUCTURE_nature_node,
+    CENTRALSTRUCTURE_ruins,
+
+    eCentralStructure_MAX,
+    eCentralStructure__SIZE__ = 0xFFFF
+};
+
 enum eCityEnchantments
 {
     CITYENCH_Wall_of_Fire, // 40 Offset EXE:2B3F8
@@ -207,6 +227,17 @@ enum eCity_Size ENUMSIZE8
     CITYSIZE_Capital = 5,
 
     eCity_Size_MAX
+};
+
+enum eCityWall
+{
+    CITYWALL_type1_first = 0,
+    CITYWALL_type2_first = 12,
+    CITYWALL_type3_first = 24,
+    CITYWALL_walloffire_first = 36,
+    CITYWALL_wallofdarkness_first = 50,
+
+    eCityWall_MAX = 64
 };
 
 enum eCombatEnchantment
@@ -2748,6 +2779,8 @@ enum eUnit_Status16 ENUMSIZE16
     UNITSTATUS16_cast_spell_108 = 108,
     UNITSTATUS16_summon_demon = 109,
 
+    UNITSTATUS16_flee_150 = 150,
+
     eUnit_Status16_MAX,
     UNITSTATUS16_eUnit_Status_SIZE__ = 0xFFFF
 };
@@ -4628,19 +4661,7 @@ typedef struct PACKED_STRUCT // Battlefield
     uint8_t field_1130[100]; // 1130
     uint8_t field_1194[100]; // 1194
     uint8_t field_11F8[762]; // 11F
-    uint16_t    m_Central_structure;            // 14F2 // 0=No Central tower,
-                                                        // 1=outpost,
-                                                        // 2=city grid,
-                                                        // 3=wizard's tower
-                                                        // 4=small tower (lair type?)
-                                                        // 5=tower between the planes
-                                                        // 6=cave,
-                                                        // 7=temple,
-                                                        // 8=medium tower (lair type?),
-                                                        // 9=sorcery node,
-                                                        // 10=chaos node,
-                                                        // 11=nature node
-                                                        // 12=ruins??
+    eCentralStructure   m_Central_structure;    // 14F2
     uint16_t field_14F4; // 14F4
     uint16_t field_14F6; // 14F6
     uint8_t field_14F8[30]; // 14F8
@@ -4709,7 +4730,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_unitNr;           // 30-31 db ?
     uint8_t                 m_UNK32;            // 32
     uint8_t                 m_web_;             // 33 db ?
-    uint8_t                 m_active__;         // 34 db ? Active (0=alive, 4=dead, 5=undeaded, 6=crackscall) ??
+    uint8_t                 m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
     ePlayer                 m_Owner;            // 35 db ?
     uint8_t                 m_cur_total_damage_GUESS;   // 36 db ?
     uint8_t                 m_UNK37[2];         // 37
@@ -4726,18 +4747,14 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_yPos;             // 46-47 db
     int16_t                 m_xPosHeaded;       // 48-49 db
     int16_t                 m_yPosHeaded;       // 4A-4B db
-    uint8_t                 m_UNK4C[8];         // 4C
-                                                // 4D
-                                                // 4E
-                                                // 4F
-                                                // 50
-                                                // 51
-                                                // 52
-                                                // 53
+    uint16_t                m_UNK4C_display_GUESS;// 4C
+    uint16_t                m_UNK4E;            // 4E
+    uint16_t                m_UNK50;            // 50
+    uint16_t                m_UNK52_sound_GUESS;// 52
     eUnit_Status16          m_Status;           // 54 Status (0=ready, 4=reached destination)
     int8_t                  m_Confused_State;   // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
-    uint8_t                 m_UNK57[13];        // 57
-                                                // 58
+    uint8_t                 m_UNK57;            // 57
+    uint16_t                m_UNK58[6];         // 58
                                                 // 59
                                                 // 5A
                                                 // 5B
@@ -5389,24 +5406,36 @@ typedef struct // MoMDataSegment
     uint16_t    m_UnitView_nrLines;                 // ds:C190
     EXE_Reloc   m_addr_UnitView_Lines;              // ds:C192
 
-    uint8_t     m_Unk_C196[0xC588 - 0xC196];        // ds:C196
+    uint8_t     m_Unk_C196[0xC524 - 0xC196];        // ds:C196
+
+    DS_Offset   m_Battlefield_battleUnitIDs[22];    // ds:C524
+
+    uint8_t     m_Unk_C550[0xC588 - 0xC550];        // ds:C550
 
     uint16_t    m_Nr_Battle_Units;                  // ds:C588
 
-    uint8_t     m_UNK08b[0xC8FA - 0xC58A];          // ds:C58A
+    uint8_t     m_Unk_C58A[0xC8B4 - 0xC58A];        // ds:C58A
+
+    uint16_t    m_Battlefield_flags;                // ds:C8B4
+
+    uint8_t     m_Unk_C8B6[0xC8FA - 0xC8B6];        // ds:C8B6
 
     uint16_t    m_offset_Available_spell_pages;     // ds:C8FA
 
-    uint8_t     m_UNK08c[0xC910 - 0xC8FC];          // ds:C8FC
+    uint8_t     m_Unk_C8FC[0xC910 - 0xC8FC];        // ds:C8FC
 
     EXE_Reloc   m_addr_Hero_Spells;                 // ds:C910
     uint16_t    m_Nr_available_spell_pages;         // ds:C914
 
-    uint8_t     m_UNK08d[0xC924 - 0xC916];          // ds:C916
+    uint8_t     m_Unk_C916[0xC924 - 0xC916];        // ds:C916
 
     uint16_t    m_First_visible_available_spell_page;   // ds:C924
 
-    uint8_t     m_Unk_C926[0xE5FC - 0xC926];        // ds:C926
+    uint8_t     m_Unk_C926[0xD49A - 0xC926];        // ds:C926
+
+    uint8_t     m_NEAR_HEAP[0x1130];                // ds:D49A
+
+    uint8_t     m_Unk_E5CA[0xE5FC - 0xE5CA];        // ds:E5CA
 
     Lbx_EMS_info    m_lbx_filenames_x_0C[0x10];     // ds:E5FC
 

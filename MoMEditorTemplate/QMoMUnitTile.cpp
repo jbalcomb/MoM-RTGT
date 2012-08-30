@@ -37,7 +37,7 @@ QRectF QMoMUnitTile::boundingRect() const
 {
     if (m_isBattlefield)
     {
-        return QRectF(0, 0, 28, 30);
+        return QRectF(-28/2, -30, 28, 30);
     }
     else
     {

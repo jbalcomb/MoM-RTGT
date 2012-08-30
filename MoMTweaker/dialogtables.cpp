@@ -783,7 +783,7 @@ void DialogTables::update_Spell_Data()
                 pSaveModifier = (int8_t*)&ovl112[ wizardsExe->getSpellSave(i).saveOffset ];
             }
             int rowSpell = saveSpellNr - 1;
-            if ((rowSpell >= 0) && (rowSpell < ndata))
+            if ((rowSpell >= 0) && (rowSpell < ndata) && (0 != pSaveModifier))
             {
                 ui->tableWidget->setItem(rowSpell, col, new NumberTableWidgetItem<int8_t>(game, *pSaveModifier, 4, SHOWNUMBER_alwaysPlus));
             }
