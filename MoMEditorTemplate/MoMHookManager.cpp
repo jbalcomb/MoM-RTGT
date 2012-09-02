@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdio>
 #include <iostream>
 
 #include "MoMGameBase.h"
@@ -137,7 +138,7 @@ bool MoMHookManager::insertHook()
         {
             const char* s = &hook_unit_strategy_exe_str[2 * i];
             unsigned hexbyte = 0;
-            ok = (1 == sscanf(s, "02X", &hexbyte));
+            ok = (1 == std::sscanf(s, "%02X", &hexbyte));
             hook_unit_strategy_exe_code[i] = static_cast<uint8_t>(hexbyte);
         }
         assert(ok && "Failed to copy hex string for Unit_strategy_exe() into byte array");

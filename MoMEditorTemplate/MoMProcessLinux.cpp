@@ -157,7 +157,8 @@ bool MoMProcess::tryLinuxPid(void* vPid)
 
         timer_start[0] = getPerformanceTime();
 
-        if (readProcessData(m_hProcess, (const uint8_t*)start, size, data))
+        data.resize(size);
+        if (readProcessData(m_hProcess, (const uint8_t*)start, size, &data[0]))
         {
             timer_start[1] = getPerformanceTime();
             timer_tot[0] += timer_start[1] - timer_start[0];
@@ -193,8 +194,6 @@ bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, s
         return false;
     }
 
-    data.resize(size);
-
     bool ok = true;
 
     char memfile[256];
@@ -206,7 +205,7 @@ bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, s
         ok = false;
     }
 
-    if (-1 == pread64(fd, &data[0], size, (unsigned long)lpBaseAddress))
+    if (-1 == pread64(fd, data, size, (unsigned long)lpBaseAddress))
     {
         printError(errno, "pread64");
         ok = false;
