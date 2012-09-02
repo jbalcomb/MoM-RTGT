@@ -49,6 +49,7 @@ public:
         return iconPtr;
     }
 
+    const QMoMImagePtr getImage(const LBXRecordID& lbxRecordID) const;
     const QMoMImagePtr getImage(MoM::eBannerColor bannerColor) const;
     const QMoMImagePtr getImage(MoM::eBuilding building) const;
     const QMoMImagePtr getImage(MoM::eCentralStructure structure) const;

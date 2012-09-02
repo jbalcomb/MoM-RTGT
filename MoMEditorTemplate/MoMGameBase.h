@@ -23,6 +23,8 @@ public:
 
     virtual ~MoMGameBase();
 
+    //! Contains the last error that applies whenever a method returning
+    //! a bool failed.
     virtual std::string errorString() const
     {
         return m_errorString;
@@ -40,11 +42,27 @@ public:
         return false;
     }
 
+    //! Commit the data identified by ptr
+    bool commitData(void* ptr, size_t size)
+    {
+        return commitData(ptr, ptr, size);
+    }
+
+    //! Commit new data at pNewValue at the location identified by ptr
+    //! The data at ptr is only updated if the commit was successful
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
-    Building_Data* getBuilding_Data(eBuilding building)
+    Battle_Unit* getBattleUnit(int battleUnitNr)
     {
-        Building_Data* buildingData = getBuilding_Data();
+        Battle_Unit* battleUnits = getBattle_Units();
+        if ((0 == battleUnits) || !inRange(battleUnitNr, getNrBattleUnits()) || !inRange(battleUnitNr, gMAX_BATTLE_UNITS))
+            return 0;
+        return &battleUnits[battleUnitNr];
+    }
+
+    Building_Data* getBuildingData(eBuilding building)
+    {
+        Building_Data* buildingData = getBuildingData();
         if ((0 == buildingData) || !inRange(building, eBuilding_MAX))
             return 0;
         return &buildingData[building];
@@ -77,28 +95,28 @@ public:
     std::string getHelpText(eUnitEnchantment unitEnchantment);
     std::string getHelpText(eUnitMutation unitMutation);
 
-    Hero_stats* getHero_stats(ePlayer playerNr, eUnit_Type heroNr)
+    Hero_stats* getHeroStats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
         if ((0 == listHeroStats) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStats[heroNr];
     }
-    Hero_Stats_Initializer* getHero_Stats_Initializer(eUnit_Type heroNr)
+    Hero_Stats_Initializer* getHeroStatsInitializer(eUnit_Type heroNr)
     {
         Hero_Stats_Initializer* listHeroStatsInitializer = getList_Hero_Stats_Initializer();
         if ((0 == listHeroStatsInitializer) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStatsInitializer[heroNr];
     }
-    Hired_Hero* getHired_Hero(ePlayer playerNr, int slotNr)
+    Hired_Hero* getHiredHero(ePlayer playerNr, int slotNr)
     {
         Wizard* wizard = getWizard(playerNr);
         if ((0 == wizard) || !inRange(slotNr, gMAX_HIRED_HEROES))
             return 0;
         return &wizard->m_Heroes_hired_by_wizard[slotNr];
     }
-    Hired_Hero* getHired_Hero(const Unit* unit)
+    Hired_Hero* getHiredHero(const Unit* unit)
     {
         if (0 == unit)
             return 0;
@@ -121,7 +139,7 @@ public:
             return 0;
         return &lairs[lairNr];
     }
-    char* getMoM_Version()
+    char* getMoMVersion()
     {
         if (0 != getDataSegment())
         {
@@ -137,9 +155,21 @@ public:
             return nullVersion;
         }
     }
-    virtual const char* getNameByOffset(DS_Offset /*offset*/)
+    virtual const char* getNameByOffset(DS_Offset)
     {
         return 0;
+    }
+    int getNrBattleUnits()
+    {
+        if (0 == getNumber_of_Battle_Units())
+            return 0;
+        return *getNumber_of_Battle_Units();
+    }
+    void setNrBattleUnits(int value)
+    {
+        if (0 == getNumber_of_Battle_Units())
+            return;
+        *getNumber_of_Battle_Units() = value;
     }
     int getNrCities()
     {
@@ -226,7 +256,7 @@ public:
         return value;
     }
 
-    Race_Data* getRace_Data(eRace race)
+    Race_Data* getRaceData(eRace race)
     {
 		MoMDataSegment* dataSegment = getDataSegment();
         if ((0 == dataSegment) || !inRange(race, eRace_MAX))
@@ -238,9 +268,9 @@ public:
 
     virtual std::string getSources() const = 0;
 
-    Spell_Data* getSpell_Data(eSpell spell)
+    Spell_Data* getSpellData(eSpell spell)
     {
-        Spell_Data* spellData = getSpell_Data();
+        Spell_Data* spellData = getSpellData();
         if ((0 == spellData) || !inRange(spell, MoM::eSpell_MAX))
             return 0;
         return &spellData[spell];
@@ -322,7 +352,7 @@ public:
             return 0;
         return &units[unitNr];
     }
-    Unit_Type_Data* getUnit_Type_Data(eUnit_Type unitTypeNr)
+    Unit_Type_Data* getUnitTypeData(eUnit_Type unitTypeNr)
     {
         Unit_Type_Data* unitTypes = getUnit_Types();
         if ((0 == unitTypes) || !inRange(unitTypeNr, MoM::eUnit_Type_MAX))
@@ -391,20 +421,21 @@ public:
     {
         return 0;
     }
+public:
     virtual Battlefield* getBattlefield()
     {
         return 0;
     }
-    virtual Battle_Unit* getBattle_Unit_View()
-    {
-        return 0;
-    }
-    virtual Battle_Unit* getBattle_Units()
+    virtual Battle_Unit* getBattleUnitViewed()
     {
         return 0;
     }
 protected:
-    virtual Building_Data* getBuilding_Data()
+    virtual Battle_Unit* getBattle_Units()
+    {
+        return 0;
+    }
+    virtual Building_Data* getBuildingData()
     {
         return 0;
     }
@@ -418,15 +449,15 @@ public:
     {
         return 0;
     }
-    virtual WizardsExe_Game_Data* getGame_Data_Exe()
+    virtual WizardsExe_Game_Data* getGameData_WizardsExe()
     {
         return 0;
     }
-    virtual Game_Data_Save* getGame_Data_Save()
+    virtual Game_Data_Save* getGameData_SaveGame()
     {
         return 0;
     }
-    virtual Game_Settings* getGame_Settings()
+    virtual Game_Settings* getGameSettings()
     {
         return 0;
     }
@@ -451,6 +482,7 @@ protected:
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
 public:
+    // Needs to be public so we can add it to a treeview
     virtual uint16_t* getNumber_of_Battle_Units()
     {
         return 0;
@@ -459,7 +491,7 @@ protected:
     virtual uint16_t* getNumber_of_Cities() = 0;
     virtual uint16_t* getNumber_of_Units() = 0;
     virtual uint16_t* getNumber_of_Wizards() = 0;
-    virtual Spell_Data* getSpell_Data()
+    virtual Spell_Data* getSpellData()
     {
         return 0;
     }

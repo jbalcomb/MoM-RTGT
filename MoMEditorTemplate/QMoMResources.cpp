@@ -93,6 +93,19 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
     }
 }
 
+const QMoMImagePtr QMoMResources::getImage(const LBXRecordID &lbxRecordID) const
+{
+    QMoMImagePtr image;
+    if (m_game.isNull())
+        return image;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxRecordID.lbxTitle + ".LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return image;
+    image = MoM::convertLbxToImage(lbx.getRecord(lbxRecordID.lbxIndex), m_colorTable, lbxRecordID.lbxTitle + toStr(lbxRecordID.lbxIndex));
+    return image;
+}
+
 const QMoMImagePtr QMoMResources::getImage(MoM::eBannerColor bannerColor) const
 {
     QMoMImagePtr image;
@@ -128,7 +141,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCentralStructure structure) con
         23, // CENTRALSTRUCTURE_temple,
         22, // CENTRALSTRUCTURE_medium_tower,
         66, // CENTRALSTRUCTURE_sorcery_node,   ANIMATION
-        120,// CENTRALSTRUCTURE_chaos_node,     ANIMATION   ??
+        120, // CENTRALSTRUCTURE_chaos_node,     ANIMATION - located in another LBX file
         65, // CENTRALSTRUCTURE_nature_node,    ANIMATION
         121,// CENTRALSTRUCTURE_ruins,
     };
@@ -139,7 +152,11 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCentralStructure structure) con
         index = lookup[structure];
     }
     QMoMImagePtr image;
-    if (inVectorRange(m_cmbtcityImages, index))
+    if (CENTRALSTRUCTURE_chaos_node == structure)
+    {
+        image = getImage(LBXRecordID("CHRIVER", 24));
+    }
+    else if (inVectorRange(m_cmbtcityImages, index))
     {
         image = m_cmbtcityImages[index];
     }
@@ -534,7 +551,7 @@ void QMoMResources::createSpellImages()
             }
         }
 
-        MoM::Spell_Data* spellData = m_game->getSpell_Data(spell);
+        MoM::Spell_Data* spellData = m_game->getSpellData(spell);
         if ((0 != spellData) && (MoM::SPELLCATEGORY_Normal_summon == spellData->m_Spell_Category))
         {
             m_spellImages[spell] = m_unitImages[ spellData->m_Parameters[0] ];

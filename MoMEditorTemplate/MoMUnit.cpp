@@ -131,9 +131,9 @@ void MoMUnit::changeUnit(Battle_Unit *battleUnit)
 
         if (0 != m_unit)
         {
-            m_heroStats = m_game->getHero_stats(battleUnit->m_Owner, m_unit->m_Unit_Type);
-            m_hiredHero = m_game->getHired_Hero(m_unit);
-            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
+            m_heroStats = m_game->getHeroStats(battleUnit->m_Owner, m_unit->m_Unit_Type);
+            m_hiredHero = m_game->getHiredHero(m_unit);
+            m_unitType = m_game->getUnitTypeData(m_unit->m_Unit_Type);
         }
 //        m_heroStatsInitializer = 0;
 
@@ -149,10 +149,10 @@ void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
     {
 //        m_battleUnit = m_game->getBattle_Units();
         // TODO: playerNr is YOU if you want to summon, or otherwise it is unknown
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
 //        m_hiredHero = 0;
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 //        m_unit = 0;
 
         applyEffects();
@@ -172,8 +172,8 @@ void MoMUnit::changeUnit(Hired_Hero *hiredHero)
         m_unit = m_game->getUnit(hiredHero->m_Unit_Nr);
         if (0 != m_unit)
         {
-            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
-            m_heroStats = m_game->getHero_stats(playerNr, m_unit->m_Unit_Type);
+            m_unitType = m_game->getUnitTypeData(m_unit->m_Unit_Type);
+            m_heroStats = m_game->getHeroStats(playerNr, m_unit->m_Unit_Type);
         }
 //        m_battleUnit = m_game->getBattle_Units();
 //        m_heroStatsInitializer = 0;
@@ -192,11 +192,11 @@ void MoMUnit::changeUnit(Hero_stats *heroStats)
     {
         MoM::ePlayer playerNr = m_game->getPlayerNr(m_heroStats);
         MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(m_heroStats);
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 
         for (unsigned slotNr = 0; slotNr < gMAX_HIRED_HEROES; ++slotNr)
         {
-            Hired_Hero* hiredHero = m_game->getHired_Hero(playerNr, slotNr);
+            Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, slotNr);
             if (0 == hiredHero)
                 continue;
             Unit* unit = m_game->getUnit(hiredHero->m_Unit_Nr);
@@ -244,7 +244,7 @@ void MoMUnit::changeUnit(Unit_Type_Data* unitType)
         MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(unitType);
 
 //        m_battleUnit = m_game->getBattle_Units();
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
 //        m_hiredHero = 0;
 //        m_unit = 0;
@@ -265,10 +265,10 @@ void MoMUnit::changeUnit(Unit* unit)
         MoM::eUnit_Type unitTypeNr = unit->m_Unit_Type;
 
 //        m_battleUnit = m_game->getBattle_Units();
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
-        m_hiredHero = m_game->getHired_Hero(unit);
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_hiredHero = m_game->getHiredHero(unit);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 
         applyEffects();
     }

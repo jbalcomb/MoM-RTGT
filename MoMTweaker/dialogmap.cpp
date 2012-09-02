@@ -456,7 +456,7 @@ DialogMap::~DialogMap()
 void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
 {
     assert(0 != battleUnit);
-    int battleUnitNr = (int)(battleUnit - m_game->getBattle_Units());
+    int battleUnitNr = (int)(battleUnit - m_game->getBattleUnit(0));
     Unit* unit = m_game->getUnit(battleUnit->m_unitNr);
     if (0 == unit)
         return;
@@ -875,9 +875,8 @@ void DialogMap::slot_gameUpdated()
     }
 
     Battlefield* battlefield = m_game->getBattlefield();
-    MoM::Battle_Unit* battleUnits = m_game->getBattle_Units();
-    uint16_t* pnrBattleUnits = m_game->getNumber_of_Battle_Units();
-    if ((0 != m_game->getBattlefield()) && (0 != battleUnits) && (0 != pnrBattleUnits))
+    MoM::Battle_Unit* battleUnits = m_game->getBattleUnit(0);
+    if ((0 != battlefield) && (0 != battleUnits))
     {
         // Show battle terrain
         for (int y = 0; y < (int)MoM::gMAX_BATTLE_ROWS; ++y)
@@ -895,10 +894,12 @@ void DialogMap::slot_gameUpdated()
         }
 
         // Show battle units
-        int nrBattleUnits = *pnrBattleUnits;
-        for (int battleUnitNr = 0; (battleUnits) && (battleUnitNr < nrBattleUnits) && (battleUnitNr < MoM::gMAX_BATTLE_UNITS); ++battleUnitNr)
+        int nrBattleUnits = m_game->getNrBattleUnits();
+        for (int battleUnitNr = 0; battleUnitNr < nrBattleUnits; ++battleUnitNr)
         {
-            MoM::Battle_Unit* battleUnit = &battleUnits[battleUnitNr];
+            MoM::Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
+            if (0 == battleUnit)
+                break;
             MoMLocation loc(battleUnit->m_xPos, battleUnit->m_yPos, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle);
 
             QMoMUnitPtr momUnit(new MoMUnit(m_game.data()));
@@ -1013,6 +1014,10 @@ void DialogMap::slot_gameUpdated()
         }
         itemStructure->setOffset(offset);
 
+        // Show battlefield menubar (numbers from IDA)
+        QPixmap pixmapMenubar = MoM::QMoMResources::instance().getPixmap(MoM::LBXRecordID("BACKGRND", 3));
+        QGraphicsPixmapItem* itemMenubar = m_sceneBattle->addPixmap(pixmapMenubar);
+        itemMenubar->setPos(0, 164);
     }
 }
 
@@ -1058,11 +1063,13 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc, const QList<QGrap
         }
     }
 
-    if ((loc.m_Plane == ePlane_MAX) && (0 != m_game->getNumber_of_Battle_Units()) && (0 != m_game->getBattle_Units()))
+    if (loc.m_Plane == ePlane_MAX)
     {
-        for (int battleUnitNr = 0; (battleUnitNr < *m_game->getNumber_of_Battle_Units()) && (battleUnitNr < gMAX_BATTLE_UNITS); ++battleUnitNr)
+        for (int battleUnitNr = 0; battleUnitNr < m_game->getNrBattleUnits(); ++battleUnitNr)
         {
-            Battle_Unit* battleUnit = m_game->getBattle_Units() + battleUnitNr;
+            Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
+            if (0 == battleUnit)
+                break;
             if ((loc.m_XPos == battleUnit->m_xPos) && (loc.m_YPos == battleUnit->m_yPos))
             {
                 addBattleUnitSubtree(ui->treeWidget_Tile, battleUnit);
@@ -1073,9 +1080,9 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc, const QList<QGrap
 
 void DialogMap::slot_timerActiveUnit()
 {
-    if (m_game.isNull() || (0 == m_game->getGame_Data_Exe()))
+    if (m_game.isNull() || (0 == m_game->getGameData_WizardsExe()))
         return;
-    int unitNrActive = m_game->getGame_Data_Exe()->m_UnitNr_Active;
+    int unitNrActive = m_game->getGameData_WizardsExe()->m_UnitNr_Active;
     MoM::Unit* unit = m_game->getUnit(unitNrActive);
     if (0 == unit)
         return;

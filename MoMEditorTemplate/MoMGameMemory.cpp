@@ -344,7 +344,7 @@ Battlefield* MoMGameMemory::getBattlefield()
     return derefHeapPointer<Battlefield>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battlefield, 1);
 }
 
-Battle_Unit* MoMGameMemory::getBattle_Unit_View()
+Battle_Unit* MoMGameMemory::getBattleUnitViewed()
 {
     if (0 == m_process.get())
         return 0;
@@ -384,7 +384,7 @@ MoMDataSegment* MoMGameMemory::getDataSegment()
     return validateStaticPointer(pMoMDataSegment, 1);
 }
 
-Building_Data* MoMGameMemory::getBuilding_Data()
+Building_Data* MoMGameMemory::getBuildingData()
 {
     if (0 == m_process.get())
         return 0;
@@ -418,7 +418,7 @@ std::string MoMGameMemory::getGameDirectory()
     return dir;
 }
 
-WizardsExe_Game_Data* MoMGameMemory::getGame_Data_Exe()
+WizardsExe_Game_Data* MoMGameMemory::getGameData_WizardsExe()
 {
     if (0 == m_process.get())
         return 0;
@@ -426,7 +426,7 @@ WizardsExe_Game_Data* MoMGameMemory::getGame_Data_Exe()
     return validateStaticPointer(&pMoMDataSegment->m_Game_Data, 1);
 }
 
-Game_Settings* MoMGameMemory::getGame_Settings()
+Game_Settings* MoMGameMemory::getGameSettings()
 {
     if (0 == m_process.get())
         return 0;
@@ -535,7 +535,7 @@ uint8_t* MoMGameMemory::getWizardsOverlay(size_t ovlNr)
     return ptr;
 }
 
-Spell_Data* MoMGameMemory::getSpell_Data()
+Spell_Data* MoMGameMemory::getSpellData()
 {
     if (0 == m_process.get())
         return 0;

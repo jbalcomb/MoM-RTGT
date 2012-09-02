@@ -30,6 +30,10 @@
 #define PACKED_STRUCT __attribute__((packed))
 #endif
 
+#ifdef SWIG         // Swig wrapper generator
+#define PACKED_STRUCT
+#endif
+
 // Specify to use short enums
 #ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma warning( once : 4480 )  // nonstandard extension used: specifying underlying type for enum
@@ -38,6 +42,11 @@
 #endif
 
 #ifdef __GNUC__     // Compiler Linux g++ (use g++ -fshort-enums)
+#define ENUMSIZE8
+#define ENUMSIZE16
+#endif
+
+#ifdef SWIG         // Swig wrapper generator
 #define ENUMSIZE8
 #define ENUMSIZE16
 #endif
@@ -167,19 +176,19 @@ enum eBuildingStatus ENUMSIZE8
 
 enum eCentralStructure ENUMSIZE16
 {
-    CENTRALSTRUCTURE_none,
-    CENTRALSTRUCTURE_outpost,
-    CENTRALSTRUCTURE_city_grid,
-    CENTRALSTRUCTURE_wizards_fortress,
-    CENTRALSTRUCTURE_small_tower,
-    CENTRALSTRUCTURE_tower_between_planes,
-    CENTRALSTRUCTURE_cave,
-    CENTRALSTRUCTURE_temple,
-    CENTRALSTRUCTURE_medium_tower,
-    CENTRALSTRUCTURE_sorcery_node,
-    CENTRALSTRUCTURE_chaos_node,
-    CENTRALSTRUCTURE_nature_node,
-    CENTRALSTRUCTURE_ruins,
+    CENTRALSTRUCTURE_none = 0,
+    CENTRALSTRUCTURE_outpost = 1,
+    CENTRALSTRUCTURE_city_grid = 2,
+    CENTRALSTRUCTURE_wizards_fortress = 3,
+    CENTRALSTRUCTURE_small_tower = 4,
+    CENTRALSTRUCTURE_tower_between_planes = 5,
+    CENTRALSTRUCTURE_cave = 6,
+    CENTRALSTRUCTURE_temple = 7,
+    CENTRALSTRUCTURE_medium_tower = 8,
+    CENTRALSTRUCTURE_sorcery_node = 9,
+    CENTRALSTRUCTURE_chaos_node = 10,
+    CENTRALSTRUCTURE_nature_node = 11,
+    CENTRALSTRUCTURE_ruins = 12,
 
     eCentralStructure_MAX,
     eCentralStructure__SIZE__ = 0xFFFF
@@ -3512,7 +3521,7 @@ typedef struct PACKED_STRUCT // Item_Bonuses
 } Item_Bonuses; // <read=read_Item_Bonuses>;
 
 
-typedef struct PACKED_STRUCT Item_Powers
+typedef struct PACKED_STRUCT // Item_Powers
 {
     uint8_t     Vampiric:1;             // 01
     uint8_t     Guardian_Wind:1;        // 02
@@ -3575,7 +3584,7 @@ typedef struct PACKED_STRUCT // Item
 } Item; // <read=read_Item>;
 
 
-typedef struct PACKED_STRUCT List_Hero_stats
+typedef struct PACKED_STRUCT // List_Hero_stats
 {
     //Hero_stats m_Hero_Stats[35];
     Hero_stats      Dwarf;

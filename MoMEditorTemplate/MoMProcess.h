@@ -17,6 +17,9 @@ namespace MoM {
 /// \brief The first data in the Datasegment (DS) of MoM WIZARDS.EXE
 const char gDATASEGMENT_IDENTIFIER[] = "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
 
+/// \brief The text that prefixes the current directory of the game
+const char gLOCAL_DIRECTORY[] = "local directory ";
+
 /// \brief The segment offset of the MoM Datasegment relative to the MoM Codesegment
 ///        Unit is the paragraph (16 bytes)
 // The offset of the DataSegment (DS) in the CODE can be deduced
@@ -25,7 +28,13 @@ const char gDATASEGMENT_IDENTIFIER[] = "\0\0\0\0Borland C++ - Copyright 1991 Bor
 //      mov cs:DGROUP@, dx      ; 2E 89 16 C4 02
 // Here you can see that the DataSegment is 26AA (relative to CS)
 // And also that it is stored in cs:DGROUP which is at offset 0x02CF (relative to CS)
+const uint8_t gCS_SIGNATURE_BYTE = '\xBA';
+const uint8_t gCS_SIGNATURE_SEQUENCE[5] = { 0x2E, 0x89, 0x16, 0xC4, 0x02 };
+
+/// \brief  MoM specific for WIZARDS.EXE
 const size_t gOFFSET_WIZARDS_DSEG_CODE = 0x26AA;
+
+/// \brief MoM specific for MAGIC.EXE
 const size_t gOFFSET_MAGIC_DSEG_CODE = 0x21D1;
 
 
@@ -82,7 +91,10 @@ public:
         return &m_dataSegmentAndUp[0] - m_dwOffsetDatasegment + m_dwOffsetSegment0;
     }
 
-    std::string getExeFilepath();
+    const std::string& MoMProcess::getExeFilepath()
+    {
+        return m_exeFilepath;
+    }
 
     size_t getOffset_DS_Code() const
     {
@@ -139,22 +151,26 @@ public:
     static void printError(int errorNumber, const std::string& msg);
 
 private:
+    void closeProcess() throw();
+    void constructExeFilepath();
     bool findSEG0(const std::vector<uint8_t>& data);
+    bool findSignatures(size_t baseAddress, const std::vector<uint8_t>& data);
+    bool registerResults(bool ok);
 
     static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data);
 
     bool tryLinuxPid(void* vPid);
     bool tryWindowTitle(const std::string& windowTitle);
 
-    void* m_hProcess;
-    uint8_t* m_lpBaseAddress;
-    size_t  m_dwBaseAddressSize;
-    size_t  m_dwOffsetSegment0;
-    size_t  m_dwOffsetCode;
-    size_t  m_dwOffsetDatasegment;
+    void*       m_hProcess;
+    uint8_t*    m_lpBaseAddress;
+    size_t      m_dwBaseAddressSize;
+    size_t      m_dwOffsetSegment0;
+    size_t      m_dwOffsetCode;
+    size_t      m_dwOffsetDatasegment;
     std::vector<uint8_t> m_dataSegmentAndUp;
     std::string m_exeFilepath;
-    bool    m_verbose;
+    bool        m_verbose;
 };
 
 }

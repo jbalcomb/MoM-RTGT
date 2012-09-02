@@ -497,7 +497,7 @@ void DialogTables::update_Spell_Data()
         }
         wizardsExe = game->getWizardsExe();
         ovl112 = game->getWizardsOverlay(112);
-        if (0 != game->getSpell_Data((MoM::eSpell)0))
+        if (0 != game->getSpellData((MoM::eSpell)0))
         {
             ndata = (int)MoM::eSpell_MAX - 1;
         }
@@ -523,7 +523,7 @@ void DialogTables::update_Spell_Data()
     {
         int spellNr = row + 1;
         MoM::eSpell spell = (MoM::eSpell)spellNr;
-        MoM::Spell_Data* data = game->getSpell_Data(spell);
+        MoM::Spell_Data* data = game->getSpellData(spell);
 
         MoM::eRealm_Type realm = (MoM::eRealm_Type)((spellNr - 1) / 40);
         QColor color = Qt::gray;
@@ -800,7 +800,7 @@ void DialogTables::update_Unit_Types()
     QMoMGamePtr game = getGame();
     int ndata = 0;
 
-	if ((0 != game) && (0 != game->getUnit_Type_Data((MoM::eUnit_Type)0)))
+	if ((0 != game) && (0 != game->getUnitTypeData((MoM::eUnit_Type)0)))
 	{
 		ndata = MoM::eUnit_Type_MAX;
 	}
@@ -825,7 +825,7 @@ void DialogTables::update_Unit_Types()
 	for (int row = 0; (0 != game) && (row < ndata); ++row)
     {
         int unitTypeNr = row;
-		MoM::Unit_Type_Data* data = game->getUnit_Type_Data((MoM::eUnit_Type)unitTypeNr);
+		MoM::Unit_Type_Data* data = game->getUnitTypeData((MoM::eUnit_Type)unitTypeNr);
 		if (0 == data)
 			break;
 

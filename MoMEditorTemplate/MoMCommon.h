@@ -21,7 +21,7 @@
 
 
 // Specify integer types with specific sizes
-#ifdef _MSC_VER         // Compiler MS Visual Studio (no proper POSIX)
+#if defined(_MSC_VER) || defined(SWIG)         // Compiler MS Visual Studio or Swig (no proper POSIX)
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
@@ -40,13 +40,17 @@ typedef signed int int32_t;
 #define PACKED_STRUCT
 #endif
 
-#ifdef __MINGW_GCC  // Compiler MinGW
+#ifdef __MINGW_GCC      // Compiler MinGW
 #pragma pack(push, 1)
 #define PACKED_STRUCT __attribute__((packed))
 #endif
 
 #ifdef __GNUC__         // Compiler g++
 #define PACKED_STRUCT __attribute__((packed))
+#endif
+
+#ifdef SWIG             // Swig wrapper generator
+#define PACKED_STRUCT
 #endif
 
 namespace MoM {
@@ -137,6 +141,19 @@ typedef struct PACKED_STRUCT {   // LBXHEADER
     uint16_t    reserved;           // 06
                                     // SIZE 08
 } LBXHEADER;
+
+struct LBXRecordID
+{
+    explicit LBXRecordID(const char aLbxTitle[9], int aLbxIndex, int aLbxSubindex = 0) :
+        lbxIndex(aLbxIndex), lbxSubindex(aLbxSubindex)
+    {
+        memset(lbxTitle, '\0', 9);
+        strncpy(lbxTitle, aLbxTitle, 8);
+    }
+    char        lbxTitle[9];
+    int         lbxIndex;
+    int         lbxSubindex;
+};
 
 }
 

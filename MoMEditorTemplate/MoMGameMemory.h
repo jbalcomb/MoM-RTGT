@@ -91,14 +91,14 @@ private:
 
     virtual Available_spell_page* getAvailable_spell_pages();
     virtual Battlefield* getBattlefield();
-    virtual Battle_Unit* getBattle_Unit_View();
+    virtual Battle_Unit* getBattleUnitViewed();
     virtual Battle_Unit* getBattle_Units();
-    virtual Building_Data* getBuilding_Data();
+    virtual Building_Data* getBuildingData();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
     virtual Fortress* getFortresses();
-    virtual WizardsExe_Game_Data* getGame_Data_Exe();
-    virtual Game_Settings* getGame_Settings();
+    virtual WizardsExe_Game_Data* getGameData_WizardsExe();
+    virtual Game_Settings* getGameSettings();
     virtual eSpell16* getHero_spells();
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr);
     virtual Item* getItems();
@@ -107,7 +107,7 @@ private:
     virtual uint16_t* getNumber_of_Cities();
     virtual uint16_t* getNumber_of_Units();
     virtual uint16_t* getNumber_of_Wizards();
-    virtual Spell_Data* getSpell_Data();
+    virtual Spell_Data* getSpellData();
     virtual Spells_Cast_in_Battle* getSpells_Cast_in_Battle();
 
     virtual eTerrainBonusDeposit* getTerrain_Bonuses();

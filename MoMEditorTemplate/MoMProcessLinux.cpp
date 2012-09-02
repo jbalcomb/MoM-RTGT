@@ -32,7 +32,6 @@ namespace MoM {
 namespace {
 
 const std::string gPID_FILENAME = "dosbox.pid";
-const char gLOCAL_DIRECTORY[] = "local directory ";
 
 void detachProcess(pid_t pid)
 {
@@ -71,33 +70,8 @@ bool attachProcess(pid_t pid)
 
 }
 
-
-MoMProcess::MoMProcess(void) :
-    m_hProcess(NULL),
-    m_lpBaseAddress(0),
-    m_dwBaseAddressSize(0),
-    m_dwOffsetSegment0(0),
-    m_dwOffsetCode(0),
-    m_dwOffsetDatasegment(0),
-    m_dataSegmentAndUp(),
-    m_verbose(false)
+void MoMProcess::closeProcess() throw()
 {
-}
-
-MoMProcess::~MoMProcess(void)
-{
-    close();
-}
-
-void MoMProcess::close() throw()
-{
-    m_dataSegmentAndUp.clear();
-
-    m_lpBaseAddress = 0;
-    m_dwBaseAddressSize = 0;
-    m_dwOffsetSegment0 = 0;
-    m_dwOffsetCode = 0;
-    m_dwOffsetDatasegment = 0;
     m_hProcess = NULL;
 }
 
@@ -138,9 +112,6 @@ bool MoMProcess::tryLinuxPid(void* vPid)
     bool ok = true;
     std::vector<uint8_t> data;
 
-//    std::cout << "Detach for safety from pid=" << pid << std::endl;
-//    detachProcess(pid);
-
     // Try to find the memory region of MoM within DOSBox (or use the defaults)
     std::cout << "Search for MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << "): ";
     std::cout << gDATASEGMENT_IDENTIFIER + 4 << std::endl;
@@ -153,7 +124,7 @@ bool MoMProcess::tryLinuxPid(void* vPid)
         printError(errno, "Could not open '" + filename + "'");
         ok = false;
     }
-    while (ok && ifs && (0 == m_lpBaseAddress))
+    while (ok && ifs && (0 == m_lpBaseAddress) && ((0 == m_dwOffsetDatasegment) || m_exeFilepath.empty()))
     {
         char ch = '\0';
         ifs >> std::hex >> start >> ch >> stop;
@@ -162,118 +133,15 @@ bool MoMProcess::tryLinuxPid(void* vPid)
         if (m_verbose) std::cout << "Scanning 0x" << std::hex << start << " size 0x" << size << std::dec << std::endl;
         if (readProcessData(m_hProcess, (const uint8_t*)start, size, data))
         {
-            for (size_t i = 0; ok && (i + ARRAYSIZE(gDATASEGMENT_IDENTIFIER) < data.size()); ++i)
-            {
-                // Try to find the current directory (exclude the terminating zero that won't be there)
-                if (0 == memcmp(&data[i], gLOCAL_DIRECTORY, ARRAYSIZE(gLOCAL_DIRECTORY) - 1))
-                {
-                    m_exeFilepath = (const char*)&data[i + strlen(gLOCAL_DIRECTORY)];
-                    std::cout << "Found LOCAL_DIRECTORY '" << m_exeFilepath << "' at 0x" << std::hex << i << std::dec << std::endl;
-                    break;
-                }
-
-                if (0 == memcmp(&data[i], gDATASEGMENT_IDENTIFIER, ARRAYSIZE(gDATASEGMENT_IDENTIFIER)))
-                {
-                    std::cout << "Found MoM BaseAddress 0x" << std::hex << start << " size 0x"<< size << std::dec << std::endl;
-                    m_lpBaseAddress = (uint8_t*)start;
-                    m_dwBaseAddressSize = size;
-                    m_dwOffsetDatasegment = i;
-                    std::cout << "Found MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ") at offset 0x" << std::hex << i << std::dec << std::endl;
-
-                    ok = findSEG0(data);
-
-                    break;
-                }
-            }
-        }
-        if ((0 != m_dwOffsetDatasegment) && !m_exeFilepath.empty())
-        {
-            break;
+            ok = findSignatures(start, data);
         }
     }
     ifs.close();
 
-    if (0 == m_lpBaseAddress || 0 == m_dwOffsetDatasegment)
-    {
-        std::cout << "Could not find DATASEGMENT_IDENTIFIER (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ")" << std::endl;
-        ok = false;
-    }
-    if (m_exeFilepath.empty())
-    {
-        std::cout << "Could not find LOCAL_DIRECTORY" << std::endl;
-        // Do not treat as failure
-    }
-
-    if (ok)
-    {
-        ok = readData();
-    }
-
-    if (ok)
-    {
-        const char* pszBaseFilename = 0;
-        switch (getOffset_DS_Code())
-        {
-        case gOFFSET_WIZARDS_DSEG_CODE: pszBaseFilename = "WIZARDS.EXE"; break;
-        case gOFFSET_MAGIC_DSEG_CODE:   pszBaseFilename = "MAGIC.EXE"; break;
-        default:                      break;
-        }
-
-        if (0 == pszBaseFilename)
-        {
-            m_exeFilepath.clear();
-        }
-        else
-        {
-            if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/')
-            {
-                m_exeFilepath += "/";
-            }
-            m_exeFilepath += pszBaseFilename;
-        }
-    }
+    ok = registerResults(ok);
 
     return ok;
 }
-
-std::string MoMProcess::getExeFilepath()
-{
-    return m_exeFilepath;
-}
-
-//std::string MoMProcess::getExeFilepath()
-//{
-//    if (NULL == m_hProcess)
-//        return "";
-
-//    pid_t pid = (pid_t)m_hProcess;
-//    std::string exeFilepath;
-
-//    std::string filename = "dosbox.proc_fd";
-//    std::string cmd = "ls -l /proc/" + toStr(pid) + "/fd/ | sed -ne 's/.*-> \\(.*\\.EXE\\)/\\1/p' > " + filename;
-//    fflush(NULL);   // Flush before system()
-//    if (0 != system(cmd.c_str()))
-//    {
-//        std::cout << "MoM ExeFilepath not found with '" << cmd << "'" << std::endl;
-//        return false;
-//    }
-
-//    std::ifstream ifs(filename.c_str());
-//    if (!std::getline(ifs, exeFilepath))
-//    {
-//        std::cout << "MoM ExeFilepath in '" << filename << "' not parseable" << std::endl;
-//        return false;
-//    }
-
-//    if (!exeFilepath.empty() && '\n' == exeFilepath[ exeFilepath.size() - 1 ])
-//    {
-//        exeFilepath.resize( exeFilepath.size() - 1 );
-//    }
-
-//    std::cout << "Found ExeFilepath '" << exeFilepath << "' (pid=" << pid << ")" << std::endl;
-
-//    return exeFilepath;
-//}
 
 bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data)
 {

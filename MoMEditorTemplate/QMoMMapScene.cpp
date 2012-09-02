@@ -19,7 +19,8 @@ QMoMMapScene::QMoMMapScene(MoM::ePlane plane, bool isBattlefield, QObject *paren
     QRectF rectfTile = MoM::QMoMMapTile(MoMLocation()).boundingRect();
     if (m_isBattlefield)
     {
-        setSceneRect(0, 0, (11 - 1) * gBATTLE_SQUARE_WIDTH, (22 - 1) * gBATTLE_SQUARE_HEIGHT);
+//        setSceneRect(0, 0, (11 - 1) * gBATTLE_SQUARE_WIDTH, (22 - 1) * gBATTLE_SQUARE_HEIGHT);
+        setSceneRect(0, 0, 320, 200);
     }
     else
     {

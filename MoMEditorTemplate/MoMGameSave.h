@@ -29,7 +29,7 @@ public:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
-    virtual Building_Data* getBuilding_Data()
+    virtual Building_Data* getBuildingData()
     {
         if (0 == m_BuilddatLbx.get())
             return 0;
@@ -60,7 +60,7 @@ public:
 
     virtual std::string getGameDirectory();
 
-    virtual Game_Data_Save* getGame_Data_Save()
+    virtual Game_Data_Save* getGameData_SaveGame()
     {
         if (0 == m_SaveGame.get())
             return 0;
@@ -135,7 +135,7 @@ public:
 
     virtual std::string getSources() const;
 
-    virtual Spell_Data* getSpell_Data()
+    virtual Spell_Data* getSpellData()
     {
         if (0 == m_SpelldatLbx.get())
             return 0;

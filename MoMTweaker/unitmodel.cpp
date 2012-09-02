@@ -284,7 +284,7 @@ void update_Battle_Unit_View(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
 {
     if (0 == game)
         return;
-    MoM::Battle_Unit* pBattle_Unit_View = game->getBattle_Unit_View();
+    MoM::Battle_Unit* pBattle_Unit_View = game->getBattleUnitViewed();
     if (0 == pBattle_Unit_View)
         return;
 
@@ -317,12 +317,10 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 {
     if (0 == game)
         return;
-    MoM::Battle_Unit* pBattleUnits = game->getBattle_Units();
+    MoM::Battle_Unit* pBattleUnits = game->getBattleUnit(0);
     if (0 == pBattleUnits)
         return;
-    if (0 == game->getNumber_of_Battle_Units())
-        return;
-    int nrBattle_Units = *game->getNumber_of_Battle_Units();
+    int nrBattle_Units = game->getNrBattleUnits();
 
     if (row >= ptree->rowCount())
     {
@@ -394,7 +392,7 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
 {
     for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (building < MoM::eBuilding_MAX); MoM::inc(building))
     {
-        MoM::Building_Data* buildingData = game->getBuilding_Data(building);
+        MoM::Building_Data* buildingData = game->getBuildingData(building);
         if (0 == buildingData)
             break;
         if (building >= ptree->rowCount())
@@ -651,7 +649,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        ptree->setChild(row, 0, constructTreeItem(game->getGame_Data_Save(), ""));
+        ptree->setChild(row, 0, constructTreeItem(game->getGameData_SaveGame(), ""));
     }
     ptree->child(row, 0)->setData(QString("SAVE:Game_Data"), Qt::EditRole);
     ptree->child(row, 1)->setData(QString(), Qt::EditRole);
@@ -663,16 +661,16 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        if (game->getMoM_Version() >= std::string("v1.40m"))
+        if (game->getMoMVersion() >= std::string("v1.40m"))
         {
-            ptree->setChild(row, 0, constructTreeItem((MoM::WizardsExe_Game_Data140m*)game->getGame_Data_Exe(), ""));
+            ptree->setChild(row, 0, constructTreeItem((MoM::WizardsExe_Game_Data140m*)game->getGameData_WizardsExe(), ""));
         }
         else
         {
-            ptree->setChild(row, 0, constructTreeItem(game->getGame_Data_Exe(), ""));
+            ptree->setChild(row, 0, constructTreeItem(game->getGameData_WizardsExe(), ""));
         }
 
-        if ((0 != dataSegment) && game->getGame_Data_Exe())
+        if ((0 != dataSegment) && game->getGameData_WizardsExe())
         {
             ptree->child(row, 0)->appendChild(QString("Copyright/Version"), new QMoMTreeItem<char[41]>(dataSegment->m_Copyright_and_Version));
             ptree->child(row, 0)->appendChild(QString(" RNG_Next_Turn_Seed"), new QMoMTreeItem<uint32_t>((uint32_t*)&dataSegment->m_Next_Turn_seed_storage_lo));
@@ -684,7 +682,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
             ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItem<int16_t>(&dataSegment->m_WizardsExe_Pointers.w_kyrub_dseg_9296));
         }
 
-        if ((0 != magicDataSegment) && game->getGame_Data_Exe())
+        if ((0 != magicDataSegment) && game->getGameData_WizardsExe())
         {
             ptree->child(row, 0)->appendChild(QString("Copyright1/Version"), new QMoMTreeItem<char[41]>(magicDataSegment->m_Copyright1_and_Version));
             ptree->child(row, 0)->appendChild(QString("Copyright2/Version"), new QMoMTreeItem<char[41]>(magicDataSegment->m_Copyright2_and_Version));
@@ -697,7 +695,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        ptree->setChild(row, 0, constructTreeItem(game->getGame_Settings(), ""));
+        ptree->setChild(row, 0, constructTreeItem(game->getGameSettings(), ""));
     }
     ptree->child(row, 0)->setData(QString("Game_Settings (MAGIC.SET)"), Qt::EditRole);
     ptree->child(row, 1)->setData(QString(), Qt::EditRole);
@@ -785,7 +783,7 @@ void update_Hero_Stats(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& ro
     for (int heroTypeNr = 0; heroTypeNr < (int)MoM::gMAX_HERO_TYPES; ++heroTypeNr)
     {
         MoM::eUnit_Type unitType = (MoM::eUnit_Type)heroTypeNr;
-        MoM::Hero_stats* heroStats = game->getHero_stats(wizardNr, unitType);
+        MoM::Hero_stats* heroStats = game->getHeroStats(wizardNr, unitType);
         if (0 == heroStats)
             break;
         if (row >= ptree->rowCount())
@@ -903,7 +901,7 @@ void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
     for (int spellNr = 0; spellNr < (int)MoM::eSpell_MAX; ++spellNr)
     {
         MoM::eSpell spell = (MoM::eSpell)spellNr;
-        MoM::Spell_Data* spellData = game->getSpell_Data(spell);
+        MoM::Spell_Data* spellData = game->getSpellData(spell);
         if (0 == spellData)
             break;
 
@@ -1019,7 +1017,7 @@ void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
     for (int unitTypeNr = 0; unitTypeNr < MoM::eUnit_Type_MAX; ++unitTypeNr)
     {
         MoM::eUnit_Type unitType = (MoM::eUnit_Type)unitTypeNr;
-        MoM::Unit_Type_Data* pUnitData = game->getUnit_Type_Data(unitType);
+        MoM::Unit_Type_Data* pUnitData = game->getUnitTypeData(unitType);
         if (0 == pUnitData)
         {
             break;
@@ -1135,7 +1133,7 @@ void UnitModel::threadUpdateModelData()
         }
         else
         {
-            parentItem->child(toprow, 2)->setData(tr("MoM Version %0").arg(toQStr(game->getMoM_Version())), Qt::EditRole);
+            parentItem->child(toprow, 2)->setData(tr("MoM Version %0").arg(toQStr(game->getMoMVersion())), Qt::EditRole);
         }
 
         int row = 0;
@@ -1839,7 +1837,7 @@ void UnitModel::threadUpdateModelData()
             if (0 == ptree->rowCount())
             {
 				// 0
-                if (game->getMoM_Version() >= std::string("v1.40j"))
+                if (game->getMoMVersion() >= std::string("v1.40j"))
                 {
                     ptree->appendChild("City Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));
                     ptree->child(row, 2)->setData("Default +3 shields", Qt::EditRole);

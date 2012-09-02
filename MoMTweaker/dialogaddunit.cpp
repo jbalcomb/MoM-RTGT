@@ -625,7 +625,7 @@ void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
         QString title = prettyQStr(unitTypeNr);
 
         MoM::Unit_Type_Data* data = 0;
-        if ((0 != game) && (0 != (data = game->getUnit_Type_Data(unitTypeNr))))
+        if ((0 != game) && (0 != (data = game->getUnitTypeData(unitTypeNr))))
         {
             title = QString("%0").arg((int)unitTypeNr, 3) + "   " + QString(game->getRaceName(data->m_Race_Code).c_str()) + "   " + QString(game->getNameByOffset(data->m_PtrName));
         }

@@ -314,7 +314,7 @@ bool MoMController::findCheapestUnitToProduce(MoMGameBase& game, const City& cit
 	bool found = false;
 	for (eUnit_Type unitTypeNr = UNITTYPE_FIRST; !found && (toUInt(unitTypeNr) < eUnit_Type_MAX); inc(unitTypeNr))
 	{
-		Unit_Type_Data* unitData = game.getUnit_Type_Data(unitTypeNr);
+		Unit_Type_Data* unitData = game.getUnitTypeData(unitTypeNr);
 		if (0 == unitData)
 			break;
 
@@ -350,10 +350,10 @@ bool MoMController::findUnitsAtLocation(MoMGameBase& game, const MoMLocation& lo
 
 bool MoMController::isBuildingAllowed(MoMGameBase& game, const City& city, eBuilding building)
 {
-	Race_Data* raceData = game.getRace_Data(city.m_Race);
+	Race_Data* raceData = game.getRaceData(city.m_Race);
 	if (0 == raceData)
 		return false;
-	Building_Data* buildingData = game.getBuilding_Data(building);
+	Building_Data* buildingData = game.getBuildingData(building);
 	if (0 == buildingData)
 		return false;
 
@@ -408,10 +408,10 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
     assert((unsigned)heroNr < gMAX_HERO_TYPES);
     assert((unsigned)heroSlotNr < gMAX_HIRED_HEROES);
 
-	Unit_Type_Data* unitTypeData = game.getUnit_Type_Data(heroNr);
+	Unit_Type_Data* unitTypeData = game.getUnitTypeData(heroNr);
     if (0 == unitTypeData)
         return false;
-    Hero_stats* heroStats = game.getHero_stats(playerNr, heroNr);
+    Hero_stats* heroStats = game.getHeroStats(playerNr, heroNr);
     if (0 == heroStats)
         return false;
     Unit* unit = game.getUnit(unitNr);
@@ -630,7 +630,7 @@ bool MoMController::validateConsistency(MoMGameBase& game)
             }
 
             // Check corresponding Hero_stats
-            const Hero_stats* heroStats = game.getHero_stats(wizardNr, unit->m_Unit_Type);
+            const Hero_stats* heroStats = game.getHeroStats(wizardNr, unit->m_Unit_Type);
             if (0 == heroStats)
                 break;
             if (HEROLEVELSTATUS_Active_in_Wizards_army != heroStats->m_Level_Status)
@@ -723,7 +723,7 @@ bool MoMController::validateConsistency(MoMGameBase& game)
     {
         for (eUnit_Type heroNr = HEROTYPE_FIRST; (unsigned)heroNr < gMAX_HERO_TYPES; inc(heroNr))
         {
-            Hero_stats* heroStats = game.getHero_stats(wizardNr, heroNr);
+            Hero_stats* heroStats = game.getHeroStats(wizardNr, heroNr);
             if (0 == heroStats)
                 break;
 

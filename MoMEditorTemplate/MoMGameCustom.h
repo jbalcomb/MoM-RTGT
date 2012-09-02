@@ -54,8 +54,8 @@ public:
     {
         return 0;
     }
-    virtual WizardsExe_Game_Data* getGame_Data_Exe();
-    virtual Game_Settings* getGame_Settings();
+    virtual WizardsExe_Game_Data* getGameData_WizardsExe();
+    virtual Game_Settings* getGameSettings();
     virtual MoM::Hero_stats* getList_Hero_stats(MoM::ePlayer)
     {
         return 0;
