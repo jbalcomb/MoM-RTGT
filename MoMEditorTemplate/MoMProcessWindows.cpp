@@ -106,7 +106,7 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
 
     bool ok = true;
     std::vector<BYTE> data;
-m_verbose=true;
+
     for (; ok && (0 != size) && ((0 == m_dwOffsetDatasegment) || m_exeFilepath.empty());
         baseAddr += mbi.RegionSize, size = VirtualQueryEx(m_hProcess, baseAddr, &mbi, sizeof(mbi)))
     {
