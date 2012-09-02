@@ -66,6 +66,10 @@ class NumberTableWidgetItem : public QMoMTableWidgetItemBase
 {
 public:
     NumberTableWidgetItem(const QMoMGamePtr& game, Number& t, int width, eShowNumber showNumber = SHOWNUMBER_normal);
+    // g++ complains that it cannot bind an uint16_t to this template, probably due to some alignment issue,
+    // but it does accept a pointer. :).
+    // Hence the second constructor
+    NumberTableWidgetItem(const QMoMGamePtr& game, Number* t, int width, eShowNumber showNumber = SHOWNUMBER_normal);
     virtual void setData(int role, const QVariant &value);
     virtual QString toString() const;
 private:
@@ -79,6 +83,17 @@ template<typename Number>
 NumberTableWidgetItem<Number>::NumberTableWidgetItem(const QMoMGamePtr& game, Number& t, int width, eShowNumber showNumber) :
     QMoMTableWidgetItemBase(game),
     m_ptr(&t),
+    m_width(width),
+    m_showNumber(showNumber)
+{
+    setFlags(flags() | Qt::ItemIsEditable);
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Number>
+NumberTableWidgetItem<Number>::NumberTableWidgetItem(const QMoMGamePtr& game, Number* t, int width, eShowNumber showNumber) :
+    QMoMTableWidgetItemBase(game),
+    m_ptr(t),
     m_width(width),
     m_showNumber(showNumber)
 {
@@ -328,6 +343,10 @@ class BitmaskTableWidgetItem : public QMoMTableWidgetItemBase
 {
 public:
     BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask& bitmask, Enum min, Enum max);
+    // g++ complains that it cannot bind an uint16_t to this template, probably due to some alignment issue,
+    // but it does accept a pointer. :).
+    // Hence the second constructor
+    BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max);
 
     virtual void setData(int role, const QVariant &value);
 
@@ -355,6 +374,17 @@ template<typename Bitmask, typename Enum>
 BitmaskTableWidgetItem<Bitmask, Enum>::BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask& bitmask, Enum min, Enum max) :
     QMoMTableWidgetItemBase(game),
     m_ptr(&bitmask),
+    m_min(min),
+    m_max(max),
+    m_actionGroup()
+{
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Bitmask, typename Enum>
+BitmaskTableWidgetItem<Bitmask, Enum>::BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max) :
+    QMoMTableWidgetItemBase(game),
+    m_ptr(bitmask),
     m_min(min),
     m_max(max),
     m_actionGroup()
@@ -547,14 +577,14 @@ void DialogTables::update_Spell_Data()
         ui->tableWidget->item(row, col)->setTextColor(color);
         ui->tableWidget->item(row, col++)->setToolTip(game->getHelpText(spell).c_str());
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int16_t>(game, data->m_Spell_desirability, 6));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int16_t>(game, &data->m_Spell_desirability, 6));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Spell_Category, 2));
         ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpell_Type>(game, data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
         ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRealm_Type>(game, data->m_Magic_Realm, MoM::eRealm_Type_MAX));
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Casting_eligibility, 4));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, data->m_Casting_cost, 5));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, data->m_Research_cost, 5));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Casting_cost, 5));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Research_cost, 5));
 
         if ((MoM::SPELLTYPE_Summoning == data->m_Section_in_spell_book) && (0 != (int)data->m_Unit_Summoned_or_Spell_Strength))
         {
@@ -573,7 +603,7 @@ void DialogTables::update_Spell_Data()
 
         ui->tableWidget->setItem(row, col++,
                                  new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                     game, data->m_Attack_Flags.bits,
+                                     game, &data->m_Attack_Flags.bits,
                                      MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
 
         uint16_t* pUpkeep = 0;
@@ -775,7 +805,7 @@ void DialogTables::update_Unit_Types()
         ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRanged_Type>(game, data->m_Ranged_Type, MoM::eRanged_Type_MAX, true));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Ranged_Shots, 3, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Gaze_Modifier, 3, SHOWNUMBER_noZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, data->m_Cost, 5));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Cost, 5));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Upkeep, 3));
 
         if (unitTypeNr < (int)MoM::gMAX_HERO_TYPES)
@@ -803,15 +833,15 @@ void DialogTables::update_Unit_Types()
                                   MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity));
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                  game, data->m_Attribute_Flags.bits,
+                                  game, &data->m_Attribute_Flags.bits,
                                   MoM::UNITABILITY_Weapon_Immunity, MoM::succ(MoM::UNITABILITY_Holy_Bonus)));
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                  game, data->m_Ability_Flags.bits,
+                                  game, &data->m_Ability_Flags.bits,
                                   MoM::UNITABILITY_Summoned_Unit, MoM::UNITABILITY_Armor_Piercing));
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                  game, data->m_Attack_Flags.bits,
+                                  game, &data->m_Attack_Flags.bits,
                                   MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_TypeCode, 3));
