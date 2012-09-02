@@ -195,6 +195,7 @@ EOF
             my $datamember = shift @datamembers;
             last if not defined $datamember;
             
+			$type = "uint16_t" if ($type eq "DS_Offset");
             $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
             my ($name, $range, $bitmask) = ($1, $3, $5);
             my $cast = "";
@@ -304,6 +305,7 @@ EOF
             my $datamember = shift @datamembers;
             last if not defined $datamember;
             
+			$type = "uint16_t" if ($type eq "DS_Offset");
             next if ($type =~ m#^u?int\d+_t$#);
             next if ($type eq "char");
             next if ($datamember =~ m#trash#i);
@@ -421,6 +423,7 @@ sub generate_Qt_code
             
             #next if ($datamember =~ m#trash#i);
             
+			$type = "uint16_t" if ($type eq "DS_Offset");
             $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
             my ($name, $range, $bitmask) = ($1, $3, $5);
             my $cast = "";

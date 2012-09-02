@@ -34,7 +34,7 @@
 // Local
 #include "dialogaddunit.h"
 #include "dialogcalculatoraddress.h"
-#include "dialogoverlandmap.h"
+#include "dialogmap.h"
 #include "dialogtables.h"
 #include "dialogtools.h"
 
@@ -64,13 +64,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QDir::setSearchPaths(QString("images"), searchPaths);
 
     m_filedialogLoadGame.setWindowTitle(tr("Open MoM file"));
-    m_filedialogLoadGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx)"));
+    m_filedialogLoadGame.setNameFilter(tr("MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptOpen);
     m_filedialogLoadGame.setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoadGame.setViewMode(QFileDialog::Detail);
 
     m_filedialogSaveGame.setWindowTitle(tr("Save MoM file"));
-    m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx)"));
+    m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptSave);
     m_filedialogSaveGame.setFileMode(QFileDialog::AnyFile);
     m_filedialogSaveGame.setViewMode(QFileDialog::Detail);
@@ -266,166 +266,11 @@ void MainWindow::update()
 
     setWindowTitle(title.c_str());
 
-    /*
-    MoM::Wizard& wizard = m_game->getWizard(playerNr);
-    char buf[4096];
-    for (int hireNr = 0; hireNr < MoM::gMAX_HIRED_HEROES; ++hireNr)
-    {
-        MoM::Hired_Hero& hiredHero = wizard.m_Heroes_hired_by_wizard[hireNr];
-        if (-1 == hiredHero.m_Unit_Nr)
-        {
-            continue;
-        }
-
-        MoM::Unit& unit = m_game->getUnit(hiredHero.m_Unit_Nr);
-        MoM::Hero_stats& heroStats = m_game->getHero_stats(playerNr, unit.m_Unit_Type);
-        MoM::Unit_Data* pHeroData = m_game->getUnit_Data(unit.m_Unit_Type);
-
-        QString featurePrefix;
-
-        //
-        // HIRED HERO
-        //
-
-        QStringList qHero(hiredHero.m_Hero_name);
-        qHero.append(QString("the %1").arg(toQStr(unit.m_Unit_Type)));
-        QTreeWidgetItem* qtreeHero = new QTreeWidgetItem((QTreeWidget*)0, qHero);
-        if ((size_t)unit.m_Unit_Type < ARRAYSIZE(gUnitTypeImage))
-        {
-            qtreeHero->setIcon(0, QIcon(gUnitTypeImage[unit.m_Unit_Type]));
-        }
-        QFont font = qtreeHero->font(0);
-        font.setPointSize(14);
-        qtreeHero->setFont(0, font);
-        qtreeHero->setFont(1, font);
-        
-        featurePrefix = tr("HH.");
-
-        addTreeFeature(qtreeHero, 
-            tr("Unit.Level(XP)"), 
-            QIcon(),
-            QString("%1 (%2)").arg(1 + unit.m_Level).arg(unit.m_Experience), 
-            QIcon(":/images/grandlord.gif"));
-
-        QTreeWidgetItem* qtreeHHFields
-            = new QTreeWidgetItem(qtreeHero, QStringList(tr("Hired Hero.Fields")));
-
-        ADDMFIELDFEATURE(qtreeHHFields, hiredHero, Hero_name);
-        ADDMFIELDFEATURE(qtreeHHFields, (int)hiredHero, Unit_Nr);
-
-        for (int itemSlotNr = 0; itemSlotNr < 3; ++itemSlotNr)
-        {
-            QTreeWidgetItem* qtreeItem
-                = addTreeFeature(qtreeHHFields, 
-                    tr("HH.Item %1").arg(1 + itemSlotNr), 
-                    QIcon(),
-                    toQStr(hiredHero.m_Slot_Types[itemSlotNr]), 
-                    QIcon());
-
-            if (-1 != hiredHero.m_Items_In_Slot[itemSlotNr])
-            {
-                MoM::Item& item = m_game->getItem(hiredHero.m_Items_In_Slot[itemSlotNr]);
-
-                ADDMFIELDFEATURE(qtreeItem, item, Item_Name);
-                ADDMFIELDFEATURE(qtreeItem, item, Icon);
-                ADDMFIELDFEATURE(qtreeItem, item, Slot_Required);
-                ADDMFIELDFEATURE(qtreeItem, item, Item_Type);
-                ADDMFIELDFEATURE(qtreeItem, item, Cost);
-
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, Attack);
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, To_Hit);
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, Defense);
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, Movement_in_halves);
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, Resistance);
-                ADDFIELDFEATURE(qtreeItem, (int)item.m_Bonuses, Spell_Points);
-                ADDFIELDFEATURE(qtreeItem, -(int)item.m_Bonuses, Spell_Save);
-
-                ADDMFIELDFEATURE(qtreeItem, item, Spell_Number_Charged);
-                ADDMFIELDFEATURE(qtreeItem, item, Number_Of_Charges);
-
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Vampiric);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Guardian_Wind);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Lightning);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Cloak_Of_Fear);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Destruction);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Wraith_Form);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Regeneration);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Pathfinding);
-
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Water_Walking);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Resist_Elements);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Elemental_Armour);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Doom_equals_Chaos);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Stoning);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Endurance);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Haste);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Invisibility);
-
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Death);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Flight);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Resist_Magic);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Magic_Immunity);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Flaming);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Holy_Avenger);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, True_Sight);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Phantasmal);
-
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Power_Drain);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Bless);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, LionHeart);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Giant_Strength);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Planar_Travel);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Merging);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Righteousness);
-                ADDFLAGFEATURE(qtreeItem, item.m_Bitmask_Powers, Invulnerability);
-            }
-        }
-
-        //
-        // UNITS
-        //
-
-        featurePrefix = tr("U.");
-
-        QTreeWidgetItem* qtreeUFields
-            = new QTreeWidgetItem(qtreeHero, QStringList(tr("Unit.Fields")));
-
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, XPos);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, YPos);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Plane);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Owner);
-
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Moves_Total);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Unit_Type);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Hero_Slot_Number);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Active);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Moves_Left);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, XPos_of_destination);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, YPos_of_destination);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Status);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Level);
-        ADDMFIELDFEATURE(qtreeUFields, unit, Experience);
-        //int8_t      m_Guess_Lifedrain_Damage;
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Damage);
-        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Grouping);
-        //int8_t      m_Guess_Combat_Enchantment_Flag[3];
-        ADDMFIELDFEATURE(qtreeUFields, (unsigned)unit, Scouting);
-        ADDMFIELDFEATURE(qtreeUFields, (int)unit, Road_Building_left_to_complete);
-        //int8_t      m_Road_Building_parms[3];
-
-        addTreeFeature(qtreeUFlags, 
-            tr("U.Weapon type"), 
-            QIcon(),
-            toQStr((MoM::eWeaponType)unit.m_Weapon_Mutation.s.Weapon_Type), 
-            QIcon());
-    }
-    */
-
     ui->pushButton_Reread->setEnabled(
             (0 != dynamic_cast<MoM::MoMGameMemory*>(m_game.data()))
             || (0 != dynamic_cast<MoM::MoMGameCustom*>(m_game.data()))
             );
-    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
+//    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
 }
 
 void MainWindow::on_pushButton_Connect_clicked()
@@ -457,11 +302,6 @@ void MainWindow::on_pushButton_Connect_clicked()
     }
     else
     {
-//		if (ui->checkBox_UpdateTree->isChecked())
-//		{
-//			statusBar()->showMessage(tr("Updating treeview ..."));
-//			m_UnitModel.setGame(m_game.get());
-//		}
         statusBar()->showMessage(tr("Game connected"));
     }
 
@@ -469,19 +309,6 @@ void MainWindow::on_pushButton_Connect_clicked()
 	{
         emit signal_gameChanged(newGame);
 	}
-
-//    if (ok)
-//    {
-//        (void) QMessageBox::warning(this,
-//            tr("Master of Magic Real-Time Game Tweaker"),
-//            tr( "Changes to WIZARDS.EXE and MAGIC.EXE.\n"
-//                "\n"
-//                "Some of the changes you may make on a connected game HAVE to be saved in a .EXE file to take effect.\n"
-//                "Please be aware of this and make a backup of WIZARDS.EXE and MAGIC.EXE to be safe.\n"
-//                "Currently no confirmation is asked before changing an .EXE file.\n"
-//                "\n"
-//                "This is only relevant if you connect to a game and make changes in sections marked 'MODIFIES Wizards.exe' or 'MODIFIES Magic.exe'."));
-//    }
 }
 
 void MainWindow::on_pushButton_Load_clicked()
@@ -492,16 +319,34 @@ void MainWindow::on_pushButton_Load_clicked()
     QString fileName = m_filedialogLoadGame.selectedFiles().first();
 
     MoM::MoMLbxBase lbxFile;
-    QMoMGameSavePtr saveGame( new MoM::MoMGameSave );
+    QMoMGamePtr newGame;
 
     statusBar()->showMessage(tr("Loading game..."));
 
+    QMoMGameSavePtr saveGame( new MoM::MoMGameSave );
+    QMoMGameMemoryPtr memoryGame = m_game.dynamicCast<MoM::MoMGameMemory>();
     bool ok = saveGame->load(fileName.toAscii());
+    if (ok)
+    {
+        newGame = saveGame.dynamicCast<MoM::MoMGameBase>();
+    }
+    else if (memoryGame)
+    {
+        ok = memoryGame->load(fileName.toAscii());
+        if (ok)
+        {
+            newGame = memoryGame.dynamicCast<MoM::MoMGameBase>();
+        }
+    }
+    else
+    {
+    }
+
     if (!ok)
     {
         statusBar()->showMessage(tr("Failed to load game"));
         (void)QMessageBox::warning(this,
-            tr("Load MoM SAVEn.GAM"),
+            tr("Load MoM game"),
             tr("Could not load MoM game '%1'").arg(fileName));
     }
     else
@@ -509,34 +354,54 @@ void MainWindow::on_pushButton_Load_clicked()
         statusBar()->showMessage(tr("Game loaded"));
     }
 
-	QMoMGamePtr newGame = saveGame.dynamicCast<MoM::MoMGameBase>();
 	emit signal_gameChanged(newGame);
 }
 
 void MainWindow::on_pushButton_Save_clicked()
 {
+    bool ok = true;
     QMoMGameSavePtr saveGame = m_game.dynamicCast<MoM::MoMGameSave>();
-    if ((saveGame.isNull()) || !saveGame->isOpen())
+    QMoMGameMemoryPtr memoryGame = m_game.dynamicCast<MoM::MoMGameMemory>();
+    if (saveGame && saveGame->isOpen())
+    {
+        if (!m_filedialogSaveGame.exec())
+        {
+            return;
+        }
+
+        QString fileName = m_filedialogSaveGame.selectedFiles().first();
+        ok = saveGame->save(fileName.toAscii());
+        if (!ok)
+        {
+            (void)QMessageBox::warning(this,
+                tr("Save MoM file"),
+                tr("Failed to save MoM game '%1'").arg(fileName));
+        }
+    }
+    else if (memoryGame && memoryGame->isOpen())
+    {
+        if (!m_filedialogSaveGame.exec())
+        {
+            return;
+        }
+
+        QString fileName = m_filedialogSaveGame.selectedFiles().first();
+        ok = memoryGame->save(fileName.toAscii());
+        if (!ok)
+        {
+            (void)QMessageBox::warning(this,
+                tr("Save MoM memory"),
+                tr("Failed to save MoM game '%1'").arg(fileName));
+        }
+    }
+    else
     {
         (void)QMessageBox::warning(this, 
-            tr("Save MoM SAVEn.GAM"),
-            tr("Can only save a game that has been loaded first"));
-        return;
+            tr("Save MoM game"),
+            tr("There is nothing to save"));
+        ok = false;
     }
 
-    if (!m_filedialogSaveGame.exec())
-    {
-        return;
-    }
-
-    QString fileName = m_filedialogSaveGame.selectedFiles().first();
-    bool ok = saveGame->save(fileName.toAscii());
-    if (!ok)
-    {
-        (void)QMessageBox::warning(this,
-            tr("Save MoM SAVEn.GAM"),
-            tr("Failed to save MoM game '%1'").arg(fileName));
-    }
 
     if (!ok)
     {
@@ -625,7 +490,7 @@ void MainWindow::on_pushButton_ShowTables_clicked()
 
 void MainWindow::on_pushButton_Map_clicked()
 {
-    DialogOverlandMap* dialog = new DialogOverlandMap(this);
+    MoM::DialogMap* dialog = new MoM::DialogMap(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
@@ -657,7 +522,12 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
         statusBar()->showMessage(tr("Catnip mod applied"));
         (void)QMessageBox::warning(this,
             tr("Catnip mod"),
-            tr("Catnip mod applied"));
+            tr( "Catnip mod applied\n"
+                "\n"
+                "1. All units have an additional half move\n"
+                "2. The heroes have alternative slots (and a couple of changes)\n"
+                "3. Magicians, priests, and shamen have been renamed and have different abilities\n"
+            ));
     }
 
     controller->update();

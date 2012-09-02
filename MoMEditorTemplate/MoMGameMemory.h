@@ -35,7 +35,7 @@ public:
 
     virtual eGameState* getGameState();
     virtual uint16_t* getGameTurn();
-    virtual const char* getNameByOffset(uint16_t offset);
+    virtual const char* getNameByOffset(DS_Offset offset);
 
     virtual std::string getSources() const
     {
@@ -47,10 +47,10 @@ public:
         return ((0 != m_process.get()) && m_process->isOpen());
     }
 
-    virtual bool readData()
-    {
-        return ((0 != m_process.get()) && m_process->readData());
-    }
+    virtual bool readData();
+
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
 
     virtual bool validate();
 
@@ -91,15 +91,14 @@ private:
 
     virtual Available_spell_page* getAvailable_spell_pages();
     virtual Battlefield* getBattlefield();
-    virtual Battle_Unit* getBattle_Unit_View();
+    virtual Battle_Unit* getBattleUnitViewed();
     virtual Battle_Unit* getBattle_Units();
-    virtual eBonusDeposit* getBonusDeposits();
-    virtual Building_Data* getBuilding_Data();
+    virtual Building_Data* getBuildingData();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
     virtual Fortress* getFortresses();
-    virtual WizardsExe_Game_Data* getGame_Data_Exe();
-    virtual Game_Settings* getGame_Settings();
+    virtual WizardsExe_Game_Data* getGameData_WizardsExe();
+    virtual Game_Settings* getGameSettings();
     virtual eSpell16* getHero_spells();
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr);
     virtual Item* getItems();
@@ -108,9 +107,19 @@ private:
     virtual uint16_t* getNumber_of_Cities();
     virtual uint16_t* getNumber_of_Units();
     virtual uint16_t* getNumber_of_Wizards();
-    virtual Spell_Data* getSpell_Data();
+    virtual Spell_Data* getSpellData();
     virtual Spells_Cast_in_Battle* getSpells_Cast_in_Battle();
-    virtual eTerrainType* getTerrainTypes();
+
+    virtual eTerrainBonusDeposit* getTerrain_Bonuses();
+    virtual Terrain_Changes* getTerrain_Changes();
+    virtual uint8_t* getTerrain_Explored();
+    virtual uint8_t* getTerrain_LandMassID();
+    // TODO: Weird. It appears that the terrain-movements are all zero in memory.
+    //       Presumably they are swapped out or something.
+    //       Either way, we can't do anything with it.
+//    virtual Map_Movement* getTerrain_Movements();
+    virtual eTerrainType* getTerrain_Types();
+
     virtual Unit* getUnits();
     virtual Unit_Type_Data* getUnit_Types();
     virtual int8_t* getUnrest_Table(eRace homeRace);

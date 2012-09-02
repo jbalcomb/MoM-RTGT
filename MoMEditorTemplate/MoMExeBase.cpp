@@ -56,26 +56,26 @@ void MoMExeBase::close() throw()
 //    m_firstStubNr = 0;
 }
 
-bool MoMExeBase::convertDsegOffset_to_ExeOffset(uint16_t dsegOffset, size_t& exeOffset)
+bool MoMExeBase::convertDsegOffset_to_ExeOffset(uint16_t dsegOffset, size_t& exeOffset) const
 {
     exeOffset = 0;
 
     if (m_contents.empty())
         return false;
-    uint8_t* pContents = (uint8_t*)&m_contents[0];
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
 
     exeOffset = (m_DataSegment - pContents) + dsegOffset;
 
     return true;
 }
 
-bool MoMExeBase::convertExeOffset_to_DsegOffset(size_t exeOffset, uint16_t& dsegOffset)
+bool MoMExeBase::convertExeOffset_to_DsegOffset(size_t exeOffset, uint16_t& dsegOffset) const
 {
     dsegOffset = 0;
 
     if (m_contents.empty())
         return false;
-    uint8_t* pContents = (uint8_t*)&m_contents[0];
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
 
     if (pContents + exeOffset < m_DataSegment)
         return false;
@@ -87,14 +87,14 @@ bool MoMExeBase::convertExeOffset_to_DsegOffset(size_t exeOffset, uint16_t& dseg
     return true;
 }
 
-bool MoMExeBase::convertExeOffset_to_OvlOffset(size_t exeOffset, size_t& ovlNr, uint16_t& ovlOffset)
+bool MoMExeBase::convertExeOffset_to_OvlOffset(size_t exeOffset, size_t& ovlNr, uint16_t& ovlOffset) const
 {
     ovlNr = 0;
     ovlOffset = 0;
 
     if (m_contents.empty())
         return false;
-    uint8_t* pContents = (uint8_t*)&m_contents[0];
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
 
     for (size_t i = 0; i < m_nrStubSegments; ++i)
     {
@@ -112,7 +112,7 @@ bool MoMExeBase::convertExeOffset_to_OvlOffset(size_t exeOffset, size_t& ovlNr, 
     return false;
 }
 
-bool MoMExeBase::convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset, size_t& exeOffset)
+bool MoMExeBase::convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset, size_t& exeOffset) const
 {
     exeOffset = 0;
 
@@ -122,7 +122,7 @@ bool MoMExeBase::convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset,
         return false;
     if (m_contents.empty())
         return false;
-    uint8_t* pContents = (uint8_t*)&m_contents[0];
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
 
     size_t stubNr = ovlNr - m_firstStubNr;
 

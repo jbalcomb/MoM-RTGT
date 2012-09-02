@@ -26,8 +26,6 @@ namespace {
 // For DOSBox 0.74 for Windows XP it is the given value (currently)
 const DWORD gBASEADDRESS_SIZE = 0x1001000;
 
-const char gLOCAL_DIRECTORY[] = "local directory ";
-
 
 BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 {
@@ -49,41 +47,13 @@ BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 }
 
 
-MoMProcess::MoMProcess(void) :
-    m_hProcess(NULL),
-    m_lpBaseAddress(0),
-    m_dwBaseAddressSize(0),
-    m_dwOffsetSegment0(0),
-    m_dwOffsetCode(0),
-    m_dwOffsetDatasegment(0),
-    m_dataSegmentAndUp(),
-    m_exeFilepath(),
-    m_verbose(false)
+void MoMProcess::closeProcess() throw()
 {
-}
-
-MoMProcess::~MoMProcess(void)
-{
-    close();
-}
-
-void MoMProcess::close() throw()
-{
-    m_dataSegmentAndUp.clear();
-
-    m_lpBaseAddress = 0;
-    m_dwBaseAddressSize = 0;
-    m_dwOffsetSegment0 = 0;
-    m_dwOffsetCode = 0;
-    m_dwOffsetDatasegment = 0;
-
     if (NULL != m_hProcess)
     {
         CloseHandle(m_hProcess);
         m_hProcess = NULL;
     }
-    
-    m_exeFilepath.clear();
 }
 
 bool MoMProcess::findProcessAndData()
@@ -142,7 +112,7 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
     bool ok = true;
     std::vector<BYTE> data;
     
-    for (; 0 != size;
+    for (; ok && (0 != size) && ((0 == m_dwOffsetDatasegment) || m_exeFilepath.empty());
         baseAddr += mbi.RegionSize, size = VirtualQueryEx(m_hProcess, baseAddr, &mbi, sizeof(mbi)))
     {
         if (m_verbose)
@@ -186,87 +156,17 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
         data.resize(mbi.RegionSize);
         if (!ReadProcessMemory(m_hProcess, mbi.BaseAddress, &data[0], mbi.RegionSize, NULL))
         {
-            printError( GetLastError(), "ReadProcessMemory" ); // Show cause of failure
+            printError(GetLastError(), "ReadProcessMemory"); // Show cause of failure
         }
         else
         {
-            for (size_t i = 0; i + ARRAYSIZE(gDATASEGMENT_IDENTIFIER) < data.size(); ++i)
-            {
-                // Try to find the current directory (exclude the terminating zero that won't be there)
-                if (0 == memcmp(&data[i], gLOCAL_DIRECTORY, ARRAYSIZE(gLOCAL_DIRECTORY) - 1))
-                {
-                    m_exeFilepath = (const char*)&data[i + strlen(gLOCAL_DIRECTORY)];
-                    std::cout << "Found LOCAL_DIRECTORY '" << m_exeFilepath << "' at 0x" << std::hex << i << std::dec << std::endl;
-                    break;
-                }
-
-                if (0 == memcmp(&data[i], gDATASEGMENT_IDENTIFIER, ARRAYSIZE(gDATASEGMENT_IDENTIFIER)))
-                {
-                    m_lpBaseAddress = (LPBYTE)mbi.BaseAddress;
-                    m_dwBaseAddressSize = data.size();
-                    m_dwOffsetDatasegment = i;
-                    std::cout << "Found DATASEGMENT_IDENTIFIER (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ") at 0x" << std::hex << i << std::dec << std::endl;
-
-                    ok = findSEG0(data);
-
-                    break;
-                }
-            }
-        }
-
-        if ((0 != m_dwOffsetDatasegment) && !m_exeFilepath.empty())
-        {
-            break;
+            ok = findSignatures((size_t)mbi.BaseAddress, data);
         }
     }
 
-    if (0 == m_lpBaseAddress || 0 == m_dwOffsetDatasegment)
-    {
-        std::cout << "Could not find DATASEGMENT_IDENTIFIER (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ")" << std::endl;
-        ok = false;
-    }
-    if (m_exeFilepath.empty())
-    {
-        std::cout << "Could not find LOCAL_DIRECTORY" << std::endl;
-        // Do not treat as failure
-    }
-
-    if (ok)
-    {
-        ok = readData();
-    }
-
-    if (ok)
-    {
-        const char* pszBaseFilename = 0;
-        switch (getOffset_DS_Code())
-        {
-        case gOFFSET_WIZARDS_DSEG_CODE: pszBaseFilename = "WIZARDS.EXE"; break;
-        case gOFFSET_MAGIC_DSEG_CODE:   pszBaseFilename = "MAGIC.EXE"; break;
-        default:                      break;
-        }
-
-        if (0 == pszBaseFilename)
-        {
-            m_exeFilepath.clear();
-        }
-        else
-        {
-            if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '\\')
-            {
-                m_exeFilepath += "\\";
-            }
-            m_exeFilepath += pszBaseFilename;
-        }
-    }
+    ok = registerResults(ok);
     
     return ok;
-}
-
-std::string MoMProcess::getExeFilepath()
-{
-    return m_exeFilepath;
-
 }
 
 void MoMProcess::printError(int errorNumber, const std::string& msg)

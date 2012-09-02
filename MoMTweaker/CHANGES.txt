@@ -2,8 +2,45 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.4 (2012--)
+CHANGES IN 0.2.6 (2012--)
 -----------------------------
+
+* Added an battlefield map.
+
+
+
+CHANGES IN 0.2.5 (2012-08-22)
+-----------------------------
+
+* Added an LBX editor (click Tools / LBX editor) [Anthony,Aureustgo,FrancoK].
+  When you load an LBX file with pictures, those will be shown in the 
+  top view.
+  The bottom view shows the bitmaps (png gif bmp jpg)
+  that are in the directory of the tweaker, or one directory lower.
+  I have included a couple of images that you can use.
+  If you click "Replace" the LBX file is overwritten.
+  To see the effect, MoM needs to be restarted (quit & continue).
+
+* Completed the overland map view to show everything it should.
+  Clicking on a tile will show what's there.
+  It also allows you to change the fields of the tile's contents.
+
+* Adjusted the Catnip mod to display what is changed, which is:
+  1. All units get an extra half move.
+  2. Heroes get dedicated slots (and a couple of changes).
+  3. Magicians, priests, and shamen are renamed and get different abilities.
+  TBH, this is not what Catwalk intended, but these are ideas I found
+  fun to implement. ;)
+  Btw, quitting MoM and continuing discards all changes.
+
+* Added tax unrest table to Game data [Anthony].
+
+  
+
+CHANGES IN 0.2.4 (2012-08-02)
+-----------------------------
+
+* Added Anthony's spell-category information to the table of spells [Anthony].
 
 * Made all fields in all tables editable (button "Show tables").
   Also added a context popup menu.
@@ -12,14 +49,18 @@ CHANGES IN 0.2.4 (2012--)
   Where applicable the selection(s) can be made from the popup menu
   (for instance the immunities of a unit).
   
-* In particular the Unrest table is now editable.
+* In particular the Unrest table is now editable. [letsdance]
   To make the changes permanent, load "TERRSTAT.LBX", make the changes,
   and save it.
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/17/
   
 * Extended "Summon" dialog to display more fields under more circumstances.
   
 * Fixed Customizer (Magic.exe) sections (which were damaged).
   
+* Fixed <Unknown eMagic Powerful> (4) in Insecticide 1.40m+ [FrancoK]
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/18/
+
 * Added max books/skills to EXE:Miscellaneous, so you can
   get more than 13 books and 6 skills [FrancoK].
 

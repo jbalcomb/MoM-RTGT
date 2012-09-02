@@ -37,7 +37,7 @@ MoMUnit::MoMUnit() :
 {
 }
 
-MoMUnit::MoMUnit(MoM::MoMGameBase *game) :
+MoMUnit::MoMUnit(MoMGameBase *game) :
     m_game(),
     m_battleUnit(),
     m_heroStats(),
@@ -132,9 +132,9 @@ void MoMUnit::changeUnit(Battle_Unit *battleUnit)
 
         if (0 != m_unit)
         {
-            m_heroStats = m_game->getHero_stats(battleUnit->m_Owner, m_unit->m_Unit_Type);
-            m_hiredHero = m_game->getHired_Hero(m_unit);
-            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
+            m_heroStats = m_game->getHeroStats(battleUnit->m_Owner, m_unit->m_Unit_Type);
+            m_hiredHero = m_game->getHiredHero(m_unit);
+            m_unitType = m_game->getUnitTypeData(m_unit->m_Unit_Type);
         }
 //        m_heroStatsInitializer = 0;
 
@@ -150,10 +150,10 @@ void MoMUnit::changeUnit(eUnit_Type unitTypeNr)
     {
 //        m_battleUnit = m_game->getBattle_Units();
         // TODO: playerNr is YOU if you want to summon, or otherwise it is unknown
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
 //        m_hiredHero = 0;
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 //        m_unit = 0;
 
         applyEffects();
@@ -173,8 +173,8 @@ void MoMUnit::changeUnit(Hired_Hero *hiredHero)
         m_unit = m_game->getUnit(hiredHero->m_Unit_Nr);
         if (0 != m_unit)
         {
-            m_unitType = m_game->getUnit_Type_Data(m_unit->m_Unit_Type);
-            m_heroStats = m_game->getHero_stats(playerNr, m_unit->m_Unit_Type);
+            m_unitType = m_game->getUnitTypeData(m_unit->m_Unit_Type);
+            m_heroStats = m_game->getHeroStats(playerNr, m_unit->m_Unit_Type);
         }
 //        m_battleUnit = m_game->getBattle_Units();
 //        m_heroStatsInitializer = 0;
@@ -193,11 +193,11 @@ void MoMUnit::changeUnit(Hero_stats *heroStats)
     {
         MoM::ePlayer playerNr = m_game->getPlayerNr(m_heroStats);
         MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(m_heroStats);
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 
         for (unsigned slotNr = 0; slotNr < gMAX_HIRED_HEROES; ++slotNr)
         {
-            Hired_Hero* hiredHero = m_game->getHired_Hero(playerNr, slotNr);
+            Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, slotNr);
             if (0 == hiredHero)
                 continue;
             Unit* unit = m_game->getUnit(hiredHero->m_Unit_Nr);
@@ -245,7 +245,7 @@ void MoMUnit::changeUnit(Unit_Type_Data* unitType)
         MoM::eUnit_Type unitTypeNr = m_game->getUnitTypeNr(unitType);
 
 //        m_battleUnit = m_game->getBattle_Units();
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
 //        m_hiredHero = 0;
 //        m_unit = 0;
@@ -266,10 +266,10 @@ void MoMUnit::changeUnit(Unit* unit)
         MoM::eUnit_Type unitTypeNr = unit->m_Unit_Type;
 
 //        m_battleUnit = m_game->getBattle_Units();
-        m_heroStats = m_game->getHero_stats(MoM::PLAYER_YOU, unitTypeNr);
+        m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);
 //        m_heroStatsInitializer = 0;
-        m_hiredHero = m_game->getHired_Hero(unit);
-        m_unitType = m_game->getUnit_Type_Data(unitTypeNr);
+        m_hiredHero = m_game->getHiredHero(unit);
+        m_unitType = m_game->getUnitTypeData(unitTypeNr);
 
         applyEffects();
     }
@@ -672,6 +672,23 @@ int MoMUnit::getNrFigures() const
     return value;
 }
 
+ePlayer MoMUnit::getOwner() const
+{
+    ePlayer value = (ePlayer)-1;
+    if (0 != m_unit)
+    {
+        value = m_unit->m_Owner;
+    }
+    else if (0 != m_battleUnit)
+    {
+        value = m_battleUnit->m_Owner;
+    }
+    else
+    {
+    }
+    return value;
+}
+
 MoMUnit::BaseAttributes MoMUnit::getPenaltyAttributes() const
 {
     return m_penalties;
@@ -1027,44 +1044,44 @@ void MoMUnit::applyEffects()
     applyWeaponType();
     applySpells();
 
-    // Check differences with Battle_Unit if available
-    if (0 != m_battleUnit)
-    {
-        BaseAttributes actualAttr = getActualAttributes();
-		std::cout << "Verify battle unit fields" << std::endl;
-		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Attack)
-		{
-            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraAtt=" << (int)m_battleUnit->m_Extra_Attack << std::endl;
-		}
-		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
-		{
-            std::cout << "Ranged calc=" << actualAttr.ranged << " bonus=" << m_bonuses.ranged << " battleUnit=" << (int)m_battleUnit->m_Ranged << " battle.extraRa=" << (int)m_battleUnit->m_Extra_Ranged << std::endl;
-		}
-		if (actualAttr.defense != m_battleUnit->m_Defense || this->m_bonuses.defense != m_battleUnit->m_Extra_Defense)
-		{
-            std::cout << "Defense calc=" << actualAttr.defense << " bonus=" << m_bonuses.defense << " battleUnit=" << (int)m_battleUnit->m_Defense << " battle.extraDf=" << (int)m_battleUnit->m_Extra_Defense << std::endl;
-		}
-		if (actualAttr.toHitMelee != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Melee || this->m_bonuses.toHitMelee != m_battleUnit->m_Extra_ToHit_Melee)
-		{
-            std::cout << "ToHit Melee calc=" << actualAttr.toHitMelee << " bonus=" << m_bonuses.toHitMelee << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToMe=" << (int)m_battleUnit->m_Extra_ToHit_Melee << std::endl;
-		}
-		if (actualAttr.toHitRanged != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Ranged || this->m_bonuses.toHitRanged != m_battleUnit->m_Extra_ToHit_Ranged)
-		{
-            std::cout << "ToHit Ranged calc=" << actualAttr.toHitRanged << " bonus=" << m_bonuses.toHitRanged << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToRa=" << (int)m_battleUnit->m_Extra_ToHit_Ranged << std::endl;
-		}
-		if (actualAttr.toDefend != m_battleUnit->m_Extra_ToDefend)
-		{
-            std::cout << "ToDefend calc=" << actualAttr.toDefend << " bonus=" << m_bonuses.toDefend << " battleUnit=N/A" << " battle.extraToDf=" << (int)m_battleUnit->m_Extra_ToDefend << std::endl;
-		}
-		if (actualAttr.moves != m_battleUnit->m_MoveHalves / 2.0)
-		{
-			std::cout << "Moves calc=" << actualAttr.moves << " get=" << getMoves() << " battleUnit=" << m_battleUnit->m_MoveHalves / 2.0 << std::endl;
-		}
-		if (getGazeModifier() != m_battleUnit->m_Gaze_Modifier)
-		{
-            std::cout << "Gaze calc=" << getGazeModifier() << " battleUnit=" << (int)m_battleUnit->m_Gaze_Modifier << std::endl;
-		}
-    }
+//    // Check differences with Battle_Unit if available
+//    if (0 != m_battleUnit)
+//    {
+//        BaseAttributes actualAttr = getActualAttributes();
+//		std::cout << "Verify battle unit fields" << std::endl;
+//		if (actualAttr.melee != m_battleUnit->m_Melee || this->m_bonuses.melee != m_battleUnit->m_Extra_Melee)
+//		{
+//            std::cout << "Melee calc=" << actualAttr.melee << " bonus=" << m_bonuses.melee << " battleUnit=" << (int)m_battleUnit->m_Melee << " battle.extraMe=" << (int)m_battleUnit->m_Extra_Melee << std::endl;
+//		}
+//		if (actualAttr.ranged != m_battleUnit->m_Ranged || this->m_bonuses.ranged != m_battleUnit->m_Extra_Ranged)
+//		{
+//            std::cout << "Ranged calc=" << actualAttr.ranged << " bonus=" << m_bonuses.ranged << " battleUnit=" << (int)m_battleUnit->m_Ranged << " battle.extraRa=" << (int)m_battleUnit->m_Extra_Ranged << std::endl;
+//		}
+//		if (actualAttr.defense != m_battleUnit->m_Defense || this->m_bonuses.defense != m_battleUnit->m_Extra_Defense)
+//		{
+//            std::cout << "Defense calc=" << actualAttr.defense << " bonus=" << m_bonuses.defense << " battleUnit=" << (int)m_battleUnit->m_Defense << " battle.extraDf=" << (int)m_battleUnit->m_Extra_Defense << std::endl;
+//		}
+//		if (actualAttr.toHitMelee != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Melee || this->m_bonuses.toHitMelee != m_battleUnit->m_Extra_ToHit_Melee)
+//		{
+//            std::cout << "ToHit Melee calc=" << actualAttr.toHitMelee << " bonus=" << m_bonuses.toHitMelee << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToMe=" << (int)m_battleUnit->m_Extra_ToHit_Melee << std::endl;
+//		}
+//		if (actualAttr.toHitRanged != m_battleUnit->m_To_Hit + m_battleUnit->m_Extra_ToHit_Ranged || this->m_bonuses.toHitRanged != m_battleUnit->m_Extra_ToHit_Ranged)
+//		{
+//            std::cout << "ToHit Ranged calc=" << actualAttr.toHitRanged << " bonus=" << m_bonuses.toHitRanged << " battleUnit=" << (int)m_battleUnit->m_To_Hit << " battle.extraToRa=" << (int)m_battleUnit->m_Extra_ToHit_Ranged << std::endl;
+//		}
+//		if (actualAttr.toDefend != m_battleUnit->m_Extra_ToDefend)
+//		{
+//            std::cout << "ToDefend calc=" << actualAttr.toDefend << " bonus=" << m_bonuses.toDefend << " battleUnit=N/A" << " battle.extraToDf=" << (int)m_battleUnit->m_Extra_ToDefend << std::endl;
+//		}
+//		if (actualAttr.moves != m_battleUnit->m_MoveHalves / 2.0)
+//		{
+//			std::cout << "Moves calc=" << actualAttr.moves << " get=" << getMoves() << " battleUnit=" << m_battleUnit->m_MoveHalves / 2.0 << std::endl;
+//		}
+//		if (getGazeModifier() != m_battleUnit->m_Gaze_Modifier)
+//		{
+//            std::cout << "Gaze calc=" << getGazeModifier() << " battleUnit=" << (int)m_battleUnit->m_Gaze_Modifier << std::endl;
+//		}
+//    }
 }
 
 void MoMUnit::applyAbilities()

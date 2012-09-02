@@ -204,7 +204,7 @@ Special<eUnitAbility> gTableUnitSpecials[eUnitAbility_MAX] =
     { UNITABILITY_Death_Touch, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_Power_Drain, HELP_SPECIAL2_POWER_DRAIN, "SPECIAL2.LBX", 31 },
     { UNITABILITY_Dispel_Evil, HELP_SPECIAL2_DISPEL_EVIL, "SPECIAL.LBX", 22 },
-    { UNITABILITY_No_effect04_COMBAT, eHelpIndex_NONE, "", -1 },
+    { UNITABILITY_Ball_COMBAT, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_No_effect03_COMBAT, eHelpIndex_NONE, "", -1 },
     { UNITABILITY_Eldritch_Weapon_COMBAT, HELP_SPECIAL_ELDRITCH_WEAPON, "SPECIAL.LBX", 84 },
     { UNITABILITY_Warp_Lightning_COMBAT, eHelpIndex_NONE, "", -1 },
@@ -278,7 +278,7 @@ int MoMGameBase::getCostToProduce(eProducing producing)
 	int buildingCost = -1;
 	if (producing < MoM::PRODUCING_BUILDING_MAX)
 	{
-		MoM::Building_Data* buildingData = getBuilding_Data((eBuilding)producing);
+		MoM::Building_Data* buildingData = getBuildingData((eBuilding)producing);
 		if (0 != buildingData)
 		{
 			buildingCost = buildingData->m_Building_cost;
@@ -287,7 +287,7 @@ int MoMGameBase::getCostToProduce(eProducing producing)
 	else 
 	{
 		MoM::eUnit_Type unitTypeNr = (MoM::eUnit_Type)((int)producing - (int)MoM::PRODUCING_Trireme + (int)MoM::UNITTYPE_Trireme);
-		MoM::Unit_Type_Data* unitData = getUnit_Type_Data(unitTypeNr);
+		MoM::Unit_Type_Data* unitData = getUnitTypeData(unitTypeNr);
 		if (0 != unitData)
 		{
 			buildingCost = unitData->m_Cost;
@@ -296,29 +296,51 @@ int MoMGameBase::getCostToProduce(eProducing producing)
 	return buildingCost;
 }
 
-std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
+const HelpLBXentry* MoMGameBase::getHelpEntry(eHelpIndex helpTextNr)
 {
-    const size_t maxwidth = 60;
-
     if (0 == m_HelpLbx.get())
     {
         m_HelpLbx.reset(new MoMLbxBase);
         // Only try to load once and ignore result.
         // We'll check if it's there when we use it.
-        (void)m_HelpLbx->load(this->getGameDirectory() + "/HELP.LBX");
+        if (m_HelpLbx->load(this->getGameDirectory() + "/" + "HELP.LBX"))
+        {
+            // TODO: Remove
+            //const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
+            //std::cout << "HelpLBXentries" << std::endl;
+            //for (size_t i = 0; i < MoM::eHelpIndex_MAX; ++i)
+            //{
+            //    std::cout << i << "\t" << helpLbxEntries[i].title << "\t" << helpLbxEntries[i].lbxFile << "\t" << helpLbxEntries[i].lbxIndex << std::endl;
+            //}
+        }
     }
     if (m_HelpLbx->getNrRecords() < 3)
     {
-        return "(HELP.LBX is not available)";
+        return 0;
     }
 
-    std::string text;
+    const HelpLBXentry* helpEntry = 0;
     if ((helpTextNr >= 0) && (helpTextNr < eHelpIndex_MAX))
     {
         // TODO: Check ranges
         const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
-        const char* title = helpLbxEntries[helpTextNr].title;
-        const char* description = helpLbxEntries[helpTextNr].description;
+        helpEntry = &helpLbxEntries[helpTextNr];
+    }
+
+    return helpEntry;
+}
+
+std::string MoMGameBase::getHelpText(eHelpIndex helpTextNr)
+{
+    const size_t maxwidth = 60;
+
+    const HelpLBXentry* helpEntry = getHelpEntry(helpTextNr);
+
+    std::string text;
+    if (0 != helpEntry)
+    {
+        const char* title = helpEntry->title;
+        const char* description = helpEntry->description;
 
         text = std::string(title) + ": " + description;
     }
@@ -419,6 +441,17 @@ std::string MoMGameBase::getHelpText(eRanged_Type rangedType)
 
     std::string value = getHelpText(helpIndex);
 
+    return value;
+}
+
+const HelpLBXentry* MoMGameBase::getHelpEntry(eSpell spell)
+{
+    const HelpLBXentry* value = 0;
+    if ((spell >= 1) && (spell < eSpell_MAX))
+    {
+        eHelpIndex helpIndex = (MoM::eHelpIndex)(0 + spell);
+        value = getHelpEntry(helpIndex);
+    }
     return value;
 }
 

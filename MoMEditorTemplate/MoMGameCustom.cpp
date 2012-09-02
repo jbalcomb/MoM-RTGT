@@ -118,7 +118,7 @@ std::string MoMGameCustom::getGameDirectory()
     return dir;
 }
 
-WizardsExe_Game_Data* MoMGameCustom::getGame_Data_Exe()
+WizardsExe_Game_Data* MoMGameCustom::getGameData_WizardsExe()
 {
     if (0 == m_process.get())
         return 0;
@@ -126,7 +126,7 @@ WizardsExe_Game_Data* MoMGameCustom::getGame_Data_Exe()
     return validateStaticPointer(&pMoMDataSegment->m_Game_Data, 1);
 }
 
-Game_Settings* MoMGameCustom::getGame_Settings()
+Game_Settings* MoMGameCustom::getGameSettings()
 {
     if (0 == m_process.get())
         return 0;
@@ -152,7 +152,7 @@ MoMMagicDataSegment* MoMGameCustom::getMagicDataSegment()
     return pDataSegment;
 }
 
-const char* MoMGameCustom::getNameByOffset(uint16_t offset)
+const char* MoMGameCustom::getNameByOffset(DS_Offset offset)
 {
     if (0 == m_process.get())
         return 0;

@@ -19,18 +19,21 @@
 namespace MoM
 {
 
-bool convertImagesToLbx(const QVector<QImage>& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
+typedef QVector<QMoMImagePtr> QMoMAnimation;
+typedef QVector<QRgb> QMoMPalette;
 
-inline bool convertImageToLbx(const QImage& image, std::vector<uint8_t>& dataBuffer, const std::string& context)
+bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
+
+inline bool convertImageToLbx(const QMoMImagePtr& image, std::vector<uint8_t>& dataBuffer, const std::string& context)
 {
-    return convertImagesToLbx(QVector<QImage>(1, image), dataBuffer, context);
+    return convertImagesToLbx(QMoMAnimation(1, image), dataBuffer, context);
 }
 
-bool convertLbxToImages(const uint8_t* data, const QVector<QRgb>& defaultColorTable, QVector<QImage>& images, const std::string& context);
+bool convertLbxToImages(const uint8_t* data, const QMoMPalette& defaultColorTable, QMoMAnimation& images, const std::string& context);
 
-inline QMoMImagePtr convertLbxToImage(const uint8_t* data, const QVector<QRgb>& defaultColorTable, const std::string& context)
+inline QMoMImagePtr convertLbxToImage(const uint8_t* data, const QMoMPalette& defaultColorTable, const std::string& context)
 {
-    QVector<QImage> images;
+    QMoMAnimation images;
     (void)convertLbxToImages(data, defaultColorTable, images, context);
     if (images.empty())
     {
@@ -38,11 +41,11 @@ inline QMoMImagePtr convertLbxToImage(const uint8_t* data, const QVector<QRgb>& 
     }
     else
     {
-        return QMoMImagePtr(new QImage(images[0]));
+        return images[0];
     }
 }
 
-void convertLbxToPalette(const uint8_t* dataPalette, QVector<QRgb>& colorTable);
+void convertLbxToPalette(const uint8_t* dataPalette, QMoMPalette& colorTable);
 
 }
 

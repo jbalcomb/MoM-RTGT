@@ -39,6 +39,21 @@ QMoMResources::~QMoMResources()
 {
 }
 
+void QMoMResources::createInstance(const QMoMGamePtr &game)
+{
+    delete m_instance;
+    m_instance = new QMoMResources(game);
+}
+
+QMoMResources &QMoMResources::instance()
+{
+    if (0 == m_instance)
+    {
+        m_instance = new QMoMResources(QMoMGamePtr());
+    }
+    return *m_instance;
+}
+
 void QMoMResources::setGame(const QMoMGamePtr& game)
 {
     if (game.data() != m_game.data())
@@ -48,22 +63,224 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         (void)createColorTable();
 
-        (void)createBuildingImages();
-        (void)createItemImages();
-        (void)createLairImages();
-        (void)createMapBackImages();
-        (void)createSpecialsImages();
+        createBuildingImages();
+        createCitySizeImages();
+        createLbxImages("CMBTCITY", m_cmbtcityImages);
+        createLbxAnimations("CITYWALL", m_citywallAnimations);
+        createFigureImages();
+        createLbxImages("ITEMISC", m_itemiscImages);
+        createLbxImages("ITEMS", m_itemsImages);
+        createLairImages();
+        createLbxImages("MAPBACK", m_mapBackImages);
+
+        createLbxImages("SPECIAL", m_specialImages);
+        QVector<QMoMImagePtr> special2Images;
+        createLbxImages("SPECIAL2", special2Images);
+        m_specialImages.resize(120 + special2Images.size());
+        for(int i = 0; i < special2Images.size(); ++i)
+        {
+            m_specialImages[120 + i] = special2Images[i];
+        }
+
         // UnitImages are created before SpellImages, because SpellImages uses them
-        (void)createUnitImages();
-        // UnitImages should already have been created, because SpellImages uses them
-        (void)createSpellImages();
-        (void)createTerrainImages();
+        createUnitImages();
+        // m_specialImages and UnitImages should already have been created, because SpellImages uses them
+        createSpellImages();
+        createLbxImages("CMBGRASS", m_terrainBattleImages);
+        createTerrainImages();
 
         qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) const
+const QMoMImagePtr QMoMResources::getImage(const LBXRecordID &lbxRecordID) const
+{
+    QMoMImagePtr image;
+    if (m_game.isNull())
+        return image;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxRecordID.lbxTitle + ".LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return image;
+    image = MoM::convertLbxToImage(lbx.getRecord(lbxRecordID.lbxIndex), m_colorTable, lbxRecordID.lbxTitle + toStr(lbxRecordID.lbxIndex));
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eBannerColor bannerColor) const
+{
+    QMoMImagePtr image;
+    unsigned index = 14 + toUInt(bannerColor);
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_buildingImages, building))
+    {
+        image = m_buildingImages[building];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eCentralStructure structure) const
+{
+    static const int lookup[MoM::eCentralStructure_MAX] =
+    {
+        -1, // CENTRALSTRUCTURE_none,
+        18, // CENTRALSTRUCTURE_outpost,
+        0,  // CENTRALSTRUCTURE_city_grid,
+        17, // CENTRALSTRUCTURE_wizards_fortress,
+        21, // CENTRALSTRUCTURE_small_tower,
+        20, // CENTRALSTRUCTURE_tower_between_planes,
+        19, // CENTRALSTRUCTURE_cave,
+        23, // CENTRALSTRUCTURE_temple,
+        22, // CENTRALSTRUCTURE_medium_tower,
+        66, // CENTRALSTRUCTURE_sorcery_node,   ANIMATION
+        120, // CENTRALSTRUCTURE_chaos_node,     ANIMATION - located in another LBX file
+        65, // CENTRALSTRUCTURE_nature_node,    ANIMATION
+        121,// CENTRALSTRUCTURE_ruins,
+    };
+
+    int index = -1;
+    if (MoM::toUInt(structure) < ARRAYSIZE(lookup))
+    {
+        index = lookup[structure];
+    }
+    QMoMImagePtr image;
+    if (CENTRALSTRUCTURE_chaos_node == structure)
+    {
+        image = getImage(LBXRecordID("CHRIVER", 24));
+    }
+    else if (inVectorRange(m_cmbtcityImages, index))
+    {
+        image = m_cmbtcityImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBannerColor bannerColor) const
+{
+    QMoMImagePtr image;
+    int index = (int)citySize - 1;
+    if (index < 0)
+    {
+        index = 0;  // Treat outpost as hamlet
+    }
+    if (inVectorRange(m_citySizeImages, index))
+    {
+        image = m_citySizeImages[index];
+
+    }
+
+    // TODO: Centralize + check if color in range of palette
+    if ((BANNER_Green != bannerColor) && (0 != image))
+    {
+        image = QMoMImagePtr(new QImage(*image));
+        int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
+
+        for (int i = 0; i < 3; ++i)
+        {
+            image->setColor(216 + i, image->color(startColor[bannerColor] + i));
+        }
+    }
+
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eCityWall wall, bool broken) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_citywallAnimations, wall) && (m_citywallAnimations[wall].size() >= 2))
+    {
+        image = m_citywallAnimations[wall].at((int)broken);
+    }
+    return image;
+}
+
+const QMoMImagePtr  QMoMResources::getImage(MoM::eItem_Icon itemIcon) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_itemsImages, itemIcon))
+    {
+        image = m_itemsImages[itemIcon];
+    }
+    return image;
+}
+
+const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_lairImages, lair))
+    {
+        image = m_lairImages[lair];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(eRace race) const
+{
+    QMoMImagePtr image(new QImage(QString(":/race/%0.gif").arg(prettyQStr(race))));
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) const
+{
+    QMoMImagePtr image(new QImage(QString(":/abilities/%0.gif").arg(prettyQStr(randomPickType))));
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eSlot_Type16 slotType) const
+{
+    static const int lookupItemisc[MoM::eSlot_Type16_MAX] =
+    {
+        -1,
+        27, // SLOT16_Sword = 1,
+        28, // SLOT16_Bow = 2,
+        29, // SLOT16_Sword_Staff_Wand = 3,
+        30, // SLOT16_Staff_Wand = 4,
+        32, // SLOT16_Armor_Shield = 5,
+        31, // SLOT16_Amulet = 6,
+    };
+
+    int index = -1;
+    if (MoM::toUInt(slotType) < ARRAYSIZE(lookupItemisc))
+    {
+        index = lookupItemisc[slotType];
+    }
+    QMoMImagePtr image;
+    if (inVectorRange(m_itemiscImages, index))
+    {
+        image = m_itemiscImages[index];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eSpell spell) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_spellImages, spell))
+    {
+        image = m_spellImages[spell];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainBattle terrain) const
+{
+    QMoMImagePtr image;
+    if (inVectorRange(m_terrainBattleImages, terrain))
+    {
+        image = m_terrainBattleImages[terrain];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainBonusDeposit bonusDeposit) const
 {
     QMoMImagePtr image;
     unsigned index = -1;
@@ -83,22 +300,72 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBonusDeposit bonusDeposit) cons
     case DEPOSIT_no_deposit:
     default:                    break;
     }
-    if (inRange(m_mapBackImages, index))
+    if (inVectorRange(m_mapBackImages, index))
     {
         image = m_mapBackImages[index];
     }
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(eRace race) const
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainChange terrainChange, int roadDirection) const
 {
-    QMoMImagePtr image(new QImage(QString(":/race/%0.gif").arg(prettyQStr(race))));
+    QMoMImagePtr image;
+    unsigned index = -1;
+    switch (terrainChange)
+    {
+//    case TERRAINCHANGE_Volcano_owner:   index = 77; break;
+    case TERRAINCHANGE_Road:            index = 45 + roadDirection; break;  // 45-53
+    case TERRAINCHANGE_Enchanted_Road:  index = 54 + roadDirection; break;  // 54-62
+    case TERRAINCHANGE_Corruption:      index = 76; break;
+    default:                    break;
+    }
+    if (inVectorRange(m_mapBackImages, index))
+    {
+        image = m_mapBackImages[index];
+    }
     return image;
 }
 
-const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) const
+const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
 {
-    QMoMImagePtr image(new QImage(QString(":/abilities/%0.gif").arg(prettyQStr(randomPickType))));
+    QMoMImagePtr image;
+    if (inVectorRange(m_terrainTypeImages, terrain))
+    {
+        image = m_terrainTypeImages[terrain];
+    }
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading, MoM::eBannerColor bannerColor) const
+{
+    QMoMImagePtr image;
+    if (heading >= 0 && heading < 8)
+    {
+        int figureIndex = (int)unitType * 8 + heading;
+        if (inVectorRange(m_figureAnimations, figureIndex) && m_figureAnimations[figureIndex].size() >= 4)
+        {
+            image = m_figureAnimations[figureIndex].at(1);
+        }
+
+        // TODO: Centralize + check if colors in range of palette
+        if ((BANNER_Green != bannerColor) && (0 != image))
+        {
+            image = QMoMImagePtr(new QImage(*image));
+            int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
+            for (int i = 0; i < 3; ++i)
+            {
+                image->setColor(216 + i, image->color(startColor[bannerColor] + i));
+            }
+        }
+    }
+    else
+    {
+        if (inVectorRange(m_unitImages, unitType))
+        {
+            image = m_unitImages[unitType];
+        }
+    }
+
     return image;
 }
 
@@ -118,14 +385,14 @@ bool QMoMResources::createColorTable()
     return true;
 }
 
-bool QMoMResources::createBuildingImages()
+void QMoMResources::createBuildingImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
+        return;
     m_buildingImages.resize(lbx.getNrRecords());
     for (MoM::eBuilding building = (MoM::eBuilding)1; building < MoM::eBuilding_MAX; MoM::inc(building))
     {
@@ -155,81 +422,98 @@ bool QMoMResources::createBuildingImages()
         }
         m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), m_colorTable, toStr(building));
     }
-    return true;
 }
 
-bool QMoMResources::createItemImages()
+void QMoMResources::createCitySizeImages()
 {
     if (m_game.isNull())
-        return false;
-    std::string itemsLbxFile = m_game->getGameDirectory() + "/" + "ITEMS.LBX";
-    MoM::MoMLbxBase itemsLbx;
-    if (!itemsLbx.load(itemsLbxFile))
-        return false;
-    m_itemImages.resize(itemsLbx.getNrRecords());
-    for (size_t i = 0; i < itemsLbx.getNrRecords(); ++i)
+        return;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return;
+    MoM::convertLbxToImages(lbx.getRecord(20), m_colorTable, m_citySizeImages, "city sizes");
+}
+
+void QMoMResources::createFigureImages()
+{
+    int firstUnused = 0;
+    // Reserve fir 16 files with max 120 images per file
+    int sizeReserved = 16 * 120;
+    m_figureAnimations.resize(sizeReserved);
+    for (int fileNr = 1; fileNr <= 16; ++fileNr)
     {
-        m_itemImages[i] = MoM::convertLbxToImage(itemsLbx.getRecord(i), m_colorTable, toStr((MoM::eItem_Icon)i));
-//        QImageWriter w(QString("item%0.png").arg(i));
-//        w.write(m_itemImages[i]);
+        std::string lbxTitle;
+        if (fileNr < 10)
+        {
+            lbxTitle = "FIGURES" + toStr(fileNr);
+        }
+        else
+        {
+            lbxTitle = "FIGURE" + toStr(fileNr);
+        }
+        QVector<QMoMAnimation> tmpAnimations;
+        (void)createLbxAnimations(lbxTitle, tmpAnimations);
+        for(int i = 0; (i < tmpAnimations.size()) && (firstUnused + i < sizeReserved); ++i)
+        {
+            m_figureAnimations[firstUnused + i] = tmpAnimations[i];
+        }
+        firstUnused += tmpAnimations.size();
     }
-    return true;
+    m_figureAnimations.resize(firstUnused);
 }
 
-bool QMoMResources::createLairImages()
+void QMoMResources::createLairImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string lairsLbxFile = m_game->getGameDirectory() + "/" + "RELOAD.LBX";
     MoM::MoMLbxBase lairsLbx;
     if (!lairsLbx.load(lairsLbxFile))
-        return false;
+        return;
     m_lairImages.resize(MoM::eTower_Node_Lair_Type_MAX);
     for (size_t i = 0; i < MoM::eTower_Node_Lair_Type_MAX; ++i)
     {
         m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
     }
-    return true;
 }
 
-bool QMoMResources::createMapBackImages()
+void QMoMResources::createLbxAnimations(const std::string& lbxTitle, QVector<QMoMAnimation>& vecAnimations)
 {
     if (m_game.isNull())
-        return false;
-    std::string lbxFile = m_game->getGameDirectory() + "/" + "MAPBACK.LBX";
+        return;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxTitle + ".LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
-    m_mapBackImages.resize(lbx.getNrRecords());
+        return;
+    vecAnimations.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
-        m_mapBackImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, toStr(i));
+        (void)MoM::convertLbxToImages(lbx.getRecord(i), m_colorTable, vecAnimations[i], lbxTitle + toStr(i));
     }
-    return true;
 }
 
-bool QMoMResources::createSpecialsImages()
+void QMoMResources::createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages)
 {
     if (m_game.isNull())
-        return false;
-    std::string lbxFile = m_game->getGameDirectory() + "/" + "SPECIAL.LBX";
+        return;
+    std::string lbxFile = m_game->getGameDirectory() + "/" + lbxTitle + ".LBX";
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
-        return false;
-    m_specialsImages.resize(lbx.getNrRecords());
+        return;
+    vecImages.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
-        m_specialsImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, "special " + toStr(i));
+        vecImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, lbxTitle + toStr(i));
     }
-    return true;
 }
 
-bool QMoMResources::createSpellImages()
+void QMoMResources::createSpellImages()
 {
     // PRE: UnitImages should already have been created, because SpellImages uses them
 
     if (m_game.isNull())
-        return false;
+        return;
     std::string cityscapLbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
     std::string specfxLbxFile = m_game->getGameDirectory() + "/" + "SPECFX.LBX";
@@ -237,23 +521,40 @@ bool QMoMResources::createSpellImages()
     MoM::MoMLbxBase monsterLbx;
     MoM::MoMLbxBase specfxLbx;
     if (!cityscapLbx.load(cityscapLbxFile))
-        return false;
+        return;
     if (!monsterLbx.load(monsterLbxFile))
-        return false;
+        return;
     if (!specfxLbx.load(specfxLbxFile))
-        return false;
+        return;
 
     m_spellImages.resize(MoM::eSpell_MAX);
 
     // MONSTER.LBX, UNITS1.LBX, UNITS2.LBX
     for (MoM::eSpell spell = (MoM::eSpell)0; spell < MoM::eSpell_MAX; MoM::inc(spell))
     {
-        MoM::Spell_Data* spellData = m_game->getSpell_Data(spell);
-        if (0 == spellData)
-            break;
-        if ((MoM::SPELLTYPE_Summoning == spellData->m_Section_in_spell_book))
+        const HelpLBXentry* helpEntry = m_game->getHelpEntry(spell);
+        if (0 != helpEntry)
         {
-            m_spellImages[spell] = m_unitImages[spellData->m_Unit_Summoned_or_Spell_Strength];
+            if (std::string(helpEntry->lbxFile) == std::string("SPECIAL.LBX"))
+            {
+                if (inVectorRange(m_specialImages, helpEntry->lbxIndex))
+                {
+                    m_spellImages[spell] = m_specialImages[helpEntry->lbxIndex];
+                }
+            }
+            else if (std::string(helpEntry->lbxFile) == std::string("SPECIAL2.LBX"))
+            {
+                if (inVectorRange(m_specialImages, 120 + helpEntry->lbxIndex))
+                {
+                    m_spellImages[spell] = m_specialImages[120 + helpEntry->lbxIndex];
+                }
+            }
+        }
+
+        MoM::Spell_Data* spellData = m_game->getSpellData(spell);
+        if ((0 != spellData) && (MoM::SPELLCATEGORY_Normal_summon == spellData->m_Spell_Category))
+        {
+            m_spellImages[spell] = m_unitImages[ spellData->m_Parameters[0] ];
         }
     }
 
@@ -346,17 +647,94 @@ bool QMoMResources::createSpellImages()
     spell = MoM::SPELL_Awareness;
     m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), m_colorTable, toStr(spell));
 
-    return true;
+
+    //600	LIGHT	COMPIX.LBX	5
+    //601	DARKNESS	COMPIX.LBX	6
+    //602	WARP REALITY	COMPIX.LBX	7
+    //603	BLACK PRAYER	COMPIX.LBX	8
+    //604	WRACK	COMPIX.LBX	9
+    //605	METAL FIRES	COMPIX.LBX	10
+    //606	PRAYER	COMPIX.LBX	11
+    //607	HIGH PRAYER	COMPIX.LBX	12
+    //608	TERROR	COMPIX.LBX	13
+    //609	CALL LIGHTNING	COMPIX.LBX	14
+    //610	COUNTER MAGIC	COMPIX.LBX	15
+    //611	MASS INVISIBILITY	COMPIX.LBX	41
+    //612	DISPELS NON-SORCERY	COMPIX.LBX	54
+    //613	DISPELS NON-CHAOS	COMPIX.LBX	47
+    //614	DISPELS NON-NATURE	COMPIX.LBX	52
+    //615	SORCERY NODE AURA	COMPIX.LBX	55
+    //616	CHAOS NODE AURA	COMPIX.LBX	48
+    //617	NATURE NODE AURA	COMPIX.LBX	53
+    //618	CLOUD OF DARKNESS	COMPIX.LBX	50
+    //619	HOLY LIGHT	COMPIX.LBX	44
+    //620	CHAOS SURGE	COMPIX.LBX	46
+    //621	ETERNAL NIGHT	COMPIX.LBX	49
+    //622	CRUSADE	COMPIX.LBX	42
+    //623	HOLY ARMS	COMPIX.LBX	43
+    //624	CHARM OF LIFE	COMPIX.LBX	45
+    //625	ZOMBIE MASTERY	COMPIX.LBX	51
+
+    //632	ENTANGLE	COMPIX.LBX	60
+
+
+    //449	IMMOLATION	SPECIAL2.LBX	6
+    //450	GUARDIAN WIND	SPECIAL2.LBX	7
+    //451	BERSERK	SPECIAL2.LBX	17
+    //452	CLOAK OF FEAR	SPECIAL.LBX	97
+    //453	BLACK CHANNELS	SPECIAL.LBX	67
+    //454	WRAITH FORM	SPECIAL.LBX	68
+    //455	REGENERATE	SPECIAL.LBX	69
+    //456	PATHFINDING	SPECIAL.LBX	70
+    //457	WATER WALKING	SPECIAL.LBX	71
+    //458	ELEMENTAL ARMOR	SPECIAL.LBX	73
+    //459	RESIST ELEMENTS	SPECIAL.LBX	72
+    //460	STONE SKIN	SPECIAL.LBX	74
+    //461	IRON SKIN	SPECIAL.LBX	75
+    //462	ENDURANCE	SPECIAL.LBX	76
+    //463	SPELL LOCK	SPECIAL2.LBX	8
+    //464	INVISIBILITY	SPECIAL.LBX	78
+    //465	WIND WALKING	SPECIAL.LBX	79
+    //466	FLIGHT	SPECIAL.LBX	80
+    //467	RESIST MAGIC	SPECIAL.LBX	81
+    //468	MAGIC IMMUNITY	SPECIAL.LBX	82
+    //469	FLAME BLADE	SPECIAL.LBX	83
+    //470	ELDRITCH WEAPON	SPECIAL.LBX	84
+    //471	TRUE SIGHT	SPECIAL.LBX	85
+    //472	HOLY WEAPON	SPECIAL.LBX	86
+    //473	HEROISM	SPECIAL.LBX	87
+    //474	BLESS	SPECIAL.LBX	88
+    //475	LION HEART	SPECIAL.LBX	89
+    //476	GIANT STRENGTH	SPECIAL.LBX	65
+    //477	PLANAR TRAVEL	SPECIAL.LBX	91
+    //478	HOLY ARMOR	SPECIAL.LBX	92
+    //479	RIGHTEOUSNESS	SPECIAL.LBX	93
+    //480	INVULNERABILITY	SPECIAL.LBX	94
+    //481	VERTIGO	SPECIAL.LBX	101
+    //482	CONFUSION	SPECIAL2.LBX	0
+    //483	WHIRLWIND	SPECIAL2.LBX	1
+    //484	MIND STORM	SPECIAL2.LBX	2
+    //485	SHATTER	SPECIAL.LBX	95
+    //486	WEAKNESS	SPECIAL.LBX	96
+    //487	BLACK SLEEP	SPECIAL2.LBX	3
+    //488	WARP CREATURE	SPECIAL2.LBX	11
+    //489	WARP CREATURE	SPECIAL2.LBX	12
+    //490	WARP CREATURE	SPECIAL2.LBX	13
+    //491	MANA LEAK	SPECIAL2.LBX	10
+    //492	HASTE	SPECIAL.LBX	77
+    //493	WEB	SPECIAL.LBX	99
+    //494	CREATURE BINDING	SPECIAL.LBX	100
+    //495	POSSESSION	SPECIAL.LBX	98
 }
 
-bool QMoMResources::createTerrainImages()
+void QMoMResources::createTerrainImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string terrainLbxFile = m_game->getGameDirectory() + "/" + "TERRAIN.LBX";
     MoM::MoMLbxBase terrainLbx;
     if (!terrainLbx.load(terrainLbxFile))
-        return false;
+        return;
     // TODO: Why does the bitmap data in TERRAIN.LBX start 192 bytes later
     uint8_t* data = terrainLbx.getRecord(0) + 192;
     m_terrainTypeImages.resize(2 * MoM::eTerrainType_MAX);
@@ -441,13 +819,12 @@ bool QMoMResources::createTerrainImages()
 
         m_terrainTypeImages[MoM::eTerrainType_MAX + terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, m_colorTable, toStr(terrainNr) + "-" + toStr(i));
     }
-    return true;
 }
 
-bool QMoMResources::createUnitImages()
+void QMoMResources::createUnitImages()
 {
     if (m_game.isNull())
-        return false;
+        return;
     std::string units1LbxFile = m_game->getGameDirectory() + "/" + "UNITS1.LBX";
     std::string units2LbxFile = m_game->getGameDirectory() + "/" + "UNITS2.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
@@ -455,11 +832,11 @@ bool QMoMResources::createUnitImages()
     MoM::MoMLbxBase units2Lbx;
     MoM::MoMLbxBase monsterLbx;
     if (!units1Lbx.load(units1LbxFile))
-        return false;
+        return;
     if (!units2Lbx.load(units2LbxFile))
-        return false;
+        return;
     if (!monsterLbx.load(monsterLbxFile))
-        return false;
+        return;
 
     m_unitImages.resize(MoM::eUnit_Type_MAX);
 
@@ -523,8 +900,6 @@ bool QMoMResources::createUnitImages()
             m_unitImages[unitType] = MoM::convertLbxToImage(monsterLbx.getRecord(i), m_colorTable, toStr(unitType));
         }
     }
-
-    return true;
 }
 
 }

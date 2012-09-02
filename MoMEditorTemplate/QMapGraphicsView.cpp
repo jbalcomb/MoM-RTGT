@@ -10,5 +10,5 @@ QMapGraphicsView::QMapGraphicsView(QWidget *parent) :
 
 void QMapGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "mouseMoveEvent ";
+    QGraphicsView::mouseMoveEvent(event);
 }

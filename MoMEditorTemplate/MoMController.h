@@ -30,7 +30,7 @@ public:
     bool applyBuildingQueue(MoMGameBase& game, ePlayer playerNr);
 
 	static bool findCheapestUnitToProduce(MoMGameBase& game, const City& city, eProducing& produce);
-    static bool findUnitsAtLocation(MoMGameBase& game, const Location& location, std::vector<int>& units);
+    static bool findUnitsAtLocation(MoMGameBase& game, const MoMLocation& location, std::vector<int>& units);
 
 	static bool isBuildingAllowed(MoMGameBase& game, const City& city, eBuilding building);
 	static bool isBuildingPresent(const City& city, eBuilding building);

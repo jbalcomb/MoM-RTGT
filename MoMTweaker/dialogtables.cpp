@@ -57,8 +57,6 @@ protected:
     QMoMGamePtr m_game;
 };
 
-typedef QSharedPointer<QMoMTableWidgetItemBase> QMoMTableWidgetItemPtr;
-
 ///////////////////////////////////////////
 
 template<typename Number>
@@ -126,7 +124,7 @@ void NumberTableWidgetItem<Number>::setData(int role, const QVariant &value)
 template<typename Number>
 QString NumberTableWidgetItem<Number>::toString() const
 {
-    QString result = QString("%0").arg(*m_ptr);
+    QString result = QString("%0").arg((int)*m_ptr);
     switch (m_showNumber)
     {
     case SHOWNUMBER_normal:
@@ -529,7 +527,7 @@ void DialogTables::update_Spell_Data()
         }
         wizardsExe = game->getWizardsExe();
         ovl112 = game->getWizardsOverlay(112);
-        if (0 != game->getSpell_Data((MoM::eSpell)0))
+        if (0 != game->getSpellData((MoM::eSpell)0))
         {
             ndata = (int)MoM::eSpell_MAX - 1;
         }
@@ -555,7 +553,7 @@ void DialogTables::update_Spell_Data()
     {
         int spellNr = row + 1;
         MoM::eSpell spell = (MoM::eSpell)spellNr;
-        MoM::Spell_Data* data = game->getSpell_Data(spell);
+        MoM::Spell_Data* data = game->getSpellData(spell);
 
         MoM::eRealm_Type realm = (MoM::eRealm_Type)((spellNr - 1) / 40);
         QColor color = Qt::gray;
@@ -578,7 +576,7 @@ void DialogTables::update_Spell_Data()
         ui->tableWidget->item(row, col++)->setToolTip(game->getHelpText(spell).c_str());
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int16_t>(game, &data->m_Spell_desirability, 6));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Spell_Category, 2));
+        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpellCategory>(game, data->m_Spell_Category, MoM::eSpellCategory_MAX));
         ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpell_Type>(game, data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
         ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRealm_Type>(game, data->m_Magic_Realm, MoM::eRealm_Type_MAX));
 
@@ -586,25 +584,113 @@ void DialogTables::update_Spell_Data()
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Casting_cost, 5));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Research_cost, 5));
 
-        if ((MoM::SPELLTYPE_Summoning == data->m_Section_in_spell_book) && (0 != (int)data->m_Unit_Summoned_or_Spell_Strength))
+        QMoMTableWidgetItemBase* itemParameters[4] = { 0, 0, 0, 0 };
+        switch (data->m_Spell_Category)
         {
-            QString parameter = prettyQStr((MoM::eUnit_Type)data->m_Unit_Summoned_or_Spell_Strength);
-            ui->tableWidget->setItem(row, col++, new QMoMTableWidgetItemBase(game, parameter));
-        }
-        else
-        {
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, *(int8_t*)&data->m_Unit_Summoned_or_Spell_Strength, 6));
+        case MoM::SPELLCATEGORY_Normal_summon:     // normal summoning spell (all but hero/champion/torin). Byte 0x20 contains the creature summoned, 21-23 are blank.
+            itemParameters[0] = new QMoMTableWidgetItemBase(game, prettyQStr((MoM::eUnit_Type)data->m_Parameters[0]));
+            break;
+        case MoM::SPELLCATEGORY_Unit_enchantment:  // enchantment that can be cast on a friendly unit. Bytes 0x20-0x23 contain the mask for the enchantment applied (same as bytes 0x18-0x1B in the unit data structure in the save file). While no current spells do this, it is possible to set more than one bit; doing so will apply both spells, and will also prevent casting if either spell is already on the unit.
+        case MoM::SPELLCATEGORY_Mundane_Unit_enchantment:          // friendly unit enchantment that only works on mundane units. Otherwise identical to 0x01.
+            itemParameters[0] = new BitmaskTableWidgetItem<uint32_t, MoM::eUnitEnchantment>(
+                        game, *(uint32_t*)&data->m_Parameters[0],
+                        (MoM::eUnitEnchantment)0, MoM::eUnitEnchantment_MAX);
+            itemParameters[1] = new QMoMTableWidgetItemBase(game, QString());
+            itemParameters[2] = new QMoMTableWidgetItemBase(game, QString());
+            break;
+        case MoM::SPELLCATEGORY_Friendly_City_enchantment:  // enchantment hits a friendly city. Byte 0x20 contains the code for the city enchantment, in the same order as for city enchantments in the save file, but starts at 0 (0x00 is wall of fire, 0x18 is altar of battle).
+        case MoM::SPELLCATEGORY_Hostile_City_enchantment:  // enchantment hits a hostile city. Byte 0x20 is the same as above.
+            break;
+        case MoM::SPELLCATEGORY_Fixed_damage:      // non-moddable damaging spell. Byte 0x20 is the magnitude, 0x21 is the immunity flags that apply (same as for monsters), 0x22 and 0x23 are attack flags (same as for monsters, but for byte 0x23, 0x80, listed as no effect for monsters, makes it act like warp lightning, and 0x10 makes it act like fireball. Neither flag seems to apply to critter attacks, though I haven't tried all possible combinations. Not all attack flags work for spells).
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
+                                         game, data->m_Parameters[1],
+                                         MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
+            itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
+                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
+            break;
+        case MoM::SPELLCATEGORY_Variable_damage:   // variable cost damage spells; max cost = base cost * 5. Otherwise identical to 0x04. The extra effect per extra mana spent is probably determined by the flags, it isn't coded here.
+                                                // Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball
+                                                //      base spell strength + (mana - cost)
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
+                                         game, data->m_Parameters[1],
+                                         MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
+            itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
+                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
+            break;
+        case MoM::SPELLCATEGORY_Special:           // unusual spells. I haven't been able to determine how they're parsed, and there are a lot of them.
+            break;
+        case MoM::SPELLCATEGORY_Target_wizard:     // spells that target one wizard. 0x20 appears to be the effect (there are only four spells in this category: spell blast, cruel unminding, drain power, subversion).
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            break;
+        case MoM::SPELLCATEGORY_Global_enchantment:// global enchantment. Byte 0x20 contains the code for the global enchantment, in the same order as for global enchantments in the save file, but starts at 0 (0x00 is eternal night, 0x17 is awareness).
+            break;
+        case MoM::SPELLCATEGORY_Battle:            // combat globals (affect all units). Mostly, it's twice the number of the enchantment (if you want, you can add +1, and apply spells to the other side), but the instants (Call Chaos, Death Spell, Holy Word, Mass Healing, Flame Strike) would appear to be special case coded. If byte 0x21 is set, it seems to just make the spell not work in most cases (cloning flame strike does not work). Enchantment codes are:
+                                                //    00: true light
+                                                //    02: darkness
+                                                //    04: warp reality
+                                                //    06: black prayer
+                                                //    08: wrack
+                                                //    0a: metal fires
+                                                //    0c: prayer
+                                                //    0e: high prayer
+                                                //    10: terror
+                                                //    12: call lightning
+                                                //    14: counter magic (which is a different bit; probably says moddable/not moddable)
+                                                //    16: mass invisibility
+                                                //    18: entangle
+                                                //    1a: mana leak
+                                                //    1c: blur
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
+                                         game, data->m_Parameters[1],
+                                         MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
+            itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
+                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
+            break;
+        case MoM::SPELLCATEGORY_Create_item:       // enchant item and create artifact.
+            break;
+        case MoM::SPELLCATEGORY_Destroy_unit:      // spells that destroy a unit. Byte 0x21 looks like it may be a normal immunity byte, as it's 0x22 for petrify, 0x20 for disintegrate, but there's missing information here.
+            itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
+                                         game, data->m_Parameters[1],
+                                         MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
+            break;
+        case MoM::SPELLCATEGORY_Resistable_Combat_enchantment:// hostile (resisted) combat enchantments. Bytes 0x20-0x21 are a mask for what effect is created:
+        case MoM::SPELLCATEGORY_Unresistable_Combat_enchantment:   // hostile (un-resisted) combat enchantments. Otherwise as 0x0d
+        case MoM::SPELLCATEGORY_Mundane_Combat_enchantment:        // hostile (resisted) combat enchantments that only work on mundane units.
+            itemParameters[0] = new BitmaskTableWidgetItem<uint16_t, MoM::eCombatEnchantment>(
+                        game, *(uint16_t*)&data->m_Parameters[0],
+                        (MoM::eCombatEnchantment)0, MoM::eCombatEnchantment_MAX);
+            itemParameters[1] = new QMoMTableWidgetItemBase(game, QString());
+            break;
+        case MoM::SPELLCATEGORY_Dispel:            // dispel magic, dispel magic true. Max cost = base cost * 5.
+        case MoM::SPELLCATEGORY_Disenchant:        // disenchant area, disenchant true. Max cost = base cost * 5.
+        case MoM::SPELLCATEGORY_Disjunction:       // disjunction, disjunction true. Max cost = base cost * 5.
+        case MoM::SPELLCATEGORY_Counter:           // counter magic. Max cost = base cost * 5. Functions otherwise like 0x0a, so it's likely that other area spells could be modded, though effects would likely be undefined.
+        case MoM::SPELLCATEGORY_Banish:
+        default:
+            break;
         }
 
-        ui->tableWidget->setItem(row, col++,
-                                 new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                     game, data->m_Immunity_Flags.bits,
-                                     MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity));
-
-        ui->tableWidget->setItem(row, col++,
-                                 new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                     game, &data->m_Attack_Flags.bits,
-                                     MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
+        for (int i = 0; i < 3; ++i)
+        {
+            if (0 != itemParameters[i])
+            {
+                ui->tableWidget->setItem(row, col++, itemParameters[i]);
+            }
+            else if (i < 2)
+            {
+                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, *(uint8_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
+            }
+            else
+            {
+                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, *(uint16_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
+            }
+        }
 
         uint16_t* pUpkeep = 0;
         ui->tableWidget->setItem(row, col, new QMoMTableWidgetItemBase(game));
@@ -727,7 +813,7 @@ void DialogTables::update_Spell_Data()
                 pSaveModifier = (int8_t*)&ovl112[ wizardsExe->getSpellSave(i).saveOffset ];
             }
             int rowSpell = saveSpellNr - 1;
-            if ((rowSpell >= 0) && (rowSpell < ndata))
+            if ((rowSpell >= 0) && (rowSpell < ndata) && (0 != pSaveModifier))
             {
                 ui->tableWidget->setItem(rowSpell, col, new NumberTableWidgetItem<int8_t>(game, *pSaveModifier, 4, SHOWNUMBER_alwaysPlus));
             }
@@ -744,7 +830,7 @@ void DialogTables::update_Unit_Types()
     QMoMGamePtr game = getGame();
     int ndata = 0;
 
-	if ((0 != game) && (0 != game->getUnit_Type_Data((MoM::eUnit_Type)0)))
+	if ((0 != game) && (0 != game->getUnitTypeData((MoM::eUnit_Type)0)))
 	{
 		ndata = MoM::eUnit_Type_MAX;
 	}
@@ -769,7 +855,7 @@ void DialogTables::update_Unit_Types()
 	for (int row = 0; (0 != game) && (row < ndata); ++row)
     {
         int unitTypeNr = row;
-		MoM::Unit_Type_Data* data = game->getUnit_Type_Data((MoM::eUnit_Type)unitTypeNr);
+		MoM::Unit_Type_Data* data = game->getUnitTypeData((MoM::eUnit_Type)unitTypeNr);
 		if (0 == data)
 			break;
 

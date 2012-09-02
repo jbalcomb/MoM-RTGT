@@ -126,4 +126,10 @@ inline QString prettyQStr(const T& t)
     return tmp;
 }
 
+template< class X, class Y >
+bool equalLocation(const X& x, const Y& y)
+{
+    return ((x.m_Plane == y.m_Plane) && (x.m_XPos == y.m_XPos) && (x.m_YPos == y.m_YPos));
+}
+
 #endif

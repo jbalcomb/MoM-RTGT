@@ -10,6 +10,7 @@
 #ifndef MOMGAMEBASE_H
 #define MOMGAMEBASE_H
 
+#include "MoMLocation.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
 
@@ -22,24 +23,46 @@ public:
 
     virtual ~MoMGameBase();
 
+    //! Contains the last error that applies whenever a method returning
+    //! a bool failed.
     virtual std::string errorString() const
     {
         return m_errorString;
     }
 
-    virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
-
-    virtual eBonusDeposit* getBonusDeposit(ePlane plane, int x, int y)
+    virtual bool load(const char*)
     {
-        eBonusDeposit* bonusDeposits = getBonusDeposits();
-        if ((0 == bonusDeposits) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
-            return 0;
-        return (bonusDeposits + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+        setErrorString("not implemented");
+        return false;
     }
 
-    Building_Data* getBuilding_Data(eBuilding building)
+    virtual bool save(const char*)
     {
-        Building_Data* buildingData = getBuilding_Data();
+        setErrorString("not implemented");
+        return false;
+    }
+
+    //! Commit the data identified by ptr
+    bool commitData(void* ptr, size_t size)
+    {
+        return commitData(ptr, ptr, size);
+    }
+
+    //! Commit new data at pNewValue at the location identified by ptr
+    //! The data at ptr is only updated if the commit was successful
+    virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
+
+    Battle_Unit* getBattleUnit(int battleUnitNr)
+    {
+        Battle_Unit* battleUnits = getBattle_Units();
+        if ((0 == battleUnits) || !inRange(battleUnitNr, getNrBattleUnits()) || !inRange(battleUnitNr, gMAX_BATTLE_UNITS))
+            return 0;
+        return &battleUnits[battleUnitNr];
+    }
+
+    Building_Data* getBuildingData(eBuilding building)
+    {
+        Building_Data* buildingData = getBuildingData();
         if ((0 == buildingData) || !inRange(building, eBuilding_MAX))
             return 0;
         return &buildingData[building];
@@ -57,6 +80,7 @@ public:
 
     virtual std::string getGameDirectory() = 0;
 
+    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
     std::string getHelpText(eHelpIndex helpTextNr);
 
     std::string getHelpText(eBuilding building);
@@ -65,33 +89,34 @@ public:
     std::string getHelpText(ePortrait wizardPortrait);
     std::string getHelpText(eRace race);
     std::string getHelpText(eRanged_Type rangedType);
+    const HelpLBXentry* getHelpEntry(eSpell spell);
     std::string getHelpText(eSpell spell);
     std::string getHelpText(eUnitAbility unitAbility);
     std::string getHelpText(eUnitEnchantment unitEnchantment);
     std::string getHelpText(eUnitMutation unitMutation);
 
-    Hero_stats* getHero_stats(ePlayer playerNr, eUnit_Type heroNr)
+    Hero_stats* getHeroStats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
         if ((0 == listHeroStats) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStats[heroNr];
     }
-    Hero_Stats_Initializer* getHero_Stats_Initializer(eUnit_Type heroNr)
+    Hero_Stats_Initializer* getHeroStatsInitializer(eUnit_Type heroNr)
     {
         Hero_Stats_Initializer* listHeroStatsInitializer = getList_Hero_Stats_Initializer();
         if ((0 == listHeroStatsInitializer) || !inRange(heroNr, gMAX_HERO_TYPES))
             return 0;
         return &listHeroStatsInitializer[heroNr];
     }
-    Hired_Hero* getHired_Hero(ePlayer playerNr, int slotNr)
+    Hired_Hero* getHiredHero(ePlayer playerNr, int slotNr)
     {
         Wizard* wizard = getWizard(playerNr);
         if ((0 == wizard) || !inRange(slotNr, gMAX_HIRED_HEROES))
             return 0;
         return &wizard->m_Heroes_hired_by_wizard[slotNr];
     }
-    Hired_Hero* getHired_Hero(const Unit* unit)
+    Hired_Hero* getHiredHero(const Unit* unit)
     {
         if (0 == unit)
             return 0;
@@ -114,7 +139,7 @@ public:
             return 0;
         return &lairs[lairNr];
     }
-    char* getMoM_Version()
+    char* getMoMVersion()
     {
         if (0 != getDataSegment())
         {
@@ -130,9 +155,21 @@ public:
             return nullVersion;
         }
     }
-    virtual const char* getNameByOffset(uint16_t /*offset*/)
+    virtual const char* getNameByOffset(DS_Offset)
     {
         return 0;
+    }
+    int getNrBattleUnits()
+    {
+        if (0 == getNumber_of_Battle_Units())
+            return 0;
+        return *getNumber_of_Battle_Units();
+    }
+    void setNrBattleUnits(int value)
+    {
+        if (0 == getNumber_of_Battle_Units())
+            return;
+        *getNumber_of_Battle_Units() = value;
     }
     int getNrCities()
     {
@@ -219,7 +256,7 @@ public:
         return value;
     }
 
-    Race_Data* getRace_Data(eRace race)
+    Race_Data* getRaceData(eRace race)
     {
 		MoMDataSegment* dataSegment = getDataSegment();
         if ((0 == dataSegment) || !inRange(race, eRace_MAX))
@@ -231,20 +268,81 @@ public:
 
     virtual std::string getSources() const = 0;
 
-    Spell_Data* getSpell_Data(eSpell spell)
+    Spell_Data* getSpellData(eSpell spell)
     {
-        Spell_Data* spellData = getSpell_Data();
+        Spell_Data* spellData = getSpellData();
         if ((0 == spellData) || !inRange(spell, MoM::eSpell_MAX))
             return 0;
         return &spellData[spell];
     }
 
-    virtual eTerrainType* getTerrainType(ePlane plane, int x, int y)
+    eTerrainBonusDeposit* getTerrainBonus(const MoMLocation& loc)
     {
-        eTerrainType* terrainTypes = getTerrainTypes();
-		if ((0 == terrainTypes) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+        return getTerrainBonus(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    eTerrainBonusDeposit* getTerrainBonus(ePlane plane, int x, int y)
+    {
+        eTerrainBonusDeposit* data = getTerrain_Bonuses();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
             return 0;
-        return (terrainTypes + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    Terrain_Changes* getTerrainChange(const MoMLocation& loc)
+    {
+        return getTerrainChange(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    Terrain_Changes* getTerrainChange(ePlane plane, int x, int y)
+    {
+        Terrain_Changes* data = getTerrain_Changes();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    uint8_t* getTerrainExplored(const MoMLocation& loc)
+    {
+        return getTerrainExplored(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    uint8_t* getTerrainExplored(ePlane plane, int x, int y)
+    {
+        uint8_t* data = getTerrain_Explored();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    uint8_t* getTerrainLandMassID(const MoMLocation& loc)
+    {
+        return getTerrainLandMassID(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    uint8_t* getTerrainLandMassID(ePlane plane, int x, int y)
+    {
+        uint8_t* data = getTerrain_LandMassID();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
+    }
+    int8_t* getTerrainMovement(const MoMLocation& loc, eMovement movement)
+    {
+        return getTerrainMovement(loc.m_Plane, loc.m_XPos, loc.m_YPos, movement);
+    }
+    int8_t* getTerrainMovement(ePlane plane, int x, int y, eMovement movement)
+    {
+        Map_Movement* data = getTerrain_Movements();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS) || !inRange(movement, MoM::eMovement_MAX))
+            return 0;
+        MapRow_Movement* mapRow = &data[plane].m_Unused_Row[0];
+        mapRow += static_cast<unsigned>(movement) * gMAX_MAP_ROWS;
+        return &mapRow[y].m_Moves[x];
+    }
+    eTerrainType* getTerrainType(const MoMLocation& loc)
+    {
+        return getTerrainType(loc.m_Plane, loc.m_XPos, loc.m_YPos);
+    }
+    eTerrainType* getTerrainType(ePlane plane, int x, int y)
+    {
+        eTerrainType* data = getTerrain_Types();
+		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
+            return 0;
+        return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
 
     Unit* getUnit(int unitNr)
@@ -254,7 +352,7 @@ public:
             return 0;
         return &units[unitNr];
     }
-    Unit_Type_Data* getUnit_Type_Data(eUnit_Type unitTypeNr)
+    Unit_Type_Data* getUnitTypeData(eUnit_Type unitTypeNr)
     {
         Unit_Type_Data* unitTypes = getUnit_Types();
         if ((0 == unitTypes) || !inRange(unitTypeNr, MoM::eUnit_Type_MAX))
@@ -323,24 +421,21 @@ public:
     {
         return 0;
     }
+public:
     virtual Battlefield* getBattlefield()
     {
         return 0;
     }
-    virtual Battle_Unit* getBattle_Unit_View()
-    {
-        return 0;
-    }
-    virtual Battle_Unit* getBattle_Units()
+    virtual Battle_Unit* getBattleUnitViewed()
     {
         return 0;
     }
 protected:
-    virtual eBonusDeposit* getBonusDeposits()
+    virtual Battle_Unit* getBattle_Units()
     {
         return 0;
     }
-    virtual Building_Data* getBuilding_Data()
+    virtual Building_Data* getBuildingData()
     {
         return 0;
     }
@@ -354,15 +449,15 @@ public:
     {
         return 0;
     }
-    virtual WizardsExe_Game_Data* getGame_Data_Exe()
+    virtual WizardsExe_Game_Data* getGameData_WizardsExe()
     {
         return 0;
     }
-    virtual Game_Data_Save* getGame_Data_Save()
+    virtual Game_Data_Save* getGameData_SaveGame()
     {
         return 0;
     }
-    virtual Game_Settings* getGame_Settings()
+    virtual Game_Settings* getGameSettings()
     {
         return 0;
     }
@@ -387,6 +482,7 @@ protected:
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
 public:
+    // Needs to be public so we can add it to a treeview
     virtual uint16_t* getNumber_of_Battle_Units()
     {
         return 0;
@@ -395,7 +491,7 @@ protected:
     virtual uint16_t* getNumber_of_Cities() = 0;
     virtual uint16_t* getNumber_of_Units() = 0;
     virtual uint16_t* getNumber_of_Wizards() = 0;
-    virtual Spell_Data* getSpell_Data()
+    virtual Spell_Data* getSpellData()
     {
         return 0;
     }
@@ -405,10 +501,31 @@ public:
         return 0;
     }
 protected:
-    virtual eTerrainType* getTerrainTypes()
+    virtual eTerrainBonusDeposit* getTerrain_Bonuses()
     {
         return 0;
     }
+    virtual Terrain_Changes* getTerrain_Changes()
+    {
+        return 0;
+    }
+    virtual uint8_t* getTerrain_Explored()
+    {
+        return 0;
+    }
+    virtual uint8_t* getTerrain_LandMassID()
+    {
+        return 0;
+    }
+    virtual Map_Movement* getTerrain_Movements()
+    {
+        return 0;
+    }
+    virtual eTerrainType* getTerrain_Types()
+    {
+        return 0;
+    }
+
     virtual Unit* getUnits() = 0;
     virtual Unit_Type_Data* getUnit_Types()
     {

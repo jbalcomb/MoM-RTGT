@@ -12,37 +12,88 @@
 
 #include <QGraphicsItem>
 
+#include "MoMLocation.h"
 #include "MoMTemplate.h"
 
 namespace MoM
 {
 
-class QMoMMapTile: public QGraphicsItem
+class QMoMMapTile : public QGraphicsItem
 {
 public:
-    QMoMMapTile();
+    explicit QMoMMapTile(const MoM::MoMLocation& location);
     virtual ~QMoMMapTile();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    void setBonusDeposit(MoM::eBonusDeposit* bonusDeposit)
+    const MoM::MoMLocation& getLocation() const
     {
-        m_bonusDeposit = bonusDeposit;
+        return m_location;
     }
-    void setPlane(MoM::ePlane plane)
+    void setLocation(MoM::MoMLocation& location)
     {
-        m_plane = plane;
+        m_location = location;
+    }
+
+    MoM::eTerrainBattle* getTerrainBattle() const
+    {
+        return m_terrainBattle;
+    }
+    void setTerrainBattle(MoM::eTerrainBattle* terrainBattle)
+    {
+        m_terrainBattle = terrainBattle;
+    }
+
+    MoM::eTerrainBonusDeposit* getTerrainBonus() const
+    {
+        return m_terrainBonus;
+    }
+    void setTerrainBonus(MoM::eTerrainBonusDeposit* bonusDeposit)
+    {
+        m_terrainBonus = bonusDeposit;
+    }
+
+    MoM::Terrain_Changes* getTerrainChange() const
+    {
+        return m_terrainChange;
+    }
+    void setTerrainChange(MoM::Terrain_Changes* terrainChange)
+    {
+        m_terrainChange = terrainChange;
+    }
+
+    uint8_t* getTerrainExplored() const
+    {
+        return m_terrainExplored;
+    }
+    void setTerrainExplored(uint8_t* terrainExplored)
+    {
+        m_terrainExplored = terrainExplored;
+    }
+
+    MoM::eTerrainType* getTerrainType() const
+    {
+        return m_terrainType;
     }
     void setTerrainType(MoM::eTerrainType* terrainType)
     {
         m_terrainType = terrainType;
     }
 
+protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *)
+    {
+//        qDebug() << "QMoMMapTile::hoverEnterEvent(event)";
+    }
+
 private:
-    MoM::eBonusDeposit* m_bonusDeposit;
-    MoM::ePlane m_plane;
+    MoM::MoMLocation m_location;
+    MoM::eTerrainBattle* m_terrainBattle;
+    MoM::eTerrainBonusDeposit* m_terrainBonus;
+    MoM::Terrain_Changes* m_terrainChange;
+    uint8_t* m_terrainExplored;
     MoM::eTerrainType* m_terrainType;
 };
 

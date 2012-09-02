@@ -24,6 +24,73 @@ const size_t gMAX_NAME_SIZE = 256;
 
 }
 
+typedef uint8_t UnknownBuf[100];
+
+struct MoMGamePointers
+{
+    char*       m_Offsets_SkillNames[eSkill_MAX];   // ds:0130
+    char*       m_Offsets_CitySizeNames[eCity_Size_MAX]; // ds:0156
+    char*       m_Offsets_CitySpecialNames[7];      // ds:0162
+    char*       m_Offset_Arcane;                    // ds:1ED8  // UNREFERENCED???
+    char*       m_Offsets_RealmNames_5[5];          // ds:1EDA
+    char*       m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
+    char*       m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
+    char*       m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
+    char*       m_UnitLevelNameOffsets[6];          // ds:3F46
+    char*       m_HeroLevelNameOffsets[9];          // ds:3F52
+
+    Spell_Data*     addr_Spell_Data ; // 912C
+    Item*           addr_Items  ; // 9136
+    UnknownBuf*        addr_item_in_game_GUESS   ; // 913A
+    UnknownBuf*        addr_Battle_Unit_View  ; // 9226
+    Battle_Unit*    addr_Battle_Unit  ; // 922A
+    Spells_Cast_in_Battle*  addr_Spells_Cast_in_Battle   ; // 922E
+    Hero_stats*     addr_Hero_stat[6]   ; // 9232
+    Battlefield*    addr_Battlefield    ; // 9274
+    UnknownBuf*        dword_3FD50 ; // 92B0
+    UnknownBuf*        addr_3FDE6  ; // 9346
+    Building_Data*  addr_Building_Data ; // 938C
+    UnknownBuf*        dword_3FE32 ; // 9392
+    UnknownBuf*        word_3FF00  ; // 9460
+    UnknownBuf*        word_3FFBE  ; // 951E
+    UnknownBuf*        word_3FFC8  ; // 9528
+    UnknownBuf*        addr_city_detailed_GUESS   ; // 9644
+    UnknownBuf*        word_403FE  ; // 995E
+    UnknownBuf*        word_40428  ; // 9988
+    Events_Status*  addr_events ; // 9998
+    UnknownBuf*        dword_40730 ; // 9C90
+    UnknownBuf*        dword_4073C ; // 9C9C
+    UnknownBuf*        dword_40740 ; // 9CA0
+    UnknownBuf*                addr_terrain_Movement_copy   ; // 9CA4
+    UnknownBuf*                dword_40748 ; // 9CA8
+    Map_Movement*           addr_Terrain_Movement ; // 9CAC
+    MapRow_Exploration*     addr_Terrain_Explored    ; // 9CB0
+    MapRow_Terrain_Changes* addr_Terrain_Changes  ; // 9CB4
+    MapRow_Bonus*           addr_Terrain_Bonuses    ; // 9CB8
+    City*                   addr_Cities ; // 9CBC
+    Tower_Node_Lair*        addr_Lairs_data   ; // 9CC0
+    Tower_Attr*             addr_tower_attr ; // 9CC4
+    Fortress*               addr_fortress_data    ; // 9CC8
+    Node_Attr*              addr_Nodes_Attr    ; // 9CCC
+    MapRow_LandMassID*      addr_Terrain_LandMassID  ; // 9CD0
+    Map_Tiles*              addr_Terrain_Types ; // 9CDC
+    int8_t*                 addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
+    UnknownBuf*        dword_407CA ; // 9D2A
+    UnknownBuf*        dword_407CE ; // 9D2E
+    UnknownBuf*        dw_Nr_in_stack  ; // 9E8C
+    UnknownBuf*        dw_stack_place  ; // 9E90
+    UnknownBuf*        dw_pla_stacks_loc   ; // 9E94
+    UnknownBuf*        dw_Y_stacks_loc ; // 9E98
+    UnknownBuf*        dw_X_stacks_loc ; // 9E9C
+    UnknownBuf*        dw_bx_6160  ; // 9EA0
+    UnknownBuf*        dw_bx_615C  ; // 9EA4
+    UnknownBuf*        dw_bx_6176  ; // 9EA8
+    UnknownBuf*        dw_bx_6154  ; // 9EAC
+    Unit*           addr_Units    ; // 9EC2
+
+    UnitView*       m_addr_UnitView_Lines;  // C192
+};
+
 MoMGameMemory::MoMGameMemory(void)
 : MoMGameBase(),
   m_process(),
@@ -125,26 +192,139 @@ bool MoMGameMemory::commitData(void* ptr, const void* pNewValue, size_t size)
     return ok;
 }
 
-/*
-bool MoMGameMemory::findAndOpenGame(const std::string& windowTitle)
+#define SET_FIELD_OFFSET(field) \
+        gMoMGamePointers.field = (char*)dseg + dseg->field;
+ 
+#define SET_ARRAY_OFFSET(field) \
+        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.field); ++i) \
+        { \
+            gMoMGamePointers.field[i] = (char*)dseg + dseg->field[i]; \
+        }
+
+#define SET_RELOC_POINTER(type, field) \
+        gMoMGamePointers.field = derefHeapPointer<type>(dseg->m_WizardsExe_Pointers.field, 1);
+
+bool MoMGameMemory::readData()
 {
-    closeGame();
+    bool ok = false;
+    MoMGamePointers gMoMGamePointers = {0};
+    setErrorString("");
+    ok = ((0 != m_process.get()) && m_process->readData());
 
-    std::auto_ptr<MoMProcess> momProcess( new MoMProcess );
-
-    if (!momProcess->findProcessAndData(windowTitle))
+    if (ok)
     {
-        return false;
+        MoMDataSegment* dseg = getDataSegment();
+
+        SET_ARRAY_OFFSET(m_Offsets_SkillNames);
+        SET_ARRAY_OFFSET(m_Offsets_CitySizeNames);
+        SET_ARRAY_OFFSET(m_Offsets_CitySpecialNames);
+        SET_FIELD_OFFSET(m_Offset_Arcane);
+        SET_ARRAY_OFFSET(m_Offsets_RealmNames_5);
+        SET_ARRAY_OFFSET(m_Offsets_CityEnchantmentNames);
+        SET_ARRAY_OFFSET(m_Offsets_PersonalityNames);
+        SET_ARRAY_OFFSET(m_Offsets_ObjectiveNames);
+        SET_ARRAY_OFFSET(m_UnitLevelNameOffsets);
+        SET_ARRAY_OFFSET(m_HeroLevelNameOffsets);
+
+        SET_RELOC_POINTER(Spell_Data, addr_Spell_Data);
+        SET_RELOC_POINTER(Item, addr_Items);
+        SET_RELOC_POINTER(UnknownBuf, addr_item_in_game_GUESS);
+        SET_RELOC_POINTER(UnknownBuf, addr_Battle_Unit_View);
+        SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit);
+
+        SET_RELOC_POINTER(Spells_Cast_in_Battle, addr_Spells_Cast_in_Battle);
+        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Hero_stat); ++i)
+        {
+            SET_RELOC_POINTER(Hero_stats, addr_Hero_stat[i]);
+        }
+        SET_RELOC_POINTER(Battlefield, addr_Battlefield);
+        SET_RELOC_POINTER(UnknownBuf, dword_3FD50);
+        SET_RELOC_POINTER(UnknownBuf, addr_3FDE6);
+        SET_RELOC_POINTER(Building_Data, addr_Building_Data);
+        SET_RELOC_POINTER(UnknownBuf, dword_3FE32);
+        SET_RELOC_POINTER(UnknownBuf, word_3FF00);
+        SET_RELOC_POINTER(UnknownBuf, word_3FFBE);
+        SET_RELOC_POINTER(UnknownBuf, word_3FFC8);
+        SET_RELOC_POINTER(UnknownBuf, addr_city_detailed_GUESS);
+        SET_RELOC_POINTER(UnknownBuf, word_403FE);
+        SET_RELOC_POINTER(UnknownBuf, word_40428);
+        SET_RELOC_POINTER(Events_Status, addr_events);
+        SET_RELOC_POINTER(UnknownBuf, dword_40730);
+        SET_RELOC_POINTER(UnknownBuf, dword_4073C);
+        SET_RELOC_POINTER(UnknownBuf, dword_40740);
+        SET_RELOC_POINTER(UnknownBuf, addr_terrain_Movement_copy);
+        SET_RELOC_POINTER(UnknownBuf, dword_40748);
+        SET_RELOC_POINTER(Map_Movement, addr_Terrain_Movement);
+        SET_RELOC_POINTER(MapRow_Exploration, addr_Terrain_Explored);
+        SET_RELOC_POINTER(MapRow_Terrain_Changes, addr_Terrain_Changes);
+        SET_RELOC_POINTER(MapRow_Bonus, addr_Terrain_Bonuses);
+        SET_RELOC_POINTER(City, addr_Cities);
+        SET_RELOC_POINTER(Tower_Node_Lair, addr_Lairs_data);
+        SET_RELOC_POINTER(Tower_Attr, addr_tower_attr);
+        SET_RELOC_POINTER(Fortress, addr_fortress_data);
+        SET_RELOC_POINTER(Node_Attr, addr_Nodes_Attr);
+        SET_RELOC_POINTER(MapRow_LandMassID, addr_Terrain_LandMassID);
+        SET_RELOC_POINTER(Map_Tiles, addr_Terrain_Types);
+        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Unrest_Table); ++i)
+        {
+            SET_RELOC_POINTER(int8_t, addr_Unrest_Table[i]);
+        }
+        SET_RELOC_POINTER(UnknownBuf, dword_407CA);
+        SET_RELOC_POINTER(UnknownBuf, dword_407CE);
+        SET_RELOC_POINTER(UnknownBuf, dw_Nr_in_stack);
+        SET_RELOC_POINTER(UnknownBuf, dw_stack_place);
+        SET_RELOC_POINTER(UnknownBuf, dw_pla_stacks_loc);
+        SET_RELOC_POINTER(UnknownBuf, dw_Y_stacks_loc);
+        SET_RELOC_POINTER(UnknownBuf, dw_X_stacks_loc);
+        SET_RELOC_POINTER(UnknownBuf, dw_bx_6160);
+        SET_RELOC_POINTER(UnknownBuf, dw_bx_615C);
+        SET_RELOC_POINTER(UnknownBuf, dw_bx_6176);
+        SET_RELOC_POINTER(UnknownBuf, dw_bx_6154);
+        SET_RELOC_POINTER(Unit, addr_Units);
+
+        gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView>(dseg->m_addr_UnitView_Lines, 1);
     }
 
-    if (!openGame(momProcess))
-    {
-        return false;
-    }
-
-    return true;
+    return ok;
 }
-*/
+
+bool MoMGameMemory::load(const char* filename)
+{
+    bool ok = false;
+    setErrorString("");
+    if (0 == m_process.get())
+    {
+        setErrorString("no connected process");
+    }
+    else if (!m_process->load(filename))
+    {
+        setErrorString("process proxy failed to load");
+    }
+    else
+    {
+        ok = true;
+    }
+    return ok;
+}
+
+bool MoMGameMemory::save(const char* filename)
+{
+    bool ok = false;
+    setErrorString("");
+    if (0 == m_process.get())
+    {
+        setErrorString("no connected process");
+    }
+    else if (!m_process->save(filename))
+    {
+        setErrorString("process proxy failed to save");
+    }
+    else
+    {
+        ok = true;
+    }
+    return ok;
+}
 
 Available_spell_page* MoMGameMemory::getAvailable_spell_pages()
 {
@@ -164,7 +344,7 @@ Battlefield* MoMGameMemory::getBattlefield()
     return derefHeapPointer<Battlefield>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battlefield, 1);
 }
 
-Battle_Unit* MoMGameMemory::getBattle_Unit_View()
+Battle_Unit* MoMGameMemory::getBattleUnitViewed()
 {
     if (0 == m_process.get())
         return 0;
@@ -188,15 +368,6 @@ Battle_Unit* MoMGameMemory::getBattle_Units()
     return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
 }
 
-eBonusDeposit* MoMGameMemory::getBonusDeposits()
-{
-    if (0 == m_process.get())
-        return 0;
-    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_special_terrain_loc_,
-            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
-}
-
 City* MoMGameMemory::getCities()
 {
     if (0 == m_process.get())
@@ -213,7 +384,7 @@ MoMDataSegment* MoMGameMemory::getDataSegment()
     return validateStaticPointer(pMoMDataSegment, 1);
 }
 
-Building_Data* MoMGameMemory::getBuilding_Data()
+Building_Data* MoMGameMemory::getBuildingData()
 {
     if (0 == m_process.get())
         return 0;
@@ -247,7 +418,7 @@ std::string MoMGameMemory::getGameDirectory()
     return dir;
 }
 
-WizardsExe_Game_Data* MoMGameMemory::getGame_Data_Exe()
+WizardsExe_Game_Data* MoMGameMemory::getGameData_WizardsExe()
 {
     if (0 == m_process.get())
         return 0;
@@ -255,7 +426,7 @@ WizardsExe_Game_Data* MoMGameMemory::getGame_Data_Exe()
     return validateStaticPointer(&pMoMDataSegment->m_Game_Data, 1);
 }
 
-Game_Settings* MoMGameMemory::getGame_Settings()
+Game_Settings* MoMGameMemory::getGameSettings()
 {
     if (0 == m_process.get())
         return 0;
@@ -311,7 +482,7 @@ Tower_Node_Lair* MoMGameMemory::getLairs()
     return derefHeapPointer<Tower_Node_Lair>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Lairs_data, MoM::gMAX_NODES_LAIRS_TOWERS);
 }
 
-const char* MoMGameMemory::getNameByOffset(uint16_t offset)
+const char* MoMGameMemory::getNameByOffset(DS_Offset offset)
 {
     if (0 == m_process.get())
         return 0;
@@ -364,7 +535,7 @@ uint8_t* MoMGameMemory::getWizardsOverlay(size_t ovlNr)
     return ptr;
 }
 
-Spell_Data* MoMGameMemory::getSpell_Data()
+Spell_Data* MoMGameMemory::getSpellData()
 {
     if (0 == m_process.get())
         return 0;
@@ -380,12 +551,57 @@ Spells_Cast_in_Battle* MoMGameMemory::getSpells_Cast_in_Battle()
     return derefHeapPointer<Spells_Cast_in_Battle>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Spells_Cast_in_Battle, 1);
 }
 
-eTerrainType* MoMGameMemory::getTerrainTypes()
+eTerrainBonusDeposit* MoMGameMemory::getTerrain_Bonuses()
 {
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_WizardsExe_Pointers.addr_TerrainTypes,
+    return derefHeapPointer<eTerrainBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Bonuses,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+Terrain_Changes* MoMGameMemory::getTerrain_Changes()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Terrain_Changes>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Changes,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+uint8_t* MoMGameMemory::getTerrain_Explored()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Explored,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+uint8_t* MoMGameMemory::getTerrain_LandMassID()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_LandMassID,
+            ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
+}
+
+//Map_Movement* MoMGameMemory::getTerrain_Movements()
+//{
+//    if (0 == m_process.get())
+//        return 0;
+//    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+//    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Movement,
+//            ePlane_MAX);
+//}
+
+eTerrainType* MoMGameMemory::getTerrain_Types()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Types,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 

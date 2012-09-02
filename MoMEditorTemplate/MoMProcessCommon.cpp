@@ -5,6 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string.h>     // memcmp()
@@ -15,12 +16,61 @@
 namespace MoM
 {
 
-namespace
+MoMProcess::MoMProcess(void) :
+    m_hProcess(NULL),
+    m_lpBaseAddress(0),
+    m_dwBaseAddressSize(0),
+    m_dwOffsetSegment0(0),
+    m_dwOffsetCode(0),
+    m_dwOffsetDatasegment(0),
+    m_dataSegmentAndUp(),
+    m_exeFilepath(),
+    m_verbose(false)
 {
+}
 
-const uint8_t gCS_SIGNATURE_BYTE = '\xBA';
-const uint8_t gCS_SIGNATURE_SEQUENCE[5] = { 0x2E, 0x89, 0x16, 0xC4, 0x02 };
+MoMProcess::~MoMProcess(void)
+{
+    close();
+}
 
+void MoMProcess::close() throw()
+{
+    m_dataSegmentAndUp.clear();
+
+    m_lpBaseAddress = 0;
+    m_dwBaseAddressSize = 0;
+    m_dwOffsetSegment0 = 0;
+    m_dwOffsetCode = 0;
+    m_dwOffsetDatasegment = 0;
+
+    closeProcess();
+
+    m_exeFilepath.clear();
+}
+
+void MoMProcess::constructExeFilepath()
+{
+    const char* pszBaseFilename = 0;
+    switch (getOffset_DS_Code())
+    {
+    case gOFFSET_WIZARDS_DSEG_CODE: pszBaseFilename = "WIZARDS.EXE"; break;
+    case gOFFSET_MAGIC_DSEG_CODE:   pszBaseFilename = "MAGIC.EXE"; break;
+    default:                      break;
+    }
+
+    if (0 == pszBaseFilename)
+    {
+        m_exeFilepath.clear();
+    }
+    else
+    {
+        if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/')
+        {
+            m_exeFilepath += "/";
+        }
+        m_exeFilepath += pszBaseFilename;
+    }
 }
 
 bool MoMProcess::findSEG0(const std::vector<uint8_t>& data)
@@ -71,14 +121,65 @@ bool MoMProcess::findSEG0(const std::vector<uint8_t>& data)
     return true;
 }
 
+bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& data)
+{
+    bool ok = true;
+    for (size_t i = 0; ok && (i + ARRAYSIZE(gDATASEGMENT_IDENTIFIER) < data.size()); ++i)
+    {
+        // Try to find the current directory (exclude the terminating zero that won't be there)
+        if (0 == memcmp(&data[i], gLOCAL_DIRECTORY, ARRAYSIZE(gLOCAL_DIRECTORY) - 1))
+        {
+            m_exeFilepath = (const char*)&data[i + strlen(gLOCAL_DIRECTORY)];
+            std::cout << "Found '" << gLOCAL_DIRECTORY << "' with '" << m_exeFilepath << "' at offset 0x" << std::hex << i << std::dec << std::endl;
+            break;
+        }
+
+        if (0 == memcmp(&data[i], gDATASEGMENT_IDENTIFIER, ARRAYSIZE(gDATASEGMENT_IDENTIFIER)))
+        {
+            std::cout << "Found MoM BaseAddress 0x" << std::hex << baseAddress << " size 0x"<< data.size() << std::dec << std::endl;
+            m_lpBaseAddress = (uint8_t*)baseAddress;
+            m_dwBaseAddressSize = data.size();
+            m_dwOffsetDatasegment = i;
+            std::cout << "Found MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ") at offset 0x" << std::hex << i << std::dec << std::endl;
+
+            ok = findSEG0(data);
+
+            break;
+        }
+    }
+    return ok;
+}
+
+bool MoMProcess::registerResults(bool ok)
+{
+    if (0 == m_lpBaseAddress || 0 == m_dwOffsetDatasegment)
+    {
+        std::cout << "Could not find DATASEGMENT_IDENTIFIER (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ")" << std::endl;
+        ok = false;
+    }
+    if (m_exeFilepath.empty())
+    {
+        std::cout << "Could not find LOCAL_DIRECTORY" << std::endl;
+        // Do not treat as failure
+    }
+
+    if (ok)
+    {
+        ok = readData();
+    }
+
+    if (ok)
+    {
+        constructExeFilepath();
+    }
+    return ok;
+}
+
 bool MoMProcess::readData()
 {
-//    std::cout << "MoMProcess::readData()" << std::endl;
     if (NULL == m_hProcess)
         return false;
     if (0 == m_lpBaseAddress)
-        return false;
-    if (0 == m_dwOffsetDatasegment)
         return false;
     if (0 == m_dwOffsetDatasegment)
         return false;
@@ -107,6 +208,43 @@ bool MoMProcess::readData()
     }
 
     return ok;
+}
+
+bool MoMProcess::load(const char *filename)
+{
+    std::ifstream ifs(filename, std::ios_base::binary);
+
+    bool ok = ifs.good();
+
+    // TODO: Try and get updating the MoM memory to work (now DOSBox plunks out of existance)
+    //       For now: break the connection with a quick hack
+    if (ok)
+    {
+        m_lpBaseAddress = NULL;
+    }
+
+    // TODO: Check mismatch in size
+    if (ok)
+    {
+        ifs.read(reinterpret_cast<char*>(&m_dataSegmentAndUp[0]), m_dataSegmentAndUp.size());
+        ok = ifs.good();
+    }
+
+//    if (ok)
+//    {
+//        ok = writeData(&m_dataSegmentAndUp[0], m_dataSegmentAndUp.size());
+//    }
+
+    return ok;
+}
+
+bool MoMProcess::save(const char *filename)
+{
+    std::ofstream ofs(filename, std::ios_base::binary);
+
+    ofs.write(reinterpret_cast<const char*>(&m_dataSegmentAndUp[0]), m_dataSegmentAndUp.size());
+
+    return ofs.good();
 }
 
 }

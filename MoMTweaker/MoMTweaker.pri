@@ -32,16 +32,22 @@ HEADERS += \
     ../MoMTweaker/dialogselectinitialspells.h \
     ../MoMTweaker/dialogbuildingqueues.h \
     ../MoMTweaker/dialogtables.h \
-    ../MoMTweaker/dialogoverlandmap.h \
+    ../MoMTweaker/dialogmap.h \
     ../MoMTweaker/dialogaddunit.h \
     ../MoMTweaker/dialogtools.h \
     ../MoMTweaker/mainwindow.h \
     ../MoMTweaker/unitmodel.h \
+    ../MoMTweaker/QMoMTreeCustomExtensions.h \
     ../MoMEditorTemplate/MoMCommon.h \
     ../MoMEditorTemplate/TeeRedirecter.h \
     ../MoMEditorTemplate/QMoMUnitTile.h \
     ../MoMEditorTemplate/QMapGraphicsView.h \
-    ../MoMEditorTemplate/MoMCatnip.h
+    ../MoMEditorTemplate/MoMCatnip.h \
+    ../MoMEditorTemplate/MoMTerrain.h \
+    dialoglbxeditor.h \
+    ../MoMEditorTemplate/QMoMLazyIcon.h \
+    ../MoMEditorTemplate/MoMLocation.h \
+    ../MoMEditorTemplate/QMoMMapScene.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -68,14 +74,18 @@ SOURCES += \
     ../MoMTweaker/dialogselectinitialspells.cpp \
     ../MoMTweaker/dialogbuildingqueues.cpp \
     ../MoMTweaker/dialogtables.cpp \
-    ../MoMTweaker/dialogoverlandmap.cpp \
+    ../MoMTweaker/dialogmap.cpp \
     ../MoMTweaker/dialogaddunit.cpp \
     ../MoMTweaker/dialogtools.cpp \
     ../MoMTweaker/mainwindow.cpp \
     ../MoMTweaker/unitmodel.cpp \
+    ../MoMTweaker/QMoMTreeCustomExtensions.cpp \
     ../MoMEditorTemplate/QMoMUnitTile.cpp \
     ../MoMEditorTemplate/QMapGraphicsView.cpp \
-    ../MoMEditorTemplate/MoMCatnip.cpp
+    ../MoMEditorTemplate/MoMCatnip.cpp \
+    ../MoMEditorTemplate/MoMTerrain.cpp \
+    dialoglbxeditor.cpp \
+    ../MoMEditorTemplate/QMoMMapScene.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \
@@ -83,8 +93,9 @@ FORMS += \
     ../MoMTweaker/dialogselectinitialspells.ui \
     ../MoMTweaker/dialogbuildingqueues.ui \
     ../MoMTweaker/dialogtables.ui \
-    ../MoMTweaker/dialogoverlandmap.ui \
+    ../MoMTweaker/dialogmap.ui \
     ../MoMTweaker/dialogaddunit.ui \
-    ../MoMTweaker/dialogtools.ui
+    ../MoMTweaker/dialogtools.ui \
+    dialoglbxeditor.ui
 
 RESOURCES += ../Resources/InteractiveGameTweaker.qrc

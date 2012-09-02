@@ -52,7 +52,7 @@ public:
     };
 
     MoMUnit();
-    explicit MoMUnit(MoM::MoMGameBase* game);
+    explicit MoMUnit(class MoMGameBase* game);
     virtual ~MoMUnit();
     MoMUnit(const MoMUnit& rhs);
     MoMUnit& operator=(const MoMUnit& rhs);
@@ -94,6 +94,7 @@ public:
     std::string getLevelName() const;
     double getMoves() const;
     int getNrFigures() const;
+    ePlayer getOwner() const;
     BaseAttributes getPenaltyAttributes() const;
     eRace getRace() const;
     std::string getRaceName() const;
@@ -161,7 +162,7 @@ private:
     // NOT IMPLEMENTED
 
     // CONFIG
-    MoMGameBase* m_game;
+    class MoMGameBase* m_game;
 
     // STATUS
     Battle_Unit* m_battleUnit;

@@ -25,10 +25,10 @@ public:
 
     virtual void close() throw();
 
-    bool convertExeOffset_to_OvlOffset(size_t exeOffset, size_t& ovlNr, uint16_t& ovlOffset);
-    bool convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset, size_t& exeOffset);
-    bool convertExeOffset_to_DsegOffset(size_t exeOffset, uint16_t& dsegOffset);
-    bool convertDsegOffset_to_ExeOffset(uint16_t dsegOffset, size_t& exeOffset);
+    bool convertExeOffset_to_OvlOffset(size_t exeOffset, size_t& ovlNr, uint16_t& ovlOffset) const;
+    bool convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset, size_t& exeOffset) const;
+    bool convertExeOffset_to_DsegOffset(size_t exeOffset, uint16_t& dsegOffset) const;
+    bool convertDsegOffset_to_ExeOffset(uint16_t dsegOffset, size_t& exeOffset) const;
 
     bool load(const std::string& filename);
 
