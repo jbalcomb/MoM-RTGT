@@ -9,6 +9,7 @@
 #include <errno.h>      // errno, strerror()
 #include <fcntl.h>      // O_RDONLY, O_WRONLY, O_LARGEFILE
 #include <sys/ptrace.h> // ptrace()
+#include <sys/time.h>   // gettimeofday()
 #include <sys/types.h>  // pid_t, __off64_t
 #include <sys/wait.h>   // waitpid()
 #include <unistd.h>     // open(), close(), pread64(), pwrite64()
@@ -18,6 +19,7 @@
 #include <iomanip>
 #include <iostream>
 #include <signal.h>     // kill()
+#include <sstream>
 #include <stdio.h>      // fflush()
 #include <stdlib.h>     // system()
 #include <string.h>     // memcmp()
@@ -29,11 +31,9 @@
 
 namespace MoM {
 
-namespace {
-
 const std::string gPID_FILENAME = "dosbox.pid";
 
-void detachProcess(pid_t pid)
+static void detachProcess(pid_t pid)
 {
     // Try a couple of times
 //    std::cout << "PTRACE_DETACH from pid=" << (unsigned)pid << std::endl;
@@ -43,7 +43,7 @@ void detachProcess(pid_t pid)
     }
 }
 
-bool attachProcess(pid_t pid)
+static bool attachProcess(pid_t pid)
 {
     // Try a couple of times
 //    std::cout << "PTRACE_ATTACH to pid=" << pid << std::endl;
@@ -68,6 +68,11 @@ bool attachProcess(pid_t pid)
     return true;
 }
 
+double getPerformanceTime()
+{
+    struct timeval tp = {0, 0};
+    (void)gettimeofday(&tp, 0);
+    return tp.tv_sec + tp.tv_usec * 1e-6;
 }
 
 void MoMProcess::closeProcess() throw()
@@ -111,13 +116,13 @@ bool MoMProcess::tryLinuxPid(void* vPid)
 
     bool ok = true;
     std::vector<uint8_t> data;
+    double timer_start[2] = {0, 0};
+    double timer_tot[2] = {0, 0};
 
     // Try to find the memory region of MoM within DOSBox (or use the defaults)
     std::cout << "Search for MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << "): ";
     std::cout << gDATASEGMENT_IDENTIFIER + 4 << std::endl;
     std::string filename = "/proc/" + toStr(pid) + "/maps";
-    unsigned long start = 0;
-    unsigned long stop = 0;
     std::ifstream ifs(filename.c_str());
     if (!ifs)
     {
@@ -126,19 +131,48 @@ bool MoMProcess::tryLinuxPid(void* vPid)
     }
     while (ok && ifs && (0 == m_lpBaseAddress) && ((0 == m_dwOffsetDatasegment) || m_exeFilepath.empty()))
     {
-        char ch = '\0';
-        ifs >> std::hex >> start >> ch >> stop;
-        ifs.ignore(1000, '\n');
+        unsigned long start = 0;
+        char dashChar = '\0';
+        unsigned long stop = 0;
+        std::string perms;
+        unsigned long offsetMem = 0;
+        std::string dev;
+        std::string inode;
+        std::string pathname;
+
+        ifs >> std::hex >> start >> dashChar >> stop >> perms >> offsetMem >> dev >> inode;
+        std::getline(ifs, pathname);
+        std::istringstream iss(pathname);
+        iss >> pathname;
+
         size_t size = stop - start;
-        if (m_verbose) std::cout << "Scanning 0x" << std::hex << start << " size 0x" << size << std::dec << std::endl;
+        if (m_verbose) std::cout << "Scanning 0x" << std::hex << start << " size 0x" << size
+                                 << " perms='" << perms << " pathname='" << pathname << "'" << std::dec << std::endl;
+
+        if ((perms != "rw-p") || (!pathname.empty() && (pathname[0] != ' ')))
+        {
+            if (m_verbose) std::cout << "Skipping due to mismatching attributes" << std::endl;
+            continue;
+        }
+
+        timer_start[0] = getPerformanceTime();
+
         if (readProcessData(m_hProcess, (const uint8_t*)start, size, data))
         {
+            timer_start[1] = getPerformanceTime();
+            timer_tot[0] += timer_start[1] - timer_start[0];
+
             ok = findSignatures(start, data);
+
+            timer_tot[1] += getPerformanceTime() - timer_start[1];
         }
     }
     ifs.close();
 
     ok = registerResults(ok);
+
+    std::cout << "Tot time reading process memory = " << timer_tot[0] << " seconds" << std::endl;
+    std::cout << "Tot time finding signatures = " << timer_tot[1] << " seconds" << std::endl;
 
     return ok;
 }

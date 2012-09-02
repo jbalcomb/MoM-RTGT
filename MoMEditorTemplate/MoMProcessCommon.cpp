@@ -129,6 +129,7 @@ bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& 
         // Try to find the current directory (exclude the terminating zero that won't be there)
         if (0 == memcmp(&data[i], gLOCAL_DIRECTORY, ARRAYSIZE(gLOCAL_DIRECTORY) - 1))
         {
+            std::cout << "Found '" << gLOCAL_DIRECTORY << "' in BaseAddress 0x" << std::hex << baseAddress << " size 0x"<< data.size() << std::dec << std::endl;
             m_exeFilepath = (const char*)&data[i + strlen(gLOCAL_DIRECTORY)];
             std::cout << "Found '" << gLOCAL_DIRECTORY << "' with '" << m_exeFilepath << "' at offset 0x" << std::hex << i << std::dec << std::endl;
             break;
