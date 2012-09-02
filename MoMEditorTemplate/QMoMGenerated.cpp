@@ -3306,29 +3306,61 @@ QMoMTreeItemBase* constructTreeItem(MoMDataSegment* rhs, const QString& context)
           ptreem_Battlefield_battleUnitIDs->appendChild(oss.str().c_str(), new QMoMTreeItem<uint16_t>(&rhs->m_Battlefield_battleUnitIDs[i]));
     }
     QMoMTreeItemBase* ptreem_Unk_C550 = ptree;
-    if (0xC588 - 0xC550 > 3)
+    if (0xC582 - 0xC550 > 3)
     {
         ptreem_Unk_C550 = new QMoMTreeItemBase("m_Unk_C550");
         ptree->appendTree(ptreem_Unk_C550, "");
     }
-    for (unsigned i = 0; i < 0xC588 - 0xC550; ++i)
+    for (unsigned i = 0; i < 0xC582 - 0xC550; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_C550[" << i << "]";
           ptreem_Unk_C550->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C550[i]));
     }
+    ptree->appendChild("m_BattleUnit_on_move", new QMoMTreeItem<int16_t>(&rhs->m_BattleUnit_on_move));
+    ptree->appendChild("m_Defending_wizard", new QMoMTreeItem<int16_t>(&rhs->m_Defending_wizard));
+    ptree->appendChild("m_Attacking_wizard", new QMoMTreeItem<int16_t>(&rhs->m_Attacking_wizard));
     ptree->appendChild("m_Nr_Battle_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Nr_Battle_Units));
+    ptree->appendChild("m_BattleUnit_pointed_at", new QMoMTreeItem<int16_t>(&rhs->m_BattleUnit_pointed_at));
     QMoMTreeItemBase* ptreem_Unk_C58A = ptree;
-    if (0xC8B4 - 0xC58A > 3)
+    if (0xC5C2 - 0xC58C > 3)
     {
         ptreem_Unk_C58A = new QMoMTreeItemBase("m_Unk_C58A");
         ptree->appendTree(ptreem_Unk_C58A, "");
     }
-    for (unsigned i = 0; i < 0xC8B4 - 0xC58A; ++i)
+    for (unsigned i = 0; i < 0xC5C2 - 0xC58C; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_C58A[" << i << "]";
           ptreem_Unk_C58A->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C58A[i]));
+    }
+    ptree->appendChild("m_Battle_winner", new QMoMTreeItem<int16_t>(&rhs->m_Battle_winner));
+    ptree->appendChild("m_Battle_loser", new QMoMTreeItem<int16_t>(&rhs->m_Battle_loser));
+    QMoMTreeItemBase* ptreem_Unk_C5C6 = ptree;
+    if (0xC5DE - 0xC5C6 > 3)
+    {
+        ptreem_Unk_C5C6 = new QMoMTreeItemBase("m_Unk_C5C6");
+        ptree->appendTree(ptreem_Unk_C5C6, "");
+    }
+    for (unsigned i = 0; i < 0xC5DE - 0xC5C6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C5C6[" << i << "]";
+          ptreem_Unk_C5C6->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C5C6[i]));
+    }
+    ptree->appendChild("m_YPos_clash", new QMoMTreeItem<int16_t>(&rhs->m_YPos_clash));
+    ptree->appendChild("m_XPos_clash", new QMoMTreeItem<int16_t>(&rhs->m_XPos_clash));
+    QMoMTreeItemBase* ptreem_Unk_C5E2 = ptree;
+    if (0xC8B4 - 0xC5E2 > 3)
+    {
+        ptreem_Unk_C5E2 = new QMoMTreeItemBase("m_Unk_C5E2");
+        ptree->appendTree(ptreem_Unk_C5E2, "");
+    }
+    for (unsigned i = 0; i < 0xC8B4 - 0xC5E2; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C5E2[" << i << "]";
+          ptreem_Unk_C5E2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Unk_C5E2[i]));
     }
     ptree->appendChild("m_Battlefield_flags", new QMoMTreeItem<uint16_t>(&rhs->m_Battlefield_flags));
     QMoMTreeItemBase* ptreem_Unk_C8B6 = ptree;

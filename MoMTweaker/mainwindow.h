@@ -72,7 +72,7 @@ private:
 
     QMoMGamePtr m_game;
 
-private slots:
+public slots:
     void on_checkBox_UpdateTree_clicked();
     void on_pushButton_AddUnit_clicked();
     void on_pushButton_Calculator_clicked();

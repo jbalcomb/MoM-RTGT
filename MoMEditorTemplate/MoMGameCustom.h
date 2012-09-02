@@ -108,7 +108,7 @@ public:
         return m_MagicExe.get();
     }
 
-	virtual const class MoMProcess* getMoMProcess() const
+    virtual class MoMProcess* getMoMProcess()
 	{
 		return m_process.get();
 	}

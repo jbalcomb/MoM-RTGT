@@ -5419,11 +5419,25 @@ typedef struct // MoMDataSegment
 
     DS_Offset   m_Battlefield_battleUnitIDs[22];    // ds:C524
 
-    uint8_t     m_Unk_C550[0xC588 - 0xC550];        // ds:C550
+    uint8_t     m_Unk_C550[0xC582 - 0xC550];        // ds:C550
 
+    int16_t     m_BattleUnit_on_move;               // ds:C582
+    int16_t     m_Defending_wizard;                 // ds:C584
+    int16_t     m_Attacking_wizard;                 // ds:C586
     uint16_t    m_Nr_Battle_Units;                  // ds:C588
+    int16_t     m_BattleUnit_pointed_at;            // ds:C58A
 
-    uint8_t     m_Unk_C58A[0xC8B4 - 0xC58A];        // ds:C58A
+    uint8_t     m_Unk_C58A[0xC5C2 - 0xC58C];        // ds:C58C
+
+    int16_t     m_Battle_winner;                    // ds:C5C2
+    int16_t     m_Battle_loser;                     // ds:C5C4
+
+    uint8_t     m_Unk_C5C6[0xC5DE - 0xC5C6];        // ds:C5C6
+
+    int16_t     m_YPos_clash;                       // ds:C5DE
+    int16_t     m_XPos_clash;                       // ds:C5E0
+
+    uint8_t     m_Unk_C5E2[0xC8B4 - 0xC5E2];        // ds:C5E2
 
     uint16_t    m_Battlefield_flags;                // ds:C8B4
 

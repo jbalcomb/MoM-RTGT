@@ -125,6 +125,7 @@ public:
     bool load(const char* filename);
 
     bool readData();
+    bool readData(void* pointer, size_t size);
 
     bool save(const char* filename);
 
@@ -132,6 +133,8 @@ public:
     {
         m_verbose = value;
     }
+
+    void sleepSec(double timeout);
 
     bool validPointer(void* pointer, size_t size)
     {
@@ -157,7 +160,7 @@ private:
     bool findSignatures(size_t baseAddress, const std::vector<uint8_t>& data);
     bool registerResults(bool ok);
 
-    static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data);
+    static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, uint8_t* data);
 
     bool tryLinuxPid(void* vPid);
     bool tryWindowTitle(const std::string& windowTitle);

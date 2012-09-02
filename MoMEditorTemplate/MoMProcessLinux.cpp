@@ -12,7 +12,7 @@
 #include <sys/time.h>   // gettimeofday()
 #include <sys/types.h>  // pid_t, __off64_t
 #include <sys/wait.h>   // waitpid()
-#include <unistd.h>     // open(), close(), pread64(), pwrite64()
+#include <unistd.h>     // open(), close(), pread64(), pwrite64(), usleep()
 
 // Standard C++ Library
 #include <fstream>
@@ -177,7 +177,7 @@ bool MoMProcess::tryLinuxPid(void* vPid)
     return ok;
 }
 
-bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data)
+bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, uint8_t* data)
 {
     if (NULL == hProcess)
         return false;
@@ -293,6 +293,12 @@ bool MoMProcess::writeData(const void* pointer, size_t size)
 void MoMProcess::printError(int errorNumber, const std::string& msg)
 {
     std::cout << "WARN: " << msg << ": " << strerror(errorNumber) << std::endl;
+}
+
+void MoMProcess::sleepSec(double timeout)
+{
+    useconds_t microseconds = (useconds_t)(timeout * 1000000 + 0.5);
+    usleep(microseconds);
 }
 
 }

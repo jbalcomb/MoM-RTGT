@@ -178,6 +178,45 @@ bool MoMProcess::registerResults(bool ok)
 
 bool MoMProcess::readData()
 {
+//    if (NULL == m_hProcess)
+//        return false;
+//    if (0 == m_lpBaseAddress)
+//        return false;
+//    if (0 == m_dwOffsetDatasegment)
+//        return false;
+//    if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
+//        return false;
+
+//    size_t size = m_dwBaseAddressSize - m_dwOffsetDatasegment;
+
+//    bool ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetDatasegment, size, m_dataSegmentAndUp);
+
+//    // Check if we're still the same executable
+//    if (ok)
+//    {
+//        std::vector<uint8_t> signature;
+//        size_t sizeSignature = 4;
+//        ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetCode, sizeSignature, signature);
+//        if (ok)
+//        {
+//            ok = (gCS_SIGNATURE_BYTE == signature[0]);
+//        }
+//        if (ok)
+//        {
+//            size_t offsetDStoSegment0 = (m_dwOffsetDatasegment - m_dwOffsetSegment0) / MoM::gPARAGRAPH_SIZE;
+//            ok = (*(uint16_t*)&signature[1] == offsetDStoSegment0);
+//        }
+//    }
+
+    if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
+        return false;
+    size_t size = m_dwBaseAddressSize - m_dwOffsetDatasegment;
+    m_dataSegmentAndUp.resize(size);
+    return readData(&m_dataSegmentAndUp[0], size);
+}
+
+bool MoMProcess::readData(void *pointer, size_t size)
+{
     if (NULL == m_hProcess)
         return false;
     if (0 == m_lpBaseAddress)
@@ -186,17 +225,21 @@ bool MoMProcess::readData()
         return false;
     if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
         return false;
+    if ((uint8_t*)pointer < &m_dataSegmentAndUp[0])
+        return false;
+    if ((uint8_t*)pointer + size > &m_dataSegmentAndUp[0] + m_dataSegmentAndUp.size())
+        return false;
 
-    size_t size = m_dwBaseAddressSize - m_dwOffsetDatasegment;
+    size_t dsegOffset = (size_t)((uint8_t*)pointer - &m_dataSegmentAndUp[0]);
 
-    bool ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetDatasegment, size, m_dataSegmentAndUp);
+    bool ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetDatasegment + dsegOffset, size, &m_dataSegmentAndUp[dsegOffset]);
 
     // Check if we're still the same executable
     if (ok)
     {
-        std::vector<uint8_t> signature;
         size_t sizeSignature = 4;
-        ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetCode, sizeSignature, signature);
+        std::vector<uint8_t> signature(sizeSignature);
+        ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetCode, sizeSignature, &signature[0]);
         if (ok)
         {
             ok = (gCS_SIGNATURE_BYTE == signature[0]);

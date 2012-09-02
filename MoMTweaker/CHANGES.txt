@@ -14,6 +14,11 @@ CHANGES IN 0.2.6 (2012--)
   Note that usually either the overland map or the battle map
   will be corrupted depending on whether battle is in progress or not.
 
+* Added an experimental External AI dialog (click Tools, click External AI).
+  You can set a hook in the code for use in battle.
+  A hook will make the game stop each time an AI unit is on move.
+  Then you can change its tactic manually and release the hook.
+  
 * Revised the address calculator to display more information.
 
 * Added city name of fortress at the bottom of the wizard's data [FrancoK].

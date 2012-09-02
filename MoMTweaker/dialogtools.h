@@ -35,6 +35,8 @@ private slots:
     void on_pushButton_SelectInitialSpells_clicked();
     void on_pushButton_Validate_clicked();
 
+    void on_pushButton_ExternalAI_clicked();
+
 private:
 	QMoMGamePtr getGame();
 	QStatusBar* statusBar();

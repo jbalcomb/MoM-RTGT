@@ -564,7 +564,7 @@ public:
     {
         return 0;
     }
-	virtual const class MoMProcess* getMoMProcess() const
+    virtual class MoMProcess* getMoMProcess()
 	{
 		return 0;
 	}

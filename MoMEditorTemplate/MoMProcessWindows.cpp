@@ -192,7 +192,7 @@ void MoMProcess::printError(int errorNumber, const std::string& msg)
     std::cout << "WARN: " << msg << " failed with error 0x" << std::hex << eNum << " (" << sysMsg << ")" << std::hex << std::endl;
 }
 
-bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, std::vector<uint8_t>& data)
+bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, uint8_t* data)
 {
     if (NULL == hProcess)
         return false;
@@ -201,8 +201,7 @@ bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, s
     if (0 == size)
         return false;
 
-    data.resize(size);
-    if (!ReadProcessMemory(hProcess, lpBaseAddress, &data[0], size, NULL))
+    if (!ReadProcessMemory(hProcess, lpBaseAddress, data, size, NULL))
     {
         printError(GetLastError(), "ReadProcessMemory"); // Show cause of failure
         return false;
@@ -237,6 +236,12 @@ bool MoMProcess::writeData(const void* pointer, size_t size)
     }
 
     return true;
+}
+
+void MoMProcess::sleepSec(double timeout)
+{
+    DWORD milliseconds = (DWORD)(timeout * 1000 + 0.5);
+    Sleep(milliseconds);
 }
 
 }

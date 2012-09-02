@@ -5142,16 +5142,36 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     }
     os << ")\n";
     os << "m_Unk_C550=(\n";
-    for (unsigned i = 0; i < 0xC588 - 0xC550; ++i)
+    for (unsigned i = 0; i < 0xC582 - 0xC550; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C550[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C550[i] << std::dec << ",\n";
     }
     os << ")\n";
+    os << "m_BattleUnit_on_move=" << rhs.m_BattleUnit_on_move << " 0x" << std::hex << rhs.m_BattleUnit_on_move << std::dec << "\n";
+    os << "m_Defending_wizard=" << rhs.m_Defending_wizard << " 0x" << std::hex << rhs.m_Defending_wizard << std::dec << "\n";
+    os << "m_Attacking_wizard=" << rhs.m_Attacking_wizard << " 0x" << std::hex << rhs.m_Attacking_wizard << std::dec << "\n";
     os << "m_Nr_Battle_Units=" << rhs.m_Nr_Battle_Units << " 0x" << std::hex << rhs.m_Nr_Battle_Units << std::dec << "\n";
+    os << "m_BattleUnit_pointed_at=" << rhs.m_BattleUnit_pointed_at << " 0x" << std::hex << rhs.m_BattleUnit_pointed_at << std::dec << "\n";
     os << "m_Unk_C58A=(\n";
-    for (unsigned i = 0; i < 0xC8B4 - 0xC58A; ++i)
+    for (unsigned i = 0; i < 0xC5C2 - 0xC58C; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C58A[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C58A[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Battle_winner=" << rhs.m_Battle_winner << " 0x" << std::hex << rhs.m_Battle_winner << std::dec << "\n";
+    os << "m_Battle_loser=" << rhs.m_Battle_loser << " 0x" << std::hex << rhs.m_Battle_loser << std::dec << "\n";
+    os << "m_Unk_C5C6=(\n";
+    for (unsigned i = 0; i < 0xC5DE - 0xC5C6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C5C6[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C5C6[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_YPos_clash=" << rhs.m_YPos_clash << " 0x" << std::hex << rhs.m_YPos_clash << std::dec << "\n";
+    os << "m_XPos_clash=" << rhs.m_XPos_clash << " 0x" << std::hex << rhs.m_XPos_clash << std::dec << "\n";
+    os << "m_Unk_C5E2=(\n";
+    for (unsigned i = 0; i < 0xC8B4 - 0xC5E2; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C5E2[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C5E2[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Battlefield_flags=" << rhs.m_Battlefield_flags << " 0x" << std::hex << rhs.m_Battlefield_flags << std::dec << "\n";

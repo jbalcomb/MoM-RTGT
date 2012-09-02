@@ -23,6 +23,7 @@
 
 // Local
 #include "dialogbuildingqueues.h"
+#include "dialogexternalai.h"
 #include "dialoglbxeditor.h"
 #include "dialogselectinitialspells.h"
 #include "mainwindow.h"
@@ -286,4 +287,11 @@ QStatusBar* DialogTools::statusBar()
 {
     MainWindow* mainWindow = MainWindow::getInstance();
 	return mainWindow->statusBar();
+}
+
+void DialogTools::on_pushButton_ExternalAI_clicked()
+{
+    DialogExternalAI* dialog = new DialogExternalAI(MainWindow::getInstance());
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
 }

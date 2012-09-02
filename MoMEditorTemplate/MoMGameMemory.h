@@ -127,7 +127,7 @@ private:
 
 
     virtual MoMDataSegment* getDataSegment();
-	virtual const class MoMProcess* getMoMProcess() const
+    virtual class MoMProcess* getMoMProcess()
 	{
 		return m_process.get();
 	}
