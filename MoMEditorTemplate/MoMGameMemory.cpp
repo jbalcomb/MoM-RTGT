@@ -691,8 +691,8 @@ bool MoMGameMemory::validate()
     }
     else
     {
-		MoMController momController;
-        ok = momController.validateConsistency(*this);
+        MoMController momController(this);
+        ok = momController.validateConsistency();
     }
 
     return ok;

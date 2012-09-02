@@ -122,9 +122,8 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
 
     if (ok)
     {
-		MoM::MoMController momController;
-        ok = momController.repopLairs(*game, 
-            ui->checkBox_RepopMaxOut->isChecked());
+        MoM::MoMController momController(game.data());
+        ok = momController.repopLairs(ui->checkBox_RepopMaxOut->isChecked());
         if (!ok)
         {
             (void)QMessageBox::warning(this, 

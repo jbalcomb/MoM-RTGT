@@ -15,7 +15,7 @@
 
 DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     QDialog(parent),
-	m_game(),
+    m_game(),
     ui(new Ui::DialogBuildingQueues)
 {
     ui->setupUi(this);
@@ -112,7 +112,7 @@ void DialogBuildingQueues::update()
         nrCities = m_game->getNrCities();
 	}
 
-	MoM::MoMController momController;
+    MoM::MoMController momController(m_game.data());
 
     int row = 0;
     for (int cityNr = 0; (cityNr < nrCities) && (cityNr < (int)MoM::gMAX_CITIES); ++cityNr)
@@ -126,7 +126,7 @@ void DialogBuildingQueues::update()
 
         std::vector<int> unitsInCity;
         MoM::MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane);
-        (void)momController.findUnitsAtLocation(*m_game, location, unitsInCity);
+        (void)momController.findUnitsAtLocation(location, unitsInCity);
         int garrisonSize = unitsInCity.size();
 
         if (row >= ui->tableWidget_Cities->rowCount())

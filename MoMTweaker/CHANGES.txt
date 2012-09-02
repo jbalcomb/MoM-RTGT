@@ -5,7 +5,19 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.6 (2012--)
 -----------------------------
 
-* Added an battlefield map.
+* Fixed the failure to connect in Windows 7 that apparently 
+  afflicted some people.
+  
+* Added a battlefield map (click Map and select Battle).
+  This completes the maps [Ayu].
+  Ticket: http://sourceforge.net/p/momrtgt/tickets/12/
+  Note that usually either the overland map or the battle map
+  will be corrupted depending on whether battle is in progress or not.
+
+* Revised the address calculator to display more information.
+
+* Added city name of fortress at the bottom of the wizard's data [FrancoK].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/19/
 
 
 

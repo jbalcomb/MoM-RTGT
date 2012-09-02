@@ -157,8 +157,8 @@ void MainWindow::addUnit(MoM::eUnit_Type unitType)
 
     if (ok)
     {
-		MoM::MoMController momController;
-		ok = momController.addUnit(*m_game, MoM::PLAYER_YOU, unitType);
+        MoM::MoMController momController(m_game.data());
+        ok = momController.addUnit(MoM::PLAYER_YOU, unitType);
         if (!ok)
         {
             (void)QMessageBox::warning(this,
@@ -197,8 +197,8 @@ void MainWindow::applyBuildQueues()
 
     if (ok)
     {
-		MoM::MoMController momController;
-        ok = momController.applyBuildingQueue(*m_game, MoM::PLAYER_YOU);
+        MoM::MoMController momController(m_game.data());
+        ok = momController.applyBuildingQueue(MoM::PLAYER_YOU);
         if (!ok)
         {
             (void)QMessageBox::warning(this,

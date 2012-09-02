@@ -488,8 +488,8 @@ bool MoMGameSave::validate()
 
     bool ok = MoM::validate(*m_SaveGame,  "MoM files");
 
-	MoMController momController;
-    ok |= momController.validateConsistency(*this);
+    MoMController momController(this);
+    ok |= momController.validateConsistency();
 
     return ok;
 }

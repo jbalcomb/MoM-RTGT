@@ -10,6 +10,7 @@
 
 #include <sstream>
 
+#include <MoMController.h>
 #include <MoMGameCustom.h>
 #include <MoMGenerated.h>
 #include <MoMLbxBase.h>
@@ -1095,7 +1096,18 @@ void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
             MoM::Fortress* fortresses = game->getFortresses();
             if (0 != fortresses)
             {
-                subtree->setChild(subtree->rowCount(), 0, constructTreeItem(&fortresses[wizardNr], "Fortress"));
+                MoM::Fortress* fortress = &fortresses[wizardNr];
+                int subrow = subtree->rowCount();
+                subtree->setChild(subrow, 0, constructTreeItem(fortress, "Fortress"));
+
+                MoM::MoMController momController(game.data());
+                MoM::City* city = momController.findCityAtLocation(MoM::MoMLocation(*fortress));
+                if (0 != city)
+                {
+                    int cityNr = (int)(city - game->getCity(0));
+                    subtree->child(subrow,0)->appendChild("Fortress city", new QMoMTreeItem<char[14]>(city->m_City_Name),
+                                                          QString("city[%0]").arg(cityNr));
+                }
             }
         }
         ptree->child(wizardNr, 0)->setData(toQStr(wizard->m_Portrait), Qt::UserRole);

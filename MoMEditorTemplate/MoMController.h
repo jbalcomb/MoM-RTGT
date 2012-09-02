@@ -16,7 +16,8 @@ namespace MoM {
 class MoMController
 {
 public:
-	MoMController()
+    explicit MoMController(MoMGameBase* game) :
+        m_game(game)
 	{}
 
 	const std::string& errorString() const
@@ -24,26 +25,28 @@ public:
 		return m_errorString;
 	}
 
-    bool addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unitType);
+    bool addUnit(ePlayer playerNr, eUnit_Type unitType);
 
-    bool applyBuildingQueue(MoMGameBase& game, int cityNr);
-    bool applyBuildingQueue(MoMGameBase& game, ePlayer playerNr);
+    bool applyBuildingQueue(int cityNr);
+    bool applyBuildingQueue(ePlayer playerNr);
 
-	static bool findCheapestUnitToProduce(MoMGameBase& game, const City& city, eProducing& produce);
-    static bool findUnitsAtLocation(MoMGameBase& game, const MoMLocation& location, std::vector<int>& units);
+    bool findCheapestUnitToProduce(const City& city, eProducing& produce);
+    City* findCityAtLocation(const MoMLocation& location);
+    bool findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units);
 
-	static bool isBuildingAllowed(MoMGameBase& game, const City& city, eBuilding building);
-	static bool isBuildingPresent(const City& city, eBuilding building);
+    bool isBuildingAllowed(const City& city, eBuilding building);
+    bool isBuildingPresent(const City& city, eBuilding building);
 
-    bool polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr);
+    bool polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr);
 
-    bool repopLairs(MoMGameBase& game, bool maxOut = false);
+    bool repopLairs(bool maxOut = false);
 
-    bool validateConsistency(MoMGameBase& game);
+    bool validateConsistency();
 
 private:
-    bool createUnit(MoMGameBase& game, int& unitNr);
+    bool createUnit(int& unitNr);
 
+    MoMGameBase* m_game;
 	std::string m_errorString;
 };
 

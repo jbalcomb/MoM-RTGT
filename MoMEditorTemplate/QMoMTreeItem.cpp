@@ -43,13 +43,13 @@ QMoMTreeItemBase::~QMoMTreeItemBase()
     }
 }
 
-void QMoMTreeItemBase::appendChild(const QString& feature, QMoMTreeItemBase* value)
+void QMoMTreeItemBase::appendChild(const QString& feature, QMoMTreeItemBase* value, const QString& comment)
 {
     QList<QMoMTreeItemBase*> items;
 
     items.append(new QMoMTreeItemBase(feature));
     items.append(value);
-    items.append(new QMoMTreeItemBase);
+    items.append(new QMoMTreeItemBase(comment));
 
     appendRow(items);
 }

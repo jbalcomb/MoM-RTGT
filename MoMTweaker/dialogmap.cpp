@@ -893,6 +893,24 @@ void DialogMap::slot_gameUpdated()
             }
         }
 
+        // Show central structure
+        QPixmap pixmapStructure = MoM::QMoMResources::instance().getPixmap(battlefield->m_Central_structure);
+        QGraphicsPixmapItem* itemStructure = m_sceneBattle->addPixmapAtLocation(pixmapStructure, MoMLocation(6, 11, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle));
+        QPointF offset = itemStructure->offset();
+        if (MoM::CENTRALSTRUCTURE_city_grid == battlefield->m_Central_structure)
+        {
+            offset.ry() += 2 * 16;
+        }
+        else if ((MoM::CENTRALSTRUCTURE_sorcery_node == battlefield->m_Central_structure)
+                 || (MoM::CENTRALSTRUCTURE_nature_node == battlefield->m_Central_structure))
+        {
+            offset.ry() += 16;
+        }
+        else
+        {
+        }
+        itemStructure->setOffset(offset);
+
         // Show battle units
         int nrBattleUnits = m_game->getNrBattleUnits();
         for (int battleUnitNr = 0; battleUnitNr < nrBattleUnits; ++battleUnitNr)
@@ -996,23 +1014,6 @@ void DialogMap::slot_gameUpdated()
                 (void)m_sceneBattle->addPixmapAtLocation(pixmapWall, wallLocations[i]);
             }
         }
-
-        QPixmap pixmapStructure = MoM::QMoMResources::instance().getPixmap(battlefield->m_Central_structure);
-        QGraphicsPixmapItem* itemStructure = m_sceneBattle->addPixmapAtLocation(pixmapStructure, MoMLocation(6, 11, (ePlane)battlefield->m_Plane, MoMLocation::MAP_battle));
-        QPointF offset = itemStructure->offset();
-        if (MoM::CENTRALSTRUCTURE_city_grid == battlefield->m_Central_structure)
-        {
-            offset.ry() += 2 * 16;
-        }
-        else if ((MoM::CENTRALSTRUCTURE_sorcery_node == battlefield->m_Central_structure)
-                 || (MoM::CENTRALSTRUCTURE_nature_node == battlefield->m_Central_structure))
-        {
-            offset.ry() += 16;
-        }
-        else
-        {
-        }
-        itemStructure->setOffset(offset);
 
         // Show battlefield menubar (numbers from IDA)
         QPixmap pixmapMenubar = MoM::QMoMResources::instance().getPixmap(MoM::LBXRecordID("BACKGRND", 3));

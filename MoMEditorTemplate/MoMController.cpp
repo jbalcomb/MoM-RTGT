@@ -40,9 +40,14 @@ int gXPforLevel[] =
 #define producingGarrison(city) \
     ((city).m_Producing >= PRODUCING_BUILDING_MAX)
 
-bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unitType)
+bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     if ((unsigned)unitType >= eUnit_Type_MAX)
     {
         std::cout << "Cannot add unit " << unitType << " because it is out-of-range" << std::endl;
@@ -61,7 +66,7 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
 
 	// Create a new unit that is not in the game yet
     int unitNr = -1;
-    bool ok = createUnit(game, unitNr);
+    bool ok = createUnit(unitNr);
 
     Unit* unit = game.getUnit(unitNr);
     if (0 == unit)
@@ -91,7 +96,7 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
 	// Polymorph the unit to a hero if applicable
     if (ok && ((unsigned)unitType < gMAX_HERO_TYPES))
 	{
-		ok = polymorphToHero(game, playerNr, unitNr, unitType);
+        ok = polymorphToHero(playerNr, unitNr, unitType);
 	}
 
 	// Put the unit in the game
@@ -103,9 +108,14 @@ bool MoMController::addUnit(MoMGameBase& game, ePlayer playerNr, eUnit_Type unit
     return ok;
 }
 
-bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
+bool MoMController::applyBuildingQueue(int cityNr)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     City* city = game.getCity(cityNr);
     if (0 == city)
 	{
@@ -119,7 +129,7 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
     std::vector<int> unitsInCity;
 //    MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane, false);
     MoMLocation location(*city, MoMLocation::MAP_overland);
-    (void)findUnitsAtLocation(game, location, unitsInCity);
+    (void)findUnitsAtLocation(location, unitsInCity);
 
     // TODO: Remove this spell enchantment ;)
 //    if (OWNER_None == city->m_City_Enchantments.Gaias_Blessing)
@@ -167,7 +177,7 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
         //std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
         //    << city->m_Producing << " keeps producing a garrison" << std::endl;
     }
-    else if (0 == unitsInCity.size() && !producingGarrison(*city) && findCheapestUnitToProduce(game, *city, produce))
+    else if (0 == unitsInCity.size() && !producingGarrison(*city) && findCheapestUnitToProduce(*city, produce))
     {
         // Switch from any task to Spearmen if there is none
         // TODO: pick the cheapest unit that may be built (if any: Dwarves!)
@@ -207,40 +217,40 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
     {
         city->m_Producing = PRODUCING_Shrine;
     }
-	else if (!buildingPresent(*city, Sawmill) && isBuildingAllowed(game, *city, BUILDING_Sawmill))
+    else if (!buildingPresent(*city, Sawmill) && isBuildingAllowed(*city, BUILDING_Sawmill))
     {
         // TODO: forbidden building (no forest)?
         city->m_Producing = PRODUCING_Sawmill;
     }
-    else if (!buildingPresent(*city, Foresters_Guild) && isBuildingAllowed(game, *city, BUILDING_Foresters_Guild))
+    else if (!buildingPresent(*city, Foresters_Guild) && isBuildingAllowed(*city, BUILDING_Foresters_Guild))
     {
         city->m_Producing = PRODUCING_Foresters_Guild;
     }
-    else if (!buildingPresent(*city, Library) && isBuildingAllowed(game, *city, BUILDING_Library))
+    else if (!buildingPresent(*city, Library) && isBuildingAllowed(*city, BUILDING_Library))
     {
         city->m_Producing = PRODUCING_Library;
     }
-    else if (!buildingPresent(*city, Sages_Guild) && isBuildingAllowed(game, *city, BUILDING_Sages_Guild))
+    else if (!buildingPresent(*city, Sages_Guild) && isBuildingAllowed(*city, BUILDING_Sages_Guild))
     {
         city->m_Producing = PRODUCING_Sages_Guild;
     }
-    else if (!buildingPresent(*city, Temple) && isBuildingAllowed(game, *city, BUILDING_Temple))
+    else if (!buildingPresent(*city, Temple) && isBuildingAllowed(*city, BUILDING_Temple))
     {
         city->m_Producing = PRODUCING_Temple;
     }
-    else if (!buildingPresent(*city, Alchemist_Guild) && isBuildingAllowed(game, *city, BUILDING_Alchemist_Guild))
+    else if (!buildingPresent(*city, Alchemist_Guild) && isBuildingAllowed(*city, BUILDING_Alchemist_Guild))
     {
         city->m_Producing = PRODUCING_Alchemist_Guild;
     }
-    else if (!buildingPresent(*city, University) && isBuildingAllowed(game, *city, BUILDING_University))
+    else if (!buildingPresent(*city, University) && isBuildingAllowed(*city, BUILDING_University))
     {
         city->m_Producing = PRODUCING_University;
     }
-    else if (!buildingPresent(*city, Bank) && isBuildingAllowed(game, *city, BUILDING_Bank))
+    else if (!buildingPresent(*city, Bank) && isBuildingAllowed(*city, BUILDING_Bank))
     {
         city->m_Producing = PRODUCING_Bank;
     }
-    else if (!buildingPresent(*city, Miners_Guild) && isBuildingAllowed(game, *city, BUILDING_Miners_Guild))
+    else if (!buildingPresent(*city, Miners_Guild) && isBuildingAllowed(*city, BUILDING_Miners_Guild))
     {
         // TODO: forbidden building (no Hills or Mountains)?
         city->m_Producing = PRODUCING_Miners_Guild;
@@ -261,9 +271,14 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, int cityNr)
     return true;
 }
 
-bool MoMController::applyBuildingQueue(MoMGameBase& game, ePlayer playerNr)
+bool MoMController::applyBuildingQueue(ePlayer playerNr)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     bool ok = true;
     for (int cityNr = 0; cityNr < game.getNrCities(); ++cityNr)
     {
@@ -273,15 +288,20 @@ bool MoMController::applyBuildingQueue(MoMGameBase& game, ePlayer playerNr)
 
         if (city->m_Owner == playerNr)
         {
-            ok |= applyBuildingQueue(game, cityNr);
+            ok |= applyBuildingQueue(cityNr);
         }
     }
     return ok;
 }
 
-bool MoMController::createUnit(MoMGameBase& game, int& unitNr)
+bool MoMController::createUnit(int& unitNr)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     if (game.getNrUnits() < 0
         || game.getNrUnits() >= (int)gMAX_UNITS)
     {
@@ -309,9 +329,13 @@ bool MoMController::createUnit(MoMGameBase& game, int& unitNr)
     return true;
 }
 
-bool MoMController::findCheapestUnitToProduce(MoMGameBase& game, const City& city, eProducing& produce)
+bool MoMController::findCheapestUnitToProduce(const City& city, eProducing& produce)
 {
-	bool found = false;
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
+    bool found = false;
 	for (eUnit_Type unitTypeNr = UNITTYPE_FIRST; !found && (toUInt(unitTypeNr) < eUnit_Type_MAX); inc(unitTypeNr))
 	{
 		Unit_Type_Data* unitData = game.getUnitTypeData(unitTypeNr);
@@ -324,12 +348,38 @@ bool MoMController::findCheapestUnitToProduce(MoMGameBase& game, const City& cit
 			found = true;
 		}
 	}
-	return found;
+    return found;
 }
 
-bool MoMController::findUnitsAtLocation(MoMGameBase& game, const MoMLocation& location, std::vector<int>& units)
+City *MoMController::findCityAtLocation(const MoMLocation &location)
+{
+    City* value = 0;
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
+    for (int i = 0; i < game.getNrCities(); ++i)
+    {
+        City* city = game.getCity(i);
+        if (0 == city)
+            break;
+        if (location == MoMLocation(*city, MoMLocation::MAP_overland))
+        {
+            value = city;
+            break;
+        }
+    }
+    return value;
+}
+
+bool MoMController::findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units)
 {
     units.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
 
     for (int unitNr = 0; unitNr < game.getNrUnits(); ++unitNr)
     {
@@ -348,9 +398,13 @@ bool MoMController::findUnitsAtLocation(MoMGameBase& game, const MoMLocation& lo
     return true;
 }
 
-bool MoMController::isBuildingAllowed(MoMGameBase& game, const City& city, eBuilding building)
-{
-	Race_Data* raceData = game.getRaceData(city.m_Race);
+bool MoMController::isBuildingAllowed(const City& city, eBuilding building)
+{    
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
+    Race_Data* raceData = game.getRaceData(city.m_Race);
 	if (0 == raceData)
 		return false;
 	Building_Data* buildingData = game.getBuildingData(building);
@@ -392,9 +446,14 @@ bool MoMController::isBuildingPresent(const City& city, eBuilding building)
 			|| (BUILDINGSTATUS_Replaced == city.m_Building_Status.a[building]);
 }
 
-bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int unitNr, eUnit_Type heroNr)
+bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     // EXTRA INPUT:
 	// TODO: Retrieve heroName from game
 	// TODO: Retrieve heroSlotTypes from game
@@ -540,9 +599,14 @@ bool MoMController::polymorphToHero(MoMGameBase& game, ePlayer playerNr, int uni
     return true;
 }
 
-bool MoMController::repopLairs(MoMGameBase& game, bool maxOut)
+bool MoMController::repopLairs(bool maxOut)
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     for (unsigned lairNr = 0; lairNr < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
     {
         Tower_Node_Lair* lair = game.getLair(lairNr);
@@ -583,9 +647,14 @@ bool MoMController::repopLairs(MoMGameBase& game, bool maxOut)
     return true;
 }
 
-bool MoMController::validateConsistency(MoMGameBase& game)
+bool MoMController::validateConsistency()
 {
 	m_errorString.clear();
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
     bool ok = true;
 
     // Check internal consistencies

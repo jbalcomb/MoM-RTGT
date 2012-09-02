@@ -25,7 +25,7 @@ public:
 
     virtual ~QMoMTreeItemBase();
 
-    virtual void appendChild(const QString& feature, QMoMTreeItemBase* value);
+    virtual void appendChild(const QString& feature, QMoMTreeItemBase* value, const QString& comment = "");
 
     virtual void appendTree(QMoMTreeItemBase* tree, const QString& value);
 
