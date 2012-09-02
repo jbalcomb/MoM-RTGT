@@ -57,6 +57,7 @@ HEADERS += \
     ../MoMEditorTemplate/MoMGameMemory.h \
     ../MoMEditorTemplate/MoMGameSave.h \
     ../MoMEditorTemplate/MoMGenerated.h \
+    ../MoMEditorTemplate/MoMHookManager.h \
     ../MoMEditorTemplate/MoMLbxBase.h \
     ../MoMEditorTemplate/MoMLocation.h \
     ../MoMEditorTemplate/MoMProcess.h \
@@ -69,14 +70,15 @@ HEADERS += \
 SOURCES += \
     ../MoMEditorTemplate/MoMCatnip.cpp \
     ../MoMEditorTemplate/MoMController.cpp \
+    ../MoMEditorTemplate/MoMExeBase.cpp \
+    ../MoMEditorTemplate/MoMExeMagic.cpp \
+    ../MoMEditorTemplate/MoMExeWizards.cpp \
     ../MoMEditorTemplate/MoMGameBase.cpp \
     ../MoMEditorTemplate/MoMGameCustom.cpp \
     ../MoMEditorTemplate/MoMGameMemory.cpp \
     ../MoMEditorTemplate/MoMGameSave.cpp \
     ../MoMEditorTemplate/MoMGenerated.cpp \
-    ../MoMEditorTemplate/MoMExeBase.cpp \
-    ../MoMEditorTemplate/MoMExeMagic.cpp \
-    ../MoMEditorTemplate/MoMExeWizards.cpp \
+    ../MoMEditorTemplate/MoMHookManager.cpp \
     ../MoMEditorTemplate/MoMLbxBase.cpp \
     ../MoMEditorTemplate/MoMProcessCommon.cpp \
     ../MoMEditorTemplate/MoMTerrain.cpp \

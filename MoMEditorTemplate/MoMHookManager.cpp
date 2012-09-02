@@ -80,29 +80,33 @@ MoMHookManager::MoMHookManager(MoMGameBase* game) :
 //26 8B 7F 44     mov     di, es:[bx+struc_Battle_Unit.field_xPos]
 //26 8B 47 46     mov     ax, es:[bx+struc_Battle_Unit.field_yPos]
 //89 7E 0A        mov     [bp+target_Y], di
-//89 46 08        mov    [bp+target_X], ax
+//89 46 08        mov     [bp+target_X], ax
 //
 //50              push    ax
-//A0 97 92        mov    al, [w_kyrub_dseg_9297]
-//08 C0           or    al, al
-//74 18           jz    loc_no_external_AI:
-//B0 01           mov    al, 1
-//A2 96 92        mov    [w_kyrub_dseg_9296], al
+//A0 97 92        mov     al, [w_kyrub_dseg_9297]
+//08 C0           or      al, al
+//74 18           jz      loc_no_external_AI:
+//B0 01           mov     al, 1
+//A2 96 92        mov     [w_kyrub_dseg_9296], al
 //loc_wait_external_AI:
-//A0 96 92        mov    al, [w_kyrub_dseg_9296]
-//08 C0           or    al, al
-//75 F9           jnz    loc_wait_external_AI
-//A8 00 89        mov    ax, [w_kyrub_dseg_8900]
-//89 46 08        mov    [bp+target_X], ax
-//A8 02 89        mov    ax, [w_kyrub_dseg_8902]
-//89 46 0A        mov    [bp+target_Y], ax
+//A0 96 92        mov     al, [w_kyrub_dseg_9296]
+//08 C0           or      al, al
+//75 F9           jnz     loc_wait_external_AI
+//A8 00 89        mov     ax, [w_kyrub_dseg_8900]
+//89 46 08        mov     [bp+target_X], ax
+//A8 02 89        mov     ax, [w_kyrub_dseg_8902]
+//89 46 0A        mov     [bp+target_Y], ax
 //loc_no_external_AI:
-//58              pop    ax
+//58              pop     ax
 //
 //90 90 90 90 90 90
 //
 //
-//Notice the flag in dseg:9297. By default it is 0, meaning the external ai is disabled. It's purpose is choose whether to use the original ai or wait for the external program. My program changes dseg:9297 flag to 1 when it executes. When dseg:9297 = 1, then MoM waits until dseg:9296 is reset to zero. My program saves x- and y-coordinates to dseg:8900 and dseg:8902.
+//Notice the flag in dseg:9297. By default it is 0, meaning the external ai is disabled.
+// It's purpose is choose whether to use the original ai or wait for the external program.
+//My program changes dseg:9297 flag to 1 when it executes.
+//When dseg:9297 = 1, then MoM waits until dseg:9296 is reset to zero.
+//My program saves x- and y-coordinates to dseg:8900 and dseg:8902.
 //
 //Code:
 //Replace opcodes in 0x889E4
@@ -157,6 +161,11 @@ bool MoMHookManager::insertHook()
     return ok;
 }
 
+void MoMHookManager::removeHook()
+{
+    std::cout << "NOT IMPLEMENTED" << std::endl;
+}
+
 bool MoMHookManager::raiseHook()
 {
     if ((0 == m_process) || (0 == m_game) || (0 == m_game->getDataSegment()))
@@ -196,21 +205,21 @@ bool MoMHookManager::waitForHook(double timeout)
 
     const double sleepTime = 0.001;
 
-    // Wait till dseg:9297 is 0
-    uint8_t* ptrDseg9297 = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    // Wait till dseg:9296 is 1
+    uint8_t* ptrDseg9296 = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
     bool ok = true;
     bool hookTriggered = false;
     int nrTries = (int)(timeout / sleepTime + 0.5);
     for (int tryNr = 0; ok && !hookTriggered && (tryNr < nrTries); ++tryNr)
     {
-        ok = m_process->readData(ptrDseg9297, 1);
+        ok = m_process->readData(ptrDseg9296, 1);
         if (!ok)
         {
             std::cout << "failed to read from dseg:9297" << std::endl;
         }
         else
         {
-            hookTriggered = (0 == *ptrDseg9297);
+            hookTriggered = (1 == *ptrDseg9297);
         }
         m_process->sleepSec(0.001);
     }

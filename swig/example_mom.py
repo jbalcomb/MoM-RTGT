@@ -45,35 +45,20 @@ print("\nManipulating data")
 dseg = uint8_array.frompointer(p.getDatasegmentData())
 	
 # Gold reserve is a word at ds:A220
-#gold = getWord(dseg, 0xA220)
-gold = dseg[0xA220] + 256 * dseg[0xA221]
-print("\tGold=", gold)
-gold += 10
-dseg[0xA220] = gold % 256
-dseg[0xA221] = gold // 256
-#ok = p.writeData(ptr, 2)
-#print("\tGold ", gold, " written with result", ok)
+gold_ptr = uint8_ptr(dseg.cast_at_index(0xA220)).cast_to_int16()
+print("\tGold=", gold_ptr.value())
+gold.assign(gold_ptr.value() + 10)
+ok = p.writeData(gold_ptr.this(), 2)
+print("\tGold ", gold, " written with result", ok)
+gold.assign(0)
 ok = p.readData()
 print("\tReread data with result", ok)
-gold = dseg[0xA220] + 256 * dseg[0xA221]
-print("\tGold=", gold)
-
-# Alternative for manipulating data
-#ptr = getPointer(dseg, 0xA126)
-#mana = getWord(ptr, 0)
-#print("\tMana ", mana)
-#mana += 10
-#setWord(ptr, mana)
-#ok = p.writeData(ptr, 2)
-#print("\tMana ", mana, " written with result", ok)
-#ok = p.readData()
-#print("\tReread data with result", ok)
-#mana = getWord(dseg, 0xA126)
-#print("\tMana=", mana)
+gold_ptr = uint8_ptr(dseg.cast_at_index(0xA220)).cast_to_int16()
+print("\tGold=", gold_ptr.value())
 
 # Copyright_and_Version[41] is at ds:7151  Offset version is at [34]
-#version = getStr(getPointer(dseg, 0x7151 + 34))
-#print("MoMVersion=", version)
+version = cdata(dseg.cast_at_index(0x7151 + 34), 6)
+print("MoMVersion=", version)
 
 file = "test.dmp"
 print("\nSaving to ", file);
@@ -145,6 +130,21 @@ try:
 except:
     print("Failed to set the city walls")
 
+
+##while true:
+##    hook = game.waitForHook()
+##    dispatchHook(hook)
+##
+##def onBattleUnitMove(unit):
+##
+##    if (unit.abilities.wallcrusher
+##    and battlefield.has_city_walls
+##    and unit.owner == attacking_wizard
+##    and battlefield.wall[Location(8,12)] == WALL_whole
+##    ):
+##        unit.tactic = TACTIC_melee
+##        unit.target = Location(8,12)
+        
 # ----------------------------------------------------------------------------
 #
 # Clean up
