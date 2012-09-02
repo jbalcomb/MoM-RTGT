@@ -20,14 +20,12 @@
 
 namespace MoM {
 
-namespace {
-
 // The DOSBox Base Address Size is different depending on OS configuration and DOSBox version
 // For DOSBox 0.74 for Windows XP it is the given value (currently)
-const DWORD gBASEADDRESS_SIZE = 0x1001000;
+const DWORD gBASEADDRESS_MINSIZE = 0x1001000;
 
 
-BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
+static BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 {
 	std::vector<std::string>& windowTitles = *(std::vector<std::string>*)lParam;
 
@@ -43,9 +41,6 @@ BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 
     return TRUE;
 }
-
-}
-
 
 void MoMProcess::closeProcess() throw()
 {
@@ -111,7 +106,7 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
 
     bool ok = true;
     std::vector<BYTE> data;
-    
+m_verbose=true;
     for (; ok && (0 != size) && ((0 == m_dwOffsetDatasegment) || m_exeFilepath.empty());
         baseAddr += mbi.RegionSize, size = VirtualQueryEx(m_hProcess, baseAddr, &mbi, sizeof(mbi)))
     {
@@ -127,9 +122,9 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
                 << ", Type=0x" << mbi.Type
                 << std::dec << std::endl;
         }
-        if (gBASEADDRESS_SIZE == mbi.RegionSize && MEM_PRIVATE == mbi.Type)
+        if (gBASEADDRESS_MINSIZE <= mbi.RegionSize && MEM_PRIVATE == mbi.Type)
         {
-            std::cout << std::hex << "Found MoM virtual memory (baseAddress=0x" << (unsigned)mbi.BaseAddress << ", size=0x" << mbi.RegionSize << ")" << std::dec << std::endl;
+            std::cout << std::hex << "Found possible MoM virtual memory (baseAddress=0x" << (unsigned)mbi.BaseAddress << ", size=0x" << mbi.RegionSize << ")" << std::dec << std::endl;
         }
         else if (0x106000 == mbi.RegionSize && MEM_PRIVATE == mbi.Type)
         {
