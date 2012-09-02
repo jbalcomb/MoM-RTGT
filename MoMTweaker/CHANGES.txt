@@ -7,6 +7,8 @@ CHANGES IN 0.2.6 (2012--)
 
 * Fixed the failure to connect in Windows 7 that apparently 
   afflicted some people.
+  At least I tried to, since I did not want the connect time
+  to increase to dramatically.
   
 * Added a battlefield map (click Map and select Battle).
   This completes the maps [Ayu].
