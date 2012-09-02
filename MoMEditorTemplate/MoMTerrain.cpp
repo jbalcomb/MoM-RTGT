@@ -48,6 +48,9 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     case forest_w_nature_node: value = TERRAINCATEGORY_Forest; break;
 
     case volcano_w_chaos_node: value = TERRAINCATEGORY_Volcano; break;
+
+    default:            // Handled later
+                        break;
     }
 
     if (value != (eTerrainCategory)-1)
@@ -135,7 +138,7 @@ City *MoMTerrain::getCity()
 Tower_Node_Lair *MoMTerrain::getLair()
 {
     Tower_Node_Lair* value = 0;
-    for (int lairNr = 0; lairNr < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
+    for (int lairNr = 0; toUInt(lairNr) < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
     {
         Tower_Node_Lair* lair = m_game->getLair(lairNr);
         if (0 == lair)

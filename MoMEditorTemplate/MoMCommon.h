@@ -12,11 +12,12 @@
 #ifndef MOMCOMMON_H
 #define MOMCOMMON_H
 
-#include <assert.h>     // assert()
+#include <assert.h>
 #include <iostream>
 #include <map>
 #include <memory>       // std::auto_ptr
 #include <sstream>
+#include <string.h>
 #include <vector>
 
 

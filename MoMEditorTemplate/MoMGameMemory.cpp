@@ -91,6 +91,8 @@ struct MoMGamePointers
     UnitView*       m_addr_UnitView_Lines;  // C192
 };
 
+static MoMGamePointers gMoMGamePointers;    // TODO: For DEBUG purposes
+
 MoMGameMemory::MoMGameMemory(void)
 : MoMGameBase(),
   m_process(),
@@ -196,7 +198,7 @@ bool MoMGameMemory::commitData(void* ptr, const void* pNewValue, size_t size)
         gMoMGamePointers.field = (char*)dseg + dseg->field;
  
 #define SET_ARRAY_OFFSET(field) \
-        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.field); ++i) \
+        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.field); ++i) \
         { \
             gMoMGamePointers.field[i] = (char*)dseg + dseg->field[i]; \
         }
@@ -207,10 +209,10 @@ bool MoMGameMemory::commitData(void* ptr, const void* pNewValue, size_t size)
 bool MoMGameMemory::readData()
 {
     bool ok = false;
-    MoMGamePointers gMoMGamePointers = {0};
     setErrorString("");
     ok = ((0 != m_process.get()) && m_process->readData());
 
+    // TODO: FOR DEBUGGING
     if (ok)
     {
         MoMDataSegment* dseg = getDataSegment();
@@ -233,7 +235,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit);
 
         SET_RELOC_POINTER(Spells_Cast_in_Battle, addr_Spells_Cast_in_Battle);
-        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Hero_stat); ++i)
+        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Hero_stat); ++i)
         {
             SET_RELOC_POINTER(Hero_stats, addr_Hero_stat[i]);
         }
@@ -265,7 +267,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Node_Attr, addr_Nodes_Attr);
         SET_RELOC_POINTER(MapRow_LandMassID, addr_Terrain_LandMassID);
         SET_RELOC_POINTER(Map_Tiles, addr_Terrain_Types);
-        for (int i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Unrest_Table); ++i)
+        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Unrest_Table); ++i)
         {
             SET_RELOC_POINTER(int8_t, addr_Unrest_Table[i]);
         }

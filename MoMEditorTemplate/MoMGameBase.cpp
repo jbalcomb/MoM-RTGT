@@ -375,7 +375,7 @@ std::string MoMGameBase::getHelpText(eBuilding building)
 std::string MoMGameBase::getHelpText(eHeroAbility heroAbility)
 {
     std::string value;
-    if ((heroAbility >= 0) && (heroAbility < ARRAYSIZE(gTableHeroSpecials)))
+    if (toUInt(heroAbility) < ARRAYSIZE(gTableHeroSpecials))
     {
         value = getHelpText(gTableHeroSpecials[heroAbility].helpIndex);
     }
@@ -385,7 +385,7 @@ std::string MoMGameBase::getHelpText(eHeroAbility heroAbility)
 std::string MoMGameBase::getHelpText(eItemPower itemPower)
 {
     std::string value;
-    if ((itemPower >= 0) && (itemPower < ARRAYSIZE(gTableItemSpecials)))
+    if (toUInt(itemPower) < ARRAYSIZE(gTableItemSpecials))
     {
         value = getHelpText(gTableItemSpecials[itemPower].helpIndex);
     }
@@ -469,7 +469,7 @@ std::string MoMGameBase::getHelpText(eSpell spell)
 std::string MoMGameBase::getHelpText(eUnitAbility unitAbility)
 {
     std::string value;
-    if ((unitAbility >= 0) && (unitAbility < ARRAYSIZE(gTableUnitSpecials)))
+    if (toUInt(unitAbility) < ARRAYSIZE(gTableUnitSpecials))
     {
         value = getHelpText(gTableUnitSpecials[unitAbility].helpIndex);
     }
@@ -479,7 +479,7 @@ std::string MoMGameBase::getHelpText(eUnitAbility unitAbility)
 std::string MoMGameBase::getHelpText(eUnitEnchantment unitEnchantment)
 {
     std::string value;
-    if ((unitEnchantment >= 0) && (unitEnchantment < ARRAYSIZE(gTableUnitEnchantments)))
+    if (toUInt(unitEnchantment) < ARRAYSIZE(gTableUnitEnchantments))
     {
         value = getHelpText(gTableUnitEnchantments[unitEnchantment].helpIndex);
     }
@@ -489,7 +489,7 @@ std::string MoMGameBase::getHelpText(eUnitEnchantment unitEnchantment)
 std::string MoMGameBase::getHelpText(eUnitMutation unitMutation)
 {
     std::string value;
-    if ((unitMutation >= 0) && (unitMutation < ARRAYSIZE(gTableUnitMutations)))
+    if (toUInt(unitMutation) < ARRAYSIZE(gTableUnitMutations))
     {
         value = getHelpText(gTableUnitMutations[unitMutation].helpIndex);
     }

@@ -5,7 +5,8 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include <cassert>
+#include <assert.h>
+#include <stdio.h>
 
 #include "MoMController.h"
 #include "MoMGenerated.h"

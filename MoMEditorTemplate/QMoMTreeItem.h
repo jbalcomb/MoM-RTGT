@@ -274,7 +274,8 @@ public:
     virtual void setData(const QVariant &value, int role)
     {
 //        qDebug() << QString("setData(%0, %1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
-        char newvalue[N] = "";
+        char newvalue[N];
+        memset(newvalue, '\0', N);  // Needed because g++ gives an internal compiler error on direct initialization
         switch (role)
         {
         case Qt::EditRole:

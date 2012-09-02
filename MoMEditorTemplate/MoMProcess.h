@@ -91,7 +91,7 @@ public:
         return &m_dataSegmentAndUp[0] - m_dwOffsetDatasegment + m_dwOffsetSegment0;
     }
 
-    const std::string& MoMProcess::getExeFilepath()
+    const std::string& getExeFilepath()
     {
         return m_exeFilepath;
     }

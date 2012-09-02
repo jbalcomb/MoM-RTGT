@@ -17,9 +17,6 @@ namespace MoM
 namespace
 {
 
-uint gTRANSPARENT_COLOR = 0;
-uint gSHADOW_COLOR = 239;
-
 void dump(const uint8_t* ptr, unsigned n)
 {
     //std::cout << ":";

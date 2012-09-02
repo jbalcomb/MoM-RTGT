@@ -1,6 +1,7 @@
 #ifndef QMOMLAZYICON_H
 #define QMOMLAZYICON_H
 
+#include "QMoMResources.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM

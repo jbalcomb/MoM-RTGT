@@ -22,6 +22,9 @@ namespace MoM
 typedef QVector<QMoMImagePtr> QMoMAnimation;
 typedef QVector<QRgb> QMoMPalette;
 
+const uint8_t gTRANSPARENT_COLOR = 0;
+const uint8_t gSHADOW_COLOR = 232;
+
 bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
 
 inline bool convertImageToLbx(const QMoMImagePtr& image, std::vector<uint8_t>& dataBuffer, const std::string& context)
