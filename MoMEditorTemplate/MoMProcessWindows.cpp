@@ -122,11 +122,11 @@ m_verbose=true;
                 << ", Type=0x" << mbi.Type
                 << std::dec << std::endl;
         }
-        if (gBASEADDRESS_MINSIZE <= mbi.RegionSize && MEM_PRIVATE == mbi.Type)
+        if ((gBASEADDRESS_MINSIZE <= mbi.RegionSize) && (MEM_PRIVATE == mbi.Type))
         {
             std::cout << std::hex << "Found possible MoM virtual memory (baseAddress=0x" << (unsigned)mbi.BaseAddress << ", size=0x" << mbi.RegionSize << ")" << std::dec << std::endl;
         }
-        else if (0x106000 == mbi.RegionSize && MEM_PRIVATE == mbi.Type)
+        else if ((0x106000 == mbi.RegionSize) && (MEM_PRIVATE == mbi.Type))
         {
             std::cout << std::hex << "Found region with local directory" << std::endl;
         }
