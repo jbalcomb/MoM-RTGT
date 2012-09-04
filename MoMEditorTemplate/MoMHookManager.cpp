@@ -172,7 +172,7 @@ bool MoMHookManager::raiseHook()
         return false;
 
     // Set dseg:9297 to 1
-    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_kyrub_dseg_9296;
     *ptrHook = 1;
     bool ok = m_process->writeData(ptrHook, 1);
     if (!ok)
@@ -188,7 +188,7 @@ bool MoMHookManager::retractHook()
         return false;
 
     // Set dseg:9297 to 0
-    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_kyrub_dseg_9296;
     *ptrHook = 0;
     bool ok = m_process->writeData(ptrHook, 1);
     if (!ok)
@@ -206,7 +206,7 @@ bool MoMHookManager::waitForBait(double timeout)
     const double sleepTime = 0.001;
 
     // Wait till dseg:9296 is 1
-    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_kyrub_dseg_9296;
     bool ok = true;
     bool hookTriggered = false;
     int nrTries = (int)(timeout / sleepTime + 0.5);
@@ -232,7 +232,7 @@ bool MoMHookManager::releaseBait()
         return false;
 
     // Set dseg:9296 to 0
-    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_kyrub_dseg_9296;
     *ptrBait = 0;
     bool ok = m_process->writeData(ptrBait, 1);
     if (!ok)

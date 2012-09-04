@@ -4959,22 +4959,106 @@ typedef struct PACKED_STRUCT // Game_Settings
                                                 // SIZE 1D2h = 466d
 } Game_Settings;
 
-typedef struct // WizardsExe_Pointers
+typedef struct PACKED_STRUCT {   // Available_spell_page
+    char        m_Page_Name[0x10];          // 00
+    eSpell16    m_Spells_on_page[6];        // 10
+    uint8_t     m_Nr_spells_on_page;        // 1C
+    uint8_t     m_Zero;                     // 1D
+                                            // SIZE 1E
+} Available_spell_page;
+
+typedef struct PACKED_STRUCT {   // Lbx_ems_info
+    char        m_buffer[8];                // 00
+    uint16_t    m_Unk_08;                   // 08
+    uint16_t    m_Unk_0A;                   // 0A
+                                            // SIZE 0C
+} Lbx_EMS_info;
+
+typedef struct // MoMDataSegment
 {
-    // Offset(dec)  Beschrijving    DS:Ofset(hex)
-    EXE_Reloc   addr_Spell_Data ; // 912C
+    char        m_DataSegmentStart[0x0130];          // ds:0 / EXE:294A0
+    // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
+
+    DS_Offset   m_Offsets_SkillNames[eSkill_MAX];   // ds:0130
+    uint16_t    m_unk0154;                          // ds:0154
+    DS_Offset   m_Offsets_CitySizeNames[eCity_Size_MAX]; // ds:0156
+    DS_Offset   m_Offsets_CitySpecialNames[7];      // ds:0162
+    uint16_t    m_Unk0170[22];                      // ds:0170
+
+    Unit_Data_Hero_Types  m_Hero_Types;             // ds:019C / EXE:2963C
+    Unit_Type_Data   m_Normal_Units[4 + 115];
+    Unit_Type_Data   m_Summoned_Units[44];
+
+    uint16_t    m_XP_Level_Table[9];                // ds:1D74 / EXE:2B214
+
+    Race_Data   m_Race_Data[14];                    // ds:1D86 / EXE:2B226
+
+    uint16_t    m_Unk1ED6;                          // ds:1ED6 / EXE:2B376
+    DS_Offset   m_Offset_Arcane;                    // ds:1ED8  // UNREFERENCED???
+    DS_Offset   m_Offsets_RealmNames_5[5];          // ds:1EDA
+    DS_Offset   m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
+
+    Upkeep_Enchantments m_Upkeep_Enchantments;      // ds:1F18 / EXE:2B3B8
+
+    DS_Offset   m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
+    int16_t     m_Values_Personalities_GUESS[ePersonality_MAX]; // ds:1FC8
+    DS_Offset   m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
+    uint16_t    m_Unk1FDE;                                      // ds:1FDE
+    int16_t     m_Values_Objectives_GUESS[eObjective_MAX];      // ds:1FE0
+
+    // 5 x 8 entries for each difficulty level
+    Difficulty_Table m_DifficultyTable[eDifficulty_MAX];    // ds:1FEA / EXE:2B48A
+
+    uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
+
+    char        m_NameBuffer_2082[0x3F46 - 0x2082];    // ds:2082 / EXE:2B522
+
+    DS_Offset   m_UnitLevelNameOffsets[6];          // ds:3F46
+    DS_Offset   m_HeroLevelNameOffsets[9];          // ds:3F52
+
+    char        m_NameBuffer_3F64[0x5E92 - 0x3F64];    // ds:3F64
+
+    // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
+    uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92
+    uint16_t    m_Next_Turn_seed_storage_hi;        // ds:5E94
+
+    uint8_t     m_UNK_5E96[0x6E9E - 0x5E96];        // ds:5E96
+
+    uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];  // ds:6E9E
+
+    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];        // ds:6EAC
+
+    char        m_Copyright_and_Version[41];        // ds:7151  Offset version is at [34]
+
+    uint8_t     m_UNK_717A[0x71E0 - 0x717A];        // ds:717A
+
+    uint32_t    m_BIOS_clock_snapshot;              // ds:71E0
+
+    uint8_t     m_UNK_71E4[0x7846 - 0x71E4];        // ds:71E4
+
+    // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
+    uint16_t    m_RNG_seed_lo;                      // ds:7846
+    uint16_t    m_RNG_seed_hi;                      // ds:7848
+
+    uint8_t     m_UNK06c[0x7876 - 0x784A];          // ds:784A
+
+    uint16_t    m_DEBUG_Off;                        // ds:7876
+
+    uint8_t     m_UNK06d[0x912C - 0x7878];          // ds:7878
+
+    EXE_Reloc   m_addr_Spell_Data;                  // 912C
     uint16_t    word_3FBD0  ; // 9130
     uint16_t    w_sound_x   ; // 9132
     uint16_t    word_3FBD4  ; // 9134
-    EXE_Reloc   addr_Items  ; // 9136
+    EXE_Reloc   m_addr_Items;                       // 9136
     EXE_Reloc   addr_item_in_game_GUESS   ; // 913A
     uint8_t unk__913E[26]   ; // 913E
     uint8_t unk_3FBF8[23]   ; // 9158
     uint8_t unk_3FC0F[183]  ; // 916F
-    EXE_Reloc   addr_Battle_Unit_View  ; // 9226
-    EXE_Reloc   addr_Battle_Unit  ; // 922A
-    EXE_Reloc   addr_Spells_Cast_in_Battle   ; // 922E
-    EXE_Reloc   addr_Hero_stat[6]   ; // 9232
+    EXE_Reloc   m_addr_Battle_Unit_View;            // 9226
+    EXE_Reloc   m_addr_Battle_Unit;                 // 922A
+    EXE_Reloc   m_addr_Spells_Cast_in_Battle;       // 922E
+    EXE_Reloc   m_addr_Hero_stat[6];                // 9232
     uint8_t w_AI_flees[20]  ; // 924A
     uint8_t word_3FCFE[10]  ; // 925E
     uint16_t    word_3FD08  ; // 9268
@@ -4983,17 +5067,17 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_3FD0E  ; // 926E
     uint16_t    word_3FD10  ; // 9270
     uint16_t    word_3FD12  ; // 9272
-    EXE_Reloc   addr_Battlefield    ; // 9274
+    EXE_Reloc   m_addr_Battlefield;                 // 9274
     uint16_t    word_3FD18  ; // 9278
     uint16_t    word_3FD1A  ; // 927A
     uint16_t    w_AI_on_the_move_GUESS  ; // 927C
     uint16_t    w_coo_X_Y_clicked   ; // 927E
     uint16_t    w_coo_Y_X_clicked   ; // 9280
     uint16_t    word_3FD22  ; // 9282
-    uint16_t    w_clash_place_type  ; // 9284
+    int16_t     m_clash_place_type; // 9284         // -1=undef,0=overland,1=city,5=lair
     uint8_t w_clash_place_ID[14]    ; // 9286
-    int16_t    w_kyrub_dseg_9294  ; // 9294
-    int16_t    w_kyrub_dseg_9296  ; // 9296
+    int16_t     m_kyrub_dseg_9294  ; // 9294
+    int16_t     m_kyrub_dseg_9296  ; // 9296
     uint8_t word_3FD38[20]  ; // 9298
     uint16_t    w_negat_encha_x17_flag_def  ; // 92AC
     uint16_t    w_aggre_spell_color_flag_att    ; // 92AE
@@ -5050,7 +5134,7 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_3FE26  ; // 9386
     uint16_t    word_3FE28  ; // 9388
     uint16_t    word_3FE2A  ; // 938A
-    EXE_Reloc   addr_Building_Data ; // 938C
+    EXE_Reloc   m_addr_Building_Data;               // 938C
     uint16_t    word_3FE30  ; // 9390
     EXE_Reloc   dword_3FE32 ; // 9392
     uint8_t dword_3FE36[126]    ; // 9396
@@ -5152,7 +5236,7 @@ typedef struct // WizardsExe_Pointers
     uint8_t word_4006E[34]  ; // 95CE
     uint16_t    word_40090  ; // 95F0
     uint8_t word_40092[82]  ; // 95F2
-    EXE_Reloc   addr_city_detailed_GUESS   ; // 9644
+    EXE_Reloc   m_addr_city_detailed_GUESS;         // 9644
     uint8_t word_400E8[244] ; // 9648
     uint16_t    word_401DC  ; // 973C
     uint16_t    word_401DE  ; // 973E
@@ -5257,11 +5341,11 @@ typedef struct // WizardsExe_Pointers
     EXE_Reloc   word_40428  ; // 9988
     uint16_t    word_4042C  ; // 998C
     uint16_t    w_constant_GUESS    ; // 998E
-    eGameState  w_Game_flow ; // 9990
+    eGameState  m_Game_flow ; // 9990
     uint16_t    word_40432  ; // 9992
     uint16_t    word_40434  ; // 9994
     uint16_t    word_40436  ; // 9996
-    EXE_Reloc   addr_events ; // 9998
+    EXE_Reloc   m_addr_events ; // 9998
     uint16_t    w_uts_in_stack_ovrland_GUESS    ; // 999C
     uint8_t w_Stack_active_GUESS[36]    ; // 999E
     uint8_t byte_40462[281] ; // 99C2
@@ -5283,24 +5367,24 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_4073A  ; // 9C9A
     EXE_Reloc   dword_4073C ; // 9C9C
     EXE_Reloc   dword_40740 ; // 9CA0
-    EXE_Reloc   addr_terrain_Movement_copy   ; // 9CA4
+    EXE_Reloc   m_addr_terrain_Movement_copy;       // 9CA4
     EXE_Reloc   dword_40748 ; // 9CA8
-    EXE_Reloc   addr_Terrain_Movement ; // 9CAC
-    EXE_Reloc   addr_Terrain_Explored    ; // 9CB0
-    EXE_Reloc   addr_Terrain_Changes  ; // 9CB4
-    EXE_Reloc   addr_Terrain_Bonuses    ; // 9CB8
-    EXE_Reloc   addr_Cities ; // 9CBC
-    EXE_Reloc   addr_Lairs_data   ; // 9CC0
-    EXE_Reloc   addr_tower_attr ; // 9CC4
-    EXE_Reloc   addr_fortress_data    ; // 9CC8
-    EXE_Reloc   addr_Nodes_Attr    ; // 9CCC
-    EXE_Reloc   addr_Terrain_LandMassID  ; // 9CD0
+    EXE_Reloc   m_addr_Terrain_Movement;            // 9CAC
+    EXE_Reloc   m_addr_Terrain_Explored;            // 9CB0
+    EXE_Reloc   m_addr_Terrain_Changes;             // 9CB4
+    EXE_Reloc   m_addr_Terrain_Bonuses;             // 9CB8
+    EXE_Reloc   m_addr_Cities;                      // 9CBC
+    EXE_Reloc   m_addr_Lairs_data;                  // 9CC0
+    EXE_Reloc   m_addr_tower_attr;                  // 9CC4
+    EXE_Reloc   m_addr_fortress_data;               // 9CC8
+    EXE_Reloc   m_addr_Nodes_Attr;                  // 9CCC
+    EXE_Reloc   m_addr_Terrain_LandMassID;          // 9CD0
     uint16_t    word_40774  ; // 9CD4
     uint16_t    word_40776  ; // 9CD6
     uint16_t    word_40778  ; // 9CD8
     uint16_t    word_4077A  ; // 9CDA
-    EXE_Reloc   addr_Terrain_Types ; // 9CDC
-    EXE_Reloc   addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
+    EXE_Reloc   m_addr_Terrain_Types;               // 9CDC
+    EXE_Reloc   m_addr_Unrest_Table[gMAX_RACES];    // 9CE0
     uint16_t    word_407B8  ; // 9D18
     uint16_t    word_407BA  ; // 9D1A
     uint16_t    word_407BC  ; // 9D1C
@@ -5341,99 +5425,8 @@ typedef struct // WizardsExe_Pointers
     uint16_t    word_4095C  ; // 9EBC
     uint16_t    word_4095E  ; // 9EBE
     uint16_t    word_40960  ; // 9EC0
-    EXE_Reloc   addr_Units    ; // 9EC2
+    EXE_Reloc   m_addr_Units;                       // 9EC2
     EXE_Reloc   dword_40966 ; // 9EC6
-            ; // 9ECA
-} WizardsExe_Pointers;
-
-typedef struct PACKED_STRUCT {   // Available_spell_page
-    char        m_Page_Name[0x10];          // 00
-    eSpell16    m_Spells_on_page[6];        // 10
-    uint8_t     m_Nr_spells_on_page;        // 1C
-    uint8_t     m_Zero;                     // 1D
-                                            // SIZE 1E
-} Available_spell_page;
-
-typedef struct PACKED_STRUCT {   // Lbx_ems_info
-    char        m_buffer[8];                // 00
-    uint16_t    m_Unk_08;                   // 08
-    uint16_t    m_Unk_0A;                   // 0A
-                                            // SIZE 0C
-} Lbx_EMS_info;
-
-typedef struct // MoMDataSegment
-{
-    char        m_DataSegmentStart[0x0130];          // ds:0 / EXE:294A0
-    // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
-
-    DS_Offset   m_Offsets_SkillNames[eSkill_MAX];   // ds:0130
-    uint16_t    m_unk0154;                          // ds:0154
-    DS_Offset   m_Offsets_CitySizeNames[eCity_Size_MAX]; // ds:0156
-    DS_Offset   m_Offsets_CitySpecialNames[7];      // ds:0162
-    uint16_t    m_Unk0170[22];                      // ds:0170
-
-    Unit_Data_Hero_Types  m_Hero_Types;             // ds:019C / EXE:2963C
-    Unit_Type_Data   m_Normal_Units[4 + 115];
-    Unit_Type_Data   m_Summoned_Units[44];
-
-    uint16_t    m_XP_Level_Table[9];                // ds:1D74 / EXE:2B214
-
-    Race_Data   m_Race_Data[14];                    // ds:1D86 / EXE:2B226
-
-    uint16_t    m_Unk1ED6;                          // ds:1ED6 / EXE:2B376
-    DS_Offset   m_Offset_Arcane;                    // ds:1ED8  // UNREFERENCED???
-    DS_Offset   m_Offsets_RealmNames_5[5];          // ds:1EDA
-    DS_Offset   m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
-
-    Upkeep_Enchantments m_Upkeep_Enchantments;      // ds:1F18 / EXE:2B3B8
-
-    DS_Offset   m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
-    int16_t     m_Values_Personalities_GUESS[ePersonality_MAX]; // ds:1FC8
-    DS_Offset   m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
-    uint16_t    m_Unk1FDE;                                      // ds:1FDE
-    int16_t     m_Values_Objectives_GUESS[eObjective_MAX];      // ds:1FE0
-
-    // 5 x 8 entries for each difficulty level
-    Difficulty_Table m_DifficultyTable[eDifficulty_MAX];    // ds:1FEA / EXE:2B48A
-
-    uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
-
-    char        m_NameBuffer_2082[0x3F46 - 0x2082];    // ds:2082 / EXE:2B522
-
-    DS_Offset   m_UnitLevelNameOffsets[6];          // ds:3F46
-    DS_Offset   m_HeroLevelNameOffsets[9];          // ds:3F52
-
-    char        m_NameBuffer_3F64[0x5E92 - 0x3F64];    // ds:3F64
-
-    // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
-    uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92
-    uint16_t    m_Next_Turn_seed_storage_hi;        // ds:5E94
-
-    uint8_t     m_UNK_5E96[0x6E9E - 0x5E96];        // ds:5E96
-
-    uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];  // ds:6E9E
-
-    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];        // ds:6EAC
-
-    char        m_Copyright_and_Version[41];        // ds:7151  Offset version is at [34]
-
-    uint8_t     m_UNK_717A[0x71E0 - 0x717A];        // ds:717A
-
-    uint32_t    m_BIOS_clock_snapshot;              // ds:71E0
-
-    uint8_t     m_UNK_71E4[0x7846 - 0x71E4];        // ds:71E4
-
-    // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
-    uint16_t    m_RNG_seed_lo;                      // ds:7846
-    uint16_t    m_RNG_seed_hi;                      // ds:7848
-
-    uint8_t     m_UNK06c[0x7876 - 0x784A];          // ds:784A
-
-    uint16_t    m_DEBUG_Off;                        // ds:7876
-
-    uint8_t     m_UNK06d[0x912C - 0x7878];          // ds:7878
-
-    WizardsExe_Pointers m_WizardsExe_Pointers;      // ds:912C
 
     Wizard      m_Wizards[gMAX_WIZARD_RECORDS];     // ds:9ECA / EXE:3336A
 

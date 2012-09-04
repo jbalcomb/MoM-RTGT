@@ -3263,7 +3263,1014 @@ QMoMTreeItemBase* constructTreeItem(MoMDataSegment* rhs, const QString& context)
           oss << "m_UNK06d[" << i << "]";
           ptreem_UNK06d->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK06d[i]));
     }
-    ptree->appendTree(constructTreeItem(&rhs->m_WizardsExe_Pointers, "m_WizardsExe_Pointers"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Spell_Data, "m_addr_Spell_Data"), "");
+    ptree->appendChild("word_3FBD0", new QMoMTreeItem<uint16_t>(&rhs->word_3FBD0));
+    ptree->appendChild("w_sound_x", new QMoMTreeItem<uint16_t>(&rhs->w_sound_x));
+    ptree->appendChild("word_3FBD4", new QMoMTreeItem<uint16_t>(&rhs->word_3FBD4));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Items, "m_addr_Items"), "");
+    ptree->appendTree(constructTreeItem(&rhs->addr_item_in_game_GUESS, "addr_item_in_game_GUESS"), "");
+    QMoMTreeItemBase* ptreeunk__913E = ptree;
+    if (26 > 3)
+    {
+        ptreeunk__913E = new QMoMTreeItemBase("unk__913E");
+        ptree->appendTree(ptreeunk__913E, "");
+    }
+    for (unsigned i = 0; i < 26; ++i)
+    {
+          std::ostringstream oss;
+          oss << "unk__913E[" << i << "]";
+          ptreeunk__913E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk__913E[i]));
+    }
+    QMoMTreeItemBase* ptreeunk_3FBF8 = ptree;
+    if (23 > 3)
+    {
+        ptreeunk_3FBF8 = new QMoMTreeItemBase("unk_3FBF8");
+        ptree->appendTree(ptreeunk_3FBF8, "");
+    }
+    for (unsigned i = 0; i < 23; ++i)
+    {
+          std::ostringstream oss;
+          oss << "unk_3FBF8[" << i << "]";
+          ptreeunk_3FBF8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_3FBF8[i]));
+    }
+    QMoMTreeItemBase* ptreeunk_3FC0F = ptree;
+    if (183 > 3)
+    {
+        ptreeunk_3FC0F = new QMoMTreeItemBase("unk_3FC0F");
+        ptree->appendTree(ptreeunk_3FC0F, "");
+    }
+    for (unsigned i = 0; i < 183; ++i)
+    {
+          std::ostringstream oss;
+          oss << "unk_3FC0F[" << i << "]";
+          ptreeunk_3FC0F->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_3FC0F[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Battle_Unit_View, "m_addr_Battle_Unit_View"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Battle_Unit, "m_addr_Battle_Unit"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Spells_Cast_in_Battle, "m_addr_Spells_Cast_in_Battle"), "");
+    QMoMTreeItemBase* ptreem_addr_Hero_stat = ptree;
+    if (6 > 3)
+    {
+        ptreem_addr_Hero_stat = new QMoMTreeItemBase("m_addr_Hero_stat");
+        ptree->appendTree(ptreem_addr_Hero_stat, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_addr_Hero_stat[" << i << "]";
+          ptreem_addr_Hero_stat->appendTree(constructTreeItem(&rhs->m_addr_Hero_stat[i], oss.str().c_str()), "");
+    }
+    QMoMTreeItemBase* ptreew_AI_flees = ptree;
+    if (20 > 3)
+    {
+        ptreew_AI_flees = new QMoMTreeItemBase("w_AI_flees");
+        ptree->appendTree(ptreew_AI_flees, "");
+    }
+    for (unsigned i = 0; i < 20; ++i)
+    {
+          std::ostringstream oss;
+          oss << "w_AI_flees[" << i << "]";
+          ptreew_AI_flees->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_AI_flees[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FCFE = ptree;
+    if (10 > 3)
+    {
+        ptreeword_3FCFE = new QMoMTreeItemBase("word_3FCFE");
+        ptree->appendTree(ptreeword_3FCFE, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FCFE[" << i << "]";
+          ptreeword_3FCFE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FCFE[i]));
+    }
+    ptree->appendChild("word_3FD08", new QMoMTreeItem<uint16_t>(&rhs->word_3FD08));
+    ptree->appendChild("word_3FD0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0A));
+    ptree->appendChild("word_3FD0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0C));
+    ptree->appendChild("word_3FD0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0E));
+    ptree->appendChild("word_3FD10", new QMoMTreeItem<uint16_t>(&rhs->word_3FD10));
+    ptree->appendChild("word_3FD12", new QMoMTreeItem<uint16_t>(&rhs->word_3FD12));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Battlefield, "m_addr_Battlefield"), "");
+    ptree->appendChild("word_3FD18", new QMoMTreeItem<uint16_t>(&rhs->word_3FD18));
+    ptree->appendChild("word_3FD1A", new QMoMTreeItem<uint16_t>(&rhs->word_3FD1A));
+    ptree->appendChild("w_AI_on_the_move_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_AI_on_the_move_GUESS));
+    ptree->appendChild("w_coo_X_Y_clicked", new QMoMTreeItem<uint16_t>(&rhs->w_coo_X_Y_clicked));
+    ptree->appendChild("w_coo_Y_X_clicked", new QMoMTreeItem<uint16_t>(&rhs->w_coo_Y_X_clicked));
+    ptree->appendChild("word_3FD22", new QMoMTreeItem<uint16_t>(&rhs->word_3FD22));
+    ptree->appendChild("m_clash_place_type", new QMoMTreeItem<int16_t>(&rhs->m_clash_place_type));
+    QMoMTreeItemBase* ptreew_clash_place_ID = ptree;
+    if (14 > 3)
+    {
+        ptreew_clash_place_ID = new QMoMTreeItemBase("w_clash_place_ID");
+        ptree->appendTree(ptreew_clash_place_ID, "");
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << "w_clash_place_ID[" << i << "]";
+          ptreew_clash_place_ID->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_clash_place_ID[i]));
+    }
+    ptree->appendChild("m_kyrub_dseg_9294", new QMoMTreeItem<int16_t>(&rhs->m_kyrub_dseg_9294));
+    ptree->appendChild("m_kyrub_dseg_9296", new QMoMTreeItem<int16_t>(&rhs->m_kyrub_dseg_9296));
+    QMoMTreeItemBase* ptreeword_3FD38 = ptree;
+    if (20 > 3)
+    {
+        ptreeword_3FD38 = new QMoMTreeItemBase("word_3FD38");
+        ptree->appendTree(ptreeword_3FD38, "");
+    }
+    for (unsigned i = 0; i < 20; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FD38[" << i << "]";
+          ptreeword_3FD38->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD38[i]));
+    }
+    ptree->appendChild("w_negat_encha_x17_flag_def", new QMoMTreeItem<uint16_t>(&rhs->w_negat_encha_x17_flag_def));
+    ptree->appendChild("w_aggre_spell_color_flag_att", new QMoMTreeItem<uint16_t>(&rhs->w_aggre_spell_color_flag_att));
+    ptree->appendTree(constructTreeItem(&rhs->dword_3FD50, "dword_3FD50"), "");
+    ptree->appendChild("word_3FD54", new QMoMTreeItem<uint16_t>(&rhs->word_3FD54));
+    QMoMTreeItemBase* ptreeword_3FD56 = ptree;
+    if (64 > 3)
+    {
+        ptreeword_3FD56 = new QMoMTreeItemBase("word_3FD56");
+        ptree->appendTree(ptreeword_3FD56, "");
+    }
+    for (unsigned i = 0; i < 64; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FD56[" << i << "]";
+          ptreeword_3FD56->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD56[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FD96 = ptree;
+    if (8 > 3)
+    {
+        ptreeword_3FD96 = new QMoMTreeItemBase("word_3FD96");
+        ptree->appendTree(ptreeword_3FD96, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FD96[" << i << "]";
+          ptreeword_3FD96->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD96[i]));
+    }
+    ptree->appendChild("word_3FD9E", new QMoMTreeItem<uint16_t>(&rhs->word_3FD9E));
+    ptree->appendChild("word_3FDA0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA0));
+    ptree->appendChild("word_3FDA2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA2));
+    ptree->appendChild("word_3FDA4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA4));
+    ptree->appendChild("word_3FDA6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA6));
+    ptree->appendChild("word_3FDA8", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA8));
+    ptree->appendChild("word_3FDAA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAA));
+    ptree->appendChild("word_3FDAC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAC));
+    ptree->appendChild("word_3FDAE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAE));
+    ptree->appendChild("word_3FDB0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB0));
+    ptree->appendChild("word_3FDB2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB2));
+    ptree->appendChild("word_3FDB4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB4));
+    ptree->appendChild("word_3FDB6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB6));
+    QMoMTreeItemBase* ptreeword_3FDB8 = ptree;
+    if (44 > 3)
+    {
+        ptreeword_3FDB8 = new QMoMTreeItemBase("word_3FDB8");
+        ptree->appendTree(ptreeword_3FDB8, "");
+    }
+    for (unsigned i = 0; i < 44; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FDB8[" << i << "]";
+          ptreeword_3FDB8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FDB8[i]));
+    }
+    ptree->appendChild("word_3FDE4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDE4));
+    ptree->appendTree(constructTreeItem(&rhs->addr_3FDE6, "addr_3FDE6"), "");
+    ptree->appendChild("word_3FDEA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEA));
+    ptree->appendChild("word_3FDEC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEC));
+    ptree->appendChild("word_3FDEE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEE));
+    ptree->appendChild("word_3FDF0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF0));
+    ptree->appendChild("word_3FDF2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF2));
+    ptree->appendChild("word_3FDF4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF4));
+    ptree->appendChild("word_3FDF6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF6));
+    ptree->appendChild("word_3FDF8", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF8));
+    ptree->appendChild("word_3FDFA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFA));
+    ptree->appendChild("word_3FDFC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFC));
+    ptree->appendChild("word_3FDFE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFE));
+    ptree->appendChild("word_3FE00", new QMoMTreeItem<uint16_t>(&rhs->word_3FE00));
+    ptree->appendChild("word_3FE02", new QMoMTreeItem<uint16_t>(&rhs->word_3FE02));
+    ptree->appendChild("word_3FE04", new QMoMTreeItem<uint16_t>(&rhs->word_3FE04));
+    ptree->appendChild("word_3FE06", new QMoMTreeItem<uint16_t>(&rhs->word_3FE06));
+    ptree->appendChild("word_3FE08", new QMoMTreeItem<uint16_t>(&rhs->word_3FE08));
+    ptree->appendChild("word_3FE0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0A));
+    ptree->appendChild("word_3FE0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0C));
+    ptree->appendChild("word_3FE0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0E));
+    ptree->appendChild("word_3FE10", new QMoMTreeItem<uint16_t>(&rhs->word_3FE10));
+    ptree->appendChild("word_3FE12", new QMoMTreeItem<uint16_t>(&rhs->word_3FE12));
+    ptree->appendChild("word_3FE14", new QMoMTreeItem<uint16_t>(&rhs->word_3FE14));
+    ptree->appendChild("word_3FE16", new QMoMTreeItem<uint16_t>(&rhs->word_3FE16));
+    ptree->appendChild("word_3FE18", new QMoMTreeItem<uint16_t>(&rhs->word_3FE18));
+    ptree->appendChild("word_3FE1A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1A));
+    ptree->appendChild("word_3FE1C", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1C));
+    ptree->appendChild("word_3FE1E", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1E));
+    ptree->appendChild("word_3FE20", new QMoMTreeItem<uint16_t>(&rhs->word_3FE20));
+    ptree->appendChild("word_3FE22", new QMoMTreeItem<uint16_t>(&rhs->word_3FE22));
+    ptree->appendChild("word_3FE24", new QMoMTreeItem<uint16_t>(&rhs->word_3FE24));
+    ptree->appendChild("word_3FE26", new QMoMTreeItem<uint16_t>(&rhs->word_3FE26));
+    ptree->appendChild("word_3FE28", new QMoMTreeItem<uint16_t>(&rhs->word_3FE28));
+    ptree->appendChild("word_3FE2A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE2A));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Building_Data, "m_addr_Building_Data"), "");
+    ptree->appendChild("word_3FE30", new QMoMTreeItem<uint16_t>(&rhs->word_3FE30));
+    ptree->appendTree(constructTreeItem(&rhs->dword_3FE32, "dword_3FE32"), "");
+    QMoMTreeItemBase* ptreedword_3FE36 = ptree;
+    if (126 > 3)
+    {
+        ptreedword_3FE36 = new QMoMTreeItemBase("dword_3FE36");
+        ptree->appendTree(ptreedword_3FE36, "");
+    }
+    for (unsigned i = 0; i < 126; ++i)
+    {
+          std::ostringstream oss;
+          oss << "dword_3FE36[" << i << "]";
+          ptreedword_3FE36->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->dword_3FE36[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FEB4 = ptree;
+    if (6 > 3)
+    {
+        ptreeword_3FEB4 = new QMoMTreeItemBase("word_3FEB4");
+        ptree->appendTree(ptreeword_3FEB4, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FEB4[" << i << "]";
+          ptreeword_3FEB4->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEB4[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FEBA = ptree;
+    if (18 > 3)
+    {
+        ptreeword_3FEBA = new QMoMTreeItemBase("word_3FEBA");
+        ptree->appendTree(ptreeword_3FEBA, "");
+    }
+    for (unsigned i = 0; i < 18; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FEBA[" << i << "]";
+          ptreeword_3FEBA->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEBA[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FECC = ptree;
+    if (22 > 3)
+    {
+        ptreeword_3FECC = new QMoMTreeItemBase("word_3FECC");
+        ptree->appendTree(ptreeword_3FECC, "");
+    }
+    for (unsigned i = 0; i < 22; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FECC[" << i << "]";
+          ptreeword_3FECC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FECC[i]));
+    }
+    ptree->appendChild("word_3FEE2", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE2));
+    ptree->appendChild("w_all_units_moved_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_all_units_moved_GUESS));
+    ptree->appendChild("word_3FEE6", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE6));
+    ptree->appendChild("word_3FEE8", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE8));
+    ptree->appendChild("word_3FEEA", new QMoMTreeItem<uint16_t>(&rhs->word_3FEEA));
+    QMoMTreeItemBase* ptreeword_3FEEC = ptree;
+    if (6 > 3)
+    {
+        ptreeword_3FEEC = new QMoMTreeItemBase("word_3FEEC");
+        ptree->appendTree(ptreeword_3FEEC, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FEEC[" << i << "]";
+          ptreeword_3FEEC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEEC[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FEF2 = ptree;
+    if (14 > 3)
+    {
+        ptreeword_3FEF2 = new QMoMTreeItemBase("word_3FEF2");
+        ptree->appendTree(ptreeword_3FEF2, "");
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FEF2[" << i << "]";
+          ptreeword_3FEF2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEF2[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->word_3FF00, "word_3FF00"), "");
+    ptree->appendChild("word_3FF04", new QMoMTreeItem<uint16_t>(&rhs->word_3FF04));
+    ptree->appendChild("word_3FF06", new QMoMTreeItem<uint16_t>(&rhs->word_3FF06));
+    ptree->appendChild("word_3FF08", new QMoMTreeItem<uint16_t>(&rhs->word_3FF08));
+    ptree->appendChild("word_3FF0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0A));
+    ptree->appendChild("word_3FF0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0C));
+    ptree->appendChild("word_3FF0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0E));
+    QMoMTreeItemBase* ptreeword_3FF10 = ptree;
+    if (14 > 3)
+    {
+        ptreeword_3FF10 = new QMoMTreeItemBase("word_3FF10");
+        ptree->appendTree(ptreeword_3FF10, "");
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FF10[" << i << "]";
+          ptreeword_3FF10->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF10[i]));
+    }
+    ptree->appendChild("word_3FF1E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF1E));
+    ptree->appendChild("word_3FF20", new QMoMTreeItem<uint16_t>(&rhs->word_3FF20));
+    ptree->appendChild("word_3FF22", new QMoMTreeItem<uint16_t>(&rhs->word_3FF22));
+    ptree->appendChild("word_3FF24", new QMoMTreeItem<uint16_t>(&rhs->word_3FF24));
+    ptree->appendChild("word_3FF26", new QMoMTreeItem<uint16_t>(&rhs->word_3FF26));
+    ptree->appendChild("word_3FF28", new QMoMTreeItem<uint16_t>(&rhs->word_3FF28));
+    ptree->appendChild("word_3FF2A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF2A));
+    ptree->appendChild("word_3FF2C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF2C));
+    QMoMTreeItemBase* ptreeword_3FF2E = ptree;
+    if (6 > 3)
+    {
+        ptreeword_3FF2E = new QMoMTreeItemBase("word_3FF2E");
+        ptree->appendTree(ptreeword_3FF2E, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FF2E[" << i << "]";
+          ptreeword_3FF2E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF2E[i]));
+    }
+    ptree->appendChild("word_3FF34", new QMoMTreeItem<uint16_t>(&rhs->word_3FF34));
+    ptree->appendChild("word_3FF36", new QMoMTreeItem<uint16_t>(&rhs->word_3FF36));
+    ptree->appendChild("word_3FF38", new QMoMTreeItem<uint16_t>(&rhs->word_3FF38));
+    ptree->appendChild("word_3FF3A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3A));
+    ptree->appendChild("word_3FF3C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3C));
+    ptree->appendChild("word_3FF3E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3E));
+    ptree->appendChild("word_3FF40", new QMoMTreeItem<uint16_t>(&rhs->word_3FF40));
+    ptree->appendChild("word_3FF42", new QMoMTreeItem<uint16_t>(&rhs->word_3FF42));
+    ptree->appendChild("word_3FF44", new QMoMTreeItem<uint16_t>(&rhs->word_3FF44));
+    ptree->appendChild("word_3FF46", new QMoMTreeItem<uint16_t>(&rhs->word_3FF46));
+    ptree->appendChild("word_3FF48", new QMoMTreeItem<uint16_t>(&rhs->word_3FF48));
+    ptree->appendChild("word_3FF4A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF4A));
+    QMoMTreeItemBase* ptreeword_3FF4C = ptree;
+    if (58 > 3)
+    {
+        ptreeword_3FF4C = new QMoMTreeItemBase("word_3FF4C");
+        ptree->appendTree(ptreeword_3FF4C, "");
+    }
+    for (unsigned i = 0; i < 58; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FF4C[" << i << "]";
+          ptreeword_3FF4C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF4C[i]));
+    }
+    ptree->appendChild("word_3FF86", new QMoMTreeItem<uint16_t>(&rhs->word_3FF86));
+    ptree->appendChild("word_3FF88", new QMoMTreeItem<uint16_t>(&rhs->word_3FF88));
+    ptree->appendChild("word_3FF8A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8A));
+    ptree->appendChild("word_3FF8C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8C));
+    ptree->appendChild("word_3FF8E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8E));
+    QMoMTreeItemBase* ptreeword_3FF90 = ptree;
+    if (30 > 3)
+    {
+        ptreeword_3FF90 = new QMoMTreeItemBase("word_3FF90");
+        ptree->appendTree(ptreeword_3FF90, "");
+    }
+    for (unsigned i = 0; i < 30; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FF90[" << i << "]";
+          ptreeword_3FF90->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF90[i]));
+    }
+    ptree->appendChild("word_3FFAE", new QMoMTreeItem<uint16_t>(&rhs->word_3FFAE));
+    ptree->appendChild("word_3FFB0", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB0));
+    ptree->appendChild("word_3FFB2", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB2));
+    ptree->appendChild("word_3FFB4", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB4));
+    ptree->appendChild("word_3FFB6", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB6));
+    ptree->appendChild("word_3FFB8", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB8));
+    ptree->appendChild("word_3FFBA", new QMoMTreeItem<uint16_t>(&rhs->word_3FFBA));
+    ptree->appendChild("word_3FFBC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFBC));
+    ptree->appendTree(constructTreeItem(&rhs->word_3FFBE, "word_3FFBE"), "");
+    ptree->appendChild("word_3FFC2", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC2));
+    ptree->appendChild("word_3FFC4", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC4));
+    ptree->appendChild("word_3FFC6", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC6));
+    ptree->appendTree(constructTreeItem(&rhs->word_3FFC8, "word_3FFC8"), "");
+    ptree->appendChild("word_3FFCC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFCC));
+    QMoMTreeItemBase* ptreeword_3FFCE = ptree;
+    if (14 > 3)
+    {
+        ptreeword_3FFCE = new QMoMTreeItemBase("word_3FFCE");
+        ptree->appendTree(ptreeword_3FFCE, "");
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FFCE[" << i << "]";
+          ptreeword_3FFCE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFCE[i]));
+    }
+    ptree->appendChild("word_3FFDC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFDC));
+    ptree->appendChild("word_3FFDE", new QMoMTreeItem<uint16_t>(&rhs->word_3FFDE));
+    QMoMTreeItemBase* ptreeword_3FFE0 = ptree;
+    if (8 > 3)
+    {
+        ptreeword_3FFE0 = new QMoMTreeItemBase("word_3FFE0");
+        ptree->appendTree(ptreeword_3FFE0, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FFE0[" << i << "]";
+          ptreeword_3FFE0->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFE0[i]));
+    }
+    QMoMTreeItemBase* ptreeword_3FFE8 = ptree;
+    if (38 > 3)
+    {
+        ptreeword_3FFE8 = new QMoMTreeItemBase("word_3FFE8");
+        ptree->appendTree(ptreeword_3FFE8, "");
+    }
+    for (unsigned i = 0; i < 38; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_3FFE8[" << i << "]";
+          ptreeword_3FFE8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFE8[i]));
+    }
+    ptree->appendChild("word_4000E", new QMoMTreeItem<uint16_t>(&rhs->word_4000E));
+    ptree->appendChild("word_40010", new QMoMTreeItem<uint16_t>(&rhs->word_40010));
+    ptree->appendChild("word_40012", new QMoMTreeItem<uint16_t>(&rhs->word_40012));
+    ptree->appendChild("word_40014", new QMoMTreeItem<uint16_t>(&rhs->word_40014));
+    ptree->appendChild("word_40016", new QMoMTreeItem<uint16_t>(&rhs->word_40016));
+    ptree->appendChild("word_40018", new QMoMTreeItem<uint16_t>(&rhs->word_40018));
+    ptree->appendChild("word_4001A", new QMoMTreeItem<uint16_t>(&rhs->word_4001A));
+    ptree->appendChild("word_4001C", new QMoMTreeItem<uint16_t>(&rhs->word_4001C));
+    ptree->appendChild("word_4001E", new QMoMTreeItem<uint16_t>(&rhs->word_4001E));
+    ptree->appendChild("word_40020", new QMoMTreeItem<uint16_t>(&rhs->word_40020));
+    ptree->appendChild("word_40022", new QMoMTreeItem<uint16_t>(&rhs->word_40022));
+    ptree->appendChild("word_40024", new QMoMTreeItem<uint16_t>(&rhs->word_40024));
+    ptree->appendChild("word_40026", new QMoMTreeItem<uint16_t>(&rhs->word_40026));
+    ptree->appendChild("word_40028", new QMoMTreeItem<uint16_t>(&rhs->word_40028));
+    ptree->appendChild("word_4002A", new QMoMTreeItem<uint16_t>(&rhs->word_4002A));
+    ptree->appendChild("word_4002C", new QMoMTreeItem<uint16_t>(&rhs->word_4002C));
+    QMoMTreeItemBase* ptreeword_4002E = ptree;
+    if (28 > 3)
+    {
+        ptreeword_4002E = new QMoMTreeItemBase("word_4002E");
+        ptree->appendTree(ptreeword_4002E, "");
+    }
+    for (unsigned i = 0; i < 28; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4002E[" << i << "]";
+          ptreeword_4002E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4002E[i]));
+    }
+    ptree->appendChild("word_4004A", new QMoMTreeItem<uint16_t>(&rhs->word_4004A));
+    ptree->appendChild("word_4004C", new QMoMTreeItem<uint16_t>(&rhs->word_4004C));
+    ptree->appendChild("word_4004E", new QMoMTreeItem<uint16_t>(&rhs->word_4004E));
+    ptree->appendChild("word_40050", new QMoMTreeItem<uint16_t>(&rhs->word_40050));
+    ptree->appendChild("word_40052", new QMoMTreeItem<uint16_t>(&rhs->word_40052));
+    ptree->appendChild("word_40054", new QMoMTreeItem<uint16_t>(&rhs->word_40054));
+    ptree->appendChild("word_40056", new QMoMTreeItem<uint16_t>(&rhs->word_40056));
+    ptree->appendChild("word_40058", new QMoMTreeItem<uint16_t>(&rhs->word_40058));
+    ptree->appendChild("word_4005A", new QMoMTreeItem<uint16_t>(&rhs->word_4005A));
+    ptree->appendChild("word_4005C", new QMoMTreeItem<uint16_t>(&rhs->word_4005C));
+    ptree->appendChild("word_4005E", new QMoMTreeItem<uint16_t>(&rhs->word_4005E));
+    ptree->appendChild("word_40060", new QMoMTreeItem<uint16_t>(&rhs->word_40060));
+    QMoMTreeItemBase* ptreeword_40062 = ptree;
+    if (12 > 3)
+    {
+        ptreeword_40062 = new QMoMTreeItemBase("word_40062");
+        ptree->appendTree(ptreeword_40062, "");
+    }
+    for (unsigned i = 0; i < 12; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40062[" << i << "]";
+          ptreeword_40062->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40062[i]));
+    }
+    QMoMTreeItemBase* ptreeword_4006E = ptree;
+    if (34 > 3)
+    {
+        ptreeword_4006E = new QMoMTreeItemBase("word_4006E");
+        ptree->appendTree(ptreeword_4006E, "");
+    }
+    for (unsigned i = 0; i < 34; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4006E[" << i << "]";
+          ptreeword_4006E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4006E[i]));
+    }
+    ptree->appendChild("word_40090", new QMoMTreeItem<uint16_t>(&rhs->word_40090));
+    QMoMTreeItemBase* ptreeword_40092 = ptree;
+    if (82 > 3)
+    {
+        ptreeword_40092 = new QMoMTreeItemBase("word_40092");
+        ptree->appendTree(ptreeword_40092, "");
+    }
+    for (unsigned i = 0; i < 82; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40092[" << i << "]";
+          ptreeword_40092->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40092[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_city_detailed_GUESS, "m_addr_city_detailed_GUESS"), "");
+    QMoMTreeItemBase* ptreeword_400E8 = ptree;
+    if (244 > 3)
+    {
+        ptreeword_400E8 = new QMoMTreeItemBase("word_400E8");
+        ptree->appendTree(ptreeword_400E8, "");
+    }
+    for (unsigned i = 0; i < 244; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_400E8[" << i << "]";
+          ptreeword_400E8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_400E8[i]));
+    }
+    ptree->appendChild("word_401DC", new QMoMTreeItem<uint16_t>(&rhs->word_401DC));
+    ptree->appendChild("word_401DE", new QMoMTreeItem<uint16_t>(&rhs->word_401DE));
+    ptree->appendChild("word_401E0", new QMoMTreeItem<uint16_t>(&rhs->word_401E0));
+    ptree->appendChild("word_401E2", new QMoMTreeItem<uint16_t>(&rhs->word_401E2));
+    ptree->appendChild("word_401E4", new QMoMTreeItem<uint16_t>(&rhs->word_401E4));
+    ptree->appendChild("word_401E6", new QMoMTreeItem<uint16_t>(&rhs->word_401E6));
+    ptree->appendChild("word_401E8", new QMoMTreeItem<uint16_t>(&rhs->word_401E8));
+    ptree->appendChild("word_401EA", new QMoMTreeItem<uint16_t>(&rhs->word_401EA));
+    ptree->appendChild("word_401EC", new QMoMTreeItem<uint16_t>(&rhs->word_401EC));
+    ptree->appendChild("word_401EE", new QMoMTreeItem<uint16_t>(&rhs->word_401EE));
+    ptree->appendChild("word_401F0", new QMoMTreeItem<uint16_t>(&rhs->word_401F0));
+    ptree->appendChild("word_401F2", new QMoMTreeItem<uint16_t>(&rhs->word_401F2));
+    ptree->appendChild("word_401F4", new QMoMTreeItem<uint16_t>(&rhs->word_401F4));
+    ptree->appendChild("word_401F6", new QMoMTreeItem<uint16_t>(&rhs->word_401F6));
+    ptree->appendChild("word_401F8", new QMoMTreeItem<uint16_t>(&rhs->word_401F8));
+    ptree->appendChild("word_401FA", new QMoMTreeItem<uint16_t>(&rhs->word_401FA));
+    ptree->appendChild("word_401FC", new QMoMTreeItem<uint16_t>(&rhs->word_401FC));
+    ptree->appendChild("word_401FE", new QMoMTreeItem<uint16_t>(&rhs->word_401FE));
+    ptree->appendChild("word_40200", new QMoMTreeItem<uint16_t>(&rhs->word_40200));
+    ptree->appendChild("word_40202", new QMoMTreeItem<uint16_t>(&rhs->word_40202));
+    ptree->appendChild("word_40204", new QMoMTreeItem<uint16_t>(&rhs->word_40204));
+    ptree->appendChild("word_40206", new QMoMTreeItem<uint16_t>(&rhs->word_40206));
+    ptree->appendChild("word_40208", new QMoMTreeItem<uint16_t>(&rhs->word_40208));
+    ptree->appendChild("word_4020A", new QMoMTreeItem<uint16_t>(&rhs->word_4020A));
+    QMoMTreeItemBase* ptreeword_4020C = ptree;
+    if (38 > 3)
+    {
+        ptreeword_4020C = new QMoMTreeItemBase("word_4020C");
+        ptree->appendTree(ptreeword_4020C, "");
+    }
+    for (unsigned i = 0; i < 38; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4020C[" << i << "]";
+          ptreeword_4020C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4020C[i]));
+    }
+    ptree->appendChild("word_40232", new QMoMTreeItem<uint16_t>(&rhs->word_40232));
+    ptree->appendChild("word_40234", new QMoMTreeItem<uint16_t>(&rhs->word_40234));
+    ptree->appendChild("word_40236", new QMoMTreeItem<uint16_t>(&rhs->word_40236));
+    ptree->appendChild("word_40238", new QMoMTreeItem<uint16_t>(&rhs->word_40238));
+    ptree->appendChild("word_4023A", new QMoMTreeItem<uint16_t>(&rhs->word_4023A));
+    ptree->appendChild("word_4023C", new QMoMTreeItem<uint16_t>(&rhs->word_4023C));
+    ptree->appendChild("word_4023E", new QMoMTreeItem<uint16_t>(&rhs->word_4023E));
+    ptree->appendChild("word_40240", new QMoMTreeItem<uint16_t>(&rhs->word_40240));
+    QMoMTreeItemBase* ptreeword_40242 = ptree;
+    if (18 > 3)
+    {
+        ptreeword_40242 = new QMoMTreeItemBase("word_40242");
+        ptree->appendTree(ptreeword_40242, "");
+    }
+    for (unsigned i = 0; i < 18; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40242[" << i << "]";
+          ptreeword_40242->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40242[i]));
+    }
+    ptree->appendChild("word_40254", new QMoMTreeItem<uint16_t>(&rhs->word_40254));
+    ptree->appendChild("word_40256", new QMoMTreeItem<uint16_t>(&rhs->word_40256));
+    ptree->appendChild("word_40258", new QMoMTreeItem<uint16_t>(&rhs->word_40258));
+    QMoMTreeItemBase* ptreeword_4025A = ptree;
+    if (50 > 3)
+    {
+        ptreeword_4025A = new QMoMTreeItemBase("word_4025A");
+        ptree->appendTree(ptreeword_4025A, "");
+    }
+    for (unsigned i = 0; i < 50; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4025A[" << i << "]";
+          ptreeword_4025A->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4025A[i]));
+    }
+    ptree->appendChild("word_4028C", new QMoMTreeItem<uint16_t>(&rhs->word_4028C));
+    QMoMTreeItemBase* ptreeword_4028E = ptree;
+    if (10 > 3)
+    {
+        ptreeword_4028E = new QMoMTreeItemBase("word_4028E");
+        ptree->appendTree(ptreeword_4028E, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4028E[" << i << "]";
+          ptreeword_4028E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4028E[i]));
+    }
+    ptree->appendChild("word_40298", new QMoMTreeItem<uint16_t>(&rhs->word_40298));
+    ptree->appendChild("word_4029A", new QMoMTreeItem<uint16_t>(&rhs->word_4029A));
+    ptree->appendChild("word_4029C", new QMoMTreeItem<uint16_t>(&rhs->word_4029C));
+    QMoMTreeItemBase* ptreeword_4029E = ptree;
+    if (34 > 3)
+    {
+        ptreeword_4029E = new QMoMTreeItemBase("word_4029E");
+        ptree->appendTree(ptreeword_4029E, "");
+    }
+    for (unsigned i = 0; i < 34; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4029E[" << i << "]";
+          ptreeword_4029E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4029E[i]));
+    }
+    QMoMTreeItemBase* ptreeword_402C0 = ptree;
+    if (32 > 3)
+    {
+        ptreeword_402C0 = new QMoMTreeItemBase("word_402C0");
+        ptree->appendTree(ptreeword_402C0, "");
+    }
+    for (unsigned i = 0; i < 32; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_402C0[" << i << "]";
+          ptreeword_402C0->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_402C0[i]));
+    }
+    ptree->appendChild("word_402E0", new QMoMTreeItem<uint16_t>(&rhs->word_402E0));
+    QMoMTreeItemBase* ptreeword_402E2 = ptree;
+    if (36 > 3)
+    {
+        ptreeword_402E2 = new QMoMTreeItemBase("word_402E2");
+        ptree->appendTree(ptreeword_402E2, "");
+    }
+    for (unsigned i = 0; i < 36; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_402E2[" << i << "]";
+          ptreeword_402E2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_402E2[i]));
+    }
+    QMoMTreeItemBase* ptreeword_40306 = ptree;
+    if (120 > 3)
+    {
+        ptreeword_40306 = new QMoMTreeItemBase("word_40306");
+        ptree->appendTree(ptreeword_40306, "");
+    }
+    for (unsigned i = 0; i < 120; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40306[" << i << "]";
+          ptreeword_40306->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40306[i]));
+    }
+    QMoMTreeItemBase* ptreeword_4037E = ptree;
+    if (10 > 3)
+    {
+        ptreeword_4037E = new QMoMTreeItemBase("word_4037E");
+        ptree->appendTree(ptreeword_4037E, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_4037E[" << i << "]";
+          ptreeword_4037E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4037E[i]));
+    }
+    QMoMTreeItemBase* ptreeword_40388 = ptree;
+    if (10 > 3)
+    {
+        ptreeword_40388 = new QMoMTreeItemBase("word_40388");
+        ptree->appendTree(ptreeword_40388, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40388[" << i << "]";
+          ptreeword_40388->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40388[i]));
+    }
+    ptree->appendChild("word_40392", new QMoMTreeItem<uint16_t>(&rhs->word_40392));
+    QMoMTreeItemBase* ptreeword_40394 = ptree;
+    if (20 > 3)
+    {
+        ptreeword_40394 = new QMoMTreeItemBase("word_40394");
+        ptree->appendTree(ptreeword_40394, "");
+    }
+    for (unsigned i = 0; i < 20; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_40394[" << i << "]";
+          ptreeword_40394->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40394[i]));
+    }
+    QMoMTreeItemBase* ptreeword_403A8 = ptree;
+    if (6 > 3)
+    {
+        ptreeword_403A8 = new QMoMTreeItemBase("word_403A8");
+        ptree->appendTree(ptreeword_403A8, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_403A8[" << i << "]";
+          ptreeword_403A8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403A8[i]));
+    }
+    QMoMTreeItemBase* ptreeword_403AE = ptree;
+    if (10 > 3)
+    {
+        ptreeword_403AE = new QMoMTreeItemBase("word_403AE");
+        ptree->appendTree(ptreeword_403AE, "");
+    }
+    for (unsigned i = 0; i < 10; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_403AE[" << i << "]";
+          ptreeword_403AE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403AE[i]));
+    }
+    ptree->appendChild("word_403B8", new QMoMTreeItem<uint16_t>(&rhs->word_403B8));
+    ptree->appendChild("word_403BA", new QMoMTreeItem<uint16_t>(&rhs->word_403BA));
+    ptree->appendChild("word_403BC", new QMoMTreeItem<uint16_t>(&rhs->word_403BC));
+    ptree->appendChild("word_403BE", new QMoMTreeItem<uint16_t>(&rhs->word_403BE));
+    ptree->appendChild("word_403C0", new QMoMTreeItem<uint16_t>(&rhs->word_403C0));
+    QMoMTreeItemBase* ptreeword_403C2 = ptree;
+    if (20 > 3)
+    {
+        ptreeword_403C2 = new QMoMTreeItemBase("word_403C2");
+        ptree->appendTree(ptreeword_403C2, "");
+    }
+    for (unsigned i = 0; i < 20; ++i)
+    {
+          std::ostringstream oss;
+          oss << "word_403C2[" << i << "]";
+          ptreeword_403C2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403C2[i]));
+    }
+    ptree->appendChild("word_403D6", new QMoMTreeItem<uint16_t>(&rhs->word_403D6));
+    ptree->appendChild("word_403D8", new QMoMTreeItem<uint16_t>(&rhs->word_403D8));
+    ptree->appendChild("word_403DA", new QMoMTreeItem<uint16_t>(&rhs->word_403DA));
+    ptree->appendChild("word_403DC", new QMoMTreeItem<uint16_t>(&rhs->word_403DC));
+    ptree->appendChild("word_403DE", new QMoMTreeItem<uint16_t>(&rhs->word_403DE));
+    ptree->appendChild("word_403E0", new QMoMTreeItem<uint16_t>(&rhs->word_403E0));
+    ptree->appendChild("word_403E2", new QMoMTreeItem<uint16_t>(&rhs->word_403E2));
+    ptree->appendChild("word_403E4", new QMoMTreeItem<uint16_t>(&rhs->word_403E4));
+    ptree->appendChild("word_403E6", new QMoMTreeItem<uint16_t>(&rhs->word_403E6));
+    ptree->appendChild("word_403E8", new QMoMTreeItem<uint16_t>(&rhs->word_403E8));
+    ptree->appendChild("word_403EA", new QMoMTreeItem<uint16_t>(&rhs->word_403EA));
+    ptree->appendChild("word_403EC", new QMoMTreeItem<uint16_t>(&rhs->word_403EC));
+    ptree->appendChild("word_403EE", new QMoMTreeItem<uint16_t>(&rhs->word_403EE));
+    ptree->appendChild("word_403F0", new QMoMTreeItem<uint16_t>(&rhs->word_403F0));
+    ptree->appendChild("word_403F2", new QMoMTreeItem<uint16_t>(&rhs->word_403F2));
+    ptree->appendChild("word_403F4", new QMoMTreeItem<uint16_t>(&rhs->word_403F4));
+    ptree->appendChild("word_403F6", new QMoMTreeItem<uint16_t>(&rhs->word_403F6));
+    ptree->appendChild("word_403F8", new QMoMTreeItem<uint16_t>(&rhs->word_403F8));
+    ptree->appendChild("word_403FA", new QMoMTreeItem<uint16_t>(&rhs->word_403FA));
+    ptree->appendChild("word_403FC", new QMoMTreeItem<uint16_t>(&rhs->word_403FC));
+    ptree->appendTree(constructTreeItem(&rhs->word_403FE, "word_403FE"), "");
+    ptree->appendChild("word_40402", new QMoMTreeItem<uint16_t>(&rhs->word_40402));
+    ptree->appendChild("word_40404", new QMoMTreeItem<uint16_t>(&rhs->word_40404));
+    ptree->appendChild("word_40406", new QMoMTreeItem<uint16_t>(&rhs->word_40406));
+    ptree->appendChild("word_40408", new QMoMTreeItem<uint16_t>(&rhs->word_40408));
+    ptree->appendChild("word_4040A", new QMoMTreeItem<uint16_t>(&rhs->word_4040A));
+    ptree->appendChild("word_4040C", new QMoMTreeItem<uint16_t>(&rhs->word_4040C));
+    ptree->appendChild("word_4040E", new QMoMTreeItem<uint16_t>(&rhs->word_4040E));
+    ptree->appendChild("word_40410", new QMoMTreeItem<uint16_t>(&rhs->word_40410));
+    ptree->appendChild("word_40412", new QMoMTreeItem<uint16_t>(&rhs->word_40412));
+    ptree->appendChild("word_40414", new QMoMTreeItem<uint16_t>(&rhs->word_40414));
+    ptree->appendChild("word_40416", new QMoMTreeItem<uint16_t>(&rhs->word_40416));
+    ptree->appendChild("word_40418", new QMoMTreeItem<uint16_t>(&rhs->word_40418));
+    ptree->appendChild("word_4041A", new QMoMTreeItem<uint16_t>(&rhs->word_4041A));
+    ptree->appendChild("word_4041C", new QMoMTreeItem<uint16_t>(&rhs->word_4041C));
+    ptree->appendChild("word_4041E", new QMoMTreeItem<uint16_t>(&rhs->word_4041E));
+    ptree->appendChild("word_40420", new QMoMTreeItem<uint16_t>(&rhs->word_40420));
+    ptree->appendChild("word_40422", new QMoMTreeItem<uint16_t>(&rhs->word_40422));
+    ptree->appendChild("word_40424", new QMoMTreeItem<uint16_t>(&rhs->word_40424));
+    ptree->appendChild("word_40426", new QMoMTreeItem<uint16_t>(&rhs->word_40426));
+    ptree->appendTree(constructTreeItem(&rhs->word_40428, "word_40428"), "");
+    ptree->appendChild("word_4042C", new QMoMTreeItem<uint16_t>(&rhs->word_4042C));
+    ptree->appendChild("w_constant_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_constant_GUESS));
+    ptree->appendChild("m_Game_flow", new QMoMTreeItem<eGameState>(&rhs->m_Game_flow));
+    ptree->appendChild("word_40432", new QMoMTreeItem<uint16_t>(&rhs->word_40432));
+    ptree->appendChild("word_40434", new QMoMTreeItem<uint16_t>(&rhs->word_40434));
+    ptree->appendChild("word_40436", new QMoMTreeItem<uint16_t>(&rhs->word_40436));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_events, "m_addr_events"), "");
+    ptree->appendChild("w_uts_in_stack_ovrland_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_uts_in_stack_ovrland_GUESS));
+    QMoMTreeItemBase* ptreew_Stack_active_GUESS = ptree;
+    if (36 > 3)
+    {
+        ptreew_Stack_active_GUESS = new QMoMTreeItemBase("w_Stack_active_GUESS");
+        ptree->appendTree(ptreew_Stack_active_GUESS, "");
+    }
+    for (unsigned i = 0; i < 36; ++i)
+    {
+          std::ostringstream oss;
+          oss << "w_Stack_active_GUESS[" << i << "]";
+          ptreew_Stack_active_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_Stack_active_GUESS[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_40462 = ptree;
+    if (281 > 3)
+    {
+        ptreebyte_40462 = new QMoMTreeItemBase("byte_40462");
+        ptree->appendTree(ptreebyte_40462, "");
+    }
+    for (unsigned i = 0; i < 281; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_40462[" << i << "]";
+          ptreebyte_40462->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40462[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_4057B = ptree;
+    if (21 > 3)
+    {
+        ptreebyte_4057B = new QMoMTreeItemBase("byte_4057B");
+        ptree->appendTree(ptreebyte_4057B, "");
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_4057B[" << i << "]";
+          ptreebyte_4057B->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_4057B[i]));
+    }
+    QMoMTreeItemBase* ptreeb_mess_number = ptree;
+    if (82 > 3)
+    {
+        ptreeb_mess_number = new QMoMTreeItemBase("b_mess_number");
+        ptree->appendTree(ptreeb_mess_number, "");
+    }
+    for (unsigned i = 0; i < 82; ++i)
+    {
+          std::ostringstream oss;
+          oss << "b_mess_number[" << i << "]";
+          ptreeb_mess_number->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->b_mess_number[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_405E2 = ptree;
+    if (82 > 3)
+    {
+        ptreebyte_405E2 = new QMoMTreeItemBase("byte_405E2");
+        ptree->appendTree(ptreebyte_405E2, "");
+    }
+    for (unsigned i = 0; i < 82; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_405E2[" << i << "]";
+          ptreebyte_405E2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_405E2[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_40634 = ptree;
+    if (82 > 3)
+    {
+        ptreebyte_40634 = new QMoMTreeItemBase("byte_40634");
+        ptree->appendTree(ptreebyte_40634, "");
+    }
+    for (unsigned i = 0; i < 82; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_40634[" << i << "]";
+          ptreebyte_40634->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40634[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_40686 = ptree;
+    if (82 > 3)
+    {
+        ptreebyte_40686 = new QMoMTreeItemBase("byte_40686");
+        ptree->appendTree(ptreebyte_40686, "");
+    }
+    for (unsigned i = 0; i < 82; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_40686[" << i << "]";
+          ptreebyte_40686->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40686[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_406D8 = ptree;
+    if (21 > 3)
+    {
+        ptreebyte_406D8 = new QMoMTreeItemBase("byte_406D8");
+        ptree->appendTree(ptreebyte_406D8, "");
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_406D8[" << i << "]";
+          ptreebyte_406D8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_406D8[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_406ED = ptree;
+    if (21 > 3)
+    {
+        ptreebyte_406ED = new QMoMTreeItemBase("byte_406ED");
+        ptree->appendTree(ptreebyte_406ED, "");
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_406ED[" << i << "]";
+          ptreebyte_406ED->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_406ED[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_40702 = ptree;
+    if (21 > 3)
+    {
+        ptreebyte_40702 = new QMoMTreeItemBase("byte_40702");
+        ptree->appendTree(ptreebyte_40702, "");
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_40702[" << i << "]";
+          ptreebyte_40702->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40702[i]));
+    }
+    QMoMTreeItemBase* ptreebyte_40717 = ptree;
+    if (21 > 3)
+    {
+        ptreebyte_40717 = new QMoMTreeItemBase("byte_40717");
+        ptree->appendTree(ptreebyte_40717, "");
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << "byte_40717[" << i << "]";
+          ptreebyte_40717->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40717[i]));
+    }
+    ptree->appendChild("byte_4072C", new QMoMTreeItem<uint16_t>(&rhs->byte_4072C));
+    ptree->appendChild("w_video_style_CL_BUG_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_video_style_CL_BUG_GUESS));
+    ptree->appendTree(constructTreeItem(&rhs->dword_40730, "dword_40730"), "");
+    ptree->appendChild("word_40734", new QMoMTreeItem<uint16_t>(&rhs->word_40734));
+    ptree->appendChild("word_40736", new QMoMTreeItem<uint16_t>(&rhs->word_40736));
+    ptree->appendChild("word_40738", new QMoMTreeItem<uint16_t>(&rhs->word_40738));
+    ptree->appendChild("word_4073A", new QMoMTreeItem<uint16_t>(&rhs->word_4073A));
+    ptree->appendTree(constructTreeItem(&rhs->dword_4073C, "dword_4073C"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dword_40740, "dword_40740"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_terrain_Movement_copy, "m_addr_terrain_Movement_copy"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dword_40748, "dword_40748"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_Movement, "m_addr_Terrain_Movement"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_Explored, "m_addr_Terrain_Explored"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_Changes, "m_addr_Terrain_Changes"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_Bonuses, "m_addr_Terrain_Bonuses"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Cities, "m_addr_Cities"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Lairs_data, "m_addr_Lairs_data"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_tower_attr, "m_addr_tower_attr"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_fortress_data, "m_addr_fortress_data"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Nodes_Attr, "m_addr_Nodes_Attr"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_LandMassID, "m_addr_Terrain_LandMassID"), "");
+    ptree->appendChild("word_40774", new QMoMTreeItem<uint16_t>(&rhs->word_40774));
+    ptree->appendChild("word_40776", new QMoMTreeItem<uint16_t>(&rhs->word_40776));
+    ptree->appendChild("word_40778", new QMoMTreeItem<uint16_t>(&rhs->word_40778));
+    ptree->appendChild("word_4077A", new QMoMTreeItem<uint16_t>(&rhs->word_4077A));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Terrain_Types, "m_addr_Terrain_Types"), "");
+    QMoMTreeItemBase* ptreem_addr_Unrest_Table = ptree;
+    if (gMAX_RACES > 3)
+    {
+        ptreem_addr_Unrest_Table = new QMoMTreeItemBase("m_addr_Unrest_Table");
+        ptree->appendTree(ptreem_addr_Unrest_Table, "");
+    }
+    for (unsigned i = 0; i < gMAX_RACES; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_addr_Unrest_Table[" << i << "]";
+          ptreem_addr_Unrest_Table->appendTree(constructTreeItem(&rhs->m_addr_Unrest_Table[i], oss.str().c_str()), "");
+    }
+    ptree->appendChild("word_407B8", new QMoMTreeItem<uint16_t>(&rhs->word_407B8));
+    ptree->appendChild("word_407BA", new QMoMTreeItem<uint16_t>(&rhs->word_407BA));
+    ptree->appendChild("word_407BC", new QMoMTreeItem<uint16_t>(&rhs->word_407BC));
+    ptree->appendChild("word_407BE", new QMoMTreeItem<uint16_t>(&rhs->word_407BE));
+    ptree->appendChild("word_407C0", new QMoMTreeItem<uint16_t>(&rhs->word_407C0));
+    QMoMTreeItemBase* ptreew_Vizier_allowed_GUESS = ptree;
+    if (8 > 3)
+    {
+        ptreew_Vizier_allowed_GUESS = new QMoMTreeItemBase("w_Vizier_allowed_GUESS");
+        ptree->appendTree(ptreew_Vizier_allowed_GUESS, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "w_Vizier_allowed_GUESS[" << i << "]";
+          ptreew_Vizier_allowed_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_Vizier_allowed_GUESS[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->dword_407CA, "dword_407CA"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dword_407CE, "dword_407CE"), "");
+    ptree->appendChild("word_407D2", new QMoMTreeItem<uint16_t>(&rhs->word_407D2));
+    ptree->appendChild("word_407D4", new QMoMTreeItem<uint16_t>(&rhs->word_407D4));
+    ptree->appendChild("word_407D6", new QMoMTreeItem<uint16_t>(&rhs->word_407D6));
+    ptree->appendChild("word_407D8", new QMoMTreeItem<uint16_t>(&rhs->word_407D8));
+    ptree->appendChild("word_407DA", new QMoMTreeItem<uint16_t>(&rhs->word_407DA));
+    ptree->appendChild("word_407DC", new QMoMTreeItem<uint16_t>(&rhs->word_407DC));
+    ptree->appendChild("word_407DE", new QMoMTreeItem<uint16_t>(&rhs->word_407DE));
+    ptree->appendChild("word_407E0", new QMoMTreeItem<uint16_t>(&rhs->word_407E0));
+    ptree->appendChild("word_407E2", new QMoMTreeItem<uint16_t>(&rhs->word_407E2));
+    ptree->appendChild("word_407E4", new QMoMTreeItem<uint16_t>(&rhs->word_407E4));
+    ptree->appendChild("word_407E6", new QMoMTreeItem<uint16_t>(&rhs->word_407E6));
+    ptree->appendChild("word_407E8", new QMoMTreeItem<uint16_t>(&rhs->word_407E8));
+    ptree->appendChild("w_AI_stack_nr", new QMoMTreeItem<uint16_t>(&rhs->w_AI_stack_nr));
+    QMoMTreeItemBase* ptreeunk_407EC = ptree;
+    if (320 > 3)
+    {
+        ptreeunk_407EC = new QMoMTreeItemBase("unk_407EC");
+        ptree->appendTree(ptreeunk_407EC, "");
+    }
+    for (unsigned i = 0; i < 320; ++i)
+    {
+          std::ostringstream oss;
+          oss << "unk_407EC[" << i << "]";
+          ptreeunk_407EC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_407EC[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->dw_Nr_in_stack, "dw_Nr_in_stack"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_stack_place, "dw_stack_place"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_pla_stacks_loc, "dw_pla_stacks_loc"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_Y_stacks_loc, "dw_Y_stacks_loc"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_X_stacks_loc, "dw_X_stacks_loc"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6160, "dw_bx_6160"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_bx_615C, "dw_bx_615C"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6176, "dw_bx_6176"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6154, "dw_bx_6154"), "");
+    ptree->appendChild("word_40950", new QMoMTreeItem<uint16_t>(&rhs->word_40950));
+    ptree->appendChild("word_40952", new QMoMTreeItem<uint16_t>(&rhs->word_40952));
+    ptree->appendChild("word_40954", new QMoMTreeItem<uint16_t>(&rhs->word_40954));
+    ptree->appendChild("word_40956", new QMoMTreeItem<uint16_t>(&rhs->word_40956));
+    ptree->appendChild("word_40958", new QMoMTreeItem<uint16_t>(&rhs->word_40958));
+    ptree->appendChild("word_4095A", new QMoMTreeItem<uint16_t>(&rhs->word_4095A));
+    ptree->appendChild("word_4095C", new QMoMTreeItem<uint16_t>(&rhs->word_4095C));
+    ptree->appendChild("word_4095E", new QMoMTreeItem<uint16_t>(&rhs->word_4095E));
+    ptree->appendChild("word_40960", new QMoMTreeItem<uint16_t>(&rhs->word_40960));
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Units, "m_addr_Units"), "");
+    ptree->appendTree(constructTreeItem(&rhs->dword_40966, "dword_40966"), "");
     QMoMTreeItemBase* ptreem_Wizards = ptree;
     if (gMAX_WIZARD_RECORDS > 3)
     {
@@ -5744,1023 +6751,6 @@ QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data140m* rhs, const QString
     ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful140m>(&rhs->m_Magic_Powerful_setting));
     ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size140m>(&rhs->m_Land_Size_setting));
     ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Wizards));
-    return ptree;
-}
-
-QMoMTreeItemBase* constructTreeItem(WizardsExe_Pointers* rhs, const QString& context)
-{
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<WizardsExe_Pointers>(rhs, context);
-    if (0 == rhs)
-        return ptree;
-
-    ptree->appendTree(constructTreeItem(&rhs->addr_Spell_Data, "addr_Spell_Data"), "");
-    ptree->appendChild("word_3FBD0", new QMoMTreeItem<uint16_t>(&rhs->word_3FBD0));
-    ptree->appendChild("w_sound_x", new QMoMTreeItem<uint16_t>(&rhs->w_sound_x));
-    ptree->appendChild("word_3FBD4", new QMoMTreeItem<uint16_t>(&rhs->word_3FBD4));
-    ptree->appendTree(constructTreeItem(&rhs->addr_Items, "addr_Items"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_item_in_game_GUESS, "addr_item_in_game_GUESS"), "");
-    QMoMTreeItemBase* ptreeunk__913E = ptree;
-    if (26 > 3)
-    {
-        ptreeunk__913E = new QMoMTreeItemBase("unk__913E");
-        ptree->appendTree(ptreeunk__913E, "");
-    }
-    for (unsigned i = 0; i < 26; ++i)
-    {
-          std::ostringstream oss;
-          oss << "unk__913E[" << i << "]";
-          ptreeunk__913E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk__913E[i]));
-    }
-    QMoMTreeItemBase* ptreeunk_3FBF8 = ptree;
-    if (23 > 3)
-    {
-        ptreeunk_3FBF8 = new QMoMTreeItemBase("unk_3FBF8");
-        ptree->appendTree(ptreeunk_3FBF8, "");
-    }
-    for (unsigned i = 0; i < 23; ++i)
-    {
-          std::ostringstream oss;
-          oss << "unk_3FBF8[" << i << "]";
-          ptreeunk_3FBF8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_3FBF8[i]));
-    }
-    QMoMTreeItemBase* ptreeunk_3FC0F = ptree;
-    if (183 > 3)
-    {
-        ptreeunk_3FC0F = new QMoMTreeItemBase("unk_3FC0F");
-        ptree->appendTree(ptreeunk_3FC0F, "");
-    }
-    for (unsigned i = 0; i < 183; ++i)
-    {
-          std::ostringstream oss;
-          oss << "unk_3FC0F[" << i << "]";
-          ptreeunk_3FC0F->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_3FC0F[i]));
-    }
-    ptree->appendTree(constructTreeItem(&rhs->addr_Battle_Unit_View, "addr_Battle_Unit_View"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Battle_Unit, "addr_Battle_Unit"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Spells_Cast_in_Battle, "addr_Spells_Cast_in_Battle"), "");
-    QMoMTreeItemBase* ptreeaddr_Hero_stat = ptree;
-    if (6 > 3)
-    {
-        ptreeaddr_Hero_stat = new QMoMTreeItemBase("addr_Hero_stat");
-        ptree->appendTree(ptreeaddr_Hero_stat, "");
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << "addr_Hero_stat[" << i << "]";
-          ptreeaddr_Hero_stat->appendTree(constructTreeItem(&rhs->addr_Hero_stat[i], oss.str().c_str()), "");
-    }
-    QMoMTreeItemBase* ptreew_AI_flees = ptree;
-    if (20 > 3)
-    {
-        ptreew_AI_flees = new QMoMTreeItemBase("w_AI_flees");
-        ptree->appendTree(ptreew_AI_flees, "");
-    }
-    for (unsigned i = 0; i < 20; ++i)
-    {
-          std::ostringstream oss;
-          oss << "w_AI_flees[" << i << "]";
-          ptreew_AI_flees->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_AI_flees[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FCFE = ptree;
-    if (10 > 3)
-    {
-        ptreeword_3FCFE = new QMoMTreeItemBase("word_3FCFE");
-        ptree->appendTree(ptreeword_3FCFE, "");
-    }
-    for (unsigned i = 0; i < 10; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FCFE[" << i << "]";
-          ptreeword_3FCFE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FCFE[i]));
-    }
-    ptree->appendChild("word_3FD08", new QMoMTreeItem<uint16_t>(&rhs->word_3FD08));
-    ptree->appendChild("word_3FD0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0A));
-    ptree->appendChild("word_3FD0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0C));
-    ptree->appendChild("word_3FD0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FD0E));
-    ptree->appendChild("word_3FD10", new QMoMTreeItem<uint16_t>(&rhs->word_3FD10));
-    ptree->appendChild("word_3FD12", new QMoMTreeItem<uint16_t>(&rhs->word_3FD12));
-    ptree->appendTree(constructTreeItem(&rhs->addr_Battlefield, "addr_Battlefield"), "");
-    ptree->appendChild("word_3FD18", new QMoMTreeItem<uint16_t>(&rhs->word_3FD18));
-    ptree->appendChild("word_3FD1A", new QMoMTreeItem<uint16_t>(&rhs->word_3FD1A));
-    ptree->appendChild("w_AI_on_the_move_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_AI_on_the_move_GUESS));
-    ptree->appendChild("w_coo_X_Y_clicked", new QMoMTreeItem<uint16_t>(&rhs->w_coo_X_Y_clicked));
-    ptree->appendChild("w_coo_Y_X_clicked", new QMoMTreeItem<uint16_t>(&rhs->w_coo_Y_X_clicked));
-    ptree->appendChild("word_3FD22", new QMoMTreeItem<uint16_t>(&rhs->word_3FD22));
-    ptree->appendChild("w_clash_place_type", new QMoMTreeItem<uint16_t>(&rhs->w_clash_place_type));
-    QMoMTreeItemBase* ptreew_clash_place_ID = ptree;
-    if (14 > 3)
-    {
-        ptreew_clash_place_ID = new QMoMTreeItemBase("w_clash_place_ID");
-        ptree->appendTree(ptreew_clash_place_ID, "");
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << "w_clash_place_ID[" << i << "]";
-          ptreew_clash_place_ID->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_clash_place_ID[i]));
-    }
-    ptree->appendChild("w_kyrub_dseg_9294", new QMoMTreeItem<int16_t>(&rhs->w_kyrub_dseg_9294));
-    ptree->appendChild("w_kyrub_dseg_9296", new QMoMTreeItem<int16_t>(&rhs->w_kyrub_dseg_9296));
-    QMoMTreeItemBase* ptreeword_3FD38 = ptree;
-    if (20 > 3)
-    {
-        ptreeword_3FD38 = new QMoMTreeItemBase("word_3FD38");
-        ptree->appendTree(ptreeword_3FD38, "");
-    }
-    for (unsigned i = 0; i < 20; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FD38[" << i << "]";
-          ptreeword_3FD38->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD38[i]));
-    }
-    ptree->appendChild("w_negat_encha_x17_flag_def", new QMoMTreeItem<uint16_t>(&rhs->w_negat_encha_x17_flag_def));
-    ptree->appendChild("w_aggre_spell_color_flag_att", new QMoMTreeItem<uint16_t>(&rhs->w_aggre_spell_color_flag_att));
-    ptree->appendTree(constructTreeItem(&rhs->dword_3FD50, "dword_3FD50"), "");
-    ptree->appendChild("word_3FD54", new QMoMTreeItem<uint16_t>(&rhs->word_3FD54));
-    QMoMTreeItemBase* ptreeword_3FD56 = ptree;
-    if (64 > 3)
-    {
-        ptreeword_3FD56 = new QMoMTreeItemBase("word_3FD56");
-        ptree->appendTree(ptreeword_3FD56, "");
-    }
-    for (unsigned i = 0; i < 64; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FD56[" << i << "]";
-          ptreeword_3FD56->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD56[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FD96 = ptree;
-    if (8 > 3)
-    {
-        ptreeword_3FD96 = new QMoMTreeItemBase("word_3FD96");
-        ptree->appendTree(ptreeword_3FD96, "");
-    }
-    for (unsigned i = 0; i < 8; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FD96[" << i << "]";
-          ptreeword_3FD96->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FD96[i]));
-    }
-    ptree->appendChild("word_3FD9E", new QMoMTreeItem<uint16_t>(&rhs->word_3FD9E));
-    ptree->appendChild("word_3FDA0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA0));
-    ptree->appendChild("word_3FDA2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA2));
-    ptree->appendChild("word_3FDA4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA4));
-    ptree->appendChild("word_3FDA6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA6));
-    ptree->appendChild("word_3FDA8", new QMoMTreeItem<uint16_t>(&rhs->word_3FDA8));
-    ptree->appendChild("word_3FDAA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAA));
-    ptree->appendChild("word_3FDAC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAC));
-    ptree->appendChild("word_3FDAE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDAE));
-    ptree->appendChild("word_3FDB0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB0));
-    ptree->appendChild("word_3FDB2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB2));
-    ptree->appendChild("word_3FDB4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB4));
-    ptree->appendChild("word_3FDB6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDB6));
-    QMoMTreeItemBase* ptreeword_3FDB8 = ptree;
-    if (44 > 3)
-    {
-        ptreeword_3FDB8 = new QMoMTreeItemBase("word_3FDB8");
-        ptree->appendTree(ptreeword_3FDB8, "");
-    }
-    for (unsigned i = 0; i < 44; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FDB8[" << i << "]";
-          ptreeword_3FDB8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FDB8[i]));
-    }
-    ptree->appendChild("word_3FDE4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDE4));
-    ptree->appendTree(constructTreeItem(&rhs->addr_3FDE6, "addr_3FDE6"), "");
-    ptree->appendChild("word_3FDEA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEA));
-    ptree->appendChild("word_3FDEC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEC));
-    ptree->appendChild("word_3FDEE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDEE));
-    ptree->appendChild("word_3FDF0", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF0));
-    ptree->appendChild("word_3FDF2", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF2));
-    ptree->appendChild("word_3FDF4", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF4));
-    ptree->appendChild("word_3FDF6", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF6));
-    ptree->appendChild("word_3FDF8", new QMoMTreeItem<uint16_t>(&rhs->word_3FDF8));
-    ptree->appendChild("word_3FDFA", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFA));
-    ptree->appendChild("word_3FDFC", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFC));
-    ptree->appendChild("word_3FDFE", new QMoMTreeItem<uint16_t>(&rhs->word_3FDFE));
-    ptree->appendChild("word_3FE00", new QMoMTreeItem<uint16_t>(&rhs->word_3FE00));
-    ptree->appendChild("word_3FE02", new QMoMTreeItem<uint16_t>(&rhs->word_3FE02));
-    ptree->appendChild("word_3FE04", new QMoMTreeItem<uint16_t>(&rhs->word_3FE04));
-    ptree->appendChild("word_3FE06", new QMoMTreeItem<uint16_t>(&rhs->word_3FE06));
-    ptree->appendChild("word_3FE08", new QMoMTreeItem<uint16_t>(&rhs->word_3FE08));
-    ptree->appendChild("word_3FE0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0A));
-    ptree->appendChild("word_3FE0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0C));
-    ptree->appendChild("word_3FE0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FE0E));
-    ptree->appendChild("word_3FE10", new QMoMTreeItem<uint16_t>(&rhs->word_3FE10));
-    ptree->appendChild("word_3FE12", new QMoMTreeItem<uint16_t>(&rhs->word_3FE12));
-    ptree->appendChild("word_3FE14", new QMoMTreeItem<uint16_t>(&rhs->word_3FE14));
-    ptree->appendChild("word_3FE16", new QMoMTreeItem<uint16_t>(&rhs->word_3FE16));
-    ptree->appendChild("word_3FE18", new QMoMTreeItem<uint16_t>(&rhs->word_3FE18));
-    ptree->appendChild("word_3FE1A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1A));
-    ptree->appendChild("word_3FE1C", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1C));
-    ptree->appendChild("word_3FE1E", new QMoMTreeItem<uint16_t>(&rhs->word_3FE1E));
-    ptree->appendChild("word_3FE20", new QMoMTreeItem<uint16_t>(&rhs->word_3FE20));
-    ptree->appendChild("word_3FE22", new QMoMTreeItem<uint16_t>(&rhs->word_3FE22));
-    ptree->appendChild("word_3FE24", new QMoMTreeItem<uint16_t>(&rhs->word_3FE24));
-    ptree->appendChild("word_3FE26", new QMoMTreeItem<uint16_t>(&rhs->word_3FE26));
-    ptree->appendChild("word_3FE28", new QMoMTreeItem<uint16_t>(&rhs->word_3FE28));
-    ptree->appendChild("word_3FE2A", new QMoMTreeItem<uint16_t>(&rhs->word_3FE2A));
-    ptree->appendTree(constructTreeItem(&rhs->addr_Building_Data, "addr_Building_Data"), "");
-    ptree->appendChild("word_3FE30", new QMoMTreeItem<uint16_t>(&rhs->word_3FE30));
-    ptree->appendTree(constructTreeItem(&rhs->dword_3FE32, "dword_3FE32"), "");
-    QMoMTreeItemBase* ptreedword_3FE36 = ptree;
-    if (126 > 3)
-    {
-        ptreedword_3FE36 = new QMoMTreeItemBase("dword_3FE36");
-        ptree->appendTree(ptreedword_3FE36, "");
-    }
-    for (unsigned i = 0; i < 126; ++i)
-    {
-          std::ostringstream oss;
-          oss << "dword_3FE36[" << i << "]";
-          ptreedword_3FE36->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->dword_3FE36[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FEB4 = ptree;
-    if (6 > 3)
-    {
-        ptreeword_3FEB4 = new QMoMTreeItemBase("word_3FEB4");
-        ptree->appendTree(ptreeword_3FEB4, "");
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FEB4[" << i << "]";
-          ptreeword_3FEB4->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEB4[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FEBA = ptree;
-    if (18 > 3)
-    {
-        ptreeword_3FEBA = new QMoMTreeItemBase("word_3FEBA");
-        ptree->appendTree(ptreeword_3FEBA, "");
-    }
-    for (unsigned i = 0; i < 18; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FEBA[" << i << "]";
-          ptreeword_3FEBA->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEBA[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FECC = ptree;
-    if (22 > 3)
-    {
-        ptreeword_3FECC = new QMoMTreeItemBase("word_3FECC");
-        ptree->appendTree(ptreeword_3FECC, "");
-    }
-    for (unsigned i = 0; i < 22; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FECC[" << i << "]";
-          ptreeword_3FECC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FECC[i]));
-    }
-    ptree->appendChild("word_3FEE2", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE2));
-    ptree->appendChild("w_all_units_moved_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_all_units_moved_GUESS));
-    ptree->appendChild("word_3FEE6", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE6));
-    ptree->appendChild("word_3FEE8", new QMoMTreeItem<uint16_t>(&rhs->word_3FEE8));
-    ptree->appendChild("word_3FEEA", new QMoMTreeItem<uint16_t>(&rhs->word_3FEEA));
-    QMoMTreeItemBase* ptreeword_3FEEC = ptree;
-    if (6 > 3)
-    {
-        ptreeword_3FEEC = new QMoMTreeItemBase("word_3FEEC");
-        ptree->appendTree(ptreeword_3FEEC, "");
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FEEC[" << i << "]";
-          ptreeword_3FEEC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEEC[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FEF2 = ptree;
-    if (14 > 3)
-    {
-        ptreeword_3FEF2 = new QMoMTreeItemBase("word_3FEF2");
-        ptree->appendTree(ptreeword_3FEF2, "");
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FEF2[" << i << "]";
-          ptreeword_3FEF2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FEF2[i]));
-    }
-    ptree->appendTree(constructTreeItem(&rhs->word_3FF00, "word_3FF00"), "");
-    ptree->appendChild("word_3FF04", new QMoMTreeItem<uint16_t>(&rhs->word_3FF04));
-    ptree->appendChild("word_3FF06", new QMoMTreeItem<uint16_t>(&rhs->word_3FF06));
-    ptree->appendChild("word_3FF08", new QMoMTreeItem<uint16_t>(&rhs->word_3FF08));
-    ptree->appendChild("word_3FF0A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0A));
-    ptree->appendChild("word_3FF0C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0C));
-    ptree->appendChild("word_3FF0E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF0E));
-    QMoMTreeItemBase* ptreeword_3FF10 = ptree;
-    if (14 > 3)
-    {
-        ptreeword_3FF10 = new QMoMTreeItemBase("word_3FF10");
-        ptree->appendTree(ptreeword_3FF10, "");
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FF10[" << i << "]";
-          ptreeword_3FF10->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF10[i]));
-    }
-    ptree->appendChild("word_3FF1E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF1E));
-    ptree->appendChild("word_3FF20", new QMoMTreeItem<uint16_t>(&rhs->word_3FF20));
-    ptree->appendChild("word_3FF22", new QMoMTreeItem<uint16_t>(&rhs->word_3FF22));
-    ptree->appendChild("word_3FF24", new QMoMTreeItem<uint16_t>(&rhs->word_3FF24));
-    ptree->appendChild("word_3FF26", new QMoMTreeItem<uint16_t>(&rhs->word_3FF26));
-    ptree->appendChild("word_3FF28", new QMoMTreeItem<uint16_t>(&rhs->word_3FF28));
-    ptree->appendChild("word_3FF2A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF2A));
-    ptree->appendChild("word_3FF2C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF2C));
-    QMoMTreeItemBase* ptreeword_3FF2E = ptree;
-    if (6 > 3)
-    {
-        ptreeword_3FF2E = new QMoMTreeItemBase("word_3FF2E");
-        ptree->appendTree(ptreeword_3FF2E, "");
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FF2E[" << i << "]";
-          ptreeword_3FF2E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF2E[i]));
-    }
-    ptree->appendChild("word_3FF34", new QMoMTreeItem<uint16_t>(&rhs->word_3FF34));
-    ptree->appendChild("word_3FF36", new QMoMTreeItem<uint16_t>(&rhs->word_3FF36));
-    ptree->appendChild("word_3FF38", new QMoMTreeItem<uint16_t>(&rhs->word_3FF38));
-    ptree->appendChild("word_3FF3A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3A));
-    ptree->appendChild("word_3FF3C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3C));
-    ptree->appendChild("word_3FF3E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF3E));
-    ptree->appendChild("word_3FF40", new QMoMTreeItem<uint16_t>(&rhs->word_3FF40));
-    ptree->appendChild("word_3FF42", new QMoMTreeItem<uint16_t>(&rhs->word_3FF42));
-    ptree->appendChild("word_3FF44", new QMoMTreeItem<uint16_t>(&rhs->word_3FF44));
-    ptree->appendChild("word_3FF46", new QMoMTreeItem<uint16_t>(&rhs->word_3FF46));
-    ptree->appendChild("word_3FF48", new QMoMTreeItem<uint16_t>(&rhs->word_3FF48));
-    ptree->appendChild("word_3FF4A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF4A));
-    QMoMTreeItemBase* ptreeword_3FF4C = ptree;
-    if (58 > 3)
-    {
-        ptreeword_3FF4C = new QMoMTreeItemBase("word_3FF4C");
-        ptree->appendTree(ptreeword_3FF4C, "");
-    }
-    for (unsigned i = 0; i < 58; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FF4C[" << i << "]";
-          ptreeword_3FF4C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF4C[i]));
-    }
-    ptree->appendChild("word_3FF86", new QMoMTreeItem<uint16_t>(&rhs->word_3FF86));
-    ptree->appendChild("word_3FF88", new QMoMTreeItem<uint16_t>(&rhs->word_3FF88));
-    ptree->appendChild("word_3FF8A", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8A));
-    ptree->appendChild("word_3FF8C", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8C));
-    ptree->appendChild("word_3FF8E", new QMoMTreeItem<uint16_t>(&rhs->word_3FF8E));
-    QMoMTreeItemBase* ptreeword_3FF90 = ptree;
-    if (30 > 3)
-    {
-        ptreeword_3FF90 = new QMoMTreeItemBase("word_3FF90");
-        ptree->appendTree(ptreeword_3FF90, "");
-    }
-    for (unsigned i = 0; i < 30; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FF90[" << i << "]";
-          ptreeword_3FF90->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FF90[i]));
-    }
-    ptree->appendChild("word_3FFAE", new QMoMTreeItem<uint16_t>(&rhs->word_3FFAE));
-    ptree->appendChild("word_3FFB0", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB0));
-    ptree->appendChild("word_3FFB2", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB2));
-    ptree->appendChild("word_3FFB4", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB4));
-    ptree->appendChild("word_3FFB6", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB6));
-    ptree->appendChild("word_3FFB8", new QMoMTreeItem<uint16_t>(&rhs->word_3FFB8));
-    ptree->appendChild("word_3FFBA", new QMoMTreeItem<uint16_t>(&rhs->word_3FFBA));
-    ptree->appendChild("word_3FFBC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFBC));
-    ptree->appendTree(constructTreeItem(&rhs->word_3FFBE, "word_3FFBE"), "");
-    ptree->appendChild("word_3FFC2", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC2));
-    ptree->appendChild("word_3FFC4", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC4));
-    ptree->appendChild("word_3FFC6", new QMoMTreeItem<uint16_t>(&rhs->word_3FFC6));
-    ptree->appendTree(constructTreeItem(&rhs->word_3FFC8, "word_3FFC8"), "");
-    ptree->appendChild("word_3FFCC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFCC));
-    QMoMTreeItemBase* ptreeword_3FFCE = ptree;
-    if (14 > 3)
-    {
-        ptreeword_3FFCE = new QMoMTreeItemBase("word_3FFCE");
-        ptree->appendTree(ptreeword_3FFCE, "");
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FFCE[" << i << "]";
-          ptreeword_3FFCE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFCE[i]));
-    }
-    ptree->appendChild("word_3FFDC", new QMoMTreeItem<uint16_t>(&rhs->word_3FFDC));
-    ptree->appendChild("word_3FFDE", new QMoMTreeItem<uint16_t>(&rhs->word_3FFDE));
-    QMoMTreeItemBase* ptreeword_3FFE0 = ptree;
-    if (8 > 3)
-    {
-        ptreeword_3FFE0 = new QMoMTreeItemBase("word_3FFE0");
-        ptree->appendTree(ptreeword_3FFE0, "");
-    }
-    for (unsigned i = 0; i < 8; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FFE0[" << i << "]";
-          ptreeword_3FFE0->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFE0[i]));
-    }
-    QMoMTreeItemBase* ptreeword_3FFE8 = ptree;
-    if (38 > 3)
-    {
-        ptreeword_3FFE8 = new QMoMTreeItemBase("word_3FFE8");
-        ptree->appendTree(ptreeword_3FFE8, "");
-    }
-    for (unsigned i = 0; i < 38; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_3FFE8[" << i << "]";
-          ptreeword_3FFE8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_3FFE8[i]));
-    }
-    ptree->appendChild("word_4000E", new QMoMTreeItem<uint16_t>(&rhs->word_4000E));
-    ptree->appendChild("word_40010", new QMoMTreeItem<uint16_t>(&rhs->word_40010));
-    ptree->appendChild("word_40012", new QMoMTreeItem<uint16_t>(&rhs->word_40012));
-    ptree->appendChild("word_40014", new QMoMTreeItem<uint16_t>(&rhs->word_40014));
-    ptree->appendChild("word_40016", new QMoMTreeItem<uint16_t>(&rhs->word_40016));
-    ptree->appendChild("word_40018", new QMoMTreeItem<uint16_t>(&rhs->word_40018));
-    ptree->appendChild("word_4001A", new QMoMTreeItem<uint16_t>(&rhs->word_4001A));
-    ptree->appendChild("word_4001C", new QMoMTreeItem<uint16_t>(&rhs->word_4001C));
-    ptree->appendChild("word_4001E", new QMoMTreeItem<uint16_t>(&rhs->word_4001E));
-    ptree->appendChild("word_40020", new QMoMTreeItem<uint16_t>(&rhs->word_40020));
-    ptree->appendChild("word_40022", new QMoMTreeItem<uint16_t>(&rhs->word_40022));
-    ptree->appendChild("word_40024", new QMoMTreeItem<uint16_t>(&rhs->word_40024));
-    ptree->appendChild("word_40026", new QMoMTreeItem<uint16_t>(&rhs->word_40026));
-    ptree->appendChild("word_40028", new QMoMTreeItem<uint16_t>(&rhs->word_40028));
-    ptree->appendChild("word_4002A", new QMoMTreeItem<uint16_t>(&rhs->word_4002A));
-    ptree->appendChild("word_4002C", new QMoMTreeItem<uint16_t>(&rhs->word_4002C));
-    QMoMTreeItemBase* ptreeword_4002E = ptree;
-    if (28 > 3)
-    {
-        ptreeword_4002E = new QMoMTreeItemBase("word_4002E");
-        ptree->appendTree(ptreeword_4002E, "");
-    }
-    for (unsigned i = 0; i < 28; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4002E[" << i << "]";
-          ptreeword_4002E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4002E[i]));
-    }
-    ptree->appendChild("word_4004A", new QMoMTreeItem<uint16_t>(&rhs->word_4004A));
-    ptree->appendChild("word_4004C", new QMoMTreeItem<uint16_t>(&rhs->word_4004C));
-    ptree->appendChild("word_4004E", new QMoMTreeItem<uint16_t>(&rhs->word_4004E));
-    ptree->appendChild("word_40050", new QMoMTreeItem<uint16_t>(&rhs->word_40050));
-    ptree->appendChild("word_40052", new QMoMTreeItem<uint16_t>(&rhs->word_40052));
-    ptree->appendChild("word_40054", new QMoMTreeItem<uint16_t>(&rhs->word_40054));
-    ptree->appendChild("word_40056", new QMoMTreeItem<uint16_t>(&rhs->word_40056));
-    ptree->appendChild("word_40058", new QMoMTreeItem<uint16_t>(&rhs->word_40058));
-    ptree->appendChild("word_4005A", new QMoMTreeItem<uint16_t>(&rhs->word_4005A));
-    ptree->appendChild("word_4005C", new QMoMTreeItem<uint16_t>(&rhs->word_4005C));
-    ptree->appendChild("word_4005E", new QMoMTreeItem<uint16_t>(&rhs->word_4005E));
-    ptree->appendChild("word_40060", new QMoMTreeItem<uint16_t>(&rhs->word_40060));
-    QMoMTreeItemBase* ptreeword_40062 = ptree;
-    if (12 > 3)
-    {
-        ptreeword_40062 = new QMoMTreeItemBase("word_40062");
-        ptree->appendTree(ptreeword_40062, "");
-    }
-    for (unsigned i = 0; i < 12; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40062[" << i << "]";
-          ptreeword_40062->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40062[i]));
-    }
-    QMoMTreeItemBase* ptreeword_4006E = ptree;
-    if (34 > 3)
-    {
-        ptreeword_4006E = new QMoMTreeItemBase("word_4006E");
-        ptree->appendTree(ptreeword_4006E, "");
-    }
-    for (unsigned i = 0; i < 34; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4006E[" << i << "]";
-          ptreeword_4006E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4006E[i]));
-    }
-    ptree->appendChild("word_40090", new QMoMTreeItem<uint16_t>(&rhs->word_40090));
-    QMoMTreeItemBase* ptreeword_40092 = ptree;
-    if (82 > 3)
-    {
-        ptreeword_40092 = new QMoMTreeItemBase("word_40092");
-        ptree->appendTree(ptreeword_40092, "");
-    }
-    for (unsigned i = 0; i < 82; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40092[" << i << "]";
-          ptreeword_40092->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40092[i]));
-    }
-    ptree->appendTree(constructTreeItem(&rhs->addr_city_detailed_GUESS, "addr_city_detailed_GUESS"), "");
-    QMoMTreeItemBase* ptreeword_400E8 = ptree;
-    if (244 > 3)
-    {
-        ptreeword_400E8 = new QMoMTreeItemBase("word_400E8");
-        ptree->appendTree(ptreeword_400E8, "");
-    }
-    for (unsigned i = 0; i < 244; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_400E8[" << i << "]";
-          ptreeword_400E8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_400E8[i]));
-    }
-    ptree->appendChild("word_401DC", new QMoMTreeItem<uint16_t>(&rhs->word_401DC));
-    ptree->appendChild("word_401DE", new QMoMTreeItem<uint16_t>(&rhs->word_401DE));
-    ptree->appendChild("word_401E0", new QMoMTreeItem<uint16_t>(&rhs->word_401E0));
-    ptree->appendChild("word_401E2", new QMoMTreeItem<uint16_t>(&rhs->word_401E2));
-    ptree->appendChild("word_401E4", new QMoMTreeItem<uint16_t>(&rhs->word_401E4));
-    ptree->appendChild("word_401E6", new QMoMTreeItem<uint16_t>(&rhs->word_401E6));
-    ptree->appendChild("word_401E8", new QMoMTreeItem<uint16_t>(&rhs->word_401E8));
-    ptree->appendChild("word_401EA", new QMoMTreeItem<uint16_t>(&rhs->word_401EA));
-    ptree->appendChild("word_401EC", new QMoMTreeItem<uint16_t>(&rhs->word_401EC));
-    ptree->appendChild("word_401EE", new QMoMTreeItem<uint16_t>(&rhs->word_401EE));
-    ptree->appendChild("word_401F0", new QMoMTreeItem<uint16_t>(&rhs->word_401F0));
-    ptree->appendChild("word_401F2", new QMoMTreeItem<uint16_t>(&rhs->word_401F2));
-    ptree->appendChild("word_401F4", new QMoMTreeItem<uint16_t>(&rhs->word_401F4));
-    ptree->appendChild("word_401F6", new QMoMTreeItem<uint16_t>(&rhs->word_401F6));
-    ptree->appendChild("word_401F8", new QMoMTreeItem<uint16_t>(&rhs->word_401F8));
-    ptree->appendChild("word_401FA", new QMoMTreeItem<uint16_t>(&rhs->word_401FA));
-    ptree->appendChild("word_401FC", new QMoMTreeItem<uint16_t>(&rhs->word_401FC));
-    ptree->appendChild("word_401FE", new QMoMTreeItem<uint16_t>(&rhs->word_401FE));
-    ptree->appendChild("word_40200", new QMoMTreeItem<uint16_t>(&rhs->word_40200));
-    ptree->appendChild("word_40202", new QMoMTreeItem<uint16_t>(&rhs->word_40202));
-    ptree->appendChild("word_40204", new QMoMTreeItem<uint16_t>(&rhs->word_40204));
-    ptree->appendChild("word_40206", new QMoMTreeItem<uint16_t>(&rhs->word_40206));
-    ptree->appendChild("word_40208", new QMoMTreeItem<uint16_t>(&rhs->word_40208));
-    ptree->appendChild("word_4020A", new QMoMTreeItem<uint16_t>(&rhs->word_4020A));
-    QMoMTreeItemBase* ptreeword_4020C = ptree;
-    if (38 > 3)
-    {
-        ptreeword_4020C = new QMoMTreeItemBase("word_4020C");
-        ptree->appendTree(ptreeword_4020C, "");
-    }
-    for (unsigned i = 0; i < 38; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4020C[" << i << "]";
-          ptreeword_4020C->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4020C[i]));
-    }
-    ptree->appendChild("word_40232", new QMoMTreeItem<uint16_t>(&rhs->word_40232));
-    ptree->appendChild("word_40234", new QMoMTreeItem<uint16_t>(&rhs->word_40234));
-    ptree->appendChild("word_40236", new QMoMTreeItem<uint16_t>(&rhs->word_40236));
-    ptree->appendChild("word_40238", new QMoMTreeItem<uint16_t>(&rhs->word_40238));
-    ptree->appendChild("word_4023A", new QMoMTreeItem<uint16_t>(&rhs->word_4023A));
-    ptree->appendChild("word_4023C", new QMoMTreeItem<uint16_t>(&rhs->word_4023C));
-    ptree->appendChild("word_4023E", new QMoMTreeItem<uint16_t>(&rhs->word_4023E));
-    ptree->appendChild("word_40240", new QMoMTreeItem<uint16_t>(&rhs->word_40240));
-    QMoMTreeItemBase* ptreeword_40242 = ptree;
-    if (18 > 3)
-    {
-        ptreeword_40242 = new QMoMTreeItemBase("word_40242");
-        ptree->appendTree(ptreeword_40242, "");
-    }
-    for (unsigned i = 0; i < 18; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40242[" << i << "]";
-          ptreeword_40242->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40242[i]));
-    }
-    ptree->appendChild("word_40254", new QMoMTreeItem<uint16_t>(&rhs->word_40254));
-    ptree->appendChild("word_40256", new QMoMTreeItem<uint16_t>(&rhs->word_40256));
-    ptree->appendChild("word_40258", new QMoMTreeItem<uint16_t>(&rhs->word_40258));
-    QMoMTreeItemBase* ptreeword_4025A = ptree;
-    if (50 > 3)
-    {
-        ptreeword_4025A = new QMoMTreeItemBase("word_4025A");
-        ptree->appendTree(ptreeword_4025A, "");
-    }
-    for (unsigned i = 0; i < 50; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4025A[" << i << "]";
-          ptreeword_4025A->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4025A[i]));
-    }
-    ptree->appendChild("word_4028C", new QMoMTreeItem<uint16_t>(&rhs->word_4028C));
-    QMoMTreeItemBase* ptreeword_4028E = ptree;
-    if (10 > 3)
-    {
-        ptreeword_4028E = new QMoMTreeItemBase("word_4028E");
-        ptree->appendTree(ptreeword_4028E, "");
-    }
-    for (unsigned i = 0; i < 10; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4028E[" << i << "]";
-          ptreeword_4028E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4028E[i]));
-    }
-    ptree->appendChild("word_40298", new QMoMTreeItem<uint16_t>(&rhs->word_40298));
-    ptree->appendChild("word_4029A", new QMoMTreeItem<uint16_t>(&rhs->word_4029A));
-    ptree->appendChild("word_4029C", new QMoMTreeItem<uint16_t>(&rhs->word_4029C));
-    QMoMTreeItemBase* ptreeword_4029E = ptree;
-    if (34 > 3)
-    {
-        ptreeword_4029E = new QMoMTreeItemBase("word_4029E");
-        ptree->appendTree(ptreeword_4029E, "");
-    }
-    for (unsigned i = 0; i < 34; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4029E[" << i << "]";
-          ptreeword_4029E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4029E[i]));
-    }
-    QMoMTreeItemBase* ptreeword_402C0 = ptree;
-    if (32 > 3)
-    {
-        ptreeword_402C0 = new QMoMTreeItemBase("word_402C0");
-        ptree->appendTree(ptreeword_402C0, "");
-    }
-    for (unsigned i = 0; i < 32; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_402C0[" << i << "]";
-          ptreeword_402C0->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_402C0[i]));
-    }
-    ptree->appendChild("word_402E0", new QMoMTreeItem<uint16_t>(&rhs->word_402E0));
-    QMoMTreeItemBase* ptreeword_402E2 = ptree;
-    if (36 > 3)
-    {
-        ptreeword_402E2 = new QMoMTreeItemBase("word_402E2");
-        ptree->appendTree(ptreeword_402E2, "");
-    }
-    for (unsigned i = 0; i < 36; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_402E2[" << i << "]";
-          ptreeword_402E2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_402E2[i]));
-    }
-    QMoMTreeItemBase* ptreeword_40306 = ptree;
-    if (120 > 3)
-    {
-        ptreeword_40306 = new QMoMTreeItemBase("word_40306");
-        ptree->appendTree(ptreeword_40306, "");
-    }
-    for (unsigned i = 0; i < 120; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40306[" << i << "]";
-          ptreeword_40306->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40306[i]));
-    }
-    QMoMTreeItemBase* ptreeword_4037E = ptree;
-    if (10 > 3)
-    {
-        ptreeword_4037E = new QMoMTreeItemBase("word_4037E");
-        ptree->appendTree(ptreeword_4037E, "");
-    }
-    for (unsigned i = 0; i < 10; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_4037E[" << i << "]";
-          ptreeword_4037E->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_4037E[i]));
-    }
-    QMoMTreeItemBase* ptreeword_40388 = ptree;
-    if (10 > 3)
-    {
-        ptreeword_40388 = new QMoMTreeItemBase("word_40388");
-        ptree->appendTree(ptreeword_40388, "");
-    }
-    for (unsigned i = 0; i < 10; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40388[" << i << "]";
-          ptreeword_40388->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40388[i]));
-    }
-    ptree->appendChild("word_40392", new QMoMTreeItem<uint16_t>(&rhs->word_40392));
-    QMoMTreeItemBase* ptreeword_40394 = ptree;
-    if (20 > 3)
-    {
-        ptreeword_40394 = new QMoMTreeItemBase("word_40394");
-        ptree->appendTree(ptreeword_40394, "");
-    }
-    for (unsigned i = 0; i < 20; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_40394[" << i << "]";
-          ptreeword_40394->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_40394[i]));
-    }
-    QMoMTreeItemBase* ptreeword_403A8 = ptree;
-    if (6 > 3)
-    {
-        ptreeword_403A8 = new QMoMTreeItemBase("word_403A8");
-        ptree->appendTree(ptreeword_403A8, "");
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_403A8[" << i << "]";
-          ptreeword_403A8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403A8[i]));
-    }
-    QMoMTreeItemBase* ptreeword_403AE = ptree;
-    if (10 > 3)
-    {
-        ptreeword_403AE = new QMoMTreeItemBase("word_403AE");
-        ptree->appendTree(ptreeword_403AE, "");
-    }
-    for (unsigned i = 0; i < 10; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_403AE[" << i << "]";
-          ptreeword_403AE->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403AE[i]));
-    }
-    ptree->appendChild("word_403B8", new QMoMTreeItem<uint16_t>(&rhs->word_403B8));
-    ptree->appendChild("word_403BA", new QMoMTreeItem<uint16_t>(&rhs->word_403BA));
-    ptree->appendChild("word_403BC", new QMoMTreeItem<uint16_t>(&rhs->word_403BC));
-    ptree->appendChild("word_403BE", new QMoMTreeItem<uint16_t>(&rhs->word_403BE));
-    ptree->appendChild("word_403C0", new QMoMTreeItem<uint16_t>(&rhs->word_403C0));
-    QMoMTreeItemBase* ptreeword_403C2 = ptree;
-    if (20 > 3)
-    {
-        ptreeword_403C2 = new QMoMTreeItemBase("word_403C2");
-        ptree->appendTree(ptreeword_403C2, "");
-    }
-    for (unsigned i = 0; i < 20; ++i)
-    {
-          std::ostringstream oss;
-          oss << "word_403C2[" << i << "]";
-          ptreeword_403C2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->word_403C2[i]));
-    }
-    ptree->appendChild("word_403D6", new QMoMTreeItem<uint16_t>(&rhs->word_403D6));
-    ptree->appendChild("word_403D8", new QMoMTreeItem<uint16_t>(&rhs->word_403D8));
-    ptree->appendChild("word_403DA", new QMoMTreeItem<uint16_t>(&rhs->word_403DA));
-    ptree->appendChild("word_403DC", new QMoMTreeItem<uint16_t>(&rhs->word_403DC));
-    ptree->appendChild("word_403DE", new QMoMTreeItem<uint16_t>(&rhs->word_403DE));
-    ptree->appendChild("word_403E0", new QMoMTreeItem<uint16_t>(&rhs->word_403E0));
-    ptree->appendChild("word_403E2", new QMoMTreeItem<uint16_t>(&rhs->word_403E2));
-    ptree->appendChild("word_403E4", new QMoMTreeItem<uint16_t>(&rhs->word_403E4));
-    ptree->appendChild("word_403E6", new QMoMTreeItem<uint16_t>(&rhs->word_403E6));
-    ptree->appendChild("word_403E8", new QMoMTreeItem<uint16_t>(&rhs->word_403E8));
-    ptree->appendChild("word_403EA", new QMoMTreeItem<uint16_t>(&rhs->word_403EA));
-    ptree->appendChild("word_403EC", new QMoMTreeItem<uint16_t>(&rhs->word_403EC));
-    ptree->appendChild("word_403EE", new QMoMTreeItem<uint16_t>(&rhs->word_403EE));
-    ptree->appendChild("word_403F0", new QMoMTreeItem<uint16_t>(&rhs->word_403F0));
-    ptree->appendChild("word_403F2", new QMoMTreeItem<uint16_t>(&rhs->word_403F2));
-    ptree->appendChild("word_403F4", new QMoMTreeItem<uint16_t>(&rhs->word_403F4));
-    ptree->appendChild("word_403F6", new QMoMTreeItem<uint16_t>(&rhs->word_403F6));
-    ptree->appendChild("word_403F8", new QMoMTreeItem<uint16_t>(&rhs->word_403F8));
-    ptree->appendChild("word_403FA", new QMoMTreeItem<uint16_t>(&rhs->word_403FA));
-    ptree->appendChild("word_403FC", new QMoMTreeItem<uint16_t>(&rhs->word_403FC));
-    ptree->appendTree(constructTreeItem(&rhs->word_403FE, "word_403FE"), "");
-    ptree->appendChild("word_40402", new QMoMTreeItem<uint16_t>(&rhs->word_40402));
-    ptree->appendChild("word_40404", new QMoMTreeItem<uint16_t>(&rhs->word_40404));
-    ptree->appendChild("word_40406", new QMoMTreeItem<uint16_t>(&rhs->word_40406));
-    ptree->appendChild("word_40408", new QMoMTreeItem<uint16_t>(&rhs->word_40408));
-    ptree->appendChild("word_4040A", new QMoMTreeItem<uint16_t>(&rhs->word_4040A));
-    ptree->appendChild("word_4040C", new QMoMTreeItem<uint16_t>(&rhs->word_4040C));
-    ptree->appendChild("word_4040E", new QMoMTreeItem<uint16_t>(&rhs->word_4040E));
-    ptree->appendChild("word_40410", new QMoMTreeItem<uint16_t>(&rhs->word_40410));
-    ptree->appendChild("word_40412", new QMoMTreeItem<uint16_t>(&rhs->word_40412));
-    ptree->appendChild("word_40414", new QMoMTreeItem<uint16_t>(&rhs->word_40414));
-    ptree->appendChild("word_40416", new QMoMTreeItem<uint16_t>(&rhs->word_40416));
-    ptree->appendChild("word_40418", new QMoMTreeItem<uint16_t>(&rhs->word_40418));
-    ptree->appendChild("word_4041A", new QMoMTreeItem<uint16_t>(&rhs->word_4041A));
-    ptree->appendChild("word_4041C", new QMoMTreeItem<uint16_t>(&rhs->word_4041C));
-    ptree->appendChild("word_4041E", new QMoMTreeItem<uint16_t>(&rhs->word_4041E));
-    ptree->appendChild("word_40420", new QMoMTreeItem<uint16_t>(&rhs->word_40420));
-    ptree->appendChild("word_40422", new QMoMTreeItem<uint16_t>(&rhs->word_40422));
-    ptree->appendChild("word_40424", new QMoMTreeItem<uint16_t>(&rhs->word_40424));
-    ptree->appendChild("word_40426", new QMoMTreeItem<uint16_t>(&rhs->word_40426));
-    ptree->appendTree(constructTreeItem(&rhs->word_40428, "word_40428"), "");
-    ptree->appendChild("word_4042C", new QMoMTreeItem<uint16_t>(&rhs->word_4042C));
-    ptree->appendChild("w_constant_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_constant_GUESS));
-    ptree->appendChild("w_Game_flow", new QMoMTreeItem<eGameState>(&rhs->w_Game_flow));
-    ptree->appendChild("word_40432", new QMoMTreeItem<uint16_t>(&rhs->word_40432));
-    ptree->appendChild("word_40434", new QMoMTreeItem<uint16_t>(&rhs->word_40434));
-    ptree->appendChild("word_40436", new QMoMTreeItem<uint16_t>(&rhs->word_40436));
-    ptree->appendTree(constructTreeItem(&rhs->addr_events, "addr_events"), "");
-    ptree->appendChild("w_uts_in_stack_ovrland_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_uts_in_stack_ovrland_GUESS));
-    QMoMTreeItemBase* ptreew_Stack_active_GUESS = ptree;
-    if (36 > 3)
-    {
-        ptreew_Stack_active_GUESS = new QMoMTreeItemBase("w_Stack_active_GUESS");
-        ptree->appendTree(ptreew_Stack_active_GUESS, "");
-    }
-    for (unsigned i = 0; i < 36; ++i)
-    {
-          std::ostringstream oss;
-          oss << "w_Stack_active_GUESS[" << i << "]";
-          ptreew_Stack_active_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_Stack_active_GUESS[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_40462 = ptree;
-    if (281 > 3)
-    {
-        ptreebyte_40462 = new QMoMTreeItemBase("byte_40462");
-        ptree->appendTree(ptreebyte_40462, "");
-    }
-    for (unsigned i = 0; i < 281; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40462[" << i << "]";
-          ptreebyte_40462->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40462[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_4057B = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_4057B = new QMoMTreeItemBase("byte_4057B");
-        ptree->appendTree(ptreebyte_4057B, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_4057B[" << i << "]";
-          ptreebyte_4057B->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_4057B[i]));
-    }
-    QMoMTreeItemBase* ptreeb_mess_number = ptree;
-    if (82 > 3)
-    {
-        ptreeb_mess_number = new QMoMTreeItemBase("b_mess_number");
-        ptree->appendTree(ptreeb_mess_number, "");
-    }
-    for (unsigned i = 0; i < 82; ++i)
-    {
-          std::ostringstream oss;
-          oss << "b_mess_number[" << i << "]";
-          ptreeb_mess_number->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->b_mess_number[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_405E2 = ptree;
-    if (82 > 3)
-    {
-        ptreebyte_405E2 = new QMoMTreeItemBase("byte_405E2");
-        ptree->appendTree(ptreebyte_405E2, "");
-    }
-    for (unsigned i = 0; i < 82; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_405E2[" << i << "]";
-          ptreebyte_405E2->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_405E2[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_40634 = ptree;
-    if (82 > 3)
-    {
-        ptreebyte_40634 = new QMoMTreeItemBase("byte_40634");
-        ptree->appendTree(ptreebyte_40634, "");
-    }
-    for (unsigned i = 0; i < 82; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40634[" << i << "]";
-          ptreebyte_40634->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40634[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_40686 = ptree;
-    if (82 > 3)
-    {
-        ptreebyte_40686 = new QMoMTreeItemBase("byte_40686");
-        ptree->appendTree(ptreebyte_40686, "");
-    }
-    for (unsigned i = 0; i < 82; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40686[" << i << "]";
-          ptreebyte_40686->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40686[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_406D8 = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_406D8 = new QMoMTreeItemBase("byte_406D8");
-        ptree->appendTree(ptreebyte_406D8, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_406D8[" << i << "]";
-          ptreebyte_406D8->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_406D8[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_406ED = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_406ED = new QMoMTreeItemBase("byte_406ED");
-        ptree->appendTree(ptreebyte_406ED, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_406ED[" << i << "]";
-          ptreebyte_406ED->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_406ED[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_40702 = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_40702 = new QMoMTreeItemBase("byte_40702");
-        ptree->appendTree(ptreebyte_40702, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40702[" << i << "]";
-          ptreebyte_40702->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40702[i]));
-    }
-    QMoMTreeItemBase* ptreebyte_40717 = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_40717 = new QMoMTreeItemBase("byte_40717");
-        ptree->appendTree(ptreebyte_40717, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40717[" << i << "]";
-          ptreebyte_40717->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->byte_40717[i]));
-    }
-    ptree->appendChild("byte_4072C", new QMoMTreeItem<uint16_t>(&rhs->byte_4072C));
-    ptree->appendChild("w_video_style_CL_BUG_GUESS", new QMoMTreeItem<uint16_t>(&rhs->w_video_style_CL_BUG_GUESS));
-    ptree->appendTree(constructTreeItem(&rhs->dword_40730, "dword_40730"), "");
-    ptree->appendChild("word_40734", new QMoMTreeItem<uint16_t>(&rhs->word_40734));
-    ptree->appendChild("word_40736", new QMoMTreeItem<uint16_t>(&rhs->word_40736));
-    ptree->appendChild("word_40738", new QMoMTreeItem<uint16_t>(&rhs->word_40738));
-    ptree->appendChild("word_4073A", new QMoMTreeItem<uint16_t>(&rhs->word_4073A));
-    ptree->appendTree(constructTreeItem(&rhs->dword_4073C, "dword_4073C"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dword_40740, "dword_40740"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_terrain_Movement_copy, "addr_terrain_Movement_copy"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dword_40748, "dword_40748"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Movement, "addr_Terrain_Movement"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Explored, "addr_Terrain_Explored"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Changes, "addr_Terrain_Changes"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Bonuses, "addr_Terrain_Bonuses"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Cities, "addr_Cities"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Lairs_data, "addr_Lairs_data"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_tower_attr, "addr_tower_attr"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_fortress_data, "addr_fortress_data"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Nodes_Attr, "addr_Nodes_Attr"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_LandMassID, "addr_Terrain_LandMassID"), "");
-    ptree->appendChild("word_40774", new QMoMTreeItem<uint16_t>(&rhs->word_40774));
-    ptree->appendChild("word_40776", new QMoMTreeItem<uint16_t>(&rhs->word_40776));
-    ptree->appendChild("word_40778", new QMoMTreeItem<uint16_t>(&rhs->word_40778));
-    ptree->appendChild("word_4077A", new QMoMTreeItem<uint16_t>(&rhs->word_4077A));
-    ptree->appendTree(constructTreeItem(&rhs->addr_Terrain_Types, "addr_Terrain_Types"), "");
-    QMoMTreeItemBase* ptreeaddr_Unrest_Table = ptree;
-    if (gMAX_RACES > 3)
-    {
-        ptreeaddr_Unrest_Table = new QMoMTreeItemBase("addr_Unrest_Table");
-        ptree->appendTree(ptreeaddr_Unrest_Table, "");
-    }
-    for (unsigned i = 0; i < gMAX_RACES; ++i)
-    {
-          std::ostringstream oss;
-          oss << "addr_Unrest_Table[" << i << "]";
-          ptreeaddr_Unrest_Table->appendTree(constructTreeItem(&rhs->addr_Unrest_Table[i], oss.str().c_str()), "");
-    }
-    ptree->appendChild("word_407B8", new QMoMTreeItem<uint16_t>(&rhs->word_407B8));
-    ptree->appendChild("word_407BA", new QMoMTreeItem<uint16_t>(&rhs->word_407BA));
-    ptree->appendChild("word_407BC", new QMoMTreeItem<uint16_t>(&rhs->word_407BC));
-    ptree->appendChild("word_407BE", new QMoMTreeItem<uint16_t>(&rhs->word_407BE));
-    ptree->appendChild("word_407C0", new QMoMTreeItem<uint16_t>(&rhs->word_407C0));
-    QMoMTreeItemBase* ptreew_Vizier_allowed_GUESS = ptree;
-    if (8 > 3)
-    {
-        ptreew_Vizier_allowed_GUESS = new QMoMTreeItemBase("w_Vizier_allowed_GUESS");
-        ptree->appendTree(ptreew_Vizier_allowed_GUESS, "");
-    }
-    for (unsigned i = 0; i < 8; ++i)
-    {
-          std::ostringstream oss;
-          oss << "w_Vizier_allowed_GUESS[" << i << "]";
-          ptreew_Vizier_allowed_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->w_Vizier_allowed_GUESS[i]));
-    }
-    ptree->appendTree(constructTreeItem(&rhs->dword_407CA, "dword_407CA"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dword_407CE, "dword_407CE"), "");
-    ptree->appendChild("word_407D2", new QMoMTreeItem<uint16_t>(&rhs->word_407D2));
-    ptree->appendChild("word_407D4", new QMoMTreeItem<uint16_t>(&rhs->word_407D4));
-    ptree->appendChild("word_407D6", new QMoMTreeItem<uint16_t>(&rhs->word_407D6));
-    ptree->appendChild("word_407D8", new QMoMTreeItem<uint16_t>(&rhs->word_407D8));
-    ptree->appendChild("word_407DA", new QMoMTreeItem<uint16_t>(&rhs->word_407DA));
-    ptree->appendChild("word_407DC", new QMoMTreeItem<uint16_t>(&rhs->word_407DC));
-    ptree->appendChild("word_407DE", new QMoMTreeItem<uint16_t>(&rhs->word_407DE));
-    ptree->appendChild("word_407E0", new QMoMTreeItem<uint16_t>(&rhs->word_407E0));
-    ptree->appendChild("word_407E2", new QMoMTreeItem<uint16_t>(&rhs->word_407E2));
-    ptree->appendChild("word_407E4", new QMoMTreeItem<uint16_t>(&rhs->word_407E4));
-    ptree->appendChild("word_407E6", new QMoMTreeItem<uint16_t>(&rhs->word_407E6));
-    ptree->appendChild("word_407E8", new QMoMTreeItem<uint16_t>(&rhs->word_407E8));
-    ptree->appendChild("w_AI_stack_nr", new QMoMTreeItem<uint16_t>(&rhs->w_AI_stack_nr));
-    QMoMTreeItemBase* ptreeunk_407EC = ptree;
-    if (320 > 3)
-    {
-        ptreeunk_407EC = new QMoMTreeItemBase("unk_407EC");
-        ptree->appendTree(ptreeunk_407EC, "");
-    }
-    for (unsigned i = 0; i < 320; ++i)
-    {
-          std::ostringstream oss;
-          oss << "unk_407EC[" << i << "]";
-          ptreeunk_407EC->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->unk_407EC[i]));
-    }
-    ptree->appendTree(constructTreeItem(&rhs->dw_Nr_in_stack, "dw_Nr_in_stack"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_stack_place, "dw_stack_place"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_pla_stacks_loc, "dw_pla_stacks_loc"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_Y_stacks_loc, "dw_Y_stacks_loc"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_X_stacks_loc, "dw_X_stacks_loc"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6160, "dw_bx_6160"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_bx_615C, "dw_bx_615C"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6176, "dw_bx_6176"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dw_bx_6154, "dw_bx_6154"), "");
-    ptree->appendChild("word_40950", new QMoMTreeItem<uint16_t>(&rhs->word_40950));
-    ptree->appendChild("word_40952", new QMoMTreeItem<uint16_t>(&rhs->word_40952));
-    ptree->appendChild("word_40954", new QMoMTreeItem<uint16_t>(&rhs->word_40954));
-    ptree->appendChild("word_40956", new QMoMTreeItem<uint16_t>(&rhs->word_40956));
-    ptree->appendChild("word_40958", new QMoMTreeItem<uint16_t>(&rhs->word_40958));
-    ptree->appendChild("word_4095A", new QMoMTreeItem<uint16_t>(&rhs->word_4095A));
-    ptree->appendChild("word_4095C", new QMoMTreeItem<uint16_t>(&rhs->word_4095C));
-    ptree->appendChild("word_4095E", new QMoMTreeItem<uint16_t>(&rhs->word_4095E));
-    ptree->appendChild("word_40960", new QMoMTreeItem<uint16_t>(&rhs->word_40960));
-    ptree->appendTree(constructTreeItem(&rhs->addr_Units, "addr_Units"), "");
-    ptree->appendTree(constructTreeItem(&rhs->dword_40966, "dword_40966"), "");
     return ptree;
 }
 

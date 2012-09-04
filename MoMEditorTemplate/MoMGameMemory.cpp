@@ -39,42 +39,42 @@ struct MoMGamePointers
     char*       m_UnitLevelNameOffsets[6];          // ds:3F46
     char*       m_HeroLevelNameOffsets[9];          // ds:3F52
 
-    Spell_Data*     addr_Spell_Data ; // 912C
-    Item*           addr_Items  ; // 9136
+    Spell_Data*     m_addr_Spell_Data ; // 912C
+    Item*           m_addr_Items  ; // 9136
     UnknownBuf*        addr_item_in_game_GUESS   ; // 913A
-    Battle_Unit*        addr_Battle_Unit_View  ; // 9226
-    Battle_Unit*    addr_Battle_Unit  ; // 922A
-    Spells_Cast_in_Battle*  addr_Spells_Cast_in_Battle   ; // 922E
-    Hero_stats*     addr_Hero_stat[6]   ; // 9232
-    Battlefield*    addr_Battlefield    ; // 9274
+    Battle_Unit*        m_addr_Battle_Unit_View  ; // 9226
+    Battle_Unit*    m_addr_Battle_Unit  ; // 922A
+    Spells_Cast_in_Battle*  m_addr_Spells_Cast_in_Battle   ; // 922E
+    Hero_stats*     m_addr_Hero_stat[6]   ; // 9232
+    Battlefield*    m_addr_Battlefield    ; // 9274
     UnknownBuf*        dword_3FD50 ; // 92B0
     UnknownBuf*        addr_3FDE6  ; // 9346
-    Building_Data*  addr_Building_Data ; // 938C
+    Building_Data*  m_addr_Building_Data ; // 938C
     UnknownBuf*        dword_3FE32 ; // 9392
     UnknownBuf*        word_3FF00  ; // 9460
     UnknownBuf*        word_3FFBE  ; // 951E
     UnknownBuf*        word_3FFC8  ; // 9528
-    UnknownBuf*        addr_city_detailed_GUESS   ; // 9644
+    UnknownBuf*        m_addr_city_detailed_GUESS   ; // 9644
     UnknownBuf*        word_403FE  ; // 995E
     UnknownBuf*        word_40428  ; // 9988
-    Events_Status*  addr_events ; // 9998
+    Events_Status*  m_addr_events ; // 9998
     UnknownBuf*        dword_40730 ; // 9C90
     UnknownBuf*        dword_4073C ; // 9C9C
     UnknownBuf*        dword_40740 ; // 9CA0
-    UnknownBuf*                addr_terrain_Movement_copy   ; // 9CA4
+    UnknownBuf*                m_addr_terrain_Movement_copy   ; // 9CA4
     UnknownBuf*                dword_40748 ; // 9CA8
-    Map_Movement*           addr_Terrain_Movement ; // 9CAC
-    MapRow_Exploration*     addr_Terrain_Explored    ; // 9CB0
-    MapRow_Terrain_Changes* addr_Terrain_Changes  ; // 9CB4
-    MapRow_Bonus*           addr_Terrain_Bonuses    ; // 9CB8
-    City*                   addr_Cities ; // 9CBC
-    Tower_Node_Lair*        addr_Lairs_data   ; // 9CC0
-    Tower_Attr*             addr_tower_attr ; // 9CC4
-    Fortress*               addr_fortress_data    ; // 9CC8
-    Node_Attr*              addr_Nodes_Attr    ; // 9CCC
-    MapRow_LandMassID*      addr_Terrain_LandMassID  ; // 9CD0
-    Map_Tiles*              addr_Terrain_Types ; // 9CDC
-    int8_t*                 addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
+    Map_Movement*           m_addr_Terrain_Movement ; // 9CAC
+    MapRow_Exploration*     m_addr_Terrain_Explored    ; // 9CB0
+    MapRow_Terrain_Changes* m_addr_Terrain_Changes  ; // 9CB4
+    MapRow_Bonus*           m_addr_Terrain_Bonuses    ; // 9CB8
+    City*                   m_addr_Cities ; // 9CBC
+    Tower_Node_Lair*        m_addr_Lairs_data   ; // 9CC0
+    Tower_Attr*             m_addr_tower_attr ; // 9CC4
+    Fortress*               m_addr_fortress_data    ; // 9CC8
+    Node_Attr*              m_addr_Nodes_Attr    ; // 9CCC
+    MapRow_LandMassID*      m_addr_Terrain_LandMassID  ; // 9CD0
+    Map_Tiles*              m_addr_Terrain_Types ; // 9CDC
+    int8_t*                 m_addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
     UnknownBuf*        dword_407CA ; // 9D2A
     UnknownBuf*        dword_407CE ; // 9D2E
     UnknownBuf*        dw_Nr_in_stack  ; // 9E8C
@@ -86,7 +86,7 @@ struct MoMGamePointers
     UnknownBuf*        dw_bx_615C  ; // 9EA4
     UnknownBuf*        dw_bx_6176  ; // 9EA8
     UnknownBuf*        dw_bx_6154  ; // 9EAC
-    Unit*           addr_Units    ; // 9EC2
+    Unit*           m_addr_Units    ; // 9EC2
 
     UnitView_Lines*       m_addr_UnitView_Lines;  // C192
     Battle_Figure*   m_addr_Battle_figures_256;         // D15A
@@ -205,7 +205,7 @@ bool MoMGameMemory::commitData(void* ptr, const void* pNewValue, size_t size)
         }
 
 #define SET_RELOC_POINTER(type, field) \
-        gMoMGamePointers.field = derefHeapPointer<type>(dseg->m_WizardsExe_Pointers.field, 1);
+        gMoMGamePointers.field = derefHeapPointer<type>(dseg->field, 1);
 
 bool MoMGameMemory::readData()
 {
@@ -229,48 +229,48 @@ bool MoMGameMemory::readData()
         SET_ARRAY_OFFSET(m_UnitLevelNameOffsets);
         SET_ARRAY_OFFSET(m_HeroLevelNameOffsets);
 
-        SET_RELOC_POINTER(Spell_Data, addr_Spell_Data);
-        SET_RELOC_POINTER(Item, addr_Items);
+        SET_RELOC_POINTER(Spell_Data, m_addr_Spell_Data);
+        SET_RELOC_POINTER(Item, m_addr_Items);
         SET_RELOC_POINTER(UnknownBuf, addr_item_in_game_GUESS);
-        SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit_View);
-        SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit);
+        SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit_View);
+        SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit);
 
-        SET_RELOC_POINTER(Spells_Cast_in_Battle, addr_Spells_Cast_in_Battle);
-        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Hero_stat); ++i)
+        SET_RELOC_POINTER(Spells_Cast_in_Battle, m_addr_Spells_Cast_in_Battle);
+        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.m_addr_Hero_stat); ++i)
         {
-            SET_RELOC_POINTER(Hero_stats, addr_Hero_stat[i]);
+            SET_RELOC_POINTER(Hero_stats, m_addr_Hero_stat[i]);
         }
-        SET_RELOC_POINTER(Battlefield, addr_Battlefield);
+        SET_RELOC_POINTER(Battlefield, m_addr_Battlefield);
         SET_RELOC_POINTER(UnknownBuf, dword_3FD50);
         SET_RELOC_POINTER(UnknownBuf, addr_3FDE6);
-        SET_RELOC_POINTER(Building_Data, addr_Building_Data);
+        SET_RELOC_POINTER(Building_Data, m_addr_Building_Data);
         SET_RELOC_POINTER(UnknownBuf, dword_3FE32);
         SET_RELOC_POINTER(UnknownBuf, word_3FF00);
         SET_RELOC_POINTER(UnknownBuf, word_3FFBE);
         SET_RELOC_POINTER(UnknownBuf, word_3FFC8);
-        SET_RELOC_POINTER(UnknownBuf, addr_city_detailed_GUESS);
+        SET_RELOC_POINTER(UnknownBuf, m_addr_city_detailed_GUESS);
         SET_RELOC_POINTER(UnknownBuf, word_403FE);
         SET_RELOC_POINTER(UnknownBuf, word_40428);
-        SET_RELOC_POINTER(Events_Status, addr_events);
+        SET_RELOC_POINTER(Events_Status, m_addr_events);
         SET_RELOC_POINTER(UnknownBuf, dword_40730);
         SET_RELOC_POINTER(UnknownBuf, dword_4073C);
         SET_RELOC_POINTER(UnknownBuf, dword_40740);
-        SET_RELOC_POINTER(UnknownBuf, addr_terrain_Movement_copy);
+        SET_RELOC_POINTER(UnknownBuf, m_addr_terrain_Movement_copy);
         SET_RELOC_POINTER(UnknownBuf, dword_40748);
-        SET_RELOC_POINTER(Map_Movement, addr_Terrain_Movement);
-        SET_RELOC_POINTER(MapRow_Exploration, addr_Terrain_Explored);
-        SET_RELOC_POINTER(MapRow_Terrain_Changes, addr_Terrain_Changes);
-        SET_RELOC_POINTER(MapRow_Bonus, addr_Terrain_Bonuses);
-        SET_RELOC_POINTER(City, addr_Cities);
-        SET_RELOC_POINTER(Tower_Node_Lair, addr_Lairs_data);
-        SET_RELOC_POINTER(Tower_Attr, addr_tower_attr);
-        SET_RELOC_POINTER(Fortress, addr_fortress_data);
-        SET_RELOC_POINTER(Node_Attr, addr_Nodes_Attr);
-        SET_RELOC_POINTER(MapRow_LandMassID, addr_Terrain_LandMassID);
-        SET_RELOC_POINTER(Map_Tiles, addr_Terrain_Types);
-        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.addr_Unrest_Table); ++i)
+        SET_RELOC_POINTER(Map_Movement, m_addr_Terrain_Movement);
+        SET_RELOC_POINTER(MapRow_Exploration, m_addr_Terrain_Explored);
+        SET_RELOC_POINTER(MapRow_Terrain_Changes, m_addr_Terrain_Changes);
+        SET_RELOC_POINTER(MapRow_Bonus, m_addr_Terrain_Bonuses);
+        SET_RELOC_POINTER(City, m_addr_Cities);
+        SET_RELOC_POINTER(Tower_Node_Lair, m_addr_Lairs_data);
+        SET_RELOC_POINTER(Tower_Attr, m_addr_tower_attr);
+        SET_RELOC_POINTER(Fortress, m_addr_fortress_data);
+        SET_RELOC_POINTER(Node_Attr, m_addr_Nodes_Attr);
+        SET_RELOC_POINTER(MapRow_LandMassID, m_addr_Terrain_LandMassID);
+        SET_RELOC_POINTER(Map_Tiles, m_addr_Terrain_Types);
+        for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.m_addr_Unrest_Table); ++i)
         {
-            SET_RELOC_POINTER(int8_t, addr_Unrest_Table[i]);
+            SET_RELOC_POINTER(int8_t, m_addr_Unrest_Table[i]);
         }
         SET_RELOC_POINTER(UnknownBuf, dword_407CA);
         SET_RELOC_POINTER(UnknownBuf, dword_407CE);
@@ -283,7 +283,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(UnknownBuf, dw_bx_615C);
         SET_RELOC_POINTER(UnknownBuf, dw_bx_6176);
         SET_RELOC_POINTER(UnknownBuf, dw_bx_6154);
-        SET_RELOC_POINTER(Unit, addr_Units);
+        SET_RELOC_POINTER(Unit, m_addr_Units);
 
         gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView_Lines>(dseg->m_addr_UnitView_Lines, 1);
         gMoMGamePointers.m_addr_Battle_figures_256 = derefHeapPointer<Battle_Figure>(dseg->m_addr_Battle_figures_256, 256);
@@ -345,7 +345,7 @@ Battlefield* MoMGameMemory::getBattlefield()
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
     if (0 == pMoMDataSegment)
         return false;
-    return derefHeapPointer<Battlefield>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battlefield, 1);
+    return derefHeapPointer<Battlefield>(pMoMDataSegment->m_addr_Battlefield, 1);
 }
 
 Battle_Unit* MoMGameMemory::getBattleUnitViewed()
@@ -353,7 +353,7 @@ Battle_Unit* MoMGameMemory::getBattleUnitViewed()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battle_Unit_View, 1);
+    return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_addr_Battle_Unit_View, 1);
 }
 
 uint16_t* MoMGameMemory::getNumber_of_Battle_Units()
@@ -369,7 +369,7 @@ Battle_Unit* MoMGameMemory::getBattle_Units()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
+    return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
 }
 
 City* MoMGameMemory::getCities()
@@ -377,7 +377,7 @@ City* MoMGameMemory::getCities()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<City>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Cities, MoM::gMAX_CITIES);
+    return derefHeapPointer<City>(pMoMDataSegment->m_addr_Cities, MoM::gMAX_CITIES);
 }
 
 MoMDataSegment* MoMGameMemory::getDataSegment()
@@ -393,7 +393,7 @@ Building_Data* MoMGameMemory::getBuildingData()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Building_Data>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Building_Data, eBuilding_MAX);
+    return derefHeapPointer<Building_Data>(pMoMDataSegment->m_addr_Building_Data, eBuilding_MAX);
 }
 
 Events_Status* MoMGameMemory::getEvents_Status()
@@ -401,7 +401,7 @@ Events_Status* MoMGameMemory::getEvents_Status()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Events_Status>(pMoMDataSegment->m_WizardsExe_Pointers.addr_events, 1);
+    return derefHeapPointer<Events_Status>(pMoMDataSegment->m_addr_events, 1);
 }
 
 Fortress* MoMGameMemory::getFortresses()
@@ -409,7 +409,7 @@ Fortress* MoMGameMemory::getFortresses()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-	return derefHeapPointer<Fortress>(pMoMDataSegment->m_WizardsExe_Pointers.addr_fortress_data, gMAX_WIZARD_RECORDS);
+    return derefHeapPointer<Fortress>(pMoMDataSegment->m_addr_fortress_data, gMAX_WIZARD_RECORDS);
 }
 
 std::string MoMGameMemory::getGameDirectory()
@@ -443,7 +443,7 @@ eGameState* MoMGameMemory::getGameState()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return validateStaticPointer(&pMoMDataSegment->m_WizardsExe_Pointers.w_Game_flow, 1);
+    return validateStaticPointer(&pMoMDataSegment->m_Game_flow, 1);
 }
 
 uint16_t* MoMGameMemory::getGameTurn()
@@ -459,7 +459,7 @@ Item* MoMGameMemory::getItems()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Item>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Items, MoM::gMAX_ITEMS);
+    return derefHeapPointer<Item>(pMoMDataSegment->m_addr_Items, MoM::gMAX_ITEMS);
 }
 
 eSpell16* MoMGameMemory::getHero_spells()
@@ -475,7 +475,7 @@ Hero_stats* MoMGameMemory::getList_Hero_stats(ePlayer playerNr)
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Hero_stats>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Hero_stat[playerNr], MoM::gMAX_HERO_TYPES);
+    return derefHeapPointer<Hero_stats>(pMoMDataSegment->m_addr_Hero_stat[playerNr], MoM::gMAX_HERO_TYPES);
 }
 
 Tower_Node_Lair* MoMGameMemory::getLairs()
@@ -483,7 +483,7 @@ Tower_Node_Lair* MoMGameMemory::getLairs()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Tower_Node_Lair>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Lairs_data, MoM::gMAX_NODES_LAIRS_TOWERS);
+    return derefHeapPointer<Tower_Node_Lair>(pMoMDataSegment->m_addr_Lairs_data, MoM::gMAX_NODES_LAIRS_TOWERS);
 }
 
 const char* MoMGameMemory::getNameByOffset(DS_Offset offset)
@@ -544,7 +544,7 @@ Spell_Data* MoMGameMemory::getSpellData()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Spell_Data>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Spell_Data, MoM::eSpell_MAX);
+    return derefHeapPointer<Spell_Data>(pMoMDataSegment->m_addr_Spell_Data, MoM::eSpell_MAX);
 }
 
 Spells_Cast_in_Battle* MoMGameMemory::getSpells_Cast_in_Battle()
@@ -552,7 +552,7 @@ Spells_Cast_in_Battle* MoMGameMemory::getSpells_Cast_in_Battle()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Spells_Cast_in_Battle>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Spells_Cast_in_Battle, 1);
+    return derefHeapPointer<Spells_Cast_in_Battle>(pMoMDataSegment->m_addr_Spells_Cast_in_Battle, 1);
 }
 
 eTerrainBonusDeposit* MoMGameMemory::getTerrain_Bonuses()
@@ -560,7 +560,7 @@ eTerrainBonusDeposit* MoMGameMemory::getTerrain_Bonuses()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eTerrainBonusDeposit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Bonuses,
+    return derefHeapPointer<eTerrainBonusDeposit>(pMoMDataSegment->m_addr_Terrain_Bonuses,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
@@ -569,7 +569,7 @@ Terrain_Changes* MoMGameMemory::getTerrain_Changes()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Terrain_Changes>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Changes,
+    return derefHeapPointer<Terrain_Changes>(pMoMDataSegment->m_addr_Terrain_Changes,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
@@ -578,7 +578,7 @@ uint8_t* MoMGameMemory::getTerrain_Explored()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Explored,
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Terrain_Explored,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
@@ -587,7 +587,7 @@ uint8_t* MoMGameMemory::getTerrain_LandMassID()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_LandMassID,
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Terrain_LandMassID,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
@@ -605,7 +605,7 @@ eTerrainType* MoMGameMemory::getTerrain_Types()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Terrain_Types,
+    return derefHeapPointer<eTerrainType>(pMoMDataSegment->m_addr_Terrain_Types,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
@@ -614,7 +614,7 @@ Unit* MoMGameMemory::getUnits()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Unit>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Units, MoM::gMAX_UNITS);
+    return derefHeapPointer<Unit>(pMoMDataSegment->m_addr_Units, MoM::gMAX_UNITS);
 }
 
 Unit_Type_Data* MoMGameMemory::getUnit_Types()
@@ -638,7 +638,7 @@ int8_t* MoMGameMemory::getUnrest_Table(eRace homeRace)
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<int8_t>(pMoMDataSegment->m_WizardsExe_Pointers.addr_Unrest_Table[homeRace], MoM::gMAX_RACES);
+    return derefHeapPointer<int8_t>(pMoMDataSegment->m_addr_Unrest_Table[homeRace], MoM::gMAX_RACES);
 }
 
 bool MoMGameMemory::openGame(std::auto_ptr<MoMProcess>& momProcess)

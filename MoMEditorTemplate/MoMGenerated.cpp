@@ -5144,7 +5144,672 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_UNK06d[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK06d[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_WizardsExe_Pointers=" << rhs.m_WizardsExe_Pointers << "\n";
+    os << "m_addr_Spell_Data=" << rhs.m_addr_Spell_Data << "\n";
+    os << "word_3FBD0=" << rhs.word_3FBD0 << " 0x" << std::hex << rhs.word_3FBD0 << std::dec << "\n";
+    os << "w_sound_x=" << rhs.w_sound_x << " 0x" << std::hex << rhs.w_sound_x << std::dec << "\n";
+    os << "word_3FBD4=" << rhs.word_3FBD4 << " 0x" << std::hex << rhs.word_3FBD4 << std::dec << "\n";
+    os << "m_addr_Items=" << rhs.m_addr_Items << "\n";
+    os << "addr_item_in_game_GUESS=" << rhs.addr_item_in_game_GUESS << "\n";
+    os << "unk__913E=(\n";
+    for (unsigned i = 0; i < 26; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.unk__913E[i] << " 0x" << std::hex << (unsigned)rhs.unk__913E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "unk_3FBF8=(\n";
+    for (unsigned i = 0; i < 23; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.unk_3FBF8[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FBF8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "unk_3FC0F=(\n";
+    for (unsigned i = 0; i < 183; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.unk_3FC0F[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FC0F[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_addr_Battle_Unit_View=" << rhs.m_addr_Battle_Unit_View << "\n";
+    os << "m_addr_Battle_Unit=" << rhs.m_addr_Battle_Unit << "\n";
+    os << "m_addr_Spells_Cast_in_Battle=" << rhs.m_addr_Spells_Cast_in_Battle << "\n";
+    os << "m_addr_Hero_stat=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_addr_Hero_stat[i] << ",\n";
+    }
+    os << ")\n";
+    os << "w_AI_flees=(\n";
+    for (unsigned i = 0; i < 20; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.w_AI_flees[i] << " 0x" << std::hex << (unsigned)rhs.w_AI_flees[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FCFE=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FCFE[i] << " 0x" << std::hex << (unsigned)rhs.word_3FCFE[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FD08=" << rhs.word_3FD08 << " 0x" << std::hex << rhs.word_3FD08 << std::dec << "\n";
+    os << "word_3FD0A=" << rhs.word_3FD0A << " 0x" << std::hex << rhs.word_3FD0A << std::dec << "\n";
+    os << "word_3FD0C=" << rhs.word_3FD0C << " 0x" << std::hex << rhs.word_3FD0C << std::dec << "\n";
+    os << "word_3FD0E=" << rhs.word_3FD0E << " 0x" << std::hex << rhs.word_3FD0E << std::dec << "\n";
+    os << "word_3FD10=" << rhs.word_3FD10 << " 0x" << std::hex << rhs.word_3FD10 << std::dec << "\n";
+    os << "word_3FD12=" << rhs.word_3FD12 << " 0x" << std::hex << rhs.word_3FD12 << std::dec << "\n";
+    os << "m_addr_Battlefield=" << rhs.m_addr_Battlefield << "\n";
+    os << "word_3FD18=" << rhs.word_3FD18 << " 0x" << std::hex << rhs.word_3FD18 << std::dec << "\n";
+    os << "word_3FD1A=" << rhs.word_3FD1A << " 0x" << std::hex << rhs.word_3FD1A << std::dec << "\n";
+    os << "w_AI_on_the_move_GUESS=" << rhs.w_AI_on_the_move_GUESS << " 0x" << std::hex << rhs.w_AI_on_the_move_GUESS << std::dec << "\n";
+    os << "w_coo_X_Y_clicked=" << rhs.w_coo_X_Y_clicked << " 0x" << std::hex << rhs.w_coo_X_Y_clicked << std::dec << "\n";
+    os << "w_coo_Y_X_clicked=" << rhs.w_coo_Y_X_clicked << " 0x" << std::hex << rhs.w_coo_Y_X_clicked << std::dec << "\n";
+    os << "word_3FD22=" << rhs.word_3FD22 << " 0x" << std::hex << rhs.word_3FD22 << std::dec << "\n";
+    os << "m_clash_place_type=" << rhs.m_clash_place_type << " 0x" << std::hex << rhs.m_clash_place_type << std::dec << "\n";
+    os << "w_clash_place_ID=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.w_clash_place_ID[i] << " 0x" << std::hex << (unsigned)rhs.w_clash_place_ID[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_kyrub_dseg_9294=" << rhs.m_kyrub_dseg_9294 << " 0x" << std::hex << rhs.m_kyrub_dseg_9294 << std::dec << "\n";
+    os << "m_kyrub_dseg_9296=" << rhs.m_kyrub_dseg_9296 << " 0x" << std::hex << rhs.m_kyrub_dseg_9296 << std::dec << "\n";
+    os << "word_3FD38=(\n";
+    for (unsigned i = 0; i < 20; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FD38[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD38[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "w_negat_encha_x17_flag_def=" << rhs.w_negat_encha_x17_flag_def << " 0x" << std::hex << rhs.w_negat_encha_x17_flag_def << std::dec << "\n";
+    os << "w_aggre_spell_color_flag_att=" << rhs.w_aggre_spell_color_flag_att << " 0x" << std::hex << rhs.w_aggre_spell_color_flag_att << std::dec << "\n";
+    os << "dword_3FD50=" << rhs.dword_3FD50 << "\n";
+    os << "word_3FD54=" << rhs.word_3FD54 << " 0x" << std::hex << rhs.word_3FD54 << std::dec << "\n";
+    os << "word_3FD56=(\n";
+    for (unsigned i = 0; i < 64; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FD56[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD56[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FD96=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FD96[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD96[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FD9E=" << rhs.word_3FD9E << " 0x" << std::hex << rhs.word_3FD9E << std::dec << "\n";
+    os << "word_3FDA0=" << rhs.word_3FDA0 << " 0x" << std::hex << rhs.word_3FDA0 << std::dec << "\n";
+    os << "word_3FDA2=" << rhs.word_3FDA2 << " 0x" << std::hex << rhs.word_3FDA2 << std::dec << "\n";
+    os << "word_3FDA4=" << rhs.word_3FDA4 << " 0x" << std::hex << rhs.word_3FDA4 << std::dec << "\n";
+    os << "word_3FDA6=" << rhs.word_3FDA6 << " 0x" << std::hex << rhs.word_3FDA6 << std::dec << "\n";
+    os << "word_3FDA8=" << rhs.word_3FDA8 << " 0x" << std::hex << rhs.word_3FDA8 << std::dec << "\n";
+    os << "word_3FDAA=" << rhs.word_3FDAA << " 0x" << std::hex << rhs.word_3FDAA << std::dec << "\n";
+    os << "word_3FDAC=" << rhs.word_3FDAC << " 0x" << std::hex << rhs.word_3FDAC << std::dec << "\n";
+    os << "word_3FDAE=" << rhs.word_3FDAE << " 0x" << std::hex << rhs.word_3FDAE << std::dec << "\n";
+    os << "word_3FDB0=" << rhs.word_3FDB0 << " 0x" << std::hex << rhs.word_3FDB0 << std::dec << "\n";
+    os << "word_3FDB2=" << rhs.word_3FDB2 << " 0x" << std::hex << rhs.word_3FDB2 << std::dec << "\n";
+    os << "word_3FDB4=" << rhs.word_3FDB4 << " 0x" << std::hex << rhs.word_3FDB4 << std::dec << "\n";
+    os << "word_3FDB6=" << rhs.word_3FDB6 << " 0x" << std::hex << rhs.word_3FDB6 << std::dec << "\n";
+    os << "word_3FDB8=(\n";
+    for (unsigned i = 0; i < 44; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FDB8[i] << " 0x" << std::hex << (unsigned)rhs.word_3FDB8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FDE4=" << rhs.word_3FDE4 << " 0x" << std::hex << rhs.word_3FDE4 << std::dec << "\n";
+    os << "addr_3FDE6=" << rhs.addr_3FDE6 << "\n";
+    os << "word_3FDEA=" << rhs.word_3FDEA << " 0x" << std::hex << rhs.word_3FDEA << std::dec << "\n";
+    os << "word_3FDEC=" << rhs.word_3FDEC << " 0x" << std::hex << rhs.word_3FDEC << std::dec << "\n";
+    os << "word_3FDEE=" << rhs.word_3FDEE << " 0x" << std::hex << rhs.word_3FDEE << std::dec << "\n";
+    os << "word_3FDF0=" << rhs.word_3FDF0 << " 0x" << std::hex << rhs.word_3FDF0 << std::dec << "\n";
+    os << "word_3FDF2=" << rhs.word_3FDF2 << " 0x" << std::hex << rhs.word_3FDF2 << std::dec << "\n";
+    os << "word_3FDF4=" << rhs.word_3FDF4 << " 0x" << std::hex << rhs.word_3FDF4 << std::dec << "\n";
+    os << "word_3FDF6=" << rhs.word_3FDF6 << " 0x" << std::hex << rhs.word_3FDF6 << std::dec << "\n";
+    os << "word_3FDF8=" << rhs.word_3FDF8 << " 0x" << std::hex << rhs.word_3FDF8 << std::dec << "\n";
+    os << "word_3FDFA=" << rhs.word_3FDFA << " 0x" << std::hex << rhs.word_3FDFA << std::dec << "\n";
+    os << "word_3FDFC=" << rhs.word_3FDFC << " 0x" << std::hex << rhs.word_3FDFC << std::dec << "\n";
+    os << "word_3FDFE=" << rhs.word_3FDFE << " 0x" << std::hex << rhs.word_3FDFE << std::dec << "\n";
+    os << "word_3FE00=" << rhs.word_3FE00 << " 0x" << std::hex << rhs.word_3FE00 << std::dec << "\n";
+    os << "word_3FE02=" << rhs.word_3FE02 << " 0x" << std::hex << rhs.word_3FE02 << std::dec << "\n";
+    os << "word_3FE04=" << rhs.word_3FE04 << " 0x" << std::hex << rhs.word_3FE04 << std::dec << "\n";
+    os << "word_3FE06=" << rhs.word_3FE06 << " 0x" << std::hex << rhs.word_3FE06 << std::dec << "\n";
+    os << "word_3FE08=" << rhs.word_3FE08 << " 0x" << std::hex << rhs.word_3FE08 << std::dec << "\n";
+    os << "word_3FE0A=" << rhs.word_3FE0A << " 0x" << std::hex << rhs.word_3FE0A << std::dec << "\n";
+    os << "word_3FE0C=" << rhs.word_3FE0C << " 0x" << std::hex << rhs.word_3FE0C << std::dec << "\n";
+    os << "word_3FE0E=" << rhs.word_3FE0E << " 0x" << std::hex << rhs.word_3FE0E << std::dec << "\n";
+    os << "word_3FE10=" << rhs.word_3FE10 << " 0x" << std::hex << rhs.word_3FE10 << std::dec << "\n";
+    os << "word_3FE12=" << rhs.word_3FE12 << " 0x" << std::hex << rhs.word_3FE12 << std::dec << "\n";
+    os << "word_3FE14=" << rhs.word_3FE14 << " 0x" << std::hex << rhs.word_3FE14 << std::dec << "\n";
+    os << "word_3FE16=" << rhs.word_3FE16 << " 0x" << std::hex << rhs.word_3FE16 << std::dec << "\n";
+    os << "word_3FE18=" << rhs.word_3FE18 << " 0x" << std::hex << rhs.word_3FE18 << std::dec << "\n";
+    os << "word_3FE1A=" << rhs.word_3FE1A << " 0x" << std::hex << rhs.word_3FE1A << std::dec << "\n";
+    os << "word_3FE1C=" << rhs.word_3FE1C << " 0x" << std::hex << rhs.word_3FE1C << std::dec << "\n";
+    os << "word_3FE1E=" << rhs.word_3FE1E << " 0x" << std::hex << rhs.word_3FE1E << std::dec << "\n";
+    os << "word_3FE20=" << rhs.word_3FE20 << " 0x" << std::hex << rhs.word_3FE20 << std::dec << "\n";
+    os << "word_3FE22=" << rhs.word_3FE22 << " 0x" << std::hex << rhs.word_3FE22 << std::dec << "\n";
+    os << "word_3FE24=" << rhs.word_3FE24 << " 0x" << std::hex << rhs.word_3FE24 << std::dec << "\n";
+    os << "word_3FE26=" << rhs.word_3FE26 << " 0x" << std::hex << rhs.word_3FE26 << std::dec << "\n";
+    os << "word_3FE28=" << rhs.word_3FE28 << " 0x" << std::hex << rhs.word_3FE28 << std::dec << "\n";
+    os << "word_3FE2A=" << rhs.word_3FE2A << " 0x" << std::hex << rhs.word_3FE2A << std::dec << "\n";
+    os << "m_addr_Building_Data=" << rhs.m_addr_Building_Data << "\n";
+    os << "word_3FE30=" << rhs.word_3FE30 << " 0x" << std::hex << rhs.word_3FE30 << std::dec << "\n";
+    os << "dword_3FE32=" << rhs.dword_3FE32 << "\n";
+    os << "dword_3FE36=(\n";
+    for (unsigned i = 0; i < 126; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.dword_3FE36[i] << " 0x" << std::hex << (unsigned)rhs.dword_3FE36[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FEB4=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FEB4[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEB4[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FEBA=(\n";
+    for (unsigned i = 0; i < 18; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FEBA[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEBA[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FECC=(\n";
+    for (unsigned i = 0; i < 22; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FECC[i] << " 0x" << std::hex << (unsigned)rhs.word_3FECC[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FEE2=" << rhs.word_3FEE2 << " 0x" << std::hex << rhs.word_3FEE2 << std::dec << "\n";
+    os << "w_all_units_moved_GUESS=" << rhs.w_all_units_moved_GUESS << " 0x" << std::hex << rhs.w_all_units_moved_GUESS << std::dec << "\n";
+    os << "word_3FEE6=" << rhs.word_3FEE6 << " 0x" << std::hex << rhs.word_3FEE6 << std::dec << "\n";
+    os << "word_3FEE8=" << rhs.word_3FEE8 << " 0x" << std::hex << rhs.word_3FEE8 << std::dec << "\n";
+    os << "word_3FEEA=" << rhs.word_3FEEA << " 0x" << std::hex << rhs.word_3FEEA << std::dec << "\n";
+    os << "word_3FEEC=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FEEC[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEEC[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FEF2=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FEF2[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEF2[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FF00=" << rhs.word_3FF00 << "\n";
+    os << "word_3FF04=" << rhs.word_3FF04 << " 0x" << std::hex << rhs.word_3FF04 << std::dec << "\n";
+    os << "word_3FF06=" << rhs.word_3FF06 << " 0x" << std::hex << rhs.word_3FF06 << std::dec << "\n";
+    os << "word_3FF08=" << rhs.word_3FF08 << " 0x" << std::hex << rhs.word_3FF08 << std::dec << "\n";
+    os << "word_3FF0A=" << rhs.word_3FF0A << " 0x" << std::hex << rhs.word_3FF0A << std::dec << "\n";
+    os << "word_3FF0C=" << rhs.word_3FF0C << " 0x" << std::hex << rhs.word_3FF0C << std::dec << "\n";
+    os << "word_3FF0E=" << rhs.word_3FF0E << " 0x" << std::hex << rhs.word_3FF0E << std::dec << "\n";
+    os << "word_3FF10=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FF10[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF10[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FF1E=" << rhs.word_3FF1E << " 0x" << std::hex << rhs.word_3FF1E << std::dec << "\n";
+    os << "word_3FF20=" << rhs.word_3FF20 << " 0x" << std::hex << rhs.word_3FF20 << std::dec << "\n";
+    os << "word_3FF22=" << rhs.word_3FF22 << " 0x" << std::hex << rhs.word_3FF22 << std::dec << "\n";
+    os << "word_3FF24=" << rhs.word_3FF24 << " 0x" << std::hex << rhs.word_3FF24 << std::dec << "\n";
+    os << "word_3FF26=" << rhs.word_3FF26 << " 0x" << std::hex << rhs.word_3FF26 << std::dec << "\n";
+    os << "word_3FF28=" << rhs.word_3FF28 << " 0x" << std::hex << rhs.word_3FF28 << std::dec << "\n";
+    os << "word_3FF2A=" << rhs.word_3FF2A << " 0x" << std::hex << rhs.word_3FF2A << std::dec << "\n";
+    os << "word_3FF2C=" << rhs.word_3FF2C << " 0x" << std::hex << rhs.word_3FF2C << std::dec << "\n";
+    os << "word_3FF2E=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FF2E[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF2E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FF34=" << rhs.word_3FF34 << " 0x" << std::hex << rhs.word_3FF34 << std::dec << "\n";
+    os << "word_3FF36=" << rhs.word_3FF36 << " 0x" << std::hex << rhs.word_3FF36 << std::dec << "\n";
+    os << "word_3FF38=" << rhs.word_3FF38 << " 0x" << std::hex << rhs.word_3FF38 << std::dec << "\n";
+    os << "word_3FF3A=" << rhs.word_3FF3A << " 0x" << std::hex << rhs.word_3FF3A << std::dec << "\n";
+    os << "word_3FF3C=" << rhs.word_3FF3C << " 0x" << std::hex << rhs.word_3FF3C << std::dec << "\n";
+    os << "word_3FF3E=" << rhs.word_3FF3E << " 0x" << std::hex << rhs.word_3FF3E << std::dec << "\n";
+    os << "word_3FF40=" << rhs.word_3FF40 << " 0x" << std::hex << rhs.word_3FF40 << std::dec << "\n";
+    os << "word_3FF42=" << rhs.word_3FF42 << " 0x" << std::hex << rhs.word_3FF42 << std::dec << "\n";
+    os << "word_3FF44=" << rhs.word_3FF44 << " 0x" << std::hex << rhs.word_3FF44 << std::dec << "\n";
+    os << "word_3FF46=" << rhs.word_3FF46 << " 0x" << std::hex << rhs.word_3FF46 << std::dec << "\n";
+    os << "word_3FF48=" << rhs.word_3FF48 << " 0x" << std::hex << rhs.word_3FF48 << std::dec << "\n";
+    os << "word_3FF4A=" << rhs.word_3FF4A << " 0x" << std::hex << rhs.word_3FF4A << std::dec << "\n";
+    os << "word_3FF4C=(\n";
+    for (unsigned i = 0; i < 58; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FF4C[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF4C[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FF86=" << rhs.word_3FF86 << " 0x" << std::hex << rhs.word_3FF86 << std::dec << "\n";
+    os << "word_3FF88=" << rhs.word_3FF88 << " 0x" << std::hex << rhs.word_3FF88 << std::dec << "\n";
+    os << "word_3FF8A=" << rhs.word_3FF8A << " 0x" << std::hex << rhs.word_3FF8A << std::dec << "\n";
+    os << "word_3FF8C=" << rhs.word_3FF8C << " 0x" << std::hex << rhs.word_3FF8C << std::dec << "\n";
+    os << "word_3FF8E=" << rhs.word_3FF8E << " 0x" << std::hex << rhs.word_3FF8E << std::dec << "\n";
+    os << "word_3FF90=(\n";
+    for (unsigned i = 0; i < 30; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FF90[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF90[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FFAE=" << rhs.word_3FFAE << " 0x" << std::hex << rhs.word_3FFAE << std::dec << "\n";
+    os << "word_3FFB0=" << rhs.word_3FFB0 << " 0x" << std::hex << rhs.word_3FFB0 << std::dec << "\n";
+    os << "word_3FFB2=" << rhs.word_3FFB2 << " 0x" << std::hex << rhs.word_3FFB2 << std::dec << "\n";
+    os << "word_3FFB4=" << rhs.word_3FFB4 << " 0x" << std::hex << rhs.word_3FFB4 << std::dec << "\n";
+    os << "word_3FFB6=" << rhs.word_3FFB6 << " 0x" << std::hex << rhs.word_3FFB6 << std::dec << "\n";
+    os << "word_3FFB8=" << rhs.word_3FFB8 << " 0x" << std::hex << rhs.word_3FFB8 << std::dec << "\n";
+    os << "word_3FFBA=" << rhs.word_3FFBA << " 0x" << std::hex << rhs.word_3FFBA << std::dec << "\n";
+    os << "word_3FFBC=" << rhs.word_3FFBC << " 0x" << std::hex << rhs.word_3FFBC << std::dec << "\n";
+    os << "word_3FFBE=" << rhs.word_3FFBE << "\n";
+    os << "word_3FFC2=" << rhs.word_3FFC2 << " 0x" << std::hex << rhs.word_3FFC2 << std::dec << "\n";
+    os << "word_3FFC4=" << rhs.word_3FFC4 << " 0x" << std::hex << rhs.word_3FFC4 << std::dec << "\n";
+    os << "word_3FFC6=" << rhs.word_3FFC6 << " 0x" << std::hex << rhs.word_3FFC6 << std::dec << "\n";
+    os << "word_3FFC8=" << rhs.word_3FFC8 << "\n";
+    os << "word_3FFCC=" << rhs.word_3FFCC << " 0x" << std::hex << rhs.word_3FFCC << std::dec << "\n";
+    os << "word_3FFCE=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FFCE[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFCE[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FFDC=" << rhs.word_3FFDC << " 0x" << std::hex << rhs.word_3FFDC << std::dec << "\n";
+    os << "word_3FFDE=" << rhs.word_3FFDE << " 0x" << std::hex << rhs.word_3FFDE << std::dec << "\n";
+    os << "word_3FFE0=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FFE0[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFE0[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_3FFE8=(\n";
+    for (unsigned i = 0; i < 38; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_3FFE8[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFE8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_4000E=" << rhs.word_4000E << " 0x" << std::hex << rhs.word_4000E << std::dec << "\n";
+    os << "word_40010=" << rhs.word_40010 << " 0x" << std::hex << rhs.word_40010 << std::dec << "\n";
+    os << "word_40012=" << rhs.word_40012 << " 0x" << std::hex << rhs.word_40012 << std::dec << "\n";
+    os << "word_40014=" << rhs.word_40014 << " 0x" << std::hex << rhs.word_40014 << std::dec << "\n";
+    os << "word_40016=" << rhs.word_40016 << " 0x" << std::hex << rhs.word_40016 << std::dec << "\n";
+    os << "word_40018=" << rhs.word_40018 << " 0x" << std::hex << rhs.word_40018 << std::dec << "\n";
+    os << "word_4001A=" << rhs.word_4001A << " 0x" << std::hex << rhs.word_4001A << std::dec << "\n";
+    os << "word_4001C=" << rhs.word_4001C << " 0x" << std::hex << rhs.word_4001C << std::dec << "\n";
+    os << "word_4001E=" << rhs.word_4001E << " 0x" << std::hex << rhs.word_4001E << std::dec << "\n";
+    os << "word_40020=" << rhs.word_40020 << " 0x" << std::hex << rhs.word_40020 << std::dec << "\n";
+    os << "word_40022=" << rhs.word_40022 << " 0x" << std::hex << rhs.word_40022 << std::dec << "\n";
+    os << "word_40024=" << rhs.word_40024 << " 0x" << std::hex << rhs.word_40024 << std::dec << "\n";
+    os << "word_40026=" << rhs.word_40026 << " 0x" << std::hex << rhs.word_40026 << std::dec << "\n";
+    os << "word_40028=" << rhs.word_40028 << " 0x" << std::hex << rhs.word_40028 << std::dec << "\n";
+    os << "word_4002A=" << rhs.word_4002A << " 0x" << std::hex << rhs.word_4002A << std::dec << "\n";
+    os << "word_4002C=" << rhs.word_4002C << " 0x" << std::hex << rhs.word_4002C << std::dec << "\n";
+    os << "word_4002E=(\n";
+    for (unsigned i = 0; i < 28; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4002E[i] << " 0x" << std::hex << (unsigned)rhs.word_4002E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_4004A=" << rhs.word_4004A << " 0x" << std::hex << rhs.word_4004A << std::dec << "\n";
+    os << "word_4004C=" << rhs.word_4004C << " 0x" << std::hex << rhs.word_4004C << std::dec << "\n";
+    os << "word_4004E=" << rhs.word_4004E << " 0x" << std::hex << rhs.word_4004E << std::dec << "\n";
+    os << "word_40050=" << rhs.word_40050 << " 0x" << std::hex << rhs.word_40050 << std::dec << "\n";
+    os << "word_40052=" << rhs.word_40052 << " 0x" << std::hex << rhs.word_40052 << std::dec << "\n";
+    os << "word_40054=" << rhs.word_40054 << " 0x" << std::hex << rhs.word_40054 << std::dec << "\n";
+    os << "word_40056=" << rhs.word_40056 << " 0x" << std::hex << rhs.word_40056 << std::dec << "\n";
+    os << "word_40058=" << rhs.word_40058 << " 0x" << std::hex << rhs.word_40058 << std::dec << "\n";
+    os << "word_4005A=" << rhs.word_4005A << " 0x" << std::hex << rhs.word_4005A << std::dec << "\n";
+    os << "word_4005C=" << rhs.word_4005C << " 0x" << std::hex << rhs.word_4005C << std::dec << "\n";
+    os << "word_4005E=" << rhs.word_4005E << " 0x" << std::hex << rhs.word_4005E << std::dec << "\n";
+    os << "word_40060=" << rhs.word_40060 << " 0x" << std::hex << rhs.word_40060 << std::dec << "\n";
+    os << "word_40062=(\n";
+    for (unsigned i = 0; i < 12; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40062[i] << " 0x" << std::hex << (unsigned)rhs.word_40062[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_4006E=(\n";
+    for (unsigned i = 0; i < 34; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4006E[i] << " 0x" << std::hex << (unsigned)rhs.word_4006E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40090=" << rhs.word_40090 << " 0x" << std::hex << rhs.word_40090 << std::dec << "\n";
+    os << "word_40092=(\n";
+    for (unsigned i = 0; i < 82; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40092[i] << " 0x" << std::hex << (unsigned)rhs.word_40092[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_addr_city_detailed_GUESS=" << rhs.m_addr_city_detailed_GUESS << "\n";
+    os << "word_400E8=(\n";
+    for (unsigned i = 0; i < 244; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_400E8[i] << " 0x" << std::hex << (unsigned)rhs.word_400E8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_401DC=" << rhs.word_401DC << " 0x" << std::hex << rhs.word_401DC << std::dec << "\n";
+    os << "word_401DE=" << rhs.word_401DE << " 0x" << std::hex << rhs.word_401DE << std::dec << "\n";
+    os << "word_401E0=" << rhs.word_401E0 << " 0x" << std::hex << rhs.word_401E0 << std::dec << "\n";
+    os << "word_401E2=" << rhs.word_401E2 << " 0x" << std::hex << rhs.word_401E2 << std::dec << "\n";
+    os << "word_401E4=" << rhs.word_401E4 << " 0x" << std::hex << rhs.word_401E4 << std::dec << "\n";
+    os << "word_401E6=" << rhs.word_401E6 << " 0x" << std::hex << rhs.word_401E6 << std::dec << "\n";
+    os << "word_401E8=" << rhs.word_401E8 << " 0x" << std::hex << rhs.word_401E8 << std::dec << "\n";
+    os << "word_401EA=" << rhs.word_401EA << " 0x" << std::hex << rhs.word_401EA << std::dec << "\n";
+    os << "word_401EC=" << rhs.word_401EC << " 0x" << std::hex << rhs.word_401EC << std::dec << "\n";
+    os << "word_401EE=" << rhs.word_401EE << " 0x" << std::hex << rhs.word_401EE << std::dec << "\n";
+    os << "word_401F0=" << rhs.word_401F0 << " 0x" << std::hex << rhs.word_401F0 << std::dec << "\n";
+    os << "word_401F2=" << rhs.word_401F2 << " 0x" << std::hex << rhs.word_401F2 << std::dec << "\n";
+    os << "word_401F4=" << rhs.word_401F4 << " 0x" << std::hex << rhs.word_401F4 << std::dec << "\n";
+    os << "word_401F6=" << rhs.word_401F6 << " 0x" << std::hex << rhs.word_401F6 << std::dec << "\n";
+    os << "word_401F8=" << rhs.word_401F8 << " 0x" << std::hex << rhs.word_401F8 << std::dec << "\n";
+    os << "word_401FA=" << rhs.word_401FA << " 0x" << std::hex << rhs.word_401FA << std::dec << "\n";
+    os << "word_401FC=" << rhs.word_401FC << " 0x" << std::hex << rhs.word_401FC << std::dec << "\n";
+    os << "word_401FE=" << rhs.word_401FE << " 0x" << std::hex << rhs.word_401FE << std::dec << "\n";
+    os << "word_40200=" << rhs.word_40200 << " 0x" << std::hex << rhs.word_40200 << std::dec << "\n";
+    os << "word_40202=" << rhs.word_40202 << " 0x" << std::hex << rhs.word_40202 << std::dec << "\n";
+    os << "word_40204=" << rhs.word_40204 << " 0x" << std::hex << rhs.word_40204 << std::dec << "\n";
+    os << "word_40206=" << rhs.word_40206 << " 0x" << std::hex << rhs.word_40206 << std::dec << "\n";
+    os << "word_40208=" << rhs.word_40208 << " 0x" << std::hex << rhs.word_40208 << std::dec << "\n";
+    os << "word_4020A=" << rhs.word_4020A << " 0x" << std::hex << rhs.word_4020A << std::dec << "\n";
+    os << "word_4020C=(\n";
+    for (unsigned i = 0; i < 38; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4020C[i] << " 0x" << std::hex << (unsigned)rhs.word_4020C[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40232=" << rhs.word_40232 << " 0x" << std::hex << rhs.word_40232 << std::dec << "\n";
+    os << "word_40234=" << rhs.word_40234 << " 0x" << std::hex << rhs.word_40234 << std::dec << "\n";
+    os << "word_40236=" << rhs.word_40236 << " 0x" << std::hex << rhs.word_40236 << std::dec << "\n";
+    os << "word_40238=" << rhs.word_40238 << " 0x" << std::hex << rhs.word_40238 << std::dec << "\n";
+    os << "word_4023A=" << rhs.word_4023A << " 0x" << std::hex << rhs.word_4023A << std::dec << "\n";
+    os << "word_4023C=" << rhs.word_4023C << " 0x" << std::hex << rhs.word_4023C << std::dec << "\n";
+    os << "word_4023E=" << rhs.word_4023E << " 0x" << std::hex << rhs.word_4023E << std::dec << "\n";
+    os << "word_40240=" << rhs.word_40240 << " 0x" << std::hex << rhs.word_40240 << std::dec << "\n";
+    os << "word_40242=(\n";
+    for (unsigned i = 0; i < 18; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40242[i] << " 0x" << std::hex << (unsigned)rhs.word_40242[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40254=" << rhs.word_40254 << " 0x" << std::hex << rhs.word_40254 << std::dec << "\n";
+    os << "word_40256=" << rhs.word_40256 << " 0x" << std::hex << rhs.word_40256 << std::dec << "\n";
+    os << "word_40258=" << rhs.word_40258 << " 0x" << std::hex << rhs.word_40258 << std::dec << "\n";
+    os << "word_4025A=(\n";
+    for (unsigned i = 0; i < 50; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4025A[i] << " 0x" << std::hex << (unsigned)rhs.word_4025A[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_4028C=" << rhs.word_4028C << " 0x" << std::hex << rhs.word_4028C << std::dec << "\n";
+    os << "word_4028E=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4028E[i] << " 0x" << std::hex << (unsigned)rhs.word_4028E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40298=" << rhs.word_40298 << " 0x" << std::hex << rhs.word_40298 << std::dec << "\n";
+    os << "word_4029A=" << rhs.word_4029A << " 0x" << std::hex << rhs.word_4029A << std::dec << "\n";
+    os << "word_4029C=" << rhs.word_4029C << " 0x" << std::hex << rhs.word_4029C << std::dec << "\n";
+    os << "word_4029E=(\n";
+    for (unsigned i = 0; i < 34; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4029E[i] << " 0x" << std::hex << (unsigned)rhs.word_4029E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_402C0=(\n";
+    for (unsigned i = 0; i < 32; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_402C0[i] << " 0x" << std::hex << (unsigned)rhs.word_402C0[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_402E0=" << rhs.word_402E0 << " 0x" << std::hex << rhs.word_402E0 << std::dec << "\n";
+    os << "word_402E2=(\n";
+    for (unsigned i = 0; i < 36; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_402E2[i] << " 0x" << std::hex << (unsigned)rhs.word_402E2[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40306=(\n";
+    for (unsigned i = 0; i < 120; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40306[i] << " 0x" << std::hex << (unsigned)rhs.word_40306[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_4037E=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_4037E[i] << " 0x" << std::hex << (unsigned)rhs.word_4037E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40388=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40388[i] << " 0x" << std::hex << (unsigned)rhs.word_40388[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_40392=" << rhs.word_40392 << " 0x" << std::hex << rhs.word_40392 << std::dec << "\n";
+    os << "word_40394=(\n";
+    for (unsigned i = 0; i < 20; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_40394[i] << " 0x" << std::hex << (unsigned)rhs.word_40394[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_403A8=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_403A8[i] << " 0x" << std::hex << (unsigned)rhs.word_403A8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_403AE=(\n";
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_403AE[i] << " 0x" << std::hex << (unsigned)rhs.word_403AE[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_403B8=" << rhs.word_403B8 << " 0x" << std::hex << rhs.word_403B8 << std::dec << "\n";
+    os << "word_403BA=" << rhs.word_403BA << " 0x" << std::hex << rhs.word_403BA << std::dec << "\n";
+    os << "word_403BC=" << rhs.word_403BC << " 0x" << std::hex << rhs.word_403BC << std::dec << "\n";
+    os << "word_403BE=" << rhs.word_403BE << " 0x" << std::hex << rhs.word_403BE << std::dec << "\n";
+    os << "word_403C0=" << rhs.word_403C0 << " 0x" << std::hex << rhs.word_403C0 << std::dec << "\n";
+    os << "word_403C2=(\n";
+    for (unsigned i = 0; i < 20; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.word_403C2[i] << " 0x" << std::hex << (unsigned)rhs.word_403C2[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "word_403D6=" << rhs.word_403D6 << " 0x" << std::hex << rhs.word_403D6 << std::dec << "\n";
+    os << "word_403D8=" << rhs.word_403D8 << " 0x" << std::hex << rhs.word_403D8 << std::dec << "\n";
+    os << "word_403DA=" << rhs.word_403DA << " 0x" << std::hex << rhs.word_403DA << std::dec << "\n";
+    os << "word_403DC=" << rhs.word_403DC << " 0x" << std::hex << rhs.word_403DC << std::dec << "\n";
+    os << "word_403DE=" << rhs.word_403DE << " 0x" << std::hex << rhs.word_403DE << std::dec << "\n";
+    os << "word_403E0=" << rhs.word_403E0 << " 0x" << std::hex << rhs.word_403E0 << std::dec << "\n";
+    os << "word_403E2=" << rhs.word_403E2 << " 0x" << std::hex << rhs.word_403E2 << std::dec << "\n";
+    os << "word_403E4=" << rhs.word_403E4 << " 0x" << std::hex << rhs.word_403E4 << std::dec << "\n";
+    os << "word_403E6=" << rhs.word_403E6 << " 0x" << std::hex << rhs.word_403E6 << std::dec << "\n";
+    os << "word_403E8=" << rhs.word_403E8 << " 0x" << std::hex << rhs.word_403E8 << std::dec << "\n";
+    os << "word_403EA=" << rhs.word_403EA << " 0x" << std::hex << rhs.word_403EA << std::dec << "\n";
+    os << "word_403EC=" << rhs.word_403EC << " 0x" << std::hex << rhs.word_403EC << std::dec << "\n";
+    os << "word_403EE=" << rhs.word_403EE << " 0x" << std::hex << rhs.word_403EE << std::dec << "\n";
+    os << "word_403F0=" << rhs.word_403F0 << " 0x" << std::hex << rhs.word_403F0 << std::dec << "\n";
+    os << "word_403F2=" << rhs.word_403F2 << " 0x" << std::hex << rhs.word_403F2 << std::dec << "\n";
+    os << "word_403F4=" << rhs.word_403F4 << " 0x" << std::hex << rhs.word_403F4 << std::dec << "\n";
+    os << "word_403F6=" << rhs.word_403F6 << " 0x" << std::hex << rhs.word_403F6 << std::dec << "\n";
+    os << "word_403F8=" << rhs.word_403F8 << " 0x" << std::hex << rhs.word_403F8 << std::dec << "\n";
+    os << "word_403FA=" << rhs.word_403FA << " 0x" << std::hex << rhs.word_403FA << std::dec << "\n";
+    os << "word_403FC=" << rhs.word_403FC << " 0x" << std::hex << rhs.word_403FC << std::dec << "\n";
+    os << "word_403FE=" << rhs.word_403FE << "\n";
+    os << "word_40402=" << rhs.word_40402 << " 0x" << std::hex << rhs.word_40402 << std::dec << "\n";
+    os << "word_40404=" << rhs.word_40404 << " 0x" << std::hex << rhs.word_40404 << std::dec << "\n";
+    os << "word_40406=" << rhs.word_40406 << " 0x" << std::hex << rhs.word_40406 << std::dec << "\n";
+    os << "word_40408=" << rhs.word_40408 << " 0x" << std::hex << rhs.word_40408 << std::dec << "\n";
+    os << "word_4040A=" << rhs.word_4040A << " 0x" << std::hex << rhs.word_4040A << std::dec << "\n";
+    os << "word_4040C=" << rhs.word_4040C << " 0x" << std::hex << rhs.word_4040C << std::dec << "\n";
+    os << "word_4040E=" << rhs.word_4040E << " 0x" << std::hex << rhs.word_4040E << std::dec << "\n";
+    os << "word_40410=" << rhs.word_40410 << " 0x" << std::hex << rhs.word_40410 << std::dec << "\n";
+    os << "word_40412=" << rhs.word_40412 << " 0x" << std::hex << rhs.word_40412 << std::dec << "\n";
+    os << "word_40414=" << rhs.word_40414 << " 0x" << std::hex << rhs.word_40414 << std::dec << "\n";
+    os << "word_40416=" << rhs.word_40416 << " 0x" << std::hex << rhs.word_40416 << std::dec << "\n";
+    os << "word_40418=" << rhs.word_40418 << " 0x" << std::hex << rhs.word_40418 << std::dec << "\n";
+    os << "word_4041A=" << rhs.word_4041A << " 0x" << std::hex << rhs.word_4041A << std::dec << "\n";
+    os << "word_4041C=" << rhs.word_4041C << " 0x" << std::hex << rhs.word_4041C << std::dec << "\n";
+    os << "word_4041E=" << rhs.word_4041E << " 0x" << std::hex << rhs.word_4041E << std::dec << "\n";
+    os << "word_40420=" << rhs.word_40420 << " 0x" << std::hex << rhs.word_40420 << std::dec << "\n";
+    os << "word_40422=" << rhs.word_40422 << " 0x" << std::hex << rhs.word_40422 << std::dec << "\n";
+    os << "word_40424=" << rhs.word_40424 << " 0x" << std::hex << rhs.word_40424 << std::dec << "\n";
+    os << "word_40426=" << rhs.word_40426 << " 0x" << std::hex << rhs.word_40426 << std::dec << "\n";
+    os << "word_40428=" << rhs.word_40428 << "\n";
+    os << "word_4042C=" << rhs.word_4042C << " 0x" << std::hex << rhs.word_4042C << std::dec << "\n";
+    os << "w_constant_GUESS=" << rhs.w_constant_GUESS << " 0x" << std::hex << rhs.w_constant_GUESS << std::dec << "\n";
+    os << "m_Game_flow=" << rhs.m_Game_flow << "\n";
+    os << "word_40432=" << rhs.word_40432 << " 0x" << std::hex << rhs.word_40432 << std::dec << "\n";
+    os << "word_40434=" << rhs.word_40434 << " 0x" << std::hex << rhs.word_40434 << std::dec << "\n";
+    os << "word_40436=" << rhs.word_40436 << " 0x" << std::hex << rhs.word_40436 << std::dec << "\n";
+    os << "m_addr_events=" << rhs.m_addr_events << "\n";
+    os << "w_uts_in_stack_ovrland_GUESS=" << rhs.w_uts_in_stack_ovrland_GUESS << " 0x" << std::hex << rhs.w_uts_in_stack_ovrland_GUESS << std::dec << "\n";
+    os << "w_Stack_active_GUESS=(\n";
+    for (unsigned i = 0; i < 36; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.w_Stack_active_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Stack_active_GUESS[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_40462=(\n";
+    for (unsigned i = 0; i < 281; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_40462[i] << " 0x" << std::hex << (unsigned)rhs.byte_40462[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_4057B=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_4057B[i] << " 0x" << std::hex << (unsigned)rhs.byte_4057B[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "b_mess_number=(\n";
+    for (unsigned i = 0; i < 82; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.b_mess_number[i] << " 0x" << std::hex << (unsigned)rhs.b_mess_number[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_405E2=(\n";
+    for (unsigned i = 0; i < 82; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_405E2[i] << " 0x" << std::hex << (unsigned)rhs.byte_405E2[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_40634=(\n";
+    for (unsigned i = 0; i < 82; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_40634[i] << " 0x" << std::hex << (unsigned)rhs.byte_40634[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_40686=(\n";
+    for (unsigned i = 0; i < 82; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_40686[i] << " 0x" << std::hex << (unsigned)rhs.byte_40686[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_406D8=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_406D8[i] << " 0x" << std::hex << (unsigned)rhs.byte_406D8[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_406ED=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_406ED[i] << " 0x" << std::hex << (unsigned)rhs.byte_406ED[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_40702=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_40702[i] << " 0x" << std::hex << (unsigned)rhs.byte_40702[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_40717=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.byte_40717[i] << " 0x" << std::hex << (unsigned)rhs.byte_40717[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "byte_4072C=" << rhs.byte_4072C << " 0x" << std::hex << rhs.byte_4072C << std::dec << "\n";
+    os << "w_video_style_CL_BUG_GUESS=" << rhs.w_video_style_CL_BUG_GUESS << " 0x" << std::hex << rhs.w_video_style_CL_BUG_GUESS << std::dec << "\n";
+    os << "dword_40730=" << rhs.dword_40730 << "\n";
+    os << "word_40734=" << rhs.word_40734 << " 0x" << std::hex << rhs.word_40734 << std::dec << "\n";
+    os << "word_40736=" << rhs.word_40736 << " 0x" << std::hex << rhs.word_40736 << std::dec << "\n";
+    os << "word_40738=" << rhs.word_40738 << " 0x" << std::hex << rhs.word_40738 << std::dec << "\n";
+    os << "word_4073A=" << rhs.word_4073A << " 0x" << std::hex << rhs.word_4073A << std::dec << "\n";
+    os << "dword_4073C=" << rhs.dword_4073C << "\n";
+    os << "dword_40740=" << rhs.dword_40740 << "\n";
+    os << "m_addr_terrain_Movement_copy=" << rhs.m_addr_terrain_Movement_copy << "\n";
+    os << "dword_40748=" << rhs.dword_40748 << "\n";
+    os << "m_addr_Terrain_Movement=" << rhs.m_addr_Terrain_Movement << "\n";
+    os << "m_addr_Terrain_Explored=" << rhs.m_addr_Terrain_Explored << "\n";
+    os << "m_addr_Terrain_Changes=" << rhs.m_addr_Terrain_Changes << "\n";
+    os << "m_addr_Terrain_Bonuses=" << rhs.m_addr_Terrain_Bonuses << "\n";
+    os << "m_addr_Cities=" << rhs.m_addr_Cities << "\n";
+    os << "m_addr_Lairs_data=" << rhs.m_addr_Lairs_data << "\n";
+    os << "m_addr_tower_attr=" << rhs.m_addr_tower_attr << "\n";
+    os << "m_addr_fortress_data=" << rhs.m_addr_fortress_data << "\n";
+    os << "m_addr_Nodes_Attr=" << rhs.m_addr_Nodes_Attr << "\n";
+    os << "m_addr_Terrain_LandMassID=" << rhs.m_addr_Terrain_LandMassID << "\n";
+    os << "word_40774=" << rhs.word_40774 << " 0x" << std::hex << rhs.word_40774 << std::dec << "\n";
+    os << "word_40776=" << rhs.word_40776 << " 0x" << std::hex << rhs.word_40776 << std::dec << "\n";
+    os << "word_40778=" << rhs.word_40778 << " 0x" << std::hex << rhs.word_40778 << std::dec << "\n";
+    os << "word_4077A=" << rhs.word_4077A << " 0x" << std::hex << rhs.word_4077A << std::dec << "\n";
+    os << "m_addr_Terrain_Types=" << rhs.m_addr_Terrain_Types << "\n";
+    os << "m_addr_Unrest_Table=(\n";
+    for (unsigned i = 0; i < gMAX_RACES; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_addr_Unrest_Table[i] << ",\n";
+    }
+    os << ")\n";
+    os << "word_407B8=" << rhs.word_407B8 << " 0x" << std::hex << rhs.word_407B8 << std::dec << "\n";
+    os << "word_407BA=" << rhs.word_407BA << " 0x" << std::hex << rhs.word_407BA << std::dec << "\n";
+    os << "word_407BC=" << rhs.word_407BC << " 0x" << std::hex << rhs.word_407BC << std::dec << "\n";
+    os << "word_407BE=" << rhs.word_407BE << " 0x" << std::hex << rhs.word_407BE << std::dec << "\n";
+    os << "word_407C0=" << rhs.word_407C0 << " 0x" << std::hex << rhs.word_407C0 << std::dec << "\n";
+    os << "w_Vizier_allowed_GUESS=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "dword_407CA=" << rhs.dword_407CA << "\n";
+    os << "dword_407CE=" << rhs.dword_407CE << "\n";
+    os << "word_407D2=" << rhs.word_407D2 << " 0x" << std::hex << rhs.word_407D2 << std::dec << "\n";
+    os << "word_407D4=" << rhs.word_407D4 << " 0x" << std::hex << rhs.word_407D4 << std::dec << "\n";
+    os << "word_407D6=" << rhs.word_407D6 << " 0x" << std::hex << rhs.word_407D6 << std::dec << "\n";
+    os << "word_407D8=" << rhs.word_407D8 << " 0x" << std::hex << rhs.word_407D8 << std::dec << "\n";
+    os << "word_407DA=" << rhs.word_407DA << " 0x" << std::hex << rhs.word_407DA << std::dec << "\n";
+    os << "word_407DC=" << rhs.word_407DC << " 0x" << std::hex << rhs.word_407DC << std::dec << "\n";
+    os << "word_407DE=" << rhs.word_407DE << " 0x" << std::hex << rhs.word_407DE << std::dec << "\n";
+    os << "word_407E0=" << rhs.word_407E0 << " 0x" << std::hex << rhs.word_407E0 << std::dec << "\n";
+    os << "word_407E2=" << rhs.word_407E2 << " 0x" << std::hex << rhs.word_407E2 << std::dec << "\n";
+    os << "word_407E4=" << rhs.word_407E4 << " 0x" << std::hex << rhs.word_407E4 << std::dec << "\n";
+    os << "word_407E6=" << rhs.word_407E6 << " 0x" << std::hex << rhs.word_407E6 << std::dec << "\n";
+    os << "word_407E8=" << rhs.word_407E8 << " 0x" << std::hex << rhs.word_407E8 << std::dec << "\n";
+    os << "w_AI_stack_nr=" << rhs.w_AI_stack_nr << " 0x" << std::hex << rhs.w_AI_stack_nr << std::dec << "\n";
+    os << "unk_407EC=(\n";
+    for (unsigned i = 0; i < 320; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.unk_407EC[i] << " 0x" << std::hex << (unsigned)rhs.unk_407EC[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "dw_Nr_in_stack=" << rhs.dw_Nr_in_stack << "\n";
+    os << "dw_stack_place=" << rhs.dw_stack_place << "\n";
+    os << "dw_pla_stacks_loc=" << rhs.dw_pla_stacks_loc << "\n";
+    os << "dw_Y_stacks_loc=" << rhs.dw_Y_stacks_loc << "\n";
+    os << "dw_X_stacks_loc=" << rhs.dw_X_stacks_loc << "\n";
+    os << "dw_bx_6160=" << rhs.dw_bx_6160 << "\n";
+    os << "dw_bx_615C=" << rhs.dw_bx_615C << "\n";
+    os << "dw_bx_6176=" << rhs.dw_bx_6176 << "\n";
+    os << "dw_bx_6154=" << rhs.dw_bx_6154 << "\n";
+    os << "word_40950=" << rhs.word_40950 << " 0x" << std::hex << rhs.word_40950 << std::dec << "\n";
+    os << "word_40952=" << rhs.word_40952 << " 0x" << std::hex << rhs.word_40952 << std::dec << "\n";
+    os << "word_40954=" << rhs.word_40954 << " 0x" << std::hex << rhs.word_40954 << std::dec << "\n";
+    os << "word_40956=" << rhs.word_40956 << " 0x" << std::hex << rhs.word_40956 << std::dec << "\n";
+    os << "word_40958=" << rhs.word_40958 << " 0x" << std::hex << rhs.word_40958 << std::dec << "\n";
+    os << "word_4095A=" << rhs.word_4095A << " 0x" << std::hex << rhs.word_4095A << std::dec << "\n";
+    os << "word_4095C=" << rhs.word_4095C << " 0x" << std::hex << rhs.word_4095C << std::dec << "\n";
+    os << "word_4095E=" << rhs.word_4095E << " 0x" << std::hex << rhs.word_4095E << std::dec << "\n";
+    os << "word_40960=" << rhs.word_40960 << " 0x" << std::hex << rhs.word_40960 << std::dec << "\n";
+    os << "m_addr_Units=" << rhs.m_addr_Units << "\n";
+    os << "dword_40966=" << rhs.dword_40966 << "\n";
     os << "m_Wizards=(\n";
     for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
     {
@@ -6702,679 +7367,6 @@ std::ostream& operator<<(std::ostream& os, const WizardsExe_Game_Data140m& rhs)
     os << "m_Magic_Powerful_setting=" << rhs.m_Magic_Powerful_setting << "\n";
     os << "m_Land_Size_setting=" << rhs.m_Land_Size_setting << "\n";
     os << "m_Number_of_Wizards=" << rhs.m_Number_of_Wizards << " 0x" << std::hex << rhs.m_Number_of_Wizards << std::dec << "\n";
-    os << "}";
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const WizardsExe_Pointers& rhs)
-{
-    os << "{\n";
-    os << "addr_Spell_Data=" << rhs.addr_Spell_Data << "\n";
-    os << "word_3FBD0=" << rhs.word_3FBD0 << " 0x" << std::hex << rhs.word_3FBD0 << std::dec << "\n";
-    os << "w_sound_x=" << rhs.w_sound_x << " 0x" << std::hex << rhs.w_sound_x << std::dec << "\n";
-    os << "word_3FBD4=" << rhs.word_3FBD4 << " 0x" << std::hex << rhs.word_3FBD4 << std::dec << "\n";
-    os << "addr_Items=" << rhs.addr_Items << "\n";
-    os << "addr_item_in_game_GUESS=" << rhs.addr_item_in_game_GUESS << "\n";
-    os << "unk__913E=(\n";
-    for (unsigned i = 0; i < 26; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk__913E[i] << " 0x" << std::hex << (unsigned)rhs.unk__913E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "unk_3FBF8=(\n";
-    for (unsigned i = 0; i < 23; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk_3FBF8[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FBF8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "unk_3FC0F=(\n";
-    for (unsigned i = 0; i < 183; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk_3FC0F[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FC0F[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "addr_Battle_Unit_View=" << rhs.addr_Battle_Unit_View << "\n";
-    os << "addr_Battle_Unit=" << rhs.addr_Battle_Unit << "\n";
-    os << "addr_Spells_Cast_in_Battle=" << rhs.addr_Spells_Cast_in_Battle << "\n";
-    os << "addr_Hero_stat=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << rhs.addr_Hero_stat[i] << ",\n";
-    }
-    os << ")\n";
-    os << "w_AI_flees=(\n";
-    for (unsigned i = 0; i < 20; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.w_AI_flees[i] << " 0x" << std::hex << (unsigned)rhs.w_AI_flees[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FCFE=(\n";
-    for (unsigned i = 0; i < 10; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FCFE[i] << " 0x" << std::hex << (unsigned)rhs.word_3FCFE[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FD08=" << rhs.word_3FD08 << " 0x" << std::hex << rhs.word_3FD08 << std::dec << "\n";
-    os << "word_3FD0A=" << rhs.word_3FD0A << " 0x" << std::hex << rhs.word_3FD0A << std::dec << "\n";
-    os << "word_3FD0C=" << rhs.word_3FD0C << " 0x" << std::hex << rhs.word_3FD0C << std::dec << "\n";
-    os << "word_3FD0E=" << rhs.word_3FD0E << " 0x" << std::hex << rhs.word_3FD0E << std::dec << "\n";
-    os << "word_3FD10=" << rhs.word_3FD10 << " 0x" << std::hex << rhs.word_3FD10 << std::dec << "\n";
-    os << "word_3FD12=" << rhs.word_3FD12 << " 0x" << std::hex << rhs.word_3FD12 << std::dec << "\n";
-    os << "addr_Battlefield=" << rhs.addr_Battlefield << "\n";
-    os << "word_3FD18=" << rhs.word_3FD18 << " 0x" << std::hex << rhs.word_3FD18 << std::dec << "\n";
-    os << "word_3FD1A=" << rhs.word_3FD1A << " 0x" << std::hex << rhs.word_3FD1A << std::dec << "\n";
-    os << "w_AI_on_the_move_GUESS=" << rhs.w_AI_on_the_move_GUESS << " 0x" << std::hex << rhs.w_AI_on_the_move_GUESS << std::dec << "\n";
-    os << "w_coo_X_Y_clicked=" << rhs.w_coo_X_Y_clicked << " 0x" << std::hex << rhs.w_coo_X_Y_clicked << std::dec << "\n";
-    os << "w_coo_Y_X_clicked=" << rhs.w_coo_Y_X_clicked << " 0x" << std::hex << rhs.w_coo_Y_X_clicked << std::dec << "\n";
-    os << "word_3FD22=" << rhs.word_3FD22 << " 0x" << std::hex << rhs.word_3FD22 << std::dec << "\n";
-    os << "w_clash_place_type=" << rhs.w_clash_place_type << " 0x" << std::hex << rhs.w_clash_place_type << std::dec << "\n";
-    os << "w_clash_place_ID=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.w_clash_place_ID[i] << " 0x" << std::hex << (unsigned)rhs.w_clash_place_ID[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "w_kyrub_dseg_9294=" << rhs.w_kyrub_dseg_9294 << " 0x" << std::hex << rhs.w_kyrub_dseg_9294 << std::dec << "\n";
-    os << "w_kyrub_dseg_9296=" << rhs.w_kyrub_dseg_9296 << " 0x" << std::hex << rhs.w_kyrub_dseg_9296 << std::dec << "\n";
-    os << "word_3FD38=(\n";
-    for (unsigned i = 0; i < 20; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FD38[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD38[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "w_negat_encha_x17_flag_def=" << rhs.w_negat_encha_x17_flag_def << " 0x" << std::hex << rhs.w_negat_encha_x17_flag_def << std::dec << "\n";
-    os << "w_aggre_spell_color_flag_att=" << rhs.w_aggre_spell_color_flag_att << " 0x" << std::hex << rhs.w_aggre_spell_color_flag_att << std::dec << "\n";
-    os << "dword_3FD50=" << rhs.dword_3FD50 << "\n";
-    os << "word_3FD54=" << rhs.word_3FD54 << " 0x" << std::hex << rhs.word_3FD54 << std::dec << "\n";
-    os << "word_3FD56=(\n";
-    for (unsigned i = 0; i < 64; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FD56[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD56[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FD96=(\n";
-    for (unsigned i = 0; i < 8; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FD96[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD96[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FD9E=" << rhs.word_3FD9E << " 0x" << std::hex << rhs.word_3FD9E << std::dec << "\n";
-    os << "word_3FDA0=" << rhs.word_3FDA0 << " 0x" << std::hex << rhs.word_3FDA0 << std::dec << "\n";
-    os << "word_3FDA2=" << rhs.word_3FDA2 << " 0x" << std::hex << rhs.word_3FDA2 << std::dec << "\n";
-    os << "word_3FDA4=" << rhs.word_3FDA4 << " 0x" << std::hex << rhs.word_3FDA4 << std::dec << "\n";
-    os << "word_3FDA6=" << rhs.word_3FDA6 << " 0x" << std::hex << rhs.word_3FDA6 << std::dec << "\n";
-    os << "word_3FDA8=" << rhs.word_3FDA8 << " 0x" << std::hex << rhs.word_3FDA8 << std::dec << "\n";
-    os << "word_3FDAA=" << rhs.word_3FDAA << " 0x" << std::hex << rhs.word_3FDAA << std::dec << "\n";
-    os << "word_3FDAC=" << rhs.word_3FDAC << " 0x" << std::hex << rhs.word_3FDAC << std::dec << "\n";
-    os << "word_3FDAE=" << rhs.word_3FDAE << " 0x" << std::hex << rhs.word_3FDAE << std::dec << "\n";
-    os << "word_3FDB0=" << rhs.word_3FDB0 << " 0x" << std::hex << rhs.word_3FDB0 << std::dec << "\n";
-    os << "word_3FDB2=" << rhs.word_3FDB2 << " 0x" << std::hex << rhs.word_3FDB2 << std::dec << "\n";
-    os << "word_3FDB4=" << rhs.word_3FDB4 << " 0x" << std::hex << rhs.word_3FDB4 << std::dec << "\n";
-    os << "word_3FDB6=" << rhs.word_3FDB6 << " 0x" << std::hex << rhs.word_3FDB6 << std::dec << "\n";
-    os << "word_3FDB8=(\n";
-    for (unsigned i = 0; i < 44; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FDB8[i] << " 0x" << std::hex << (unsigned)rhs.word_3FDB8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FDE4=" << rhs.word_3FDE4 << " 0x" << std::hex << rhs.word_3FDE4 << std::dec << "\n";
-    os << "addr_3FDE6=" << rhs.addr_3FDE6 << "\n";
-    os << "word_3FDEA=" << rhs.word_3FDEA << " 0x" << std::hex << rhs.word_3FDEA << std::dec << "\n";
-    os << "word_3FDEC=" << rhs.word_3FDEC << " 0x" << std::hex << rhs.word_3FDEC << std::dec << "\n";
-    os << "word_3FDEE=" << rhs.word_3FDEE << " 0x" << std::hex << rhs.word_3FDEE << std::dec << "\n";
-    os << "word_3FDF0=" << rhs.word_3FDF0 << " 0x" << std::hex << rhs.word_3FDF0 << std::dec << "\n";
-    os << "word_3FDF2=" << rhs.word_3FDF2 << " 0x" << std::hex << rhs.word_3FDF2 << std::dec << "\n";
-    os << "word_3FDF4=" << rhs.word_3FDF4 << " 0x" << std::hex << rhs.word_3FDF4 << std::dec << "\n";
-    os << "word_3FDF6=" << rhs.word_3FDF6 << " 0x" << std::hex << rhs.word_3FDF6 << std::dec << "\n";
-    os << "word_3FDF8=" << rhs.word_3FDF8 << " 0x" << std::hex << rhs.word_3FDF8 << std::dec << "\n";
-    os << "word_3FDFA=" << rhs.word_3FDFA << " 0x" << std::hex << rhs.word_3FDFA << std::dec << "\n";
-    os << "word_3FDFC=" << rhs.word_3FDFC << " 0x" << std::hex << rhs.word_3FDFC << std::dec << "\n";
-    os << "word_3FDFE=" << rhs.word_3FDFE << " 0x" << std::hex << rhs.word_3FDFE << std::dec << "\n";
-    os << "word_3FE00=" << rhs.word_3FE00 << " 0x" << std::hex << rhs.word_3FE00 << std::dec << "\n";
-    os << "word_3FE02=" << rhs.word_3FE02 << " 0x" << std::hex << rhs.word_3FE02 << std::dec << "\n";
-    os << "word_3FE04=" << rhs.word_3FE04 << " 0x" << std::hex << rhs.word_3FE04 << std::dec << "\n";
-    os << "word_3FE06=" << rhs.word_3FE06 << " 0x" << std::hex << rhs.word_3FE06 << std::dec << "\n";
-    os << "word_3FE08=" << rhs.word_3FE08 << " 0x" << std::hex << rhs.word_3FE08 << std::dec << "\n";
-    os << "word_3FE0A=" << rhs.word_3FE0A << " 0x" << std::hex << rhs.word_3FE0A << std::dec << "\n";
-    os << "word_3FE0C=" << rhs.word_3FE0C << " 0x" << std::hex << rhs.word_3FE0C << std::dec << "\n";
-    os << "word_3FE0E=" << rhs.word_3FE0E << " 0x" << std::hex << rhs.word_3FE0E << std::dec << "\n";
-    os << "word_3FE10=" << rhs.word_3FE10 << " 0x" << std::hex << rhs.word_3FE10 << std::dec << "\n";
-    os << "word_3FE12=" << rhs.word_3FE12 << " 0x" << std::hex << rhs.word_3FE12 << std::dec << "\n";
-    os << "word_3FE14=" << rhs.word_3FE14 << " 0x" << std::hex << rhs.word_3FE14 << std::dec << "\n";
-    os << "word_3FE16=" << rhs.word_3FE16 << " 0x" << std::hex << rhs.word_3FE16 << std::dec << "\n";
-    os << "word_3FE18=" << rhs.word_3FE18 << " 0x" << std::hex << rhs.word_3FE18 << std::dec << "\n";
-    os << "word_3FE1A=" << rhs.word_3FE1A << " 0x" << std::hex << rhs.word_3FE1A << std::dec << "\n";
-    os << "word_3FE1C=" << rhs.word_3FE1C << " 0x" << std::hex << rhs.word_3FE1C << std::dec << "\n";
-    os << "word_3FE1E=" << rhs.word_3FE1E << " 0x" << std::hex << rhs.word_3FE1E << std::dec << "\n";
-    os << "word_3FE20=" << rhs.word_3FE20 << " 0x" << std::hex << rhs.word_3FE20 << std::dec << "\n";
-    os << "word_3FE22=" << rhs.word_3FE22 << " 0x" << std::hex << rhs.word_3FE22 << std::dec << "\n";
-    os << "word_3FE24=" << rhs.word_3FE24 << " 0x" << std::hex << rhs.word_3FE24 << std::dec << "\n";
-    os << "word_3FE26=" << rhs.word_3FE26 << " 0x" << std::hex << rhs.word_3FE26 << std::dec << "\n";
-    os << "word_3FE28=" << rhs.word_3FE28 << " 0x" << std::hex << rhs.word_3FE28 << std::dec << "\n";
-    os << "word_3FE2A=" << rhs.word_3FE2A << " 0x" << std::hex << rhs.word_3FE2A << std::dec << "\n";
-    os << "addr_Building_Data=" << rhs.addr_Building_Data << "\n";
-    os << "word_3FE30=" << rhs.word_3FE30 << " 0x" << std::hex << rhs.word_3FE30 << std::dec << "\n";
-    os << "dword_3FE32=" << rhs.dword_3FE32 << "\n";
-    os << "dword_3FE36=(\n";
-    for (unsigned i = 0; i < 126; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.dword_3FE36[i] << " 0x" << std::hex << (unsigned)rhs.dword_3FE36[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FEB4=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FEB4[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEB4[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FEBA=(\n";
-    for (unsigned i = 0; i < 18; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FEBA[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEBA[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FECC=(\n";
-    for (unsigned i = 0; i < 22; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FECC[i] << " 0x" << std::hex << (unsigned)rhs.word_3FECC[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FEE2=" << rhs.word_3FEE2 << " 0x" << std::hex << rhs.word_3FEE2 << std::dec << "\n";
-    os << "w_all_units_moved_GUESS=" << rhs.w_all_units_moved_GUESS << " 0x" << std::hex << rhs.w_all_units_moved_GUESS << std::dec << "\n";
-    os << "word_3FEE6=" << rhs.word_3FEE6 << " 0x" << std::hex << rhs.word_3FEE6 << std::dec << "\n";
-    os << "word_3FEE8=" << rhs.word_3FEE8 << " 0x" << std::hex << rhs.word_3FEE8 << std::dec << "\n";
-    os << "word_3FEEA=" << rhs.word_3FEEA << " 0x" << std::hex << rhs.word_3FEEA << std::dec << "\n";
-    os << "word_3FEEC=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FEEC[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEEC[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FEF2=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FEF2[i] << " 0x" << std::hex << (unsigned)rhs.word_3FEF2[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FF00=" << rhs.word_3FF00 << "\n";
-    os << "word_3FF04=" << rhs.word_3FF04 << " 0x" << std::hex << rhs.word_3FF04 << std::dec << "\n";
-    os << "word_3FF06=" << rhs.word_3FF06 << " 0x" << std::hex << rhs.word_3FF06 << std::dec << "\n";
-    os << "word_3FF08=" << rhs.word_3FF08 << " 0x" << std::hex << rhs.word_3FF08 << std::dec << "\n";
-    os << "word_3FF0A=" << rhs.word_3FF0A << " 0x" << std::hex << rhs.word_3FF0A << std::dec << "\n";
-    os << "word_3FF0C=" << rhs.word_3FF0C << " 0x" << std::hex << rhs.word_3FF0C << std::dec << "\n";
-    os << "word_3FF0E=" << rhs.word_3FF0E << " 0x" << std::hex << rhs.word_3FF0E << std::dec << "\n";
-    os << "word_3FF10=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FF10[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF10[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FF1E=" << rhs.word_3FF1E << " 0x" << std::hex << rhs.word_3FF1E << std::dec << "\n";
-    os << "word_3FF20=" << rhs.word_3FF20 << " 0x" << std::hex << rhs.word_3FF20 << std::dec << "\n";
-    os << "word_3FF22=" << rhs.word_3FF22 << " 0x" << std::hex << rhs.word_3FF22 << std::dec << "\n";
-    os << "word_3FF24=" << rhs.word_3FF24 << " 0x" << std::hex << rhs.word_3FF24 << std::dec << "\n";
-    os << "word_3FF26=" << rhs.word_3FF26 << " 0x" << std::hex << rhs.word_3FF26 << std::dec << "\n";
-    os << "word_3FF28=" << rhs.word_3FF28 << " 0x" << std::hex << rhs.word_3FF28 << std::dec << "\n";
-    os << "word_3FF2A=" << rhs.word_3FF2A << " 0x" << std::hex << rhs.word_3FF2A << std::dec << "\n";
-    os << "word_3FF2C=" << rhs.word_3FF2C << " 0x" << std::hex << rhs.word_3FF2C << std::dec << "\n";
-    os << "word_3FF2E=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FF2E[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF2E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FF34=" << rhs.word_3FF34 << " 0x" << std::hex << rhs.word_3FF34 << std::dec << "\n";
-    os << "word_3FF36=" << rhs.word_3FF36 << " 0x" << std::hex << rhs.word_3FF36 << std::dec << "\n";
-    os << "word_3FF38=" << rhs.word_3FF38 << " 0x" << std::hex << rhs.word_3FF38 << std::dec << "\n";
-    os << "word_3FF3A=" << rhs.word_3FF3A << " 0x" << std::hex << rhs.word_3FF3A << std::dec << "\n";
-    os << "word_3FF3C=" << rhs.word_3FF3C << " 0x" << std::hex << rhs.word_3FF3C << std::dec << "\n";
-    os << "word_3FF3E=" << rhs.word_3FF3E << " 0x" << std::hex << rhs.word_3FF3E << std::dec << "\n";
-    os << "word_3FF40=" << rhs.word_3FF40 << " 0x" << std::hex << rhs.word_3FF40 << std::dec << "\n";
-    os << "word_3FF42=" << rhs.word_3FF42 << " 0x" << std::hex << rhs.word_3FF42 << std::dec << "\n";
-    os << "word_3FF44=" << rhs.word_3FF44 << " 0x" << std::hex << rhs.word_3FF44 << std::dec << "\n";
-    os << "word_3FF46=" << rhs.word_3FF46 << " 0x" << std::hex << rhs.word_3FF46 << std::dec << "\n";
-    os << "word_3FF48=" << rhs.word_3FF48 << " 0x" << std::hex << rhs.word_3FF48 << std::dec << "\n";
-    os << "word_3FF4A=" << rhs.word_3FF4A << " 0x" << std::hex << rhs.word_3FF4A << std::dec << "\n";
-    os << "word_3FF4C=(\n";
-    for (unsigned i = 0; i < 58; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FF4C[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF4C[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FF86=" << rhs.word_3FF86 << " 0x" << std::hex << rhs.word_3FF86 << std::dec << "\n";
-    os << "word_3FF88=" << rhs.word_3FF88 << " 0x" << std::hex << rhs.word_3FF88 << std::dec << "\n";
-    os << "word_3FF8A=" << rhs.word_3FF8A << " 0x" << std::hex << rhs.word_3FF8A << std::dec << "\n";
-    os << "word_3FF8C=" << rhs.word_3FF8C << " 0x" << std::hex << rhs.word_3FF8C << std::dec << "\n";
-    os << "word_3FF8E=" << rhs.word_3FF8E << " 0x" << std::hex << rhs.word_3FF8E << std::dec << "\n";
-    os << "word_3FF90=(\n";
-    for (unsigned i = 0; i < 30; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FF90[i] << " 0x" << std::hex << (unsigned)rhs.word_3FF90[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FFAE=" << rhs.word_3FFAE << " 0x" << std::hex << rhs.word_3FFAE << std::dec << "\n";
-    os << "word_3FFB0=" << rhs.word_3FFB0 << " 0x" << std::hex << rhs.word_3FFB0 << std::dec << "\n";
-    os << "word_3FFB2=" << rhs.word_3FFB2 << " 0x" << std::hex << rhs.word_3FFB2 << std::dec << "\n";
-    os << "word_3FFB4=" << rhs.word_3FFB4 << " 0x" << std::hex << rhs.word_3FFB4 << std::dec << "\n";
-    os << "word_3FFB6=" << rhs.word_3FFB6 << " 0x" << std::hex << rhs.word_3FFB6 << std::dec << "\n";
-    os << "word_3FFB8=" << rhs.word_3FFB8 << " 0x" << std::hex << rhs.word_3FFB8 << std::dec << "\n";
-    os << "word_3FFBA=" << rhs.word_3FFBA << " 0x" << std::hex << rhs.word_3FFBA << std::dec << "\n";
-    os << "word_3FFBC=" << rhs.word_3FFBC << " 0x" << std::hex << rhs.word_3FFBC << std::dec << "\n";
-    os << "word_3FFBE=" << rhs.word_3FFBE << "\n";
-    os << "word_3FFC2=" << rhs.word_3FFC2 << " 0x" << std::hex << rhs.word_3FFC2 << std::dec << "\n";
-    os << "word_3FFC4=" << rhs.word_3FFC4 << " 0x" << std::hex << rhs.word_3FFC4 << std::dec << "\n";
-    os << "word_3FFC6=" << rhs.word_3FFC6 << " 0x" << std::hex << rhs.word_3FFC6 << std::dec << "\n";
-    os << "word_3FFC8=" << rhs.word_3FFC8 << "\n";
-    os << "word_3FFCC=" << rhs.word_3FFCC << " 0x" << std::hex << rhs.word_3FFCC << std::dec << "\n";
-    os << "word_3FFCE=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FFCE[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFCE[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FFDC=" << rhs.word_3FFDC << " 0x" << std::hex << rhs.word_3FFDC << std::dec << "\n";
-    os << "word_3FFDE=" << rhs.word_3FFDE << " 0x" << std::hex << rhs.word_3FFDE << std::dec << "\n";
-    os << "word_3FFE0=(\n";
-    for (unsigned i = 0; i < 8; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FFE0[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFE0[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_3FFE8=(\n";
-    for (unsigned i = 0; i < 38; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_3FFE8[i] << " 0x" << std::hex << (unsigned)rhs.word_3FFE8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_4000E=" << rhs.word_4000E << " 0x" << std::hex << rhs.word_4000E << std::dec << "\n";
-    os << "word_40010=" << rhs.word_40010 << " 0x" << std::hex << rhs.word_40010 << std::dec << "\n";
-    os << "word_40012=" << rhs.word_40012 << " 0x" << std::hex << rhs.word_40012 << std::dec << "\n";
-    os << "word_40014=" << rhs.word_40014 << " 0x" << std::hex << rhs.word_40014 << std::dec << "\n";
-    os << "word_40016=" << rhs.word_40016 << " 0x" << std::hex << rhs.word_40016 << std::dec << "\n";
-    os << "word_40018=" << rhs.word_40018 << " 0x" << std::hex << rhs.word_40018 << std::dec << "\n";
-    os << "word_4001A=" << rhs.word_4001A << " 0x" << std::hex << rhs.word_4001A << std::dec << "\n";
-    os << "word_4001C=" << rhs.word_4001C << " 0x" << std::hex << rhs.word_4001C << std::dec << "\n";
-    os << "word_4001E=" << rhs.word_4001E << " 0x" << std::hex << rhs.word_4001E << std::dec << "\n";
-    os << "word_40020=" << rhs.word_40020 << " 0x" << std::hex << rhs.word_40020 << std::dec << "\n";
-    os << "word_40022=" << rhs.word_40022 << " 0x" << std::hex << rhs.word_40022 << std::dec << "\n";
-    os << "word_40024=" << rhs.word_40024 << " 0x" << std::hex << rhs.word_40024 << std::dec << "\n";
-    os << "word_40026=" << rhs.word_40026 << " 0x" << std::hex << rhs.word_40026 << std::dec << "\n";
-    os << "word_40028=" << rhs.word_40028 << " 0x" << std::hex << rhs.word_40028 << std::dec << "\n";
-    os << "word_4002A=" << rhs.word_4002A << " 0x" << std::hex << rhs.word_4002A << std::dec << "\n";
-    os << "word_4002C=" << rhs.word_4002C << " 0x" << std::hex << rhs.word_4002C << std::dec << "\n";
-    os << "word_4002E=(\n";
-    for (unsigned i = 0; i < 28; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4002E[i] << " 0x" << std::hex << (unsigned)rhs.word_4002E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_4004A=" << rhs.word_4004A << " 0x" << std::hex << rhs.word_4004A << std::dec << "\n";
-    os << "word_4004C=" << rhs.word_4004C << " 0x" << std::hex << rhs.word_4004C << std::dec << "\n";
-    os << "word_4004E=" << rhs.word_4004E << " 0x" << std::hex << rhs.word_4004E << std::dec << "\n";
-    os << "word_40050=" << rhs.word_40050 << " 0x" << std::hex << rhs.word_40050 << std::dec << "\n";
-    os << "word_40052=" << rhs.word_40052 << " 0x" << std::hex << rhs.word_40052 << std::dec << "\n";
-    os << "word_40054=" << rhs.word_40054 << " 0x" << std::hex << rhs.word_40054 << std::dec << "\n";
-    os << "word_40056=" << rhs.word_40056 << " 0x" << std::hex << rhs.word_40056 << std::dec << "\n";
-    os << "word_40058=" << rhs.word_40058 << " 0x" << std::hex << rhs.word_40058 << std::dec << "\n";
-    os << "word_4005A=" << rhs.word_4005A << " 0x" << std::hex << rhs.word_4005A << std::dec << "\n";
-    os << "word_4005C=" << rhs.word_4005C << " 0x" << std::hex << rhs.word_4005C << std::dec << "\n";
-    os << "word_4005E=" << rhs.word_4005E << " 0x" << std::hex << rhs.word_4005E << std::dec << "\n";
-    os << "word_40060=" << rhs.word_40060 << " 0x" << std::hex << rhs.word_40060 << std::dec << "\n";
-    os << "word_40062=(\n";
-    for (unsigned i = 0; i < 12; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40062[i] << " 0x" << std::hex << (unsigned)rhs.word_40062[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_4006E=(\n";
-    for (unsigned i = 0; i < 34; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4006E[i] << " 0x" << std::hex << (unsigned)rhs.word_4006E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40090=" << rhs.word_40090 << " 0x" << std::hex << rhs.word_40090 << std::dec << "\n";
-    os << "word_40092=(\n";
-    for (unsigned i = 0; i < 82; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40092[i] << " 0x" << std::hex << (unsigned)rhs.word_40092[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "addr_city_detailed_GUESS=" << rhs.addr_city_detailed_GUESS << "\n";
-    os << "word_400E8=(\n";
-    for (unsigned i = 0; i < 244; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_400E8[i] << " 0x" << std::hex << (unsigned)rhs.word_400E8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_401DC=" << rhs.word_401DC << " 0x" << std::hex << rhs.word_401DC << std::dec << "\n";
-    os << "word_401DE=" << rhs.word_401DE << " 0x" << std::hex << rhs.word_401DE << std::dec << "\n";
-    os << "word_401E0=" << rhs.word_401E0 << " 0x" << std::hex << rhs.word_401E0 << std::dec << "\n";
-    os << "word_401E2=" << rhs.word_401E2 << " 0x" << std::hex << rhs.word_401E2 << std::dec << "\n";
-    os << "word_401E4=" << rhs.word_401E4 << " 0x" << std::hex << rhs.word_401E4 << std::dec << "\n";
-    os << "word_401E6=" << rhs.word_401E6 << " 0x" << std::hex << rhs.word_401E6 << std::dec << "\n";
-    os << "word_401E8=" << rhs.word_401E8 << " 0x" << std::hex << rhs.word_401E8 << std::dec << "\n";
-    os << "word_401EA=" << rhs.word_401EA << " 0x" << std::hex << rhs.word_401EA << std::dec << "\n";
-    os << "word_401EC=" << rhs.word_401EC << " 0x" << std::hex << rhs.word_401EC << std::dec << "\n";
-    os << "word_401EE=" << rhs.word_401EE << " 0x" << std::hex << rhs.word_401EE << std::dec << "\n";
-    os << "word_401F0=" << rhs.word_401F0 << " 0x" << std::hex << rhs.word_401F0 << std::dec << "\n";
-    os << "word_401F2=" << rhs.word_401F2 << " 0x" << std::hex << rhs.word_401F2 << std::dec << "\n";
-    os << "word_401F4=" << rhs.word_401F4 << " 0x" << std::hex << rhs.word_401F4 << std::dec << "\n";
-    os << "word_401F6=" << rhs.word_401F6 << " 0x" << std::hex << rhs.word_401F6 << std::dec << "\n";
-    os << "word_401F8=" << rhs.word_401F8 << " 0x" << std::hex << rhs.word_401F8 << std::dec << "\n";
-    os << "word_401FA=" << rhs.word_401FA << " 0x" << std::hex << rhs.word_401FA << std::dec << "\n";
-    os << "word_401FC=" << rhs.word_401FC << " 0x" << std::hex << rhs.word_401FC << std::dec << "\n";
-    os << "word_401FE=" << rhs.word_401FE << " 0x" << std::hex << rhs.word_401FE << std::dec << "\n";
-    os << "word_40200=" << rhs.word_40200 << " 0x" << std::hex << rhs.word_40200 << std::dec << "\n";
-    os << "word_40202=" << rhs.word_40202 << " 0x" << std::hex << rhs.word_40202 << std::dec << "\n";
-    os << "word_40204=" << rhs.word_40204 << " 0x" << std::hex << rhs.word_40204 << std::dec << "\n";
-    os << "word_40206=" << rhs.word_40206 << " 0x" << std::hex << rhs.word_40206 << std::dec << "\n";
-    os << "word_40208=" << rhs.word_40208 << " 0x" << std::hex << rhs.word_40208 << std::dec << "\n";
-    os << "word_4020A=" << rhs.word_4020A << " 0x" << std::hex << rhs.word_4020A << std::dec << "\n";
-    os << "word_4020C=(\n";
-    for (unsigned i = 0; i < 38; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4020C[i] << " 0x" << std::hex << (unsigned)rhs.word_4020C[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40232=" << rhs.word_40232 << " 0x" << std::hex << rhs.word_40232 << std::dec << "\n";
-    os << "word_40234=" << rhs.word_40234 << " 0x" << std::hex << rhs.word_40234 << std::dec << "\n";
-    os << "word_40236=" << rhs.word_40236 << " 0x" << std::hex << rhs.word_40236 << std::dec << "\n";
-    os << "word_40238=" << rhs.word_40238 << " 0x" << std::hex << rhs.word_40238 << std::dec << "\n";
-    os << "word_4023A=" << rhs.word_4023A << " 0x" << std::hex << rhs.word_4023A << std::dec << "\n";
-    os << "word_4023C=" << rhs.word_4023C << " 0x" << std::hex << rhs.word_4023C << std::dec << "\n";
-    os << "word_4023E=" << rhs.word_4023E << " 0x" << std::hex << rhs.word_4023E << std::dec << "\n";
-    os << "word_40240=" << rhs.word_40240 << " 0x" << std::hex << rhs.word_40240 << std::dec << "\n";
-    os << "word_40242=(\n";
-    for (unsigned i = 0; i < 18; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40242[i] << " 0x" << std::hex << (unsigned)rhs.word_40242[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40254=" << rhs.word_40254 << " 0x" << std::hex << rhs.word_40254 << std::dec << "\n";
-    os << "word_40256=" << rhs.word_40256 << " 0x" << std::hex << rhs.word_40256 << std::dec << "\n";
-    os << "word_40258=" << rhs.word_40258 << " 0x" << std::hex << rhs.word_40258 << std::dec << "\n";
-    os << "word_4025A=(\n";
-    for (unsigned i = 0; i < 50; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4025A[i] << " 0x" << std::hex << (unsigned)rhs.word_4025A[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_4028C=" << rhs.word_4028C << " 0x" << std::hex << rhs.word_4028C << std::dec << "\n";
-    os << "word_4028E=(\n";
-    for (unsigned i = 0; i < 10; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4028E[i] << " 0x" << std::hex << (unsigned)rhs.word_4028E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40298=" << rhs.word_40298 << " 0x" << std::hex << rhs.word_40298 << std::dec << "\n";
-    os << "word_4029A=" << rhs.word_4029A << " 0x" << std::hex << rhs.word_4029A << std::dec << "\n";
-    os << "word_4029C=" << rhs.word_4029C << " 0x" << std::hex << rhs.word_4029C << std::dec << "\n";
-    os << "word_4029E=(\n";
-    for (unsigned i = 0; i < 34; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4029E[i] << " 0x" << std::hex << (unsigned)rhs.word_4029E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_402C0=(\n";
-    for (unsigned i = 0; i < 32; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_402C0[i] << " 0x" << std::hex << (unsigned)rhs.word_402C0[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_402E0=" << rhs.word_402E0 << " 0x" << std::hex << rhs.word_402E0 << std::dec << "\n";
-    os << "word_402E2=(\n";
-    for (unsigned i = 0; i < 36; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_402E2[i] << " 0x" << std::hex << (unsigned)rhs.word_402E2[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40306=(\n";
-    for (unsigned i = 0; i < 120; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40306[i] << " 0x" << std::hex << (unsigned)rhs.word_40306[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_4037E=(\n";
-    for (unsigned i = 0; i < 10; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_4037E[i] << " 0x" << std::hex << (unsigned)rhs.word_4037E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40388=(\n";
-    for (unsigned i = 0; i < 10; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40388[i] << " 0x" << std::hex << (unsigned)rhs.word_40388[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_40392=" << rhs.word_40392 << " 0x" << std::hex << rhs.word_40392 << std::dec << "\n";
-    os << "word_40394=(\n";
-    for (unsigned i = 0; i < 20; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_40394[i] << " 0x" << std::hex << (unsigned)rhs.word_40394[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_403A8=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_403A8[i] << " 0x" << std::hex << (unsigned)rhs.word_403A8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_403AE=(\n";
-    for (unsigned i = 0; i < 10; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_403AE[i] << " 0x" << std::hex << (unsigned)rhs.word_403AE[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_403B8=" << rhs.word_403B8 << " 0x" << std::hex << rhs.word_403B8 << std::dec << "\n";
-    os << "word_403BA=" << rhs.word_403BA << " 0x" << std::hex << rhs.word_403BA << std::dec << "\n";
-    os << "word_403BC=" << rhs.word_403BC << " 0x" << std::hex << rhs.word_403BC << std::dec << "\n";
-    os << "word_403BE=" << rhs.word_403BE << " 0x" << std::hex << rhs.word_403BE << std::dec << "\n";
-    os << "word_403C0=" << rhs.word_403C0 << " 0x" << std::hex << rhs.word_403C0 << std::dec << "\n";
-    os << "word_403C2=(\n";
-    for (unsigned i = 0; i < 20; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.word_403C2[i] << " 0x" << std::hex << (unsigned)rhs.word_403C2[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "word_403D6=" << rhs.word_403D6 << " 0x" << std::hex << rhs.word_403D6 << std::dec << "\n";
-    os << "word_403D8=" << rhs.word_403D8 << " 0x" << std::hex << rhs.word_403D8 << std::dec << "\n";
-    os << "word_403DA=" << rhs.word_403DA << " 0x" << std::hex << rhs.word_403DA << std::dec << "\n";
-    os << "word_403DC=" << rhs.word_403DC << " 0x" << std::hex << rhs.word_403DC << std::dec << "\n";
-    os << "word_403DE=" << rhs.word_403DE << " 0x" << std::hex << rhs.word_403DE << std::dec << "\n";
-    os << "word_403E0=" << rhs.word_403E0 << " 0x" << std::hex << rhs.word_403E0 << std::dec << "\n";
-    os << "word_403E2=" << rhs.word_403E2 << " 0x" << std::hex << rhs.word_403E2 << std::dec << "\n";
-    os << "word_403E4=" << rhs.word_403E4 << " 0x" << std::hex << rhs.word_403E4 << std::dec << "\n";
-    os << "word_403E6=" << rhs.word_403E6 << " 0x" << std::hex << rhs.word_403E6 << std::dec << "\n";
-    os << "word_403E8=" << rhs.word_403E8 << " 0x" << std::hex << rhs.word_403E8 << std::dec << "\n";
-    os << "word_403EA=" << rhs.word_403EA << " 0x" << std::hex << rhs.word_403EA << std::dec << "\n";
-    os << "word_403EC=" << rhs.word_403EC << " 0x" << std::hex << rhs.word_403EC << std::dec << "\n";
-    os << "word_403EE=" << rhs.word_403EE << " 0x" << std::hex << rhs.word_403EE << std::dec << "\n";
-    os << "word_403F0=" << rhs.word_403F0 << " 0x" << std::hex << rhs.word_403F0 << std::dec << "\n";
-    os << "word_403F2=" << rhs.word_403F2 << " 0x" << std::hex << rhs.word_403F2 << std::dec << "\n";
-    os << "word_403F4=" << rhs.word_403F4 << " 0x" << std::hex << rhs.word_403F4 << std::dec << "\n";
-    os << "word_403F6=" << rhs.word_403F6 << " 0x" << std::hex << rhs.word_403F6 << std::dec << "\n";
-    os << "word_403F8=" << rhs.word_403F8 << " 0x" << std::hex << rhs.word_403F8 << std::dec << "\n";
-    os << "word_403FA=" << rhs.word_403FA << " 0x" << std::hex << rhs.word_403FA << std::dec << "\n";
-    os << "word_403FC=" << rhs.word_403FC << " 0x" << std::hex << rhs.word_403FC << std::dec << "\n";
-    os << "word_403FE=" << rhs.word_403FE << "\n";
-    os << "word_40402=" << rhs.word_40402 << " 0x" << std::hex << rhs.word_40402 << std::dec << "\n";
-    os << "word_40404=" << rhs.word_40404 << " 0x" << std::hex << rhs.word_40404 << std::dec << "\n";
-    os << "word_40406=" << rhs.word_40406 << " 0x" << std::hex << rhs.word_40406 << std::dec << "\n";
-    os << "word_40408=" << rhs.word_40408 << " 0x" << std::hex << rhs.word_40408 << std::dec << "\n";
-    os << "word_4040A=" << rhs.word_4040A << " 0x" << std::hex << rhs.word_4040A << std::dec << "\n";
-    os << "word_4040C=" << rhs.word_4040C << " 0x" << std::hex << rhs.word_4040C << std::dec << "\n";
-    os << "word_4040E=" << rhs.word_4040E << " 0x" << std::hex << rhs.word_4040E << std::dec << "\n";
-    os << "word_40410=" << rhs.word_40410 << " 0x" << std::hex << rhs.word_40410 << std::dec << "\n";
-    os << "word_40412=" << rhs.word_40412 << " 0x" << std::hex << rhs.word_40412 << std::dec << "\n";
-    os << "word_40414=" << rhs.word_40414 << " 0x" << std::hex << rhs.word_40414 << std::dec << "\n";
-    os << "word_40416=" << rhs.word_40416 << " 0x" << std::hex << rhs.word_40416 << std::dec << "\n";
-    os << "word_40418=" << rhs.word_40418 << " 0x" << std::hex << rhs.word_40418 << std::dec << "\n";
-    os << "word_4041A=" << rhs.word_4041A << " 0x" << std::hex << rhs.word_4041A << std::dec << "\n";
-    os << "word_4041C=" << rhs.word_4041C << " 0x" << std::hex << rhs.word_4041C << std::dec << "\n";
-    os << "word_4041E=" << rhs.word_4041E << " 0x" << std::hex << rhs.word_4041E << std::dec << "\n";
-    os << "word_40420=" << rhs.word_40420 << " 0x" << std::hex << rhs.word_40420 << std::dec << "\n";
-    os << "word_40422=" << rhs.word_40422 << " 0x" << std::hex << rhs.word_40422 << std::dec << "\n";
-    os << "word_40424=" << rhs.word_40424 << " 0x" << std::hex << rhs.word_40424 << std::dec << "\n";
-    os << "word_40426=" << rhs.word_40426 << " 0x" << std::hex << rhs.word_40426 << std::dec << "\n";
-    os << "word_40428=" << rhs.word_40428 << "\n";
-    os << "word_4042C=" << rhs.word_4042C << " 0x" << std::hex << rhs.word_4042C << std::dec << "\n";
-    os << "w_constant_GUESS=" << rhs.w_constant_GUESS << " 0x" << std::hex << rhs.w_constant_GUESS << std::dec << "\n";
-    os << "w_Game_flow=" << rhs.w_Game_flow << "\n";
-    os << "word_40432=" << rhs.word_40432 << " 0x" << std::hex << rhs.word_40432 << std::dec << "\n";
-    os << "word_40434=" << rhs.word_40434 << " 0x" << std::hex << rhs.word_40434 << std::dec << "\n";
-    os << "word_40436=" << rhs.word_40436 << " 0x" << std::hex << rhs.word_40436 << std::dec << "\n";
-    os << "addr_events=" << rhs.addr_events << "\n";
-    os << "w_uts_in_stack_ovrland_GUESS=" << rhs.w_uts_in_stack_ovrland_GUESS << " 0x" << std::hex << rhs.w_uts_in_stack_ovrland_GUESS << std::dec << "\n";
-    os << "w_Stack_active_GUESS=(\n";
-    for (unsigned i = 0; i < 36; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.w_Stack_active_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Stack_active_GUESS[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_40462=(\n";
-    for (unsigned i = 0; i < 281; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40462[i] << " 0x" << std::hex << (unsigned)rhs.byte_40462[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_4057B=(\n";
-    for (unsigned i = 0; i < 21; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_4057B[i] << " 0x" << std::hex << (unsigned)rhs.byte_4057B[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "b_mess_number=(\n";
-    for (unsigned i = 0; i < 82; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.b_mess_number[i] << " 0x" << std::hex << (unsigned)rhs.b_mess_number[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_405E2=(\n";
-    for (unsigned i = 0; i < 82; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_405E2[i] << " 0x" << std::hex << (unsigned)rhs.byte_405E2[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_40634=(\n";
-    for (unsigned i = 0; i < 82; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40634[i] << " 0x" << std::hex << (unsigned)rhs.byte_40634[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_40686=(\n";
-    for (unsigned i = 0; i < 82; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40686[i] << " 0x" << std::hex << (unsigned)rhs.byte_40686[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_406D8=(\n";
-    for (unsigned i = 0; i < 21; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_406D8[i] << " 0x" << std::hex << (unsigned)rhs.byte_406D8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_406ED=(\n";
-    for (unsigned i = 0; i < 21; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_406ED[i] << " 0x" << std::hex << (unsigned)rhs.byte_406ED[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_40702=(\n";
-    for (unsigned i = 0; i < 21; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40702[i] << " 0x" << std::hex << (unsigned)rhs.byte_40702[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_40717=(\n";
-    for (unsigned i = 0; i < 21; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40717[i] << " 0x" << std::hex << (unsigned)rhs.byte_40717[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "byte_4072C=" << rhs.byte_4072C << " 0x" << std::hex << rhs.byte_4072C << std::dec << "\n";
-    os << "w_video_style_CL_BUG_GUESS=" << rhs.w_video_style_CL_BUG_GUESS << " 0x" << std::hex << rhs.w_video_style_CL_BUG_GUESS << std::dec << "\n";
-    os << "dword_40730=" << rhs.dword_40730 << "\n";
-    os << "word_40734=" << rhs.word_40734 << " 0x" << std::hex << rhs.word_40734 << std::dec << "\n";
-    os << "word_40736=" << rhs.word_40736 << " 0x" << std::hex << rhs.word_40736 << std::dec << "\n";
-    os << "word_40738=" << rhs.word_40738 << " 0x" << std::hex << rhs.word_40738 << std::dec << "\n";
-    os << "word_4073A=" << rhs.word_4073A << " 0x" << std::hex << rhs.word_4073A << std::dec << "\n";
-    os << "dword_4073C=" << rhs.dword_4073C << "\n";
-    os << "dword_40740=" << rhs.dword_40740 << "\n";
-    os << "addr_terrain_Movement_copy=" << rhs.addr_terrain_Movement_copy << "\n";
-    os << "dword_40748=" << rhs.dword_40748 << "\n";
-    os << "addr_Terrain_Movement=" << rhs.addr_Terrain_Movement << "\n";
-    os << "addr_Terrain_Explored=" << rhs.addr_Terrain_Explored << "\n";
-    os << "addr_Terrain_Changes=" << rhs.addr_Terrain_Changes << "\n";
-    os << "addr_Terrain_Bonuses=" << rhs.addr_Terrain_Bonuses << "\n";
-    os << "addr_Cities=" << rhs.addr_Cities << "\n";
-    os << "addr_Lairs_data=" << rhs.addr_Lairs_data << "\n";
-    os << "addr_tower_attr=" << rhs.addr_tower_attr << "\n";
-    os << "addr_fortress_data=" << rhs.addr_fortress_data << "\n";
-    os << "addr_Nodes_Attr=" << rhs.addr_Nodes_Attr << "\n";
-    os << "addr_Terrain_LandMassID=" << rhs.addr_Terrain_LandMassID << "\n";
-    os << "word_40774=" << rhs.word_40774 << " 0x" << std::hex << rhs.word_40774 << std::dec << "\n";
-    os << "word_40776=" << rhs.word_40776 << " 0x" << std::hex << rhs.word_40776 << std::dec << "\n";
-    os << "word_40778=" << rhs.word_40778 << " 0x" << std::hex << rhs.word_40778 << std::dec << "\n";
-    os << "word_4077A=" << rhs.word_4077A << " 0x" << std::hex << rhs.word_4077A << std::dec << "\n";
-    os << "addr_Terrain_Types=" << rhs.addr_Terrain_Types << "\n";
-    os << "addr_Unrest_Table=(\n";
-    for (unsigned i = 0; i < gMAX_RACES; ++i)
-    {
-        os << "[" << i << "] " << rhs.addr_Unrest_Table[i] << ",\n";
-    }
-    os << ")\n";
-    os << "word_407B8=" << rhs.word_407B8 << " 0x" << std::hex << rhs.word_407B8 << std::dec << "\n";
-    os << "word_407BA=" << rhs.word_407BA << " 0x" << std::hex << rhs.word_407BA << std::dec << "\n";
-    os << "word_407BC=" << rhs.word_407BC << " 0x" << std::hex << rhs.word_407BC << std::dec << "\n";
-    os << "word_407BE=" << rhs.word_407BE << " 0x" << std::hex << rhs.word_407BE << std::dec << "\n";
-    os << "word_407C0=" << rhs.word_407C0 << " 0x" << std::hex << rhs.word_407C0 << std::dec << "\n";
-    os << "w_Vizier_allowed_GUESS=(\n";
-    for (unsigned i = 0; i < 8; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "dword_407CA=" << rhs.dword_407CA << "\n";
-    os << "dword_407CE=" << rhs.dword_407CE << "\n";
-    os << "word_407D2=" << rhs.word_407D2 << " 0x" << std::hex << rhs.word_407D2 << std::dec << "\n";
-    os << "word_407D4=" << rhs.word_407D4 << " 0x" << std::hex << rhs.word_407D4 << std::dec << "\n";
-    os << "word_407D6=" << rhs.word_407D6 << " 0x" << std::hex << rhs.word_407D6 << std::dec << "\n";
-    os << "word_407D8=" << rhs.word_407D8 << " 0x" << std::hex << rhs.word_407D8 << std::dec << "\n";
-    os << "word_407DA=" << rhs.word_407DA << " 0x" << std::hex << rhs.word_407DA << std::dec << "\n";
-    os << "word_407DC=" << rhs.word_407DC << " 0x" << std::hex << rhs.word_407DC << std::dec << "\n";
-    os << "word_407DE=" << rhs.word_407DE << " 0x" << std::hex << rhs.word_407DE << std::dec << "\n";
-    os << "word_407E0=" << rhs.word_407E0 << " 0x" << std::hex << rhs.word_407E0 << std::dec << "\n";
-    os << "word_407E2=" << rhs.word_407E2 << " 0x" << std::hex << rhs.word_407E2 << std::dec << "\n";
-    os << "word_407E4=" << rhs.word_407E4 << " 0x" << std::hex << rhs.word_407E4 << std::dec << "\n";
-    os << "word_407E6=" << rhs.word_407E6 << " 0x" << std::hex << rhs.word_407E6 << std::dec << "\n";
-    os << "word_407E8=" << rhs.word_407E8 << " 0x" << std::hex << rhs.word_407E8 << std::dec << "\n";
-    os << "w_AI_stack_nr=" << rhs.w_AI_stack_nr << " 0x" << std::hex << rhs.w_AI_stack_nr << std::dec << "\n";
-    os << "unk_407EC=(\n";
-    for (unsigned i = 0; i < 320; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk_407EC[i] << " 0x" << std::hex << (unsigned)rhs.unk_407EC[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "dw_Nr_in_stack=" << rhs.dw_Nr_in_stack << "\n";
-    os << "dw_stack_place=" << rhs.dw_stack_place << "\n";
-    os << "dw_pla_stacks_loc=" << rhs.dw_pla_stacks_loc << "\n";
-    os << "dw_Y_stacks_loc=" << rhs.dw_Y_stacks_loc << "\n";
-    os << "dw_X_stacks_loc=" << rhs.dw_X_stacks_loc << "\n";
-    os << "dw_bx_6160=" << rhs.dw_bx_6160 << "\n";
-    os << "dw_bx_615C=" << rhs.dw_bx_615C << "\n";
-    os << "dw_bx_6176=" << rhs.dw_bx_6176 << "\n";
-    os << "dw_bx_6154=" << rhs.dw_bx_6154 << "\n";
-    os << "word_40950=" << rhs.word_40950 << " 0x" << std::hex << rhs.word_40950 << std::dec << "\n";
-    os << "word_40952=" << rhs.word_40952 << " 0x" << std::hex << rhs.word_40952 << std::dec << "\n";
-    os << "word_40954=" << rhs.word_40954 << " 0x" << std::hex << rhs.word_40954 << std::dec << "\n";
-    os << "word_40956=" << rhs.word_40956 << " 0x" << std::hex << rhs.word_40956 << std::dec << "\n";
-    os << "word_40958=" << rhs.word_40958 << " 0x" << std::hex << rhs.word_40958 << std::dec << "\n";
-    os << "word_4095A=" << rhs.word_4095A << " 0x" << std::hex << rhs.word_4095A << std::dec << "\n";
-    os << "word_4095C=" << rhs.word_4095C << " 0x" << std::hex << rhs.word_4095C << std::dec << "\n";
-    os << "word_4095E=" << rhs.word_4095E << " 0x" << std::hex << rhs.word_4095E << std::dec << "\n";
-    os << "word_40960=" << rhs.word_40960 << " 0x" << std::hex << rhs.word_40960 << std::dec << "\n";
-    os << "addr_Units=" << rhs.addr_Units << "\n";
-    os << "dword_40966=" << rhs.dword_40966 << "\n";
     os << "}";
     return os;
 }
@@ -11252,7 +11244,66 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
           oss << context << ".m_DifficultyTable[" << i << "]";
           if (!validate(rhs.m_DifficultyTable[i], oss.str())) ok = false;
     }
-    if (!validate(rhs.m_WizardsExe_Pointers, context + ".m_WizardsExe_Pointers")) ok = false;
+    if (!validate(rhs.m_addr_Spell_Data, context + ".m_addr_Spell_Data")) ok = false;
+    if (!validate(rhs.m_addr_Items, context + ".m_addr_Items")) ok = false;
+    if (!validate(rhs.addr_item_in_game_GUESS, context + ".addr_item_in_game_GUESS")) ok = false;
+    if (!validate(rhs.m_addr_Battle_Unit_View, context + ".m_addr_Battle_Unit_View")) ok = false;
+    if (!validate(rhs.m_addr_Battle_Unit, context + ".m_addr_Battle_Unit")) ok = false;
+    if (!validate(rhs.m_addr_Spells_Cast_in_Battle, context + ".m_addr_Spells_Cast_in_Battle")) ok = false;
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_addr_Hero_stat[" << i << "]";
+          if (!validate(rhs.m_addr_Hero_stat[i], oss.str())) ok = false;
+    }
+    if (!validate(rhs.m_addr_Battlefield, context + ".m_addr_Battlefield")) ok = false;
+    if (!validate(rhs.dword_3FD50, context + ".dword_3FD50")) ok = false;
+    if (!validate(rhs.addr_3FDE6, context + ".addr_3FDE6")) ok = false;
+    if (!validate(rhs.m_addr_Building_Data, context + ".m_addr_Building_Data")) ok = false;
+    if (!validate(rhs.dword_3FE32, context + ".dword_3FE32")) ok = false;
+    if (!validate(rhs.word_3FF00, context + ".word_3FF00")) ok = false;
+    if (!validate(rhs.word_3FFBE, context + ".word_3FFBE")) ok = false;
+    if (!validate(rhs.word_3FFC8, context + ".word_3FFC8")) ok = false;
+    if (!validate(rhs.m_addr_city_detailed_GUESS, context + ".m_addr_city_detailed_GUESS")) ok = false;
+    if (!validate(rhs.word_403FE, context + ".word_403FE")) ok = false;
+    if (!validate(rhs.word_40428, context + ".word_40428")) ok = false;
+    if (!validate(rhs.m_Game_flow, context + ".m_Game_flow")) ok = false;
+    if (!validate(rhs.m_addr_events, context + ".m_addr_events")) ok = false;
+    if (!validate(rhs.dword_40730, context + ".dword_40730")) ok = false;
+    if (!validate(rhs.dword_4073C, context + ".dword_4073C")) ok = false;
+    if (!validate(rhs.dword_40740, context + ".dword_40740")) ok = false;
+    if (!validate(rhs.m_addr_terrain_Movement_copy, context + ".m_addr_terrain_Movement_copy")) ok = false;
+    if (!validate(rhs.dword_40748, context + ".dword_40748")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_Movement, context + ".m_addr_Terrain_Movement")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_Explored, context + ".m_addr_Terrain_Explored")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_Changes, context + ".m_addr_Terrain_Changes")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_Bonuses, context + ".m_addr_Terrain_Bonuses")) ok = false;
+    if (!validate(rhs.m_addr_Cities, context + ".m_addr_Cities")) ok = false;
+    if (!validate(rhs.m_addr_Lairs_data, context + ".m_addr_Lairs_data")) ok = false;
+    if (!validate(rhs.m_addr_tower_attr, context + ".m_addr_tower_attr")) ok = false;
+    if (!validate(rhs.m_addr_fortress_data, context + ".m_addr_fortress_data")) ok = false;
+    if (!validate(rhs.m_addr_Nodes_Attr, context + ".m_addr_Nodes_Attr")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_LandMassID, context + ".m_addr_Terrain_LandMassID")) ok = false;
+    if (!validate(rhs.m_addr_Terrain_Types, context + ".m_addr_Terrain_Types")) ok = false;
+    for (unsigned i = 0; i < gMAX_RACES; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_addr_Unrest_Table[" << i << "]";
+          if (!validate(rhs.m_addr_Unrest_Table[i], oss.str())) ok = false;
+    }
+    if (!validate(rhs.dword_407CA, context + ".dword_407CA")) ok = false;
+    if (!validate(rhs.dword_407CE, context + ".dword_407CE")) ok = false;
+    if (!validate(rhs.dw_Nr_in_stack, context + ".dw_Nr_in_stack")) ok = false;
+    if (!validate(rhs.dw_stack_place, context + ".dw_stack_place")) ok = false;
+    if (!validate(rhs.dw_pla_stacks_loc, context + ".dw_pla_stacks_loc")) ok = false;
+    if (!validate(rhs.dw_Y_stacks_loc, context + ".dw_Y_stacks_loc")) ok = false;
+    if (!validate(rhs.dw_X_stacks_loc, context + ".dw_X_stacks_loc")) ok = false;
+    if (!validate(rhs.dw_bx_6160, context + ".dw_bx_6160")) ok = false;
+    if (!validate(rhs.dw_bx_615C, context + ".dw_bx_615C")) ok = false;
+    if (!validate(rhs.dw_bx_6176, context + ".dw_bx_6176")) ok = false;
+    if (!validate(rhs.dw_bx_6154, context + ".dw_bx_6154")) ok = false;
+    if (!validate(rhs.m_addr_Units, context + ".m_addr_Units")) ok = false;
+    if (!validate(rhs.dword_40966, context + ".dword_40966")) ok = false;
     for (unsigned i = 0; i < rhs.m_Game_Data.m_Number_of_Wizards; ++i)
     {
           std::ostringstream oss;
@@ -11847,72 +11898,6 @@ bool validate(const WizardsExe_Game_Data140m& rhs, const std::string& context)
     if (!validate(rhs.m_Difficulty, context + ".m_Difficulty")) ok = false;
     if (!validate(rhs.m_Magic_Powerful_setting, context + ".m_Magic_Powerful_setting")) ok = false;
     if (!validate(rhs.m_Land_Size_setting, context + ".m_Land_Size_setting")) ok = false;
-    return ok;
-}
-
-bool validate(const WizardsExe_Pointers& rhs, const std::string& context)
-{
-    bool ok = true;
-    if (!validate(rhs.addr_Spell_Data, context + ".addr_Spell_Data")) ok = false;
-    if (!validate(rhs.addr_Items, context + ".addr_Items")) ok = false;
-    if (!validate(rhs.addr_item_in_game_GUESS, context + ".addr_item_in_game_GUESS")) ok = false;
-    if (!validate(rhs.addr_Battle_Unit_View, context + ".addr_Battle_Unit_View")) ok = false;
-    if (!validate(rhs.addr_Battle_Unit, context + ".addr_Battle_Unit")) ok = false;
-    if (!validate(rhs.addr_Spells_Cast_in_Battle, context + ".addr_Spells_Cast_in_Battle")) ok = false;
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".addr_Hero_stat[" << i << "]";
-          if (!validate(rhs.addr_Hero_stat[i], oss.str())) ok = false;
-    }
-    if (!validate(rhs.addr_Battlefield, context + ".addr_Battlefield")) ok = false;
-    if (!validate(rhs.dword_3FD50, context + ".dword_3FD50")) ok = false;
-    if (!validate(rhs.addr_3FDE6, context + ".addr_3FDE6")) ok = false;
-    if (!validate(rhs.addr_Building_Data, context + ".addr_Building_Data")) ok = false;
-    if (!validate(rhs.dword_3FE32, context + ".dword_3FE32")) ok = false;
-    if (!validate(rhs.word_3FF00, context + ".word_3FF00")) ok = false;
-    if (!validate(rhs.word_3FFBE, context + ".word_3FFBE")) ok = false;
-    if (!validate(rhs.word_3FFC8, context + ".word_3FFC8")) ok = false;
-    if (!validate(rhs.addr_city_detailed_GUESS, context + ".addr_city_detailed_GUESS")) ok = false;
-    if (!validate(rhs.word_403FE, context + ".word_403FE")) ok = false;
-    if (!validate(rhs.word_40428, context + ".word_40428")) ok = false;
-    if (!validate(rhs.w_Game_flow, context + ".w_Game_flow")) ok = false;
-    if (!validate(rhs.addr_events, context + ".addr_events")) ok = false;
-    if (!validate(rhs.dword_40730, context + ".dword_40730")) ok = false;
-    if (!validate(rhs.dword_4073C, context + ".dword_4073C")) ok = false;
-    if (!validate(rhs.dword_40740, context + ".dword_40740")) ok = false;
-    if (!validate(rhs.addr_terrain_Movement_copy, context + ".addr_terrain_Movement_copy")) ok = false;
-    if (!validate(rhs.dword_40748, context + ".dword_40748")) ok = false;
-    if (!validate(rhs.addr_Terrain_Movement, context + ".addr_Terrain_Movement")) ok = false;
-    if (!validate(rhs.addr_Terrain_Explored, context + ".addr_Terrain_Explored")) ok = false;
-    if (!validate(rhs.addr_Terrain_Changes, context + ".addr_Terrain_Changes")) ok = false;
-    if (!validate(rhs.addr_Terrain_Bonuses, context + ".addr_Terrain_Bonuses")) ok = false;
-    if (!validate(rhs.addr_Cities, context + ".addr_Cities")) ok = false;
-    if (!validate(rhs.addr_Lairs_data, context + ".addr_Lairs_data")) ok = false;
-    if (!validate(rhs.addr_tower_attr, context + ".addr_tower_attr")) ok = false;
-    if (!validate(rhs.addr_fortress_data, context + ".addr_fortress_data")) ok = false;
-    if (!validate(rhs.addr_Nodes_Attr, context + ".addr_Nodes_Attr")) ok = false;
-    if (!validate(rhs.addr_Terrain_LandMassID, context + ".addr_Terrain_LandMassID")) ok = false;
-    if (!validate(rhs.addr_Terrain_Types, context + ".addr_Terrain_Types")) ok = false;
-    for (unsigned i = 0; i < gMAX_RACES; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".addr_Unrest_Table[" << i << "]";
-          if (!validate(rhs.addr_Unrest_Table[i], oss.str())) ok = false;
-    }
-    if (!validate(rhs.dword_407CA, context + ".dword_407CA")) ok = false;
-    if (!validate(rhs.dword_407CE, context + ".dword_407CE")) ok = false;
-    if (!validate(rhs.dw_Nr_in_stack, context + ".dw_Nr_in_stack")) ok = false;
-    if (!validate(rhs.dw_stack_place, context + ".dw_stack_place")) ok = false;
-    if (!validate(rhs.dw_pla_stacks_loc, context + ".dw_pla_stacks_loc")) ok = false;
-    if (!validate(rhs.dw_Y_stacks_loc, context + ".dw_Y_stacks_loc")) ok = false;
-    if (!validate(rhs.dw_X_stacks_loc, context + ".dw_X_stacks_loc")) ok = false;
-    if (!validate(rhs.dw_bx_6160, context + ".dw_bx_6160")) ok = false;
-    if (!validate(rhs.dw_bx_615C, context + ".dw_bx_615C")) ok = false;
-    if (!validate(rhs.dw_bx_6176, context + ".dw_bx_6176")) ok = false;
-    if (!validate(rhs.dw_bx_6154, context + ".dw_bx_6154")) ok = false;
-    if (!validate(rhs.addr_Units, context + ".addr_Units")) ok = false;
-    if (!validate(rhs.dword_40966, context + ".dword_40966")) ok = false;
     return ok;
 }
 

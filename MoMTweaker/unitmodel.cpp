@@ -678,9 +678,9 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
             ptree->child(row, 0)->appendChild(QString(" RNG_Seed"), new QMoMTreeItem<uint32_t>((uint32_t*)&dataSegment->m_RNG_seed_lo));
             ptree->child(row, 0)->appendChild(QString(" DEBUG Off"), new QMoMTreeItem<uint16_t>(&dataSegment->m_DEBUG_Off));
             ptree->child(row, 0)->appendChild(QString(" BIOS Clock snapshot"), new QMoMTreeItem<uint32_t>(&dataSegment->m_BIOS_clock_snapshot));
-            ptree->child(row, 0)->appendChild(QString("Game_State"), new QMoMTreeItem<MoM::eGameState>(&dataSegment->m_WizardsExe_Pointers.w_Game_flow));
-            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9294"), new QMoMTreeItem<int16_t>(&dataSegment->m_WizardsExe_Pointers.w_kyrub_dseg_9294));
-            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItem<int16_t>(&dataSegment->m_WizardsExe_Pointers.w_kyrub_dseg_9296));
+            ptree->child(row, 0)->appendChild(QString("Game_State"), new QMoMTreeItem<MoM::eGameState>(&dataSegment->m_Game_flow));
+            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9294"), new QMoMTreeItem<int16_t>(&dataSegment->m_kyrub_dseg_9294));
+            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItem<int16_t>(&dataSegment->m_kyrub_dseg_9296));
         }
 
         if ((0 != magicDataSegment) && game->getGameData_WizardsExe())
@@ -1739,7 +1739,7 @@ void UnitModel::threadUpdateModelData()
             int nrEntries = 0;
 
             ptree->child(row, 0)->setData(tr("Battle_Units"), Qt::UserRole);
-            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_WizardsExe_Pointers.addr_Battle_Unit;
+            const MoM::EXE_Reloc& addr = game->getDataSegment()->m_addr_Battle_Unit;
             ptree->child(row, 1)->setData(toQStr(addr), Qt::EditRole);
             if (0 != game->getNumber_of_Battle_Units())
             {
