@@ -988,9 +988,9 @@ void DialogMap::slot_gameUpdated()
                 MoM::eCityWall wall = (MoM::eCityWall)i;
                 MoMLocation loc = wallLocations[i];
                 int wholeIndex = (loc.m_XPos - 5) + (loc.m_YPos - 10) * 4;
-                if (0 != battlefield->m_Wall_is_whole[wholeIndex])
+                if (0 != battlefield->m_Wall_present_4x4[wholeIndex])
                 {
-                    bool broken = (2 == battlefield->m_Wall_is_whole[wholeIndex]);
+                    bool broken = (2 == battlefield->m_Wall_present_4x4[wholeIndex]);
                     QPixmap pixmapWall = MoM::QMoMResources::instance().getPixmap(wall, 1, broken);
                     (void)m_sceneBattle->addPixmapAtLocation(pixmapWall, wallLocations[i]);
                 }

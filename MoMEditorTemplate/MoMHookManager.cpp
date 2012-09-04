@@ -172,9 +172,9 @@ bool MoMHookManager::raiseHook()
         return false;
 
     // Set dseg:9297 to 1
-    uint8_t* ptrDseg9297 = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
-    *ptrDseg9297 = 1;
-    bool ok = m_process->writeData(ptrDseg9297, 1);
+    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    *ptrHook = 1;
+    bool ok = m_process->writeData(ptrHook, 1);
     if (!ok)
     {
         std::cout << "failed to commit dseg:9297 set" << std::endl;
@@ -188,9 +188,9 @@ bool MoMHookManager::retractHook()
         return false;
 
     // Set dseg:9297 to 0
-    uint8_t* ptrDseg9297 = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
-    *ptrDseg9297 = 0;
-    bool ok = m_process->writeData(ptrDseg9297, 1);
+    uint8_t* ptrHook = 1 + (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    *ptrHook = 0;
+    bool ok = m_process->writeData(ptrHook, 1);
     if (!ok)
     {
         std::cout << "failed to commit dseg:9297 reset" << std::endl;
@@ -198,7 +198,7 @@ bool MoMHookManager::retractHook()
     return ok;
 }
 
-bool MoMHookManager::waitForHook(double timeout)
+bool MoMHookManager::waitForBait(double timeout)
 {
     if ((0 == m_process) || (0 == m_game) || (0 == m_game->getDataSegment()))
         return false;
@@ -206,35 +206,35 @@ bool MoMHookManager::waitForHook(double timeout)
     const double sleepTime = 0.001;
 
     // Wait till dseg:9296 is 1
-    uint8_t* ptrDseg9296 = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
     bool ok = true;
     bool hookTriggered = false;
     int nrTries = (int)(timeout / sleepTime + 0.5);
     for (int tryNr = 0; ok && !hookTriggered && (tryNr < nrTries); ++tryNr)
     {
-        ok = m_process->readData(ptrDseg9296, 1);
+        ok = m_process->readData(ptrBait, 1);
         if (!ok)
         {
             std::cout << "failed to read from dseg:9297" << std::endl;
         }
         else
         {
-            hookTriggered = (1 == *ptrDseg9297);
+            hookTriggered = (1 == *ptrBait);
         }
         m_process->sleepSec(0.001);
     }
     return hookTriggered;
 }
 
-bool MoMHookManager::releaseHook()
+bool MoMHookManager::releaseBait()
 {
     if ((0 == m_process) || (0 == m_game) || (0 == m_game->getDataSegment()))
         return false;
 
     // Set dseg:9296 to 0
-    uint8_t* ptrDseg9296 = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
-    *ptrDseg9296 = 0;
-    bool ok = m_process->writeData(ptrDseg9296, 1);
+    uint8_t* ptrBait = (uint8_t*)&m_game->getDataSegment()->m_WizardsExe_Pointers.w_kyrub_dseg_9296;
+    *ptrBait = 0;
+    bool ok = m_process->writeData(ptrBait, 1);
     if (!ok)
     {
         std::cout << "failed to commit dseg:9296 reset" << std::endl;

@@ -36,7 +36,7 @@ void DialogExternalAI::on_pushButton_RaiseHook_clicked()
 
 void DialogExternalAI::on_pushButton_WaitForHook_clicked()
 {
-    hookManager->waitForHook(2.0);
+    hookManager->waitForBait(2.0);
     m_game->readData();
     int battleUnitNr = (int16_t)m_game->getDataSegment()->m_BattleUnit_on_move;
     MoM::Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
@@ -62,7 +62,7 @@ void DialogExternalAI::on_pushButton_ReleaseHook_clicked()
 
     MainWindow::getInstance()->on_pushButton_Reread_clicked();
 
-    hookManager->releaseHook();
+    hookManager->releaseBait();
 
     on_pushButton_WaitForHook_clicked();
 }

@@ -70,6 +70,19 @@ enum eBannerColor ENUMSIZE16
     eBannerColor__SIZE__ = 0xFFFF
 };
 
+enum eBattleCondition ENUMSIZE16
+{
+    BATTLECONDITION_other = 0,
+    BATTLECONDITION_strategic_city_combat = 1,
+    BATTLECONDITION_sorcery_node = 2,
+    BATTLECONDITION_nature_node = 3,
+    BATTLECONDITION_chaos_node = 4,
+    BATTLECONDITION_sea = 6,
+
+    eBattleCondition_MAX,
+    eBattleCondition__SIZE__ = 0xFFFF
+};
+
 enum eBuilding ENUMSIZE16
 {
     BUILDING_Not_applicable = 0xFFFF,
@@ -4655,21 +4668,21 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
 typedef struct PACKED_STRUCT // Battlefield
 {
     eTerrainBattle  m_Terrain[462];             // 0        // Map is 22 rows by 11 columns, corresponding to 22 x 21 squares (lines of 21 bytes/words)
-    uint8_t field_39C[462];             // 39C
-    uint8_t field_56A[462];             // 56A
-    uint8_t     m_Movement_walking[462];    // 738
-    uint8_t     m_Movement_merging_teleporting_fly[462]; // 9D6
-    uint8_t     m_Movement_unused[462];     // AD4
-    uint8_t     m_Movement_sailing[462];    // CA2
-    uint16_t    field_E70_Nr_extra_terrain_pics_GUESS; // E70
-    uint16_t field_E72[100]; // E72
-    uint16_t field_F3A[100]; // F3A
-    uint16_t    field_1002_extra_terrain_pics_GUESS[100]; // 1002
-    uint16_t    field_10CA_Nr; // 10CA
-    uint8_t field_10CC[100]; // 10CC
-    uint8_t field_1130[100]; // 1130
-    uint8_t field_1194[100]; // 1194
-    uint8_t field_11F8[762]; // 11F
+    uint8_t     m_TerrainGroupType[462];        // 039C     // 0=walkable, 1=rough, 2=walkable, 3=river, 4=sea
+    uint8_t     m_Road[462];                    // 056A     // 0=no road, 81h=road, other=?
+    uint8_t     m_Movement_walking[462];        // 0738
+    uint8_t     m_Movement_merging_teleporting_fly[462];// 09D6
+    uint8_t     m_Movement_similar_to_walking[462];     // 0AD4
+    uint8_t     m_Movement_sailing[462];        // 0CA2
+    uint16_t    m_Nr_tree_pics;                 // 0E70
+    uint16_t    m_xpel_tree_pics[100];          // 0E72
+    uint16_t    m_ypel_tree_pics[100];          // 0F3A
+    uint16_t    m_tree_pics[100];               // 1002
+    uint16_t    m_Nr_rock_pics;                 // 10CA
+    uint16_t    m_xpel_rock_pics[100];          // 10CC
+    uint16_t    m_ypel_rock_pics[100];          // 1194
+    uint16_t    m_rock_pics[100];               // 125C
+    uint8_t field_11F8[462]; // 1324
     eCentralStructure   m_Central_structure;    // 14F2
     uint16_t field_14F4; // 14F4
     uint16_t field_14F6; // 14F6
@@ -4678,14 +4691,34 @@ typedef struct PACKED_STRUCT // Battlefield
     uint8_t field_1518[30]; // 1518
     uint16_t field_1536; // 1536
     uint8_t field_1538[30]; // 1538
-    eYesNo16    m_City_Walls;               // 1556 // 00=No City Walls, 01=City Walls
-    uint16_t    m_Wall_is_whole[16];        // 1558 // 00=No Wall, 01=Whole Wall, 02=Broken Wall
-    eYesNo16    m_Wall_of_Fire;             // 1578
-    eYesNo16    m_Wall_of_Darkness;         // 157A
-    int16_t     m_Plane;                    // 157C
-    City_Enchantments m_City_Enchantments;  // 157E
-                                            // SIZE 159C
+    eYesNo16    m_City_Walls;                   // 1556     // 00=No City Walls, 01=City Walls
+    uint16_t    m_Wall_present_4x4[16];         // 1558     // 00=No Wall, 01=Whole Wall, 02=Broken Wall
+    eYesNo16    m_Wall_of_Fire;                 // 1578
+    eYesNo16    m_Wall_of_Darkness;             // 157A
+    int16_t     m_Plane;                        // 157C
+    City_Enchantments m_City_Enchantments;      // 157E
+                                                // SIZE 159C
 } Battlefield;
+
+
+typedef struct PACKED_STRUCT // Battle_Figure
+{
+    uint16_t                m_xpel;             // 0
+    uint16_t                m_ypel;             // 02
+    uint16_t                m_Pic;              // 04
+    uint16_t                m_Unk_6_sound;      // 06
+    uint16_t                m_Unk_8;            // 08
+    uint16_t                m_Unk_A;            // 0A
+    uint16_t                m_Unk_C;            // 0C
+    ePlayer                 m_Owner;            // 0E
+    uint16_t                m_Unk_10;           // 10
+    uint16_t                m_Color_enchantment;// 12
+    uint16_t                m_Unk_14_sound;     // 14
+    uint16_t                m_Unk_16;           // 16
+    uint16_t                m_Unk_18_battleunit_field_58;   // 18
+    uint32_t                m_ZDepth;           // 1A
+                                                // SIZE 1E
+} Battle_Figure;
 
 typedef struct PACKED_STRUCT // Battle_Unit
 {
@@ -4794,14 +4827,14 @@ typedef struct PACKED_STRUCT // UnitView_Line
     char m_Line[30];
 } UnitView_Line;
 
-typedef struct PACKED_STRUCT // UnitView
+typedef struct PACKED_STRUCT // UnitView_Lines
 {
     UnitView_Line   m_lines[40];                // 000
     uint32_t        m_4B0_line_related[4];      // 4B0
     uint16_t        m_550_line_icon[40];        // 550
     uint16_t        m_5A0_line_related_itemNr[40];  // 5A0
                                                 // SIZE 5F0
-} UnitView;
+} UnitView_Lines;
 
 typedef struct PACKED_STRUCT // Unit_Data_Hero_Types
 {
@@ -5415,9 +5448,13 @@ typedef struct // MoMDataSegment
     uint16_t    m_UnitView_nrLines;                 // ds:C190
     EXE_Reloc   m_addr_UnitView_Lines;              // ds:C192
 
-    uint8_t     m_Unk_C196[0xC524 - 0xC196];        // ds:C196
+    uint8_t     m_Unk_C196[0xC51C - 0xC196];        // ds:C196
 
-    DS_Offset   m_Battlefield_battleUnitIDs[22];    // ds:C524
+    int16_t     m_Combat_turn;                      // ds:C51C
+    uint16_t    m_Unk_C51E;                         // ds:C51E
+    eBattleCondition    m_External_battle_condition;// ds:C520
+    uint16_t    m_Unk_C522;                         // ds:C522
+    DS_Offset   m_Offsets_Battlefield_battleUnitIDs[22];    // ds:C524
 
     uint8_t     m_Unk_C550[0xC582 - 0xC550];        // ds:C550
 
@@ -5454,7 +5491,17 @@ typedef struct // MoMDataSegment
 
     uint16_t    m_First_visible_available_spell_page;   // ds:C924
 
-    uint8_t     m_Unk_C926[0xD49A - 0xC926];        // ds:C926
+    uint8_t     m_Unk_C926[0xD15A - 0xC926];        // ds:C926
+
+    EXE_Reloc   m_addr_Battle_figures_256;          // ds:D15A      // Battle_Figure
+    int16_t     m_Nr_figures_on_battlefield;        // ds:D15E
+
+    uint8_t     m_Unk_D160[0xD188 - 0xD160];        // ds:D160
+
+    uint16_t    m_Battle_activetile_anim;           // ds:D188
+    uint16_t    m_Battle_tileselection_anim;        // ds:D18A
+
+    uint8_t     m_Unk_D18C[0xD49A - 0xD18C];        // ds:D18C
 
     uint8_t     m_NEAR_HEAP[0x1130];                // ds:D49A
 

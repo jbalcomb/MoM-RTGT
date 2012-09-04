@@ -20,11 +20,6 @@
 
 namespace MoM {
 
-// The DOSBox Base Address Size is different depending on OS configuration and DOSBox version
-// For DOSBox 0.74 for Windows XP it is the given value (currently)
-const DWORD gBASEADDRESS_MINSIZE = 0x1001000;
-
-
 static BOOL CALLBACK wndEnumProc(HWND hwnd, LPARAM lParam)
 {
 	std::vector<std::string>& windowTitles = *(std::vector<std::string>*)lParam;
@@ -122,28 +117,27 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
                 << ", Type=0x" << mbi.Type
                 << std::dec << std::endl;
         }
-        if ((gBASEADDRESS_MINSIZE <= mbi.RegionSize) && (MEM_PRIVATE == mbi.Type))
-        {
-            std::cout << std::hex << "Found possible MoM virtual memory (baseAddress=0x" << (unsigned)mbi.BaseAddress << ", size=0x" << mbi.RegionSize << ")" << std::dec << std::endl;
-        }
-        else if ((0x106000 == mbi.RegionSize) && (MEM_PRIVATE == mbi.Type))
-        {
-            std::cout << std::hex << "Found region with local directory" << std::endl;
-        }
-        else if ((mbi.Protect & PAGE_NOACCESS) || (mbi.Protect & PAGE_EXECUTE))
+        if ((mbi.Protect & PAGE_NOACCESS) || (mbi.Protect & PAGE_EXECUTE) || (mbi.Protect & PAGE_GUARD))
         {
             // Documented access violations: skip
             if (m_verbose)
             {
-                std::cout << "Skipped due to protection settings" << std::endl;
+                std::cout << "Skipped due to protection settings (access denied)" << std::endl;
             }
             continue;
+        }
+        else if ((mbi.Protect & PAGE_READWRITE) && (MEM_PRIVATE == mbi.Type))
+        {
+            if (m_verbose)
+            {
+                std::cout << std::hex << "Possible region for MoM or for the local directory" << std::endl;
+            }
         }
         else
         {
             if (m_verbose)
             {
-                std::cout << "Skipped due to mismatching size" << std::endl;
+                std::cout << "Skipped due to mismatching attributes (should be rw-p)" << std::endl;
             }
             continue;
         }
@@ -152,6 +146,15 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
         if (!ReadProcessMemory(m_hProcess, mbi.BaseAddress, &data[0], mbi.RegionSize, NULL))
         {
             printError(GetLastError(), "ReadProcessMemory"); // Show cause of failure
+            std::cout << std::hex << "Failure was in virtual memory at baseAddr 0x" << (unsigned)baseAddr
+                << ", BaseAddress=0x" << (unsigned)mbi.BaseAddress
+                << ", RegionSize=0x" << mbi.RegionSize
+                << ", AllocationBase=0x" << (unsigned)mbi.AllocationBase
+                << ", AllocationProtect=0x" << mbi.AllocationProtect
+                << ", State=0x" << mbi.State
+                << ", Protect=0x" << mbi.Protect
+                << ", Type=0x" << mbi.Type
+                << std::dec << std::endl;
         }
         else
         {

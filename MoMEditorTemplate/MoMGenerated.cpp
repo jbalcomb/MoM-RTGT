@@ -45,6 +45,23 @@ std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eBattleCondition& rhs)
+{
+    switch (rhs)
+    {
+    case BATTLECONDITION_other: os << "BATTLECONDITION_other"; break;
+    case BATTLECONDITION_strategic_city_combat: os << "BATTLECONDITION_strategic_city_combat"; break;
+    case BATTLECONDITION_sorcery_node: os << "BATTLECONDITION_sorcery_node"; break;
+    case BATTLECONDITION_nature_node: os << "BATTLECONDITION_nature_node"; break;
+    case BATTLECONDITION_chaos_node: os << "BATTLECONDITION_chaos_node"; break;
+    case BATTLECONDITION_sea: os << "BATTLECONDITION_sea"; break;
+    case eBattleCondition_MAX: os << "eBattleCondition_MAX"; break;
+    default: os << "<Unknown eBattleCondition>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
 {
     switch (rhs)
@@ -3446,6 +3463,27 @@ std::ostream& operator<<(std::ostream& os, const Available_spell_page& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const Battle_Figure& rhs)
+{
+    os << "{\n";
+    os << "m_xpel=" << rhs.m_xpel << " 0x" << std::hex << rhs.m_xpel << std::dec << "\n";
+    os << "m_ypel=" << rhs.m_ypel << " 0x" << std::hex << rhs.m_ypel << std::dec << "\n";
+    os << "m_Pic=" << rhs.m_Pic << " 0x" << std::hex << rhs.m_Pic << std::dec << "\n";
+    os << "m_Unk_6_sound=" << rhs.m_Unk_6_sound << " 0x" << std::hex << rhs.m_Unk_6_sound << std::dec << "\n";
+    os << "m_Unk_8=" << rhs.m_Unk_8 << " 0x" << std::hex << rhs.m_Unk_8 << std::dec << "\n";
+    os << "m_Unk_A=" << rhs.m_Unk_A << " 0x" << std::hex << rhs.m_Unk_A << std::dec << "\n";
+    os << "m_Unk_C=" << rhs.m_Unk_C << " 0x" << std::hex << rhs.m_Unk_C << std::dec << "\n";
+    os << "m_Owner=" << rhs.m_Owner << "\n";
+    os << "m_Unk_10=" << rhs.m_Unk_10 << " 0x" << std::hex << rhs.m_Unk_10 << std::dec << "\n";
+    os << "m_Color_enchantment=" << rhs.m_Color_enchantment << " 0x" << std::hex << rhs.m_Color_enchantment << std::dec << "\n";
+    os << "m_Unk_14_sound=" << rhs.m_Unk_14_sound << " 0x" << std::hex << rhs.m_Unk_14_sound << std::dec << "\n";
+    os << "m_Unk_16=" << rhs.m_Unk_16 << " 0x" << std::hex << rhs.m_Unk_16 << std::dec << "\n";
+    os << "m_Unk_18_battleunit_field_58=" << rhs.m_Unk_18_battleunit_field_58 << " 0x" << std::hex << rhs.m_Unk_18_battleunit_field_58 << std::dec << "\n";
+    os << "m_ZDepth=" << rhs.m_ZDepth << " 0x" << std::hex << rhs.m_ZDepth << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
 {
     os << "{\n";
@@ -3546,16 +3584,16 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
         os << "[" << i << "] " << rhs.m_Terrain[i] << ",\n";
     }
     os << ")\n";
-    os << "field_39C=(\n";
+    os << "m_TerrainGroupType=(\n";
     for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_39C[i] << " 0x" << std::hex << (unsigned)rhs.field_39C[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_TerrainGroupType[i] << " 0x" << std::hex << (unsigned)rhs.m_TerrainGroupType[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_56A=(\n";
+    os << "m_Road=(\n";
     for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_56A[i] << " 0x" << std::hex << (unsigned)rhs.field_56A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Road[i] << " 0x" << std::hex << (unsigned)rhs.m_Road[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Movement_walking=(\n";
@@ -3570,10 +3608,10 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_Movement_merging_teleporting_fly[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_merging_teleporting_fly[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Movement_unused=(\n";
+    os << "m_Movement_similar_to_walking=(\n";
     for (unsigned i = 0; i < 462; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Movement_unused[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_unused[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Movement_similar_to_walking[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_similar_to_walking[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Movement_sailing=(\n";
@@ -3582,46 +3620,46 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_Movement_sailing[i] << " 0x" << std::hex << (unsigned)rhs.m_Movement_sailing[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_E70_Nr_extra_terrain_pics_GUESS=" << rhs.field_E70_Nr_extra_terrain_pics_GUESS << " 0x" << std::hex << rhs.field_E70_Nr_extra_terrain_pics_GUESS << std::dec << "\n";
-    os << "field_E72=(\n";
+    os << "m_Nr_tree_pics=" << rhs.m_Nr_tree_pics << " 0x" << std::hex << rhs.m_Nr_tree_pics << std::dec << "\n";
+    os << "m_xpel_tree_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << rhs.field_E72[i] << " 0x" << std::hex << rhs.field_E72[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_xpel_tree_pics[i] << " 0x" << std::hex << rhs.m_xpel_tree_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_F3A=(\n";
+    os << "m_ypel_tree_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << rhs.field_F3A[i] << " 0x" << std::hex << rhs.field_F3A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_ypel_tree_pics[i] << " 0x" << std::hex << rhs.m_ypel_tree_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_1002_extra_terrain_pics_GUESS=(\n";
+    os << "m_tree_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << rhs.field_1002_extra_terrain_pics_GUESS[i] << " 0x" << std::hex << rhs.field_1002_extra_terrain_pics_GUESS[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_tree_pics[i] << " 0x" << std::hex << rhs.m_tree_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_10CA_Nr=" << rhs.field_10CA_Nr << " 0x" << std::hex << rhs.field_10CA_Nr << std::dec << "\n";
-    os << "field_10CC=(\n";
+    os << "m_Nr_rock_pics=" << rhs.m_Nr_rock_pics << " 0x" << std::hex << rhs.m_Nr_rock_pics << std::dec << "\n";
+    os << "m_xpel_rock_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_10CC[i] << " 0x" << std::hex << (unsigned)rhs.field_10CC[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_xpel_rock_pics[i] << " 0x" << std::hex << rhs.m_xpel_rock_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_1130=(\n";
+    os << "m_ypel_rock_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_1130[i] << " 0x" << std::hex << (unsigned)rhs.field_1130[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_ypel_rock_pics[i] << " 0x" << std::hex << rhs.m_ypel_rock_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "field_1194=(\n";
+    os << "m_rock_pics=(\n";
     for (unsigned i = 0; i < 100; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.field_1194[i] << " 0x" << std::hex << (unsigned)rhs.field_1194[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_rock_pics[i] << " 0x" << std::hex << rhs.m_rock_pics[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "field_11F8=(\n";
-    for (unsigned i = 0; i < 762; ++i)
+    for (unsigned i = 0; i < 462; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.field_11F8[i] << " 0x" << std::hex << (unsigned)rhs.field_11F8[i] << std::dec << ",\n";
     }
@@ -3650,10 +3688,10 @@ std::ostream& operator<<(std::ostream& os, const Battlefield& rhs)
     }
     os << ")\n";
     os << "m_City_Walls=" << rhs.m_City_Walls << "\n";
-    os << "m_Wall_is_whole=(\n";
+    os << "m_Wall_present_4x4=(\n";
     for (unsigned i = 0; i < 16; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Wall_is_whole[i] << " 0x" << std::hex << rhs.m_Wall_is_whole[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Wall_present_4x4[i] << " 0x" << std::hex << rhs.m_Wall_present_4x4[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Wall_of_Fire=" << rhs.m_Wall_of_Fire << "\n";
@@ -5130,15 +5168,19 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "m_UnitView_nrLines=" << rhs.m_UnitView_nrLines << " 0x" << std::hex << rhs.m_UnitView_nrLines << std::dec << "\n";
     os << "m_addr_UnitView_Lines=" << rhs.m_addr_UnitView_Lines << "\n";
     os << "m_Unk_C196=(\n";
-    for (unsigned i = 0; i < 0xC524 - 0xC196; ++i)
+    for (unsigned i = 0; i < 0xC51C - 0xC196; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C196[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C196[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Battlefield_battleUnitIDs=(\n";
+    os << "m_Combat_turn=" << rhs.m_Combat_turn << " 0x" << std::hex << rhs.m_Combat_turn << std::dec << "\n";
+    os << "m_Unk_C51E=" << rhs.m_Unk_C51E << " 0x" << std::hex << rhs.m_Unk_C51E << std::dec << "\n";
+    os << "m_External_battle_condition=" << rhs.m_External_battle_condition << "\n";
+    os << "m_Unk_C522=" << rhs.m_Unk_C522 << " 0x" << std::hex << rhs.m_Unk_C522 << std::dec << "\n";
+    os << "m_Offsets_Battlefield_battleUnitIDs=(\n";
     for (unsigned i = 0; i < 22; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Battlefield_battleUnitIDs[i] << " 0x" << std::hex << rhs.m_Battlefield_battleUnitIDs[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Offsets_Battlefield_battleUnitIDs[i] << " 0x" << std::hex << rhs.m_Offsets_Battlefield_battleUnitIDs[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Unk_C550=(\n";
@@ -5198,9 +5240,25 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << ")\n";
     os << "m_First_visible_available_spell_page=" << rhs.m_First_visible_available_spell_page << " 0x" << std::hex << rhs.m_First_visible_available_spell_page << std::dec << "\n";
     os << "m_Unk_C926=(\n";
-    for (unsigned i = 0; i < 0xD49A - 0xC926; ++i)
+    for (unsigned i = 0; i < 0xD15A - 0xC926; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C926[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C926[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_addr_Battle_figures_256=" << rhs.m_addr_Battle_figures_256 << "\n";
+    os << "m_Nr_figures_on_battlefield=" << rhs.m_Nr_figures_on_battlefield << " 0x" << std::hex << rhs.m_Nr_figures_on_battlefield << std::dec << "\n";
+    os << "m_Unk_D160=(\n";
+    for (unsigned i = 0; i < 0xD188 - 0xD160; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_D160[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_D160[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Battle_activetile_anim=" << rhs.m_Battle_activetile_anim << " 0x" << std::hex << rhs.m_Battle_activetile_anim << std::dec << "\n";
+    os << "m_Battle_tileselection_anim=" << rhs.m_Battle_tileselection_anim << " 0x" << std::hex << rhs.m_Battle_tileselection_anim << std::dec << "\n";
+    os << "m_Unk_D18C=(\n";
+    for (unsigned i = 0; i < 0xD49A - 0xD18C; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_D18C[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_D18C[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_NEAR_HEAP=(\n";
@@ -6061,7 +6119,15 @@ std::ostream& operator<<(std::ostream& os, const Unit& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const UnitView& rhs)
+std::ostream& operator<<(std::ostream& os, const UnitView_Line& rhs)
+{
+    os << "{\n";
+    os << "m_Line=" << formatCharArray(rhs.m_Line, 30) << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_Lines& rhs)
 {
     os << "{\n";
     os << "m_lines=(\n";
@@ -6088,14 +6154,6 @@ std::ostream& operator<<(std::ostream& os, const UnitView& rhs)
         os << "[" << i << "] " << rhs.m_5A0_line_related_itemNr[i] << " 0x" << std::hex << rhs.m_5A0_line_related_itemNr[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "}";
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const UnitView_Line& rhs)
-{
-    os << "{\n";
-    os << "m_Line=" << formatCharArray(rhs.m_Line, 30) << "\n";
     os << "}";
     return os;
 }
@@ -7473,6 +7531,22 @@ bool validate(const eBannerColor& rhs, const std::string& context)
     case BANNER_Yellow: break;
     case BANNER_Brown: break;
     default: std::cout << context << ": Unknown eBannerColor = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eBattleCondition& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case BATTLECONDITION_other: break;
+    case BATTLECONDITION_strategic_city_combat: break;
+    case BATTLECONDITION_sorcery_node: break;
+    case BATTLECONDITION_nature_node: break;
+    case BATTLECONDITION_chaos_node: break;
+    case BATTLECONDITION_sea: break;
+    default: std::cout << context << ": Unknown eBattleCondition = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -10490,6 +10564,13 @@ bool validate(const Available_spell_page& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const Battle_Figure& rhs, const std::string& context)
+{
+    bool ok = true;
+    if (!validate(rhs.m_Owner, context + ".m_Owner")) ok = false;
+    return ok;
+}
+
 bool validate(const Battle_Unit& rhs, const std::string& context)
 {
     bool ok = true;
@@ -11181,7 +11262,9 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     if (!validate(rhs.m_Game_Data, context + ".m_Game_Data")) ok = false;
     if (!validate(rhs.m_Game_Settings, context + ".m_Game_Settings")) ok = false;
     if (!validate(rhs.m_addr_UnitView_Lines, context + ".m_addr_UnitView_Lines")) ok = false;
+    if (!validate(rhs.m_External_battle_condition, context + ".m_External_battle_condition")) ok = false;
     if (!validate(rhs.m_addr_Hero_Spells, context + ".m_addr_Hero_Spells")) ok = false;
+    if (!validate(rhs.m_addr_Battle_figures_256, context + ".m_addr_Battle_figures_256")) ok = false;
     for (unsigned i = 0; i < 0x10; ++i)
     {
           std::ostringstream oss;
@@ -11614,7 +11697,13 @@ bool validate(const Unit& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const UnitView& rhs, const std::string& context)
+bool validate(const UnitView_Line& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const UnitView_Lines& rhs, const std::string& context)
 {
     bool ok = true;
     for (unsigned i = 0; i < 40; ++i)
@@ -11623,12 +11712,6 @@ bool validate(const UnitView& rhs, const std::string& context)
           oss << context << ".m_lines[" << i << "]";
           if (!validate(rhs.m_lines[i], oss.str())) ok = false;
     }
-    return ok;
-}
-
-bool validate(const UnitView_Line& rhs, const std::string& context)
-{
-    bool ok = true;
     return ok;
 }
 

@@ -42,7 +42,7 @@ struct MoMGamePointers
     Spell_Data*     addr_Spell_Data ; // 912C
     Item*           addr_Items  ; // 9136
     UnknownBuf*        addr_item_in_game_GUESS   ; // 913A
-    UnknownBuf*        addr_Battle_Unit_View  ; // 9226
+    Battle_Unit*        addr_Battle_Unit_View  ; // 9226
     Battle_Unit*    addr_Battle_Unit  ; // 922A
     Spells_Cast_in_Battle*  addr_Spells_Cast_in_Battle   ; // 922E
     Hero_stats*     addr_Hero_stat[6]   ; // 9232
@@ -88,7 +88,8 @@ struct MoMGamePointers
     UnknownBuf*        dw_bx_6154  ; // 9EAC
     Unit*           addr_Units    ; // 9EC2
 
-    UnitView*       m_addr_UnitView_Lines;  // C192
+    UnitView_Lines*       m_addr_UnitView_Lines;  // C192
+    Battle_Figure*   m_addr_Battle_figures_256;         // D15A
 };
 
 static MoMGamePointers gMoMGamePointers;    // TODO: For DEBUG purposes
@@ -231,7 +232,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Spell_Data, addr_Spell_Data);
         SET_RELOC_POINTER(Item, addr_Items);
         SET_RELOC_POINTER(UnknownBuf, addr_item_in_game_GUESS);
-        SET_RELOC_POINTER(UnknownBuf, addr_Battle_Unit_View);
+        SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit_View);
         SET_RELOC_POINTER(Battle_Unit, addr_Battle_Unit);
 
         SET_RELOC_POINTER(Spells_Cast_in_Battle, addr_Spells_Cast_in_Battle);
@@ -284,7 +285,8 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(UnknownBuf, dw_bx_6154);
         SET_RELOC_POINTER(Unit, addr_Units);
 
-        gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView>(dseg->m_addr_UnitView_Lines, 1);
+        gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView_Lines>(dseg->m_addr_UnitView_Lines, 1);
+        gMoMGamePointers.m_addr_Battle_figures_256 = derefHeapPointer<Battle_Figure>(dseg->m_addr_Battle_figures_256, 256);
     }
 
     return ok;

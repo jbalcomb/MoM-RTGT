@@ -27,10 +27,10 @@ public:
     /// Wait for MoM to trigger the hook.
     /// \retval true if the hook was triggered
     /// \retval false if the connection is broken or a timeout occurred
-    bool waitForHook(double timeout);
+    bool waitForBait(double timeout);
 
     /// Let MoM continue from the hook.
-    bool releaseHook();
+    bool releaseBait();
 
 private:
     MoMGameBase* m_game;

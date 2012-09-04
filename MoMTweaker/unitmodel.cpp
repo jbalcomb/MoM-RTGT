@@ -1713,7 +1713,7 @@ void UnitModel::threadUpdateModelData()
         int nrBattleSections = 0;
         if ((0 != game) && (0 != game->getDataSegment()))
         {
-            nrBattleSections = 3;       // TODO: Proper number
+            nrBattleSections = 3+5;       // TODO: Proper number
         }
         parentItem->child(toprow, 0)->setData(tr("MEM:Battle"), Qt::UserRole);
         parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
@@ -1764,6 +1764,7 @@ void UnitModel::threadUpdateModelData()
             {
                 update_Battle_Units(psubtree, game, subrow);
             }
+
             removeUnusedRows(row, psubtree, subrow);
 
             row++;
@@ -1772,6 +1773,19 @@ void UnitModel::threadUpdateModelData()
         update_Battlefield(ptree, game, row);
 
         update_Spells_Cast_in_Battle(ptree, game, row);
+
+        if ((0 != game) && (0 != game->getDataSegment()))
+        {
+            if (ptree->rowCount() == row)
+            {
+                ptree->appendChild("m_Combat_turn", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Combat_turn));
+                ptree->appendChild("m_External_battle_condition", new QMoMTreeItem<MoM::eBattleCondition>(&game->getDataSegment()->m_External_battle_condition));
+                ptree->appendChild("m_BattleUnit_on_move", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_BattleUnit_on_move));
+                ptree->appendChild("m_Defending_wizard", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Defending_wizard));
+                ptree->appendChild("m_Attacking_wizard", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Attacking_wizard));
+            }
+            row += 5;
+        }
 
         if (nrBattleSections > oldRowCount)
         {

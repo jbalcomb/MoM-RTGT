@@ -124,30 +124,38 @@ bool MoMProcess::findSEG0(const std::vector<uint8_t>& data)
 bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& data)
 {
     bool ok = true;
-    for (size_t i = 0; ok && (i + ARRAYSIZE(gDATASEGMENT_IDENTIFIER) < data.size()); ++i)
+
+    // Find the gLOCAL_DIRECTORY, but do not accept '%s' as a result (which is in the dosbox executable itself)
+    std::string strLocalDirectoryKey(gLOCAL_DIRECTORY);
+    size_t indexLocalDirectory = findStringInBuffer(strLocalDirectoryKey, data);
+    if (indexLocalDirectory < data.size())
     {
-        // Try to find the current directory (exclude the terminating zero that won't be there)
-        if (0 == memcmp(&data[i], gLOCAL_DIRECTORY, ARRAYSIZE(gLOCAL_DIRECTORY) - 1))
+        const char* localDirectory = (const char*)&data[indexLocalDirectory + strLocalDirectoryKey.size()];
+        if (strlen(localDirectory) > 2)
         {
-            std::cout << "Found '" << gLOCAL_DIRECTORY << "' in BaseAddress 0x" << std::hex << baseAddress << " size 0x"<< data.size() << std::dec << std::endl;
-            m_exeFilepath = (const char*)&data[i + strlen(gLOCAL_DIRECTORY)];
-            std::cout << "Found '" << gLOCAL_DIRECTORY << "' with '" << m_exeFilepath << "' at offset 0x" << std::hex << i << std::dec << std::endl;
-            break;
-        }
-
-        if (0 == memcmp(&data[i], gDATASEGMENT_IDENTIFIER, ARRAYSIZE(gDATASEGMENT_IDENTIFIER)))
-        {
-            std::cout << "Found MoM BaseAddress 0x" << std::hex << baseAddress << " size 0x"<< data.size() << std::dec << std::endl;
-            m_lpBaseAddress = (uint8_t*)baseAddress;
-            m_dwBaseAddressSize = data.size();
-            m_dwOffsetDatasegment = i;
-            std::cout << "Found MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER) << ") at offset 0x" << std::hex << i << std::dec << std::endl;
-
-            ok = findSEG0(data);
-
-            break;
+            std::cout << "Found '" << gLOCAL_DIRECTORY << "' in BaseAddress 0x" << std::hex << baseAddress
+                      << " with size 0x"<< data.size() << std::dec << std::endl;
+            m_exeFilepath = localDirectory;
+            std::cout << "Result of '" << gLOCAL_DIRECTORY << "' is '" << m_exeFilepath
+                      << "' at offset 0x" << std::hex << indexLocalDirectory << std::dec << std::endl;
         }
     }
+
+    // Find the gDATASEGMENT_IDENTIFIER and fill in the related fields
+    size_t indexDatasegmentIdentifier = findStringInBuffer(std::string(gDATASEGMENT_IDENTIFIER, sizeof(gDATASEGMENT_IDENTIFIER)), data);
+    if (indexDatasegmentIdentifier < data.size())
+    {
+        std::cout << "Found MoM BaseAddress 0x" << std::hex << baseAddress << " with size 0x"<< data.size() << std::dec << std::endl;
+        m_lpBaseAddress = (uint8_t*)baseAddress;
+        m_dwBaseAddressSize = data.size();
+        m_dwOffsetDatasegment = indexDatasegmentIdentifier;
+        std::cout << "MoM Data Segment (DS) Identifier (size " << ARRAYSIZE(gDATASEGMENT_IDENTIFIER)
+                  << ") is at offset 0x" << std::hex << indexDatasegmentIdentifier << std::dec << std::endl;
+
+        // Check and fill the related fields
+        ok = findSEG0(data);
+    }
+
     return ok;
 }
 
@@ -178,36 +186,6 @@ bool MoMProcess::registerResults(bool ok)
 
 bool MoMProcess::readData()
 {
-//    if (NULL == m_hProcess)
-//        return false;
-//    if (0 == m_lpBaseAddress)
-//        return false;
-//    if (0 == m_dwOffsetDatasegment)
-//        return false;
-//    if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
-//        return false;
-
-//    size_t size = m_dwBaseAddressSize - m_dwOffsetDatasegment;
-
-//    bool ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetDatasegment, size, m_dataSegmentAndUp);
-
-//    // Check if we're still the same executable
-//    if (ok)
-//    {
-//        std::vector<uint8_t> signature;
-//        size_t sizeSignature = 4;
-//        ok = readProcessData(m_hProcess, m_lpBaseAddress + m_dwOffsetCode, sizeSignature, signature);
-//        if (ok)
-//        {
-//            ok = (gCS_SIGNATURE_BYTE == signature[0]);
-//        }
-//        if (ok)
-//        {
-//            size_t offsetDStoSegment0 = (m_dwOffsetDatasegment - m_dwOffsetSegment0) / MoM::gPARAGRAPH_SIZE;
-//            ok = (*(uint16_t*)&signature[1] == offsetDStoSegment0);
-//        }
-//    }
-
     if (m_dwOffsetDatasegment >= m_dwBaseAddressSize)
         return false;
     size_t size = m_dwBaseAddressSize - m_dwOffsetDatasegment;

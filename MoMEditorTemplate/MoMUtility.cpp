@@ -24,6 +24,52 @@ std::string dirFromFilepath(const std::string filepath)
     return dir;
 }
 
+// Knuth–Morris–Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)
+// \retval n if the needle was not found
+// \retval the index of the needle in the haystack otherwise
+static size_t findKnuthMorrisPratt(const uint8_t* needle, size_t m, const uint8_t* haystack, size_t n)
+{
+    // Pre-compile the needle
+    std::vector<int> border(m + 1);
+    border[0] = -1;
+    for (int i = 0; i < (int)m; ++i)
+    {
+        border[i+1] = border[i];
+        while ((border[i+1] > -1) && (needle[border[i+1]] != needle[i]))
+        {
+            border[i+1] = border[border[i+1]];
+        }
+        border[i+1]++;
+    }
+
+    // Find the pre-compiled needle in the haystack
+    int seen = 0;
+    size_t foundIndex = n;
+    for (int i = 0; i < (int)n; ++i)
+    {
+        while ((seen > -1) && (needle[seen] != haystack[i]))
+        {
+            seen = border[seen];
+        }
+        if (++seen == m)
+        {
+            foundIndex = (size_t)(i - m + 1);
+
+            // Break off the algorithm, since we have what we want;
+            break;
+
+            // There are no more characters in needle, so with the next input character let's try with the border of the whole needle.
+            seen = border[m];
+        }
+    }
+    return foundIndex;
+}
+
+size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>& haystack)
+{
+    return findKnuthMorrisPratt((const uint8_t*)&needle[0], needle.size(), &haystack[0], haystack.size());
+}
+
 std::string lowercase(const std::string& str)
 {
     std::string result = str;
