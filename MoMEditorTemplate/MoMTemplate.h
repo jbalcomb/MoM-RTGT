@@ -4903,22 +4903,6 @@ typedef struct PACKED_STRUCT // WizardsExe_Game_Data
                                             // SIZE 10 ds:BD9E
 } WizardsExe_Game_Data;
 
-typedef struct PACKED_STRUCT // WizardsExe_Game_Data140m
-{                                           // ds:BD8E
-    // Game status
-    uint16_t        m_UnitNr_Active;        // 00
-    uint16_t        m_Current_Turn;         // 02 year is 1400 + Turn/12, month is Turn%12
-    uint16_t        m_Number_of_Units;      // 04 in Unit Instance Table (0 ... 1000, out of a maximum of 1000)
-    uint16_t        m_Number_of_Cities;     // 06 in City Table (0 ... 100, of out of a maximum of 100)
-
-    // Game choices
-    eDifficulty140m     m_Difficulty;           // 08
-    eMagic_Powerful140m m_Magic_Powerful_setting;   // 0A
-    eLand_Size140m      m_Land_Size_setting;    // 0C
-    uint16_t        m_Number_of_Wizards;    // 0E in Wizard Table (including YOU, 2 ... 5)
-                                            // SIZE 10 ds:BD9E
-} WizardsExe_Game_Data140m;
-
 typedef struct PACKED_STRUCT // WizardsExe_Save_Name
 {
     char        m_Name[20];

@@ -662,14 +662,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        if (game->getMoMVersion() >= std::string("v1.40m"))
-        {
-            ptree->setChild(row, 0, constructTreeItem((MoM::WizardsExe_Game_Data140m*)game->getGameData_WizardsExe(), ""));
-        }
-        else
-        {
-            ptree->setChild(row, 0, constructTreeItem(game->getGameData_WizardsExe(), ""));
-        }
+        ptree->setChild(row, 0, constructTreeItem(game->getGameData_WizardsExe(), ""));
 
         if ((0 != dataSegment) && game->getGameData_WizardsExe())
         {

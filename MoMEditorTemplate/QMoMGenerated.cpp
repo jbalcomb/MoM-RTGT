@@ -1382,9 +1382,30 @@ QMoMTreeItemBase* constructTreeItem(Game_Data_Save* rhs, const QString& context)
         return ptree;
 
     ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Wizards));
-    ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size_setting));
-    ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
-    ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size_setting));
+    }
+    else
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size_setting));
+    }
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful_setting));
+    }
+    else
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
+    }
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
+    }
+    else
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
+    }
     ptree->appendChild("m_Number_of_Cities", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Cities));
     ptree->appendChild("m_Number_of_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Units));
     ptree->appendChild("m_Current_Turn", new QMoMTreeItem<uint16_t>(&rhs->m_Current_Turn));
@@ -1418,10 +1439,31 @@ QMoMTreeItemBase* constructTreeItem(Game_Settings* rhs, const QString& context)
     ptree->appendChild("m_Expanding_Help", new QMoMTreeItem<eYesNo16>(&rhs->m_Expanding_Help));
     ptree->appendChild("m_UNK01", new QMoMTreeItem<uint16_t>(&rhs->m_UNK01));
     ptree->appendChild("m_UNK02", new QMoMTreeItem<uint16_t>(&rhs->m_UNK02));
-    ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
+    }
+    else
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
+    }
     ptree->appendChild("m_Nr_Opponents", new QMoMTreeItem<uint16_t>(&rhs->m_Nr_Opponents));
-    ptree->appendChild("m_Land_Size", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size));
-    ptree->appendChild("m_Magic_Powerful", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful));
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Land_Size", new QMoMTreeItem<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size));
+    }
+    else
+    {
+        ptree->appendChild("m_Land_Size", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size));
+    }
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Magic_Powerful", new QMoMTreeItem<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful));
+    }
+    else
+    {
+        ptree->appendChild("m_Magic_Powerful", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful));
+    }
     QMoMTreeItemBase* ptreem_Slots_Saved = ptree;
     if (8 > 3)
     {
@@ -6730,26 +6772,30 @@ QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QString& co
     ptree->appendChild("m_Current_Turn", new QMoMTreeItem<uint16_t>(&rhs->m_Current_Turn));
     ptree->appendChild("m_Number_of_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Units));
     ptree->appendChild("m_Number_of_Cities", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Cities));
-    ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
-    ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
-    ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size_setting));
-    ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Wizards));
-    return ptree;
-}
-
-QMoMTreeItemBase* constructTreeItem(WizardsExe_Game_Data140m* rhs, const QString& context)
-{
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<WizardsExe_Game_Data140m>(rhs, context);
-    if (0 == rhs)
-        return ptree;
-
-    ptree->appendChild("m_UnitNr_Active", new QMoMTreeItem<uint16_t>(&rhs->m_UnitNr_Active));
-    ptree->appendChild("m_Current_Turn", new QMoMTreeItem<uint16_t>(&rhs->m_Current_Turn));
-    ptree->appendChild("m_Number_of_Units", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Units));
-    ptree->appendChild("m_Number_of_Cities", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Cities));
-    ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty140m>(&rhs->m_Difficulty));
-    ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful140m>(&rhs->m_Magic_Powerful_setting));
-    ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size140m>(&rhs->m_Land_Size_setting));
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
+    }
+    else
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItem<eDifficulty>(&rhs->m_Difficulty));
+    }
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful_setting));
+    }
+    else
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItem<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
+    }
+    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size_setting));
+    }
+    else
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItem<eLand_Size>(&rhs->m_Land_Size_setting));
+    }
     ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItem<uint16_t>(&rhs->m_Number_of_Wizards));
     return ptree;
 }

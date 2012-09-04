@@ -7356,21 +7356,6 @@ std::ostream& operator<<(std::ostream& os, const WizardsExe_Game_Data& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const WizardsExe_Game_Data140m& rhs)
-{
-    os << "{\n";
-    os << "m_UnitNr_Active=" << rhs.m_UnitNr_Active << " 0x" << std::hex << rhs.m_UnitNr_Active << std::dec << "\n";
-    os << "m_Current_Turn=" << rhs.m_Current_Turn << " 0x" << std::hex << rhs.m_Current_Turn << std::dec << "\n";
-    os << "m_Number_of_Units=" << rhs.m_Number_of_Units << " 0x" << std::hex << rhs.m_Number_of_Units << std::dec << "\n";
-    os << "m_Number_of_Cities=" << rhs.m_Number_of_Cities << " 0x" << std::hex << rhs.m_Number_of_Cities << std::dec << "\n";
-    os << "m_Difficulty=" << rhs.m_Difficulty << "\n";
-    os << "m_Magic_Powerful_setting=" << rhs.m_Magic_Powerful_setting << "\n";
-    os << "m_Land_Size_setting=" << rhs.m_Land_Size_setting << "\n";
-    os << "m_Number_of_Wizards=" << rhs.m_Number_of_Wizards << " 0x" << std::hex << rhs.m_Number_of_Wizards << std::dec << "\n";
-    os << "}";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const WizardsExe_Save_Name& rhs)
 {
     os << "{\n";
@@ -11884,15 +11869,6 @@ bool validate(const Wizard_Type_Data& rhs, const std::string& context)
 }
 
 bool validate(const WizardsExe_Game_Data& rhs, const std::string& context)
-{
-    bool ok = true;
-    if (!validate(rhs.m_Difficulty, context + ".m_Difficulty")) ok = false;
-    if (!validate(rhs.m_Magic_Powerful_setting, context + ".m_Magic_Powerful_setting")) ok = false;
-    if (!validate(rhs.m_Land_Size_setting, context + ".m_Land_Size_setting")) ok = false;
-    return ok;
-}
-
-bool validate(const WizardsExe_Game_Data140m& rhs, const std::string& context)
 {
     bool ok = true;
     if (!validate(rhs.m_Difficulty, context + ".m_Difficulty")) ok = false;
