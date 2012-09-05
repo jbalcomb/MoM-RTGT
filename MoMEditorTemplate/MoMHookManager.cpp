@@ -129,9 +129,9 @@ bool MoMHookManager::insertHook()
 
     bool ok = true;
     uint8_t* codeBase = m_game->getWizardsExeContents();
-    if (0 != codeBase)
+    if (0 == codeBase)
     {
-        std::cout << "failed to commit code changes" << std::endl;
+        std::cout << "failed to retrieve WIZARDS.EXE contents" << std::endl;
         ok = false;
     }
 
