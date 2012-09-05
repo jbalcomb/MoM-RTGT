@@ -1459,12 +1459,13 @@ void UnitModel::threadUpdateModelData()
             ++row;
         }
 
+        MOM_FOREACH(ePlayer, playerNr, gMAX_VALID_WIZARDS)
         {
             if (row == ptree->rowCount())
             {
                 ptree->appendEmptyRow();
             }
-            ptree->child(row, 0)->setData(tr("Hero Stats (YOU)"), Qt::UserRole);
+            ptree->child(row, 0)->setData(tr("Hero Stats (%0)").arg(prettyQStr(playerNr)), Qt::EditRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             if (0 == game)
             {
@@ -1477,7 +1478,7 @@ void UnitModel::threadUpdateModelData()
 
             int subrow = 0;
             QMoMTreeItemBase* psubtree = ptree->child(row, 0);
-            update_Hero_Stats(psubtree, game, subrow, MoM::PLAYER_YOU);
+            update_Hero_Stats(psubtree, game, subrow, playerNr);
             removeUnusedRows(row, psubtree, subrow);
 
             ++row;
