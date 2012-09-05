@@ -24,6 +24,8 @@ typedef QVector<QRgb> QMoMPalette;
 
 const uint8_t gTRANSPARENT_COLOR = 0;
 const uint8_t gSHADOW_COLOR = 232;
+const uint8_t gFIRST_BANNER_COLOR = 215; // Either 215 or 216. Apparently only 3 colors are actually used (216-218).
+const uint8_t gCOUNT_BANNER_COLOR = 4;
 
 bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context);
 

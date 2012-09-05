@@ -4642,7 +4642,7 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     eRace       m_Race_Code;         // 0D  Race code (table 2)
     uint8_t     m_Building_Required1;    // 0E  Normal units: building required (table 3), Hero: ID Code, Summoned: 6
     eHero_TypeCode     m_Hero_TypeCode_or_Building2;      // 0F  Heroes: type code, Regular units: Building required, Summoned: zero
-    uint8_t     m_TypeCode;         // 10  Type code?
+    uint8_t     m_Unit_picture;     // 10  Unit picture
     uint8_t     m_UNK01;            // 11  00
     uint8_t     m_Hitpoints;        // 12  Hit points (hearts) per figure
     uint8_t     m_Scouting;    // 13  Scouting range
@@ -4836,6 +4836,58 @@ typedef struct PACKED_STRUCT // UnitView_Lines
                                                 // SIZE 5F0
 } UnitView_Lines;
 
+typedef struct PACKED_STRUCT // UnitView_HeroAbility
+{
+    uint32_t        m_bitmask;                  // 0
+    int16_t         m_lbxIndex;                 // 4
+    int16_t         m_helpIndex;                // 6
+                                                // SIZE 8
+} UnitView_HeroAbility;
+
+typedef struct PACKED_STRUCT // UnitView_UnitData
+{
+    DS_Offset       m_offset_label;             // 0
+    uint16_t        m_bitmask;                  // 2
+    int16_t         m_lbxIndex;                 // 4
+    int16_t         m_helpIndex;                // 6
+                                                // SIZE 8
+} UnitView_UnitData;
+
+typedef struct PACKED_STRUCT // UnitView_Mutation
+{
+    DS_Offset       m_offset_label;             // 0
+    uint8_t         m_bitmask;                  // 2
+    int8_t          m_lbxIndex;                 // 3
+    int16_t         m_helpIndex;                // 4
+                                                // SIZE 6
+} UnitView_Mutation;
+
+typedef struct PACKED_STRUCT // UnitView_Ranged
+{
+    DS_Offset       m_offset_label;             // 0
+    eRanged_Type    m_rangedType;               // 2
+    int8_t          m_lbxIndex;                 // 3
+    int16_t         m_helpIndex;                // 4
+                                                // SIZE 6
+} UnitView_Ranged;
+
+typedef struct PACKED_STRUCT // UnitView_SpellData
+{
+    DS_Offset       m_offset_label;             // 0
+    uint32_t        m_bitmask;                  // 2
+    int16_t         m_lbxIndex;                 // 6
+    int16_t         m_helpIndex;                // 8
+                                                // SIZE A
+} UnitView_SpellData;
+
+typedef struct PACKED_STRUCT // UnitView_ItemText
+{
+    DS_Offset       m_offset_label;             // 0
+    DS_Offset       m_offset_helpText;          // 2
+    uint32_t        m_bitmask;                  // 4
+                                                // SIZE 8
+} UnitView_ItemText;
+
 typedef struct PACKED_STRUCT // Unit_Data_Hero_Types
 {
     //Unit_Type_Data m_Hero_Types[35];
@@ -4995,12 +5047,23 @@ typedef struct // MoMDataSegment
 
     uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
 
-    char        m_NameBuffer_2082[0x3F46 - 0x2082];    // ds:2082 / EXE:2B522
+    char        m_NameBuffer_2082[0x3A50 - 0x2082];    // ds:2082 / EXE:2B522
 
-    DS_Offset   m_UnitLevelNameOffsets[6];          // ds:3F46
-    DS_Offset   m_HeroLevelNameOffsets[9];          // ds:3F52
+    UnitView_HeroAbility    m_UnitView_HeroAbility_data[23];    // ds:3A50
+    UnitView_UnitData       m_UnitView_UnitAbility_data[17];    // ds:3B08
+    UnitView_UnitData       m_UnitView_UnitImmunity_data[8];    // ds:3B90
+    UnitView_UnitData       m_UnitView_UnitSpell_data[8];       // ds:3BD0
+    UnitView_UnitData       m_UnitView_UnitAttack_data[11];     // ds:3C10
+    UnitView_Mutation       m_UnitMutation_data[3];             // ds:3C68
+    UnitView_Ranged         m_UnitRanged_data[6];               // ds:3C7A
+    UnitView_SpellData      m_UnitEnchantment_data[32];         // ds:3C9E
+    UnitView_SpellData      m_CombatEnchantment_data[15];       // ds:3DDE
+    UnitView_SpellData      m_ItemPower_data[21];               // ds:3E74
+    DS_Offset               m_Offsets_UnitLevelNames[6];        // ds:3F46
+    DS_Offset               m_Offsets_HeroLevelNames[9];        // ds:3F52
+    UnitView_ItemText       m_ItemPower_text[32];               // ds:3F64
 
-    char        m_NameBuffer_3F64[0x5E92 - 0x3F64];    // ds:3F64
+    char        m_NameBuffer_4064[0x5E92 - 0x4064]; // ds:4064
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
     uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92
@@ -5036,9 +5099,7 @@ typedef struct // MoMDataSegment
     uint16_t    word_3FBD4  ; // 9134
     EXE_Reloc   m_addr_Items;                       // 9136
     EXE_Reloc   addr_item_in_game_GUESS   ; // 913A
-    uint8_t unk__913E[26]   ; // 913E
-    uint8_t unk_3FBF8[23]   ; // 9158
-    uint8_t unk_3FC0F[183]  ; // 916F
+    uint16_t    m_item_pics_116[116];               // 913E
     EXE_Reloc   m_addr_Battle_Unit_View;            // 9226
     EXE_Reloc   m_addr_Battle_Unit;                 // 922A
     EXE_Reloc   m_addr_Spells_Cast_in_Battle;       // 922E
@@ -5059,7 +5120,8 @@ typedef struct // MoMDataSegment
     uint16_t    w_coo_Y_X_clicked   ; // 9280
     uint16_t    word_3FD22  ; // 9282
     int16_t     m_clash_place_type; // 9284         // -1=undef,0=overland,1=city,5=lair
-    uint8_t w_clash_place_ID[14]    ; // 9286
+    int16_t     m_clash_cityNr_or_lairNr; // 9286
+    uint8_t word_3FD28[12]    ; // 9288
     int16_t     m_kyrub_dseg_9294  ; // 9294
     int16_t     m_kyrub_dseg_9296  ; // 9296
     uint8_t word_3FD38[20]  ; // 9298
@@ -5220,8 +5282,8 @@ typedef struct // MoMDataSegment
     uint8_t word_4006E[34]  ; // 95CE
     uint16_t    word_40090  ; // 95F0
     uint8_t word_40092[82]  ; // 95F2
-    EXE_Reloc   m_addr_city_detailed_GUESS;         // 9644
-    uint8_t word_400E8[244] ; // 9648
+    int16_t     m_cityNr_detailed;              // 9644
+    uint8_t word_400E8[246] ; // 9646
     uint16_t    word_401DC  ; // 973C
     uint16_t    word_401DE  ; // 973E
     uint16_t    word_401E0  ; // 9740
@@ -5363,10 +5425,8 @@ typedef struct // MoMDataSegment
     EXE_Reloc   m_addr_fortress_data;               // 9CC8
     EXE_Reloc   m_addr_Nodes_Attr;                  // 9CCC
     EXE_Reloc   m_addr_Terrain_LandMassID;          // 9CD0
-    uint16_t    word_40774  ; // 9CD4
-    uint16_t    word_40776  ; // 9CD6
-    uint16_t    word_40778  ; // 9CD8
-    uint16_t    word_4077A  ; // 9CDA
+    EXE_Reloc addr_40774_Terrain; // 9CD4
+    EXE_Reloc addr_40778_Terrain; // 9CD8
     EXE_Reloc   m_addr_Terrain_Types;               // 9CDC
     EXE_Reloc   m_addr_Unrest_Table[gMAX_RACES];    // 9CE0
     uint16_t    word_407B8  ; // 9D18
@@ -5374,7 +5434,8 @@ typedef struct // MoMDataSegment
     uint16_t    word_407BC  ; // 9D1C
     uint16_t    word_407BE  ; // 9D1E
     uint16_t    word_407C0  ; // 9D20
-    uint8_t w_Vizier_allowed_GUESS[8]   ; // 9D22
+    uint16_t    m_Vizier_active   ; // 9D22
+    uint8_t word_407C4[6]   ; // 9D24
     EXE_Reloc   dword_407CA ; // 9D2A
     EXE_Reloc   dword_407CE ; // 9D2E
     uint16_t    word_407D2  ; // 9D32
@@ -5410,7 +5471,7 @@ typedef struct // MoMDataSegment
     uint16_t    word_4095E  ; // 9EBE
     uint16_t    word_40960  ; // 9EC0
     EXE_Reloc   m_addr_Units;                       // 9EC2
-    EXE_Reloc   dword_40966 ; // 9EC6
+    EXE_Reloc   m_addr_Chosen_Hero_Names;           // 9EC6
 
     Wizard      m_Wizards[gMAX_WIZARD_RECORDS];     // ds:9ECA / EXE:3336A
 

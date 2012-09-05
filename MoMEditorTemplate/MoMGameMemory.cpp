@@ -36,8 +36,8 @@ struct MoMGamePointers
     char*       m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
     char*       m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
     char*       m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
-    char*       m_UnitLevelNameOffsets[6];          // ds:3F46
-    char*       m_HeroLevelNameOffsets[9];          // ds:3F52
+    char*       m_Offsets_UnitLevelNames[6];          // ds:3F46
+    char*       m_Offsets_HeroLevelNames[9];          // ds:3F52
 
     Spell_Data*     m_addr_Spell_Data ; // 912C
     Item*           m_addr_Items  ; // 9136
@@ -54,7 +54,6 @@ struct MoMGamePointers
     UnknownBuf*        word_3FF00  ; // 9460
     UnknownBuf*        word_3FFBE  ; // 951E
     UnknownBuf*        word_3FFC8  ; // 9528
-    UnknownBuf*        m_addr_city_detailed_GUESS   ; // 9644
     UnknownBuf*        word_403FE  ; // 995E
     UnknownBuf*        word_40428  ; // 9988
     Events_Status*  m_addr_events ; // 9998
@@ -87,6 +86,7 @@ struct MoMGamePointers
     UnknownBuf*        dw_bx_6176  ; // 9EA8
     UnknownBuf*        dw_bx_6154  ; // 9EAC
     Unit*           m_addr_Units    ; // 9EC2
+    Hero_Choice*    m_addr_Chosen_Hero_Names;   // 9EC6
 
     UnitView_Lines*       m_addr_UnitView_Lines;  // C192
     Battle_Figure*   m_addr_Battle_figures_256;         // D15A
@@ -226,8 +226,8 @@ bool MoMGameMemory::readData()
         SET_ARRAY_OFFSET(m_Offsets_CityEnchantmentNames);
         SET_ARRAY_OFFSET(m_Offsets_PersonalityNames);
         SET_ARRAY_OFFSET(m_Offsets_ObjectiveNames);
-        SET_ARRAY_OFFSET(m_UnitLevelNameOffsets);
-        SET_ARRAY_OFFSET(m_HeroLevelNameOffsets);
+        SET_ARRAY_OFFSET(m_Offsets_UnitLevelNames);
+        SET_ARRAY_OFFSET(m_Offsets_HeroLevelNames);
 
         SET_RELOC_POINTER(Spell_Data, m_addr_Spell_Data);
         SET_RELOC_POINTER(Item, m_addr_Items);
@@ -248,7 +248,6 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(UnknownBuf, word_3FF00);
         SET_RELOC_POINTER(UnknownBuf, word_3FFBE);
         SET_RELOC_POINTER(UnknownBuf, word_3FFC8);
-        SET_RELOC_POINTER(UnknownBuf, m_addr_city_detailed_GUESS);
         SET_RELOC_POINTER(UnknownBuf, word_403FE);
         SET_RELOC_POINTER(UnknownBuf, word_40428);
         SET_RELOC_POINTER(Events_Status, m_addr_events);
@@ -284,6 +283,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(UnknownBuf, dw_bx_6176);
         SET_RELOC_POINTER(UnknownBuf, dw_bx_6154);
         SET_RELOC_POINTER(Unit, m_addr_Units);
+        SET_RELOC_POINTER(Hero_Choice, m_addr_Chosen_Hero_Names);
 
         gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView_Lines>(dseg->m_addr_UnitView_Lines, 1);
         gMoMGamePointers.m_addr_Battle_figures_256 = derefHeapPointer<Battle_Figure>(dseg->m_addr_Battle_figures_256, 256);

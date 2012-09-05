@@ -174,20 +174,9 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eCity_Size citySize, MoM::eBanne
     if (inVectorRange(m_citySizeImages, index))
     {
         image = m_citySizeImages[index];
-
     }
 
-    // TODO: Centralize + check if color in range of palette
-    if ((BANNER_Green != bannerColor) && (0 != image))
-    {
-        image = QMoMImagePtr(new QImage(*image));
-        int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
-
-        for (int i = 0; i < 3; ++i)
-        {
-            image->setColor(216 + i, image->color(startColor[bannerColor] + i));
-        }
-    }
+    changeBannerColor(bannerColor, image);
 
     return image;
 }
@@ -347,16 +336,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
             image = m_figureAnimations[figureIndex].at(1);
         }
 
-        // TODO: Centralize + check if colors in range of palette
-        if ((BANNER_Green != bannerColor) && (0 != image))
-        {
-            image = QMoMImagePtr(new QImage(*image));
-            int startColor[MoM::eBannerColor_MAX] = { 170, 216, 206, 201, 210, 37 };
-            for (int i = 0; i < 3; ++i)
-            {
-                image->setColor(216 + i, image->color(startColor[bannerColor] + i));
-            }
-        }
+        changeBannerColor(bannerColor, image);
     }
     else
     {
@@ -367,6 +347,29 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
     }
 
     return image;
+}
+
+void QMoMResources::changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const
+{
+    const int gCOLORS_IN_BANNERS[MoM::eBannerColor_MAX][gCOUNT_BANNER_COLOR] =
+    {
+        // From dseg:56E8
+        {97, 98, 99, 100},
+        {66, 67, 68, 69},
+        {33, 34, 35, 36},
+        {201, 202, 203, 166},
+        {160, 161, 162, 163},
+        {28, 27, 26, 25},
+    };
+
+    if ((BANNER_Green != bannerColor) && (0 != image) && (image->colorCount() >= gFIRST_BANNER_COLOR + gCOUNT_BANNER_COLOR))
+    {
+        image = QMoMImagePtr(new QImage(*image));
+        for (int i = 0; i < gCOUNT_BANNER_COLOR; ++i)
+        {
+            image->setColor(gFIRST_BANNER_COLOR + i, image->color(gCOLORS_IN_BANNERS[bannerColor][i]));
+        }
+    }
 }
 
 bool QMoMResources::createColorTable()

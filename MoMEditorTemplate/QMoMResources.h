@@ -118,6 +118,8 @@ public:
     static const QFont g_Font;
 
 private:
+    void changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const;
+
     bool createColorTable();
 
     void createBuildingImages();

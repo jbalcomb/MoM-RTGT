@@ -362,16 +362,7 @@ void convertLbxToPalette(const uint8_t* dataPalette, QMoMPalette& colorTable)
 {
     for (int i = 0; i < 256; ++i)
     {
-//        if ((i > 0) && (0 == dataPalette[3*i]) && (0 == dataPalette[3*i+1]) && (0 == dataPalette[3*i+2]))
-//        {
-//            colorTable[i] = qRgb(255, 0, 255);
-////            colorTable.resize(i);
-////            break;
-//        }
-//        else
-        {
-            colorTable[i] = qRgb(4 * dataPalette[3*i], 4 * dataPalette[3*i+1], 4 * dataPalette[3*i+2]);
-        }
+        colorTable[i] = qRgb(4 * dataPalette[3*i], 4 * dataPalette[3*i+1], 4 * dataPalette[3*i+2]);
     }
     // Set transparent color
     colorTable[gTRANSPARENT_COLOR] = qRgba(0, 0, 0, 0);

@@ -5081,20 +5081,86 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_UNK06a[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK06a[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_NameBuffer_2082=" << formatCharArray(rhs.m_NameBuffer_2082, 0x3F46 - 0x2082) << "\n";
-    os << "m_UnitLevelNameOffsets=(\n";
+    os << "m_NameBuffer_2082=" << formatCharArray(rhs.m_NameBuffer_2082, 0x3A50 - 0x2082) << "\n";
+    os << "m_UnitView_HeroAbility_data=(\n";
+    for (unsigned i = 0; i < 23; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitView_HeroAbility_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitView_UnitAbility_data=(\n";
+    for (unsigned i = 0; i < 17; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitView_UnitAbility_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitView_UnitImmunity_data=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitView_UnitImmunity_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitView_UnitSpell_data=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitView_UnitSpell_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitView_UnitAttack_data=(\n";
+    for (unsigned i = 0; i < 11; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitView_UnitAttack_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitMutation_data=(\n";
+    for (unsigned i = 0; i < 3; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitMutation_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_UnitRanged_data=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UnitLevelNameOffsets[i] << " 0x" << std::hex << rhs.m_UnitLevelNameOffsets[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_UnitRanged_data[i] << ",\n";
     }
     os << ")\n";
-    os << "m_HeroLevelNameOffsets=(\n";
+    os << "m_UnitEnchantment_data=(\n";
+    for (unsigned i = 0; i < 32; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_UnitEnchantment_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_CombatEnchantment_data=(\n";
+    for (unsigned i = 0; i < 15; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_CombatEnchantment_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_ItemPower_data=(\n";
+    for (unsigned i = 0; i < 21; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_ItemPower_data[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Offsets_UnitLevelNames=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Offsets_UnitLevelNames[i] << " 0x" << std::hex << rhs.m_Offsets_UnitLevelNames[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Offsets_HeroLevelNames=(\n";
     for (unsigned i = 0; i < 9; ++i)
     {
-        os << "[" << i << "] " << rhs.m_HeroLevelNameOffsets[i] << " 0x" << std::hex << rhs.m_HeroLevelNameOffsets[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Offsets_HeroLevelNames[i] << " 0x" << std::hex << rhs.m_Offsets_HeroLevelNames[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_NameBuffer_3F64=" << formatCharArray(rhs.m_NameBuffer_3F64, 0x5E92 - 0x3F64) << "\n";
+    os << "m_ItemPower_text=(\n";
+    for (unsigned i = 0; i < 32; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_ItemPower_text[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_NameBuffer_4064=" << formatCharArray(rhs.m_NameBuffer_4064, 0x5E92 - 0x4064) << "\n";
     os << "m_Next_Turn_seed_storage_lo=" << rhs.m_Next_Turn_seed_storage_lo << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_lo << std::dec << "\n";
     os << "m_Next_Turn_seed_storage_hi=" << rhs.m_Next_Turn_seed_storage_hi << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_hi << std::dec << "\n";
     os << "m_UNK_5E96=(\n";
@@ -5150,22 +5216,10 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "word_3FBD4=" << rhs.word_3FBD4 << " 0x" << std::hex << rhs.word_3FBD4 << std::dec << "\n";
     os << "m_addr_Items=" << rhs.m_addr_Items << "\n";
     os << "addr_item_in_game_GUESS=" << rhs.addr_item_in_game_GUESS << "\n";
-    os << "unk__913E=(\n";
-    for (unsigned i = 0; i < 26; ++i)
+    os << "m_item_pics_116=(\n";
+    for (unsigned i = 0; i < 116; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.unk__913E[i] << " 0x" << std::hex << (unsigned)rhs.unk__913E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "unk_3FBF8=(\n";
-    for (unsigned i = 0; i < 23; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk_3FBF8[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FBF8[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "unk_3FC0F=(\n";
-    for (unsigned i = 0; i < 183; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.unk_3FC0F[i] << " 0x" << std::hex << (unsigned)rhs.unk_3FC0F[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_item_pics_116[i] << " 0x" << std::hex << rhs.m_item_pics_116[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_addr_Battle_Unit_View=" << rhs.m_addr_Battle_Unit_View << "\n";
@@ -5203,10 +5257,11 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "w_coo_Y_X_clicked=" << rhs.w_coo_Y_X_clicked << " 0x" << std::hex << rhs.w_coo_Y_X_clicked << std::dec << "\n";
     os << "word_3FD22=" << rhs.word_3FD22 << " 0x" << std::hex << rhs.word_3FD22 << std::dec << "\n";
     os << "m_clash_place_type=" << rhs.m_clash_place_type << " 0x" << std::hex << rhs.m_clash_place_type << std::dec << "\n";
-    os << "w_clash_place_ID=(\n";
-    for (unsigned i = 0; i < 14; ++i)
+    os << "m_clash_cityNr_or_lairNr=" << rhs.m_clash_cityNr_or_lairNr << " 0x" << std::hex << rhs.m_clash_cityNr_or_lairNr << std::dec << "\n";
+    os << "word_3FD28=(\n";
+    for (unsigned i = 0; i < 12; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.w_clash_place_ID[i] << " 0x" << std::hex << (unsigned)rhs.w_clash_place_ID[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.word_3FD28[i] << " 0x" << std::hex << (unsigned)rhs.word_3FD28[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_kyrub_dseg_9294=" << rhs.m_kyrub_dseg_9294 << " 0x" << std::hex << rhs.m_kyrub_dseg_9294 << std::dec << "\n";
@@ -5474,9 +5529,9 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << (unsigned)rhs.word_40092[i] << " 0x" << std::hex << (unsigned)rhs.word_40092[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_addr_city_detailed_GUESS=" << rhs.m_addr_city_detailed_GUESS << "\n";
+    os << "m_cityNr_detailed=" << rhs.m_cityNr_detailed << " 0x" << std::hex << rhs.m_cityNr_detailed << std::dec << "\n";
     os << "word_400E8=(\n";
-    for (unsigned i = 0; i < 244; ++i)
+    for (unsigned i = 0; i < 246; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.word_400E8[i] << " 0x" << std::hex << (unsigned)rhs.word_400E8[i] << std::dec << ",\n";
     }
@@ -5747,10 +5802,8 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "m_addr_fortress_data=" << rhs.m_addr_fortress_data << "\n";
     os << "m_addr_Nodes_Attr=" << rhs.m_addr_Nodes_Attr << "\n";
     os << "m_addr_Terrain_LandMassID=" << rhs.m_addr_Terrain_LandMassID << "\n";
-    os << "word_40774=" << rhs.word_40774 << " 0x" << std::hex << rhs.word_40774 << std::dec << "\n";
-    os << "word_40776=" << rhs.word_40776 << " 0x" << std::hex << rhs.word_40776 << std::dec << "\n";
-    os << "word_40778=" << rhs.word_40778 << " 0x" << std::hex << rhs.word_40778 << std::dec << "\n";
-    os << "word_4077A=" << rhs.word_4077A << " 0x" << std::hex << rhs.word_4077A << std::dec << "\n";
+    os << "addr_40774_Terrain=" << rhs.addr_40774_Terrain << "\n";
+    os << "addr_40778_Terrain=" << rhs.addr_40778_Terrain << "\n";
     os << "m_addr_Terrain_Types=" << rhs.m_addr_Terrain_Types << "\n";
     os << "m_addr_Unrest_Table=(\n";
     for (unsigned i = 0; i < gMAX_RACES; ++i)
@@ -5763,10 +5816,11 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "word_407BC=" << rhs.word_407BC << " 0x" << std::hex << rhs.word_407BC << std::dec << "\n";
     os << "word_407BE=" << rhs.word_407BE << " 0x" << std::hex << rhs.word_407BE << std::dec << "\n";
     os << "word_407C0=" << rhs.word_407C0 << " 0x" << std::hex << rhs.word_407C0 << std::dec << "\n";
-    os << "w_Vizier_allowed_GUESS=(\n";
-    for (unsigned i = 0; i < 8; ++i)
+    os << "m_Vizier_active=" << rhs.m_Vizier_active << " 0x" << std::hex << rhs.m_Vizier_active << std::dec << "\n";
+    os << "word_407C4=(\n";
+    for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Vizier_allowed_GUESS[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.word_407C4[i] << " 0x" << std::hex << (unsigned)rhs.word_407C4[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "dword_407CA=" << rhs.dword_407CA << "\n";
@@ -5809,7 +5863,7 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "word_4095E=" << rhs.word_4095E << " 0x" << std::hex << rhs.word_4095E << std::dec << "\n";
     os << "word_40960=" << rhs.word_40960 << " 0x" << std::hex << rhs.word_40960 << std::dec << "\n";
     os << "m_addr_Units=" << rhs.m_addr_Units << "\n";
-    os << "dword_40966=" << rhs.dword_40966 << "\n";
+    os << "m_addr_Chosen_Hero_Names=" << rhs.m_addr_Chosen_Hero_Names << "\n";
     os << "m_Wizards=(\n";
     for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
     {
@@ -6784,6 +6838,26 @@ std::ostream& operator<<(std::ostream& os, const Unit& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const UnitView_HeroAbility& rhs)
+{
+    os << "{\n";
+    os << "m_bitmask=" << rhs.m_bitmask << " 0x" << std::hex << rhs.m_bitmask << std::dec << "\n";
+    os << "m_lbxIndex=" << rhs.m_lbxIndex << " 0x" << std::hex << rhs.m_lbxIndex << std::dec << "\n";
+    os << "m_helpIndex=" << rhs.m_helpIndex << " 0x" << std::hex << rhs.m_helpIndex << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_ItemText& rhs)
+{
+    os << "{\n";
+    os << "m_offset_label=" << rhs.m_offset_label << " 0x" << std::hex << rhs.m_offset_label << std::dec << "\n";
+    os << "m_offset_helpText=" << rhs.m_offset_helpText << " 0x" << std::hex << rhs.m_offset_helpText << std::dec << "\n";
+    os << "m_bitmask=" << rhs.m_bitmask << " 0x" << std::hex << rhs.m_bitmask << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const UnitView_Line& rhs)
 {
     os << "{\n";
@@ -6819,6 +6893,50 @@ std::ostream& operator<<(std::ostream& os, const UnitView_Lines& rhs)
         os << "[" << i << "] " << rhs.m_5A0_line_related_itemNr[i] << " 0x" << std::hex << rhs.m_5A0_line_related_itemNr[i] << std::dec << ",\n";
     }
     os << ")\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_Mutation& rhs)
+{
+    os << "{\n";
+    os << "m_offset_label=" << rhs.m_offset_label << " 0x" << std::hex << rhs.m_offset_label << std::dec << "\n";
+    os << "m_bitmask=" << (unsigned)rhs.m_bitmask << " 0x" << std::hex << (unsigned)rhs.m_bitmask << std::dec << "\n";
+    os << "m_lbxIndex=" << (int)rhs.m_lbxIndex << " 0x" << std::hex << (int)rhs.m_lbxIndex << std::dec << "\n";
+    os << "m_helpIndex=" << rhs.m_helpIndex << " 0x" << std::hex << rhs.m_helpIndex << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_Ranged& rhs)
+{
+    os << "{\n";
+    os << "m_offset_label=" << rhs.m_offset_label << " 0x" << std::hex << rhs.m_offset_label << std::dec << "\n";
+    os << "m_rangedType=" << rhs.m_rangedType << "\n";
+    os << "m_lbxIndex=" << (int)rhs.m_lbxIndex << " 0x" << std::hex << (int)rhs.m_lbxIndex << std::dec << "\n";
+    os << "m_helpIndex=" << rhs.m_helpIndex << " 0x" << std::hex << rhs.m_helpIndex << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_SpellData& rhs)
+{
+    os << "{\n";
+    os << "m_offset_label=" << rhs.m_offset_label << " 0x" << std::hex << rhs.m_offset_label << std::dec << "\n";
+    os << "m_bitmask=" << rhs.m_bitmask << " 0x" << std::hex << rhs.m_bitmask << std::dec << "\n";
+    os << "m_lbxIndex=" << rhs.m_lbxIndex << " 0x" << std::hex << rhs.m_lbxIndex << std::dec << "\n";
+    os << "m_helpIndex=" << rhs.m_helpIndex << " 0x" << std::hex << rhs.m_helpIndex << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const UnitView_UnitData& rhs)
+{
+    os << "{\n";
+    os << "m_offset_label=" << rhs.m_offset_label << " 0x" << std::hex << rhs.m_offset_label << std::dec << "\n";
+    os << "m_bitmask=" << rhs.m_bitmask << " 0x" << std::hex << rhs.m_bitmask << std::dec << "\n";
+    os << "m_lbxIndex=" << rhs.m_lbxIndex << " 0x" << std::hex << rhs.m_lbxIndex << std::dec << "\n";
+    os << "m_helpIndex=" << rhs.m_helpIndex << " 0x" << std::hex << rhs.m_helpIndex << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -7017,7 +7135,7 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Race_Code=" << rhs.m_Race_Code << "\n";
     os << "m_Building_Required1=" << (unsigned)rhs.m_Building_Required1 << " 0x" << std::hex << (unsigned)rhs.m_Building_Required1 << std::dec << "\n";
     os << "m_Hero_TypeCode_or_Building2=" << rhs.m_Hero_TypeCode_or_Building2 << "\n";
-    os << "m_TypeCode=" << (unsigned)rhs.m_TypeCode << " 0x" << std::hex << (unsigned)rhs.m_TypeCode << std::dec << "\n";
+    os << "m_Unit_picture=" << (unsigned)rhs.m_Unit_picture << " 0x" << std::hex << (unsigned)rhs.m_Unit_picture << std::dec << "\n";
     os << "m_UNK01=" << (unsigned)rhs.m_UNK01 << " 0x" << std::hex << (unsigned)rhs.m_UNK01 << std::dec << "\n";
     os << "m_Hitpoints=" << (unsigned)rhs.m_Hitpoints << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints << std::dec << "\n";
     os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
@@ -11229,6 +11347,72 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
           oss << context << ".m_DifficultyTable[" << i << "]";
           if (!validate(rhs.m_DifficultyTable[i], oss.str())) ok = false;
     }
+    for (unsigned i = 0; i < 23; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitView_HeroAbility_data[" << i << "]";
+          if (!validate(rhs.m_UnitView_HeroAbility_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 17; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitView_UnitAbility_data[" << i << "]";
+          if (!validate(rhs.m_UnitView_UnitAbility_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitView_UnitImmunity_data[" << i << "]";
+          if (!validate(rhs.m_UnitView_UnitImmunity_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitView_UnitSpell_data[" << i << "]";
+          if (!validate(rhs.m_UnitView_UnitSpell_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 11; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitView_UnitAttack_data[" << i << "]";
+          if (!validate(rhs.m_UnitView_UnitAttack_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 3; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitMutation_data[" << i << "]";
+          if (!validate(rhs.m_UnitMutation_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitRanged_data[" << i << "]";
+          if (!validate(rhs.m_UnitRanged_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 32; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_UnitEnchantment_data[" << i << "]";
+          if (!validate(rhs.m_UnitEnchantment_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 15; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_CombatEnchantment_data[" << i << "]";
+          if (!validate(rhs.m_CombatEnchantment_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 21; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_ItemPower_data[" << i << "]";
+          if (!validate(rhs.m_ItemPower_data[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 32; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_ItemPower_text[" << i << "]";
+          if (!validate(rhs.m_ItemPower_text[i], oss.str())) ok = false;
+    }
     if (!validate(rhs.m_addr_Spell_Data, context + ".m_addr_Spell_Data")) ok = false;
     if (!validate(rhs.m_addr_Items, context + ".m_addr_Items")) ok = false;
     if (!validate(rhs.addr_item_in_game_GUESS, context + ".addr_item_in_game_GUESS")) ok = false;
@@ -11249,7 +11433,6 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     if (!validate(rhs.word_3FF00, context + ".word_3FF00")) ok = false;
     if (!validate(rhs.word_3FFBE, context + ".word_3FFBE")) ok = false;
     if (!validate(rhs.word_3FFC8, context + ".word_3FFC8")) ok = false;
-    if (!validate(rhs.m_addr_city_detailed_GUESS, context + ".m_addr_city_detailed_GUESS")) ok = false;
     if (!validate(rhs.word_403FE, context + ".word_403FE")) ok = false;
     if (!validate(rhs.word_40428, context + ".word_40428")) ok = false;
     if (!validate(rhs.m_Game_flow, context + ".m_Game_flow")) ok = false;
@@ -11269,6 +11452,8 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     if (!validate(rhs.m_addr_fortress_data, context + ".m_addr_fortress_data")) ok = false;
     if (!validate(rhs.m_addr_Nodes_Attr, context + ".m_addr_Nodes_Attr")) ok = false;
     if (!validate(rhs.m_addr_Terrain_LandMassID, context + ".m_addr_Terrain_LandMassID")) ok = false;
+    if (!validate(rhs.addr_40774_Terrain, context + ".addr_40774_Terrain")) ok = false;
+    if (!validate(rhs.addr_40778_Terrain, context + ".addr_40778_Terrain")) ok = false;
     if (!validate(rhs.m_addr_Terrain_Types, context + ".m_addr_Terrain_Types")) ok = false;
     for (unsigned i = 0; i < gMAX_RACES; ++i)
     {
@@ -11288,7 +11473,7 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     if (!validate(rhs.dw_bx_6176, context + ".dw_bx_6176")) ok = false;
     if (!validate(rhs.dw_bx_6154, context + ".dw_bx_6154")) ok = false;
     if (!validate(rhs.m_addr_Units, context + ".m_addr_Units")) ok = false;
-    if (!validate(rhs.dword_40966, context + ".dword_40966")) ok = false;
+    if (!validate(rhs.m_addr_Chosen_Hero_Names, context + ".m_addr_Chosen_Hero_Names")) ok = false;
     for (unsigned i = 0; i < rhs.m_Game_Data.m_Number_of_Wizards; ++i)
     {
           std::ostringstream oss;
@@ -11733,6 +11918,18 @@ bool validate(const Unit& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const UnitView_HeroAbility& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const UnitView_ItemText& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
 bool validate(const UnitView_Line& rhs, const std::string& context)
 {
     bool ok = true;
@@ -11748,6 +11945,31 @@ bool validate(const UnitView_Lines& rhs, const std::string& context)
           oss << context << ".m_lines[" << i << "]";
           if (!validate(rhs.m_lines[i], oss.str())) ok = false;
     }
+    return ok;
+}
+
+bool validate(const UnitView_Mutation& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const UnitView_Ranged& rhs, const std::string& context)
+{
+    bool ok = true;
+    if (!validate(rhs.m_rangedType, context + ".m_rangedType")) ok = false;
+    return ok;
+}
+
+bool validate(const UnitView_SpellData& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const UnitView_UnitData& rhs, const std::string& context)
+{
+    bool ok = true;
     return ok;
 }
 

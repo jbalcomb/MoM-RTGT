@@ -591,13 +591,13 @@ std::string MoMUnit::getLevelName() const
     if ((0 != m_game) && (level > 0) && (0 != (dataSegment = m_game->getDataSegment())))
     {
         level--;
-        if (isHero() && (level < ARRAYSIZE(dataSegment->m_HeroLevelNameOffsets)))
+        if (isHero() && (level < ARRAYSIZE(dataSegment->m_Offsets_HeroLevelNames)))
         {
-            name = m_game->getNameByOffset(dataSegment->m_HeroLevelNameOffsets[level]);
+            name = m_game->getNameByOffset(dataSegment->m_Offsets_HeroLevelNames[level]);
         }
-        else if (level < ARRAYSIZE(dataSegment->m_UnitLevelNameOffsets))
+        else if (level < ARRAYSIZE(dataSegment->m_Offsets_UnitLevelNames))
         {
-            name = m_game->getNameByOffset(dataSegment->m_UnitLevelNameOffsets[level]);
+            name = m_game->getNameByOffset(dataSegment->m_Offsets_UnitLevelNames[level]);
         }
     }
     return name;
