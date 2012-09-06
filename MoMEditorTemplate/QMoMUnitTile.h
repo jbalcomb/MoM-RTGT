@@ -46,6 +46,10 @@ private slots:
     void slot_actionUnitView();
 
 private:
+    int calcHeading() const;
+    void drawBattleUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
+    void drawOverlandUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
+
     QMoMGamePtr m_game;
     QMoMUnitPtr m_momUnit;
     bool m_isBattlefield;

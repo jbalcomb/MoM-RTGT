@@ -82,6 +82,7 @@ public:
     int getCastingSkillTotal() const;
     int getConstructionSkill() const;
     int getCost() const;
+    int getCurFigures() const;
     std::string getDisplayName() const;
 	int getGazeModifier() const;
     std::string getHeroName() const;
@@ -92,8 +93,8 @@ public:
     eSlot_Type16 getSlotType(int itemSlotNr) const;
     int getLevel() const;
     std::string getLevelName() const;
+    int getMaxFigures() const;
     double getMoves() const;
-    int getNrFigures() const;
     ePlayer getOwner() const;
     BaseAttributes getPenaltyAttributes() const;
     eRace getRace() const;

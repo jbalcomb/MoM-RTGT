@@ -3176,6 +3176,7 @@ static const unsigned gMAX_BATTLE_COLS = 21;
 static const unsigned gMAX_BATTLE_ROWS = 22;
 static const unsigned gMAX_BATTLE_UNITS = 18;
 static const unsigned gMAX_CITIES = 100;
+static const unsigned gMAX_FIGURES_IN_UNIT = 8;
 static const unsigned gMAX_HERO_TYPES = 35;
 static const unsigned gMAX_HIRED_HEROES = 6;
 static const unsigned gMAX_ITEMSLOTS = 3;
