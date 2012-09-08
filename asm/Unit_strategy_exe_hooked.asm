@@ -1,8 +1,5 @@
-;.586                   ;Target processor.  Use instructions for Pentium class machines
+.8086                   ;Target processor.
 .MODEL LARGE, C         ;Use the flat memory model. Use C calling conventions
-;.STACK                 ;Define a stack segment of 1KB (Not required for this example)
-;.DATA                  ;Create a near data segment.  Local variables are declared after
-.CODE                   ;Indicates the start of a code segment.
 
 dseg            segment byte public 'DATA' use16
 
@@ -95,4 +92,6 @@ Unit_strategy_exe       endp
 
                 ;; ...
 
-ovr114           ends
+ovr114          ends
+
+                end 
