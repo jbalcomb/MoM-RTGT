@@ -2,7 +2,7 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.6 (2012--)
+CHANGES IN 0.2.6 (2012-09-08)
 -----------------------------
 
 * Fixed the failure to connect in Windows 7 that apparently 
