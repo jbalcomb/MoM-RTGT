@@ -108,7 +108,7 @@ bool MoMGameCustom::openGame(std::auto_ptr<MoMProcess>& momProcess)
     return true;
 }
 
-std::string MoMGameCustom::getGameDirectory()
+std::string MoMGameCustom::getGameDirectory() const
 {
     std::string dir;
     if (0 != m_process.get())

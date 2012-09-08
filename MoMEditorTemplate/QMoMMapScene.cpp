@@ -101,6 +101,16 @@ void QMoMMapScene::convertScenePosToLocation(const QPointF& scenePos, MoMLocatio
     }
 }
 
+int QMoMMapScene::convertScenePosToZValue(const QPointF &scenePos) const
+{
+    int zvalue = 0;
+    if (m_isBattlefield)
+    {
+        zvalue = 8320 * scenePos.y() + 17 * scenePos.x();
+    }
+    return zvalue;
+}
+
 void QMoMMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsScene::mouseMoveEvent(event);

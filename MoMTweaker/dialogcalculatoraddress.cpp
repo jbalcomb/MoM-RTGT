@@ -140,6 +140,46 @@ void DialogCalculatorAddress::update(const QWidget* originator)
     }
 }
 
+void DialogCalculatorAddress::updateValues(const QWidget *originator)
+{
+    if (m_updating)
+        return;
+    MoM::UpdateLock lock(m_updating);
+
+    if (originator != ui->lineEdit_CurrentFileValue)
+    {
+        bool ok = false;
+        size_t exeOffset = ui->lineEdit_OffsetExe->text().toULong(&ok, 16);
+
+        ui->lineEdit_CurrentFileValue->clear();
+        MoM::MoMExeBase* exeBase = getExeBase();
+        if ((0 != exeBase) && (exeOffset + 1 < exeBase->getExeSize()))
+        {
+            const uint8_t* pointer = exeBase->getExeContents() + exeOffset;
+            updateCurrentValue(ui->lineEdit_CurrentFileValue, pointer);
+        }
+    }
+
+    const MoM::MoMProcess* momProcess = 0;
+    if (0 != m_game)
+    {
+        momProcess = m_game->getMoMProcess();
+    }
+    if (originator != ui->lineEdit_CurrentMemValue)
+    {
+        bool ok = false;
+        size_t memOffset = ui->lineEdit_OffsetMem->text().toULong(&ok, 16);
+
+        ui->lineEdit_CurrentMemValue->clear();
+        if ((0 != momProcess) && (memOffset >= (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment())
+                 && (memOffset +1 < (size_t)momProcess->getBaseAddress() + momProcess->getBaseAddressSize()))
+        {
+            const uint8_t* pointer = const_cast<MoM::MoMProcess*>(momProcess)->getSeg0Pointer() + (memOffset - (size_t)momProcess->getBaseAddress() - momProcess->getOffsetSegment0());
+            updateCurrentValue(ui->lineEdit_CurrentMemValue, pointer);
+        }
+    }
+}
+
 void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(const QString&)
 {
     update(ui->lineEdit_OffsetExe);
@@ -163,12 +203,12 @@ void DialogCalculatorAddress::on_lineEdit_OffsetDOS_textChanged(const QString&)
 void DialogCalculatorAddress::slot_gameChanged(const QMoMGamePtr& game)
 {
     m_game = game;
-    update(QApplication::focusWidget());
+    updateValues(QApplication::focusWidget());
 }
 
 void DialogCalculatorAddress::slot_gameUpdated()
 {
-    update(QApplication::focusWidget());
+    updateValues(QApplication::focusWidget());
 }
 
 void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)

@@ -78,7 +78,7 @@ public:
 
 	int getCostToProduce(eProducing producing);
 
-    virtual std::string getGameDirectory() = 0;
+    virtual std::string getGameDirectory() const = 0;
 
     const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
     std::string getHelpText(eHelpIndex helpTextNr);
@@ -401,6 +401,11 @@ public:
 		if ((0 == wizards) || !inRange(wizardNr, MoM::gMAX_WIZARD_RECORDS))
             return 0;
         return &wizards[wizardNr];
+    }
+
+    virtual bool isBattleInProgress() const
+    {
+        return false;
     }
 
     virtual bool isOpen() const = 0;

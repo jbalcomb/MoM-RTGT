@@ -412,7 +412,7 @@ Fortress* MoMGameMemory::getFortresses()
     return derefHeapPointer<Fortress>(pMoMDataSegment->m_addr_fortress_data, gMAX_WIZARD_RECORDS);
 }
 
-std::string MoMGameMemory::getGameDirectory()
+std::string MoMGameMemory::getGameDirectory() const
 {
     std::string dir;
     if (0 != m_process.get())
@@ -503,6 +503,19 @@ const char* MoMGameMemory::getNameByOffset(DS_Offset offset)
     }
     // No terminating zero found
     return 0;
+}
+
+bool MoMGameMemory::isBattleInProgress() const
+{
+    bool battleInProgress = false;
+    std::string gameDirectory = getGameDirectory();
+    if (!gameDirectory.empty())
+    {
+        std::string combatTmpFile = gameDirectory + "/" + "COMBAT.TMP";
+        std::ifstream ifs(combatTmpFile.c_str());
+        battleInProgress = (ifs.is_open());
+    }
+    return battleInProgress;
 }
 
 uint16_t* MoMGameMemory::getNumber_of_Cities()

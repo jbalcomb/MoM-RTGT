@@ -58,7 +58,7 @@ public:
 		return &m_SaveGame->m_Map_Tiles.m_Fortresses[0];
     }
 
-    virtual std::string getGameDirectory();
+    virtual std::string getGameDirectory() const;
 
     virtual Game_Data_Save* getGameData_SaveGame()
     {

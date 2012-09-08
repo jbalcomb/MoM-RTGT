@@ -31,7 +31,7 @@ public:
 //    bool findAndOpenGame(const std::string& windowTitle);
     bool openGame(std::auto_ptr<MoMProcess>& momProcess);
 
-    virtual std::string getGameDirectory();
+    virtual std::string getGameDirectory() const;
 
     virtual eGameState* getGameState();
     virtual uint16_t* getGameTurn();
@@ -41,6 +41,8 @@ public:
     {
         return "Connected game " + m_filename_WizardsExe;
     }
+
+    virtual bool isBattleInProgress() const;
 
     virtual bool isOpen() const
     {

@@ -412,7 +412,15 @@ DialogMap::DialogMap(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->comboBox_Plane->setCurrentIndex(1);
+    QMoMGamePtr game= MainWindow::getInstance()->getGame();
+    if ((0 != game) && (game->isBattleInProgress()))
+    {
+        ui->comboBox_Plane->setCurrentIndex(3);
+    }
+    else
+    {
+        ui->comboBox_Plane->setCurrentIndex(1);
+    }
 
     // Update view when game is changed or updated
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -908,6 +916,8 @@ void DialogMap::slot_gameUpdated()
         }
         else
         {
+            int zvalue = m_sceneBattle->convertScenePosToZValue(itemStructure->pos());
+            itemStructure->setZValue(zvalue);
         }
         itemStructure->setOffset(offset);
 
@@ -928,6 +938,8 @@ void DialogMap::slot_gameUpdated()
             unitTile->setUnit(momUnit);
 
             m_sceneBattle->addItemAtLocation(unitTile, loc);
+            int zvalue = m_sceneBattle->convertScenePosToZValue(unitTile->pos());
+            unitTile->setZValue(zvalue);
             unitTile->setToolTip(momUnit->getDisplayName().c_str());
 
             QPointF pos;
@@ -1016,6 +1028,7 @@ void DialogMap::slot_gameUpdated()
         }
 
         // Show battlefield menubar (numbers from IDA)
+        m_sceneBattle->addRect(m_sceneBattle->sceneRect(), QPen(Qt::black));
         QPixmap pixmapMenubar = MoM::QMoMResources::instance().getPixmap(MoM::LBXRecordID("BACKGRND", 3));
         QGraphicsPixmapItem* itemMenubar = m_sceneBattle->addPixmap(pixmapMenubar);
         itemMenubar->setPos(0, 164);

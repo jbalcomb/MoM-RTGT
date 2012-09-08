@@ -26,7 +26,7 @@ public:
 
     bool openGame(std::auto_ptr<MoMProcess>& momProcess);
 
-    virtual std::string getGameDirectory();
+    virtual std::string getGameDirectory() const;
 
     virtual const char* getNameByOffset(DS_Offset offset);
 

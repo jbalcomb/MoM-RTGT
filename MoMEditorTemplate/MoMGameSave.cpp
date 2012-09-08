@@ -86,7 +86,7 @@ bool MoMGameSave::commitData(void* ptr, const void* pNewValue, size_t size)
     return true;
 }
 
-std::string MoMGameSave::getGameDirectory()
+std::string MoMGameSave::getGameDirectory() const
 {
     return m_GameDirectory;
 }
