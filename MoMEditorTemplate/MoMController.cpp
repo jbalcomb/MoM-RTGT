@@ -373,6 +373,28 @@ City *MoMController::findCityAtLocation(const MoMLocation &location)
     return value;
 }
 
+Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
+{
+    Node_Attr* value = 0;
+
+    if (0 == m_game)
+        return false;
+    MoMGameBase& game = *m_game;
+
+    for (int i = 0; i < gMAX_NODES; ++i)
+    {
+        Node_Attr* nodeAttr = game.getNodeAttr(i);
+        if (0 == nodeAttr)
+            break;
+        if (location == MoMLocation(*nodeAttr, MoMLocation::MAP_overland))
+        {
+            value = nodeAttr;
+            break;
+        }
+    }
+    return value;
+}
+
 bool MoMController::findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units)
 {
     units.clear();

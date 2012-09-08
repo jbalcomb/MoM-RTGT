@@ -834,7 +834,14 @@ void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
             break;
         if (lairNr >= ptree->rowCount())
         {
-            ptree->setChild(row, 0, constructTreeItem(lair, ""));
+            QMoMTreeItemBase* subtree = constructTreeItem(lair, "");
+            ptree->setChild(row, 0, subtree);
+
+            MoM::Node_Attr* nodeAttr = MoM::MoMController(game.data()).findNodeAttrAtLocation(MoM::MoMLocation(*lair));
+            if (0 != nodeAttr)
+            {
+                subtree->setChild(subtree->rowCount(), 0, constructTreeItem(nodeAttr, "Node attr"));
+            }
 
             ptree->child(lairNr, 0)->setData(prettyQStr(lair->m_Type), Qt::EditRole);
             ptree->child(lairNr, 1)->setData(QString("(%0, %1, %2) %3")

@@ -18,18 +18,19 @@ class MoMGameMemory :
 {
 public:
     MoMGameMemory(void);
-    virtual ~MoMGameMemory()
-    {
-        closeGame();
-    }
+    virtual ~MoMGameMemory();
 
-    void closeGame() throw();
+    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
 
     bool commitChanges();
-    virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
-//    bool findAndOpenGame(const std::string& windowTitle);
-    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
+
+protected:
+    virtual void closeGame() throw();
+
+    virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
     virtual std::string getGameDirectory() const;
 
@@ -50,9 +51,6 @@ public:
     }
 
     virtual bool readData();
-
-    virtual bool load(const char* filename);
-    virtual bool save(const char* filename);
 
     virtual bool validate();
 
@@ -105,6 +103,7 @@ private:
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr);
     virtual Item* getItems();
     virtual Tower_Node_Lair* getLairs();
+    virtual Node_Attr* getNodeAttributes();
     virtual uint16_t* getNumber_of_Battle_Units();
     virtual uint16_t* getNumber_of_Cities();
     virtual uint16_t* getNumber_of_Units();

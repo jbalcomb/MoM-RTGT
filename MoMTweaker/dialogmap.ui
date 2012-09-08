@@ -184,22 +184,6 @@
            </property>
           </item>
          </widget>
-         <widget class="QDialogButtonBox" name="buttonBox">
-          <property name="geometry">
-           <rect>
-            <x>120</x>
-            <y>200</y>
-            <width>111</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="standardButtons">
-           <set>QDialogButtonBox::Close</set>
-          </property>
-         </widget>
          <widget class="QSlider" name="verticalSlider_Zoom">
           <property name="geometry">
            <rect>

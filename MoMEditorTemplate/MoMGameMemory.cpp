@@ -102,6 +102,11 @@ MoMGameMemory::MoMGameMemory(void)
 {
 }
 
+MoMGameMemory::~MoMGameMemory()
+{
+    closeGame();
+}
+
 void MoMGameMemory::closeGame() throw()
 {
     try
@@ -484,6 +489,14 @@ Tower_Node_Lair* MoMGameMemory::getLairs()
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
     return derefHeapPointer<Tower_Node_Lair>(pMoMDataSegment->m_addr_Lairs_data, MoM::gMAX_NODES_LAIRS_TOWERS);
+}
+
+Node_Attr *MoMGameMemory::getNodeAttributes()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Node_Attr>(pMoMDataSegment->m_addr_Nodes_Attr, MoM::gMAX_NODES);
 }
 
 const char* MoMGameMemory::getNameByOffset(DS_Offset offset)

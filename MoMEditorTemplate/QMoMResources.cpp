@@ -102,7 +102,7 @@ const QMoMImagePtr QMoMResources::getImage(const LBXRecordID &lbxRecordID) const
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return image;
-    image = MoM::convertLbxToImage(lbx.getRecord(lbxRecordID.lbxIndex), m_colorTable, lbxRecordID.lbxTitle + toStr(lbxRecordID.lbxIndex));
+    image = MoM::convertLbxToImage(lbx.getRecord(lbxRecordID.lbxIndex), lbx.getRecordSize(lbxRecordID.lbxIndex), m_colorTable, lbxRecordID.lbxTitle + toStr(lbxRecordID.lbxIndex));
     return image;
 }
 
@@ -423,7 +423,7 @@ void QMoMResources::createBuildingImages()
         else
         {
         }
-        m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), m_colorTable, toStr(building));
+        m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), lbx.getRecordSize(recordNr), m_colorTable, toStr(building));
     }
 }
 
@@ -435,7 +435,7 @@ void QMoMResources::createCitySizeImages()
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return;
-    MoM::convertLbxToImages(lbx.getRecord(20), m_colorTable, m_citySizeImages, "city sizes");
+    MoM::convertLbxToImages(lbx.getRecord(20), lbx.getRecordSize(20), m_colorTable, m_citySizeImages, "city sizes");
 }
 
 void QMoMResources::createFigureImages()
@@ -477,7 +477,7 @@ void QMoMResources::createLairImages()
     m_lairImages.resize(MoM::eTower_Node_Lair_Type_MAX);
     for (size_t i = 0; i < MoM::eTower_Node_Lair_Type_MAX; ++i)
     {
-        m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
+        m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), lairsLbx.getRecordSize(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
     }
 }
 
@@ -492,7 +492,7 @@ void QMoMResources::createLbxAnimations(const std::string& lbxTitle, QVector<QMo
     vecAnimations.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
-        (void)MoM::convertLbxToImages(lbx.getRecord(i), m_colorTable, vecAnimations[i], lbxTitle + toStr(i));
+        (void)MoM::convertLbxToImages(lbx.getRecord(i), lbx.getRecordSize(i), m_colorTable, vecAnimations[i], lbxTitle + toStr(i));
     }
 }
 
@@ -507,7 +507,7 @@ void QMoMResources::createLbxImages(const std::string& lbxTitle, QVector<QMoMIma
     vecImages.resize(lbx.getNrRecords());
     for (size_t i = 0; i < lbx.getNrRecords(); ++i)
     {
-        vecImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), m_colorTable, lbxTitle + toStr(i));
+        vecImages[i] = MoM::convertLbxToImage(lbx.getRecord(i), lbx.getRecordSize(i), m_colorTable, lbxTitle + toStr(i));
     }
 }
 
@@ -565,90 +565,90 @@ void QMoMResources::createSpellImages()
 
     // CITYSCAP.LBX
     spell = MoM::SPELL_Summoning_Circle;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(6), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(6), cityscapLbx.getRecordSize(6), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Altar_of_Battle;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(12), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(12), cityscapLbx.getRecordSize(12), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Dark_Rituals;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(81), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(81), cityscapLbx.getRecordSize(81), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Earth_Gate;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(83), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(83), cityscapLbx.getRecordSize(83), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Stream_of_Life;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(84), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(84), cityscapLbx.getRecordSize(84), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Astral_Gate;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(85), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(85), cityscapLbx.getRecordSize(85), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Spell_Ward;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(96), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(96), cityscapLbx.getRecordSize(96), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Inspirations;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(100), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(100), cityscapLbx.getRecordSize(100), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Prosperity;
-    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(101), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(101), cityscapLbx.getRecordSize(101), m_colorTable, toStr(spell));
 //    spell = MoM::SPELL_; // Mana cross
-//    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(102), m_colorTable, toStr(spell));
+//    m_spellImages[spell] = MoM::convertLbxToImage(cityscapLbx.getRecord(102), cityscapLbx.getRecordSize(102), m_colorTable, toStr(spell));
 
     // MONSTER.LBX
     spell = MoM::SPELL_Summon_Hero;
-    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(45), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(45), monsterLbx.getRecordSize(45), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Summon_Champion;
-    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(44), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(44), monsterLbx.getRecordSize(44), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Enchant_Item;
-    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(46), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(46), monsterLbx.getRecordSize(46), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Create_Artifact;
-    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(46), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(monsterLbx.getRecord(46), monsterLbx.getRecordSize(46), m_colorTable, toStr(spell));
 
     // SPECFX.LBX
     spell = MoM::SPELL_Eternal_Night;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(15), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(15), specfxLbx.getRecordSize(15), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Evil_Omens;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(16), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(16), specfxLbx.getRecordSize(16), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Zombie_Mastery;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(17), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(17), specfxLbx.getRecordSize(17), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Aura_of_Majesty;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(18), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(18), specfxLbx.getRecordSize(18), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Wind_Mastery;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(19), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(19), specfxLbx.getRecordSize(19), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Suppress_Magic;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(20), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(20), specfxLbx.getRecordSize(20), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Time_Stop;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(21), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(21), specfxLbx.getRecordSize(21), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Nature_Awareness;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(22), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(22), specfxLbx.getRecordSize(22), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Natures_Wrath;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(23), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(23), specfxLbx.getRecordSize(23), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Herb_Mastery;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(24), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(24), specfxLbx.getRecordSize(24), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Chaos_Surge;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(25), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(25), specfxLbx.getRecordSize(25), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Doom_Mastery;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(26), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(26), specfxLbx.getRecordSize(26), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Great_Wasting;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(27), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(27), specfxLbx.getRecordSize(27), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Meteor_Storm;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(28), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(28), specfxLbx.getRecordSize(28), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Armageddon;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(29), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(29), specfxLbx.getRecordSize(29), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Tranquility;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(30), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(30), specfxLbx.getRecordSize(30), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Life_Force;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(31), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(31), specfxLbx.getRecordSize(31), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Crusade;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(32), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(32), specfxLbx.getRecordSize(32), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Just_Cause;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(33), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(33), specfxLbx.getRecordSize(33), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Holy_Arms;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(34), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(34), specfxLbx.getRecordSize(34), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Planar_Seal;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(35), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(35), specfxLbx.getRecordSize(35), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Charm_of_Life;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(36), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(36), specfxLbx.getRecordSize(36), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Detect_Magic;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(37), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(37), specfxLbx.getRecordSize(37), m_colorTable, toStr(spell));
 
     spell = MoM::SPELL_Death_Wish;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(38), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(38), specfxLbx.getRecordSize(38), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Great_Unsummoning;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(39), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(39), specfxLbx.getRecordSize(39), m_colorTable, toStr(spell));
     spell = MoM::SPELL_Awareness;
-    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), m_colorTable, toStr(spell));
+    m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), specfxLbx.getRecordSize(56), m_colorTable, toStr(spell));
 
 
     //600	LIGHT	COMPIX.LBX	5
@@ -811,7 +811,7 @@ void QMoMResources::createTerrainImages()
             i = 728 + (terrainNr - 602);
         }
 
-        m_terrainTypeImages[terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, m_colorTable, toStr(terrainNr) + "-" + toStr(i));
+        m_terrainTypeImages[terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(i));
 
         i += 888;   // Myrror
         if (i > 906) i -= 3; // No animation
@@ -820,7 +820,7 @@ void QMoMResources::createTerrainImages()
         if (i > 921) i -= 3;
         if (i > 990) i -= 3;
 
-        m_terrainTypeImages[MoM::eTerrainType_MAX + terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, m_colorTable, toStr(terrainNr) + "-" + toStr(i));
+        m_terrainTypeImages[MoM::eTerrainType_MAX + terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(i));
     }
 }
 
@@ -884,11 +884,11 @@ void QMoMResources::createUnitImages()
     {
         if (unitType < 120)
         {
-            m_unitImages[unitType] = MoM::convertLbxToImage(units1Lbx.getRecord(unitType), m_colorTable, toStr(unitType));
+            m_unitImages[unitType] = MoM::convertLbxToImage(units1Lbx.getRecord(unitType), units1Lbx.getRecordSize(unitType), m_colorTable, toStr(unitType));
         }
         else
         {
-            m_unitImages[unitType] = MoM::convertLbxToImage(units2Lbx.getRecord(unitType - 120), m_colorTable, toStr(unitType));
+            m_unitImages[unitType] = MoM::convertLbxToImage(units2Lbx.getRecord(unitType - 120), units2Lbx.getRecordSize(unitType - 120), m_colorTable, toStr(unitType));
         }
     }
     for (size_t i = 0; i < monsterLbx.getNrRecords(); ++i)
@@ -900,7 +900,7 @@ void QMoMResources::createUnitImages()
                 && (MoM::UNITTYPE_Blue_Phantom_Warriors != unitType) && (MoM::UNITTYPE_Blue_Phantom_Beast != unitType)
                 && (MoM::UNITTYPE_Blue_Air_Elemental != unitType))
         {
-            m_unitImages[unitType] = MoM::convertLbxToImage(monsterLbx.getRecord(i), m_colorTable, toStr(unitType));
+            m_unitImages[unitType] = MoM::convertLbxToImage(monsterLbx.getRecord(i), monsterLbx.getRecordSize(i), m_colorTable, toStr(unitType));
         }
     }
 }

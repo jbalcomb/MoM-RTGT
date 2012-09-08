@@ -76,6 +76,11 @@ MoMGameSave::MoMGameSave() :
 
 MoMGameSave::~MoMGameSave()
 {
+    closeGame();
+}
+
+void MoMGameSave::closeGame() throw()
+{
 }
 
 bool MoMGameSave::commitData(void* ptr, const void* pNewValue, size_t size)

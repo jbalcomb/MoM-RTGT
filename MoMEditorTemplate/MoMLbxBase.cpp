@@ -77,11 +77,29 @@ size_t MoMLbxBase::getNrRecords() const
 
 uint8_t* MoMLbxBase::getRecord(size_t recordNr)
 {
+    uint8_t* ptr = 0;
+
+    size_t size = getRecordSize(recordNr);  // Includes range checks
+    if (size > 0)
+    {
+        ptr = (uint8_t*)(&m_contents[0] + m_DataOffsets[recordNr]);
+    }
+
+    return ptr;
+}
+
+size_t MoMLbxBase::getRecordSize(size_t recordNr)
+{
     if (m_contents.empty())
         return 0;
-    // TODO: Check ranges
-    uint8_t* ptr = (uint8_t*)(&m_contents[0] + m_DataOffsets[recordNr]);
-    return ptr;
+    if (recordNr >= m_LBX_Header->n)
+        return 0;
+    if ((m_DataOffsets[recordNr + 1] <= m_DataOffsets[recordNr]) || (m_DataOffsets[recordNr + 1] > m_contents.size()))
+        return 0;
+
+    size_t size = m_DataOffsets[recordNr + 1] - m_DataOffsets[recordNr];
+
+    return size;
 }
 
 void MoMLbxBase::initPointers()

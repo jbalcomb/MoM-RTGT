@@ -3183,6 +3183,7 @@ static const unsigned gMAX_ITEMSLOTS = 3;
 static const unsigned gMAX_ITEMS = 138;
 static const unsigned gMAX_MAP_COLS = 60;
 static const unsigned gMAX_MAP_ROWS = 40;
+static const unsigned gMAX_NODES = 30;
 static const unsigned gMAX_NODES_LAIRS_TOWERS = 102;
 static const unsigned gMAX_RACES = 14;
 static const unsigned gMAX_UNITS = 1009;

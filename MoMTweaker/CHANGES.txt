@@ -24,13 +24,29 @@ CHANGES IN 0.2.6 (2012--)
 
 * Added city name of fortress at the bottom of the wizard's data [FrancoK].
   Ticket: https://sourceforge.net/p/momrtgt/tickets/19/
-  
+ 
+* Combat round added [Asfex].
+  Hero stats of all wizards added.
+  Node attributes added to the tree model and also in the overland map.
+  I do not know yet how it shows that it is warped though.
+  Added check box "Use icons".
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/20/
+
 * Fixed the 1.40m+ settings [FrancoK].
   There is one catch: if you load a save file, the tweaker does not know 
   the version of MoM, so it cannot show the 1.40m+ version of the fields.
   Ticket: https://sourceforge.net/p/momrtgt/tickets/18/
 
+* Fixed LBX editor bugs [FrancoK].
+  I've also added a "Save pics" button.
+  Note that some LBX files contain both pictures and non-pictures.
+  The non-pictures are shown as empty pictures now.
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/21/
 
+* Removed close button from map dialog and closed ticket [FrancoK].
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/22/
+
+  
 
 CHANGES IN 0.2.5 (2012-08-22)
 -----------------------------
