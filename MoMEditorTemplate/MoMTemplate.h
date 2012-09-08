@@ -3761,16 +3761,17 @@ typedef struct PACKED_STRUCT // Tower_Node_Lair
 typedef struct PACKED_STRUCT // Node_Attr
 {
 //    uint8_t         m_Data[0x30];
-    uint8_t         m_XPos;
-    uint8_t         m_YPos;
-    ePlane          m_Plane;
-    ePlayer         m_Owner;        // FF = Not owned by a player
-    uint8_t         m_Power_Node;
-    uint8_t         m_XPos_Mana[20];
-    uint8_t         m_YPos_Mana[20];
-    eNode_Type      m_Node_Type;
-    uint8_t         m_UNK01[2];     // 00 00 ??
-                                    // SIZE 30
+    uint8_t         m_XPos;             // 0
+    uint8_t         m_YPos;             // 01
+    ePlane          m_Plane;            // 02
+    ePlayer         m_Owner;            // 03    // FF = Not owned by a player
+    uint8_t         m_Power_Node;       // 04
+    uint8_t         m_XPos_Mana[20];    // 05 
+    uint8_t         m_YPos_Mana[20];    // 19
+    eNode_Type      m_Node_Type;        // 2D
+    uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit
+    uint8_t         m_Unk_2F;           // 2F ??
+                                        // SIZE 30
 } Node_Attr;
 
 typedef struct PACKED_STRUCT // Fortress

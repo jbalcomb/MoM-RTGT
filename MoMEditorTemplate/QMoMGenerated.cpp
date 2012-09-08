@@ -5143,18 +5143,8 @@ QMoMTreeItemBase* constructTreeItem(Node_Attr* rhs, const QString& context)
           ptreem_YPos_Mana->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_YPos_Mana[i]));
     }
     ptree->appendChild("m_Node_Type", new QMoMTreeItem<eNode_Type>(&rhs->m_Node_Type));
-    QMoMTreeItemBase* ptreem_UNK01 = ptree;
-    if (2 > 3)
-    {
-        ptreem_UNK01 = new QMoMTreeItemBase("m_UNK01");
-        ptree->appendTree(ptreem_UNK01, "");
-    }
-    for (unsigned i = 0; i < 2; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_UNK01[" << i << "]";
-          ptreem_UNK01->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK01[i]));
-    }
+    ptree->appendChild("m_Status", new QMoMTreeItem<uint8_t>(&rhs->m_Status));
+    ptree->appendChild("m_Unk_2F", new QMoMTreeItem<uint8_t>(&rhs->m_Unk_2F));
     return ptree;
 }
 

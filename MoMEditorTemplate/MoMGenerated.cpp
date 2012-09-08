@@ -6252,12 +6252,8 @@ std::ostream& operator<<(std::ostream& os, const Node_Attr& rhs)
     }
     os << ")\n";
     os << "m_Node_Type=" << rhs.m_Node_Type << "\n";
-    os << "m_UNK01=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK01[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK01[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_Status=" << (unsigned)rhs.m_Status << " 0x" << std::hex << (unsigned)rhs.m_Status << std::dec << "\n";
+    os << "m_Unk_2F=" << (unsigned)rhs.m_Unk_2F << " 0x" << std::hex << (unsigned)rhs.m_Unk_2F << std::dec << "\n";
     os << "}";
     return os;
 }
