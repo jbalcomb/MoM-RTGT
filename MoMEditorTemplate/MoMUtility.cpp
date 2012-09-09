@@ -51,7 +51,7 @@ static size_t findKnuthMorrisPratt(const uint8_t* needle, size_t m, const uint8_
         {
             seen = border[seen];
         }
-        if (++seen == m)
+        if (++seen == (int)m)
         {
             foundIndex = (size_t)(i - m + 1);
 

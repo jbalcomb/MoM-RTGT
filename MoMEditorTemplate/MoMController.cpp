@@ -381,7 +381,7 @@ Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
         return false;
     MoMGameBase& game = *m_game;
 
-    for (int i = 0; i < gMAX_NODES; ++i)
+    for (size_t i = 0; i < gMAX_NODES; ++i)
     {
         Node_Attr* nodeAttr = game.getNodeAttr(i);
         if (0 == nodeAttr)

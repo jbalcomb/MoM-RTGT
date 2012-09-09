@@ -431,7 +431,7 @@ MoMUnit::ListSpells MoMUnit::getHeroSpells() const
     ListSpells value;
     if (0 != m_heroStats)
     {
-        for(int i = 0; i < ARRAYSIZE(m_heroStats->m_Spell); ++i)
+        for(size_t i = 0; i < ARRAYSIZE(m_heroStats->m_Spell); ++i)
         {
             if (m_heroStats->m_Spell[i] != SPELL_None)
             {
@@ -441,7 +441,7 @@ MoMUnit::ListSpells MoMUnit::getHeroSpells() const
     }
     else if (0 != m_heroStatsInitializer)
     {
-        for(int i = 0; i < ARRAYSIZE(m_heroStatsInitializer->m_Spell); ++i)
+        for(size_t i = 0; i < ARRAYSIZE(m_heroStatsInitializer->m_Spell); ++i)
         {
             if (m_heroStatsInitializer->m_Spell[i] != SPELL16_None)
             {
@@ -591,11 +591,11 @@ std::string MoMUnit::getLevelName() const
     if ((0 != m_game) && (level > 0) && (0 != (dataSegment = m_game->getDataSegment())))
     {
         level--;
-        if (isHero() && (level < ARRAYSIZE(dataSegment->m_Offsets_HeroLevelNames)))
+        if (isHero() && (toUInt(level) < ARRAYSIZE(dataSegment->m_Offsets_HeroLevelNames)))
         {
             name = m_game->getNameByOffset(dataSegment->m_Offsets_HeroLevelNames[level]);
         }
-        else if (level < ARRAYSIZE(dataSegment->m_Offsets_UnitLevelNames))
+        else if (toUInt(level) < ARRAYSIZE(dataSegment->m_Offsets_UnitLevelNames))
         {
             name = m_game->getNameByOffset(dataSegment->m_Offsets_UnitLevelNames[level]);
         }

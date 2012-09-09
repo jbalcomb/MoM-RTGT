@@ -63,10 +63,8 @@ template<typename Number>
 class NumberTableWidgetItem : public QMoMTableWidgetItemBase
 {
 public:
-    NumberTableWidgetItem(const QMoMGamePtr& game, Number& t, int width, eShowNumber showNumber = SHOWNUMBER_normal);
-    // g++ complains that it cannot bind an uint16_t to this template, probably due to some alignment issue,
+    // g++ complains that it cannot bind an uint16_t to a reference in this template, probably due to some alignment issue,
     // but it does accept a pointer. :).
-    // Hence the second constructor
     NumberTableWidgetItem(const QMoMGamePtr& game, Number* t, int width, eShowNumber showNumber = SHOWNUMBER_normal);
     virtual void setData(int role, const QVariant &value);
     virtual QString toString() const;
@@ -76,17 +74,6 @@ private:
     eShowNumber m_showNumber;
 };
 
-
-template<typename Number>
-NumberTableWidgetItem<Number>::NumberTableWidgetItem(const QMoMGamePtr& game, Number& t, int width, eShowNumber showNumber) :
-    QMoMTableWidgetItemBase(game),
-    m_ptr(&t),
-    m_width(width),
-    m_showNumber(showNumber)
-{
-    setFlags(flags() | Qt::ItemIsEditable);
-    QTableWidgetItem::setData(Qt::EditRole, toString());
-}
 
 template<typename Number>
 NumberTableWidgetItem<Number>::NumberTableWidgetItem(const QMoMGamePtr& game, Number* t, int width, eShowNumber showNumber) :
@@ -222,7 +209,7 @@ template<typename Enum>
 class EnumTableWidgetItem : public QMoMTableWidgetItemBase
 {
 public:
-    EnumTableWidgetItem(const QMoMGamePtr& game, Enum& e, Enum max, bool showMinusOneEmpty = false);
+    EnumTableWidgetItem(const QMoMGamePtr& game, Enum* e, Enum max, bool showMinusOneEmpty = false);
 
     virtual void setData(int role, const QVariant &value);
 
@@ -248,9 +235,9 @@ private:
 };
 
 template<typename Enum>
-EnumTableWidgetItem<Enum>::EnumTableWidgetItem(const QMoMGamePtr& game, Enum& e, Enum max, bool showMinusOneEmpty) :
+EnumTableWidgetItem<Enum>::EnumTableWidgetItem(const QMoMGamePtr& game, Enum* e, Enum max, bool showMinusOneEmpty) :
     QMoMTableWidgetItemBase(game),
-    m_ptr(&e),
+    m_ptr(e),
     m_max(max),
     m_showMinusOneEmpty(showMinusOneEmpty),
     m_actionGroup()
@@ -340,10 +327,8 @@ template<typename Bitmask, typename Enum>
 class BitmaskTableWidgetItem : public QMoMTableWidgetItemBase
 {
 public:
-    BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask& bitmask, Enum min, Enum max);
-    // g++ complains that it cannot bind an uint16_t to this template, probably due to some alignment issue,
+    // g++ complains that it cannot bind an uint16_t to a reference in this template, probably due to some alignment issue,
     // but it does accept a pointer. :).
-    // Hence the second constructor
     BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max);
 
     virtual void setData(int role, const QVariant &value);
@@ -367,17 +352,6 @@ private:
     // m_actionGroup is deleted by its parent (the context menu)
     QActionGroup* m_actionGroup;
 };
-
-template<typename Bitmask, typename Enum>
-BitmaskTableWidgetItem<Bitmask, Enum>::BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask& bitmask, Enum min, Enum max) :
-    QMoMTableWidgetItemBase(game),
-    m_ptr(&bitmask),
-    m_min(min),
-    m_max(max),
-    m_actionGroup()
-{
-    QTableWidgetItem::setData(Qt::EditRole, toString());
-}
 
 template<typename Bitmask, typename Enum>
 BitmaskTableWidgetItem<Bitmask, Enum>::BitmaskTableWidgetItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max) :
@@ -576,11 +550,11 @@ void DialogTables::update_Spell_Data()
         ui->tableWidget->item(row, col++)->setToolTip(game->getHelpText(spell).c_str());
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int16_t>(game, &data->m_Spell_desirability, 6));
-        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpellCategory>(game, data->m_Spell_Category, MoM::eSpellCategory_MAX));
-        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpell_Type>(game, data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
-        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRealm_Type>(game, data->m_Magic_Realm, MoM::eRealm_Type_MAX));
+        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpellCategory>(game, &data->m_Spell_Category, MoM::eSpellCategory_MAX));
+        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eSpell_Type>(game, &data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
+        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRealm_Type>(game, &data->m_Magic_Realm, MoM::eRealm_Type_MAX));
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Casting_eligibility, 4));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, &data->m_Casting_eligibility, 4));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Casting_cost, 5));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Research_cost, 5));
 
@@ -593,7 +567,7 @@ void DialogTables::update_Spell_Data()
         case MoM::SPELLCATEGORY_Unit_enchantment:  // enchantment that can be cast on a friendly unit. Bytes 0x20-0x23 contain the mask for the enchantment applied (same as bytes 0x18-0x1B in the unit data structure in the save file). While no current spells do this, it is possible to set more than one bit; doing so will apply both spells, and will also prevent casting if either spell is already on the unit.
         case MoM::SPELLCATEGORY_Mundane_Unit_enchantment:          // friendly unit enchantment that only works on mundane units. Otherwise identical to 0x01.
             itemParameters[0] = new BitmaskTableWidgetItem<uint32_t, MoM::eUnitEnchantment>(
-                        game, *(uint32_t*)&data->m_Parameters[0],
+                        game, (uint32_t*)&data->m_Parameters[0],
                         (MoM::eUnitEnchantment)0, MoM::eUnitEnchantment_MAX);
             itemParameters[1] = new QMoMTableWidgetItemBase(game, QString());
             itemParameters[2] = new QMoMTableWidgetItemBase(game, QString());
@@ -602,29 +576,29 @@ void DialogTables::update_Spell_Data()
         case MoM::SPELLCATEGORY_Hostile_City_enchantment:  // enchantment hits a hostile city. Byte 0x20 is the same as above.
             break;
         case MoM::SPELLCATEGORY_Fixed_damage:      // non-moddable damaging spell. Byte 0x20 is the magnitude, 0x21 is the immunity flags that apply (same as for monsters), 0x22 and 0x23 are attack flags (same as for monsters, but for byte 0x23, 0x80, listed as no effect for monsters, makes it act like warp lightning, and 0x10 makes it act like fireball. Neither flag seems to apply to critter attacks, though I haven't tried all possible combinations. Not all attack flags work for spells).
-            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, &data->m_Parameters[0], 4, SHOWNUMBER_normal);
             itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                         game, data->m_Parameters[1],
+                                         game, &data->m_Parameters[1],
                                          MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
             itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         game, (uint16_t*)&data->m_Parameters[2],
                                          MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
             break;
         case MoM::SPELLCATEGORY_Variable_damage:   // variable cost damage spells; max cost = base cost * 5. Otherwise identical to 0x04. The extra effect per extra mana spent is probably determined by the flags, it isn't coded here.
                                                 // Life Drain, Fire Bolt, Ice Bolt, Lightning Bolt, Psionic Blast, Fireball
                                                 //      base spell strength + (mana - cost)
-            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, &data->m_Parameters[0], 4, SHOWNUMBER_normal);
             itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                         game, data->m_Parameters[1],
+                                         game, &data->m_Parameters[1],
                                          MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
             itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         game, (uint16_t*)&data->m_Parameters[2],
                                          MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
             break;
         case MoM::SPELLCATEGORY_Special:           // unusual spells. I haven't been able to determine how they're parsed, and there are a lot of them.
             break;
         case MoM::SPELLCATEGORY_Target_wizard:     // spells that target one wizard. 0x20 appears to be the effect (there are only four spells in this category: spell blast, cruel unminding, drain power, subversion).
-            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, &data->m_Parameters[0], 4, SHOWNUMBER_normal);
             break;
         case MoM::SPELLCATEGORY_Global_enchantment:// global enchantment. Byte 0x20 contains the code for the global enchantment, in the same order as for global enchantments in the save file, but starts at 0 (0x00 is eternal night, 0x17 is awareness).
             break;
@@ -644,26 +618,26 @@ void DialogTables::update_Spell_Data()
                                                 //    18: entangle
                                                 //    1a: mana leak
                                                 //    1c: blur
-            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, data->m_Parameters[0], 4, SHOWNUMBER_normal);
+            itemParameters[0] = new NumberTableWidgetItem<uint8_t>(game, &data->m_Parameters[0], 4, SHOWNUMBER_normal);
             itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                         game, data->m_Parameters[1],
+                                         game, &data->m_Parameters[1],
                                          MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
             itemParameters[2] = new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
-                                         game, *(uint16_t*)&data->m_Parameters[2],
+                                         game, (uint16_t*)&data->m_Parameters[2],
                                          MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX);
             break;
         case MoM::SPELLCATEGORY_Create_item:       // enchant item and create artifact.
             break;
         case MoM::SPELLCATEGORY_Destroy_unit:      // spells that destroy a unit. Byte 0x21 looks like it may be a normal immunity byte, as it's 0x22 for petrify, 0x20 for disintegrate, but there's missing information here.
             itemParameters[1] = new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                         game, data->m_Parameters[1],
+                                         game, &data->m_Parameters[1],
                                          MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity);
             break;
         case MoM::SPELLCATEGORY_Resistable_Combat_enchantment:// hostile (resisted) combat enchantments. Bytes 0x20-0x21 are a mask for what effect is created:
         case MoM::SPELLCATEGORY_Unresistable_Combat_enchantment:   // hostile (un-resisted) combat enchantments. Otherwise as 0x0d
         case MoM::SPELLCATEGORY_Mundane_Combat_enchantment:        // hostile (resisted) combat enchantments that only work on mundane units.
             itemParameters[0] = new BitmaskTableWidgetItem<uint16_t, MoM::eCombatEnchantment>(
-                        game, *(uint16_t*)&data->m_Parameters[0],
+                        game, (uint16_t*)&data->m_Parameters[0],
                         (MoM::eCombatEnchantment)0, MoM::eCombatEnchantment_MAX);
             itemParameters[1] = new QMoMTableWidgetItemBase(game, QString());
             break;
@@ -684,11 +658,11 @@ void DialogTables::update_Spell_Data()
             }
             else if (i < 2)
             {
-                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, *(uint8_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
+                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, (uint8_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
             }
             else
             {
-                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, *(uint16_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
+                ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, (uint16_t*)&data->m_Parameters[i], 6, SHOWNUMBER_noZero));
             }
         }
 
@@ -791,7 +765,7 @@ void DialogTables::update_Spell_Data()
 
             if (0 != pUpkeep)
             {
-                ui->tableWidget->setItem(row, col, new NumberTableWidgetItem<uint16_t>(game, *pUpkeep, 5));
+                ui->tableWidget->setItem(row, col, new NumberTableWidgetItem<uint16_t>(game, pUpkeep, 5));
             }
         }
         col++;
@@ -815,7 +789,7 @@ void DialogTables::update_Spell_Data()
             int rowSpell = saveSpellNr - 1;
             if ((rowSpell >= 0) && (rowSpell < ndata) && (0 != pSaveModifier))
             {
-                ui->tableWidget->setItem(rowSpell, col, new NumberTableWidgetItem<int8_t>(game, *pSaveModifier, 4, SHOWNUMBER_alwaysPlus));
+                ui->tableWidget->setItem(rowSpell, col, new NumberTableWidgetItem<int8_t>(game, pSaveModifier, 4, SHOWNUMBER_alwaysPlus));
             }
         }
     }
@@ -874,48 +848,48 @@ void DialogTables::update_Unit_Types()
         int col = 0;
         ui->tableWidget->setItem(row, col++, new QMoMTableWidgetItemBase(game, QString("%0").arg(unitTypeNr, 3)));
 
-        ui->tableWidget->setItem(row, col, new EnumTableWidgetItem<MoM::eRace>(game, data->m_Race_Code, MoM::eRace_MAX));
+        ui->tableWidget->setItem(row, col, new EnumTableWidgetItem<MoM::eRace>(game, &data->m_Race_Code, MoM::eRace_MAX));
         ui->tableWidget->item(row, col++)->setTextColor(color);
 
         ui->tableWidget->setItem(row, col, new QMoMTableWidgetItemBase(game, game->getNameByOffset(data->m_PtrName)));
         ui->tableWidget->item(row, col++)->setTextColor(color);
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Nr_Figures, 3));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Melee, 3, SHOWNUMBER_noZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Ranged, 3, SHOWNUMBER_noZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Defense, 3));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Resistance, 3));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Hitpoints, 3));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_To_Hit, 2, SHOWNUMBER_plusAndNoZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_MoveHalves, 5, SHOWNUMBER_halfMove));
-        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRanged_Type>(game, data->m_Ranged_Type, MoM::eRanged_Type_MAX, true));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Ranged_Shots, 3, SHOWNUMBER_noZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, data->m_Gaze_Modifier, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Nr_Figures, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Melee, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Ranged, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Defense, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Resistance, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Hitpoints, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, &data->m_To_Hit, 2, SHOWNUMBER_plusAndNoZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_MoveHalves, 5, SHOWNUMBER_halfMove));
+        ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eRanged_Type>(game, &data->m_Ranged_Type, MoM::eRanged_Type_MAX, true));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Ranged_Shots, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<int8_t>(game, &data->m_Gaze_Modifier, 3, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Cost, 5));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Upkeep, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Upkeep, 3));
 
         if (unitTypeNr < (int)MoM::gMAX_HERO_TYPES)
         {
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Building_Required1, 4));
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eHero_TypeCode>(game, *(MoM::eHero_TypeCode*)&data->m_Hero_TypeCode_or_Building2, MoM::eHero_TypeCode_MAX));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building_Required1, 4));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eHero_TypeCode>(game, (MoM::eHero_TypeCode*)&data->m_Hero_TypeCode_or_Building2, MoM::eHero_TypeCode_MAX));
         }
         else if (unitTypeNr < MoM::UNITTYPE_Arcane_Magic_Spirit)
         {
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, *(MoM::eBuilding8*)&data->m_Building_Required1, MoM::eBuilding8_MAX));
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, *(MoM::eBuilding8*)&data->m_Hero_TypeCode_or_Building2, MoM::eBuilding8_MAX));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Building_Required1, MoM::eBuilding8_MAX));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Hero_TypeCode_or_Building2, MoM::eBuilding8_MAX));
         }
         else
         {
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Building_Required1, 4));
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, *(uint8_t*)&data->m_Hero_TypeCode_or_Building2, 4));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building_Required1, 4));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, (uint8_t*)&data->m_Hero_TypeCode_or_Building2, 4));
         }
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                  game, data->m_Movement_Flags.bits,
+                                  game, &data->m_Movement_Flags.bits,
                                   MoM::UNITABILITY_Cavalry, MoM::succ(MoM::UNITABILITY_Merging)));
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
-                                  game, data->m_Immunity_Flags.bits,
+                                  game, &data->m_Immunity_Flags.bits,
                                   MoM::UNITABILITY_Fire_Immunity, MoM::UNITABILITY_Weapon_Immunity));
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint16_t, MoM::eUnitAbility>(
@@ -930,11 +904,11 @@ void DialogTables::update_Unit_Types()
                                   game, &data->m_Attack_Flags.bits,
                                   MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Unit_picture, 3));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Scouting, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Unit_picture, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Scouting, 3));
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Transport_Capacity, 3, SHOWNUMBER_noZero));
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, data->m_Construction, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Transport_Capacity, 3, SHOWNUMBER_noZero));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Construction, 3, SHOWNUMBER_noZero));
     }
 
     ui->tableWidget->resizeColumnsToContents();
@@ -987,7 +961,7 @@ void DialogTables::update_Unrest_Table()
         for (col = 2; col < labels.size(); ++col)
         {
             MoM::eRace cityRace = (MoM::eRace)(col - 2);
-            ui->tableWidget->setItem(row, col, new NumberTableWidgetItem<int8_t>(game, data[cityRace], 3, SHOWNUMBER_positivePlus));
+            ui->tableWidget->setItem(row, col, new NumberTableWidgetItem<int8_t>(game, &data[cityRace], 3, SHOWNUMBER_positivePlus));
         }
     }
 
