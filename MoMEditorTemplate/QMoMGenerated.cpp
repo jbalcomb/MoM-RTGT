@@ -563,7 +563,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_unitNr", new QMoMTreeItem<int16_t>(&rhs->m_unitNr));
     ptree->appendChild("m_UNK32", new QMoMTreeItem<uint8_t>(&rhs->m_UNK32));
     ptree->appendChild("m_web_", new QMoMTreeItem<uint8_t>(&rhs->m_web_));
-    ptree->appendChild("m_Active", new QMoMTreeItem<uint8_t>(&rhs->m_Active));
+    ptree->appendChild("m_Active", new QMoMTreeItem<eBattleUnitActive>(&rhs->m_Active));
     ptree->appendChild("m_Owner", new QMoMTreeItem<ePlayer>(&rhs->m_Owner));
     ptree->appendChild("m_cur_total_damage_GUESS", new QMoMTreeItem<uint8_t>(&rhs->m_cur_total_damage_GUESS));
     QMoMTreeItemBase* ptreem_UNK37 = ptree;
@@ -594,7 +594,7 @@ QMoMTreeItemBase* constructTreeItem(Battle_Unit* rhs, const QString& context)
     ptree->appendChild("m_UNK4E", new QMoMTreeItem<uint16_t>(&rhs->m_UNK4E));
     ptree->appendChild("m_UNK50", new QMoMTreeItem<uint16_t>(&rhs->m_UNK50));
     ptree->appendChild("m_UNK52_sound_GUESS", new QMoMTreeItem<uint16_t>(&rhs->m_UNK52_sound_GUESS));
-    ptree->appendChild("m_Status", new QMoMTreeItem<eUnit_Status16>(&rhs->m_Status));
+    ptree->appendChild("m_Tactic", new QMoMTreeItem<eBattleUnitTactic>(&rhs->m_Tactic));
     ptree->appendChild("m_Confused_State", new QMoMTreeItem<int8_t>(&rhs->m_Confused_State));
     ptree->appendChild("m_UNK57", new QMoMTreeItem<uint8_t>(&rhs->m_UNK57));
     QMoMTreeItemBase* ptreem_UNK58 = ptree;

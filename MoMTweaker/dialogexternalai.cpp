@@ -58,7 +58,7 @@ void DialogExternalAI::on_pushButton_WaitForHook_clicked()
         errorString = "No bait";
     }
 
-    MoM::MoMHookManager::Data data;
+    MoM::MoMHookData data;
     if (ok)
     {
         ok = hookManager->readBaitData(data);
@@ -99,7 +99,7 @@ void DialogExternalAI::on_pushButton_ReleaseHook_clicked()
     bool ok = true;
     std::string errorString = "Bait released";
 
-    MoM::MoMHookManager::Data data;
+    MoM::MoMHookData data;
 
     data.targetID = ui->lineEdit_TargetBattleUnitNr->text().toInt();
     data.tactic = ui->lineEdit_Tactic->text().toInt();

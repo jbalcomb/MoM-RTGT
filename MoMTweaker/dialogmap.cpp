@@ -481,8 +481,8 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
 
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
     qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &battleUnit->m_Owner, ePlayer_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<uint8_t>(m_game, "Active", &battleUnit->m_Active, eUnit_Active_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status16>(m_game, "Status", &battleUnit->m_Status, eUnit_Status16_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eBattleUnitActive>(m_game, "Active", &battleUnit->m_Active, eBattleUnitActive_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eBattleUnitTactic>(m_game, "Status", &battleUnit->m_Tactic, eBattleUnitTactic_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TargetID", &battleUnit->m_Target_BattleUnitID));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPos", &battleUnit->m_xPos));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPos", &battleUnit->m_yPos));
@@ -964,7 +964,7 @@ void DialogMap::slot_gameUpdated()
             textItem->setFont(QMoMResources::g_FontSmall);
             textItem->setPos(pos);
 
-            QString text = prettyQStr(battleUnit->m_Status);
+            QString text = prettyQStr(battleUnit->m_Tactic);
             textItem = m_sceneBattle->addSimpleText(QString("%0").arg(text[0]));
             textItem->setFont(QMoMResources::g_FontSmall);
             pos.rx() += textItem->boundingRect().width() + 4;

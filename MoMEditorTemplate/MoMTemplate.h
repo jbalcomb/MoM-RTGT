@@ -70,6 +70,41 @@ enum eBannerColor ENUMSIZE16
     eBannerColor__SIZE__ = 0xFFFF
 };
 
+enum eBattleUnitActive ENUMSIZE8
+{
+    BATTLEUNITACTIVE_alive = 0,
+    BATTLEUNITACTIVE_fleeing = 2,
+    BATTLEUNITACTIVE_dead = 4,
+    BATTLEUNITACTIVE_undeaded = 5,
+    BATTLEUNITACTIVE_crackscall = 6,
+
+    eBattleUnitActive_MAX,
+    eBattleUnitActive_SIZE__ = 0xFF
+};
+
+enum eBattleUnitTactic ENUMSIZE16
+{
+    TACTIC_ready = 0,
+
+    TACTIC_done = 4,
+
+    TACTIC_melee = 100,
+    TACTIC_shoot = 101,
+    TACTIC_unclear_102 = 102,
+    TACTIC_unclear_103 = 103,
+    TACTIC_doom_bolt = 104,
+    TACTIC_fireball = 105,
+    TACTIC_healing_GUESS106 = 106,
+    TACTIC_cast_spell_107 = 107,
+    TACTIC_cast_spell_108 = 108,
+    TACTIC_summon_demon = 109,
+
+    TACTIC_flee_150 = 150,
+
+    eBattleUnitTactic_MAX,
+    eBattleUnitTactic_SIZE__ = 0xFFFF
+};
+
 enum eBattleCondition ENUMSIZE16
 {
     BATTLECONDITION_other = 0,
@@ -328,6 +363,8 @@ enum eEvent
     EVENT_Conjunction_Nature  = 15,
     EVENT_Conjunction_Chaos   = 16,
     EVENT_Mana_Short          = 17,
+
+    eEvent_MAX
 };
 
 enum eGameState ENUMSIZE16
@@ -2777,36 +2814,6 @@ enum eUnit_Status8 ENUMSIZE8
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
 };
 
-enum eUnit_Status16 ENUMSIZE16
-{
-    UNITSTATUS16_ready = 0,                     //   00=ready
-    UNITSTATUS16_patrol = 1,                    //   01=patrol
-    UNITSTATUS16_building_road_in_place = 2,    //   02=building road (in place)
-    UNITSTATUS16_going_to_XY = 3,               //   03=going to X,Y destination (could be building road too, see 0x1C)
-    UNITSTATUS16_reached_destination = 4,       //   04=reached destination & expended (0x07 == 01)
-                                                //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
-    UNITSTATUS16_wait = 5,                      //   05=wait until all other units have had a chance to go (then clears all flags)
-                                                //      the SAVE game does not record if we are traversing UP or DOWN the units!
-                                                //   ??=building road
-                                                //   ??=purifying
-
-    UNITSTATUS16_melee = 100,                   // Unit_strategy_exe()  
-    UNITSTATUS16_shoot = 101,
-    UNITSTATUS16_unclear_102 = 102,
-    UNITSTATUS16_unclear_103 = 103,
-    UNITSTATUS16_doom_bolt = 104,
-    UNITSTATUS16_fireball = 105,
-    UNITSTATUS16_healing_GUESS106 = 106,
-    UNITSTATUS16_cast_spell_107 = 107,
-    UNITSTATUS16_cast_spell_108 = 108,
-    UNITSTATUS16_summon_demon = 109,
-
-    UNITSTATUS16_flee_150 = 150,
-
-    eUnit_Status16_MAX,
-    UNITSTATUS16_eUnit_Status_SIZE__ = 0xFFFF
-};
-
 enum eUnit_Type ENUMSIZE8
 {
     //  * 35 Heroes (00=Brax; 22=Chosen One) => better heroes, higher number
@@ -3760,7 +3767,6 @@ typedef struct PACKED_STRUCT // Tower_Node_Lair
 
 typedef struct PACKED_STRUCT // Node_Attr
 {
-//    uint8_t         m_Data[0x30];
     uint8_t         m_XPos;             // 0
     uint8_t         m_YPos;             // 01
     ePlane          m_Plane;            // 02
@@ -3770,7 +3776,7 @@ typedef struct PACKED_STRUCT // Node_Attr
     uint8_t         m_YPos_Mana[20];    // 19
     eNode_Type      m_Node_Type;        // 2D
     uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit
-    uint8_t         m_Unk_2F;           // 2F ??
+    uint8_t         m_Unk_2F;           // 2F
                                         // SIZE 30
 } Node_Attr;
 
@@ -4775,7 +4781,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_unitNr;           // 30-31 db ?
     uint8_t                 m_UNK32;            // 32
     uint8_t                 m_web_;             // 33 db ?
-    uint8_t                 m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
+    eBattleUnitActive       m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
     ePlayer                 m_Owner;            // 35 db ?
     uint8_t                 m_cur_total_damage_GUESS;   // 36 db ?
     uint8_t                 m_UNK37[2];         // 37
@@ -4796,7 +4802,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint16_t                m_UNK4E;            // 4E
     uint16_t                m_UNK50;            // 50
     uint16_t                m_UNK52_sound_GUESS;// 52
-    eUnit_Status16          m_Status;           // 54 Status (0=ready, 4=reached destination)
+    eBattleUnitTactic       m_Tactic;           // 54 Tactic (0=ready, 4=done, 100=melee, 101=shoot, ...)
     int8_t                  m_Confused_State;   // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
     uint8_t                 m_UNK57;            // 57
     uint16_t                m_UNK58[6];         // 58

@@ -62,6 +62,46 @@ std::ostream& operator<<(std::ostream& os, const eBattleCondition& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eBattleUnitActive& rhs)
+{
+    switch (rhs)
+    {
+    case BATTLEUNITACTIVE_alive: os << "BATTLEUNITACTIVE_alive"; break;
+    case BATTLEUNITACTIVE_fleeing: os << "BATTLEUNITACTIVE_fleeing"; break;
+    case BATTLEUNITACTIVE_dead: os << "BATTLEUNITACTIVE_dead"; break;
+    case BATTLEUNITACTIVE_undeaded: os << "BATTLEUNITACTIVE_undeaded"; break;
+    case BATTLEUNITACTIVE_crackscall: os << "BATTLEUNITACTIVE_crackscall"; break;
+    case eBattleUnitActive_MAX: os << "eBattleUnitActive_MAX"; break;
+    default: os << "<Unknown eBattleUnitActive>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eBattleUnitTactic& rhs)
+{
+    switch (rhs)
+    {
+    case TACTIC_ready: os << "TACTIC_ready"; break;
+    case TACTIC_done: os << "TACTIC_done"; break;
+    case TACTIC_melee: os << "TACTIC_melee"; break;
+    case TACTIC_shoot: os << "TACTIC_shoot"; break;
+    case TACTIC_unclear_102: os << "TACTIC_unclear_102"; break;
+    case TACTIC_unclear_103: os << "TACTIC_unclear_103"; break;
+    case TACTIC_doom_bolt: os << "TACTIC_doom_bolt"; break;
+    case TACTIC_fireball: os << "TACTIC_fireball"; break;
+    case TACTIC_healing_GUESS106: os << "TACTIC_healing_GUESS106"; break;
+    case TACTIC_cast_spell_107: os << "TACTIC_cast_spell_107"; break;
+    case TACTIC_cast_spell_108: os << "TACTIC_cast_spell_108"; break;
+    case TACTIC_summon_demon: os << "TACTIC_summon_demon"; break;
+    case TACTIC_flee_150: os << "TACTIC_flee_150"; break;
+    case eBattleUnitTactic_MAX: os << "eBattleUnitTactic_MAX"; break;
+    default: os << "<Unknown eBattleUnitTactic>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
 {
     switch (rhs)
@@ -348,6 +388,7 @@ std::ostream& operator<<(std::ostream& os, const eEvent& rhs)
     case EVENT_Conjunction_Nature: os << "EVENT_Conjunction_Nature"; break;
     case EVENT_Conjunction_Chaos: os << "EVENT_Conjunction_Chaos"; break;
     case EVENT_Mana_Short: os << "EVENT_Mana_Short"; break;
+    case eEvent_MAX: os << "eEvent_MAX"; break;
     default: os << "<Unknown eEvent>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2926,34 +2967,6 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Active& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const eUnit_Status16& rhs)
-{
-    switch (rhs)
-    {
-    case UNITSTATUS16_ready: os << "UNITSTATUS16_ready"; break;
-    case UNITSTATUS16_patrol: os << "UNITSTATUS16_patrol"; break;
-    case UNITSTATUS16_building_road_in_place: os << "UNITSTATUS16_building_road_in_place"; break;
-    case UNITSTATUS16_going_to_XY: os << "UNITSTATUS16_going_to_XY"; break;
-    case UNITSTATUS16_reached_destination: os << "UNITSTATUS16_reached_destination"; break;
-    case UNITSTATUS16_wait: os << "UNITSTATUS16_wait"; break;
-    case UNITSTATUS16_melee: os << "UNITSTATUS16_melee"; break;
-    case UNITSTATUS16_shoot: os << "UNITSTATUS16_shoot"; break;
-    case UNITSTATUS16_unclear_102: os << "UNITSTATUS16_unclear_102"; break;
-    case UNITSTATUS16_unclear_103: os << "UNITSTATUS16_unclear_103"; break;
-    case UNITSTATUS16_doom_bolt: os << "UNITSTATUS16_doom_bolt"; break;
-    case UNITSTATUS16_fireball: os << "UNITSTATUS16_fireball"; break;
-    case UNITSTATUS16_healing_GUESS106: os << "UNITSTATUS16_healing_GUESS106"; break;
-    case UNITSTATUS16_cast_spell_107: os << "UNITSTATUS16_cast_spell_107"; break;
-    case UNITSTATUS16_cast_spell_108: os << "UNITSTATUS16_cast_spell_108"; break;
-    case UNITSTATUS16_summon_demon: os << "UNITSTATUS16_summon_demon"; break;
-    case UNITSTATUS16_flee_150: os << "UNITSTATUS16_flee_150"; break;
-    case eUnit_Status16_MAX: os << "eUnit_Status16_MAX"; break;
-    default: os << "<Unknown eUnit_Status16>"; break;
-    }
-    os << " (" << (unsigned)rhs << ")";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const eUnit_Status8& rhs)
 {
     switch (rhs)
@@ -3527,7 +3540,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
     os << "m_UNK32=" << (unsigned)rhs.m_UNK32 << " 0x" << std::hex << (unsigned)rhs.m_UNK32 << std::dec << "\n";
     os << "m_web_=" << (unsigned)rhs.m_web_ << " 0x" << std::hex << (unsigned)rhs.m_web_ << std::dec << "\n";
-    os << "m_Active=" << (unsigned)rhs.m_Active << " 0x" << std::hex << (unsigned)rhs.m_Active << std::dec << "\n";
+    os << "m_Active=" << rhs.m_Active << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
     os << "m_cur_total_damage_GUESS=" << (unsigned)rhs.m_cur_total_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_total_damage_GUESS << std::dec << "\n";
     os << "m_UNK37=(\n";
@@ -3552,7 +3565,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_UNK4E=" << rhs.m_UNK4E << " 0x" << std::hex << rhs.m_UNK4E << std::dec << "\n";
     os << "m_UNK50=" << rhs.m_UNK50 << " 0x" << std::hex << rhs.m_UNK50 << std::dec << "\n";
     os << "m_UNK52_sound_GUESS=" << rhs.m_UNK52_sound_GUESS << " 0x" << std::hex << rhs.m_UNK52_sound_GUESS << std::dec << "\n";
-    os << "m_Status=" << rhs.m_Status << "\n";
+    os << "m_Tactic=" << rhs.m_Tactic << "\n";
     os << "m_Confused_State=" << (int)rhs.m_Confused_State << " 0x" << std::hex << (int)rhs.m_Confused_State << std::dec << "\n";
     os << "m_UNK57=" << (unsigned)rhs.m_UNK57 << " 0x" << std::hex << (unsigned)rhs.m_UNK57 << std::dec << "\n";
     os << "m_UNK58=(\n";
@@ -7642,6 +7655,44 @@ bool validate(const eBattleCondition& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eBattleUnitActive& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case BATTLEUNITACTIVE_alive: break;
+    case BATTLEUNITACTIVE_fleeing: break;
+    case BATTLEUNITACTIVE_dead: break;
+    case BATTLEUNITACTIVE_undeaded: break;
+    case BATTLEUNITACTIVE_crackscall: break;
+    default: std::cout << context << ": Unknown eBattleUnitActive = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eBattleUnitTactic& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case TACTIC_ready: break;
+    case TACTIC_done: break;
+    case TACTIC_melee: break;
+    case TACTIC_shoot: break;
+    case TACTIC_unclear_102: break;
+    case TACTIC_unclear_103: break;
+    case TACTIC_doom_bolt: break;
+    case TACTIC_fireball: break;
+    case TACTIC_healing_GUESS106: break;
+    case TACTIC_cast_spell_107: break;
+    case TACTIC_cast_spell_108: break;
+    case TACTIC_summon_demon: break;
+    case TACTIC_flee_150: break;
+    default: std::cout << context << ": Unknown eBattleUnitTactic = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eBuilding& rhs, const std::string& context)
 {
     bool ok = true;
@@ -10322,33 +10373,6 @@ bool validate(const eUnit_Active& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const eUnit_Status16& rhs, const std::string& context)
-{
-    bool ok = true;
-    switch (rhs)
-    {
-    case UNITSTATUS16_ready: break;
-    case UNITSTATUS16_patrol: break;
-    case UNITSTATUS16_building_road_in_place: break;
-    case UNITSTATUS16_going_to_XY: break;
-    case UNITSTATUS16_reached_destination: break;
-    case UNITSTATUS16_wait: break;
-    case UNITSTATUS16_melee: break;
-    case UNITSTATUS16_shoot: break;
-    case UNITSTATUS16_unclear_102: break;
-    case UNITSTATUS16_unclear_103: break;
-    case UNITSTATUS16_doom_bolt: break;
-    case UNITSTATUS16_fireball: break;
-    case UNITSTATUS16_healing_GUESS106: break;
-    case UNITSTATUS16_cast_spell_107: break;
-    case UNITSTATUS16_cast_spell_108: break;
-    case UNITSTATUS16_summon_demon: break;
-    case UNITSTATUS16_flee_150: break;
-    default: std::cout << context << ": Unknown eUnit_Status16 = " << (int)rhs << "\n"; ok = false; break;
-    }
-    return ok;
-}
-
 bool validate(const eUnit_Status8& rhs, const std::string& context)
 {
     bool ok = true;
@@ -10676,9 +10700,10 @@ bool validate(const Battle_Unit& rhs, const std::string& context)
     if (!validate(rhs.m_Cur_Attack_Flags, context + ".m_Cur_Attack_Flags")) ok = false;
     if (!validate(rhs.m_Item_Attack_Flags, context + ".m_Item_Attack_Flags")) ok = false;
     if (!validate(rhs.m_Flags2_UnitEnchantment, context + ".m_Flags2_UnitEnchantment")) ok = false;
+    if (!validate(rhs.m_Active, context + ".m_Active")) ok = false;
     if (!validate(rhs.m_Owner, context + ".m_Owner")) ok = false;
     if (!validate(rhs.m_Flags1_UnitEnchantment, context + ".m_Flags1_UnitEnchantment")) ok = false;
-    if (!validate(rhs.m_Status, context + ".m_Status")) ok = false;
+    if (!validate(rhs.m_Tactic, context + ".m_Tactic")) ok = false;
     return ok;
 }
 

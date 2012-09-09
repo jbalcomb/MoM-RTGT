@@ -1,4 +1,3 @@
-/* File : mom.i */
 %module mom
 
 %{

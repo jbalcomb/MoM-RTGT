@@ -310,7 +310,7 @@ bool MoMHookManager::isBaitReady()
     return pdIsBaitReady();
 }
 
-bool MoMHookManager::readBaitData(MoMHookManager::Data& data)
+bool MoMHookManager::readBaitData(MoMHookData& data)
 {
     bool ok = true;
     m_errorString = "Bait data read";
@@ -352,7 +352,7 @@ bool MoMHookManager::readBaitData(MoMHookManager::Data& data)
         if (0 != battleUnit)
         {
             data.targetID = battleUnit->m_Target_BattleUnitID;
-            data.tactic = battleUnit->m_Status;
+            data.tactic = battleUnit->m_Tactic;
         }
     }
 
@@ -361,7 +361,7 @@ bool MoMHookManager::readBaitData(MoMHookManager::Data& data)
     return ok;
 }
 
-bool MoMHookManager::writeBaitData(const MoMHookManager::Data &data)
+bool MoMHookManager::writeBaitData(const MoMHookData &data)
 {
     bool ok = true;
     m_errorString = "Bait data written";
@@ -389,7 +389,7 @@ bool MoMHookManager::writeBaitData(const MoMHookManager::Data &data)
     if (ok)
     {
         battleUnit->m_Target_BattleUnitID = data.targetID;
-        battleUnit->m_Status = (MoM::eUnit_Status16)data.tactic;
+        battleUnit->m_Tactic = (MoM::eBattleUnitTactic)data.tactic;
 
         *(int16_t*)(&sseg[basePointer + 6]) = data.battleUnitNr;
         *(int16_t*)(&sseg[basePointer + 8]) = data.targetXpos;

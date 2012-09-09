@@ -6,20 +6,22 @@ namespace MoM {
 class MoMGameBase;
 class MoMProcess;
 
+// This structure is defined outside the MoMHookManager
+// because SWIG currently does not support nested structures.
+struct MoMHookData
+{
+    int battleUnitNr;
+    int targetID;
+    int tactic;
+    int targetXpos;
+    int targetYpos;
+    int parm1;
+    int parm2;
+};
+
 class MoMHookManager
 {
 public:
-    struct Data
-    {
-        int battleUnitNr;
-        int targetID;
-        int tactic;
-        int targetXpos;
-        int targetYpos;
-        int parm1;
-        int parm2;
-    };
-
     explicit MoMHookManager(MoMGameBase* game);
 
     std::string errorString() const
@@ -54,12 +56,12 @@ public:
     /// Read the bait data
     /// \pre The bait is currently hooked
     /// \param[out] data The relevant data for this hook
-    bool readBaitData(Data& data);
+    bool readBaitData(MoMHookData& data);
 
     /// Write the bait data
     /// \pre The bait is currently hooked
     /// \param[in] data The relevant data for this hook
-    bool writeBaitData(const Data& data);
+    bool writeBaitData(const MoMHookData& data);
 
 private:
     bool pdIsBaitReady();

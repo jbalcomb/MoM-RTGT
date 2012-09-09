@@ -9,6 +9,8 @@ namespace MoM {
 
 std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs);
 std::ostream& operator<<(std::ostream& os, const eBattleCondition& rhs);
+std::ostream& operator<<(std::ostream& os, const eBattleUnitActive& rhs);
+std::ostream& operator<<(std::ostream& os, const eBattleUnitTactic& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs);
@@ -71,7 +73,6 @@ std::ostream& operator<<(std::ostream& os, const eUnitAbility& rhs);
 std::ostream& operator<<(std::ostream& os, const eUnitEnchantment& rhs);
 std::ostream& operator<<(std::ostream& os, const eUnitMutation& rhs);
 std::ostream& operator<<(std::ostream& os, const eUnit_Active& rhs);
-std::ostream& operator<<(std::ostream& os, const eUnit_Status16& rhs);
 std::ostream& operator<<(std::ostream& os, const eUnit_Status8& rhs);
 std::ostream& operator<<(std::ostream& os, const eUnit_Type& rhs);
 std::ostream& operator<<(std::ostream& os, const eWar_Status& rhs);
@@ -174,6 +175,8 @@ std::ostream& operator<<(std::ostream& os, const unionUnit_Weapon_Mutation& rhs)
 
 bool validate(const eBannerColor& rhs, const std::string& context);
 bool validate(const eBattleCondition& rhs, const std::string& context);
+bool validate(const eBattleUnitActive& rhs, const std::string& context);
+bool validate(const eBattleUnitTactic& rhs, const std::string& context);
 bool validate(const eBuilding& rhs, const std::string& context);
 bool validate(const eBuilding8& rhs, const std::string& context);
 bool validate(const eBuildingStatus& rhs, const std::string& context);
@@ -236,7 +239,6 @@ bool validate(const eUnitAbility& rhs, const std::string& context);
 bool validate(const eUnitEnchantment& rhs, const std::string& context);
 bool validate(const eUnitMutation& rhs, const std::string& context);
 bool validate(const eUnit_Active& rhs, const std::string& context);
-bool validate(const eUnit_Status16& rhs, const std::string& context);
 bool validate(const eUnit_Status8& rhs, const std::string& context);
 bool validate(const eUnit_Type& rhs, const std::string& context);
 bool validate(const eWar_Status& rhs, const std::string& context);
