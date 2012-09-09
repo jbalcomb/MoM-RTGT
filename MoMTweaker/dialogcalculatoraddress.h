@@ -30,8 +30,6 @@ public:
     explicit DialogCalculatorAddress(QWidget *parent = 0);
     ~DialogCalculatorAddress();
 
-    void update(const QWidget* originator = 0);
-
 public slots:
     void slot_gameChanged(const QMoMGamePtr& game);
     void slot_gameUpdated();
@@ -48,6 +46,8 @@ private:
     void convertMemtoDOSString(size_t memOffset, QString& sDOSOffset);
     MoM::MoMExeBase* getExeBase();
 
+    void update(const QWidget* originator = 0);
+    void updateValues(const QWidget* originator = 0);
     void updateCurrentValue(class QLineEdit* lineEdit, const uint8_t* pointer);
 
 private:

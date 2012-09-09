@@ -34,7 +34,7 @@ DESTDIR = $${COMPILER}/bin
 
 QT += core gui
 QT += xml
-CONFIG += debug
+#CONFIG += debug
 
 #DEFINES += QT_LARGEFILE_SUPPORT
 DEFINES += _CRT_SECURE_NO_WARNINGS

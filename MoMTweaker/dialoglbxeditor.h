@@ -38,6 +38,8 @@ private slots:
     void on_pushButton_Load_clicked();
     void on_pushButton_Replace_clicked();
 
+    void on_pushButton_SavePics_clicked();
+
 private:
     Ui::DialogLbxEditor *ui;
 
@@ -50,6 +52,7 @@ private:
     QString m_bitmapFilename;
     QString m_lbxFilename;
     QFileDialog m_filedialogLoad;
+    QFileDialog m_filedialogSave;
     MoM::MoMLbxBase m_lbx;
     QVector<MoM::QMoMAnimation> m_lbxAnimations;
     MoM::QMoMAnimation m_bitmapAnimation;

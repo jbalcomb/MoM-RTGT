@@ -904,7 +904,7 @@ void DialogTables::update_Unit_Types()
                                   game, &data->m_Attack_Flags.bits,
                                   MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_TypeCode, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Unit_picture, 3));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Scouting, 3));
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Transport_Capacity, 3, SHOWNUMBER_noZero));

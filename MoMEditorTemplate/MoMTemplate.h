@@ -70,6 +70,41 @@ enum eBannerColor ENUMSIZE16
     eBannerColor__SIZE__ = 0xFFFF
 };
 
+enum eBattleUnitActive ENUMSIZE8
+{
+    BATTLEUNITACTIVE_alive = 0,
+    BATTLEUNITACTIVE_fleeing = 2,
+    BATTLEUNITACTIVE_dead = 4,
+    BATTLEUNITACTIVE_undeaded = 5,
+    BATTLEUNITACTIVE_crackscall = 6,
+
+    eBattleUnitActive_MAX,
+    eBattleUnitActive_SIZE__ = 0xFF
+};
+
+enum eBattleUnitTactic ENUMSIZE16
+{
+    TACTIC_ready = 0,
+
+    TACTIC_done = 4,
+
+    TACTIC_melee = 100,
+    TACTIC_shoot = 101,
+    TACTIC_unclear_102 = 102,
+    TACTIC_unclear_103 = 103,
+    TACTIC_doom_bolt = 104,
+    TACTIC_fireball = 105,
+    TACTIC_healing_GUESS106 = 106,
+    TACTIC_cast_spell_107 = 107,
+    TACTIC_cast_spell_108 = 108,
+    TACTIC_summon_demon = 109,
+
+    TACTIC_flee_150 = 150,
+
+    eBattleUnitTactic_MAX,
+    eBattleUnitTactic_SIZE__ = 0xFFFF
+};
+
 enum eBattleCondition ENUMSIZE16
 {
     BATTLECONDITION_other = 0,
@@ -328,6 +363,8 @@ enum eEvent
     EVENT_Conjunction_Nature  = 15,
     EVENT_Conjunction_Chaos   = 16,
     EVENT_Mana_Short          = 17,
+
+    eEvent_MAX
 };
 
 enum eGameState ENUMSIZE16
@@ -2777,36 +2814,6 @@ enum eUnit_Status8 ENUMSIZE8
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
 };
 
-enum eUnit_Status16 ENUMSIZE16
-{
-    UNITSTATUS16_ready = 0,                     //   00=ready
-    UNITSTATUS16_patrol = 1,                    //   01=patrol
-    UNITSTATUS16_building_road_in_place = 2,    //   02=building road (in place)
-    UNITSTATUS16_going_to_XY = 3,               //   03=going to X,Y destination (could be building road too, see 0x1C)
-    UNITSTATUS16_reached_destination = 4,       //   04=reached destination & expended (0x07 == 01)
-                                                //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
-    UNITSTATUS16_wait = 5,                      //   05=wait until all other units have had a chance to go (then clears all flags)
-                                                //      the SAVE game does not record if we are traversing UP or DOWN the units!
-                                                //   ??=building road
-                                                //   ??=purifying
-
-    UNITSTATUS16_melee = 100,                   // Unit_strategy_exe()  
-    UNITSTATUS16_shoot = 101,
-    UNITSTATUS16_unclear_102 = 102,
-    UNITSTATUS16_unclear_103 = 103,
-    UNITSTATUS16_doom_bolt = 104,
-    UNITSTATUS16_fireball = 105,
-    UNITSTATUS16_healing_GUESS106 = 106,
-    UNITSTATUS16_cast_spell_107 = 107,
-    UNITSTATUS16_cast_spell_108 = 108,
-    UNITSTATUS16_summon_demon = 109,
-
-    UNITSTATUS16_flee_150 = 150,
-
-    eUnit_Status16_MAX,
-    UNITSTATUS16_eUnit_Status_SIZE__ = 0xFFFF
-};
-
 enum eUnit_Type ENUMSIZE8
 {
     //  * 35 Heroes (00=Brax; 22=Chosen One) => better heroes, higher number
@@ -3176,12 +3183,14 @@ static const unsigned gMAX_BATTLE_COLS = 21;
 static const unsigned gMAX_BATTLE_ROWS = 22;
 static const unsigned gMAX_BATTLE_UNITS = 18;
 static const unsigned gMAX_CITIES = 100;
+static const unsigned gMAX_FIGURES_IN_UNIT = 8;
 static const unsigned gMAX_HERO_TYPES = 35;
 static const unsigned gMAX_HIRED_HEROES = 6;
 static const unsigned gMAX_ITEMSLOTS = 3;
 static const unsigned gMAX_ITEMS = 138;
 static const unsigned gMAX_MAP_COLS = 60;
 static const unsigned gMAX_MAP_ROWS = 40;
+static const unsigned gMAX_NODES = 30;
 static const unsigned gMAX_NODES_LAIRS_TOWERS = 102;
 static const unsigned gMAX_RACES = 14;
 static const unsigned gMAX_UNITS = 1009;
@@ -3758,17 +3767,17 @@ typedef struct PACKED_STRUCT // Tower_Node_Lair
 
 typedef struct PACKED_STRUCT // Node_Attr
 {
-//    uint8_t         m_Data[0x30];
-    uint8_t         m_XPos;
-    uint8_t         m_YPos;
-    ePlane          m_Plane;
-    ePlayer         m_Owner;        // FF = Not owned by a player
-    uint8_t         m_Power_Node;
-    uint8_t         m_XPos_Mana[20];
-    uint8_t         m_YPos_Mana[20];
-    eNode_Type      m_Node_Type;
-    uint8_t         m_UNK01[2];     // 00 00 ??
-                                    // SIZE 30
+    uint8_t         m_XPos;             // 0
+    uint8_t         m_YPos;             // 01
+    ePlane          m_Plane;            // 02
+    ePlayer         m_Owner;            // 03    // FF = Not owned by a player
+    uint8_t         m_Power_Node;       // 04
+    uint8_t         m_XPos_Mana[20];    // 05 
+    uint8_t         m_YPos_Mana[20];    // 19
+    eNode_Type      m_Node_Type;        // 2D
+    uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit
+    uint8_t         m_Unk_2F;           // 2F
+                                        // SIZE 30
 } Node_Attr;
 
 typedef struct PACKED_STRUCT // Fortress
@@ -4642,7 +4651,7 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     eRace       m_Race_Code;         // 0D  Race code (table 2)
     uint8_t     m_Building_Required1;    // 0E  Normal units: building required (table 3), Hero: ID Code, Summoned: 6
     eHero_TypeCode     m_Hero_TypeCode_or_Building2;      // 0F  Heroes: type code, Regular units: Building required, Summoned: zero
-    uint8_t     m_TypeCode;         // 10  Type code?
+    uint8_t     m_Unit_picture;     // 10  Unit picture
     uint8_t     m_UNK01;            // 11  00
     uint8_t     m_Hitpoints;        // 12  Hit points (hearts) per figure
     uint8_t     m_Scouting;    // 13  Scouting range
@@ -4772,7 +4781,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_unitNr;           // 30-31 db ?
     uint8_t                 m_UNK32;            // 32
     uint8_t                 m_web_;             // 33 db ?
-    uint8_t                 m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
+    eBattleUnitActive       m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
     ePlayer                 m_Owner;            // 35 db ?
     uint8_t                 m_cur_total_damage_GUESS;   // 36 db ?
     uint8_t                 m_UNK37[2];         // 37
@@ -4793,7 +4802,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint16_t                m_UNK4E;            // 4E
     uint16_t                m_UNK50;            // 50
     uint16_t                m_UNK52_sound_GUESS;// 52
-    eUnit_Status16          m_Status;           // 54 Status (0=ready, 4=reached destination)
+    eBattleUnitTactic       m_Tactic;           // 54 Tactic (0=ready, 4=done, 100=melee, 101=shoot, ...)
     int8_t                  m_Confused_State;   // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
     uint8_t                 m_UNK57;            // 57
     uint16_t                m_UNK58[6];         // 58
@@ -4835,6 +4844,58 @@ typedef struct PACKED_STRUCT // UnitView_Lines
     uint16_t        m_5A0_line_related_itemNr[40];  // 5A0
                                                 // SIZE 5F0
 } UnitView_Lines;
+
+typedef struct PACKED_STRUCT // UnitView_HeroAbility
+{
+    uint32_t        m_bitmask;                  // 0
+    int16_t         m_lbxIndex;                 // 4
+    int16_t         m_helpIndex;                // 6
+                                                // SIZE 8
+} UnitView_HeroAbility;
+
+typedef struct PACKED_STRUCT // UnitView_UnitData
+{
+    DS_Offset       m_offset_label;             // 0
+    uint16_t        m_bitmask;                  // 2
+    int16_t         m_lbxIndex;                 // 4
+    int16_t         m_helpIndex;                // 6
+                                                // SIZE 8
+} UnitView_UnitData;
+
+typedef struct PACKED_STRUCT // UnitView_Mutation
+{
+    DS_Offset       m_offset_label;             // 0
+    uint8_t         m_bitmask;                  // 2
+    int8_t          m_lbxIndex;                 // 3
+    int16_t         m_helpIndex;                // 4
+                                                // SIZE 6
+} UnitView_Mutation;
+
+typedef struct PACKED_STRUCT // UnitView_Ranged
+{
+    DS_Offset       m_offset_label;             // 0
+    eRanged_Type    m_rangedType;               // 2
+    int8_t          m_lbxIndex;                 // 3
+    int16_t         m_helpIndex;                // 4
+                                                // SIZE 6
+} UnitView_Ranged;
+
+typedef struct PACKED_STRUCT // UnitView_SpellData
+{
+    DS_Offset       m_offset_label;             // 0
+    uint32_t        m_bitmask;                  // 2
+    int16_t         m_lbxIndex;                 // 6
+    int16_t         m_helpIndex;                // 8
+                                                // SIZE A
+} UnitView_SpellData;
+
+typedef struct PACKED_STRUCT // UnitView_ItemText
+{
+    DS_Offset       m_offset_label;             // 0
+    DS_Offset       m_offset_helpText;          // 2
+    uint32_t        m_bitmask;                  // 4
+                                                // SIZE 8
+} UnitView_ItemText;
 
 typedef struct PACKED_STRUCT // Unit_Data_Hero_Types
 {
@@ -4902,22 +4963,6 @@ typedef struct PACKED_STRUCT // WizardsExe_Game_Data
     uint16_t        m_Number_of_Wizards;    // 0E in Wizard Table (including YOU, 2 ... 5)
                                             // SIZE 10 ds:BD9E
 } WizardsExe_Game_Data;
-
-typedef struct PACKED_STRUCT // WizardsExe_Game_Data140m
-{                                           // ds:BD8E
-    // Game status
-    uint16_t        m_UnitNr_Active;        // 00
-    uint16_t        m_Current_Turn;         // 02 year is 1400 + Turn/12, month is Turn%12
-    uint16_t        m_Number_of_Units;      // 04 in Unit Instance Table (0 ... 1000, out of a maximum of 1000)
-    uint16_t        m_Number_of_Cities;     // 06 in City Table (0 ... 100, of out of a maximum of 100)
-
-    // Game choices
-    eDifficulty140m     m_Difficulty;           // 08
-    eMagic_Powerful140m m_Magic_Powerful_setting;   // 0A
-    eLand_Size140m      m_Land_Size_setting;    // 0C
-    uint16_t        m_Number_of_Wizards;    // 0E in Wizard Table (including YOU, 2 ... 5)
-                                            // SIZE 10 ds:BD9E
-} WizardsExe_Game_Data140m;
 
 typedef struct PACKED_STRUCT // WizardsExe_Save_Name
 {
@@ -5011,12 +5056,23 @@ typedef struct // MoMDataSegment
 
     uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
 
-    char        m_NameBuffer_2082[0x3F46 - 0x2082];    // ds:2082 / EXE:2B522
+    char        m_NameBuffer_2082[0x3A50 - 0x2082];    // ds:2082 / EXE:2B522
 
-    DS_Offset   m_UnitLevelNameOffsets[6];          // ds:3F46
-    DS_Offset   m_HeroLevelNameOffsets[9];          // ds:3F52
+    UnitView_HeroAbility    m_UnitView_HeroAbility_data[23];    // ds:3A50
+    UnitView_UnitData       m_UnitView_UnitAbility_data[17];    // ds:3B08
+    UnitView_UnitData       m_UnitView_UnitImmunity_data[8];    // ds:3B90
+    UnitView_UnitData       m_UnitView_UnitSpell_data[8];       // ds:3BD0
+    UnitView_UnitData       m_UnitView_UnitAttack_data[11];     // ds:3C10
+    UnitView_Mutation       m_UnitMutation_data[3];             // ds:3C68
+    UnitView_Ranged         m_UnitRanged_data[6];               // ds:3C7A
+    UnitView_SpellData      m_UnitEnchantment_data[32];         // ds:3C9E
+    UnitView_SpellData      m_CombatEnchantment_data[15];       // ds:3DDE
+    UnitView_SpellData      m_ItemPower_data[21];               // ds:3E74
+    DS_Offset               m_Offsets_UnitLevelNames[6];        // ds:3F46
+    DS_Offset               m_Offsets_HeroLevelNames[9];        // ds:3F52
+    UnitView_ItemText       m_ItemPower_text[32];               // ds:3F64
 
-    char        m_NameBuffer_3F64[0x5E92 - 0x3F64];    // ds:3F64
+    char        m_NameBuffer_4064[0x5E92 - 0x4064]; // ds:4064
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
     uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92
@@ -5052,9 +5108,7 @@ typedef struct // MoMDataSegment
     uint16_t    word_3FBD4  ; // 9134
     EXE_Reloc   m_addr_Items;                       // 9136
     EXE_Reloc   addr_item_in_game_GUESS   ; // 913A
-    uint8_t unk__913E[26]   ; // 913E
-    uint8_t unk_3FBF8[23]   ; // 9158
-    uint8_t unk_3FC0F[183]  ; // 916F
+    uint16_t    m_item_pics_116[116];               // 913E
     EXE_Reloc   m_addr_Battle_Unit_View;            // 9226
     EXE_Reloc   m_addr_Battle_Unit;                 // 922A
     EXE_Reloc   m_addr_Spells_Cast_in_Battle;       // 922E
@@ -5075,7 +5129,8 @@ typedef struct // MoMDataSegment
     uint16_t    w_coo_Y_X_clicked   ; // 9280
     uint16_t    word_3FD22  ; // 9282
     int16_t     m_clash_place_type; // 9284         // -1=undef,0=overland,1=city,5=lair
-    uint8_t w_clash_place_ID[14]    ; // 9286
+    int16_t     m_clash_cityNr_or_lairNr; // 9286
+    uint8_t word_3FD28[12]    ; // 9288
     int16_t     m_kyrub_dseg_9294  ; // 9294
     int16_t     m_kyrub_dseg_9296  ; // 9296
     uint8_t word_3FD38[20]  ; // 9298
@@ -5236,8 +5291,8 @@ typedef struct // MoMDataSegment
     uint8_t word_4006E[34]  ; // 95CE
     uint16_t    word_40090  ; // 95F0
     uint8_t word_40092[82]  ; // 95F2
-    EXE_Reloc   m_addr_city_detailed_GUESS;         // 9644
-    uint8_t word_400E8[244] ; // 9648
+    int16_t     m_cityNr_detailed;              // 9644
+    uint8_t word_400E8[246] ; // 9646
     uint16_t    word_401DC  ; // 973C
     uint16_t    word_401DE  ; // 973E
     uint16_t    word_401E0  ; // 9740
@@ -5379,10 +5434,8 @@ typedef struct // MoMDataSegment
     EXE_Reloc   m_addr_fortress_data;               // 9CC8
     EXE_Reloc   m_addr_Nodes_Attr;                  // 9CCC
     EXE_Reloc   m_addr_Terrain_LandMassID;          // 9CD0
-    uint16_t    word_40774  ; // 9CD4
-    uint16_t    word_40776  ; // 9CD6
-    uint16_t    word_40778  ; // 9CD8
-    uint16_t    word_4077A  ; // 9CDA
+    EXE_Reloc addr_40774_Terrain; // 9CD4
+    EXE_Reloc addr_40778_Terrain; // 9CD8
     EXE_Reloc   m_addr_Terrain_Types;               // 9CDC
     EXE_Reloc   m_addr_Unrest_Table[gMAX_RACES];    // 9CE0
     uint16_t    word_407B8  ; // 9D18
@@ -5390,7 +5443,8 @@ typedef struct // MoMDataSegment
     uint16_t    word_407BC  ; // 9D1C
     uint16_t    word_407BE  ; // 9D1E
     uint16_t    word_407C0  ; // 9D20
-    uint8_t w_Vizier_allowed_GUESS[8]   ; // 9D22
+    uint16_t    m_Vizier_active   ; // 9D22
+    uint8_t word_407C4[6]   ; // 9D24
     EXE_Reloc   dword_407CA ; // 9D2A
     EXE_Reloc   dword_407CE ; // 9D2E
     uint16_t    word_407D2  ; // 9D32
@@ -5426,7 +5480,7 @@ typedef struct // MoMDataSegment
     uint16_t    word_4095E  ; // 9EBE
     uint16_t    word_40960  ; // 9EC0
     EXE_Reloc   m_addr_Units;                       // 9EC2
-    EXE_Reloc   dword_40966 ; // 9EC6
+    EXE_Reloc   m_addr_Chosen_Hero_Names;           // 9EC6
 
     Wizard      m_Wizards[gMAX_WIZARD_RECORDS];     // ds:9ECA / EXE:3336A
 

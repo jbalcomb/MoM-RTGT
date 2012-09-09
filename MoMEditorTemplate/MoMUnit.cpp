@@ -591,13 +591,13 @@ std::string MoMUnit::getLevelName() const
     if ((0 != m_game) && (level > 0) && (0 != (dataSegment = m_game->getDataSegment())))
     {
         level--;
-        if (isHero() && (toUInt(level) < ARRAYSIZE(dataSegment->m_HeroLevelNameOffsets)))
+        if (isHero() && (toUInt(level) < ARRAYSIZE(dataSegment->m_Offsets_HeroLevelNames)))
         {
-            name = m_game->getNameByOffset(dataSegment->m_HeroLevelNameOffsets[level]);
+            name = m_game->getNameByOffset(dataSegment->m_Offsets_HeroLevelNames[level]);
         }
-        else if (toUInt(level) < ARRAYSIZE(dataSegment->m_UnitLevelNameOffsets))
+        else if (toUInt(level) < ARRAYSIZE(dataSegment->m_Offsets_UnitLevelNames))
         {
-            name = m_game->getNameByOffset(dataSegment->m_UnitLevelNameOffsets[level]);
+            name = m_game->getNameByOffset(dataSegment->m_Offsets_UnitLevelNames[level]);
         }
     }
     return name;
@@ -662,10 +662,32 @@ int MoMUnit::getCost() const
     return value;
 }
 
-int MoMUnit::getNrFigures() const
+int MoMUnit::getCurFigures() const
 {
     int value = 0;
-    if (0 != m_unitType)
+    if (0 != m_battleUnit)
+    {
+        value = m_battleUnit->m_Current_Figures;
+    }
+    else if (0 != m_unitType)
+    {
+        // TODO: process damage
+        value = m_unitType->m_Nr_Figures;
+    }
+    else
+    {
+    }
+    return value;
+}
+
+int MoMUnit::getMaxFigures() const
+{
+    int value = 0;
+    if (0 != m_battleUnit)
+    {
+        value = m_battleUnit->m_Total_Figures;
+    }
+    else if (0 != m_unitType)
     {
         value = m_unitType->m_Nr_Figures;
     }

@@ -662,14 +662,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        if (game->getMoMVersion() >= std::string("v1.40m"))
-        {
-            ptree->setChild(row, 0, constructTreeItem((MoM::WizardsExe_Game_Data140m*)game->getGameData_WizardsExe(), ""));
-        }
-        else
-        {
-            ptree->setChild(row, 0, constructTreeItem(game->getGameData_WizardsExe(), ""));
-        }
+        ptree->setChild(row, 0, constructTreeItem(game->getGameData_WizardsExe(), ""));
 
         if ((0 != dataSegment) && game->getGameData_WizardsExe())
         {
@@ -841,7 +834,14 @@ void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
             break;
         if (lairNr >= ptree->rowCount())
         {
-            ptree->setChild(row, 0, constructTreeItem(lair, ""));
+            QMoMTreeItemBase* subtree = constructTreeItem(lair, "");
+            ptree->setChild(row, 0, subtree);
+
+            MoM::Node_Attr* nodeAttr = MoM::MoMController(game.data()).findNodeAttrAtLocation(MoM::MoMLocation(*lair));
+            if (0 != nodeAttr)
+            {
+                subtree->setChild(subtree->rowCount(), 0, constructTreeItem(nodeAttr, "Node attr"));
+            }
 
             ptree->child(lairNr, 0)->setData(prettyQStr(lair->m_Type), Qt::EditRole);
             ptree->child(lairNr, 1)->setData(QString("(%0, %1, %2) %3")
@@ -1466,12 +1466,13 @@ void UnitModel::threadUpdateModelData()
             ++row;
         }
 
+        MOM_FOREACH(ePlayer, playerNr, gMAX_VALID_WIZARDS)
         {
             if (row == ptree->rowCount())
             {
                 ptree->appendEmptyRow();
             }
-            ptree->child(row, 0)->setData(tr("Hero Stats (YOU)"), Qt::UserRole);
+            ptree->child(row, 0)->setData(tr("Hero Stats (%0)").arg(prettyQStr(playerNr)), Qt::EditRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             if (0 == game)
             {
@@ -1484,7 +1485,7 @@ void UnitModel::threadUpdateModelData()
 
             int subrow = 0;
             QMoMTreeItemBase* psubtree = ptree->child(row, 0);
-            update_Hero_Stats(psubtree, game, subrow, MoM::PLAYER_YOU);
+            update_Hero_Stats(psubtree, game, subrow, playerNr);
             removeUnusedRows(row, psubtree, subrow);
 
             ++row;

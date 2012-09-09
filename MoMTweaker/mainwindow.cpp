@@ -362,7 +362,7 @@ void MainWindow::on_pushButton_Save_clicked()
     bool ok = true;
     QMoMGameSavePtr saveGame = m_game.dynamicCast<MoM::MoMGameSave>();
     QMoMGameMemoryPtr memoryGame = m_game.dynamicCast<MoM::MoMGameMemory>();
-    if (saveGame && saveGame->isOpen())
+    if (saveGame && m_game->isOpen())
     {
         if (!m_filedialogSaveGame.exec())
         {
@@ -378,7 +378,7 @@ void MainWindow::on_pushButton_Save_clicked()
                 tr("Failed to save MoM game '%1'").arg(fileName));
         }
     }
-    else if (memoryGame && memoryGame->isOpen())
+    else if (memoryGame && m_game->isOpen())
     {
         if (!m_filedialogSaveGame.exec())
         {
@@ -456,7 +456,7 @@ void MainWindow::slot_timerReread()
 
 void MainWindow::slot_timerUpdateIcons()
 {
-    if (ui->checkBox_UpdateTree->isChecked())
+    if (ui->checkBox_UpdateTree->isChecked() && ui->checkBox_UseIcons->isChecked())
     {
         m_UnitModel.updateFirstUnresolvedIcon();
     }

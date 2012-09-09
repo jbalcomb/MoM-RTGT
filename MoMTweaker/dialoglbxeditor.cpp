@@ -32,13 +32,21 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     m_filedialogLoad.setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoad.setViewMode(QFileDialog::Detail);
 
+    m_filedialogSave.setWindowTitle(tr("Save picture(s)"));
+    m_filedialogSave.setNameFilter(tr("Pictures (*.png *.bmp *.gif *.jpg);;All files (*.*)"));
+    m_filedialogSave.setDefaultSuffix("png");
+    m_filedialogSave.setAcceptMode(QFileDialog::AcceptSave);
+    m_filedialogSave.setFileMode(QFileDialog::AnyFile);
+    m_filedialogSave.setViewMode(QFileDialog::Detail);
+
 #ifdef _WIN32
     m_filedialogLoad.setDirectory("C:/games/MAGIC-work/");
 #else // Linux
     m_filedialogLoad.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
 #endif
-
     m_bitmapDirectory = QApplication::applicationDirPath();
+    m_filedialogSave.setDirectory(m_bitmapDirectory);
+
     listBitmapFiles(m_bitmapDirectory);
 }
 
@@ -59,7 +67,8 @@ QString DialogLbxEditor::constructFrameFilename(const QString& bitmapFilename, i
         }
         else
         {
-            frameFilename.clear();
+            frameFilename = QString("%0_%1%2")
+                            .arg(frameFilename.left(indexExt)).arg(frameNr).arg(frameFilename.mid(indexExt));
         }
     }
     return frameFilename;
@@ -96,7 +105,7 @@ void DialogLbxEditor::loadLbx(const QString& filename)
     m_lbxAnimations.resize(m_lbx.getNrRecords());
     for (size_t i = 0; i < m_lbx.getNrRecords(); ++i)
     {
-        (void)MoM::convertLbxToImages(m_lbx.getRecord(i), m_colorTable, m_lbxAnimations[i], MoM::toStr(i));
+        (void)MoM::convertLbxToImages(m_lbx.getRecord(i), m_lbx.getRecordSize(i), m_colorTable, m_lbxAnimations[i], MoM::toStr(i));
     }
 
     int curIndex = ui->comboBox_LbxIndex->currentIndex();
@@ -104,7 +113,7 @@ void DialogLbxEditor::loadLbx(const QString& filename)
     for (int i = 0; i < m_lbxAnimations.size(); ++i)
     {
         QPixmap pixmap;
-        if (!m_lbxAnimations[i].isEmpty())
+        if (!m_lbxAnimations[i].isEmpty() && (0 != m_lbxAnimations[i][0]))
         {
             pixmap.convertFromImage(*m_lbxAnimations[i][0]);
         }
@@ -179,7 +188,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
     // Track converted image for later use
     if (dataBuffer.size() > 0)
     {
-        (void)MoM::convertLbxToImages(&dataBuffer[0], m_colorTable, m_bitmapAnimation, "LbxEditor");
+        (void)MoM::convertLbxToImages(&dataBuffer[0], dataBuffer.size(), m_colorTable, m_bitmapAnimation, "LbxEditor");
     }
 
     // Show the converted image(s) together with the original image(s) in the graphics view
@@ -196,6 +205,17 @@ void DialogLbxEditor::updateLbxImage(int lbxIndex)
     }
 
     updateImage(ui->graphicsView_LbxImage, curAnimation);
+
+    int width = 0;
+    int height = 0;
+    if (!curAnimation.isEmpty() && (0 != curAnimation[0]))
+    {
+        QMoMImagePtr& image = curAnimation[0];
+        width = image->width();
+        height = image->height();
+    }
+
+    ui->label_Status->setText(QString("%0 x %1, %2 image(s)").arg(width).arg(height).arg(curAnimation.size()));
 }
 
 void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation& curAnimation, int line, bool clearImage)
@@ -219,6 +239,8 @@ void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation&
     for(int i = 0; i < curAnimation.count(); ++i)
     {
         const QMoMImagePtr& curImage = curAnimation[i];
+        if (0 == curAnimation[i])
+            break;
 
         double scale = 3.0;
         if ((scale * curImage->width() > view->width())
@@ -279,6 +301,42 @@ void DialogLbxEditor::on_pushButton_Load_clicked()
     }
 }
 
+void DialogLbxEditor::on_pushButton_SavePics_clicked()
+{
+    MoM::QMoMAnimation curAnimation;
+    int lbxIndex = ui->comboBox_LbxIndex->currentIndex();
+    if ((lbxIndex >= 0) && (lbxIndex < m_lbxAnimations.count()))
+    {
+        curAnimation = m_lbxAnimations[lbxIndex];
+    }
+    if ((curAnimation.size() <= 0) || (0 == curAnimation[0]))
+    {
+        (void)QMessageBox::warning(this,
+            tr("Save picture(s)"),
+            tr("There are no pictures to save"));
+        return;
+    }
+
+    if (m_filedialogSave.exec())
+    {
+        QString filenameBase = m_filedialogSave.selectedFiles().first();
+
+        for (int frameNr = 0; frameNr < curAnimation.size(); ++frameNr)
+        {
+            QMoMImagePtr& image = curAnimation[frameNr];
+            if (0 == image)
+                continue;
+            QString filename = constructFrameFilename(filenameBase, frameNr);
+            if (!image->save(filename))
+            {
+                (void)QMessageBox::warning(this,
+                    tr("Save picture(s)"),
+                    tr("Failed to save the picture(s)"));
+                break;
+            }
+        }
+    }
+}
 
 void DialogLbxEditor::on_pushButton_Replace_clicked()
 {

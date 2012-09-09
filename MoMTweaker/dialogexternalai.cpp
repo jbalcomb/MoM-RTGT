@@ -26,43 +26,112 @@ DialogExternalAI::~DialogExternalAI()
 
 void DialogExternalAI::on_pushButton_InsertHook_clicked()
 {
-    hookManager->insertHook();
+    if (hookManager->insertHook())
+    {
+        ui->label_Status->setText("Hook inserted");
+    }
+    else
+    {
+        ui->label_Status->setText("Insert failed");
+    }
 }
 
 void DialogExternalAI::on_pushButton_RaiseHook_clicked()
 {
-    hookManager->raiseHook();
+    if (hookManager->raiseHook())
+    {
+        ui->label_Status->setText("Hook raised");
+    }
+    else
+    {
+        ui->label_Status->setText("Raise failed");
+    }
 }
 
 void DialogExternalAI::on_pushButton_WaitForHook_clicked()
 {
-    hookManager->waitForBait(2.0);
-    m_game->readData();
-    int battleUnitNr = (int16_t)m_game->getDataSegment()->m_BattleUnit_on_move;
-    MoM::Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
+    std::string errorString = "Bait ready";
 
-    ui->lineEdit_BattleUnitNr->setText(QString("%0").arg(battleUnitNr));
-    ui->lineEdit_TargetBattleUnitNr->setText(QString("%0").arg((int)battleUnit->m_Target_BattleUnitID));
-    ui->lineEdit_Tactic->setText(QString("%0").arg((int)battleUnit->m_Status));
+    bool ok = hookManager->waitForBait(0.5);
+    if (!ok)
+    {
+        errorString = "No bait";
+    }
+
+    MoM::MoMHookData data;
+    if (ok)
+    {
+        ok = hookManager->readBaitData(data);
+        if (!ok)
+        {
+            errorString = hookManager->errorString();
+        }
+    }
+
+    if (ok)
+    {
+        ui->lineEdit_BattleUnitNr->setText(QString("%0").arg(data.battleUnitNr));
+        ui->lineEdit_TargetBattleUnitNr->setText(QString("%0").arg(data.targetID));
+        ui->lineEdit_Tactic->setText(QString("%0").arg(data.tactic));
+        ui->lineEdit_TargetXpos->setText(QString("%0").arg(data.targetXpos));
+        ui->lineEdit_TargetYpos->setText(QString("%0").arg(data.targetYpos));
+        ui->lineEdit_Parm1->setText(QString("%0").arg(data.parm1));
+        ui->lineEdit_Parm2->setText(QString("%0").arg(data.parm2));
+    }
+
+    ui->label_Status->setText(errorString.c_str());
 }
 
 void DialogExternalAI::on_pushButton_RetractHook_clicked()
 {
-    hookManager->retractHook();
+    if (hookManager->retractHook())
+    {
+        ui->label_Status->setText("Hook retracted");
+    }
+    else
+    {
+        ui->label_Status->setText("Retract failed");
+    }
 }
 
 void DialogExternalAI::on_pushButton_ReleaseHook_clicked()
 {
-    int battleUnitNr = (int16_t)m_game->getDataSegment()->m_BattleUnit_on_move;
-    MoM::Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
+    bool ok = true;
+    std::string errorString = "Bait released";
 
-    battleUnit->m_Target_BattleUnitID = ui->lineEdit_TargetBattleUnitNr->text().toInt();
-    battleUnit->m_Status = (MoM::eUnit_Status16)ui->lineEdit_Tactic->text().toInt();
-    m_game->commitData(battleUnit, sizeof(*battleUnit));
+    MoM::MoMHookData data;
 
-    MainWindow::getInstance()->on_pushButton_Reread_clicked();
+    data.targetID = ui->lineEdit_TargetBattleUnitNr->text().toInt();
+    data.tactic = ui->lineEdit_Tactic->text().toInt();
+    data.targetXpos = ui->lineEdit_TargetXpos->text().toInt();
+    data.targetYpos = ui->lineEdit_TargetYpos->text().toInt();
+    data.parm1 = ui->lineEdit_Parm1->text().toInt();
+    data.parm2 = ui->lineEdit_Parm1->text().toInt();
 
-    hookManager->releaseBait();
+    ok = hookManager->writeBaitData(data);
+    if (!ok)
+    {
+        errorString = hookManager->errorString();
+    }
 
-    on_pushButton_WaitForHook_clicked();
+    if (ok)
+    {
+        MainWindow::getInstance()->on_pushButton_Reread_clicked();
+    }
+
+    if (ok)
+    {
+        ok = hookManager->releaseBait();
+        if (!ok)
+        {
+            errorString = "Release failed";
+        }
+    }
+
+    ui->label_Status->setText(errorString.c_str());
+
+    if (ok)
+    {
+        on_pushButton_WaitForHook_clicked();
+    }
 }

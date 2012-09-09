@@ -410,7 +410,7 @@ void DialogAddUnit::displaySectionTop()
 
     // Figures, moves, upkeep
     pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
-    textItem = addText(pos, QString("%0").arg(m_unit->getNrFigures()));
+    textItem = addText(pos, QString("%0").arg(m_unit->getMaxFigures()));
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
     pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
     textItem = addText(pos, QString("%0").arg(m_unit->getMoves(), 0, 'f', 1));

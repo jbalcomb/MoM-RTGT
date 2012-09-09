@@ -17,11 +17,12 @@
 
 #include "dialogcalculatoraddress.h"
 #include "mainwindow.h"
-#include "MoMUtility.h"
+#include "MoMController.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
 #include "MoMTemplate.h"
 #include "MoMTerrain.h"
+#include "MoMUtility.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
 #include "QMoMTreeItem.h"
@@ -412,7 +413,15 @@ DialogMap::DialogMap(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->comboBox_Plane->setCurrentIndex(1);
+    QMoMGamePtr game= MainWindow::getInstance()->getGame();
+    if ((0 != game) && (game->isBattleInProgress()))
+    {
+        ui->comboBox_Plane->setCurrentIndex(3);
+    }
+    else
+    {
+        ui->comboBox_Plane->setCurrentIndex(1);
+    }
 
     // Update view when game is changed or updated
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -472,8 +481,8 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
 
     qtreeUnit->addChild(new EnumTreeItem<eUnit_Type>(m_game, "Unit Type", &unit->m_Unit_Type, eUnit_Type_MAX));
     qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &battleUnit->m_Owner, ePlayer_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<uint8_t>(m_game, "Active", &battleUnit->m_Active, eUnit_Active_MAX));
-    qtreeUnit->addChild(new EnumTreeItem<eUnit_Status16>(m_game, "Status", &battleUnit->m_Status, eUnit_Status16_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eBattleUnitActive>(m_game, "Active", &battleUnit->m_Active, eBattleUnitActive_MAX));
+    qtreeUnit->addChild(new EnumTreeItem<eBattleUnitTactic>(m_game, "Status", &battleUnit->m_Tactic, eBattleUnitTactic_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TargetID", &battleUnit->m_Target_BattleUnitID));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPos", &battleUnit->m_xPos));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPos", &battleUnit->m_yPos));
@@ -541,9 +550,16 @@ void DialogMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
     if (0 != lair)
     {
         int lairNr = (int)(lair - m_game->getLair(0));
+        MoM::Node_Attr* nodeAttr = MoM::MoMController(m_game.data()).findNodeAttrAtLocation(MoM::MoMLocation(*lair));
+
+        QString text = QString("%0").arg(prettyQStr(lair->m_Type));
+        if ((0 != nodeAttr) && (MoM::PLAYER_Dismissed_Deceased != nodeAttr->m_Owner))
+        {
+            text += QString(",player %0").arg(prettyQStr(nodeAttr->m_Owner));
+        }
         QTreeItemBase* qtreeItem = new QTreeItemBase(m_game,
             QString("Lair[%0]").arg(lairNr),
-            QString("%0").arg(prettyQStr(lair->m_Type)));
+            text);
         treeWidget->addTopLevelItem(qtreeItem);
 
         qtreeItem->addChild(new EnumTreeItem<eTower_Node_Lair_Status>(m_game, "Status", &lair->m_Status, eTower_Node_Lair_Status_MAX));
@@ -576,6 +592,12 @@ void DialogMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
             {
                 qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, QString("Item Value[%0]").arg(i), &lair->m_Item_Value[i]));
             }
+        }
+
+        if (0 != nodeAttr)
+        {
+            qtreeItem->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &nodeAttr->m_Owner, ePlayer_MAX));
+            qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Power node", &nodeAttr->m_Power_Node));
         }
     }
 }
@@ -908,6 +930,8 @@ void DialogMap::slot_gameUpdated()
         }
         else
         {
+            int zvalue = m_sceneBattle->convertScenePosToZValue(itemStructure->pos());
+            itemStructure->setZValue(zvalue);
         }
         itemStructure->setOffset(offset);
 
@@ -928,6 +952,8 @@ void DialogMap::slot_gameUpdated()
             unitTile->setUnit(momUnit);
 
             m_sceneBattle->addItemAtLocation(unitTile, loc);
+            int zvalue = m_sceneBattle->convertScenePosToZValue(unitTile->pos());
+            unitTile->setZValue(zvalue);
             unitTile->setToolTip(momUnit->getDisplayName().c_str());
 
             QPointF pos;
@@ -938,7 +964,7 @@ void DialogMap::slot_gameUpdated()
             textItem->setFont(QMoMResources::g_FontSmall);
             textItem->setPos(pos);
 
-            QString text = prettyQStr(battleUnit->m_Status);
+            QString text = prettyQStr(battleUnit->m_Tactic);
             textItem = m_sceneBattle->addSimpleText(QString("%0").arg(text[0]));
             textItem->setFont(QMoMResources::g_FontSmall);
             pos.rx() += textItem->boundingRect().width() + 4;
@@ -1016,6 +1042,7 @@ void DialogMap::slot_gameUpdated()
         }
 
         // Show battlefield menubar (numbers from IDA)
+        m_sceneBattle->addRect(m_sceneBattle->sceneRect(), QPen(Qt::black));
         QPixmap pixmapMenubar = MoM::QMoMResources::instance().getPixmap(MoM::LBXRecordID("BACKGRND", 3));
         QGraphicsPixmapItem* itemMenubar = m_sceneBattle->addPixmap(pixmapMenubar);
         itemMenubar->setPos(0, 164);

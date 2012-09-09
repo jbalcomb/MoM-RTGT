@@ -63,6 +63,16 @@ inline T Min(const T& a, const T& b)
 
 std::string prettyEnumStr(const std::string& str);
 
+template< typename T >
+inline T Range(const T& value, const T& minimum, const T& maximum)
+{
+    if (value < minimum)
+        return minimum;
+    if (value > maximum)
+        return maximum;
+    return value;
+}
+
 std::string replaceUnderscoresBySpaces(const std::string& str);
 
 std::string replaceStrInStr(const std::string& str, const std::string& findStr, const std::string& replaceStr);

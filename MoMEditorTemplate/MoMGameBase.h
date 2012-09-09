@@ -20,8 +20,9 @@ class MoMGameBase
 {
 public:
     MoMGameBase();
-
     virtual ~MoMGameBase();
+
+    virtual void closeGame() throw() = 0;
 
     //! Contains the last error that applies whenever a method returning
     //! a bool failed.
@@ -78,7 +79,7 @@ public:
 
 	int getCostToProduce(eProducing producing);
 
-    virtual std::string getGameDirectory() = 0;
+    virtual std::string getGameDirectory() const = 0;
 
     const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
     std::string getHelpText(eHelpIndex helpTextNr);
@@ -125,6 +126,7 @@ public:
             return 0;
         return &wizard->m_Heroes_hired_by_wizard[unit->m_Hero_Slot_Number];
     }
+
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
@@ -132,6 +134,7 @@ public:
             return 0;
         return &items[itemNr];
     }
+
     Tower_Node_Lair* getLair(int lairNr)
     {
         Tower_Node_Lair* lairs = getLairs();
@@ -139,6 +142,7 @@ public:
             return 0;
         return &lairs[lairNr];
     }
+
     char* getMoMVersion()
     {
         if (0 != getDataSegment())
@@ -155,10 +159,20 @@ public:
             return nullVersion;
         }
     }
+
     virtual const char* getNameByOffset(DS_Offset)
     {
         return 0;
     }
+
+    virtual Node_Attr* getNodeAttr(int nodeNr)
+    {
+        Node_Attr* nodeAttr = getNodeAttributes();
+        if ((0 == nodeAttr) || !inRange(nodeNr, gMAX_NODES))
+            return 0;
+        return &nodeAttr[nodeNr];
+    }
+
     int getNrBattleUnits()
     {
         if (0 == getNumber_of_Battle_Units())
@@ -403,6 +417,11 @@ public:
         return &wizards[wizardNr];
     }
 
+    virtual bool isBattleInProgress() const
+    {
+        return false;
+    }
+
     virtual bool isOpen() const = 0;
 
     virtual bool readData()
@@ -481,6 +500,7 @@ protected:
     }
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
+    virtual Node_Attr* getNodeAttributes() = 0;
 public:
     // Needs to be public so we can add it to a treeview
     virtual uint16_t* getNumber_of_Battle_Units()

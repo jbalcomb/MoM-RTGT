@@ -14,10 +14,9 @@
 namespace MoM
 {
 
-namespace
-{
+static bool gVerbose = false;
 
-void dump(const uint8_t* ptr, unsigned n)
+static void dump(const uint8_t* ptr, unsigned n)
 {
     //std::cout << ":";
     //for (unsigned i = 0; i < n; ++i)
@@ -30,12 +29,10 @@ void dump(const uint8_t* ptr, unsigned n)
     //}
 }
 
-void dumpnl(const uint8_t* ptr, unsigned n)
+static void dumpnl(const uint8_t* ptr, unsigned n)
 {
     //dump(ptr, n);
     //std::cout << std::dec << std::endl;
-}
-
 }
 
 bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
@@ -142,12 +139,12 @@ bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataB
     return true;
 }
 
-bool convertLbxToImages(const uint8_t* data, const QMoMPalette& defaultColorTable, QMoMAnimation& images, const std::string& context)
+bool convertLbxToImages(const uint8_t* data, size_t size, const QMoMPalette& defaultColorTable, QMoMAnimation& images, const std::string& context)
 {
+    images.clear();
+
     if (0 == data)
         return false;
-
-    images.clear();
 
     // Extract header
     uint16_t width = *(uint16_t*)(data + 0);
@@ -155,18 +152,27 @@ bool convertLbxToImages(const uint8_t* data, const QMoMPalette& defaultColorTabl
     uint16_t nframes = *(uint16_t*)(data + 6);
     uint16_t paletteInfoOffset = *(uint16_t*)(data + 14);
     uint32_t* frameOffsets = (uint32_t*)(data + 18);
+    if (paletteInfoOffset >= size)
+    {
+        std::cout << "Lbx bitmap '" << context << "' is corrupt"  << std::endl;
+        return false;
+    }
 
     uint16_t firstPaletteColorIndex = 0;
     uint16_t paletteColorCount = 255;
 
     QMoMPalette colorTable(defaultColorTable);
 
-//std::cout << "Images: context=" << context << "\n"
-//    << " width=" << (unsigned)width
-//    << " height=" << (unsigned)height
-//    << " nframes=" << (unsigned)nframes
-//    << " paletteInfoOffset=" << (unsigned)paletteInfoOffset
-//    << std::endl;
+    if (gVerbose)
+    {
+        std::cout << "Images: context=" << context << "\n"
+                  << " size=" << (unsigned)size
+                  << " width=" << (unsigned)width
+                  << " height=" << (unsigned)height
+                  << " nframes=" << (unsigned)nframes
+                  << " paletteInfoOffset=" << (unsigned)paletteInfoOffset
+                  << std::endl;
+    }
 
     // TODO: Range checks
     int nimages = nframes;
@@ -184,11 +190,14 @@ bool convertLbxToImages(const uint8_t* data, const QMoMPalette& defaultColorTabl
         firstPaletteColorIndex = *(uint16_t*)(data + paletteInfoOffset + 2);
         paletteColorCount = *(uint16_t*)(data + paletteInfoOffset + 4);
 
-//std::cout << "Palette: " << "\n"
-//    << " paletteOffset=" << (unsigned)paletteOffset
-//    << " firstPaletteColorIndex=" << (unsigned)firstPaletteColorIndex
-//    << " paletteColorCount=" << (unsigned)paletteColorCount
-//    << std::endl;
+        if (gVerbose)
+        {
+            std::cout << "Palette: " << "\n"
+                      << " paletteOffset=" << (unsigned)paletteOffset
+                      << " firstPaletteColorIndex=" << (unsigned)firstPaletteColorIndex
+                      << " paletteColorCount=" << (unsigned)paletteColorCount
+                      << std::endl;
+        }
         if (firstPaletteColorIndex + paletteColorCount > colorTable.size())
         {
             colorTable.resize(firstPaletteColorIndex + paletteColorCount);
@@ -206,7 +215,6 @@ dumpnl(palette + 3 * i, 3);
     // Create images
     for (int frameNr = 0; frameNr < nimages; ++frameNr)
     {
-//std::cout << "Frame=" << frameNr << std::endl;
         // Create empty image
         images[frameNr] = QMoMImagePtr(new QImage(width, height, QImage::Format_Indexed8));
         QImage& image = *images[frameNr];
@@ -220,8 +228,17 @@ dumpnl(palette + 3 * i, 3);
         const uint8_t* ptr = data;
         if (nframes > 0)
         {
-//std::cout << "frameOffset=" << frameOffsets[frameNr] << std::endl;
+            if (gVerbose)
+            {
+                std::cout << "frameOffset[" << frameNr << "]=" << frameOffsets[frameNr] << std::endl;
+            }
             ptr += frameOffsets[frameNr];
+            if ((frameOffsets[frameNr] >= size) || (ptr >= data + size))
+            {
+                std::cout << "Lbx bitmap '" << context << "' is corrupt"  << std::endl;
+                ok = false;
+                break;
+            }
 dumpnl(ptr, 1);
 
             uint8_t frameCode = *ptr++;     // TODO: Check - Should be 01 for first frame,
@@ -235,6 +252,7 @@ dumpnl(ptr, 1);
             {
                 std::cout << "Lbx bitmap '" << context << "' has unexpected frameCode " << (unsigned)frameCode << std::endl;
                 ok = false;
+                break;
             }
 
             for (int row = 0; ok && (row < width); ++row)
@@ -336,7 +354,10 @@ dumpnl(ptr, 1);
         else
         {
             // ??? Uncompressed ???
-//std::cout << "??? Uncompressed ???" << std::endl;
+            if (gVerbose)
+            {
+                std::cout << "Uncompressed" << std::endl;
+            }
 dumpnl(ptr, 16);
             ptr += 16;
 
@@ -362,16 +383,7 @@ void convertLbxToPalette(const uint8_t* dataPalette, QMoMPalette& colorTable)
 {
     for (int i = 0; i < 256; ++i)
     {
-//        if ((i > 0) && (0 == dataPalette[3*i]) && (0 == dataPalette[3*i+1]) && (0 == dataPalette[3*i+2]))
-//        {
-//            colorTable[i] = qRgb(255, 0, 255);
-////            colorTable.resize(i);
-////            break;
-//        }
-//        else
-        {
-            colorTable[i] = qRgb(4 * dataPalette[3*i], 4 * dataPalette[3*i+1], 4 * dataPalette[3*i+2]);
-        }
+        colorTable[i] = qRgb(4 * dataPalette[3*i], 4 * dataPalette[3*i+1], 4 * dataPalette[3*i+2]);
     }
     // Set transparent color
     colorTable[gTRANSPARENT_COLOR] = qRgba(0, 0, 0, 0);

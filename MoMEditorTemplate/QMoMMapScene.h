@@ -21,6 +21,7 @@ public:
     QGraphicsPixmapItem* addPixmapAtLocation(const QPixmap& pixmap, const MoM::MoMLocation& location);
     void convertLocationToScenePos(const MoM::MoMLocation& location, QPointF& scenePos) const;
     void convertScenePosToLocation(const QPointF& scenePos, MoM::MoMLocation& location) const;
+    int convertScenePosToZValue(const QPointF& scenePos) const;
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

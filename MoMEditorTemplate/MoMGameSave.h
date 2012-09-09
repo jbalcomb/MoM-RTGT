@@ -23,9 +23,12 @@ public:
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
 
+protected:
     bool addLair();
     bool findYourFirstUnit(int& unitNr);
     bool findOthersFirstUnit(int& unitNr);
+
+    virtual void closeGame() throw();
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
@@ -58,7 +61,7 @@ public:
 		return &m_SaveGame->m_Map_Tiles.m_Fortresses[0];
     }
 
-    virtual std::string getGameDirectory();
+    virtual std::string getGameDirectory() const;
 
     virtual Game_Data_Save* getGameData_SaveGame()
     {
@@ -110,6 +113,13 @@ public:
             return 0;
         // TODO: Check range and terminating zero
         return namebuffer + offset;
+    }
+
+    virtual Node_Attr* getNodeAttributes()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return &m_SaveGame->m_Map_Tiles.m_Arcanus_Node_Attr[0];
     }
 
     virtual uint16_t* getNumber_of_Cities()

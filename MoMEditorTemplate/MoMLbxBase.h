@@ -42,6 +42,7 @@ public:
 
     size_t getNrRecords() const;
     uint8_t* getRecord(size_t recordNr);
+    size_t getRecordSize(size_t recordNr);
 
     bool replaceRecord(size_t recordNr, const std::vector<uint8_t>& dataBuffer);
 

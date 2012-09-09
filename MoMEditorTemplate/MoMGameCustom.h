@@ -20,13 +20,14 @@ public:
     MoMGameCustom(void);
     virtual ~MoMGameCustom();
 
-    void closeGame() throw();
+    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
+
+protected:
+    virtual void closeGame() throw();
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
-    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
-
-    virtual std::string getGameDirectory();
+    virtual std::string getGameDirectory() const;
 
     virtual const char* getNameByOffset(DS_Offset offset);
 
@@ -39,8 +40,6 @@ public:
     {
         return ((0 != m_process.get()) && m_process->readData());
     }
-
-public:
 
     virtual std::string getSources() const
     {
@@ -69,6 +68,10 @@ public:
     {
         return 0;
     }
+    virtual Node_Attr* getNodeAttributes()
+    {
+        return 0;
+    }
     virtual uint16_t* getNumber_of_Cities()
     {
         return 0;
@@ -84,7 +87,6 @@ public:
     }
     virtual MoM::Wizard* getWizards();
 
-// private:
     virtual MoMMagicDataSegment* getMagicDataSegment();
 
     virtual uint8_t* getMagicOverlay(size_t ovlNr);

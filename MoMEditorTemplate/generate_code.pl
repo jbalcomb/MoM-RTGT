@@ -305,7 +305,7 @@ EOF
             my $datamember = shift @datamembers;
             last if not defined $datamember;
             
-			$type = "uint16_t" if ($type eq "DS_Offset");
+            $type = "uint16_t" if ($type eq "DS_Offset");
             next if ($type =~ m#^u?int\d+_t$#);
             next if ($type eq "char");
             next if ($datamember =~ m#trash#i);
@@ -471,7 +471,19 @@ sub generate_Qt_code
                 print qq#    else if (2 == sizeof(mask${name}))\n#;
                 print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
                 print qq#    else\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;           }
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
+            }
+            elsif (exists $gEnums{"${type}"} and exists $gEnums{"${type}140m"})
+            {
+                print qq#    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))\n#;
+                print qq#    {\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<${type}140m>((${type}140m*)&rhs->${name}));\n#;
+                print qq#    }\n#;
+                print qq#    else\n#;
+                print qq#    {\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<${type}>(&rhs->${name}));\n#;
+                print qq#    }\n#;
+            }
             elsif ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
             {
                 print qq#    ptree->appendChild("${name}", new QMoMTreeItem<$type>(&rhs->${name}));\n#;
