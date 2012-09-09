@@ -3775,7 +3775,7 @@ typedef struct PACKED_STRUCT // Node_Attr
     uint8_t         m_XPos_Mana[20];    // 05 
     uint8_t         m_YPos_Mana[20];    // 19
     eNode_Type      m_Node_Type;        // 2D
-    uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit
+    uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit, 03=both
     uint8_t         m_Unk_2F;           // 2F
                                         // SIZE 30
 } Node_Attr;
@@ -3785,15 +3785,15 @@ typedef struct PACKED_STRUCT // Fortress
     uint8_t         m_XPos;
     uint8_t         m_YPos;
     ePlane          m_Plane;
-    uint8_t         m_Active; // 00 or 01=non-Eliminated or FF??=not-in-play??
+    uint8_t         m_Active;           // 00 or 01=non-Eliminated or FF??=not-in-play??
 } Fortress;
 
 typedef struct PACKED_STRUCT // Tower_Attr
 {
     uint8_t         m_XPos;
     uint8_t         m_YPos;
-    uint8_t         m_Closed;   // 00=opened, FF=closed, sealed??
-    uint8_t         m_UNK;      // unused ??
+    uint8_t         m_Closed;           // 00=opened, FF=closed, sealed??
+    uint8_t         m_UNK;              // unused ??
 } Tower_Attr;
 
 typedef struct PACKED_STRUCT // Map_Tiles
