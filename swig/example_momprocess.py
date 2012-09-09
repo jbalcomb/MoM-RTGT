@@ -7,14 +7,16 @@ from mom import *
 # ----------------------------------------------------------------------------
 
 # Connect tot MoM
+print("\nConnecting to MoM...")
 g = connectToMoM()
-if not g.isOpen():
-    print("\nFailed to find MoM")
-    exit
+try:
+    print("\tConnected to MoM:", g.isOpen())
+except:
+    raise SystemExit("Failed to find MoM")
 
 print("# ---------------------------------------------------------------------")
 print("#")
-print("# Show the functionality of the lowe level interface MoMProcess")
+print("# Show the functionality of the low level interface MoMProcess")
 print("#")
 print("# ---------------------------------------------------------------------")
 
