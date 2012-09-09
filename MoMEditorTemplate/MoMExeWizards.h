@@ -15,15 +15,15 @@
 
 namespace MoM {
 
+struct SpellSaveEntry
+{
+    size_t spellOffset;
+    size_t saveOffset;
+};
+
 class MoMExeWizards : public MoMExeBase
 {
 public:
-    struct SpellSaveEntry
-    {
-        size_t spellOffset;
-        size_t saveOffset;
-    };
-
     MoMExeWizards();
 
     virtual void close() throw();

@@ -3255,7 +3255,7 @@ typedef struct PACKED_STRUCT // Building_Data
 
 typedef struct PACKED_STRUCT // Building_Status
 {
-    eBuildingStatus     None;           // (keep at 0 "Replaced"!!!!!)
+    eBuildingStatus     No_building;           // (keep at 0 "Replaced"!!!!!)
 
     eBuildingStatus     Trade_Goods;    // (keep at -1!!!!!)
     eBuildingStatus     Housing;        // (keep at -1!!!!!)
@@ -3920,7 +3920,7 @@ typedef struct PACKED_STRUCT // Spells_Cast_in_Battle
 
 typedef struct PACKED_STRUCT { // Spells_Known (order in file):
 
-    eSpellKnown     None;
+    eSpellKnown     No_spell;
 
     //    * NATURE
     eSpellKnown     Earth_to_Mud;

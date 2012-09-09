@@ -20,6 +20,14 @@ unix:QMAKE_LIBS +=
 win32-g++:QMAKE_LIBS += -luser32
 win32-msvc2008:QMAKE_LIBS += user32.lib
 
+# Python
+unix:INCLUDEPATH += /usr/include/python3.1
+unix:QMAKE_LIBS += -lpython3.1
+win32-g++:INCLUDEPATH += C:/Python32/include
+win32-g++:QMAKE_LIBS += C:/Python32/libs/python32.lib
+win32-msvc2008:INCLUDEPATH += C:/Python32/include
+win32-msvc2008:QMAKE_LIBS += C:/Python32/libs/python32.lib
+
 QT       -= core gui
 
 TARGET = MoMCore
@@ -34,10 +42,7 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 
 INCLUDEPATH += \
     . \
-    ../MoMEditorTemplate \
-    C:/Python32/include
-
-QMAKE_LIBS += C:/Python32/libs/python32.lib
+    ../MoMEditorTemplate
 
 SOURCES += MoMCore.cpp \
     ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \

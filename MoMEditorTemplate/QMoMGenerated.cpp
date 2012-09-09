@@ -967,7 +967,7 @@ QMoMTreeItemBase* constructTreeItem(Building_Status* rhs, const QString& context
     if (0 == rhs)
         return ptree;
 
-    ptree->appendChild("None", new QMoMTreeItem<eBuildingStatus>(&rhs->None));
+    ptree->appendChild("No_building", new QMoMTreeItem<eBuildingStatus>(&rhs->No_building));
     ptree->appendChild("Trade_Goods", new QMoMTreeItem<eBuildingStatus>(&rhs->Trade_Goods));
     ptree->appendChild("Housing", new QMoMTreeItem<eBuildingStatus>(&rhs->Housing));
     ptree->appendChild("Barracks", new QMoMTreeItem<eBuildingStatus>(&rhs->Barracks));
@@ -5548,7 +5548,7 @@ QMoMTreeItemBase* constructTreeItem(Spells_Known* rhs, const QString& context)
     if (0 == rhs)
         return ptree;
 
-    ptree->appendChild("None", new QMoMTreeItem<eSpellKnown>(&rhs->None));
+    ptree->appendChild("No_spell", new QMoMTreeItem<eSpellKnown>(&rhs->No_spell));
     ptree->appendChild("Earth_to_Mud", new QMoMTreeItem<eSpellKnown>(&rhs->Earth_to_Mud));
     ptree->appendChild("Resist_Elements", new QMoMTreeItem<eSpellKnown>(&rhs->Resist_Elements));
     ptree->appendChild("Wall_of_Stone", new QMoMTreeItem<eSpellKnown>(&rhs->Wall_of_Stone));
