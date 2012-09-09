@@ -3794,7 +3794,7 @@ std::ostream& operator<<(std::ostream& os, const Building_Data& rhs)
 std::ostream& operator<<(std::ostream& os, const Building_Status& rhs)
 {
     os << "{\n";
-    os << "None=" << rhs.None << "\n";
+    os << "No_building=" << rhs.No_building << "\n";
     os << "Trade_Goods=" << rhs.Trade_Goods << "\n";
     os << "Housing=" << rhs.Housing << "\n";
     os << "Barracks=" << rhs.Barracks << "\n";
@@ -6502,7 +6502,7 @@ std::ostream& operator<<(std::ostream& os, const Spells_Cast_in_Battle& rhs)
 std::ostream& operator<<(std::ostream& os, const Spells_Known& rhs)
 {
     os << "{\n";
-    os << "None=" << rhs.None << "\n";
+    os << "No_spell=" << rhs.No_spell << "\n";
     os << "Earth_to_Mud=" << rhs.Earth_to_Mud << "\n";
     os << "Resist_Elements=" << rhs.Resist_Elements << "\n";
     os << "Wall_of_Stone=" << rhs.Wall_of_Stone << "\n";
@@ -10763,7 +10763,7 @@ bool validate(const Building_Data& rhs, const std::string& context)
 bool validate(const Building_Status& rhs, const std::string& context)
 {
     bool ok = true;
-    if (!validate(rhs.None, context + ".None")) ok = false;
+    if (!validate(rhs.No_building, context + ".No_building")) ok = false;
     if (!validate(rhs.Trade_Goods, context + ".Trade_Goods")) ok = false;
     if (!validate(rhs.Housing, context + ".Housing")) ok = false;
     if (!validate(rhs.Barracks, context + ".Barracks")) ok = false;
@@ -11676,7 +11676,7 @@ bool validate(const Spells_Cast_in_Battle& rhs, const std::string& context)
 bool validate(const Spells_Known& rhs, const std::string& context)
 {
     bool ok = true;
-    if (!validate(rhs.None, context + ".None")) ok = false;
+    if (!validate(rhs.No_spell, context + ".No_spell")) ok = false;
     if (!validate(rhs.Earth_to_Mud, context + ".Earth_to_Mud")) ok = false;
     if (!validate(rhs.Resist_Elements, context + ".Resist_Elements")) ok = false;
     if (!validate(rhs.Wall_of_Stone, context + ".Wall_of_Stone")) ok = false;

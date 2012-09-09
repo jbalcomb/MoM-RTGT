@@ -18,7 +18,7 @@ const size_t gOFFSET_STUB_SEGMENT_ENTRIES = (0x2A0 + 0x2369) * gPARAGRAPH_SIZE +
 const size_t gNR_STUB_SEGMENTS = 115;
 const size_t gFIRST_STUB_NR = 50;
 
-static MoMExeWizards::SpellSaveEntry gSpellSaveTableV131[] =
+static SpellSaveEntry gSpellSaveTableV131[] =
 {
     { 0x1C82, 0 },
     { 0x1C89, 0x1C8D },
@@ -42,7 +42,7 @@ static MoMExeWizards::SpellSaveEntry gSpellSaveTableV131[] =
     { 0x1D21, 0x1D25 },
 };
 
-static MoMExeWizards::SpellSaveEntry gSpellSaveTableV140j[] =
+static SpellSaveEntry gSpellSaveTableV140j[] =
 {
     { 0x1C82, 0x1C86 },
     { 0x1C8A, 0x1C8E },
@@ -83,7 +83,7 @@ size_t MoMExeWizards::getNrSpellSaves() const
     return ARRAYSIZE(gSpellSaveTableV131);
 }
 
-MoMExeWizards::SpellSaveEntry MoMExeWizards::getSpellSave(size_t nr)
+SpellSaveEntry MoMExeWizards::getSpellSave(size_t nr)
 {
     const MoMDataSegment* pDataSegment = (const MoMDataSegment*)getDataSegment();
     if ((0 != pDataSegment) && (&pDataSegment->m_Copyright_and_Version[34] >= std::string("v1.40j")))
