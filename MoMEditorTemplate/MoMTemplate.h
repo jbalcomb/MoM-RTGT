@@ -2808,8 +2808,19 @@ enum eUnit_Status8 ENUMSIZE8
                                             //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
     UNITSTATUS8_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
                                             //      the SAVE game does not record if we are traversing UP or DOWN the units!
-                                            //   ??=building road
                                             //   ??=purifying
+    UNITSTATUS8_unk6 = 6, 
+    UNITSTATUS8_meld_GUESS = 7, 
+    UNITSTATUS8_build_GUESS = 8, 
+    UNITSTATUS8_seek_transport_GUESS = 9, 
+    UNITSTATUS8_unk10 = 10, 
+    UNITSTATUS8_unk11 = 11, 
+    UNITSTATUS8_unk12 = 12, 
+    UNITSTATUS8_unk13 = 13, 
+    UNITSTATUS8_unk14 = 14, 
+    UNITSTATUS8_unk15 = 15, 
+    UNITSTATUS8_move = 16,                      
+
     eUnit_Status8_MAX,
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
 };

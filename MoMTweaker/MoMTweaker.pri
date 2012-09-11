@@ -45,12 +45,13 @@ HEADERS += \
     ../MoMEditorTemplate/QMapGraphicsView.h \
     ../MoMEditorTemplate/MoMCatnip.h \
     ../MoMEditorTemplate/MoMTerrain.h \
-    dialoglbxeditor.h \
+    ../MoMTweaker/dialoglbxeditor.h \
     ../MoMEditorTemplate/QMoMLazyIcon.h \
     ../MoMEditorTemplate/MoMLocation.h \
     ../MoMEditorTemplate/QMoMMapScene.h \
     ../MoMEditorTemplate/MoMHookManager.h \
-    dialogexternalai.h
+    ../MoMTweaker/dialogexternalai.h \
+    ../MoMEditorTemplate/MoMCombat.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -88,10 +89,11 @@ SOURCES += \
     ../MoMEditorTemplate/QMapGraphicsView.cpp \
     ../MoMEditorTemplate/MoMCatnip.cpp \
     ../MoMEditorTemplate/MoMTerrain.cpp \
-    dialoglbxeditor.cpp \
+    ../MoMTweaker/dialoglbxeditor.cpp \
     ../MoMEditorTemplate/QMoMMapScene.cpp \
     ../MoMEditorTemplate/MoMHookManager.cpp \
-    dialogexternalai.cpp
+    ../MoMTweaker/dialogexternalai.cpp \
+    ../MoMEditorTemplate/MoMCombat.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \
@@ -102,7 +104,7 @@ FORMS += \
     ../MoMTweaker/dialogmap.ui \
     ../MoMTweaker/dialogaddunit.ui \
     ../MoMTweaker/dialogtools.ui \
-    dialoglbxeditor.ui \
-    dialogexternalai.ui
+    ../MoMTweaker/dialoglbxeditor.ui \
+    ../MoMTweaker/dialogexternalai.ui
 
 RESOURCES += ../Resources/InteractiveGameTweaker.qrc

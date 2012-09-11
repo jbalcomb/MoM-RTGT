@@ -26,6 +26,7 @@ win32-msvc2008:QMAKE_LIBS += user32.lib
 message(QMAKE_LIBS: $$QMAKE_LIBS)
 
 QT       += testlib
+QT       += xml
 
 TARGET = MoMTest
 DESTDIR = $${COMPILER}/bin
@@ -50,6 +51,7 @@ include(../MoMTweaker/MoMTweaker.pri)
 # Additional platform specific sources
 SOURCES += \
     ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
+    tst_momcombat.cpp
 
 # Test sources
 SOURCES += \
