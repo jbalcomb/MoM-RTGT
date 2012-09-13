@@ -2977,6 +2977,17 @@ std::ostream& operator<<(std::ostream& os, const eUnit_Status8& rhs)
     case UNITSTATUS8_going_to_XY: os << "UNITSTATUS8_going_to_XY"; break;
     case UNITSTATUS8_reached_destination: os << "UNITSTATUS8_reached_destination"; break;
     case UNITSTATUS8_wait: os << "UNITSTATUS8_wait"; break;
+    case UNITSTATUS8_unk6: os << "UNITSTATUS8_unk6"; break;
+    case UNITSTATUS8_meld_GUESS: os << "UNITSTATUS8_meld_GUESS"; break;
+    case UNITSTATUS8_build_GUESS: os << "UNITSTATUS8_build_GUESS"; break;
+    case UNITSTATUS8_seek_transport_GUESS: os << "UNITSTATUS8_seek_transport_GUESS"; break;
+    case UNITSTATUS8_unk10: os << "UNITSTATUS8_unk10"; break;
+    case UNITSTATUS8_unk11: os << "UNITSTATUS8_unk11"; break;
+    case UNITSTATUS8_unk12: os << "UNITSTATUS8_unk12"; break;
+    case UNITSTATUS8_unk13: os << "UNITSTATUS8_unk13"; break;
+    case UNITSTATUS8_unk14: os << "UNITSTATUS8_unk14"; break;
+    case UNITSTATUS8_unk15: os << "UNITSTATUS8_unk15"; break;
+    case UNITSTATUS8_move: os << "UNITSTATUS8_move"; break;
     case eUnit_Status8_MAX: os << "eUnit_Status8_MAX"; break;
     default: os << "<Unknown eUnit_Status8>"; break;
     }
@@ -3513,7 +3524,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Race_Code=" << rhs.m_Race_Code << "\n";
     os << "m_Buildings_Required1_UNK=" << (unsigned)rhs.m_Buildings_Required1_UNK << " 0x" << std::hex << (unsigned)rhs.m_Buildings_Required1_UNK << std::dec << "\n";
     os << "m_Current_Figures=" << (unsigned)rhs.m_Current_Figures << " 0x" << std::hex << (unsigned)rhs.m_Current_Figures << std::dec << "\n";
-    os << "m_graphics_ID_GUESS=" << (unsigned)rhs.m_graphics_ID_GUESS << " 0x" << std::hex << (unsigned)rhs.m_graphics_ID_GUESS << std::dec << "\n";
+    os << "m_BattleUnitNr=" << (unsigned)rhs.m_BattleUnitNr << " 0x" << std::hex << (unsigned)rhs.m_BattleUnitNr << std::dec << "\n";
     os << "m_UNK0F=" << (unsigned)rhs.m_UNK0F << " 0x" << std::hex << (unsigned)rhs.m_UNK0F << std::dec << "\n";
     os << "m_Hitpoints_per_Figure=" << (unsigned)rhs.m_Hitpoints_per_Figure << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints_per_Figure << std::dec << "\n";
     os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
@@ -3538,17 +3549,13 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Item_Attack_Flags=" << rhs.m_Item_Attack_Flags << "\n";
     os << "m_Flags2_UnitEnchantment=" << rhs.m_Flags2_UnitEnchantment << "\n";
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
-    os << "m_UNK32=" << (unsigned)rhs.m_UNK32 << " 0x" << std::hex << (unsigned)rhs.m_UNK32 << std::dec << "\n";
+    os << "m_additional_life_per_figure=" << (unsigned)rhs.m_additional_life_per_figure << " 0x" << std::hex << (unsigned)rhs.m_additional_life_per_figure << std::dec << "\n";
     os << "m_web_=" << (unsigned)rhs.m_web_ << " 0x" << std::hex << (unsigned)rhs.m_web_ << std::dec << "\n";
     os << "m_Active=" << rhs.m_Active << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
     os << "m_cur_total_damage_GUESS=" << (unsigned)rhs.m_cur_total_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_total_damage_GUESS << std::dec << "\n";
-    os << "m_UNK37=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK37[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK37[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_lifesteal_damage=" << (int)rhs.m_lifesteal_damage << " 0x" << std::hex << (int)rhs.m_lifesteal_damage << std::dec << "\n";
+    os << "m_instant_damage_like_stoning=" << (int)rhs.m_instant_damage_like_stoning << " 0x" << std::hex << (int)rhs.m_instant_damage_like_stoning << std::dec << "\n";
     os << "m_cur_figure_damage_GUESS=" << (int)rhs.m_cur_figure_damage_GUESS << " 0x" << std::hex << (int)rhs.m_cur_figure_damage_GUESS << std::dec << "\n";
     os << "m_Flags1_UnitEnchantment=" << rhs.m_Flags1_UnitEnchantment << "\n";
     os << "m_Suppression=" << (int)rhs.m_Suppression << " 0x" << std::hex << (int)rhs.m_Suppression << std::dec << "\n";
@@ -7310,7 +7317,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_Research_Percentage=" << (unsigned)rhs.m_Research_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Research_Percentage << std::dec << "\n";
     os << "m_Mana_Percentage=" << (unsigned)rhs.m_Mana_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Mana_Percentage << std::dec << "\n";
     os << "m_Skill_Percentage=" << (unsigned)rhs.m_Skill_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Skill_Percentage << std::dec << "\n";
-    os << "m_UNK02D=" << (unsigned)rhs.m_UNK02D << " 0x" << std::hex << (unsigned)rhs.m_UNK02D << std::dec << "\n";
+    os << "m_Mana_generated_by_volcanoes=" << (unsigned)rhs.m_Mana_generated_by_volcanoes << " 0x" << std::hex << (unsigned)rhs.m_Mana_generated_by_volcanoes << std::dec << "\n";
     os << "m_X_Coordinate_of_Summoning_Circle=" << rhs.m_X_Coordinate_of_Summoning_Circle << " 0x" << std::hex << rhs.m_X_Coordinate_of_Summoning_Circle << std::dec << "\n";
     os << "m_Y_Coordinate_of_Summoning_Circle=" << rhs.m_Y_Coordinate_of_Summoning_Circle << " 0x" << std::hex << rhs.m_Y_Coordinate_of_Summoning_Circle << std::dec << "\n";
     os << "m_Plane_of_Summoning_Circle=" << rhs.m_Plane_of_Summoning_Circle << "\n";
@@ -7391,28 +7398,40 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_War_Status[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_15E=(\n";
+    os << "m_Unk15E=(\n";
     for (unsigned i = 0; i < 0x24; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK_15E[i] << " 0x" << std::hex << (int)rhs.m_UNK_15E[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk15E[i] << " 0x" << std::hex << (int)rhs.m_Unk15E[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_182_Relation=(\n";
+    os << "m_Unk182_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK_182_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK_182_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk182_Relation[i] << " 0x" << std::hex << (int)rhs.m_Unk182_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_188_Relation=(\n";
+    os << "m_Unk188_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK_188_Relation[i] << " 0x" << std::hex << (int)rhs.m_UNK_188_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk188_Relation[i] << " 0x" << std::hex << (int)rhs.m_Unk188_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_18E=(\n";
-    for (unsigned i = 0; i < 0xCC; ++i)
+    os << "m_Unk18E=(\n";
+    for (unsigned i = 0; i < 18; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK_18E[i] << " 0x" << std::hex << (int)rhs.m_UNK_18E[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk18E[i] << " 0x" << std::hex << (int)rhs.m_Unk18E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Diplomacy_penalty_GUESS=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Diplomacy_penalty_GUESS[i] << " 0x" << std::hex << (int)rhs.m_Diplomacy_penalty_GUESS[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk1A6=(\n";
+    for (unsigned i = 0; i < 0xB4; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Unk1A6[i] << " 0x" << std::hex << (int)rhs.m_Unk1A6[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Researching_Left=" << rhs.m_Researching_Left << " 0x" << std::hex << rhs.m_Researching_Left << std::dec << "\n";
@@ -7528,6 +7547,15 @@ std::ostream& operator<<(std::ostream& os, const unionBuilding_Status& rhs)
     }
     os << ")\n";
     os << "s=" << rhs.s << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const unionCombat_Enchantment& rhs)
+{
+    os << "{\n";
+    os << "s=" << rhs.s << "\n";
+    os << "bits=" << rhs.bits << " 0x" << std::hex << rhs.bits << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -10384,6 +10412,17 @@ bool validate(const eUnit_Status8& rhs, const std::string& context)
     case UNITSTATUS8_going_to_XY: break;
     case UNITSTATUS8_reached_destination: break;
     case UNITSTATUS8_wait: break;
+    case UNITSTATUS8_unk6: break;
+    case UNITSTATUS8_meld_GUESS: break;
+    case UNITSTATUS8_build_GUESS: break;
+    case UNITSTATUS8_seek_transport_GUESS: break;
+    case UNITSTATUS8_unk10: break;
+    case UNITSTATUS8_unk11: break;
+    case UNITSTATUS8_unk12: break;
+    case UNITSTATUS8_unk13: break;
+    case UNITSTATUS8_unk14: break;
+    case UNITSTATUS8_unk15: break;
+    case UNITSTATUS8_move: break;
     default: std::cout << context << ": Unknown eUnit_Status8 = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -12156,6 +12195,13 @@ bool validate(const unionBuilding_Status& rhs, const std::string& context)
           oss << context << ".a[" << i << "]";
           if (!validate(rhs.a[i], oss.str())) ok = false;
     }
+    if (!validate(rhs.s, context + ".s")) ok = false;
+    return ok;
+}
+
+bool validate(const unionCombat_Enchantment& rhs, const std::string& context)
+{
+    bool ok = true;
     if (!validate(rhs.s, context + ".s")) ok = false;
     return ok;
 }

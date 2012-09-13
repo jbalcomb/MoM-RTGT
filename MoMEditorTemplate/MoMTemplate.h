@@ -3364,6 +3364,12 @@ typedef struct PACKED_STRUCT // Combat_Enchantment
     uint8_t     No_Effect80:1;          // 80
 } Combat_Enchantment;
 
+typedef union // unionCombat_Enchantment
+{
+    Combat_Enchantment  s;
+    uint16_t            bits; // <format=hex>;
+} unionCombat_Enchantment;
+
 typedef struct PACKED_STRUCT // Events_Status
 {
     uint16_t    m_Turn_Event_triggered_GUESS ;         // 00
@@ -4191,7 +4197,7 @@ typedef struct PACKED_STRUCT // Wizard
     uint8_t         m_Research_Percentage;              // 02A
     uint8_t         m_Mana_Percentage;                  // 02B
     uint8_t         m_Skill_Percentage;                 // 02C
-    uint8_t         m_UNK02D;                           // 02D
+    uint8_t         m_Mana_generated_by_volcanoes;      // 02D
     int16_t         m_X_Coordinate_of_Summoning_Circle; // 02E (0-59)
     int16_t         m_Y_Coordinate_of_Summoning_Circle; // 030 (0-59)
     ePlane          m_Plane_of_Summoning_Circle;        // 032 (0-1)
@@ -4241,10 +4247,12 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //    Harmony   100...119
                                                         //    No Treaty 120...127
     eWar_Status     m_War_Status[6];                    // 158 (0=None, 1=Wizard Pact, 2=Alliance, 3+=War)
-    int8_t          m_UNK_15E[0x24];                    // 15E
-    int8_t          m_UNK_182_Relation[6];              // 182
-    int8_t          m_UNK_188_Relation[6];              // 188
-    int8_t          m_UNK_18E[0xCC];                    // 18E
+    int8_t          m_Unk15E[0x24];                     // 15E
+    int8_t          m_Unk182_Relation[6];               // 182
+    int8_t          m_Unk188_Relation[6];               // 188
+    int8_t          m_Unk18E[18];                       // 18E
+    int8_t          m_Diplomacy_penalty_GUESS[6];       // 1A0
+    int8_t          m_Unk1A6[0xB4];                     // 1A6
     int16_t         m_Researching_Left;                 // 25A
     int16_t         m_Mana_Crystals;                    // 25C
     int32_t         m_Wizard_Casting_Skill;             // 25E <read=read_Wizard_Casting_Skill>;
@@ -4745,100 +4753,100 @@ typedef struct PACKED_STRUCT // Battle_Unit
                                     // (sizeof=0x6E)
     // First part copied from Unit_Type_Data (starting at offset 2)
 
-    uint8_t                 m_Melee;            // 00  Melee attack strength
-    uint8_t                 m_Ranged;           // 01  Ranged attack strength
-    eRanged_Type            m_Ranged_Type;      // 02  Ranged attack type (table 1)
-    uint8_t                 m_Ranged_Shots;     // 03  Ranged attack number of shots
-    uint8_t                 m_To_Hit;           // 04  Plus to hit
-    uint8_t                 m_Defense;          // 05  Defense
-    uint8_t                 m_Resistance;       // 06  Resistance
-    uint8_t                 m_MoveHalves;       // 07  Movement rate (in units of 1/2 MP)
-    uint16_t                m_Cost;             // 08-09  Heroes: cost to hire (note 2)
-                                                //     Normal units: cost to build
-                                                //     Summoned units: cost to place in lair, node or rampaging force (note 3)
-    uint8_t                 m_Upkeep;           // 0A  Summoned units: upkeep cost  Others: not used (note 4)
-    eRace                   m_Race_Code;        // 0B  Race code (table 2)
-    uint8_t                 m_Buildings_Required1_UNK;  // 0C-0D  Normal units: buildings required (table 3)
-                                                //     Others: note 5
-    uint8_t                 m_Current_Figures;  // 0D
-    uint8_t                 m_graphics_ID_GUESS;// 0E
-    uint8_t                 m_UNK0F;            // 0F  00
-    uint8_t                 m_Hitpoints_per_Figure;     // 10  Hit points (hearts) per figure
-    uint8_t                 m_Scouting;         // 11  Scouting range
-    uint8_t                 m_Transport_Capacity_GUESS; // 12  Transport capacity (number of units carried)
-    uint8_t                 m_Total_Figures;    // 13  Number of figures in the unit
-    uint8_t                 m_Construction;     // 14  Construction capacity (road building)
-    uint8_t                 m_Gaze_Modifier;    // 15  Special attack or bonus strength
-    unionMovement_Flags     m_Movement_Flags;   // 16  Movement flags (table 4)
-    uint8_t                 m_Zero01;           // 17  00
-    unionImmunity_Flags     m_Immunity_Flags;   // 18  Immunity flags (table 5)
-    unionAttribute_Flags    m_Attribute_Flags;  // 19  Attribute flags (table 6)
-                                                // 1A  Attribute flags (table 7)
-    uint8_t                 m_Zero02;           // 1B  00
-    unionAbility_Flags      m_Ability_Flags;    // 1C  Attribute flags (table 8)
-                                                // 1D  Attribute flags (table 9)
-    unionAttack_Flags       m_Attack_Flags;     // 1E  Special attack flags (table 10)
-                                                // 1F  Special attack flags (table 11)
+    uint8_t                 m_Melee;                        // 00  Melee attack strength
+    uint8_t                 m_Ranged;                       // 01  Ranged attack strength
+    eRanged_Type            m_Ranged_Type;                  // 02  Ranged attack type (table 1)
+    uint8_t                 m_Ranged_Shots;                 // 03  Ranged attack number of shots
+    uint8_t                 m_To_Hit;                       // 04  Plus to hit
+    uint8_t                 m_Defense;                      // 05  Defense
+    uint8_t                 m_Resistance;                   // 06  Resistance
+    uint8_t                 m_MoveHalves;                   // 07  Movement rate (in units of 1/2 MP)
+    uint16_t                m_Cost;                         // 08-09  Heroes: cost to hire (note 2)
+                                                            //     Normal units: cost to build
+                                                            //     Summoned units: cost to place in lair, node or rampaging force (note 3)
+    uint8_t                 m_Upkeep;                       // 0A  Summoned units: upkeep cost  Others: not used (note 4)
+    eRace                   m_Race_Code;                    // 0B  Race code (table 2)
+    uint8_t                 m_Buildings_Required1_UNK;      // 0C-0D  Normal units: buildings required (table 3)
+                                                            //     Others: note 5
+    uint8_t                 m_Current_Figures;              // 0D
+    uint8_t                 m_BattleUnitNr;                 // 0E
+    uint8_t                 m_UNK0F;                        // 0F  00
+    uint8_t                 m_Hitpoints_per_Figure;         // 10  Hit points (hearts) per figure
+    uint8_t                 m_Scouting;                     // 11  Scouting range
+    uint8_t                 m_Transport_Capacity_GUESS;     // 12  Transport capacity (number of units carried)
+    uint8_t                 m_Total_Figures;                // 13  Number of figures in the unit
+    uint8_t                 m_Construction;                 // 14  Construction capacity (road building)
+    uint8_t                 m_Gaze_Modifier;                // 15  Special attack or bonus strength
+    unionMovement_Flags     m_Movement_Flags;               // 16  Movement flags (table 4)
+    uint8_t                 m_Zero01;                       // 17  00
+    unionImmunity_Flags     m_Immunity_Flags;               // 18  Immunity flags (table 5)
+    unionAttribute_Flags    m_Attribute_Flags;              // 19  Attribute flags (table 6)
+                                                            // 1A  Attribute flags (table 7)
+    uint8_t                 m_Zero02;                       // 1B  00
+    unionAbility_Flags      m_Ability_Flags;                // 1C  Attribute flags (table 8)
+                                                            // 1D  Attribute flags (table 9)
+    unionAttack_Flags       m_Attack_Flags;                 // 1E  Special attack flags (table 10)
+                                                            // 1F  Special attack flags (table 11)
 
-    uint16_t                m_Zero03;           // 20-21 dw ? ; unused
-    Combat_Enchantment      m_Flags_Combat_Enchantment; // 22-23 dw
-    uint8_t                 m_Extra_ToHit_Melee;    // 24 db
-    uint8_t                 m_Extra_ToHit_Ranged;   // 25 db
-    uint8_t                 m_Extra_ToDefend;       // 26 db
-    uint8_t                 m_Weapon_Type_Plus_1;   // 27 db ?
-    unionAttack_Flags       m_Cur_Attack_Flags;     // 28-29 db
-    unionAttack_Flags       m_Item_Attack_Flags;    // 2A-2B db
-    unionUnit_Enchantment   m_Flags2_UnitEnchantment;   // 2C-2F db
-    int16_t                 m_unitNr;           // 30-31 db ?
-    uint8_t                 m_UNK32;            // 32
-    uint8_t                 m_web_;             // 33 db ?
-    eBattleUnitActive       m_Active;           // 34 db ? Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
-    ePlayer                 m_Owner;            // 35 db ?
-    uint8_t                 m_cur_total_damage_GUESS;   // 36 db ?
-    uint8_t                 m_UNK37[2];         // 37
-                                                // 38
-    int8_t                  m_cur_figure_damage_GUESS;    // 39 db ?
-    unionUnit_Enchantment   m_Flags1_UnitEnchantment;       // 3A-3D db
-    int8_t                  m_Suppression;      // 3E db ?
-    int8_t                  m_Mana_points;      // 3F db ?
-    int8_t                  m_Current_mana_;    // 40 db ?
-    int8_t                  m_Item_nr_charges_; // 41 db ?
-    int8_t                  m_Poison_strength_; // 42 db ?
-    int8_t                  m_Target_BattleUnitID;  // 43
-    int16_t                 m_xPos;             // 44-45 db
-    int16_t                 m_yPos;             // 46-47 db
-    int16_t                 m_xPosHeaded;       // 48-49 db
-    int16_t                 m_yPosHeaded;       // 4A-4B db
-    uint16_t                m_UNK4C_display_GUESS;// 4C
-    uint16_t                m_UNK4E;            // 4E
-    uint16_t                m_UNK50;            // 50
-    uint16_t                m_UNK52_sound_GUESS;// 52
-    eBattleUnitTactic       m_Tactic;           // 54 Tactic (0=ready, 4=done, 100=melee, 101=shoot, ...)
-    int8_t                  m_Confused_State;   // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
-    uint8_t                 m_UNK57;            // 57
-    uint16_t                m_UNK58[6];         // 58
-                                                // 59
-                                                // 5A
-                                                // 5B
-                                                // 5C
-                                                // 5D
-                                                // 5E
-                                                // 5F
-                                                // 60
-                                                // 61
-                                                // 62
-                                                // 63
-    uint8_t                 m_Extra_Melee;      // 64 
-    uint8_t                 m_Extra_Ranged;     // 65 
-    uint8_t                 m_Extra_Defense;    // 66 
-    uint8_t                 m_Extra_Resistance; // 67 
-    uint8_t                 m_Extra_Hitpoints;  // 68 
-    uint8_t                 m_Lost_Melee;       // 69
-    uint8_t                 m_Lost_Ranged;      // 6A
-    uint8_t                 m_Lost_Defense;     // 6B
-    uint8_t                 m_Lost_Resistance;  // 6C 
-    uint8_t                 m_UNUSED6D;         // 6D db ?
-                                                // SIZE 6E
+    uint16_t                m_Zero03;                       // 20-21 ; unused
+    unionCombat_Enchantment m_Flags_Combat_Enchantment;     // 22-23
+    uint8_t                 m_Extra_ToHit_Melee;            // 24
+    uint8_t                 m_Extra_ToHit_Ranged;           // 25
+    uint8_t                 m_Extra_ToDefend;               // 26
+    uint8_t                 m_Weapon_Type_Plus_1;           // 27
+    unionAttack_Flags       m_Cur_Attack_Flags;             // 28-29
+    unionAttack_Flags       m_Item_Attack_Flags;            // 2A-2B
+    unionUnit_Enchantment   m_Flags2_UnitEnchantment;       // 2C-2F
+    int16_t                 m_unitNr;                       // 30-31
+    uint8_t                 m_additional_life_per_figure;   // 32
+    uint8_t                 m_web_;                         // 33
+    eBattleUnitActive       m_Active;                       // 34 Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
+    ePlayer                 m_Owner;                        // 35
+    uint8_t                 m_cur_total_damage_GUESS;       // 36
+    int8_t                  m_lifesteal_damage;             // 37
+    int8_t                  m_instant_damage_like_stoning;  // 38
+    int8_t                  m_cur_figure_damage_GUESS;      // 39
+    unionUnit_Enchantment   m_Flags1_UnitEnchantment;       // 3A-3D
+    int8_t                  m_Suppression;                  // 3E
+    int8_t                  m_Mana_points;                  // 3F
+    int8_t                  m_Current_mana_;                // 40
+    int8_t                  m_Item_nr_charges_;             // 41
+    int8_t                  m_Poison_strength_;             // 42
+    int8_t                  m_Target_BattleUnitID;          // 43
+    int16_t                 m_xPos;                         // 44-45
+    int16_t                 m_yPos;                         // 46-47
+    int16_t                 m_xPosHeaded;                   // 48-49
+    int16_t                 m_yPosHeaded;                   // 4A-4B
+    uint16_t                m_UNK4C_display_GUESS;          // 4C
+    uint16_t                m_UNK4E;                        // 4E
+    uint16_t                m_UNK50;                        // 50
+    uint16_t                m_UNK52_sound_GUESS;            // 52
+    eBattleUnitTactic       m_Tactic;                       // 54 Tactic (0=ready, 4=done, 100=melee, 101=shoot, ...)
+    int8_t                  m_Confused_State;               // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
+    uint8_t                 m_UNK57;                        // 57
+    uint16_t                m_UNK58[6];                     // 58
+                                                            // 59
+                                                            // 5A
+                                                            // 5B
+                                                            // 5C
+                                                            // 5D
+                                                            // 5E
+                                                            // 5F
+                                                            // 60
+                                                            // 61
+                                                            // 62
+                                                            // 63
+    uint8_t                 m_Extra_Melee;                  // 64
+    uint8_t                 m_Extra_Ranged;                 // 65
+    uint8_t                 m_Extra_Defense;                // 66
+    uint8_t                 m_Extra_Resistance;             // 67
+    uint8_t                 m_Extra_Hitpoints;              // 68
+    uint8_t                 m_Lost_Melee;                   // 69
+    uint8_t                 m_Lost_Ranged;                  // 6A
+    uint8_t                 m_Lost_Defense;                 // 6B
+    uint8_t                 m_Lost_Resistance;              // 6C
+    uint8_t                 m_UNUSED6D;                     // 6D db ?
+                                                            // SIZE 6E
 } Battle_Unit;
 
 

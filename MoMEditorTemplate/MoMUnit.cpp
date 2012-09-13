@@ -966,6 +966,16 @@ bool MoMUnit::hasThrownRangedAttack() const
     return value;
 }
 
+bool MoMUnit::hasSpecial(eCombatEnchantment combatEnchantment) const
+{
+    bool value = false;
+    if (m_battleUnit != 0)
+    {
+        value = (1 & (m_battleUnit->m_Flags_Combat_Enchantment.bits >> combatEnchantment));
+    }
+    return value;
+}
+
 bool MoMUnit::hasSpecial(eHeroAbility heroAbility) const
 {
     bool value = false;
@@ -1012,15 +1022,34 @@ bool MoMUnit::hasSpecial(eUnitAbility unitAbility) const
         uint8_t* ptr = &m_unitType->m_Movement_Flags.bits;
         value = (1 & (ptr[offset] >> shift));
     }
+    if (m_battleUnit != 0)
+    {
+        unsigned offset = unitAbility / 8;
+        unsigned shift = unitAbility % 8;
+        uint8_t* ptr = &m_battleUnit->m_Movement_Flags.bits;
+        value |= (1 & (ptr[offset] >> shift));
+
+        if ((unitAbility >= UNITABILITY_Armor_Piercing) && (unitAbility <= UNITABILITY_Warp_Lightning_COMBAT))
+        {
+            unsigned shift = ((unsigned)unitAbility - (unsigned)UNITABILITY_Armor_Piercing);
+            value |= (1 & (m_battleUnit->m_Cur_Attack_Flags.bits >> shift));
+            value |= (1 & (m_battleUnit->m_Item_Attack_Flags.bits >> shift));
+        }
+    }
     return value;
 }
 
-bool MoMUnit::hasSpecial(eUnitEnchantment unitAbility) const
+bool MoMUnit::hasSpecial(eUnitEnchantment unitEnchantment) const
 {
     bool value = false;
     if (m_unit != 0)
     {
-        value = (1 & (m_unit->m_Unit_Enchantment.bits >> unitAbility));
+        value = (1 & (m_unit->m_Unit_Enchantment.bits >> unitEnchantment));
+    }
+    if (m_battleUnit != 0)
+    {
+        value |= (1 & (m_battleUnit->m_Flags1_UnitEnchantment.bits >> unitEnchantment));
+        value |= (1 & (m_battleUnit->m_Flags2_UnitEnchantment.bits >> unitEnchantment));
     }
     return value;
 }
@@ -1035,10 +1064,24 @@ bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
     return value;
 }
 
+bool MoMUnit::isFlying() const
+{
+    bool hasFlying = (hasSpecial(UNITABILITY_Flying) || hasSpecial(UNITABILITY_Flyer)
+                      || hasSpecial(ITEMPOWER_Flight) || hasSpecial(UNITENCHANTMENT_Flight));
+    bool isWebbed = hasSpecial(COMBATENCHANTMENT_Web);
+    isWebbed |= (m_battleUnit->m_web_ != 0);
+    return (hasFlying && !isWebbed);
+}
+
 bool MoMUnit::isHero() const
 {
 	// TODO: A hero only counts as a hero if he occupies a hired hero slot.
     return (toUInt(getUnitTypeNr()) < gMAX_HERO_TYPES);
+}
+
+bool MoMUnit::isInvisible() const
+{
+    return (hasSpecial(UNITABILITY_Invisibility) || hasSpecial(ITEMPOWER_Invisibility) || hasSpecial(UNITENCHANTMENT_Invisibility));
 }
 
 bool MoMUnit::isNormal() const
@@ -1551,7 +1594,7 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //    }
 
     //if (spell_active("Vertigo"))
-    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.Vertigo)
+    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.s.Vertigo)
     {
         dn.toHitMelee += +2;
         dn.toHitRanged += +2;
@@ -1572,7 +1615,7 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //    }
 
     //if (spell_active("Weakness"))
-    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.Weakness)
+    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.s.Weakness)
     {
         dn.melee += +2; if (hasMissileRangedAttack()) dn.ranged += +2;
     }

@@ -91,6 +91,7 @@ QMoMTreeItemBase* constructTreeItem(unionAbility_Flags* rhs, const QString& cont
 QMoMTreeItemBase* constructTreeItem(unionAttack_Flags* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionAttribute_Flags* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionBuilding_Status* rhs, const QString& context);
+QMoMTreeItemBase* constructTreeItem(unionCombat_Enchantment* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionHero_Abilities* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionImmunity_Flags* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(unionItem_Powers* rhs, const QString& context);

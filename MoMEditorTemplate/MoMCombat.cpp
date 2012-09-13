@@ -576,11 +576,73 @@ double MoMCombat::expected_hp_from_Life_Steal(double EDD)
 }
 
 
+//Unit.prototype.can_damage = function(defender, attack_type)
+//{
+//   var attacker = this;
+//   var special = attack_type;
+
+//   if ((special == "Breath" || special == "Fire Breath") && attacker.has("Fire Breath") && !defender.has("Fire Imm"))
+//      return true;
+//   else if ((special == "Breath" || special == "Lightning") && attacker.has("Lightning") && !defender.has("Lightning Imm")) // Note: Lightning Imm does not exist
+//      return true;
+//   else if (special == "Breath")
+//      return false;
+
+//   else if ((special == "Gaze" || special == "Death Gaze") && attacker.has("Death Gaze") && !defender.has("Death Imm") && !defender.has("Magic Imm"))
+//      return true;
+//   else if ((special == "Gaze" || special == "Doom Gaze") && attacker.has("Doom Gaze"))
+//      return true;
+//   else if ((special == "Gaze" || special == "Stoning Gaze") && attacker.has("Stoning Gaze") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
+//      return true;
+//   else if (special == "Gaze")
+//      return false;
+
+//   else if (special == "Immolation" && attacker.has(special) && !defender.has("Fire Imm") && !defender.has("Magic Imm"))
+//      return true;
+
+//   else if (special == "Life Steal" && attacker.has("Life Steal") && !defender.has("Death Imm") && !defender.has("Magic Imm"))
+//      return true;
+
+//   else if (special == "Melee")
+//      return true;
+
+//   else if (special == "Poison" && attacker.has(special) && !defender.has("Poison Imm"))
+//      return true;
+
+//   else if (special == "Thrown" && attacker.has(special))
+//      return true;
+
+//   else if ((special == "Touch" || special == "Stoning Touch") && attacker.has("Stoning Touch") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
+//      return true;
+
+//   else
+//      return false;
+//}
+
+//Unit.prototype.apply_effects = function(enemy)
+//{
+//   this.apply_level(this.level);
+//   this.apply_abilities();
+//   this.apply_weapon_type(this.weapon_type);
+//   this.apply_spell_effects(enemy);
+//   this.apply_other_effects();
+
+//   if (this.has("Thrown")) this.set_special("Thrown", this.Ra);
+//   if (!this.spell_active("Chaos Channel") || 1 * this.spells[ "Chaos Channel" ] != 3)
+//   {
+//      if (this.has("Fire Breath")) this.set_special("Fire Breath", this.Ra);
+//   }
+//   if (this.has("Lightning")) this.set_special("Lightning", this.Ra);
+//   if (this.has("Doom Gaze")) this.set_special("Doom Gaze", this.Ra);
+//}
+
+
 bool MoMCombat::life_steal_applicable(const CombatUnit& attacker, const CombatUnit& defender)
 {
     return attacker.hasSpecial(UNITABILITY_Life_Stealing)
             && !defender.hasSpecial(UNITABILITY_Death_Immunity)
-            && !defender.hasSpecial(UNITABILITY_Magic_Immunity);    // TODO: spell effect Magic Imm???
+            && !defender.hasSpecial(UNITABILITY_Magic_Immunity)
+            && !defender.hasSpecial(UNITENCHANTMENT_Magic_Immunity);    // TODO: centralize Magic Imm???
 }
 
 
@@ -598,7 +660,7 @@ double MoMCombat::special_attack(const CombatUnit& attacker, const CombatUnit& d
     MoMUnit::BaseAttributes def = defender.getActualAttributes();
 
     int ignore_damage = 0;
-//    if (defender.hasSpecial(UNITENCHANTMENT_Invulnerability) && attacker.can_damage(defender, special))
+//    if (defender.has("Invulnerability") && attacker.can_damage(defender, special))
 //    {
 //        ignore_damage = 2;
 //        o += "Invulnerability ignores the first " + toStr(ignore_damage) + " points of damage\n";
@@ -756,12 +818,12 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     }
 
     //! Check if the attacker is sleeping
-//    if (attacker.spell_active("Black Sleep"))
-//    {
-//        o += "Unit of " + attacker.name + " can not attack because it is asleep. Attack aborted.\n";
-//        o += "\n";
-//        return o;
-//    }
+    if (attacker.hasSpecial(COMBATENCHANTMENT_Black_Sleep))
+    {
+        o += "Unit of " + attacker.getDisplayName() + " can not attack because it is asleep. Attack aborted.\n";
+        o += "\n";
+        return o;
+    }
 
     //! Check if the attacker is allowed to attack a flying defender
 //    if (defender.has("Flying") && !attacker.has("Flying") && !attacker.has("Fire Breath") && !attacker.has("Lightning")
@@ -777,6 +839,8 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
 //    int orig_att_Th = attacker.getBaseAttributes().toHitMelee, orig_def_Th = defender.getBaseAttributes().toHitMelee;
 //    int orig_att_Th_Ra = attacker.getBaseAttributes().toHitRanged, orig_def_Th_Ra = defender.getBaseAttributes().toHitRanged;
 //    int orig_att_Tb = attacker.getBaseAttributes().toDefend, orig_def_Tb = defender.getBaseAttributes().toDefend;
+    MoMUnit::BaseAttributes att = attacker.getActualAttributes();
+    MoMUnit::BaseAttributes def = defender.getActualAttributes();
 
     do // Single-iteration-loop to allow for a break followed by a centralized clean-up
     {
@@ -802,17 +866,17 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
 //            o += "Weapon Immunity increases defense of " + defender.name + " to " + defender.Df + "\n";
 //        }
 
-//        //! Reduce Df of an opponent of Armor Piercing
-//        if (attacker.has("Armor Piercing"))
-//        {
-//            defender.Df = Math.floor(defender.Df / 2);
-//            o += "Armor Piercing reduces defense of " + defender.name + " to " + defender.Df + "\n";
-//        }
-//        if (defender.has("Armor Piercing"))
-//        {
-//            attacker.Df = Math.floor(attacker.Df / 2);
-//            o += "Armor Piercing reduces defense of " + attacker.name + " to " + attacker.Df + "\n";
-//        }
+        //! Reduce Df of an opponent of Armor Piercing
+        if (attacker.hasSpecial(UNITABILITY_Armor_Piercing))
+        {
+            def.defense = def.defense / 2;
+            o += "Armor Piercing reduces defense of " + toStr(def.defense) + " to " + toStr(def.defense) + "\n";
+        }
+        if (defender.hasSpecial(UNITABILITY_Armor_Piercing))
+        {
+            att.defense = att.defense / 2;
+            o += "Armor Piercing reduces defense of " + attacker.getDisplayName() + " to " + toStr(att.defense) + "\n";
+        }
 
 //        //! Reduce Df to 0 for an opponent of an Illusion
 //        if (attacker.has("Illusion") && !defender.has("Illusion Imm"))
@@ -852,15 +916,15 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         EDD_att += special_attack(attacker, defender, "Melee", o);
 
         //! First Strike: resolve casualties
-//        if (attacker.has("First Strike") && !defender.has("Negate First Strike"))
-//        {
-//            resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
-//            EDD_att = EDD_def = 0;
+        if (attacker.hasSpecial(UNITABILITY_First_Strike) && !defender.hasSpecial(UNITABILITY_Negate_First_Strike))
+        {
+            resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
+            EDD_att = EDD_def = 0;
 
-//            // End combat if anyone defeated
-//            if (attacker.total_hp() <= 0 || defender.total_hp() <= 0)
-//                break;
-//        }
+            // End combat if anyone defeated
+            if (attacker.total_hp() <= 0 || defender.total_hp() <= 0)
+                break;
+        }
 
         //! Defender attacks with Immolation, Life Steal, Poison, Touch, and regular Melee
 

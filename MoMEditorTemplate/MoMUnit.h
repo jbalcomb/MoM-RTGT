@@ -118,13 +118,16 @@ public:
     bool hasMissileRangedAttack() const;
     bool hasPhysicalRangedAttack() const;
     bool hasThrownRangedAttack() const;
+    bool hasSpecial(eCombatEnchantment combatEnchantment) const;
     bool hasSpecial(eHeroAbility heroAbility) const;
     bool hasSpecial(eItemPower itemPower) const;
     bool hasSpecial(eUnitAbility unitAbility) const;
-    bool hasSpecial(eUnitEnchantment unitAbility) const;
+    bool hasSpecial(eUnitEnchantment unitEnchantment) const;
     bool hasSpecial(eUnitMutation unitMutation) const;
 
-	bool isHero() const;
+    bool isFlying() const;
+    bool isHero() const;
+    bool isInvisible() const;
     bool isNormal() const;
     bool isSummoned() const;
 
