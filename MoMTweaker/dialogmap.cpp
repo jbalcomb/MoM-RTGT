@@ -17,6 +17,7 @@
 
 #include "dialogcalculatoraddress.h"
 #include "mainwindow.h"
+#include "MoMCombat.h"
 #include "MoMController.h"
 #include "MoMGenerated.h"
 #include "MoMExeWizards.h"
@@ -441,9 +442,14 @@ DialogMap::DialogMap(QWidget *parent) :
     QObject::connect(m_sceneArcanus, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
     QObject::connect(m_sceneMyrror, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
     QObject::connect(m_sceneBattle, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
-    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
-    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
-    QObject::connect(m_sceneBattle, SIGNAL(signal_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)), this, SLOT(slot_tileSelected(MoM::MoMLocation,QList<QGraphicsItem*>)));
+
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileSelected(MoM::MoMLocation)), this, SLOT(slot_tileSelected(MoM::MoMLocation)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileSelected(MoM::MoMLocation)), this, SLOT(slot_tileSelected(MoM::MoMLocation)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileSelected(MoM::MoMLocation)), this, SLOT(slot_tileSelected(MoM::MoMLocation)));
+
+    QObject::connect(m_sceneArcanus, SIGNAL(signal_tileDragged(MoM::MoMLocation,MoM::MoMLocation)), this, SLOT(slot_tileDragged(MoM::MoMLocation,MoM::MoMLocation)));
+    QObject::connect(m_sceneMyrror, SIGNAL(signal_tileDragged(MoM::MoMLocation,MoM::MoMLocation)), this, SLOT(slot_tileDragged(MoM::MoMLocation,MoM::MoMLocation)));
+    QObject::connect(m_sceneBattle, SIGNAL(signal_tileDragged(MoM::MoMLocation,MoM::MoMLocation)), this, SLOT(slot_tileDragged(MoM::MoMLocation,MoM::MoMLocation)));
 
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
@@ -1064,9 +1070,78 @@ void DialogMap::slot_tileChanged(const MoM::MoMLocation& loc)
     ui->label_Location->setText(QString("Location: (%1,%2)").arg(loc.m_XPos).arg(loc.m_YPos));
 }
 
-void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc, const QList<QGraphicsItem *> &graphicItems)
+void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &locTo)
 {
-    qDebug() << QString("slot_tileSelected(%0:(%1,%2), %3 items").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos).arg(graphicItems.count());
+    qDebug() << QString("slot_tileDragged(%0:(%1,%2) -> (%3,%4)")
+                .arg(prettyQStr(locFrom.m_Plane)).arg(locFrom.m_XPos).arg(locFrom.m_YPos)
+                .arg(locTo.m_XPos).arg(locTo.m_YPos);
+
+    MoM::MoMTerrain terrainFrom(m_game.data());
+    MoM::MoMTerrain terrainTo(m_game.data());
+    terrainFrom.setLocation(locFrom);
+    terrainTo.setLocation(locTo);
+
+    // TODO: Figure out the action:
+    //       1. Move (sub) stack of selected units
+    //       2. Attack with (sub) stack of selected units
+    //       3. Copy or move terrain feature
+    //       4. Copy or move terrain tile
+    std::vector<int> unitsFrom = terrainFrom.getUnits();
+    std::vector<int> unitsTo = terrainTo.getUnits();
+
+    qDebug() << QString("%0 units versus %1 units")
+                .arg(unitsFrom.size()).arg(unitsTo.size());
+
+    if ((unitsFrom.size() > 0) && (unitsTo.size() <= 0))
+    {
+        // Move stack
+        for (size_t i = 0; i < unitsFrom.size(); ++i)
+        {
+            Unit* unit = m_game->getUnit(unitsFrom[i]);
+            if (0 != unit)
+            {
+                Unit newUnit = *unit;
+                newUnit.m_XPos = locTo.m_XPos;
+                newUnit.m_YPos = locTo.m_YPos;
+                newUnit.m_Plane = locTo.m_Plane;
+                (void)m_game->commitData(unit, &newUnit, sizeof(Unit));
+            }
+        }
+        slot_gameUpdated();
+    }
+    else if ((unitsFrom.size() > 0) && (unitsTo.size() > 0))
+    {
+        // Simulate combat
+        MoMCombat::StackUnits attackers(unitsFrom.size());
+        MoMCombat::StackUnits defenders(unitsTo.size());
+
+        for (size_t i = 0; i < attackers.size(); ++i)
+        {
+            attackers[i] = CombatUnit(m_game.data());
+            CombatUnit& attacker = attackers[i];
+            attacker.changeUnit(m_game->getUnit(unitsFrom[i]));
+            attacker.m_simulatedDamage = attacker.getDamage();
+        }
+        for (size_t i = 0; i < defenders.size(); ++i)
+        {
+            defenders[i] = CombatUnit(m_game.data());
+            CombatUnit& defender = defenders[i];
+            defender.changeUnit(m_game->getUnit(unitsTo[i]));
+            defender.m_simulatedDamage = defender.getDamage();
+        }
+
+        MoMCombat combat;
+        int result = 0;
+        std::string ostr = combat.full_combat(attackers, defenders, result);
+        qDebug() << "Result = " << result;
+        qDebug() << ostr.c_str();
+        std::cout << ostr << std::endl;
+    }
+}
+
+void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
+{
+    qDebug() << QString("slot_tileSelected(%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos);
 
     ui->treeWidget_Tile->clear();
 

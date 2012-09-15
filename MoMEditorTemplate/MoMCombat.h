@@ -9,24 +9,55 @@
 
 namespace MoM {
 
+// TODO: - Split CombatUnit off in a separate file
+//       - Create a common MoMUnitBase class to allow proper overrides
 class CombatUnit : public MoMUnit
 {
 public:
-    explicit CombatUnit(class MoMGameBase* game) :
+    explicit CombatUnit(class MoMGameBase* game = 0) :
         MoMUnit(game),
-        damage()
+        m_simulatedDamage(),
+        m_suppressionCounter(),
+        m_rangedShots(),
+        m_currentMana()
     {
     }
 
-    double total_hp() const;
-    double cur_Nr() const;
+    /// Modifies MoMUnit::applyEffects() to make sure the extra fields are initialized
+    virtual void applyEffects();
 
-    double damage;
+    int getCurrentMana() const
+    {
+        return m_currentMana;
+    }
+    void setCurrentMana(int mana)
+    {
+        m_currentMana = mana;
+    }
+
+    int getCurRangedShots() const;
+    void decCurRangedShots();
+
+    int getSuppressionCounter() const;
+    void incSuppressionCounter();
+
+    double getMaxTotalHp() const;
+    double getCurTotalHp() const;
+    double getCurFiguresFrac() const;
+
+public:
+    double m_simulatedDamage;
+private:
+    int m_suppressionCounter;
+    int m_rangedShots;
+    int m_currentMana;
 };
 
 class MoMCombat
 {
 public:
+    typedef std::vector<CombatUnit> StackUnits;
+
     MoMCombat();
 
     //
@@ -148,9 +179,14 @@ public:
     //!
     //! UNDER DEVELOPMENT!!!
     //!
-    //! \param attacker The attacker
-    //! \param defender The defender
-    std::string full_combat(CombatUnit& attacker, CombatUnit& defender);
+    //! \param attackers The attackers
+    //! \param defenders The defenders
+    std::string full_combat(StackUnits& attackers, StackUnits& defenders, int& result);
+
+private:
+    static void countHitpointsUnits(const StackUnits& units, double& totalHitpoints, double& currentHitpoints);
+    static size_t countLivingUnits(const StackUnits& units);
+    static size_t findFirstLivingUnit(const StackUnits& units);
 
 private:
     bool m_verbose;

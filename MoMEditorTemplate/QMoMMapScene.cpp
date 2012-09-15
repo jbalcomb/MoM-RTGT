@@ -14,7 +14,8 @@ const int gBATTLE_SQUARE_HEIGHT = 8;
 QMoMMapScene::QMoMMapScene(MoM::ePlane plane, bool isBattlefield, QObject *parent) :
     QGraphicsScene(parent),
     m_plane(plane),
-    m_isBattlefield(isBattlefield)
+    m_isBattlefield(isBattlefield),
+    m_dragFrom()
 {
     QRectF rectfTile = MoM::QMoMMapTile(MoMLocation()).boundingRect();
     if (m_isBattlefield)
@@ -113,8 +114,6 @@ int QMoMMapScene::convertScenePosToZValue(const QPointF &scenePos) const
 
 void QMoMMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    QGraphicsScene::mouseMoveEvent(event);
-
     MoM::MoMLocation loc;
     convertScenePosToLocation(event->scenePos(), loc);
 
@@ -123,21 +122,23 @@ void QMoMMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
 void QMoMMapScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsScene::mousePressEvent(event);
+    convertScenePosToLocation(event->scenePos(), m_dragFrom);
+}
 
+void QMoMMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
     MoM::MoMLocation loc;
     convertScenePosToLocation(event->scenePos(), loc);
 
-    QList<QGraphicsItem*> sceneItems = items(Qt::AscendingOrder);
-    QList<QGraphicsItem*> curItems;
-    for (int i = 0; i < sceneItems.count(); ++i)
+    if (loc == m_dragFrom)
     {
-        if (sceneItems.at(i)->boundingRect().contains(sceneItems.at(i)->mapFromScene(event->scenePos())))
-        {
-            curItems.push_back(sceneItems.at(i));
-        }
+        emit signal_tileSelected(loc);
     }
-    emit signal_tileSelected(loc, curItems);
+    else
+    {
+        qDebug() << "Drag from " << m_dragFrom.m_XPos << m_dragFrom.m_YPos << " to " << loc.m_XPos << loc.m_YPos;
+        emit signal_tileDragged(m_dragFrom, loc);
+    }
 }
 
 }

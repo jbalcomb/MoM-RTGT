@@ -25,6 +25,12 @@ namespace MoM {
 #define MOM_FOREACH(type, var, max) \
     for (MoM::type var = (MoM::type)0; var < MoM::max; MoM::inc(var))
 
+template< typename T >
+inline T Abs(const T& x)
+{
+    return (x < 0 ? -x : x);
+}
+
 std::string dirFromFilepath(const std::string filepath);
 
 // Knuth–Morris–Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)

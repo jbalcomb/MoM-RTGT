@@ -62,7 +62,8 @@ private slots:
     void slot_gameUpdated();
     void slot_itemAction();
     void slot_tileChanged(const MoM::MoMLocation& loc);
-    void slot_tileSelected(const MoM::MoMLocation& loc, const QList<QGraphicsItem*>& graphicItems);
+    void slot_tileDragged(const MoM::MoMLocation& locFrom, const MoM::MoMLocation& locTo);
+    void slot_tileSelected(const MoM::MoMLocation& loc);
     void slot_timerActiveUnit();
 };
 

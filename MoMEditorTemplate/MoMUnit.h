@@ -83,8 +83,10 @@ public:
     int getConstructionSkill() const;
     int getCost() const;
     int getCurFigures() const;
+    int getDamage() const;
     std::string getDisplayName() const;
 	int getGazeModifier() const;
+    int getHeroAbility(eHeroAbility heroAbility) const;
     std::string getHeroName() const;
     ListSpells getHeroSpells() const;
     eHero_TypeCode getHeroTypeCode() const;
@@ -99,38 +101,51 @@ public:
     BaseAttributes getPenaltyAttributes() const;
     eRace getRace() const;
     std::string getRaceName() const;
-    int getRangedShots() const;
+    int getMaxRangedShots() const;
     eRanged_Type getRangedType() const;
     ListBuildings getRequiredBuildings() const;
     int getScouting() const;
-    int getSpecial(eHeroAbility heroAbility) const;
-    int getSpecial(eUnitAbility unitAbility) const;
     int getTransportCapacity() const;
+    int getUnitAbility(eUnitAbility unitAbility) const;
     std::string getUnitName() const;
     eUnit_Type getUnitTypeNr() const;
     int getUpkeep() const;
     eWeaponType getWeaponType() const;
     int getXP() const;
 
+    // Ranged and other special attacks
+    bool hasFireBreath() const;
+    bool hasIllusionaryAttack() const;
+    bool hasImmolation() const;
+    bool hasLightningBreath() const;
     bool hasMagicalBreathAttack() const;
     bool hasMagicalGazeAttack() const;
     bool hasMagicalRangedAttack() const;
     bool hasMissileRangedAttack() const;
     bool hasPhysicalRangedAttack() const;
     bool hasThrownRangedAttack() const;
-    bool hasSpecial(eCombatEnchantment combatEnchantment) const;
-    bool hasSpecial(eHeroAbility heroAbility) const;
-    bool hasSpecial(eItemPower itemPower) const;
-    bool hasSpecial(eUnitAbility unitAbility) const;
-    bool hasSpecial(eUnitEnchantment unitEnchantment) const;
-    bool hasSpecial(eUnitMutation unitMutation) const;
 
+    // Bitmask flags
+    bool hasCombatEnchantment(eCombatEnchantment combatEnchantment) const;
+    bool hasHeroAbility(eHeroAbility heroAbility) const;
+    bool hasItemPower(eItemPower itemPower) const;
+    bool hasMagicWeapon() const;
+    bool hasUnitAbility(eUnitAbility unitAbility) const;
+    bool hasUnitEnchantment(eUnitEnchantment unitEnchantment) const;
+    bool hasMutation(eUnitMutation unitMutation) const;
+
+    // Tests
+    bool isCaster() const;
+    bool isColor(eRealm_Type color) const;
     bool isFlying() const;
     bool isHero() const;
+    bool isImmune(eUnitAbility immunity) const;
     bool isInvisible() const;
+    bool isInvulnerable() const;
     bool isNormal() const;
     bool isSummoned() const;
 
+    // Commit data
     bool setBattleUnit(const Battle_Unit& value);
     bool setHeroStats(const Hero_stats& value);
     bool setHeroStatsInitializer(const Hero_Stats_Initializer& value);
@@ -138,21 +153,25 @@ public:
     bool setUnitInGame(const Unit& value);
     bool setUnitTypeData(const Unit_Type_Data& value);
 
-private:
+protected:
 
     /// \brief (Re)applies all effects
-    void applyEffects();
+    virtual void applyEffects();
 
+private:
     /// \brief (Re)applies effects of (hero) abilities
+    ///        However, spell like effects are applied in applySpells()
     void applyAbilities();
 
     /// \brief (Re)applies effects of items
+    ///        However, spell like effects are applied in applySpells()
     void applyItems();
 
     /// \brief (Re)applies effects of level
     void applyLevel();
 
     /// \brief (Re)applies effects of spells
+    ///        This includes spell like abilities and item powers
     void applySpells(const MoMUnit* enemy = 0);
 
     /// \brief (Re)applies effects of weapon type
@@ -163,6 +182,7 @@ private:
  
     void copyMemberData(const MoMUnit& rhs);
 
+private:
     // NOT IMPLEMENTED
 
     // CONFIG

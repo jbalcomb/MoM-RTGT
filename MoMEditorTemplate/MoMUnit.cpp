@@ -629,13 +629,24 @@ int MoMUnit::getCastingSkillBase() const
     {
         value = m_heroStatsInitializer->m_Hero_Casting_Skill;
     }
+    else if (hasUnitAbility(UNITABILITY_Caster_40_MP))
+    {
+        value = 40;
+    }
+    else if (hasUnitAbility(UNITABILITY_Caster_20_MP))
+    {
+        value = 20;
+    }
+    else
+    {
+    }
     return value;
 }
 
 int MoMUnit::getCastingSkillTotal() const
 {
     int value = getCastingSkillBase();
-    if (getLevel() > 0)
+    if (isHero() && (getLevel() > 0))
     {
         value = static_cast<int>(getLevel() * (1 + getCastingSkillBase()) * 5 / 2);
     }
@@ -678,6 +689,56 @@ int MoMUnit::getCurFigures() const
     {
     }
     return value;
+}
+
+int MoMUnit::getDamage() const
+{
+    int value = 0;
+    if (0 != m_battleUnit)
+    {
+        value = m_battleUnit->m_cur_total_damage_GUESS;
+    }
+    else if (0 != m_unit)
+    {
+        value = m_unit->m_Damage;
+    }
+    return value;
+}
+
+int MoMUnit::getHeroAbility(eHeroAbility heroAbility) const
+{
+    int bonus = 0;
+    int level = getLevel();
+    switch (heroAbility)
+    {
+    case HEROABILITY_Agility:          { bonus = level; break; }
+    case HEROABILITY_Agility_X:        { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Arcane_Power:     { bonus = level; break; }
+    case HEROABILITY_Arcane_Power_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Armsmaster:       { bonus = 2 * level; break; }
+    case HEROABILITY_Armsmaster_X:     { bonus = static_cast<int>(2 * level * 3 / 2); break; }
+    case HEROABILITY_Blademaster:      { bonus = static_cast<int>(level / 2); break; }
+    case HEROABILITY_Blademaster_X:    { bonus = static_cast<int>(level * 3 / 4); break; }
+//    case HEROABILITY_Caster:           { bonus = static_cast<int>(level * (1 + getCastingSkillBase()) * 5 / 2); break; }
+    case HEROABILITY_Constitution:     { bonus = level; break; }
+    case HEROABILITY_Constitution_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Leadership:       { bonus = static_cast<int>(level / 3); break; }
+    case HEROABILITY_Leadership_X:     { bonus = static_cast<int>(level / 2); break; }
+
+    case HEROABILITY_Legendary:        { bonus = 3 * level; break; }
+    case HEROABILITY_Legendary_X:      { bonus = static_cast<int>(3 * level * 3 / 2); break; }
+    case HEROABILITY_Lucky:            { break; }
+    case HEROABILITY_Might:            { bonus = level; break; }
+    case HEROABILITY_Might_X:          { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Noble:            { break; }
+    case HEROABILITY_Prayermaster:     { bonus = level; break; }
+    case HEROABILITY_Prayermaster_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
+    case HEROABILITY_Sage:             { bonus = 3 * level; break; }
+    case HEROABILITY_Sage_X:           { bonus = static_cast<int>(3 * level * 3 / 2); break; }
+
+    default:                           { break; }
+    }
+    return bonus;
 }
 
 int MoMUnit::getMaxFigures() const
@@ -736,7 +797,7 @@ std::string MoMUnit::getRaceName() const
     return name;
 }
 
-int MoMUnit::getRangedShots() const
+int MoMUnit::getMaxRangedShots() const
 {
     int value = 0;
     if (0 != m_unitType)
@@ -786,62 +847,6 @@ int MoMUnit::getScouting() const
     return value;
 }
 
-int MoMUnit::getSpecial(eHeroAbility heroAbility) const
-{
-    int bonus = 0;
-    int level = getLevel();
-    switch (heroAbility)
-    {
-    case HEROABILITY_Agility:          { bonus = level; break; }
-    case HEROABILITY_Agility_X:        { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Arcane_Power:     { bonus = level; break; }
-    case HEROABILITY_Arcane_Power_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Armsmaster:       { bonus = 2 * level; break; }
-    case HEROABILITY_Armsmaster_X:     { bonus = static_cast<int>(2 * level * 3 / 2); break; }
-    case HEROABILITY_Blademaster:      { bonus = static_cast<int>(level / 2); break; }
-    case HEROABILITY_Blademaster_X:    { bonus = static_cast<int>(level * 3 / 4); break; }
-//    case HEROABILITY_Caster:           { bonus = static_cast<int>(level * (1 + getCastingSkillBase()) * 5 / 2); break; }
-    case HEROABILITY_Constitution:     { bonus = level; break; }
-    case HEROABILITY_Constitution_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Leadership:       { bonus = static_cast<int>(level / 3); break; }
-    case HEROABILITY_Leadership_X:     { bonus = static_cast<int>(level / 2); break; }
-
-    case HEROABILITY_Legendary:        { bonus = 3 * level; break; }
-    case HEROABILITY_Legendary_X:      { bonus = static_cast<int>(3 * level * 3 / 2); break; }
-    case HEROABILITY_Lucky:            { break; }
-    case HEROABILITY_Might:            { bonus = level; break; }
-    case HEROABILITY_Might_X:          { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Noble:            { break; }
-    case HEROABILITY_Prayermaster:     { bonus = level; break; }
-    case HEROABILITY_Prayermaster_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Sage:             { bonus = 3 * level; break; }
-    case HEROABILITY_Sage_X:           { bonus = static_cast<int>(3 * level * 3 / 2); break; }
-
-    default:                           { break; }
-    }
-    return bonus;
-}
-
-int MoMUnit::getSpecial(eUnitAbility unitAbility) const
-{
-    int bonus = 0;
-    if (0 == m_unitType)
-        return 0;
-    switch (unitAbility)
-    {
-    case UNITABILITY_Holy_Bonus:
-    case UNITABILITY_Resistance_to_All:
-    case UNITABILITY_Poison_attack:
-    case UNITABILITY_Life_Stealing:
-    case UNITABILITY_Stoning_Touch:
-    case UNITABILITY_Death_Touch:
-    case UNITABILITY_Power_Drain:
-    case UNITABILITY_Dispel_Evil:     { bonus = m_unitType->m_Gaze_Modifier; break; }
-    default:                          { break; }
-    }
-    return bonus;
-}
-
 int MoMUnit::getTransportCapacity() const
 {
     int value = 0;
@@ -850,6 +855,40 @@ int MoMUnit::getTransportCapacity() const
         value = m_unitType->m_Transport_Capacity;
     }
     return value;
+}
+
+int MoMUnit::getUnitAbility(eUnitAbility unitAbility) const
+{
+    int bonus = 0;
+    if (0 == m_unitType)
+        return 0;
+
+    switch (unitAbility)
+    {
+    // Positive bonuses
+    case UNITABILITY_Holy_Bonus:
+    case UNITABILITY_Resistance_to_All:
+    case UNITABILITY_Poison_attack:
+        bonus = m_unitType->m_Gaze_Modifier;
+        break;
+
+    case UNITABILITY_Immolation:
+        bonus = 4;
+        break;
+
+    // Penalties
+    case UNITABILITY_Life_Stealing:
+    case UNITABILITY_Stoning_Touch:
+    case UNITABILITY_Death_Touch:
+    case UNITABILITY_Power_Drain:
+    case UNITABILITY_Dispel_Evil:
+        bonus = m_unitType->m_Gaze_Modifier;
+        break;
+
+    default:
+        break;
+    }
+    return bonus;
 }
 
 std::string MoMUnit::getUnitName() const
@@ -919,11 +958,30 @@ int MoMUnit::getXP() const
     return value;
 }
 
+bool MoMUnit::hasFireBreath() const
+{
+    return ((getRangedType() == MoM::RANGED_Fire_Breath) || hasMutation(UNITMUTATION_Chaos_Channels_Fiery_Breath));
+}
+
+bool MoMUnit::hasIllusionaryAttack() const
+{
+    return (hasUnitAbility(UNITABILITY_Illusionary_attack) || hasItemPower(ITEMPOWER_Phantasmal));
+}
+
+bool MoMUnit::hasImmolation() const
+{
+    return (hasUnitEnchantment(UNITENCHANTMENT_Immolation) || hasUnitAbility(UNITABILITY_Immolation));
+}
+
+bool MoMUnit::hasLightningBreath() const
+{
+    return ((getRangedType() == MoM::RANGED_Lightning_Breath) || hasItemPower(ITEMPOWER_Lightning));
+}
+
 bool MoMUnit::hasMagicalBreathAttack() const
 {
     eRanged_Type rangedType = getRangedType();
-    bool value = ((rangedType == MoM::RANGED_Fire_Breath)
-                  || (rangedType == MoM::RANGED_Lightning_Breath));
+    bool value = (hasFireBreath() || hasLightningBreath());
     return value;
 }
 
@@ -966,7 +1024,7 @@ bool MoMUnit::hasThrownRangedAttack() const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eCombatEnchantment combatEnchantment) const
+bool MoMUnit::hasCombatEnchantment(eCombatEnchantment combatEnchantment) const
 {
     bool value = false;
     if (m_battleUnit != 0)
@@ -976,7 +1034,7 @@ bool MoMUnit::hasSpecial(eCombatEnchantment combatEnchantment) const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eHeroAbility heroAbility) const
+bool MoMUnit::hasHeroAbility(eHeroAbility heroAbility) const
 {
     bool value = false;
     if (m_heroStats != 0)
@@ -994,7 +1052,7 @@ bool MoMUnit::hasSpecial(eHeroAbility heroAbility) const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eItemPower itemPower) const
+bool MoMUnit::hasItemPower(eItemPower itemPower) const
 {
     bool value = false;
     if ((m_game != 0) && (m_hiredHero != 0))
@@ -1012,7 +1070,34 @@ bool MoMUnit::hasSpecial(eItemPower itemPower) const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eUnitAbility unitAbility) const
+bool MoMUnit::hasMagicWeapon() const
+{
+    bool value = false;
+
+    if (!isNormal())
+    {
+        value = true;
+    }
+    else if ((getWeaponType() == WEAPON_magic) || (getWeaponType() == WEAPON_mithril) || (getWeaponType() == WEAPON_mithril))
+    {
+        value = true;
+    }
+    else if (hasUnitEnchantment(UNITENCHANTMENT_Eldritch_Weapon) || hasUnitAbility(UNITABILITY_Eldritch_Weapon_COMBAT)
+             || hasUnitEnchantment(UNITENCHANTMENT_Flame_Blade) || hasItemPower(ITEMPOWER_Flaming)
+             || hasUnitEnchantment(UNITENCHANTMENT_Holy_Weapon))
+    {
+        //TODO: GLOBALENCHANTMENT_Holy_Arms
+        //      BATTLEENCHANTMENT_Metal_Fires
+        value = true;
+    }
+    else
+    {
+        value = false;
+    }
+    return value;
+}
+
+bool MoMUnit::hasUnitAbility(eUnitAbility unitAbility) const
 {
     bool value = false;
     if (m_unitType != 0)
@@ -1039,7 +1124,7 @@ bool MoMUnit::hasSpecial(eUnitAbility unitAbility) const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eUnitEnchantment unitEnchantment) const
+bool MoMUnit::hasUnitEnchantment(eUnitEnchantment unitEnchantment) const
 {
     bool value = false;
     if (m_unit != 0)
@@ -1054,7 +1139,7 @@ bool MoMUnit::hasSpecial(eUnitEnchantment unitEnchantment) const
     return value;
 }
 
-bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
+bool MoMUnit::hasMutation(eUnitMutation unitMutation) const
 {
     bool value = false;
     if ((m_unit != 0) && (unitMutation >= UNITMUTATION_Chaos_Channels_Demon_Skin))
@@ -1064,12 +1149,56 @@ bool MoMUnit::hasSpecial(eUnitMutation unitMutation) const
     return value;
 }
 
+bool MoMUnit::isCaster() const
+{
+    return (getCastingSkillBase() > 0);
+}
+
+bool MoMUnit::isColor(eRealm_Type color) const
+{
+    bool value = false;
+
+    // TODO: Can a unit have more than 1 color?
+
+    if (0 != m_unitType)
+    {
+        switch (m_unitType->m_Race_Code)
+        {
+        case RACE_Arcane:   value = (color == REALM_Arcane); break;
+        case RACE_Nature:   value = (color == REALM_Nature); break;
+        case RACE_Sorcery:  value = (color == REALM_Sorcery); break;
+        case RACE_Chaos:    value = (color == REALM_Chaos); break;
+        case RACE_Life:     value = (color == REALM_Life); break;
+        case RACE_Death:    value = (color == REALM_Death); break;
+        }
+    }
+
+    if (hasUnitEnchantment(UNITENCHANTMENT_Black_Channels)
+        || hasMutation(UNITMUTATION_Undead))
+    {
+        value = (color == REALM_Death);
+    }
+
+    if (hasMutation(UNITMUTATION_Chaos_Channels_Demon_Skin)
+            || hasMutation(UNITMUTATION_Chaos_Channels_Demon_Wings)
+            || hasMutation(UNITMUTATION_Chaos_Channels_Fiery_Breath))
+    {
+        value = (color == REALM_Chaos);
+    }
+
+    return value;
+}
+
 bool MoMUnit::isFlying() const
 {
-    bool hasFlying = (hasSpecial(UNITABILITY_Flying) || hasSpecial(UNITABILITY_Flyer)
-                      || hasSpecial(ITEMPOWER_Flight) || hasSpecial(UNITENCHANTMENT_Flight));
-    bool isWebbed = hasSpecial(COMBATENCHANTMENT_Web);
-    isWebbed |= (m_battleUnit->m_web_ != 0);
+    bool hasFlying = (hasUnitAbility(UNITABILITY_Flying) || hasUnitAbility(UNITABILITY_Flyer)
+                      || hasItemPower(ITEMPOWER_Flight) || hasUnitEnchantment(UNITENCHANTMENT_Flight)
+                      || hasMutation(UNITMUTATION_Chaos_Channels_Demon_Wings));
+    bool isWebbed = hasCombatEnchantment(COMBATENCHANTMENT_Web);
+    if (0 != m_battleUnit)
+    {
+        isWebbed |= (m_battleUnit->m_web_ != 0);
+    }
     return (hasFlying && !isWebbed);
 }
 
@@ -1079,9 +1208,61 @@ bool MoMUnit::isHero() const
     return (toUInt(getUnitTypeNr()) < gMAX_HERO_TYPES);
 }
 
+bool MoMUnit::isImmune(eUnitAbility immunity) const
+{
+    bool value = false;
+    if ((immunity >= UNITABILITY_Fire_Immunity) && (immunity <= UNITABILITY_Weapon_Immunity))
+    {
+        value = hasUnitAbility(immunity);
+    }
+
+    switch (immunity)
+    {
+    case UNITABILITY_Fire_Immunity:
+    case UNITABILITY_Stoning_Immunity:
+    case UNITABILITY_Cold_Immunity:
+    case UNITABILITY_Death_Immunity:
+        value |= (       hasUnitAbility(UNITABILITY_Magic_Immunity)
+                  || hasUnitEnchantment(UNITENCHANTMENT_Magic_Immunity));
+        break;
+
+    case UNITABILITY_Magic_Immunity:
+        value |= hasUnitEnchantment(UNITENCHANTMENT_Magic_Immunity);
+
+    case UNITABILITY_Illusions_Immunity:
+        value |= (hasUnitEnchantment(UNITENCHANTMENT_True_Sight)
+                     || hasItemPower(ITEMPOWER_True_Sight));
+        break;
+
+    case UNITABILITY_Poison_Immunity:
+        // TODO: ?
+        break;
+
+    case UNITABILITY_Missiles_Immunity:
+        value |= (hasUnitEnchantment(UNITENCHANTMENT_Guardian_Wind)
+                     || hasItemPower(ITEMPOWER_Guardian_Wind));
+        break;
+
+    case UNITABILITY_Weapon_Immunity:
+        value |= isInvulnerable();
+        value |= (hasUnitEnchantment(UNITENCHANTMENT_Wraith_Form)
+                     || hasItemPower(ITEMPOWER_Wraith_Form));
+        break;
+    }
+
+    return value;
+}
+
 bool MoMUnit::isInvisible() const
 {
-    return (hasSpecial(UNITABILITY_Invisibility) || hasSpecial(ITEMPOWER_Invisibility) || hasSpecial(UNITENCHANTMENT_Invisibility));
+    return (hasUnitAbility(UNITABILITY_Invisibility) || hasItemPower(ITEMPOWER_Invisibility) || hasUnitEnchantment(UNITENCHANTMENT_Invisibility));
+    // TODO:        BATTLEENCHANTMENT_Mass_Invisibility
+}
+
+bool MoMUnit::isInvulnerable() const
+{
+    return (hasUnitEnchantment(UNITENCHANTMENT_Invulnerability)
+               || hasItemPower(ITEMPOWER_Invulnerability));
 }
 
 bool MoMUnit::isNormal() const
@@ -1160,35 +1341,36 @@ void MoMUnit::applyAbilities()
     int prayer_bonus = 0;
 
     // Hero specific
-    if (hasSpecial(HEROABILITY_Agility))        { up.defense += bonus = level; }
-    if (hasSpecial(HEROABILITY_Agility_X))      { up.defense += bonus = static_cast<int>(level * 3 / 2); }
-    if (hasSpecial(HEROABILITY_Arcane_Power))   { up.ranged += bonus = level; }
-    if (hasSpecial(HEROABILITY_Arcane_Power_X)) { up.ranged += bonus = static_cast<int>(level * 3 / 2); }
-    if (hasSpecial(HEROABILITY_Armsmaster))     { bonus = 2 * level; }
-    if (hasSpecial(HEROABILITY_Armsmaster_X))   { bonus = static_cast<int>(2 * level * 3 / 2); }
-    if (hasSpecial(HEROABILITY_Blademaster))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; }
-    if (hasSpecial(HEROABILITY_Blademaster_X))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; }
+    if (hasHeroAbility(HEROABILITY_Agility))        { up.defense += bonus = level; }
+    if (hasHeroAbility(HEROABILITY_Agility_X))      { up.defense += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Arcane_Power))   { up.ranged += bonus = level; }
+    if (hasHeroAbility(HEROABILITY_Arcane_Power_X)) { up.ranged += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Armsmaster))     { bonus = 2 * level; }
+    if (hasHeroAbility(HEROABILITY_Armsmaster_X))   { bonus = static_cast<int>(2 * level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Blademaster))    { up.toHitMelee += bonus = static_cast<int>(level / 2); up.toHitRanged += bonus; }
+    if (hasHeroAbility(HEROABILITY_Blademaster_X))  { up.toHitMelee += bonus = static_cast<int>(level * 3 / 4); up.toHitRanged += bonus; }
 //    if (has("Caster"))         { bonus = static_cast<int>(level * (1 + getCastingSkill()) * 5 / 2); set_special("Caster", bonus); }
-    if (hasSpecial(HEROABILITY_Constitution))   { up.hitpoints += bonus = level; }
-    if (hasSpecial(HEROABILITY_Constitution_X)) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Constitution))   { up.hitpoints += bonus = level; }
+    if (hasHeroAbility(HEROABILITY_Constitution_X)) { up.hitpoints += bonus = static_cast<int>(level * 3 / 2); }
 	// Treat Leadership bonus as gold bonus, since application depends on highest Leadership in group
-    if (hasSpecial(HEROABILITY_Leadership))     { up_gold.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
-    if (hasSpecial(HEROABILITY_Leadership_X))   { up_gold.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
+    if (hasHeroAbility(HEROABILITY_Leadership))     { up_gold.melee += bonus = static_cast<int>(level / 3); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
+    if (hasHeroAbility(HEROABILITY_Leadership_X))   { up_gold.melee += bonus = static_cast<int>(level / 2); if (hasMissileRangedAttack()) up_gold.ranged += static_cast<int>(bonus / 2); }
 
-    if (hasSpecial(HEROABILITY_Legendary))      { bonus = 3 * level; }
-    if (hasSpecial(HEROABILITY_Legendary_X))    { bonus = static_cast<int>(3 * level * 3 / 2); }
-    if (hasSpecial(HEROABILITY_Lucky))          { up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1; up.resistance += +1; }
-    if (hasSpecial(HEROABILITY_Might))          { up.melee += bonus = level; }
-    if (hasSpecial(HEROABILITY_Might_X))        { up.melee += bonus = static_cast<int>(level * 3 / 2); }
-    if (hasSpecial(HEROABILITY_Noble))          { ; }
-    if (hasSpecial(HEROABILITY_Prayermaster))   { bonus = level; prayer_bonus = Max(prayer_bonus, bonus); }
-    if (hasSpecial(HEROABILITY_Prayermaster_X)) { bonus = static_cast<int>(level * 3 / 2); prayer_bonus = Max(prayer_bonus, bonus); }
-    if (hasSpecial(HEROABILITY_Sage))           { bonus = 3 * level; }
-    if (hasSpecial(HEROABILITY_Sage_X))         { bonus = static_cast<int>(3 * level * 3 / 2);}
+    if (hasHeroAbility(HEROABILITY_Legendary))      { bonus = 3 * level; }
+    if (hasHeroAbility(HEROABILITY_Legendary_X))    { bonus = static_cast<int>(3 * level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Lucky)
+        || hasUnitAbility(UNITABILITY_Lucky))       { up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1; up.resistance += +1; }
+    if (hasHeroAbility(HEROABILITY_Might))          { up.melee += bonus = level; }
+    if (hasHeroAbility(HEROABILITY_Might_X))        { up.melee += bonus = static_cast<int>(level * 3 / 2); }
+    if (hasHeroAbility(HEROABILITY_Noble))          { ; }
+    if (hasHeroAbility(HEROABILITY_Prayermaster))   { bonus = level; prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasHeroAbility(HEROABILITY_Prayermaster_X)) { bonus = static_cast<int>(level * 3 / 2); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasHeroAbility(HEROABILITY_Sage))           { bonus = 3 * level; }
+    if (hasHeroAbility(HEROABILITY_Sage_X))         { bonus = static_cast<int>(3 * level * 3 / 2);}
 
     // Unit specific
-    if (hasSpecial(UNITABILITY_Holy_Bonus))     { bonus = getSpecial(UNITABILITY_Holy_Bonus); holy_bonus = Max(holy_bonus, bonus); }
-    if (hasSpecial(UNITABILITY_Resistance_to_All)) { bonus = getSpecial(UNITABILITY_Resistance_to_All); prayer_bonus = Max(prayer_bonus, bonus); }
+    if (hasUnitAbility(UNITABILITY_Holy_Bonus))     { bonus = getUnitAbility(UNITABILITY_Holy_Bonus); holy_bonus = Max(holy_bonus, bonus); }
+    if (hasUnitAbility(UNITABILITY_Resistance_to_All)) { bonus = getUnitAbility(UNITABILITY_Resistance_to_All); prayer_bonus = Max(prayer_bonus, bonus); }
 
     // Process holy_bonus (highest applies)
     up_gold.melee += holy_bonus;
@@ -1271,6 +1453,9 @@ void MoMUnit::applyLevel()
     m_upLevel = BaseAttributes();
     BaseAttributes& up = m_upLevel;
 
+    // TODO:
+    //    UNITENCHANTMENT_Heroism,          // 01
+
 	if (isHero())
 	{
 		switch (level)
@@ -1303,57 +1488,29 @@ void MoMUnit::applyLevel()
       }
 	}
 
+    // TODO: Node type
+//    enum eNode_Type ENUMSIZE8
+//    {
+//        NODETYPE_Sorcery = 0,
+//        NODETYPE_Nature = 1,
+//        NODETYPE_Chaos = 2,
+
+//        eNode_Type_MAX
+//    };
+
     up.toHitRanged = up.toHitMelee;
 
 //    // Add level bonus where appropriate
 //    this.add_bonus(up);
-    //    this.fixedunit.add_bonus(up);
+//    this.fixedunit.add_bonus(up);
 }
 
 void MoMUnit::applySpells(const MoMUnit *enemy)
 {
-    // TODO: other effects: spells
-
     m_dnSpells = BaseAttributes();
     m_upSpells = BaseAttributes();
     BaseAttributes& dn = m_dnSpells;
     BaseAttributes& up = m_upSpells;
-
-#define hasUnitEnchantment(spell) \
-    ((m_unit && m_unit->m_Unit_Enchantment.s.spell) \
-            || (m_battleUnit && (m_battleUnit->m_Flags1_UnitEnchantment.s.spell \
-                                 || m_battleUnit->m_Flags2_UnitEnchantment.s.spell)))
-
-    //
-    // First process spells on which other spells may depend (such as unit_type)
-    //
-
-    //    if (spell_active("Black Channels"))
-    if (hasUnitEnchantment(Black_Channels))
-    {
-        up.melee += +3; up.ranged += +1; up.hitpoints += +1; up.resistance += +1; up.defense += +1;
-        // add_special("Undead");
-    }
-
-    //if (spell_active("Chaos Channel"))
-    if (m_unit && m_unit->m_Weapon_Mutation.s.Chaos_Channels_Demon_Skin)
-    {
-        up.defense += +2;
-    }
-    if (m_unit && m_unit->m_Weapon_Mutation.s.Chaos_Channels_Demon_Wings)
-    {
-//        if (!has("Flying"))
-//            add_special("Flying", 2);
-//        else if (get_special("Flying") < 2)
-//            set_special("Flying", 2);
-    }
-    if (m_unit && m_unit->m_Weapon_Mutation.s.Chaos_Channels_Fiery_Breath)
-    {
-//        if (!has("Fire Breath"))
-//            add_special("Fire Breath", 2);
-//        else if (get_special("Fire Breath") < 2)
-//            set_special("Fire Breath", 2);
-    }
 
     //
     // Process the regular spells
@@ -1361,7 +1518,12 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 
     // "Berserk" is processed last (after other effects on Me and Df)
 
-    // "Black Channels" is processed earlier (before other effects depending on unit_type)
+    //    if (spell_active("Black Channels"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Black_Channels))
+    {
+        up.melee += +3; up.ranged += +1; up.hitpoints += +1; up.resistance += +1; up.defense += +1;
+        // add_special("Undead");
+    }
 
 //    if (spell_active("Black Prayer"))
 //    {
@@ -1370,22 +1532,43 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 
     // "Black Sleep" is processed last (after other effects on Me/Ra/Df/Re)
 
-//    if (spell_active("Bless"))
-//    {
-//        if (enemy && (enemy.is_type("Death") || enemy.is_type("Chaos")))
-//        {
-//            // [Manual] says Df/Re+2, but [Game] and [Strategy Guide] say Df/Re+3.
-//            // TODO: Df/Re only against R&G Melee, All Breath, R&G Magic Ranged, R&G Spells
-//            up.Df += +3;
-//            up.Re += +3;
-//        }
-//    }
+    //if (spell_active("Bless"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Bless)
+           || hasItemPower(ITEMPOWER_Bless))
+    {
+        if (enemy && (enemy->isColor(REALM_Death) || enemy->isColor(REALM_Chaos)))
+        {
+            // [Manual] says Df/Re+2, but [Game] and [Strategy Guide] say Df/Re+3.
+            // TODO: Df/Re only against R&G Melee, All Breath, R&G Magic Ranged, R&G Spells
+            up.defense += +3;
+            up.resistance += +3;
+        }
+    }
 
-    // "Blur" is processed last (after possible True Sightn)
+    // "Blur" is processed last (after possible True Sight)
 
-    // "Chaos Channel" is processed earlier (before other effects depending on unit_type)
+    //        BATTLEENCHANTMENT_Call_Lightning,       // 12-13
+
+    //if (spell_active("Chaos Channel"))
+    if (hasMutation(UNITMUTATION_Chaos_Channels_Demon_Skin))
+    {
+        up.defense += +2;
+    }
+    if (hasMutation(UNITMUTATION_Chaos_Channels_Demon_Wings))
+    {
+        // TODO: effect on move
+//        if (!has("Flying"))
+//            add_special("Flying", 2);
+//        else if (get_special("Flying") < 2)
+//            set_special("Flying", 2);
+    }
+    if (hasMutation(UNITMUTATION_Chaos_Channels_Fiery_Breath))
+    {
+        // Strength of fire breath handled in MoMCombat
+    }
 
 //    if ((spell_active("Chaos Surge") || enemy && enemy.spell_active("Chaos Surge")) && is_type("Chaos"))
+//    GLOBALENCHANTMENT_Chaos_Surge, // 88 Offset EXE:2B440
 //    {
 //        if (baseunit.Me) up.Me += +2; if (baseunit.Ra) up.Ra += +2;
 //        // [Strategy Guide]
@@ -1393,16 +1576,30 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //    }
 
 //    if (spell_active("Charm of Life"))
+//    GLOBALENCHANTMENT_Charm_of_Life, // 9E Offset EXE:2B456
 //    {
 //        up.Hp += +Math.max(1, Math.floor(Hp / 4));
 //    }
 
+    //        BATTLEENCHANTMENT_Counter_Magic,        // 14-15
+
+//    GLOBALENCHANTMENT_Crusade, // 96 Offset EXE:2B44E
+
 //    if (spell_active("Cloak of Fear"))
+    //        BATTLEENCHANTMENT_Terror,               // 10-11
+    //    UNITENCHANTMENT_Cloak_of_Fear,    // 08
+//    UNITABILITY_Cause_Fear_Spell,     // 20
+    //     ITEMPOWER_Cloak_Of_Fear,
 //    {
 //        // Each turn each opposing unit must resist (Re +1) or cower in fear (cannot attack, but can still counter)
 //    }
 
+    //        BATTLEENCHANTMENT_Dark_Prayer,          // 06-07
+
 //    if (spell_active("Darkness") || enemy && enemy.spell_active("Darkness"))
+    //        BATTLEENCHANTMENT_Darkness,             // 02-03
+//    CITYENCH_Cloud_of_Shadow, // 4C Offset EXE:2B404
+//    GLOBALENCHANTMENT_Eternal_Night, // 74 Offset EXE:2B42C
 //    {
 //        if (is_type("Death"))
 //        {
@@ -1414,94 +1611,119 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //        }
 //    }
 
-//    if (spell_active("Eldritch Weapon"))
-//    {
-//        if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
-//    }
-//    if (enemy && enemy.spell_active("Eldritch Weapon"))
-//    {
-//        dn.Tb += +1;                              // The To-Block (Tb) of the enemy is reduced by 1
-//    }
+    //     ITEMPOWER_Death,
+    //     ITEMPOWER_Destruction,
+    //     ITEMPOWER_Doom_equals_Chaos,
 
-//    if (spell_active("Elemental Armor"))
-//    {
-//        // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
-//        // up.Df += +10;
-//        up.Re += +10;
-//    }
+    //if (spell_active("Eldritch Weapon"))
+    // TODO: UNITABILITY_Eldritch_Weapon_COMBAT;   // 40
+    if (enemy && enemy->hasUnitEnchantment(UNITENCHANTMENT_Eldritch_Weapon))
+    {
+        dn.toDefend += +1;                              // The To-Block (Tb) of the enemy is reduced by 1
+    }
+
+    //if (spell_active("Elemental Armor"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Elemental_Armor)
+           || hasItemPower(ITEMPOWER_Elemental_Armour))
+    {
+        // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
+        // up.Df += +10;
+        up.resistance += +10;
+    }
+    else if (hasUnitEnchantment(UNITENCHANTMENT_Resist_Elements)
+           || hasItemPower(ITEMPOWER_Resist_Elements))
+    {
+        if (enemy && (enemy->isColor(REALM_Chaos) || enemy->isColor(REALM_Nature)))
+        {
+            // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
+            // Df+=3
+            up.resistance += +3;
+        }
+    }
+
+    if (hasUnitEnchantment(UNITENCHANTMENT_Endurance)
+           || hasItemPower(ITEMPOWER_Endurance))
+    {
+        up.moves += 1.0;
+    }
+
+    //        BATTLEENCHANTMENT_Entangle,             // 18-19
 
     //if (spell_active("Flame Blade"))
-    if (hasUnitEnchantment(Flame_Blade))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Flame_Blade)
+           || hasItemPower(ITEMPOWER_Flaming))
     {
         up.melee += +2; if (hasMissileRangedAttack()) up.ranged += +2;
-//        if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
     }
 
 //    if (spell_active("Flight") && !has("Flying"))
+    //    UNITENCHANTMENT_Flight,           // 02
+    //     ITEMPOWER_Flight,
 //    {
 //        add_special("Flying", 0);                 // ??? amount = landbased move + 1
 //    }
 
     //if (spell_active("Giant Strength"))
-    if (hasUnitEnchantment(Giant_Strength))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Giant_Strength)
+           || hasItemPower(ITEMPOWER_Giant_Strength))
     {
         up.melee += +1; if (hasThrownRangedAttack()) up.ranged += +1;
     }
 
-//    if (spell_active("Guardian Wind"))
-//    {
-//        add_special("Missile Imm");
-//    }
+    // "Guardian Wind" is handled in isImmune()
 
     // "Haste" is processed last (after other effects on Me and Ra)
 
+    //    UNITENCHANTMENT_Heroism,          // 01
+
 //    if (spell_active("High Prayer"))
+    //        BATTLEENCHANTMENT_High_Prayer,          // 0E-0F
 //    {
 //        if (baseunit.Me) up.Me += +2; up.Df += +2; up.Re += +3; up.Th += +1; up.Th_Ra += +1; up.Tb += +1;
 //    }
 
     //if (spell_active("Holy Armor"))
-    if (hasUnitEnchantment(Holy_Armor))
+    // TODO: Doesn't stack
+    if (hasUnitEnchantment(UNITENCHANTMENT_Holy_Armor))
     {
         up.defense += +2;
     }
 
+    //     ITEMPOWER_Holy_Avenger,
+
     //if (spell_active("Holy Weapon"))
-    if (hasUnitEnchantment(Holy_Weapon))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Holy_Weapon))
+//        GLOBALENCHANTMENT_Holy_Arms, // 9A Offset EXE:2B452
     {
 //        if (Me) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
         up.toHitMelee += +1;
         if (hasPhysicalRangedAttack()) up.toHitRanged += +1;
     }
 
-//    if (spell_active("Immolation"))
-//    {
-//        if (has("Immolation"))
-//            set_special("Immolation", Math.max(get_special("Immolation"), 4));
-//        else
-//            add_special("Immolation", 4);
-//    }
+    // "Immolation" handled in hasImmolation()
 
-//    if (spell_active("Invisibility"))
-//    {
-//        add_special("Invisibility");
-//    }
-
+    // "Invisibility" is handled in isInvisible()
     // Actual effect of "Invisibility" is processed last (after possible True Sight)
 
-//    if (spell_active("Invulnerability"))
-//    {
-//        add_special("Weapon Imm");
-//    }
+    // "Invulnerability" is handled in isImmune()
 
     //if (spell_active("Iron Skin"))
-    if (hasUnitEnchantment(Iron_Skin))
+    // TODO: Doesn't stack
+    if (hasUnitEnchantment(UNITENCHANTMENT_Iron_Skin))
     {
         up.defense += +5;
     }
+    //if (spell_active("Stone Skin"))
+    else if (hasUnitEnchantment(UNITENCHANTMENT_Stone_Skin))
+    {
+        up.defense += +1;
+    }
+
+    //     ITEMPOWER_Lightning,
 
     //if (spell_active("Lion Heart"))
-    if (hasUnitEnchantment(Lionheart))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Lionheart)
+           || hasItemPower(ITEMPOWER_Lion_Heart))
     {
         // [Manual] says Me/Ra/Hp/Re +2, but [Game] shows Me/Ra/Hp/Re +3.
         up.melee += +3;
@@ -1510,12 +1732,14 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
         up.resistance += +3;
     }
 
-//    if (spell_active("Magic Immunity"))
-//    {
-//        add_special("Magic Imm");
-//    }
+    // "Magic Immunity" is handled in isImmune()
+
+    //        BATTLEENCHANTMENT_Mana_Leak,            // 1A-1B
+
+    //     ITEMPOWER_Merging,
 
 //    if (spell_active("Metal Fires"))
+    //        BATTLEENCHANTMENT_Metal_Fires,          // 0A-0B
 //    {
 //        if (this.is_type("Normal") && !spell_active("Flame Blade"))
 //        {
@@ -1524,7 +1748,19 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //        }
 //    }
 
-//    if (spell_active("Prayer"))
+//    COMBATENCHANTMENT_Mind_Storm,           // 08
+//    COMBATENCHANTMENT_Mind_Twist,           // 04
+    //    UNITENCHANTMENT_Path_Finding,     // 80
+    //    UNITENCHANTMENT_Planar_Travel,    // 10
+
+    //     ITEMPOWER_Pathfinding,
+
+    //     ITEMPOWER_Phantasmal,
+    //     ITEMPOWER_Planar_Travel,
+    //     ITEMPOWER_Power_Drain,
+
+  //if (spell_active("Prayer"))
+      //        BATTLEENCHANTMENT_Prayer,               // 0C-0D
 //    {
 //        // Verified 2010-11-13 with [Tweaker] that Prayer and High Prayer do not stack
 //        if (!spell_active("High Prayer"))
@@ -1534,42 +1770,40 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //    }
 
 //    if (spell_active("Regeneration"))
+    //    UNITENCHANTMENT_Regeneration,     // 40
+//    UNITABILITY_Regeneration,         // 20
+      //     ITEMPOWER_Regeneration,
 //    {
 //        add_special("Regeneration");
 //    }
 
-//    if (spell_active("Resist Elements"))
-//    {
-//        if (!spell_active("Elemental Armor"))
-//        {
-//            if (enemy && (enemy.is_type("Chaos") || enemy.is_type("Nature")))
-//            {
-//                // TODO: Df/Re only against All Breath, R&G Magic Ranged, R&G Spells
-//                // Df+=3
-//                up.Re += +3;
-//            }
-//        }
-//    }
+    // "Resist Elements" is handled after "Elemental Armor" since they don't stack
 
-//    if (spell_active("Resist Magic"))
-//    {
-//        up.Re += +5;
-//    }
+    //if (spell_active("Resist Magic"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Resist_Magic)
+           || hasItemPower(ITEMPOWER_Resist_Magic))
+    {
+        up.resistance += +5;
+    }
 
-//    if (spell_active("Righteousness"))
-//    {
-//        // TODO: Df/Re only against All Breath, B&R Magic Ranged, B&R Spells
-//        // Df = (50)
-//        up.Re += +30;
-//    }
+    //if (spell_active("Righteousness"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Resist_Magic)
+           || hasItemPower(ITEMPOWER_Resist_Magic))
+    {
+        // TODO: Df/Re only against All Breath, B&R Magic Ranged, B&R Spells
+        // Df = (50)
+        up.resistance += +30;
+    }
 
     // "Shatter" is processed last (after other effects on Me/Ra/Df/Re)
 
-    //if (spell_active("Stone Skin"))
-    if (hasUnitEnchantment(Stone_Skin))
-    {
-        up.defense += +1;
-    }
+    //    UNITENCHANTMENT_Spell_Lock,       // 40
+//    UNITMUTATION_Stasis_initial,                // 40
+//    UNITMUTATION_Stasis_lingering,              // 80
+
+    // "Stone Skin" is handled together with "Iron Skin"
+
+  //     ITEMPOWER_Stoning,
 
 //    if (spell_active("Terror"))
 //    {
@@ -1577,6 +1811,8 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //    }
 
 //    if (spell_active("True Light") || enemy && enemy.spell_active("True Light"))
+    //        BATTLEENCHANTMENT_True_Light,           // 00-01    1=True Light (Battle), 2=Heavenly Light (City) / Cloud of Shadow (City), 3=Eternal Darkness (Global)
+//    CITYENCH_Heavenly_Light, // 6A Offset EXE:2B422
 //    {
 //        if (is_type("Life"))
 //        {
@@ -1588,13 +1824,14 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //        }
 //    }
 
-//    if (spell_active("True Sight"))
-//    {
-//        add_special("Illusion Imm");
-//    }
+    // "True Sight" is handled in isImmune()
+
+  //    UNITMUTATION_Undead,                        // 20
+
+  //     ITEMPOWER_Vampiric = 0,
 
     //if (spell_active("Vertigo"))
-    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.s.Vertigo)
+    if (hasCombatEnchantment(COMBATENCHANTMENT_Vertigo))
     {
         dn.toHitMelee += +2;
         dn.toHitRanged += +2;
@@ -1604,6 +1841,7 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
     // "Warp Creature" is processed last (after other effects on Me/Ra/Df/Re)
 
 //    if (spell_active("Warp Reality") || enemy && enemy.spell_active("Warp Reality"))
+            //        BATTLEENCHANTMENT_Warp_Reality,         // 04-05
 //    {
 //        if (!is_type("Chaos")) { dn.Th += +2; dn.Th_Ra += +2; }
 //    }
@@ -1614,20 +1852,32 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //        if (has("Bullets")) set_special("Bullets", 0);
 //    }
 
+            //    UNITENCHANTMENT_Water_Walking,    // 01
+            //     ITEMPOWER_Water_Walking,
+
     //if (spell_active("Weakness"))
-    if (m_battleUnit && m_battleUnit->m_Flags_Combat_Enchantment.s.Weakness)
+    if (hasCombatEnchantment(COMBATENCHANTMENT_Weakness))
     {
         dn.melee += +2; if (hasMissileRangedAttack()) dn.ranged += +2;
     }
 
     // "Web" is processed last (after Flight and Wraith Form)
 
+//    COMBATENCHANTMENT_Whirlwind,            // 04
+
+//    UNITENCHANTMENT_Wind_Walking,     // 01
+//        UNITABILITY_Wind_Walking,         // 10
+
 //    if (spell_active("Wrack"))
+        //        BATTLEENCHANTMENT_Wrack,                // 08-09
 //    {
 //        // each enemy figure resists or loses 1 hp per turn
 //    }
 
+        //        UNITABILITY_Non_Corporeal,        // 08
 //    if (spell_active("Wraith Form"))
+//    UNITENCHANTMENT_Wraith_Form,      // 20
+        //     ITEMPOWER_Wraith_Form,
 //    {
 //        add_special("Weapon Imm");
 //        add_special("Non Corporeal");
@@ -1638,28 +1888,33 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
     // Process the spells last that must be processed after other spells
     //
 
-//    if (spell_active("Berserk"))
-//    {
+    //   if (spell_active("Berserk"))
+    if (hasUnitEnchantment(UNITENCHANTMENT_Berserk))
+    {
 //        up.Me += Me; dn.Df += Df;
-//    }
+    }
 
-//    if (spell_active("Black Sleep"))
-//    {
-//        // Chance to resist initially.
-//        // Me, Ra, Df are effective reduced to zero.
+    //if (spell_active("Black Sleep"))
+    if (hasCombatEnchantment(COMBATENCHANTMENT_Black_Sleep))
+    {
+        // Chance to resist initially.
+        // Me, Ra, Df are effective reduced to zero.
 //        dn.Me = Me + up.Me;
 //        dn.Ra = Ra + up.Ra;
 //        dn.Df = Df + up.Df;
-//    }
+    }
 
 //    if (enemy && enemy.spell_active("Blur") && !has("Illusion Imm"))
+//        BATTLEENCHANTMENT_Blur,                 // 1C-1D
 //    {
 //        // TODO: Proper processing: ignore 10% of hits or something like that
 //        dn.Th += +1;
 //        dn.Th_Ra += +1;
 //    }
 
-//    if (spell_active("Haste"))
+    //if (spell_active("Haste"))
+//    COMBATENCHANTMENT_Haste,                // 08
+        //     ITEMPOWER_Haste,
 //    {
 //        if (baseunit.Me) up.Me += Me; if (baseunit.Ra) up.Ra += Ra;
 //    }
@@ -1670,14 +1925,18 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
 //        dn.Th_Ra += +1;
 //    }
 
-//    if (spell_active("Shatter"))
-//    {
-//        // Resist or Me=Ra=1
-//        dn.Me = Math.max(0, Me + up.Me - 1);
-//        dn.Ra = Math.max(0, Ra + up.Ra - 1);
-//    }
+    //if (spell_active("Shatter"))
+    if (hasCombatEnchantment(COMBATENCHANTMENT_Shatter))
+    {
+        // Resist or Me=Ra=1
+//        dn.Me = Max(0, Me + up.Me - 1);
+//        dn.Ra = Max(0, Ra + up.Ra - 1);
+    }
 
 //    if (spell_active("Warp Creature"))
+        //    COMBATENCHANTMENT_Warp_Creature_Attack, // 80
+        //    COMBATENCHANTMENT_Warp_Creature_Defense,    // 01
+        //    COMBATENCHANTMENT_Warp_Creature_Resistance, // 02
 //    {
 //        // Resist at -1 or (Me/2 or Df/2 or Re=0)
 //        switch (1 * spells[ "Warp Creature" ])

@@ -70,6 +70,27 @@ enum eBannerColor ENUMSIZE16
     eBannerColor__SIZE__ = 0xFFFF
 };
 
+enum eBattleEnchantment
+{
+    BATTLEENCHANTMENT_True_Light,           // 00-01    1=True Light (Battle), 2=Heavenly Light (City) / Cloud of Shadow (City), 3=Eternal Darkness (Global)
+    BATTLEENCHANTMENT_Darkness,             // 02-03
+    BATTLEENCHANTMENT_Warp_Reality,         // 04-05
+    BATTLEENCHANTMENT_Dark_Prayer,          // 06-07
+    BATTLEENCHANTMENT_Wrack,                // 08-09
+    BATTLEENCHANTMENT_Metal_Fires,          // 0A-0B
+    BATTLEENCHANTMENT_Prayer,               // 0C-0D
+    BATTLEENCHANTMENT_High_Prayer,          // 0E-0F
+    BATTLEENCHANTMENT_Terror,               // 10-11
+    BATTLEENCHANTMENT_Call_Lightning,       // 12-13
+    BATTLEENCHANTMENT_Counter_Magic,        // 14-15
+    BATTLEENCHANTMENT_Mass_Invisibility,    // 16-17
+    BATTLEENCHANTMENT_Entangle,             // 18-19
+    BATTLEENCHANTMENT_Mana_Leak,            // 1A-1B
+    BATTLEENCHANTMENT_Blur,                 // 1C-1D
+
+    eBattleEnchantment_MAX
+};
+
 enum eBattleUnitActive ENUMSIZE8
 {
     BATTLEUNITACTIVE_alive = 0,
@@ -386,6 +407,36 @@ enum eGameState ENUMSIZE16
     STATE_Info = 14,
     STATE_Diplomacy = 15,
     STATE_Computers_turn_GUESS = 0xFFFF
+};
+
+enum eGlobalEnchantment
+{
+    GLOBALENCHANTMENT_Eternal_Night, // 74 Offset EXE:2B42C
+    GLOBALENCHANTMENT_Evil_Omens, // 76 Offset EXE:2B42E
+    GLOBALENCHANTMENT_Zombie_Mastery, // 78 Offset EXE:2B430
+    GLOBALENCHANTMENT_Aura_of_Majesty, // 7A Offset EXE:2B432
+    GLOBALENCHANTMENT_Wind_Mastery, // 7C Offset EXE:2B434
+    GLOBALENCHANTMENT_Suppress_Magic, // 7E Offset EXE:2B436
+    GLOBALENCHANTMENT_Time_Stop, // 80 Offset EXE:2B438
+    GLOBALENCHANTMENT_Nature_Awareness, // 82 Offset EXE:2B43A
+    GLOBALENCHANTMENT_Natures_Wrath, // 84 Offset EXE:2B43C
+    GLOBALENCHANTMENT_Herb_Mastery, // 86 Offset EXE:2B43E
+    GLOBALENCHANTMENT_Chaos_Surge, // 88 Offset EXE:2B440
+    GLOBALENCHANTMENT_Doom_Mastery, // 8A Offset EXE:2B442
+    GLOBALENCHANTMENT_Great_Wasting, // 8C Offset EXE:2B444
+    GLOBALENCHANTMENT_Meteor_Storm, // 8E Offset EXE:2B446
+    GLOBALENCHANTMENT_Armageddon, // 90 Offset EXE:2B448
+    GLOBALENCHANTMENT_Tranquility, // 92 Offset EXE:2B44A
+    GLOBALENCHANTMENT_Life_Force, // 94 Offset EXE:2B44C
+    GLOBALENCHANTMENT_Crusade, // 96 Offset EXE:2B44E
+    GLOBALENCHANTMENT_Just_Cause, // 98 Offset EXE:2B450
+    GLOBALENCHANTMENT_Holy_Arms, // 9A Offset EXE:2B452
+    GLOBALENCHANTMENT_Planar_Seal, // 9C Offset EXE:2B454
+    GLOBALENCHANTMENT_Charm_of_Life, // 9E Offset EXE:2B456
+    GLOBALENCHANTMENT_Detect_Magic, // A0 Offset EXE:2B458
+    GLOBALENCHANTMENT_Awareness, // A2 Offset EXE:2B45A
+
+    eGlobalEnchantment_MAX
 };
 
 enum eGrand_Vizier ENUMSIZE16

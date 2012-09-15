@@ -26,16 +26,19 @@ public:
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 public slots:
 
 signals:
     void signal_tileChanged(const MoM::MoMLocation& loc);
-    void signal_tileSelected(const MoM::MoMLocation& loc, const QList<QGraphicsItem*>& graphicItems);
+    void signal_tileDragged(const MoM::MoMLocation& locFrom, const MoM::MoMLocation& locTo);
+    void signal_tileSelected(const MoM::MoMLocation& loc);
 
 private:
     MoM::ePlane m_plane;
     bool m_isBattlefield;
+    MoMLocation m_dragFrom;
 };
 
 }

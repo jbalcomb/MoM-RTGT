@@ -267,7 +267,7 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
 
     MOM_FOREACH(eItemPower, itemPower, eItemPower_MAX)
     {
-        if (m_unit->hasSpecial(itemPower))
+        if (m_unit->hasItemPower(itemPower))
         {
             QString specialName = prettyQStr(itemPower);
             displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(itemPower).c_str());  // TODO: Lookup images for item effects
@@ -276,11 +276,11 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
 
     if (m_unit->hasMissileRangedAttack())
     {
-        displaySpecial(pos, "Arrows", m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+        displaySpecial(pos, "Arrows", m_unit->getMaxRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
     }
-    else if (m_unit->hasMagicalRangedAttack() && m_unit->getRangedShots() > 0)
+    else if (m_unit->hasMagicalRangedAttack() && m_unit->getMaxRangedShots() > 0)
     {
-        displaySpecial(pos, "Spells", m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+        displaySpecial(pos, "Spells", m_unit->getMaxRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
     }
     else if (m_unit->hasMagicalBreathAttack())
     {
@@ -295,9 +295,9 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
         }
         displaySpecial(pos, prettyQStr(m_unit->getRangedType()), specialValue, ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
     }
-    else if (m_unit->getRangedShots() > 0)
+    else if (m_unit->getMaxRangedShots() > 0)
     {
-        displaySpecial(pos, prettyQStr(m_unit->getRangedType()), m_unit->getRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
+        displaySpecial(pos, prettyQStr(m_unit->getRangedType()), m_unit->getMaxRangedShots(), ":/abilities/", m_game->getHelpText(m_unit->getRangedType()).c_str());  // TODO: Lookup images for item effects
     }
     else
     {
@@ -325,23 +325,23 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
     }
     MOM_FOREACH(eHeroAbility, heroAbility, eHeroAbility_MAX)
     {
-        if (m_unit->hasSpecial(heroAbility))
+        if (m_unit->hasHeroAbility(heroAbility))
         {
             QString specialName = prettyQStr(heroAbility);
-            displaySpecial(pos, specialName, m_unit->getSpecial(heroAbility), ":/abilities/", m_game->getHelpText(heroAbility).c_str());    // TODO: Lookup images
+            displaySpecial(pos, specialName, m_unit->getHeroAbility(heroAbility), ":/abilities/", m_game->getHelpText(heroAbility).c_str());    // TODO: Lookup images
         }
     }
     MOM_FOREACH(eUnitAbility, unitAbility, eUnitAbility_MAX)
     {
-        if (m_unit->hasSpecial(unitAbility))
+        if (m_unit->hasUnitAbility(unitAbility))
         {
             QString specialName = prettyQStr(unitAbility);
-            displaySpecial(pos, specialName, m_unit->getSpecial(unitAbility), ":/abilities/", m_game->getHelpText(unitAbility).c_str());    // TODO: Lookup images
+            displaySpecial(pos, specialName, m_unit->getUnitAbility(unitAbility), ":/abilities/", m_game->getHelpText(unitAbility).c_str());    // TODO: Lookup images
         }
     }
     MOM_FOREACH(eUnitMutation, unitMutation, eUnitMutation_MAX)
     {
-        if (m_unit->hasSpecial(unitMutation))
+        if (m_unit->hasMutation(unitMutation))
         {
             QString specialName = prettyQStr(unitMutation);
             displaySpecial(pos, specialName, 0, ":/abilities/", m_game->getHelpText(unitMutation).c_str());    // TODO: Lookup images
@@ -349,7 +349,7 @@ void DialogAddUnit::displaySectionSpecials(QPointF &pos)
     }
     MOM_FOREACH(eUnitEnchantment, unitEnchantment, eUnitEnchantment_MAX)
     {
-        if (m_unit->hasSpecial(unitEnchantment))
+        if (m_unit->hasUnitEnchantment(unitEnchantment))
         {
             QString specialName = prettyQStr(unitEnchantment);
             displaySpecial(pos, specialName, 0, ":/spells/", m_game->getHelpText(unitEnchantment).c_str());    // TODO: Lookup images

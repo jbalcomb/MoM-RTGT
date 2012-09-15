@@ -13,13 +13,48 @@
 namespace MoM {
 
 const void* null = 0;
+const double g_epsilon = 0.00001;
 
-double CombatUnit::total_hp() const
+void CombatUnit::applyEffects()
 {
-    return (getMaxFigures() * getBaseAttributes().hitpoints - damage);
+    MoMUnit::applyEffects();
+    m_simulatedDamage = MoMUnit::getDamage();
+    m_suppressionCounter = MoMUnit::getBattleUnit().m_Suppression;
+    // TODO: Find out what the current ranged shots are in a battle unit
+    m_rangedShots = MoMUnit::getMaxRangedShots();
 }
 
-double CombatUnit::cur_Nr() const
+int CombatUnit::getCurRangedShots() const
+{
+    return m_rangedShots;
+}
+
+void CombatUnit::decCurRangedShots()
+{
+    m_rangedShots--;
+}
+
+int CombatUnit::getSuppressionCounter() const
+{
+    return m_suppressionCounter;
+}
+
+void CombatUnit::incSuppressionCounter()
+{
+    m_suppressionCounter++;
+}
+
+double CombatUnit::getMaxTotalHp() const
+{
+    return (getMaxFigures() * getBaseAttributes().hitpoints);
+}
+
+double CombatUnit::getCurTotalHp() const
+{
+    return (getMaxFigures() * getBaseAttributes().hitpoints - m_simulatedDamage);
+}
+
+double CombatUnit::getCurFiguresFrac() const
 {
     // Basically the nr of figures is the total_hp divided by the figure_hp rounded upward
     // However, if a figures has between 0 and 1 hitpoints left, the chance that he is still
@@ -29,8 +64,8 @@ double CombatUnit::cur_Nr() const
     if (Hp <= 0)
         return 0;
 
-    double nr_full_figures = std::floor(total_hp() / Hp);
-    double hp_last_figure = total_hp() - nr_full_figures * Hp;
+    double nr_full_figures = std::floor(getCurTotalHp() / Hp + g_epsilon);
+    double hp_last_figure = getCurTotalHp() - nr_full_figures * Hp;
 
     if (hp_last_figure >= 1) return nr_full_figures + 1;
     else return nr_full_figures + hp_last_figure;
@@ -576,73 +611,9 @@ double MoMCombat::expected_hp_from_Life_Steal(double EDD)
 }
 
 
-//Unit.prototype.can_damage = function(defender, attack_type)
-//{
-//   var attacker = this;
-//   var special = attack_type;
-
-//   if ((special == "Breath" || special == "Fire Breath") && attacker.has("Fire Breath") && !defender.has("Fire Imm"))
-//      return true;
-//   else if ((special == "Breath" || special == "Lightning") && attacker.has("Lightning") && !defender.has("Lightning Imm")) // Note: Lightning Imm does not exist
-//      return true;
-//   else if (special == "Breath")
-//      return false;
-
-//   else if ((special == "Gaze" || special == "Death Gaze") && attacker.has("Death Gaze") && !defender.has("Death Imm") && !defender.has("Magic Imm"))
-//      return true;
-//   else if ((special == "Gaze" || special == "Doom Gaze") && attacker.has("Doom Gaze"))
-//      return true;
-//   else if ((special == "Gaze" || special == "Stoning Gaze") && attacker.has("Stoning Gaze") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
-//      return true;
-//   else if (special == "Gaze")
-//      return false;
-
-//   else if (special == "Immolation" && attacker.has(special) && !defender.has("Fire Imm") && !defender.has("Magic Imm"))
-//      return true;
-
-//   else if (special == "Life Steal" && attacker.has("Life Steal") && !defender.has("Death Imm") && !defender.has("Magic Imm"))
-//      return true;
-
-//   else if (special == "Melee")
-//      return true;
-
-//   else if (special == "Poison" && attacker.has(special) && !defender.has("Poison Imm"))
-//      return true;
-
-//   else if (special == "Thrown" && attacker.has(special))
-//      return true;
-
-//   else if ((special == "Touch" || special == "Stoning Touch") && attacker.has("Stoning Touch") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
-//      return true;
-
-//   else
-//      return false;
-//}
-
-//Unit.prototype.apply_effects = function(enemy)
-//{
-//   this.apply_level(this.level);
-//   this.apply_abilities();
-//   this.apply_weapon_type(this.weapon_type);
-//   this.apply_spell_effects(enemy);
-//   this.apply_other_effects();
-
-//   if (this.has("Thrown")) this.set_special("Thrown", this.Ra);
-//   if (!this.spell_active("Chaos Channel") || 1 * this.spells[ "Chaos Channel" ] != 3)
-//   {
-//      if (this.has("Fire Breath")) this.set_special("Fire Breath", this.Ra);
-//   }
-//   if (this.has("Lightning")) this.set_special("Lightning", this.Ra);
-//   if (this.has("Doom Gaze")) this.set_special("Doom Gaze", this.Ra);
-//}
-
-
 bool MoMCombat::life_steal_applicable(const CombatUnit& attacker, const CombatUnit& defender)
 {
-    return attacker.hasSpecial(UNITABILITY_Life_Stealing)
-            && !defender.hasSpecial(UNITABILITY_Death_Immunity)
-            && !defender.hasSpecial(UNITABILITY_Magic_Immunity)
-            && !defender.hasSpecial(UNITENCHANTMENT_Magic_Immunity);    // TODO: centralize Magic Imm???
+    return (attacker.hasUnitAbility(UNITABILITY_Life_Stealing) && !defender.isImmune(UNITABILITY_Death_Immunity));
 }
 
 
@@ -654,117 +625,144 @@ double MoMCombat::special_attack(const CombatUnit& attacker, const CombatUnit& d
     double EDD = 0;
     double EDD_tmp;
 
-    // TODO
-
     MoMUnit::BaseAttributes att = attacker.getActualAttributes();
     MoMUnit::BaseAttributes def = defender.getActualAttributes();
 
     int ignore_damage = 0;
-//    if (defender.has("Invulnerability") && attacker.can_damage(defender, special))
-//    {
-//        ignore_damage = 2;
-//        o += "Invulnerability ignores the first " + toStr(ignore_damage) + " points of damage\n";
-//    }
-
-//    if (special == "Breath")
-//    {
-//        if (attacker.has("Fire Breath") && !defender.has("Fire Imm"))
-//        {
-//            var Df = defender.Df;
-//            if (defender.has("Large Shield"))
-//            {
-//                Df += 2;
-//                o += "Large Shield raises defense of " + defender.name + " to " + Df + " against Fire Breath\n";
-//            }
-//            if (defender.has("Magic Imm") && Df < 50)
-//            {
-//                Df = 50;
-//                o += "Magic Immunity raises defense of " + defender.name + " to 50 against Fire Breath\n";
-//            }
-//            EDD_tmp = expected_dam(attacker.cur_Nr(), attacker.get_special("Fire Breath"), attacker.Th_Ra, defender.max_Nr, Df, defender.Hp, defender.Tb, defender.damage, ignore_damage);
-//            EDD += EDD_tmp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Fire Breath " + attacker.get_special("Fire Breath") + " for " + prec1(EDD_tmp) + " damage\n";
-//        }
-//        if (attacker.has("Lightning") && !defender.has("Lightning Imm")) // Note: Lightning Imm does not exist
-//        {
-//            var Df = defender.Df;
-//            if (defender.has("Large Shield"))
-//            {
-//                Df += 2;
-//                o += "Large Shield raises defense of " + defender.name + " to " + Df + " against Lightning\n";
-//            }
-//            if (defender.has("Magic Imm") && Df < 50)
-//            {
-//                Df = 50;
-//                o += "Magic Immunity raises defense of " + defender.name + " to 50 against Lightning\n";
-//            }
-//            else
-//            {
-//                Df = Math.floor(Df / 2);
-//                o += "Lightning reduces defense of " + defender.name + " to " + Df + "\n";
-//            }
-//            EDD += EDD_tmp = expected_dam(attacker.cur_Nr(), attacker.get_special("Lightning"), attacker.Th_Ra, defender.max_Nr, Df, defender.Hp, defender.Tb, defender.damage, ignore_damage);
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Lightning " + attacker.get_special("Lightning") + " for " + prec1(EDD_tmp) + " damage\n";
-//        }
-//    }
-//    else if (special == "Gaze")
-//    {
-//        if (attacker.has("Death Gaze") && !defender.has("Death Imm") && !defender.has("Magic Imm"))
-//        {
-//            var nr_kills = expected_resistable_kills(defender.cur_Nr(), defender.Re + attacker.get_special("Death Gaze"));
-//            EDD += EDD_tmp = nr_kills * defender.Hp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Death Gaze " + attacker.get_special("Death Gaze") + " for " + prec1(nr_kills) + " kills\n";
-//        }
-//        if (attacker.has("Doom Gaze"))
-//        {
-//            EDD += EDD_tmp = attacker.get_special("Doom Gaze");
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Doom Gaze " + attacker.get_special("Doom Gaze") + " for " + prec1(EDD_tmp) + " damage\n";
-//        }
-//        if (attacker.has("Stoning Gaze") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
-//        {
-//            var nr_kills = expected_resistable_kills(defender.cur_Nr(), defender.Re + attacker.get_special("Stoning Gaze"));
-//            EDD += EDD_tmp = nr_kills * defender.Hp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Stoning Gaze " + attacker.get_special("Stoning Gaze") + " for " + prec1(nr_kills) + " kills\n";
-//        }
-//    }
-//    else if (special == "Immolation" && attacker.has(special) && !defender.has("Fire Imm") && !defender.has("Magic Imm"))
-//    {
-//        EDD = expected_dam(attacker.cur_Nr(), attacker.get_special("Immolation"), attacker.Th_Ra, defender.max_Nr, defender.Df, defender.Hp, defender.Tb, defender.damage, ignore_damage);
-//        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Immolation " + attacker.get_special("Immolation") + " for " + prec1(EDD) + " damage\n";
-//    }
-//    else if (special == "Life Steal" && life_steal_applicable(attacker, defender))
-//    {
-//        EDD = expected_lifesteal_dam(attacker.cur_Nr(), defender.Re + attacker.get_special("Life Steal"), ignore_damage);
-//        var heal_hp = expected_hp_from_Life_Steal(EDD);
-//        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses " + special + " " + attacker.get_special(special) + " for " + prec1(EDD) + " damage and heals " + prec1(heal_hp) + " hitpoints\n";
-//    }
-//    else 
-    if (special == "Melee")
+    if (defender.isInvulnerable())
     {
-        EDD = expected_dam(attacker.cur_Nr(), att.melee, att.toHitMelee,
-            defender.getMaxFigures(), def.defense, def.hitpoints, def.toDefend,
-            defender.damage, ignore_damage);
-        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.getDisplayName() + " attacks for " + prec1(EDD) + " damage\n";
+        ignore_damage = 2;
+        o += "Invulnerability ignores the first " + toStr(ignore_damage) + " points of damage\n";
     }
-//    else if (special == "Poison" && attacker.has(special) && !defender.has("Poison Imm"))
-//    {
-//        EDD = expected_poison_dam(attacker.cur_Nr(), attacker.get_special("Poison"), defender.Re, ignore_damage);
-//        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Poison " + attacker.get_special("Poison") + " for " + prec1(EDD) + " damage\n";
-//    }
-//    else if (special == "Thrown" && attacker.has(special))
-//    {
-//        EDD = expected_dam(attacker.cur_Nr(), attacker.Ra, attacker.Th_Ra, defender.max_Nr, defender.Df, defender.Hp, defender.Tb, defender.damage, ignore_damage);
-//        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses " + special + " " + attacker.Ra + " for " + prec1(EDD) + " damage\n";
-//    }
-//    else if (special == "Touch")
-//    {
-//        if (attacker.has("Stoning Touch") && !defender.has("Stoning Imm") && !defender.has("Magic Imm"))
-//        {
-//            var nr_kills = expected_resistable_kills(defender.cur_Nr(), defender.Re + attacker.get_special("Stoning Touch"));
-//            EDD += nr_kills * defender.Hp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Stoning Touch " + attacker.get_special("Stoning Touch") + " for " + prec1(nr_kills) + " kills\n";
-//        }
-//    }
+
+    if (special == "Breath")
+    {
+        if (attacker.hasFireBreath() && !defender.hasUnitAbility(UNITABILITY_Fire_Immunity))
+        {
+            int Df = def.defense;
+            if (defender.hasUnitAbility(UNITABILITY_Large_Shield))
+            {
+                Df += 2;
+                o += "Large Shield raises defense of " + defender.getDisplayName() + " to " + toStr(Df) + " against Fire Breath\n";
+            }
+            if (defender.isImmune(UNITABILITY_Magic_Immunity) && Df < 50)
+            {
+                Df = 50;
+                o += "Magic Immunity raises defense of " + defender.getDisplayName() + " to 50 against Fire Breath\n";
+            }
+            int strength = att.ranged;  // attacker.get_special("Fire Breath")
+            if ((strength < 2) && attacker.hasMutation(UNITMUTATION_Chaos_Channels_Fiery_Breath))
+            {
+                strength = 2;
+            }
+            EDD_tmp = expected_dam(attacker.getCurFiguresFrac(), strength, att.toHitRanged,
+                                   defender.getMaxFigures(), Df, def.hitpoints, def.toDefend,
+                                   defender.m_simulatedDamage, ignore_damage);
+            EDD += EDD_tmp;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Fire Breath " + toStr(strength) + " for " + prec1(EDD_tmp) + " damage\n";
+        }
+        if (attacker.hasLightningBreath()) // Note: Lightning Imm does not exist
+        {
+            int Df = def.defense;
+            if (defender.hasUnitAbility(UNITABILITY_Large_Shield))
+            {
+                Df += 2;
+                o += "Large Shield raises defense of " + defender.getDisplayName() + " to " + toStr(Df) + " against Fire Breath\n";
+            }
+            if (defender.isImmune(UNITABILITY_Magic_Immunity) && Df < 50)
+            {
+                Df = 50;
+                o += "Magic Immunity raises defense of " + defender.getDisplayName() + " to 50 against Fire Breath\n";
+            }
+            else
+            {
+                Df = Df / 2;
+                o += "Lightning reduces defense of " + defender.getDisplayName() + " to " + toStr(Df) + "\n";
+            }
+            int strength = att.ranged;  // attacker.get_special("Lightning")
+            EDD +=  EDD_tmp = expected_dam(attacker.getCurFiguresFrac(), strength, att.toHitRanged,
+                                   defender.getMaxFigures(), Df, def.hitpoints, def.toDefend,
+                                   defender.m_simulatedDamage, ignore_damage);
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Lightning " + toStr(strength) + " for " + prec1(EDD_tmp) + " damage\n";
+        }
+    }
+    else if (special == "Gaze")
+    {
+        // TODO: Resolve sequentially
+        if ((attacker.getRangedType() == RANGED_Multiple_Gaze)) // "Doom Gaze"
+        {
+            int strength = att.ranged;  // attacker.get_special("Doom Gaze")
+            EDD += EDD_tmp = strength;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Doom Gaze " + toStr(strength) + " for " + prec1(EDD_tmp) + " damage\n";
+        }
+        if (((attacker.getRangedType() == RANGED_Death_Gaze) || (attacker.getRangedType() == RANGED_Multiple_Gaze))
+                && !defender.isImmune(UNITABILITY_Death_Immunity))
+        {
+            int modifier = -Abs(attacker.getGazeModifier());  // attacker.get_special("Death Gaze")
+            double nr_kills = expected_resistable_kills(defender.getCurFiguresFrac(), def.resistance + modifier);
+            EDD += EDD_tmp = nr_kills * def.hitpoints;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Death Gaze " + format_modifier(modifier) + " for " + prec1(nr_kills) + " kills\n";
+        }
+        if (((attacker.getRangedType() == RANGED_Stoning_Gaze) || (attacker.getRangedType() == RANGED_Multiple_Gaze))
+                && !defender.isImmune(UNITABILITY_Stoning_Immunity))
+        {
+            int modifier = -Abs(attacker.getGazeModifier());  // attacker.get_special("Stoning Gaze")
+            double nr_kills = expected_resistable_kills(defender.getCurFiguresFrac(), def.resistance + modifier);
+            EDD += EDD_tmp = nr_kills * def.hitpoints;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Stoning Gaze " + format_modifier(modifier) + " for " + prec1(nr_kills) + " kills\n";
+        }
+    }
+    else if (special == "Immolation" && attacker.hasImmolation() && !defender.isImmune(UNITABILITY_Fire_Immunity))
+    {
+        int strength = attacker.getUnitAbility(UNITABILITY_Immolation);
+        EDD = expected_dam(attacker.getCurFiguresFrac(), strength,  att.toHitRanged,
+                           defender.getMaxFigures(), def.defense, def.hitpoints, def.toDefend,
+                           defender.m_simulatedDamage, ignore_damage);
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Immolation " + toStr(strength) + " for " + prec1(EDD) + " damage\n";
+    }
+    else if (special == "Life Steal" && life_steal_applicable(attacker, defender))
+    {
+        int modifier = attacker.getUnitAbility(UNITABILITY_Life_Stealing);
+        EDD = expected_lifesteal_dam(attacker.getCurFiguresFrac(), def.resistance + modifier);
+        double heal_hp = expected_hp_from_Life_Steal(EDD);
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses " + special + " " + format_modifier(modifier) + " for " + prec1(EDD) + " damage and heals " + prec1(heal_hp) + " hitpoints\n";
+    }
+    else if (special == "Melee")
+    {
+        EDD = expected_dam(attacker.getCurFiguresFrac(), att.melee, att.toHitMelee,
+            defender.getMaxFigures(), def.defense, def.hitpoints, def.toDefend,
+            defender.m_simulatedDamage, ignore_damage);
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " attacks for " + prec1(EDD) + " damage\n";
+    }
+    else if (special == "Poison" && attacker.hasUnitAbility(UNITABILITY_Poison_attack) && !defender.isImmune(UNITABILITY_Poison_Immunity))
+    {
+        int strength = attacker.getUnitAbility(UNITABILITY_Poison_attack);
+        EDD = expected_poison_dam(attacker.getCurFiguresFrac(), strength, def.resistance);
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Poison " + toStr(strength) + " for " + prec1(EDD) + " damage\n";
+    }
+    else if (special == "Thrown" && attacker.hasThrownRangedAttack())
+    {
+        EDD = expected_dam(attacker.getCurFiguresFrac(), att.ranged, att.toHitRanged,
+                           defender.getMaxFigures(), def.defense, def.hitpoints, def.toDefend, defender.m_simulatedDamage, ignore_damage);
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses " + special + " " + toStr(att.ranged) + " for " + prec1(EDD) + " damage\n";
+    }
+    else if (special == "Touch")
+    {
+        if (attacker.hasUnitAbility(UNITABILITY_Death_Touch) && !defender.isImmune(UNITABILITY_Death_Immunity))
+        {
+            int modifier = attacker.getUnitAbility(UNITABILITY_Death_Touch);
+            double nr_kills = expected_resistable_kills(defender.getCurFiguresFrac(), def.resistance + modifier);
+            EDD += nr_kills * def.hitpoints;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Death Touch " + format_modifier(modifier) + " for " + prec1(nr_kills) + " kills\n";
+        }
+        if (attacker.hasUnitAbility(UNITABILITY_Stoning_Touch) && !defender.isImmune(UNITABILITY_Stoning_Immunity))
+        {
+            int modifier = attacker.getUnitAbility(UNITABILITY_Stoning_Touch);
+            double nr_kills = expected_resistable_kills(defender.getCurFiguresFrac(), def.resistance + modifier);
+            EDD += nr_kills * def.hitpoints;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Stoning Touch " + format_modifier(modifier) + " for " + prec1(nr_kills) + " kills\n";
+        }
+    }
 
     return EDD;
 }
@@ -774,18 +772,18 @@ void MoMCombat::resolve_casualties(CombatUnit& attacker, CombatUnit& defender, d
 {
     if (EDD_def != 0)
     {
-        attacker.damage += EDD_def;
-        if (attacker.damage < 0)
-            attacker.damage = 0;
-        o += "Unit of " + attacker.getDisplayName() + " has " + prec1(attacker.cur_Nr()) + " units left with a total of " + prec1(attacker.total_hp()) + " hp\n";
+        attacker.m_simulatedDamage += EDD_def;
+        if (attacker.m_simulatedDamage < 0)
+            attacker.m_simulatedDamage = 0;
+        o += "Unit of " + attacker.getDisplayName() + " has " + prec1(attacker.getCurFiguresFrac()) + " units left with a total of " + prec1(attacker.getCurTotalHp()) + " hp\n";
     }
     if (EDD_att != 0)
     {
-        double kill_damage = defender.total_hp();
-        defender.damage += EDD_att;
-        if (defender.damage < 0)
-            defender.damage = 0;
-        o += "Unit of " + defender.getDisplayName() + " has " + prec1(defender.cur_Nr()) + " units left with a total of " + prec1(defender.total_hp()) + " hp\n";
+        double kill_damage = defender.getCurTotalHp();
+        defender.m_simulatedDamage += EDD_att;
+        if (defender.m_simulatedDamage < 0)
+            defender.m_simulatedDamage = 0;
+        o += "Unit of " + defender.getDisplayName() + " has " + prec1(defender.getCurFiguresFrac()) + " units left with a total of " + prec1(defender.getCurTotalHp()) + " hp\n";
 
         if (distr_att != null)
         {
@@ -810,7 +808,7 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     std::string o;   // output string
 
     //! Check if attacker is alive
-    if (attacker.total_hp() <= 0)
+    if (attacker.getCurTotalHp() <= 0)
     {
         o += "Cannot attack since attacker is not alive. Attack aborted.\n";
         o += "\n";
@@ -818,7 +816,7 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     }
 
     //! Check if the attacker is sleeping
-    if (attacker.hasSpecial(COMBATENCHANTMENT_Black_Sleep))
+    if (attacker.hasCombatEnchantment(COMBATENCHANTMENT_Black_Sleep))
     {
         o += "Unit of " + attacker.getDisplayName() + " can not attack because it is asleep. Attack aborted.\n";
         o += "\n";
@@ -826,19 +824,14 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     }
 
     //! Check if the attacker is allowed to attack a flying defender
-//    if (defender.has("Flying") && !attacker.has("Flying") && !attacker.has("Fire Breath") && !attacker.has("Lightning")
-//            && !attacker.has("Thrown") && !attacker.has("Death Gaze") && !attacker.has("Doom Gaze")
-//            && !attacker.has("Stoning Gaze"))
-//    {
-//        o += "Unit of " + attacker.name + " can not attack a flying unit. Attack aborted.\n";
-//        o += "\n";
-//        return o;
-//    }
+    if (defender.isFlying() && !attacker.isFlying()
+            && !attacker.hasMagicalBreathAttack() && !attacker.hasMagicalGazeAttack() && !attacker.hasThrownRangedAttack())
+    {
+        o += "Unit of " + attacker.getDisplayName() + " can not attack a flying unit. Attack aborted.\n";
+        o += "\n";
+        return o;
+    }
 
-//    int orig_att_Df = attacker.getBaseAttributes().defense, orig_def_Df = defender.getBaseAttributes().defense;
-//    int orig_att_Th = attacker.getBaseAttributes().toHitMelee, orig_def_Th = defender.getBaseAttributes().toHitMelee;
-//    int orig_att_Th_Ra = attacker.getBaseAttributes().toHitRanged, orig_def_Th_Ra = defender.getBaseAttributes().toHitRanged;
-//    int orig_att_Tb = attacker.getBaseAttributes().toDefend, orig_def_Tb = defender.getBaseAttributes().toDefend;
     MoMUnit::BaseAttributes att = attacker.getActualAttributes();
     MoMUnit::BaseAttributes def = defender.getActualAttributes();
 
@@ -846,49 +839,49 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     {
         double EDD, EDD_att, EDD_def;
 
-//        if (attacker.get_suppressionCounter() >= 2)
-//        {
-//            attacker.Th -= Math.floor(attacker.get_suppressionCounter() / 2);
-//            attacker.Th_Ra -= Math.floor(attacker.get_suppressionCounter() / 2);
-//            o += "Suppression reduces to hit melee/ranged of " + attacker.name
-//                    + " to " + format_modifier(attacker.Th) + "/" + format_modifier(attacker.Th_Ra) + "\n";
-//        }
+        if (attacker.getSuppressionCounter() >= 2)
+        {
+            att.toHitMelee -= attacker.getSuppressionCounter() / 2;
+            att.toHitRanged -= attacker.getSuppressionCounter() / 2;
+            o += "Suppression reduces to hit melee/ranged of " + attacker.getDisplayName()
+                    + " to " + format_modifier(att.toHitMelee) + "/" + format_modifier(att.toHitRanged) + "\n";
+        }
 
-//        //! Weapon Immunity increase Df to 10 if opponent is normal and does not have a magic weapon
-//        if (attacker.has("Weapon Imm") && attacker.Df < 10 && defender.unit_type == "Normal" && !defender.has("Magic Weapon"))
-//        {
-//            attacker.Df = 10;
-//            o += "Weapon Immunity increases defense of " + attacker.name + " to " + attacker.Df + "\n";
-//        }
-//        if (defender.has("Weapon Imm") && defender.Df < 10 && attacker.unit_type == "Normal" && !attacker.has("Magic Weapon"))
-//        {
-//            defender.Df = 10;
-//            o += "Weapon Immunity increases defense of " + defender.name + " to " + defender.Df + "\n";
-//        }
+        //! Weapon Immunity increase Df to 10 if opponent is normal and does not have a magic weapon
+        if (attacker.isImmune(UNITABILITY_Weapon_Immunity) && att.defense < 10 && defender.isNormal() && !defender.hasMagicWeapon())
+        {
+            att.defense = 10;
+            o += "Weapon Immunity increases defense of " + attacker.getDisplayName() + " to " + toStr(att.defense) + "\n";
+        }
+        if (defender.isImmune(UNITABILITY_Weapon_Immunity) && def.defense < 10 && attacker.isNormal() && !attacker.hasMagicWeapon())
+        {
+            def.defense = 10;
+            o += "Weapon Immunity increases defense of " + defender.getDisplayName() + " to " + toStr(def.defense) + "\n";
+        }
 
         //! Reduce Df of an opponent of Armor Piercing
-        if (attacker.hasSpecial(UNITABILITY_Armor_Piercing))
+        if (attacker.hasUnitAbility(UNITABILITY_Armor_Piercing))
         {
             def.defense = def.defense / 2;
             o += "Armor Piercing reduces defense of " + toStr(def.defense) + " to " + toStr(def.defense) + "\n";
         }
-        if (defender.hasSpecial(UNITABILITY_Armor_Piercing))
+        if (defender.hasUnitAbility(UNITABILITY_Armor_Piercing))
         {
             att.defense = att.defense / 2;
             o += "Armor Piercing reduces defense of " + attacker.getDisplayName() + " to " + toStr(att.defense) + "\n";
         }
 
-//        //! Reduce Df to 0 for an opponent of an Illusion
-//        if (attacker.has("Illusion") && !defender.has("Illusion Imm"))
-//        {
-//            defender.Df = 0;
-//            o += "Illusion reduces defense of " + defender.name + " to " + defender.Df + "\n";
-//        }
-//        if (defender.has("Illusion") && !attacker.has("Illusion Imm"))
-//        {
-//            attacker.Df = 0;
-//            o += "Illusion reduces defense of " + attacker.name + " to " + attacker.Df + "\n";
-//        }
+        //! Reduce Df to 0 for an opponent of an Illusion
+        if (attacker.hasIllusionaryAttack() && !defender.isImmune(UNITABILITY_Illusions_Immunity))
+        {
+            def.defense = 0;
+            o += "Illusion reduces defense of " + defender.getDisplayName() + " to " + toStr(def.defense) + "\n";
+        }
+        if (defender.hasIllusionaryAttack() && !attacker.isImmune(UNITABILITY_Illusions_Immunity))
+        {
+            att.defense = 0;
+            o += "Illusion reduces defense of " + attacker.getDisplayName() + " to " + toStr(def.defense) + "\n";
+        }
 
         //! Pre-melee: attacker's Breaths, First Strike, Gazes, Thrown, defender's Gazes
         EDD_att = EDD_def = 0;
@@ -902,7 +895,7 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
 
         //! End combat if anyone defeated
-        if (attacker.total_hp() <= 0 || defender.total_hp() <= 0)
+        if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
             break;
 
         //! Attacker attacks with Immolation, Life Steal, Poison, Touch, and Melee
@@ -916,13 +909,13 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         EDD_att += special_attack(attacker, defender, "Melee", o);
 
         //! First Strike: resolve casualties
-        if (attacker.hasSpecial(UNITABILITY_First_Strike) && !defender.hasSpecial(UNITABILITY_Negate_First_Strike))
+        if (attacker.hasUnitAbility(UNITABILITY_First_Strike) && !defender.hasUnitAbility(UNITABILITY_Negate_First_Strike))
         {
             resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
             EDD_att = EDD_def = 0;
 
             // End combat if anyone defeated
-            if (attacker.total_hp() <= 0 || defender.total_hp() <= 0)
+            if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
                 break;
         }
 
@@ -940,14 +933,8 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     } while (0);   // Single-iteration-loop to allow for a break followed by a centralized clean-up
 
     //! Update suppressionCounter
+    // TODO: Update suppressionCounter
     //   defender.other_effects["suppressionCounter"]++;
-
-    //! Clean up
-
-//    attacker.Df = orig_att_Df, defender.Df = orig_def_Df;
-//    attacker.Th = orig_att_Th, defender.Th = orig_def_Th;
-//    attacker.Th_Ra = orig_att_Th_Ra, defender.Th_Ra = orig_def_Th_Ra;
-//    attacker.Tb = orig_att_Tb, defender.Tb = orig_def_Tb;
 
     o += "\n";
 
@@ -965,7 +952,7 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
     double EDD_tmp;
 
     //! Check if attacker is alive
-    if (attacker.total_hp() <= 0)
+    if (attacker.getCurTotalHp() <= 0)
     {
         o += "Cannot shoot since attacker is not alive. Attack aborted.\n";
         o += "\n";
@@ -973,145 +960,135 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
     }
 
     //! Check if the attacker is sleeping
-//    if (attacker.spell_active("Black Sleep"))
-//    {
-//        o += "Unit of " + attacker.name + " can not shoot because it is asleep. Attack aborted.\n";
-//        o += "\n";
-//        return o;
-//    }
-
-    int distance_modifier = - std::floor(distance / 3 + 0.0001);
-    if (attacker.hasSpecial(UNITABILITY_Long_Range))
+    if (attacker.hasCombatEnchantment(COMBATENCHANTMENT_Black_Sleep))
     {
-        distance_modifier =Max(-1, distance_modifier);
+        o += "Unit of " + attacker.getDisplayName() + " can not shoot because it is asleep. Attack aborted.\n";
+        o += "\n";
+        return o;
     }
 
+    int distance_modifier = - distance / 3;
+    if (attacker.hasUnitAbility(UNITABILITY_Long_Range))
+    {
+        distance_modifier = Max(-1, distance_modifier);
+    }
+
+    MoMUnit::BaseAttributes att = attacker.getActualAttributes();
+    MoMUnit::BaseAttributes def = defender.getActualAttributes();
+
     // Chance to hit is always at least 10%, which maps to -2
-    int Th_physical = Max(-2, attacker.getBaseAttributes().toHitRanged + distance_modifier);
-    int Th_magical = attacker.getBaseAttributes().toHitRanged;
+    int Th_physical = Max(-2, att.toHitRanged + distance_modifier);
+    int Th_magical = att.toHitRanged;
 
     int ranged_Df_modifier;
-    if (defender.hasSpecial(UNITABILITY_Large_Shield)) ranged_Df_modifier = +2;
+    if (defender.hasUnitAbility(UNITABILITY_Large_Shield)) ranged_Df_modifier = +2;
     else ranged_Df_modifier = 0;
 
-//    var ignore_damage = 0;
-//    if (defender.spell_active("Invulnerability"))
-//    {
-//        ignore_damage = 2;
-//        o += "Invulnerability ignores the first " + ignore_damage + " points of damage\n";
-//    }
+    int ignore_damage = 0;
+    if (defender.isInvulnerable())
+    {
+        ignore_damage = 2;
+        o += "Invulnerability ignores the first " + toStr(ignore_damage) + " points of damage\n";
+    }
 
-//    if (attacker.get_suppressionCounter() >= 2)
-//    {
-//        Th_physical = Math.max(-2, Th_physical - Math.floor(attacker.get_suppressionCounter() / 2));
-//        Th_magical = Math.max(-2, Th_magical - Math.floor(attacker.get_suppressionCounter() / 2));
-//        o += "Suppression reduces to hit ranged physical/magical of " + attacker.name
-//                + " to " + format_modifier(Th_physical) + "/" + format_modifier(Th_magical) + "\n";
-//    }
+    if (attacker.getSuppressionCounter() >= 2)
+    {
+        Th_physical = Max(-2, Th_physical - attacker.getSuppressionCounter() / 2);
+        Th_magical = Max(-2, Th_magical - attacker.getSuppressionCounter() / 2);
+        o += "Suppression reduces to hit ranged physical/magical of " + attacker.getDisplayName()
+                + " to " + format_modifier(Th_physical) + "/" + format_modifier(Th_magical) + "\n";
+    }
 
-//    if (attacker.has("Arrows"))
-//    {
-//        if (attacker.get_special("Arrows") <= 0)
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " is out of ammo.\n";
-//        else if (defender.has("Missile Imm"))
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " can not shoot a unit with Missile Immunity\n";
-//        else
-//        {
-//            EDD = expected_dam(attacker.cur_Nr(), attacker.Ra, Th_physical, defender.max_Nr
-//                               , defender.Df + ranged_Df_modifier, defender.Hp, defender.Tb, defender.damage, ignore_damage, distr);
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " shoots " + defender.name
-//                    + " at " + distance + " squares with " + format_modifier(Th_physical) + " to hit for " + prec1(EDD) + " damage\n";
-//            attacker.set_special("Arrows", attacker.get_special("Arrows") - 1);
-//            has_attacked = true;
-//        }
-//    }
-//    else if (attacker.has("Bullets"))   // Halfling Slingers
-//    {
-//        if (attacker.get_special("Bullets") <= 0)
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " is out of ammo.\n";
-//        else if (defender.has("Missile Imm"))
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " can not shoot a unit with Missile Immunity\n";
-//        else
-//        {
-//            EDD = expected_dam(attacker.cur_Nr(), attacker.Ra, Th_physical, defender.max_Nr
-//                               , defender.Df + ranged_Df_modifier, defender.Hp, defender.Tb, defender.damage, ignore_damage, distr);
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " shoots " + defender.name
-//                    + " at " + distance + " squares with " + format_modifier(Th_physical) + " to hit for " + prec1(EDD) + " damage\n";
-//            attacker.set_special("Bullets", attacker.get_special("Bullets") - 1);
-//            has_attacked = true;
-//        }
-//    }
-//    else if (attacker.has("Rocks"))
-//    {
-//        if (attacker.get_special("Rocks") <= 0)
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " is out of ammo.\n";
-//        else
-//        {
-//            EDD = expected_dam(attacker.cur_Nr(), attacker.Ra, Th_physical, defender.max_Nr
-//                               , defender.Df + ranged_Df_modifier, defender.Hp, defender.Tb, defender.damage, ignore_damage, distr);
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " shoots " + defender.name
-//                    + " at " + distance + " squares with " + format_modifier(Th_physical) + " to hit for " + prec1(EDD) + " damage\n";
-//            attacker.set_special("Rocks", attacker.get_special("Rocks") - 1);
-//            has_attacked = true;
-//        }
-//    }
-//    else if (attacker.has("Spell"))
-//    {
-//        if (attacker.get_special("Spell") <= 0)
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " is out of ammo.\n";
-//        else if (defender.has("Magic Imm"))
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " can not magically attack a unit with Magic Immunity\n";
-//        else
-//        {
-//            if (life_steal_applicable(attacker, defender)) // Demon Lord
-//            {
-//                EDD = expected_lifesteal_dam(attacker.cur_Nr(), defender.Re + attacker.get_special("Life Steal"));
-//                life_stolen = expected_hp_from_Life_Steal(EDD);
-//                o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Ranged Life Steal for " + prec1(EDD) + " damage and heals " + prec1(life_stolen) + " hitpoints\n";
-//                attacker.set_special("Spell", attacker.get_special("Spell") - 1);
-//            }
+    if ((attacker.getRangedType() == RANGED_Arrow) || (attacker.getRangedType() == RANGED_Bullet))
+    {
+        if (attacker.getCurRangedShots() <= 0)
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " is out of ammo.\n";
+        else if (defender.isImmune(UNITABILITY_Missiles_Immunity))
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " can not shoot a unit with Missile Immunity\n";
+        else
+        {
+            EDD = expected_dam(attacker.getCurFiguresFrac(), att.ranged, Th_physical, defender.getMaxFigures()
+                               , def.defense + ranged_Df_modifier, def.hitpoints, def.toDefend, defender.m_simulatedDamage, ignore_damage, &distr);
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " shoots " + defender.getDisplayName()
+                    + " at " + toStr(distance) + " squares with " + format_modifier(Th_physical) + " to hit for " + prec1(EDD) + " damage\n";
+            attacker.decCurRangedShots();
+            has_attacked = true;
+        }
+    }
+    else if (attacker.getRangedType() == RANGED_Rock)
+    {
+        if (attacker.getCurRangedShots() <= 0)
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " is out of ammo.\n";
+        else
+        {
+            EDD = expected_dam(attacker.getCurFiguresFrac(), att.ranged, Th_physical, defender.getMaxFigures()
+                               , def.defense + ranged_Df_modifier, def.hitpoints, def.toDefend, defender.m_simulatedDamage, ignore_damage, &distr);
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " throws a rock at " + defender.getDisplayName()
+                    + " at " + toStr(distance) + " squares with " + format_modifier(Th_physical) + " to hit for " + prec1(EDD) + " damage\n";
+            attacker.decCurRangedShots();
+            has_attacked = true;
+        }
+    }
+    else if (attacker.hasMagicalRangedAttack())
+    {
+        // TODO: Check the different colors of the ranged attacks??
+        if (attacker.getCurRangedShots() <= 0)
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " is out of ammo.\n";
+        else if (defender.isImmune(UNITABILITY_Magic_Immunity))
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " can not magically attack a unit with Magic Immunity\n";
+        else
+        {
+            if (life_steal_applicable(attacker, defender)) // Demon Lord
+            {
+                int modifier = attacker.getUnitAbility(UNITABILITY_Life_Stealing);
+                EDD = expected_lifesteal_dam(attacker.getCurFiguresFrac(), def.resistance + modifier);
+                life_stolen = expected_hp_from_Life_Steal(EDD);
+                o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Ranged Life Steal for " + prec1(EDD) + " damage and heals " + prec1(life_stolen) + " hitpoints\n";
+            }
 
-//            EDD_tmp = expected_dam(attacker.cur_Nr(), attacker.Ra, Th_magical, defender.max_Nr
-//                                   , defender.Df + ranged_Df_modifier, defender.Hp, defender.Tb, defender.damage, ignore_damage, distr);
-//            EDD += EDD_tmp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " magically attacks " + defender.name
-//                    + " with " + format_modifier(Th_magical) + " to hit for " + prec1(EDD_tmp) + " damage\n";
-//            attacker.set_special("Spell", attacker.get_special("Spell") - 1);
-//            has_attacked = true;
-//        }
-//    }
-//    else if (attacker.has("Caster") && attacker.Ra > 0)
-//    {
-//        if (attacker.get_special("Caster") <= 2)
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " is out of mana.\n";
-//        else if (defender.has("Magic Imm"))
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " can not magically attack a unit with Magic Immunity\n";
-//        else
-//        {
-//            if (life_steal_applicable(attacker, defender)) // Necromancer
-//            {
-//                EDD = expected_lifesteal_dam(attacker.cur_Nr(), defender.Re + attacker.get_special("Life Steal"));
-//                life_stolen = expected_hp_from_Life_Steal(EDD);
-//                o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " uses Ranged Life Steal for " + prec1(EDD) + " damage and heals " + prec1(life_stolen) + " hitpoints\n";
-//                attacker.set_special("Spell", attacker.get_special("Spell") - 1);
-//            }
+            EDD_tmp = expected_dam(attacker.getCurFiguresFrac(), att.ranged, Th_magical, defender.getMaxFigures()
+                                   , def.defense + ranged_Df_modifier, def.hitpoints, def.toDefend, defender.m_simulatedDamage, ignore_damage, &distr);
+            EDD += EDD_tmp;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " magically attacks " + defender.getDisplayName()
+                    + " with " + format_modifier(Th_magical) + " to hit for " + prec1(EDD_tmp) + " damage\n";
+            attacker.decCurRangedShots();
+            has_attacked = true;
+        }
+    }
+    else if (attacker.isCaster() && (att.ranged > 0))
+    {
+        // TODO: Check the different colors of the ranged attacks??
+        if (attacker.getCurrentMana() < 3)
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " is out of mana.\n";
+        else if (defender.isImmune(UNITABILITY_Magic_Immunity))
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " can not magically attack a unit with Magic Immunity\n";
+        else
+        {
+            if (life_steal_applicable(attacker, defender)) // Necromancer
+            {
+                int modifier = attacker.getUnitAbility(UNITABILITY_Life_Stealing);
+                EDD = expected_lifesteal_dam(attacker.getCurFiguresFrac(), def.resistance + modifier);
+                life_stolen = expected_hp_from_Life_Steal(EDD);
+                o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " uses Ranged Life Steal for " + prec1(EDD) + " damage and heals " + prec1(life_stolen) + " hitpoints\n";
+            }
 
-//            EDD_tmp = expected_dam(attacker.cur_Nr(), attacker.Ra, Th_magical, defender.max_Nr
-//                                   , defender.Df + ranged_Df_modifier, defender.Hp, defender.Tb, defender.damage, ignore_damage, distr);
-//            EDD += EDD_tmp;
-//            o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " magically attacks " + defender.name
-//                    + " with " + format_modifier(Th_magical) + " to hit for " + prec1(EDD_tmp) + " damage\n";
-//            attacker.set_special("Caster", attacker.get_special("Caster") - 3);
-//            has_attacked = true;
-//        }
-//    }
-//    else
-//    {
-//        o += "Unit of " + prec1(attacker.cur_Nr()) + " " + attacker.name + " can not shoot.\n";
-//    }
+            EDD_tmp = expected_dam(attacker.getCurFiguresFrac(), att.ranged, Th_magical, defender.getMaxFigures()
+                                   , def.defense + ranged_Df_modifier, def.hitpoints, def.toDefend, defender.m_simulatedDamage, ignore_damage, &distr);
+            EDD += EDD_tmp;
+            o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " magically attacks " + defender.getDisplayName()
+                    + " with " + format_modifier(Th_magical) + " to hit for " + prec1(EDD_tmp) + " damage\n";
+            attacker.setCurrentMana(attacker.getCurrentMana() - 3);
+            has_attacked = true;
+        }
+    }
+    else
+    {
+        o += "Unit of " + prec1(attacker.getCurFiguresFrac()) + " " + attacker.getDisplayName() + " can not shoot.\n";
+    }
 
     if (has_attacked)
     {
+        // TODO: Suppression
         //      defender.other_effects["suppressionCounter"]++;
     }
 
@@ -1164,23 +1141,129 @@ std::string MoMCombat::shoot_round(CombatUnit& attacker, CombatUnit& defender, i
 //!
 //! \param attacker The attacker
 //! \param defender The defender
-std::string MoMCombat::full_combat(CombatUnit& attacker, CombatUnit& defender)
+std::string MoMCombat::full_combat(StackUnits& attackers, StackUnits& defenders, int& result)
 {
+    result = 0;      // Draw
     std::string o;   // output string
 
-    for (int round_nr = 1; round_nr <= 1; ++round_nr)
+    StackUnits origAttackers = attackers;
+    StackUnits origDefenders = defenders;
+
+    // For each round
+    for (int round_nr = 1; (round_nr <= 50) && (result == 0); ++round_nr)
     {
-        //      o += combat_round(attacker, defender);
-        //      o += combat_round(defender, attacker);
-        std::vector<double> distr;
-        o += toStr(expected_dam_per_unit(3, 1, +0, 2, +0, 0, &distr));
-        for (int i = 0; i < distr.size(); ++i)
+        // For each live attacker
+        for (int attacker_nr = 0; attacker_nr < attackers.size(); ++attacker_nr)
         {
-            o += "\n" + toStr(i) + "\t" + toStr(distr[i]);
+            CombatUnit& attacker = attackers[attacker_nr];
+            if (attacker.getCurTotalHp() <= 0)
+                continue;
+
+            // Find first live defender
+            size_t defender_nr = findFirstLivingUnit(defenders);
+            if (defender_nr >= defenders.size())
+            {
+                result = +1;
+            }
+            else
+            {
+                CombatUnit& defender = defenders[defender_nr];
+                // Attack
+                o += combat_round(attacker, defender);
+            }
+        }
+
+        // For each live defender
+        for (int defender_nr = 0; defender_nr < defenders.size(); ++defender_nr)
+        {
+            CombatUnit& defender = defenders[defender_nr];
+            if (defender.getCurTotalHp() <= 0)
+                continue;
+
+            // Find first live attacker
+            size_t attacker_nr = findFirstLivingUnit(attackers);
+            if (attacker_nr >= attackers.size())
+            {
+                result = -1;
+            }
+            else
+            {
+                CombatUnit& attacker = defenders[defender_nr];
+                // Counter attack
+                o += combat_round(defender, attacker);
+            }
         }
     }
 
+
+
+    o += "\nResult is " + toStr(result) + "\n";
+
+    char buf[4096] = "";
+    double origTotalHitpoints = 0;
+    double origCurrentHitpoints = 0;
+    double totalHitpoints = 0;
+    double currentHitpoints = 0;
+
+    countHitpointsUnits(origAttackers, origTotalHitpoints, origCurrentHitpoints);
+    countHitpointsUnits(attackers, totalHitpoints, currentHitpoints);
+    sprintf(buf, "%d (%.1f/%.1f hp) attackers started, %d (%.1f hp) died, %d (%.1f/%.1f hp) attackers left\n",
+            countLivingUnits(origAttackers), origCurrentHitpoints, origTotalHitpoints,
+            countLivingUnits(origAttackers) - countLivingUnits(attackers), origCurrentHitpoints - currentHitpoints,
+            countLivingUnits(attackers), currentHitpoints, totalHitpoints);
+    o += buf;
+
+    countHitpointsUnits(origDefenders, origTotalHitpoints, origCurrentHitpoints);
+    countHitpointsUnits(defenders, totalHitpoints, currentHitpoints);
+    sprintf(buf, "%d (%.1f/%.1f hp) defenders started, %d (%.1f hp) died, %d (%.1f/%.1f hp) defenders left\n",
+            countLivingUnits(origDefenders), origCurrentHitpoints, origTotalHitpoints,
+            countLivingUnits(origDefenders) - countLivingUnits(defenders), origCurrentHitpoints - currentHitpoints,
+            countLivingUnits(defenders), currentHitpoints, totalHitpoints);
+    o += buf;
+
+    o += "\n";
+
     return o;
+}
+
+void MoMCombat::countHitpointsUnits(const StackUnits& units, double& totalHitpoints, double& currentHitpoints)
+{
+    totalHitpoints = currentHitpoints = 0;
+    for (size_t i = 0; i < units.size(); ++i)
+    {
+        if (units[i].getCurTotalHp() > 0)
+        {
+            totalHitpoints += units[i].getMaxTotalHp();
+            currentHitpoints += units[i].getCurTotalHp();
+        }
+    }
+}
+
+size_t MoMCombat::countLivingUnits(const StackUnits& units)
+{
+    size_t count = 0;
+    for (size_t i = 0; i < units.size(); ++i)
+    {
+        if (units[i].getCurTotalHp() > 0)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+size_t MoMCombat::findFirstLivingUnit(const StackUnits& units)
+{
+    int index = units.size();
+    for (size_t i = 0; i < units.size(); ++i)
+    {
+        if (units[i].getCurTotalHp() > 0)
+        {
+            index = i;
+            break;
+        }
+    }
+    return index;
 }
 
 }
