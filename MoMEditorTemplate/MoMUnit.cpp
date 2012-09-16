@@ -320,6 +320,7 @@ Unit MoMUnit::getUnitInGame() const
 {
     Unit value;
     memset(&value, '\0', sizeof(value));
+    value.m_Hero_Slot_Number = -1;
     if (0 != m_unit)
     {
         value = *m_unit;
@@ -980,7 +981,6 @@ bool MoMUnit::hasLightningBreath() const
 
 bool MoMUnit::hasMagicalBreathAttack() const
 {
-    eRanged_Type rangedType = getRangedType();
     bool value = (hasFireBreath() || hasLightningBreath());
     return value;
 }
@@ -1703,7 +1703,6 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
     // "Immolation" handled in hasImmolation()
 
     // "Invisibility" is handled in isInvisible()
-    // Actual effect of "Invisibility" is processed last (after possible True Sight)
 
     // "Invulnerability" is handled in isImmune()
 
@@ -1917,12 +1916,6 @@ void MoMUnit::applySpells(const MoMUnit *enemy)
         //     ITEMPOWER_Haste,
 //    {
 //        if (baseunit.Me) up.Me += Me; if (baseunit.Ra) up.Ra += Ra;
-//    }
-
-//    if (enemy && enemy.has("Invisibility") && !has("Illusion Imm"))
-//    {
-//        dn.Th += +1;
-//        dn.Th_Ra += +1;
 //    }
 
     //if (spell_active("Shatter"))

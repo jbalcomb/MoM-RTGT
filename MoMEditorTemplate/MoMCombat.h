@@ -17,6 +17,7 @@ public:
     explicit CombatUnit(class MoMGameBase* game = 0) :
         MoMUnit(game),
         m_simulatedDamage(),
+        m_baseAttributes(),
         m_suppressionCounter(),
         m_rangedShots(),
         m_currentMana()
@@ -25,6 +26,15 @@ public:
 
     /// Modifies MoMUnit::applyEffects() to make sure the extra fields are initialized
     virtual void applyEffects();
+
+    BaseAttributes& getCombatAttributes()
+    {
+        return m_baseAttributes;
+    }
+    const BaseAttributes& getCombatAttributes() const
+    {
+        return m_baseAttributes;
+    }
 
     int getCurrentMana() const
     {
@@ -48,6 +58,7 @@ public:
 public:
     double m_simulatedDamage;
 private:
+    BaseAttributes m_baseAttributes;
     int m_suppressionCounter;
     int m_rangedShots;
     int m_currentMana;

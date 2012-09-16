@@ -3,6 +3,7 @@
 #include "MoMCombat.h"
 
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -19,9 +20,11 @@ void CombatUnit::applyEffects()
 {
     MoMUnit::applyEffects();
     m_simulatedDamage = MoMUnit::getDamage();
+    m_baseAttributes = MoMUnit::getActualAttributes();
     m_suppressionCounter = MoMUnit::getBattleUnit().m_Suppression;
     // TODO: Find out what the current ranged shots are in a battle unit
     m_rangedShots = MoMUnit::getMaxRangedShots();
+    m_currentMana = MoMUnit::getCastingSkillTotal();
 }
 
 int CombatUnit::getCurRangedShots() const
@@ -46,12 +49,12 @@ void CombatUnit::incSuppressionCounter()
 
 double CombatUnit::getMaxTotalHp() const
 {
-    return (getMaxFigures() * getBaseAttributes().hitpoints);
+    return (getMaxFigures() * m_baseAttributes.hitpoints);
 }
 
 double CombatUnit::getCurTotalHp() const
 {
-    return (getMaxFigures() * getBaseAttributes().hitpoints - m_simulatedDamage);
+    return (getMaxFigures() * m_baseAttributes.hitpoints - m_simulatedDamage);
 }
 
 double CombatUnit::getCurFiguresFrac() const
@@ -60,7 +63,7 @@ double CombatUnit::getCurFiguresFrac() const
     // However, if a figures has between 0 and 1 hitpoints left, the chance that he is still
     // standing equals the fraction of a hitpoint he has left.
 
-    int Hp = getBaseAttributes().hitpoints;
+    int Hp = m_baseAttributes.hitpoints;
     if (Hp <= 0)
         return 0;
 
@@ -334,7 +337,7 @@ double MoMCombat::expected_dam_per_figure(int A, int Th, int D, int Tb, int igno
             }
             else
             {
-                P_blocks *= (D - blocks) / (blocks + 1) * pb10 / (10 - pb10);
+                P_blocks = P_blocks * (D - blocks) / (blocks + 1) * pb10 / (10 - pb10);
                 ++blocks;
             }
         }
@@ -348,7 +351,7 @@ double MoMCombat::expected_dam_per_figure(int A, int Th, int D, int Tb, int igno
         }
         else
         {
-            P_hits *= (A - hits) / (hits + 1) * ph10 / (10 - ph10);
+            P_hits = P_hits * (A - hits) / (hits + 1) * ph10 / (10 - ph10);
             ++hits;
         }
     }
@@ -625,8 +628,8 @@ double MoMCombat::special_attack(const CombatUnit& attacker, const CombatUnit& d
     double EDD = 0;
     double EDD_tmp;
 
-    MoMUnit::BaseAttributes att = attacker.getActualAttributes();
-    MoMUnit::BaseAttributes def = defender.getActualAttributes();
+    MoMUnit::BaseAttributes att = attacker.getCombatAttributes();
+    MoMUnit::BaseAttributes def = defender.getCombatAttributes();
 
     int ignore_damage = 0;
     if (defender.isInvulnerable())
@@ -794,7 +797,7 @@ void MoMCombat::resolve_casualties(CombatUnit& attacker, CombatUnit& defender, d
             }
             if (kill_probability >= 0.0005)
             {
-                o += "Chance to be killed was " + prec1(100 * kill_probability) + "% (experimental feature)\n";
+//                o += "Chance to be killed was " + prec1(100 * kill_probability) + "% (experimental feature)\n";
             }
         }
     }
@@ -832,8 +835,8 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         return o;
     }
 
-    MoMUnit::BaseAttributes att = attacker.getActualAttributes();
-    MoMUnit::BaseAttributes def = defender.getActualAttributes();
+    MoMUnit::BaseAttributes& att = attacker.getCombatAttributes();
+    MoMUnit::BaseAttributes& def = defender.getCombatAttributes();
 
     do // Single-iteration-loop to allow for a break followed by a centralized clean-up
     {
@@ -881,6 +884,17 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         {
             att.defense = 0;
             o += "Illusion reduces defense of " + attacker.getDisplayName() + " to " + toStr(def.defense) + "\n";
+        }
+
+        if (defender.isInvisible() && !attacker.isImmune(UNITABILITY_Illusions_Immunity))
+        {
+            att.toHitMelee -= 1;
+            o += "Invisibility reduces to hit of " + attacker.getDisplayName() + " to " + format_modifier(att.toHitMelee) + "\n";
+        }
+        if (attacker.isInvisible() && !defender.isImmune(UNITABILITY_Illusions_Immunity))
+        {
+            def.toHitMelee -= 1;
+            o += "Invisibility reduces to hit of " + defender.getDisplayName() + " to " + format_modifier(def.toHitMelee) + "\n";
         }
 
         //! Pre-melee: attacker's Breaths, First Strike, Gazes, Thrown, defender's Gazes
@@ -932,6 +946,10 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
 
     } while (0);   // Single-iteration-loop to allow for a break followed by a centralized clean-up
 
+    // Restore actual attributes of attacker and defender
+    att = attacker.getActualAttributes();
+    def = defender.getActualAttributes();
+
     //! Update suppressionCounter
     // TODO: Update suppressionCounter
     //   defender.other_effects["suppressionCounter"]++;
@@ -967,14 +985,21 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
         return o;
     }
 
+    if (defender.isInvisible() && !attacker.isImmune(UNITABILITY_Illusions_Immunity) && (distance > 1))
+    {
+        o += "Unit of " + attacker.getDisplayName() + " can not shoot an invisible unit at a distance. Attack aborted.\n";
+        o += "\n";
+        return o;
+    }
+
     int distance_modifier = - distance / 3;
     if (attacker.hasUnitAbility(UNITABILITY_Long_Range))
     {
         distance_modifier = Max(-1, distance_modifier);
     }
 
-    MoMUnit::BaseAttributes att = attacker.getActualAttributes();
-    MoMUnit::BaseAttributes def = defender.getActualAttributes();
+    MoMUnit::BaseAttributes& att = attacker.getCombatAttributes();
+    MoMUnit::BaseAttributes& def = defender.getCombatAttributes();
 
     // Chance to hit is always at least 10%, which maps to -2
     int Th_physical = Max(-2, att.toHitRanged + distance_modifier);
@@ -989,6 +1014,14 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
     {
         ignore_damage = 2;
         o += "Invulnerability ignores the first " + toStr(ignore_damage) + " points of damage\n";
+    }
+
+    if (defender.isInvisible() && !attacker.isImmune(UNITABILITY_Illusions_Immunity))
+    {
+        Th_physical = Max(-2, Th_physical - 1);
+        Th_magical = Max(-2, Th_magical - 1);
+        o += "Invisibility reduces to hit ranged physical/magical of " + attacker.getDisplayName()
+                + " to " + format_modifier(Th_physical) + "/" + format_modifier(Th_magical) + "\n";
     }
 
     if (attacker.getSuppressionCounter() >= 2)
@@ -1029,7 +1062,7 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
             has_attacked = true;
         }
     }
-    else if (attacker.hasMagicalRangedAttack())
+    else if (attacker.hasMagicalRangedAttack() && attacker.getMaxRangedShots() > 0)
     {
         // TODO: Check the different colors of the ranged attacks??
         if (attacker.getCurRangedShots() <= 0)
@@ -1095,6 +1128,10 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
     resolve_casualties(attacker, defender, EDD, -life_stolen, o, &distr);
 
     o += "\n";
+
+    // Restore actual attributes of attacker and defender
+    att = attacker.getActualAttributes();
+    def = defender.getActualAttributes();
 
     return o;
 }

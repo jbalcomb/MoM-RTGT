@@ -46,7 +46,7 @@
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
 				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;&quot;$(QTDIR)\include\QtTest&quot;;&quot;$(QTDIR)\include&quot;;&quot;.\..\MoMEditorTemplate&quot;;&quot;.\..\MoMTweaker&quot;;&quot;.\GeneratedFiles&quot;;&quot;$(QTDIR)\include\ActiveQt&quot;;&quot;.\..\..\..\Qt\4.8.0\mkspecs\default&quot;"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,SRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot;,QT_DLL,QT_TESTLIB_LIB,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,_CRT_SECURE_NO_WARNINGS,QT_LARGEFILE_SUPPORT,SRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot;,QT_DLL,QT_TESTLIB_LIB,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="3"
@@ -362,6 +362,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\test_utility.cpp"
+				>
+			</File>
+			<File
 				RelativePath="tst_momcombat.cpp"
 				>
 			</File>
@@ -392,7 +396,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogaddunit.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -418,7 +422,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogbuildingqueues.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -444,7 +448,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogcalculatoraddress.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -470,7 +474,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogexternalai.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -496,7 +500,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialoglbxeditor.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -522,7 +526,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogmap.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -548,7 +552,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogselectinitialspells.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -574,7 +578,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtables.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -600,7 +604,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing dialogtools.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -626,7 +630,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing mainwindow.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -748,7 +752,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing QMoMMapScene.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -794,7 +798,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing QMoMUnitTile.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -820,6 +824,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\test_utility.h"
+				>
+			</File>
+			<File
 				RelativePath="..\MoMTweaker\unitmodel.h"
 				>
 				<FileConfiguration
@@ -828,7 +836,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing unitmodel.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\moc_$(InputName).cpp&quot;"
 					/>
@@ -932,7 +940,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing tst_momcombat.cpp..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momcombat.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momcombat.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\tst_momcombat.cpp"
 						Outputs="&quot;.\GeneratedFiles\$(InputName).moc&quot;"
 					/>
@@ -958,7 +966,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing tst_momgamebase.cpp..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momgamebase.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momgamebase.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\tst_momgamebase.cpp"
 						Outputs="&quot;.\GeneratedFiles\$(InputName).moc&quot;"
 					/>
@@ -984,7 +992,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing tst_momtweaker_mainwindow.cpp..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momtweaker_mainwindow.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_CONSOLE -DUNICODE -DWIN32 -D_CRT_SECURE_NO_WARNINGS -DQT_LARGEFILE_SUPPORT -DSRCDIR=\&quot;C:/GIT/momrtgt-code/MoMTest/\&quot; -DQT_DLL -DQT_TESTLIB_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtXml&quot; &quot;-I$(QTDIR)\include\QtTest&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\MoMEditorTemplate&quot; &quot;-I.\..\MoMTweaker&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\..\..\..\Qt\4.8.0\mkspecs\default&quot; &quot;tst_momtweaker_mainwindow.cpp&quot; -o &quot;.\GeneratedFiles\$(InputName).moc&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\tst_momtweaker_mainwindow.cpp"
 						Outputs="&quot;.\GeneratedFiles\$(InputName).moc&quot;"
 					/>
@@ -1692,6 +1700,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="attack.gif"
+				>
+			</File>
+			<File
+				RelativePath="Attack.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\Resources\images\Attack.gif"
 				>
 				<FileConfiguration
@@ -1710,14 +1726,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="attack.gif"
-				>
-			</File>
-			<File
-				RelativePath="Attack.gif"
-				>
 			</File>
 			<File
 				RelativePath="..\Resources\heroes\aureus.gif"
@@ -1804,7 +1812,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\race\Barbarian.gif"
+				RelativePath="..\Resources\units\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1824,7 +1832,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Barbarian.gif"
+				RelativePath="..\Resources\race\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2388,15 +2396,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Chaos"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\units\Chaos"
 				>
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Chaos"
+				>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Chaos"
 				>
 			</File>
 			<File
@@ -2812,11 +2820,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Creature"
+				RelativePath="..\Resources\spells\Creature"
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Creature"
+				RelativePath="Creature"
 				>
 			</File>
 			<File
@@ -3052,11 +3060,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Dispel"
+				RelativePath="..\Resources\abilities\Dispel"
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Dispel"
+				RelativePath="..\Resources\spells\Dispel"
 				>
 			</File>
 			<File
@@ -3148,7 +3156,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Draconian.gif"
+				RelativePath="..\Resources\race\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3168,7 +3176,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\race\Draconian.gif"
+				RelativePath="..\Resources\units\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3604,11 +3612,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\First"
+				RelativePath="First"
 				>
 			</File>
 			<File
-				RelativePath="First"
+				RelativePath="..\Resources\abilities\First"
 				>
 			</File>
 			<File
@@ -3980,7 +3988,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Healer.gif"
+				RelativePath="..\Resources\abilities\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4000,7 +4008,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Healer.gif"
+				RelativePath="..\Resources\units\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4436,7 +4444,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Immolation.gif"
+				RelativePath="..\Resources\spells\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4456,7 +4464,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Immolation.gif"
+				RelativePath="..\Resources\abilities\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4506,7 +4514,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Invisibility.gif"
+				RelativePath="..\Resources\spells\Invisibility.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4526,7 +4534,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Invisibility.gif"
+				RelativePath="..\Resources\abilities\Invisibility.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4670,6 +4678,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="Knight.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\Resources\units\Knight.gif"
 				>
 				<FileConfiguration
@@ -4688,10 +4700,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Knight.gif"
-				>
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Land"
@@ -5038,10 +5046,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Life.gif"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\images\Life.gif"
 				>
 				<FileConfiguration
@@ -5060,6 +5064,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Life.gif"
+				>
 			</File>
 			<File
 				RelativePath="Light.gif"
@@ -5242,15 +5250,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Magic"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\spells\Magic"
 				>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Magic Immunity.gif"
+				RelativePath="..\Resources\abilities\Magic"
+				>
+			</File>
+			<File
+				RelativePath="..\Resources\spells\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5270,7 +5278,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Magic Immunity.gif"
+				RelativePath="..\Resources\abilities\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6122,11 +6130,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Power"
+				RelativePath="Power"
 				>
 			</File>
 			<File
-				RelativePath="Power"
+				RelativePath="..\Resources\abilities\Power"
 				>
 			</File>
 			<File
@@ -6154,10 +6162,6 @@
 				>
 			</File>
 			<File
-				RelativePath="Prayer.gif"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\spells\Prayer.gif"
 				>
 				<FileConfiguration
@@ -6176,6 +6180,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Prayer.gif"
+				>
 			</File>
 			<File
 				RelativePath="..\Resources\abilities\Prayermaster"
@@ -6350,10 +6358,6 @@
 				>
 			</File>
 			<File
-				RelativePath="Ranged.gif"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\images\Ranged.gif"
 				>
 				<FileConfiguration
@@ -6372,6 +6376,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Ranged.gif"
+				>
 			</File>
 			<File
 				RelativePath="..\Resources\images\ranged_unknown.gif"
@@ -6478,7 +6486,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Regeneration.gif"
+				RelativePath="..\Resources\spells\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6498,7 +6506,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Regeneration.gif"
+				RelativePath="..\Resources\abilities\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6934,7 +6942,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\units\Sage.gif"
+				RelativePath="..\Resources\abilities\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6954,7 +6962,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Sage.gif"
+				RelativePath="..\Resources\units\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8054,7 +8062,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Thrown.gif"
+				RelativePath="..\Resources\images\thrown.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8074,7 +8082,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\images\thrown.gif"
+				RelativePath="..\Resources\abilities\Thrown.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8358,10 +8366,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Undead.gif"
-				>
-			</File>
-			<File
 				RelativePath="..\Resources\abilities\Undead.gif"
 				>
 				<FileConfiguration
@@ -8380,6 +8384,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Undead.gif"
+				>
 			</File>
 			<File
 				RelativePath="..\Resources\units\Unknown.gif"
@@ -8802,7 +8810,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Web.gif"
+				RelativePath="..\Resources\spells\Web.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8822,7 +8830,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Web.gif"
+				RelativePath="..\Resources\abilities\Web.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8894,7 +8902,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\spells\Wind Walking.gif"
+				RelativePath="..\Resources\abilities\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8914,7 +8922,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Resources\abilities\Wind Walking.gif"
+				RelativePath="..\Resources\spells\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
