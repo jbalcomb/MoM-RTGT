@@ -1,9 +1,9 @@
-// File: QMoMGenerated.h
-// Generated from: MoMTemplate.h
+// File: QMoMCommon/Generated/QMoMGenerated.h
+// Generated from: MoMModel/MoMTemplate.h
 
 #include <iostream>
 
-#include "MoMTemplate.h"
+#include "MoMModel/MoMTemplate.h"
 #include "QMoMTreeItem.h"
 
 namespace MoM {

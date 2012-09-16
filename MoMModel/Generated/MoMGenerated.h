@@ -1,9 +1,9 @@
-// File: MoMGenerated.h
-// Generated from: MoMTemplate.h
+// File: MoMModel/Generated/MoMGenerated.h
+// Generated from: MoMModel/MoMTemplate.h
 
 #include <iostream>
 
-#include "MoMTemplate.h"
+#include "MoMModel/MoMTemplate.h"
 
 namespace MoM {
 

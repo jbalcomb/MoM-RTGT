@@ -1,8 +1,10 @@
 use strict;
 
-my @INPUTFILENAMES = ("MoMTemplate.h", "MoMCommon.h");
-my $HFILENAME = "MoMGenerated.h";
-my $CPPFILENAME = "MoMGenerated.cpp";
+my @INPUTFILENAMES = ("MoMModel/MoMTemplate.h", "Platform/MoMCommon.h");
+my $HFILENAME = "MoMModel/Generated/MoMGenerated.h";
+my $CPPFILENAME = "MoMModel/Generated/MoMGenerated.cpp";
+my $QT_HFILENAME = "QMoMCommon/Generated/QMoMGenerated.h";
+my $QT_CPPFILENAME = "QMoMCommon/Generated/QMoMGenerated.cpp";
 
 #
 # Read input
@@ -46,7 +48,7 @@ while (s#enum\s+(\w+)[^{]*{([^}]*)}[^;]*;##m)
 
 generate_code($HFILENAME, $CPPFILENAME);
 
-generate_Qt_code("Q".$HFILENAME, "Q".$CPPFILENAME);
+generate_Qt_code($QT_HFILENAME, $QT_CPPFILENAME);
 
 close CPPFILE;
 close HFILE;

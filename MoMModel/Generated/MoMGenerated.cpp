@@ -1,11 +1,11 @@
-// File: MoMGenerated.cpp
-// Generated from: MoMTemplate.h
+// File: MoMModel/Generated/MoMGenerated.cpp
+// Generated from: MoMModel/MoMTemplate.h
 
 #include <ctype.h>
 #include <iomanip>
 #include <sstream>
 
-#include "MoMGenerated.h"
+#include "MoMModel/Generated/MoMGenerated.h"
 
 namespace MoM {
 
@@ -1989,9 +1989,12 @@ std::ostream& operator<<(std::ostream& os, const eRanged_Type& rhs)
     switch (rhs)
     {
     case RANGED_None: os << "RANGED_None"; break;
+    case RANGED_Unk0: os << "RANGED_Unk0"; break;
     case RANGED_Rock: os << "RANGED_Rock"; break;
+    case RANGED_Unk11: os << "RANGED_Unk11"; break;
     case RANGED_Arrow: os << "RANGED_Arrow"; break;
     case RANGED_Bullet: os << "RANGED_Bullet"; break;
+    case RANGED_Unk22: os << "RANGED_Unk22"; break;
     case RANGED_Chaos_Magic1_Storm_Giant: os << "RANGED_Chaos_Magic1_Storm_Giant"; break;
     case RANGED_Chaos_Magic2_Magician: os << "RANGED_Chaos_Magic2_Magician"; break;
     case RANGED_Sorcery_Magic_Illusionist: os << "RANGED_Sorcery_Magic_Illusionist"; break;
@@ -9556,9 +9559,12 @@ bool validate(const eRanged_Type& rhs, const std::string& context)
     switch (rhs)
     {
     case RANGED_None: break;
+    case RANGED_Unk0: break;
     case RANGED_Rock: break;
+    case RANGED_Unk11: break;
     case RANGED_Arrow: break;
     case RANGED_Bullet: break;
+    case RANGED_Unk22: break;
     case RANGED_Chaos_Magic1_Storm_Giant: break;
     case RANGED_Chaos_Magic2_Magician: break;
     case RANGED_Sorcery_Magic_Illusionist: break;
