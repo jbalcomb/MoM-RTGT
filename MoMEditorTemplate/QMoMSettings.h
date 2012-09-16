@@ -4,8 +4,6 @@
 class QMoMSettings
 {
 public:
-    QMoMSettings();
-
     /// \brief  Initializes the QSettings configuration
     /// \pre    The QApplication objects must have been created to
     ///         make sure the right directory is used.

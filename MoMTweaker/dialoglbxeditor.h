@@ -46,13 +46,13 @@ private:
 private:
     QGraphicsScene* m_sceneBitmap;
     QGraphicsScene* m_sceneLbx;
+    QFileDialog* m_filedialogLoad;
+    QFileDialog* m_filedialogSave;
     MoM::QMoMPalette m_colorTable;
     QString m_bitmapDirectory;
     QString m_lbxDirectory;
     QString m_bitmapFilename;
     QString m_lbxFilename;
-    QFileDialog m_filedialogLoad;
-    QFileDialog m_filedialogSave;
     MoM::MoMLbxBase m_lbx;
     QVector<MoM::QMoMAnimation> m_lbxAnimations;
     MoM::QMoMAnimation m_bitmapAnimation;

@@ -21,8 +21,6 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QMoMSettings::readSettings(this);
-
     ui->splitter->setSizes(QList<int>() << 100 << 680);
 
     ui->tableWidget_QueueDefinition->setColumnWidth(0, 140);
@@ -92,6 +90,8 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Miners Guild"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
+
+    QMoMSettings::readSettings(this);
 
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));

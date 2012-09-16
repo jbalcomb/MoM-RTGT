@@ -13,10 +13,11 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogLbxEditor),
     m_sceneBitmap(new QGraphicsScene(this)),
-    m_sceneLbx(new QGraphicsScene(this))
+    m_sceneLbx(new QGraphicsScene(this)),
+    m_filedialogLoad(new QFileDialog(this)),
+    m_filedialogSave(new QFileDialog(this))
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
 
     setWindowFlags(Qt::Window);
     setFont(MoM::QMoMResources::g_Font);
@@ -29,26 +30,30 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     ui->comboBox_FileIndex->clear();
     ui->comboBox_FileIndex->addItem("(Images in directory containing the tweaker)");
 
-    m_filedialogLoad.setWindowTitle(tr("Open LBX file"));
-    m_filedialogLoad.setNameFilter(tr("LBX files (*.lbx)"));
-    m_filedialogLoad.setAcceptMode(QFileDialog::AcceptOpen);
-    m_filedialogLoad.setFileMode(QFileDialog::ExistingFile);
-    m_filedialogLoad.setViewMode(QFileDialog::Detail);
+    m_filedialogLoad->setObjectName("filedialogLoad");
+    m_filedialogLoad->setWindowTitle(tr("Open LBX file"));
+    m_filedialogLoad->setNameFilter(tr("LBX files (*.lbx)"));
+    m_filedialogLoad->setAcceptMode(QFileDialog::AcceptOpen);
+    m_filedialogLoad->setFileMode(QFileDialog::ExistingFile);
+    m_filedialogLoad->setViewMode(QFileDialog::Detail);
 
-    m_filedialogSave.setWindowTitle(tr("Save picture(s)"));
-    m_filedialogSave.setNameFilter(tr("Pictures (*.png *.bmp *.gif *.jpg);;All files (*.*)"));
-    m_filedialogSave.setDefaultSuffix("png");
-    m_filedialogSave.setAcceptMode(QFileDialog::AcceptSave);
-    m_filedialogSave.setFileMode(QFileDialog::AnyFile);
-    m_filedialogSave.setViewMode(QFileDialog::Detail);
+    m_filedialogSave->setObjectName("filedialogSave");
+    m_filedialogSave->setWindowTitle(tr("Save picture(s)"));
+    m_filedialogSave->setNameFilter(tr("Pictures (*.png *.bmp *.gif *.jpg);;All files (*.*)"));
+    m_filedialogSave->setDefaultSuffix("png");
+    m_filedialogSave->setAcceptMode(QFileDialog::AcceptSave);
+    m_filedialogSave->setFileMode(QFileDialog::AnyFile);
+    m_filedialogSave->setViewMode(QFileDialog::Detail);
 
 #ifdef _WIN32
-    m_filedialogLoad.setDirectory("C:/games/MAGIC-work/");
+    m_filedialogLoad->setDirectory("C:/GAMES/");
 #else // Linux
-    m_filedialogLoad.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
+//    m_filedialogLoad->setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
 #endif
     m_bitmapDirectory = QApplication::applicationDirPath();
-    m_filedialogSave.setDirectory(m_bitmapDirectory);
+    m_filedialogSave->setDirectory(m_bitmapDirectory);
+
+    QMoMSettings::readSettings(this);
 
     listBitmapFiles(m_bitmapDirectory);
 }
@@ -297,9 +302,9 @@ void DialogLbxEditor::on_comboBox_FileIndex_currentIndexChanged(const QString &a
 
 void DialogLbxEditor::on_pushButton_Load_clicked()
 {
-    if (m_filedialogLoad.exec())
+    if (m_filedialogLoad->exec())
     {
-        QString filename = m_filedialogLoad.selectedFiles().first();
+        QString filename = m_filedialogLoad->selectedFiles().first();
         m_lbxDirectory = QFileInfo(filename).absoluteDir().absolutePath();
 
         loadLbx(filename);
@@ -322,9 +327,9 @@ void DialogLbxEditor::on_pushButton_SavePics_clicked()
         return;
     }
 
-    if (m_filedialogSave.exec())
+    if (m_filedialogSave->exec())
     {
-        QString filenameBase = m_filedialogSave.selectedFiles().first();
+        QString filenameBase = m_filedialogSave->selectedFiles().first();
 
         for (int frameNr = 0; frameNr < curAnimation.size(); ++frameNr)
         {

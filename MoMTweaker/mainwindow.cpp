@@ -53,8 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	m_instance = this;
 
-    QMoMSettings::readSettings(this);
-
     QStringList searchPaths(":/images");
     searchPaths.append(":/units");
     searchPaths.append(":/abilities");
@@ -63,12 +61,14 @@ MainWindow::MainWindow(QWidget *parent) :
     searchPaths.append(":/wizards");
     QDir::setSearchPaths(QString("images"), searchPaths);
 
+    m_filedialogLoadGame.setObjectName("filedialogLoadGame");
     m_filedialogLoadGame.setWindowTitle(tr("Open MoM file"));
     m_filedialogLoadGame.setNameFilter(tr("MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptOpen);
     m_filedialogLoadGame.setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoadGame.setViewMode(QFileDialog::Detail);
 
+    m_filedialogSaveGame.setObjectName("filedialogSaveGame");
     m_filedialogSaveGame.setWindowTitle(tr("Save MoM file"));
     m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptSave);
@@ -80,13 +80,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setFont(MoM::QMoMResources::g_Font);
     ui->treeView_MoM->setFont(MoM::QMoMResources::g_Font);
 
-    // TODO: Load and save config
 #ifdef _WIN32
-    m_filedialogLoadGame.setDirectory("C:/games/MAGIC-work/");
-    m_filedialogSaveGame.setDirectory("C:/games/MAGIC-work/");
+    m_filedialogLoadGame.setDirectory("C:/GAMES/");
+    m_filedialogSaveGame.setDirectory("C:/GAMES/");
 #else // Linux
-    m_filedialogLoadGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
-    m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
+//    m_filedialogLoadGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
+//    m_filedialogSaveGame.setDirectory("/media/C_DRIVE/GAMES/MAGIC-work/");
     QFont fontTreeView(MoM::QMoMResources::g_Font);
     fontTreeView.setPointSize(fontTreeView.pointSize() - 1);
     ui->treeView_MoM->setFont(fontTreeView);
@@ -95,6 +94,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // Connect the item model UnitModel to the treeview
     // TODO: Move to new method in UnitModel
     ui->treeView_MoM->setModel(&m_UnitModel);
+
+    // Read settings
+    QMoMSettings::readSettings(this);
+
     QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)));
 
     // Make internal connections to handle events centrally
