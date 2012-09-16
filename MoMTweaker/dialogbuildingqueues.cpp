@@ -10,6 +10,7 @@
 
 #include <MoMController.h>
 #include <MoMGenerated.h>
+#include <QMoMSettings.h>
 
 #include "mainwindow.h"
 
@@ -19,6 +20,8 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui(new Ui::DialogBuildingQueues)
 {
     ui->setupUi(this);
+
+    QMoMSettings::readSettings(this);
 
     ui->splitter->setSizes(QList<int>() << 100 << 680);
 
@@ -98,6 +101,8 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
 DialogBuildingQueues::~DialogBuildingQueues()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
 }
 

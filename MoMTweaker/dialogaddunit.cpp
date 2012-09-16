@@ -15,6 +15,7 @@
 #include <MoMUnit.h>
 #include <MoMUtility.h>
 #include "QMoMResources.h"
+#include "QMoMSettings.h"
 #include "QMoMSharedPointers.h"
 
 #include "mainwindow.h"
@@ -35,6 +36,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui(new Ui::DialogAddUnit)
 {
     ui->setupUi(this);
+    QMoMSettings::readSettings(this);
 
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;
@@ -66,6 +68,8 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 DialogAddUnit::~DialogAddUnit()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
     delete m_sceneUnit;
 }

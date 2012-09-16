@@ -9,6 +9,7 @@ namespace MoM {
 
 std::ostream& operator<<(std::ostream& os, const eBannerColor& rhs);
 std::ostream& operator<<(std::ostream& os, const eBattleCondition& rhs);
+std::ostream& operator<<(std::ostream& os, const eBattleEnchantment& rhs);
 std::ostream& operator<<(std::ostream& os, const eBattleUnitActive& rhs);
 std::ostream& operator<<(std::ostream& os, const eBattleUnitTactic& rhs);
 std::ostream& operator<<(std::ostream& os, const eBuilding& rhs);
@@ -23,6 +24,7 @@ std::ostream& operator<<(std::ostream& os, const eDifficulty& rhs);
 std::ostream& operator<<(std::ostream& os, const eDifficulty140m& rhs);
 std::ostream& operator<<(std::ostream& os, const eEvent& rhs);
 std::ostream& operator<<(std::ostream& os, const eGameState& rhs);
+std::ostream& operator<<(std::ostream& os, const eGlobalEnchantment& rhs);
 std::ostream& operator<<(std::ostream& os, const eGrand_Vizier& rhs);
 std::ostream& operator<<(std::ostream& os, const eHelpIndex& rhs);
 std::ostream& operator<<(std::ostream& os, const eHeroAbility& rhs);
@@ -176,6 +178,7 @@ std::ostream& operator<<(std::ostream& os, const unionUnit_Weapon_Mutation& rhs)
 
 bool validate(const eBannerColor& rhs, const std::string& context);
 bool validate(const eBattleCondition& rhs, const std::string& context);
+bool validate(const eBattleEnchantment& rhs, const std::string& context);
 bool validate(const eBattleUnitActive& rhs, const std::string& context);
 bool validate(const eBattleUnitTactic& rhs, const std::string& context);
 bool validate(const eBuilding& rhs, const std::string& context);
@@ -190,6 +193,7 @@ bool validate(const eDifficulty& rhs, const std::string& context);
 bool validate(const eDifficulty140m& rhs, const std::string& context);
 bool validate(const eEvent& rhs, const std::string& context);
 bool validate(const eGameState& rhs, const std::string& context);
+bool validate(const eGlobalEnchantment& rhs, const std::string& context);
 bool validate(const eGrand_Vizier& rhs, const std::string& context);
 bool validate(const eHelpIndex& rhs, const std::string& context);
 bool validate(const eHeroAbility& rhs, const std::string& context);

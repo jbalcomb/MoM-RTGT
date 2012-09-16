@@ -116,6 +116,40 @@ void MoMTerrain::setLocation(const MoMLocation &loc)
     m_location = loc;
 }
 
+Battle_Unit *MoMTerrain::getBattleUnit()
+{
+    if (m_location.m_Map != MoMLocation::MAP_battle)
+        return 0;
+    Battle_Unit* value = 0;
+    Battle_Unit* firstInactiveUnit = 0;
+    for (int battleUnitNr = 0; battleUnitNr < m_game->getNrBattleUnits(); ++battleUnitNr)
+    {
+        Battle_Unit* battleUnit = m_game->getBattleUnit(battleUnitNr);
+        if (0 == battleUnit)
+            break;
+        if ((battleUnit->m_xPos == m_location.m_XPos) && (battleUnit->m_yPos == m_location.m_YPos))
+        {
+            if (battleUnit->m_Active == BATTLEUNITACTIVE_alive)
+            {
+                value = battleUnit;
+                break;
+            }
+            else if (0 == firstInactiveUnit)
+            {
+                firstInactiveUnit = battleUnit;
+            }
+            else
+            {
+            }
+        }
+    }
+    if (0 == value)
+    {
+        value = firstInactiveUnit;
+    }
+    return value;
+}
+
 City *MoMTerrain::getCity()
 {
     City* value = 0;

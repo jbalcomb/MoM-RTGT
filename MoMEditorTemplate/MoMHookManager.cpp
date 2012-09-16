@@ -11,9 +11,13 @@
 namespace MoM {
 
 MoMHookManager::MoMHookManager(MoMGameBase* game) :
-    m_game(game)
+    m_game(game),
+    m_process()
 {
-    m_process = m_game->getMoMProcess();
+    if (0 != m_game)
+    {
+        m_process = m_game->getMoMProcess();
+    }
 }
 
 ///

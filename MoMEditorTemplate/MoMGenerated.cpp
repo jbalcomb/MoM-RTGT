@@ -62,6 +62,32 @@ std::ostream& operator<<(std::ostream& os, const eBattleCondition& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eBattleEnchantment& rhs)
+{
+    switch (rhs)
+    {
+    case BATTLEENCHANTMENT_True_Light: os << "BATTLEENCHANTMENT_True_Light"; break;
+    case BATTLEENCHANTMENT_Darkness: os << "BATTLEENCHANTMENT_Darkness"; break;
+    case BATTLEENCHANTMENT_Warp_Reality: os << "BATTLEENCHANTMENT_Warp_Reality"; break;
+    case BATTLEENCHANTMENT_Black_Prayer: os << "BATTLEENCHANTMENT_Black_Prayer"; break;
+    case BATTLEENCHANTMENT_Wrack: os << "BATTLEENCHANTMENT_Wrack"; break;
+    case BATTLEENCHANTMENT_Metal_Fires: os << "BATTLEENCHANTMENT_Metal_Fires"; break;
+    case BATTLEENCHANTMENT_Prayer: os << "BATTLEENCHANTMENT_Prayer"; break;
+    case BATTLEENCHANTMENT_High_Prayer: os << "BATTLEENCHANTMENT_High_Prayer"; break;
+    case BATTLEENCHANTMENT_Terror: os << "BATTLEENCHANTMENT_Terror"; break;
+    case BATTLEENCHANTMENT_Call_Lightning: os << "BATTLEENCHANTMENT_Call_Lightning"; break;
+    case BATTLEENCHANTMENT_Counter_Magic: os << "BATTLEENCHANTMENT_Counter_Magic"; break;
+    case BATTLEENCHANTMENT_Mass_Invisibility: os << "BATTLEENCHANTMENT_Mass_Invisibility"; break;
+    case BATTLEENCHANTMENT_Entangle: os << "BATTLEENCHANTMENT_Entangle"; break;
+    case BATTLEENCHANTMENT_Mana_Leak: os << "BATTLEENCHANTMENT_Mana_Leak"; break;
+    case BATTLEENCHANTMENT_Blur: os << "BATTLEENCHANTMENT_Blur"; break;
+    case eBattleEnchantment_MAX: os << "eBattleEnchantment_MAX"; break;
+    default: os << "<Unknown eBattleEnchantment>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eBattleUnitActive& rhs)
 {
     switch (rhs)
@@ -417,6 +443,41 @@ std::ostream& operator<<(std::ostream& os, const eGameState& rhs)
     case STATE_Diplomacy: os << "STATE_Diplomacy"; break;
     case STATE_Computers_turn_GUESS: os << "STATE_Computers_turn_GUESS"; break;
     default: os << "<Unknown eGameState>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eGlobalEnchantment& rhs)
+{
+    switch (rhs)
+    {
+    case GLOBALENCHANTMENT_Eternal_Night: os << "GLOBALENCHANTMENT_Eternal_Night"; break;
+    case GLOBALENCHANTMENT_Evil_Omens: os << "GLOBALENCHANTMENT_Evil_Omens"; break;
+    case GLOBALENCHANTMENT_Zombie_Mastery: os << "GLOBALENCHANTMENT_Zombie_Mastery"; break;
+    case GLOBALENCHANTMENT_Aura_of_Majesty: os << "GLOBALENCHANTMENT_Aura_of_Majesty"; break;
+    case GLOBALENCHANTMENT_Wind_Mastery: os << "GLOBALENCHANTMENT_Wind_Mastery"; break;
+    case GLOBALENCHANTMENT_Suppress_Magic: os << "GLOBALENCHANTMENT_Suppress_Magic"; break;
+    case GLOBALENCHANTMENT_Time_Stop: os << "GLOBALENCHANTMENT_Time_Stop"; break;
+    case GLOBALENCHANTMENT_Nature_Awareness: os << "GLOBALENCHANTMENT_Nature_Awareness"; break;
+    case GLOBALENCHANTMENT_Natures_Wrath: os << "GLOBALENCHANTMENT_Natures_Wrath"; break;
+    case GLOBALENCHANTMENT_Herb_Mastery: os << "GLOBALENCHANTMENT_Herb_Mastery"; break;
+    case GLOBALENCHANTMENT_Chaos_Surge: os << "GLOBALENCHANTMENT_Chaos_Surge"; break;
+    case GLOBALENCHANTMENT_Doom_Mastery: os << "GLOBALENCHANTMENT_Doom_Mastery"; break;
+    case GLOBALENCHANTMENT_Great_Wasting: os << "GLOBALENCHANTMENT_Great_Wasting"; break;
+    case GLOBALENCHANTMENT_Meteor_Storm: os << "GLOBALENCHANTMENT_Meteor_Storm"; break;
+    case GLOBALENCHANTMENT_Armageddon: os << "GLOBALENCHANTMENT_Armageddon"; break;
+    case GLOBALENCHANTMENT_Tranquility: os << "GLOBALENCHANTMENT_Tranquility"; break;
+    case GLOBALENCHANTMENT_Life_Force: os << "GLOBALENCHANTMENT_Life_Force"; break;
+    case GLOBALENCHANTMENT_Crusade: os << "GLOBALENCHANTMENT_Crusade"; break;
+    case GLOBALENCHANTMENT_Just_Cause: os << "GLOBALENCHANTMENT_Just_Cause"; break;
+    case GLOBALENCHANTMENT_Holy_Arms: os << "GLOBALENCHANTMENT_Holy_Arms"; break;
+    case GLOBALENCHANTMENT_Planar_Seal: os << "GLOBALENCHANTMENT_Planar_Seal"; break;
+    case GLOBALENCHANTMENT_Charm_of_Life: os << "GLOBALENCHANTMENT_Charm_of_Life"; break;
+    case GLOBALENCHANTMENT_Detect_Magic: os << "GLOBALENCHANTMENT_Detect_Magic"; break;
+    case GLOBALENCHANTMENT_Awareness: os << "GLOBALENCHANTMENT_Awareness"; break;
+    case eGlobalEnchantment_MAX: os << "eGlobalEnchantment_MAX"; break;
+    default: os << "<Unknown eGlobalEnchantment>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -6430,10 +6491,10 @@ std::ostream& operator<<(std::ostream& os, const Spells_Cast_in_Battle& rhs)
         os << "[" << i << "] " << (unsigned)rhs.Warp_Reality[i] << " 0x" << std::hex << (unsigned)rhs.Warp_Reality[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "Dark_Prayer=(\n";
+    os << "Black_Prayer=(\n";
     for (unsigned i = 0; i < 2; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.Dark_Prayer[i] << " 0x" << std::hex << (unsigned)rhs.Dark_Prayer[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.Black_Prayer[i] << " 0x" << std::hex << (unsigned)rhs.Black_Prayer[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "Wrack=(\n";
@@ -7683,6 +7744,31 @@ bool validate(const eBattleCondition& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eBattleEnchantment& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case BATTLEENCHANTMENT_True_Light: break;
+    case BATTLEENCHANTMENT_Darkness: break;
+    case BATTLEENCHANTMENT_Warp_Reality: break;
+    case BATTLEENCHANTMENT_Black_Prayer: break;
+    case BATTLEENCHANTMENT_Wrack: break;
+    case BATTLEENCHANTMENT_Metal_Fires: break;
+    case BATTLEENCHANTMENT_Prayer: break;
+    case BATTLEENCHANTMENT_High_Prayer: break;
+    case BATTLEENCHANTMENT_Terror: break;
+    case BATTLEENCHANTMENT_Call_Lightning: break;
+    case BATTLEENCHANTMENT_Counter_Magic: break;
+    case BATTLEENCHANTMENT_Mass_Invisibility: break;
+    case BATTLEENCHANTMENT_Entangle: break;
+    case BATTLEENCHANTMENT_Mana_Leak: break;
+    case BATTLEENCHANTMENT_Blur: break;
+    default: std::cout << context << ": Unknown eBattleEnchantment = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eBattleUnitActive& rhs, const std::string& context)
 {
     bool ok = true;
@@ -8026,6 +8112,40 @@ bool validate(const eGameState& rhs, const std::string& context)
     case STATE_Diplomacy: break;
     case STATE_Computers_turn_GUESS: break;
     default: std::cout << context << ": Unknown eGameState = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eGlobalEnchantment& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case GLOBALENCHANTMENT_Eternal_Night: break;
+    case GLOBALENCHANTMENT_Evil_Omens: break;
+    case GLOBALENCHANTMENT_Zombie_Mastery: break;
+    case GLOBALENCHANTMENT_Aura_of_Majesty: break;
+    case GLOBALENCHANTMENT_Wind_Mastery: break;
+    case GLOBALENCHANTMENT_Suppress_Magic: break;
+    case GLOBALENCHANTMENT_Time_Stop: break;
+    case GLOBALENCHANTMENT_Nature_Awareness: break;
+    case GLOBALENCHANTMENT_Natures_Wrath: break;
+    case GLOBALENCHANTMENT_Herb_Mastery: break;
+    case GLOBALENCHANTMENT_Chaos_Surge: break;
+    case GLOBALENCHANTMENT_Doom_Mastery: break;
+    case GLOBALENCHANTMENT_Great_Wasting: break;
+    case GLOBALENCHANTMENT_Meteor_Storm: break;
+    case GLOBALENCHANTMENT_Armageddon: break;
+    case GLOBALENCHANTMENT_Tranquility: break;
+    case GLOBALENCHANTMENT_Life_Force: break;
+    case GLOBALENCHANTMENT_Crusade: break;
+    case GLOBALENCHANTMENT_Just_Cause: break;
+    case GLOBALENCHANTMENT_Holy_Arms: break;
+    case GLOBALENCHANTMENT_Planar_Seal: break;
+    case GLOBALENCHANTMENT_Charm_of_Life: break;
+    case GLOBALENCHANTMENT_Detect_Magic: break;
+    case GLOBALENCHANTMENT_Awareness: break;
+    default: std::cout << context << ": Unknown eGlobalEnchantment = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }

@@ -5,14 +5,11 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-// OS specific
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
+// Qt
 #include <QImageWriter>
 #include <QRegExp>
-#include <qtimer.h>
+#include <QSettings>
+#include <QTimer>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -30,6 +27,7 @@
 #include <MoMGameSave.h>
 #include <MoMUtility.h>
 #include <QMoMResources.h>
+#include <QMoMSettings.h>
 
 // Local
 #include "dialogaddunit.h"
@@ -54,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 	m_instance = this;
+
+    QMoMSettings::readSettings(this);
 
     QStringList searchPaths(":/images");
     searchPaths.append(":/units");
@@ -126,6 +126,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
 }
 
@@ -270,7 +272,7 @@ void MainWindow::update()
             (0 != dynamic_cast<MoM::MoMGameMemory*>(m_game.data()))
             || (0 != dynamic_cast<MoM::MoMGameCustom*>(m_game.data()))
             );
-//    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
+    ui->checkBox_UseIcons->setEnabled(ui->checkBox_UpdateTree->isChecked());
 }
 
 void MainWindow::on_pushButton_Connect_clicked()
@@ -558,6 +560,7 @@ void MainWindow::on_checkBox_UpdateTree_clicked()
 		QObject::disconnect(this, SIGNAL(signal_gameUpdated()), &m_UnitModel, SLOT(slot_gameUpdated()));
         statusBar()->showMessage(tr("Treeview is not updated anymore"));
 	}
+    update();
 }
 
 void MainWindow::slot_gameChanged(const QMoMGamePtr& game)

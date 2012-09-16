@@ -1,5 +1,6 @@
 #include "MoMTemplate.h"
 #include "mainwindow.h"
+#include "QMoMSettings.h"
 
 #include "dialogexternalai.h"
 #include "ui_dialogexternalai.h"
@@ -11,14 +12,19 @@ DialogExternalAI::DialogExternalAI(QWidget *parent) :
     hookManager(0)
 {
     ui->setupUi(this);
+    QMoMSettings::readSettings(this);
 
-    // TODO: Checks + life cycle management of the game and the process
-    m_game = MainWindow::getInstance()->getGame();
-    hookManager = new MoM::MoMHookManager(m_game.data());
+    // Update view when game is changed or updated
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
+
+    slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 DialogExternalAI::~DialogExternalAI()
 {
+    QMoMSettings::writeSettings(this);
+
     delete hookManager;
 
     delete ui;
@@ -134,4 +140,18 @@ void DialogExternalAI::on_pushButton_ReleaseHook_clicked()
     {
         on_pushButton_WaitForHook_clicked();
     }
+}
+
+void DialogExternalAI::slot_gameChanged(const QMoMGamePtr &game)
+{
+    m_game = game;
+
+    delete hookManager;
+    hookManager = new MoM::MoMHookManager(m_game.data());
+
+    slot_gameUpdated();
+}
+
+void DialogExternalAI::slot_gameUpdated()
+{
 }

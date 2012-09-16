@@ -5385,17 +5385,17 @@ QMoMTreeItemBase* constructTreeItem(Spells_Cast_in_Battle* rhs, const QString& c
           oss << "Warp_Reality[" << i << "]";
           ptreeWarp_Reality->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->Warp_Reality[i]));
     }
-    QMoMTreeItemBase* ptreeDark_Prayer = ptree;
+    QMoMTreeItemBase* ptreeBlack_Prayer = ptree;
     if (2 > 3)
     {
-        ptreeDark_Prayer = new QMoMTreeItemBase("Dark_Prayer");
-        ptree->appendTree(ptreeDark_Prayer, "");
+        ptreeBlack_Prayer = new QMoMTreeItemBase("Black_Prayer");
+        ptree->appendTree(ptreeBlack_Prayer, "");
     }
     for (unsigned i = 0; i < 2; ++i)
     {
           std::ostringstream oss;
-          oss << "Dark_Prayer[" << i << "]";
-          ptreeDark_Prayer->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->Dark_Prayer[i]));
+          oss << "Black_Prayer[" << i << "]";
+          ptreeBlack_Prayer->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->Black_Prayer[i]));
     }
     QMoMTreeItemBase* ptreeWrack = ptree;
     if (2 > 3)

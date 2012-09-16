@@ -7,7 +7,9 @@
 
 #include <QtGui/QApplication>
 
-#include <TeeRedirecter.h>
+#include "QMoMSettings.h"
+#include "TeeRedirecter.h"
+
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -18,6 +20,10 @@ int main(int argc, char *argv[])
 
     // Run application
     QApplication a(argc, argv);
+
+    // Settings for the configuration
+    QMoMSettings::initialize("MoMTweaker");
+
     MainWindow w;
     w.show();
     return a.exec();

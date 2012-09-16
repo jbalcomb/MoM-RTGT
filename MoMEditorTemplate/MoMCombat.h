@@ -25,7 +25,7 @@ public:
     }
 
     /// Modifies MoMUnit::applyEffects() to make sure the extra fields are initialized
-    virtual void applyEffects();
+    virtual void applyEffects(const Spells_Cast_in_Battle* battleSpells = 0);
 
     BaseAttributes& getCombatAttributes()
     {
@@ -69,7 +69,7 @@ class MoMCombat
 public:
     typedef std::vector<CombatUnit> StackUnits;
 
-    MoMCombat();
+    MoMCombat(class MoMGameBase* game = 0);
 
     //
     // LIBRARY FUNCTIONS (sorted alphabetically)
@@ -200,6 +200,7 @@ private:
     static size_t findFirstLivingUnit(const StackUnits& units);
 
 private:
+    class MoMGameBase* m_game;
     bool m_verbose;
     int m_method;
     int m_nr_simulations;

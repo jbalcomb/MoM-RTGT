@@ -8,6 +8,7 @@
 #include <iostream>
 #include <limits>
 
+#include "MoMGameBase.h"
 #include "MoMUnit.h"
 #include "MoMUtility.h"
 
@@ -16,9 +17,10 @@ namespace MoM {
 const void* null = 0;
 const double g_epsilon = 0.00001;
 
-void CombatUnit::applyEffects()
+void CombatUnit::applyEffects(const Spells_Cast_in_Battle* battleSpells)
 {
-    MoMUnit::applyEffects();
+    MoMUnit::applyEffects(battleSpells);
+
     m_simulatedDamage = MoMUnit::getDamage();
     m_baseAttributes = MoMUnit::getActualAttributes();
     m_suppressionCounter = MoMUnit::getBattleUnit().m_Suppression;
@@ -74,26 +76,14 @@ double CombatUnit::getCurFiguresFrac() const
     else return nr_full_figures + hp_last_figure;
 }
 
-MoMCombat::MoMCombat() :
+MoMCombat::MoMCombat(MoMGameBase* game) :
+    m_game(game),
     m_verbose(false),
     m_method(0),
     m_nr_simulations(100)
 {
 }
 
-//!
-//! This source is roughly divided into 5 sections:\n
-//!    1. The html header.\n
-//!    2. The global variables (prefixed with "g_").\n
-//!    3. The classes with their implementation (BaseUnit and Unit).\n
-//!    4. Auxiliary functions.\n
-//!    5. Event handlers of the form OnButtonAttack()\n
-//!    6. The html form and html trailer.\n
-//!
-//!
-//! The global variable g_units[] contains all units.
-//! The global variables g_attacker and g_defender contain the currently selected attacker and defender.
-//!
 //!
 //! The function combat_round(attacker, defender) resolves 1 melee combat round. That is:\n
 //!   1. Pre-melee: Attacker executes Breath, Thrown, and Gaze attacks.\n
@@ -105,15 +95,6 @@ MoMCombat::MoMCombat() :
 //!   7. Melee: Resolve casualties\n
 //!
 //! The function shoot_round(attacker, defender, distance) resolves 1 ranged attack.
-//!
-//!
-//! The eventhandler OnLoad() initializes the form
-//!
-//!
-//! JAVASCRIPT RELATED ISSUES:
-//!
-//! How can I create MoM-style look-and-feel:
-//!   Backgrounds, Buttons, Borders, Cursors, ...
 //!
 
 //

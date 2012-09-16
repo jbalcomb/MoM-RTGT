@@ -20,14 +20,12 @@ public:
     
 private slots:
     void on_pushButton_InsertHook_clicked();
-
     void on_pushButton_RaiseHook_clicked();
-
     void on_pushButton_WaitForHook_clicked();
-
     void on_pushButton_RetractHook_clicked();
-
     void on_pushButton_ReleaseHook_clicked();
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
 
 private:
     Ui::DialogExternalAI *ui;

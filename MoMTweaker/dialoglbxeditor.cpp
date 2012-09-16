@@ -7,6 +7,7 @@
 
 #include "QMoMLbx.h"
 #include "QMoMResources.h"
+#include "QMoMSettings.h"
 
 DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     QDialog(parent),
@@ -15,7 +16,9 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     m_sceneLbx(new QGraphicsScene(this))
 {
     ui->setupUi(this);
+    QMoMSettings::readSettings(this);
 
+    setWindowFlags(Qt::Window);
     setFont(MoM::QMoMResources::g_Font);
 
     ui->graphicsView_LbxImage->setScene(m_sceneLbx);
@@ -52,6 +55,8 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
 
 DialogLbxEditor::~DialogLbxEditor()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
 }
 

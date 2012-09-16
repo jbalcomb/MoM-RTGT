@@ -51,7 +51,8 @@ HEADERS += \
     ../MoMEditorTemplate/QMoMMapScene.h \
     ../MoMEditorTemplate/MoMHookManager.h \
     ../MoMTweaker/dialogexternalai.h \
-    ../MoMEditorTemplate/MoMCombat.h
+    ../MoMEditorTemplate/MoMCombat.h \
+    ../MoMEditorTemplate/QMoMSettings.h
 
 SOURCES += \
     ../MoMEditorTemplate/MoMController.cpp \
@@ -93,7 +94,8 @@ SOURCES += \
     ../MoMEditorTemplate/QMoMMapScene.cpp \
     ../MoMEditorTemplate/MoMHookManager.cpp \
     ../MoMTweaker/dialogexternalai.cpp \
-    ../MoMEditorTemplate/MoMCombat.cpp
+    ../MoMEditorTemplate/MoMCombat.cpp \
+    ../MoMEditorTemplate/QMoMSettings.cpp
 
 FORMS += \
     ../MoMTweaker/mainwindow.ui \

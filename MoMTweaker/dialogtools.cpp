@@ -20,6 +20,7 @@
 #include <MoMUtility.h>
 #include <QMoMLbx.h>
 #include <QMoMResources.h>
+#include <QMoMSettings.h>
 
 // Local
 #include "dialogbuildingqueues.h"
@@ -38,10 +39,14 @@ DialogTools::DialogTools(QWidget *parent) :
 {
     ui->setupUi(this);
     setFont(MoM::QMoMResources::g_Font);
+
+    QMoMSettings::readSettings(this);
 }
 
 DialogTools::~DialogTools()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
 }
 

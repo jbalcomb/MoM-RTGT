@@ -24,11 +24,12 @@
 #include "MoMTemplate.h"
 #include "MoMTerrain.h"
 #include "MoMUtility.h"
+#include "QMoMMapScene.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
+#include "QMoMSettings.h"
 #include "QMoMTreeItem.h"
 #include "QMoMUnitTile.h"
-#include "QMoMMapScene.h"
 
 namespace MoM
 {
@@ -414,15 +415,19 @@ DialogMap::DialogMap(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QMoMGamePtr game= MainWindow::getInstance()->getGame();
-    if ((0 != game) && (game->isBattleInProgress()))
-    {
-        ui->comboBox_Plane->setCurrentIndex(3);
-    }
-    else
-    {
-        ui->comboBox_Plane->setCurrentIndex(1);
-    }
+    QMoMSettings::readSettings(this);
+
+    setWindowFlags(Qt::Window);
+
+//    QMoMGamePtr game= MainWindow::getInstance()->getGame();
+//    if ((0 != game) && (game->isBattleInProgress()))
+//    {
+//        ui->comboBox_Plane->setCurrentIndex(3);
+//    }
+//    else
+//    {
+//        ui->comboBox_Plane->setCurrentIndex(1);
+//    }
 
     // Update view when game is changed or updated
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -463,6 +468,8 @@ DialogMap::DialogMap(QWidget *parent) :
 
 DialogMap::~DialogMap()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
     delete m_sceneMyrror;
     delete m_sceneArcanus;
@@ -704,7 +711,6 @@ void DialogMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
         qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromXPos", &unit->m_XPos_Road_Building_from));
         qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromYPos", &unit->m_YPos_Road_Building_from));
     }
-
 }
 
 void DialogMap::on_comboBox_Plane_currentIndexChanged(int index)
@@ -1086,56 +1092,91 @@ void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &
     //       2. Attack with (sub) stack of selected units
     //       3. Copy or move terrain feature
     //       4. Copy or move terrain tile
-    std::vector<int> unitsFrom = terrainFrom.getUnits();
-    std::vector<int> unitsTo = terrainTo.getUnits();
 
-    qDebug() << QString("%0 units versus %1 units")
-                .arg(unitsFrom.size()).arg(unitsTo.size());
-
-    if ((unitsFrom.size() > 0) && (unitsTo.size() <= 0))
+    if (locFrom.m_Map == MoMLocation::MAP_overland)
     {
-        // Move stack
-        for (size_t i = 0; i < unitsFrom.size(); ++i)
+        std::vector<int> unitsFrom = terrainFrom.getUnits();
+        std::vector<int> unitsTo = terrainTo.getUnits();
+
+        qDebug() << QString("%0 units versus %1 units")
+                    .arg(unitsFrom.size()).arg(unitsTo.size());
+
+        if ((unitsFrom.size() > 0) && (unitsTo.size() <= 0))
         {
-            Unit* unit = m_game->getUnit(unitsFrom[i]);
-            if (0 != unit)
+            // Move stack
+            for (size_t i = 0; i < unitsFrom.size(); ++i)
             {
-                Unit newUnit = *unit;
-                newUnit.m_XPos = locTo.m_XPos;
-                newUnit.m_YPos = locTo.m_YPos;
-                newUnit.m_Plane = locTo.m_Plane;
-                (void)m_game->commitData(unit, &newUnit, sizeof(Unit));
+                Unit* unit = m_game->getUnit(unitsFrom[i]);
+                if (0 != unit)
+                {
+                    Unit newUnit = *unit;
+                    newUnit.m_XPos = locTo.m_XPos;
+                    newUnit.m_YPos = locTo.m_YPos;
+                    newUnit.m_Plane = locTo.m_Plane;
+                    (void)m_game->commitData(unit, &newUnit, sizeof(newUnit));
+                }
             }
+            slot_gameUpdated();
         }
-        slot_gameUpdated();
+        else if ((unitsFrom.size() > 0) && (unitsTo.size() > 0))
+        {
+            // Simulate combat
+            MoMCombat::StackUnits attackers(unitsFrom.size());
+            MoMCombat::StackUnits defenders(unitsTo.size());
+
+            for (size_t i = 0; i < attackers.size(); ++i)
+            {
+                attackers[i] = CombatUnit(m_game.data());
+                CombatUnit& attacker = attackers[i];
+                attacker.changeUnit(m_game->getUnit(unitsFrom[i]));
+            }
+            for (size_t i = 0; i < defenders.size(); ++i)
+            {
+                defenders[i] = CombatUnit(m_game.data());
+                CombatUnit& defender = defenders[i];
+                defender.changeUnit(m_game->getUnit(unitsTo[i]));
+            }
+
+            MoMCombat combat;
+            int result = 0;
+            std::string ostr = combat.full_combat(attackers, defenders, result);
+
+            std::cout << ostr << std::endl;
+            (void)QMessageBox::information(this,
+                tr("Battle simulation"),
+                ostr.c_str());
+        }
     }
-    else if ((unitsFrom.size() > 0) && (unitsTo.size() > 0))
+    else
     {
-        // Simulate combat
-        MoMCombat::StackUnits attackers(unitsFrom.size());
-        MoMCombat::StackUnits defenders(unitsTo.size());
+        Battle_Unit* unitFrom = terrainFrom.getBattleUnit();
+        Battle_Unit* unitTo = terrainTo.getBattleUnit();
 
-        for (size_t i = 0; i < attackers.size(); ++i)
+        if ((0 != unitFrom) && ((0 == unitTo) || (unitTo->m_Active != BATTLEUNITACTIVE_alive)))
         {
-            attackers[i] = CombatUnit(m_game.data());
-            CombatUnit& attacker = attackers[i];
-            attacker.changeUnit(m_game->getUnit(unitsFrom[i]));
-            attacker.m_simulatedDamage = attacker.getDamage();
+            // Move unit
+            Battle_Unit newUnit = *unitFrom;
+            newUnit.m_xPos = locTo.m_XPos;
+            newUnit.m_yPos = locTo.m_YPos;
+            (void)m_game->commitData(unitFrom, &newUnit, sizeof(newUnit));
+            slot_gameUpdated();
         }
-        for (size_t i = 0; i < defenders.size(); ++i)
+        else if ((0 != unitFrom) && (unitFrom->m_Active == BATTLEUNITACTIVE_alive)
+                 && (0 != unitTo) && (unitTo->m_Active == BATTLEUNITACTIVE_alive))
         {
-            defenders[i] = CombatUnit(m_game.data());
-            CombatUnit& defender = defenders[i];
-            defender.changeUnit(m_game->getUnit(unitsTo[i]));
-            defender.m_simulatedDamage = defender.getDamage();
-        }
+            // Simulate combat
+            CombatUnit attacker(m_game.data());
+            CombatUnit defender(m_game.data());
+            attacker.changeUnit(unitFrom);
+            defender.changeUnit(unitTo);
 
-        MoMCombat combat;
-        int result = 0;
-        std::string ostr = combat.full_combat(attackers, defenders, result);
-        qDebug() << "Result = " << result;
-        qDebug() << ostr.c_str();
-        std::cout << ostr << std::endl;
+            MoMCombat combat;
+            std::string ostr = combat.combat_round(attacker, defender);
+            std::cout << ostr << std::endl;
+            (void)QMessageBox::information(this,
+                tr("Combat round simulation"),
+                ostr.c_str());
+        }
     }
 }
 
@@ -1166,7 +1207,7 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
         }
     }
 
-    if (loc.m_Plane == ePlane_MAX)
+    if (loc.m_Map == MoMLocation::MAP_battle)
     {
         for (int battleUnitNr = 0; battleUnitNr < m_game->getNrBattleUnits(); ++battleUnitNr)
         {

@@ -17,8 +17,14 @@ public:
     }
     void setLocation(const MoMLocation& loc);
 
+    /// \brief Returns the unit that is alive if there is one.
+    ///        Otherwise the first inactive unit is returned.
+    Battle_Unit* getBattleUnit();
+
     City* getCity();
+
     Tower_Node_Lair* getLair();
+
     std::vector<int> getUnits();
 
     static eTerrainCategory getTerrainCategory(eTerrainType terrainType);

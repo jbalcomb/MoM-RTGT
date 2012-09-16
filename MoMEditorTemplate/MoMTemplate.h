@@ -75,7 +75,7 @@ enum eBattleEnchantment
     BATTLEENCHANTMENT_True_Light,           // 00-01    1=True Light (Battle), 2=Heavenly Light (City) / Cloud of Shadow (City), 3=Eternal Darkness (Global)
     BATTLEENCHANTMENT_Darkness,             // 02-03
     BATTLEENCHANTMENT_Warp_Reality,         // 04-05
-    BATTLEENCHANTMENT_Dark_Prayer,          // 06-07
+    BATTLEENCHANTMENT_Black_Prayer,         // 06-07
     BATTLEENCHANTMENT_Wrack,                // 08-09
     BATTLEENCHANTMENT_Metal_Fires,          // 0A-0B
     BATTLEENCHANTMENT_Prayer,               // 0C-0D
@@ -1846,12 +1846,16 @@ enum eRandomPickType ENUMSIZE16 {
 enum eRanged_Type ENUMSIZE8 {
     RANGED_None = 0xFF,
 
+    RANGED_Unk0 = 0,
+
     // 10-19 Rocks
     RANGED_Rock = 10,
+    RANGED_Unk11 = 11,
 
     // 20-29 Missiles
     RANGED_Arrow = 20,
     RANGED_Bullet = 21,                     // Slingers
+    RANGED_Unk22 = 22,
 
     // 30-39 Magic ranged attack
     RANGED_Chaos_Magic1_Storm_Giant = 30,   // Warlock, Chaos Warrior, Storm Giant
@@ -1866,11 +1870,11 @@ enum eRanged_Type ENUMSIZE8 {
 
     // 100-109 Thrown/Breath/Gaze
     RANGED_Thrown_Weapons = 100,
-    RANGED_Fire_Breath = 101,
-    RANGED_Lightning_Breath = 102,          // Sky_Drake
-    RANGED_Stoning_Gaze = 103,              // Basilisk, Gorgons (resistance modifier in byte 17)
-    RANGED_Multiple_Gaze = 104,             // Chaos Spawn
-    RANGED_Death_Gaze = 105,                // Night stalker (resistance modifier in byte 17)
+    RANGED_Fire_Breath = 101,               // (Chaos)
+    RANGED_Lightning_Breath = 102,          // (Chaos)  Sky_Drake
+    RANGED_Stoning_Gaze = 103,              // (Nature) Basilisk, Gorgons (resistance modifier in byte 17)
+    RANGED_Multiple_Gaze = 104,             // (Chaos)  Chaos Spawn
+    RANGED_Death_Gaze = 105,                // (Death)  Night stalker (resistance modifier in byte 17)
 
     eRanged_Type_MAX
 };
@@ -3971,7 +3975,7 @@ typedef struct PACKED_STRUCT // Spells_Cast_in_Battle
     uint8_t True_Light[2];          // 00-01    1=True Light (Battle), 2=Heavenly Light (City) / Cloud of Shadow (City), 3=Eternal Darkness (Global)
     uint8_t Darkness[2];            // 02-03
     uint8_t Warp_Reality[2];        // 04-05
-    uint8_t Dark_Prayer[2];         // 06-07
+    uint8_t Black_Prayer[2];        // 06-07
     uint8_t Wrack[2];               // 08-09
     uint8_t Metal_Fires[2];         // 0A-0B
     uint8_t Prayer[2];              // 0C-0D

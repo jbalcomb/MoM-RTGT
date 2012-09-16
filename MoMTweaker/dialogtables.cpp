@@ -19,6 +19,7 @@
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
 #include "mainwindow.h"
+#include "QMoMSettings.h"
 
 enum eShowNumber
 {
@@ -450,13 +451,17 @@ DialogTables::DialogTables(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->comboBox_Table->setCurrentIndex(2);
+    QMoMSettings::readSettings(this);
+    setWindowFlags(Qt::Window);
+//    ui->comboBox_Table->setCurrentIndex(2);
 
     // TODO: Make the signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
 DialogTables::~DialogTables()
 {
+    QMoMSettings::writeSettings(this);
+
     delete ui;
 }
 

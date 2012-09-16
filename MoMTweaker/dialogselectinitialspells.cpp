@@ -15,6 +15,7 @@
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "mainwindow.h"
+#include "QMoMSettings.h"
 
 
 //        starting guaranteed  totals   discount   total # spells
@@ -164,6 +165,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
     m_InitialSpells(0)
 {
     ui->setupUi(this);
+    QMoMSettings::readSettings(this);
 
     srand(time(NULL));
 
@@ -204,6 +206,8 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 
 DialogSelectInitialSpells::~DialogSelectInitialSpells()
 {
+    QMoMSettings::writeSettings(this);
+
     delete m_InitialSpells;
 
     delete ui;

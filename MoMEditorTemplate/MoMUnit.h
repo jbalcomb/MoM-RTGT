@@ -156,12 +156,15 @@ public:
 protected:
 
     /// \brief (Re)applies all effects
-    virtual void applyEffects();
+    virtual void applyEffects(const Spells_Cast_in_Battle* battleSpells = 0);
 
 private:
     /// \brief (Re)applies effects of (hero) abilities
     ///        However, spell like effects are applied in applySpells()
     void applyAbilities();
+
+    /// \brief (Re)applies effects of battle spells
+    void applyBattleSpells(const Spells_Cast_in_Battle* battleSpells);
 
     /// \brief (Re)applies effects of items
     ///        However, spell like effects are applied in applySpells()
