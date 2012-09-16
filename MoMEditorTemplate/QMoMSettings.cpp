@@ -58,19 +58,16 @@ void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
     QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
     if (0 != checkbox)
     {
-        qDebug() << "QCheckBox" << checkbox->text();
         checkbox->setChecked(settings.value(checkbox->objectName()).toBool());
     }
-//    QComboBox* combobox =  dynamic_cast<QComboBox*>(object);
-//    if (0 != combobox)
-//    {
-//        qDebug() << "QComboBox" << combobox->objectName();
-//        combobox->setCurrentIndex(settings.value(combobox->objectName()));
-//    }
+    QComboBox* combobox =  dynamic_cast<QComboBox*>(object);
+    if (0 != combobox)
+    {
+        combobox->setCurrentIndex(settings.value(combobox->objectName()).toInt());
+    }
     QSlider* slider =  dynamic_cast<QSlider*>(object);
     if (0 != slider)
     {
-        qDebug() << "QSlider" << slider->objectName();
         slider->setValue(settings.value(slider->objectName()).toInt());
     }
 
@@ -85,19 +82,16 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
     QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
     if (0 != checkbox)
     {
-        qDebug() << "QCheckBox" << checkbox->text();
         settings.setValue(checkbox->objectName(), checkbox->isChecked());
     }
     QSlider* slider =  dynamic_cast<QSlider*>(object);
     if (0 != slider)
     {
-        qDebug() << "QSlider" << slider->objectName();
         settings.setValue(slider->objectName(), slider->value());
     }
     QComboBox* combobox =  dynamic_cast<QComboBox*>(object);
     if (0 != combobox)
     {
-        qDebug() << "QComboBox" << combobox->objectName();
         settings.setValue(combobox->objectName(), combobox->currentIndex());
     }
 

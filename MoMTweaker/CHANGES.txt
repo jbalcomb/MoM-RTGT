@@ -2,6 +2,19 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.7 (2012--)
+-----------------------------
+
+* Drag & drop on the maps:
+  - either moves a stack of units,
+  - or simulates combat and shows the result in a message box.
+  
+* Combat simulator added.
+
+* Save and restore the dialog positions, sizes, check boxes, etcetera.
+
+
+
 CHANGES IN 0.2.6 (2012-09-08)
 -----------------------------
 
