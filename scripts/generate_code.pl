@@ -1,10 +1,13 @@
 use strict;
 
-my @INPUTFILENAMES = ("MoMModel/MoMTemplate.h", "Platform/MoMCommon.h");
-my $HFILENAME = "MoMModel/Generated/MoMGenerated.h";
-my $CPPFILENAME = "MoMModel/Generated/MoMGenerated.cpp";
-my $QT_HFILENAME = "QMoMCommon/Generated/QMoMGenerated.h";
-my $QT_CPPFILENAME = "QMoMCommon/Generated/QMoMGenerated.cpp";
+my $INPUTFILE = "MoMTemplate.h";
+my @INPUTFILENAMES = ("MoMModel/$INPUTFILE", "Platform/MoMCommon.h");
+my $GENDIR = "MoMModel/Generated";
+my $HFILENAME = "MoMGenerated.h";
+my $CPPFILENAME = "MoMGenerated.cpp";
+my $QT_GENDIR = "QMoMCommon/Generated";
+my $QT_HFILENAME = "QMoMGenerated.h";
+my $QT_CPPFILENAME = "QMoMGenerated.cpp";
 
 #
 # Read input
@@ -46,9 +49,9 @@ while (s#enum\s+(\w+)[^{]*{([^}]*)}[^;]*;##m)
 }
 
 
-generate_code($HFILENAME, $CPPFILENAME);
+generate_code($GENDIR, $HFILENAME, $CPPFILENAME);
 
-generate_Qt_code($QT_HFILENAME, $QT_CPPFILENAME);
+generate_Qt_code($QT_GENDIR, $QT_HFILENAME, $QT_CPPFILENAME);
 
 close CPPFILE;
 close HFILE;
@@ -58,25 +61,25 @@ exit;
 
 sub generate_code
 {
-    my ($hfilename, $cppfilename) = @_;
+    my ($gendir, $hfilename, $cppfilename) = @_;
 
     #
     # Open output files
     #
-    open(HFILE, ">$hfilename") || die "Cannot open '$hfilename' to write: $!";
-    open(CPPFILE, ">$cppfilename") || die "Cannot open '$cppfilename' to write: $!";
+    open(HFILE, ">$gendir/$hfilename") || die "Cannot open '$gendir/$hfilename' to write: $!";
+    open(CPPFILE, ">$gendir/$cppfilename") || die "Cannot open '$gendir/$cppfilename' to write: $!";
 
     #
     # Generate .h file
     #
     select(HFILE);
     
-    print "// File: $hfilename\n";
+    print "// File: $gendir/$hfilename\n";
     print "// Generated from: $INPUTFILENAMES[0]\n";
     print "\n";
     print "#include <iostream>\n";
     print "\n";
-    print "#include \"$INPUTFILENAMES[0]\"\n";
+    print "#include \"$INPUTFILE\"\n";
     print "\n";
     print "namespace MoM {\n";
     print "\n";
@@ -113,7 +116,7 @@ sub generate_code
 
     select(CPPFILE);
         
-    print "// File: $cppfilename\n";
+    print "// File: $gendir/$cppfilename\n";
     print "// Generated from: $INPUTFILENAMES[0]\n";
     print "\n";
     print "#include <ctype.h>\n";
@@ -346,25 +349,25 @@ EOF
 
 sub generate_Qt_code
 {
-    my ($hfilename, $cppfilename) = @_;
+    my ($gendir, $hfilename, $cppfilename) = @_;
 
     #
     # Open output files
     #
-    open(HFILE, ">$hfilename") || die "Cannot open '$hfilename' to write: $!";
-    open(CPPFILE, ">$cppfilename") || die "Cannot open '$cppfilename' to write: $!";
+    open(HFILE, ">$gendir/$hfilename") || die "Cannot open '$gendir/$hfilename' to write: $!";
+    open(CPPFILE, ">$gendir/$cppfilename") || die "Cannot open '$gendir/$cppfilename' to write: $!";
 
     #
     # Generate .h file
     #
     select(HFILE);
     
-    print "// File: $hfilename\n";
+    print "// File: $gendir/$hfilename\n";
     print "// Generated from: $INPUTFILENAMES[0]\n";
     print "\n";
     print "#include <iostream>\n";
     print "\n";
-    print "#include \"$INPUTFILENAMES[0]\"\n";
+    print "#include \"$INPUTFILE\"\n";
     print "#include \"QMoMTreeItem.h\"\n";
     print "\n";
     print "namespace MoM {\n";
@@ -387,7 +390,7 @@ sub generate_Qt_code
 
     select(CPPFILE);
         
-    print "// File: $cppfilename\n";
+    print "// File: $gendir/$cppfilename\n";
     print "// Generated from: $INPUTFILENAMES[0]\n";
     print "\n";
     print "#include <ctype.h>\n";

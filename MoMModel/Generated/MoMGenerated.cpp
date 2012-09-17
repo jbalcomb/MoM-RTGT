@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "MoMModel/Generated/MoMGenerated.h"
+#include "MoMGenerated.h"
 
 namespace MoM {
 

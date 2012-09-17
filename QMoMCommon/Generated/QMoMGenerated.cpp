@@ -7,7 +7,7 @@
 
 #include <MoMGenerated.h>
 
-#include "QMoMCommon/Generated/QMoMGenerated.h"
+#include "QMoMGenerated.h"
 
 namespace MoM {
 

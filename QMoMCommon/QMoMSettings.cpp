@@ -26,11 +26,6 @@ void QMoMSettings::initialize(const QString &applicationName)
     QCoreApplication::setOrganizationName("MoMRTGT");
     QCoreApplication::setOrganizationDomain("sourceforge.net/projects/momrtgt/");
     QCoreApplication::setApplicationName(applicationName);
-    QSettings::setDefaultFormat(QSettings::IniFormat);
-
-    std::cout << "Using ini file in '" << QCoreApplication::applicationDirPath().toAscii().data() << "'" << std::endl;
-    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::applicationDirPath());
-    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, QCoreApplication::applicationDirPath());
 }
 
 void QMoMSettings::readSettings(QWidget* window)

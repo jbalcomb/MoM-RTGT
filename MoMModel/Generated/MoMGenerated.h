@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "MoMModel/MoMTemplate.h"
+#include "MoMTemplate.h"
 
 namespace MoM {
 
