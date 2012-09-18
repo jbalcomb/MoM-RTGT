@@ -1,5 +1,5 @@
 // File: MoMModel/Generated/MoMGenerated.cpp
-// Generated from: MoMModel/MoMTemplate.h
+// Generated from: MoMTemplate.h
 
 #include <ctype.h>
 #include <iomanip>
@@ -4141,11 +4141,11 @@ std::ostream& operator<<(std::ostream& os, const Events_Status& rhs)
     os << "m_Bad_Moon_active=" << rhs.m_Bad_Moon_active << " 0x" << std::hex << rhs.m_Bad_Moon_active << std::dec << "\n";
     os << "m_UNUSED06=" << rhs.m_UNUSED06 << " 0x" << std::hex << rhs.m_UNUSED06 << std::dec << "\n";
     os << "m_Conjunction_Sorcery_active=" << rhs.m_Conjunction_Sorcery_active << " 0x" << std::hex << rhs.m_Conjunction_Sorcery_active << std::dec << "\n";
-    os << "m_UNUSED07=" << rhs.m_UNUSED07 << " 0x" << std::hex << rhs.m_UNUSED07 << std::dec << "\n";
+    os << "m_Conjunction_Sorcery_Nr_GUESS=" << rhs.m_Conjunction_Sorcery_Nr_GUESS << " 0x" << std::hex << rhs.m_Conjunction_Sorcery_Nr_GUESS << std::dec << "\n";
     os << "m_Conjunction_Nature_active=" << rhs.m_Conjunction_Nature_active << " 0x" << std::hex << rhs.m_Conjunction_Nature_active << std::dec << "\n";
-    os << "m_UNUSED08=" << rhs.m_UNUSED08 << " 0x" << std::hex << rhs.m_UNUSED08 << std::dec << "\n";
+    os << "m_Conjunction_Nature_Nr_GUESS=" << rhs.m_Conjunction_Nature_Nr_GUESS << " 0x" << std::hex << rhs.m_Conjunction_Nature_Nr_GUESS << std::dec << "\n";
     os << "m_Conjunction_Chaos_active=" << rhs.m_Conjunction_Chaos_active << " 0x" << std::hex << rhs.m_Conjunction_Chaos_active << std::dec << "\n";
-    os << "m_UNUSED09=" << rhs.m_UNUSED09 << " 0x" << std::hex << rhs.m_UNUSED09 << std::dec << "\n";
+    os << "m_Conjunction_Chaos_Nr_GUESS=" << rhs.m_Conjunction_Chaos_Nr_GUESS << " 0x" << std::hex << rhs.m_Conjunction_Chaos_Nr_GUESS << std::dec << "\n";
     os << "m_Mana_Short_active=" << rhs.m_Mana_Short_active << " 0x" << std::hex << rhs.m_Mana_Short_active << std::dec << "\n";
     os << "m_UNUSED10=" << rhs.m_UNUSED10 << " 0x" << std::hex << rhs.m_UNUSED10 << std::dec << "\n";
     os << "}";
@@ -5969,9 +5969,10 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     }
     os << ")\n";
     os << "m_UnitView_nrLines=" << rhs.m_UnitView_nrLines << " 0x" << std::hex << rhs.m_UnitView_nrLines << std::dec << "\n";
-    os << "m_addr_UnitView_Lines=" << rhs.m_addr_UnitView_Lines << "\n";
+    os << "m_Offset_UnitView_Lines=" << rhs.m_Offset_UnitView_Lines << " 0x" << std::hex << rhs.m_Offset_UnitView_Lines << std::dec << "\n";
+    os << "m_UnitView_UnitEnchantment=" << rhs.m_UnitView_UnitEnchantment << "\n";
     os << "m_Unk_C196=(\n";
-    for (unsigned i = 0; i < 0xC51C - 0xC196; ++i)
+    for (unsigned i = 0; i < 0xC51C - 0xC198; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C196[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C196[i] << std::dec << ",\n";
     }
@@ -6955,22 +6956,22 @@ std::ostream& operator<<(std::ostream& os, const UnitView_Lines& rhs)
         os << "[" << i << "] " << rhs.m_lines[i] << ",\n";
     }
     os << ")\n";
-    os << "m_4B0_line_related=(\n";
-    for (unsigned i = 0; i < 4; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_4B0_line_related[i] << " 0x" << std::hex << rhs.m_4B0_line_related[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_550_line_icon=(\n";
+    os << "m_bitmask_unitenchantment=(\n";
     for (unsigned i = 0; i < 40; ++i)
     {
-        os << "[" << i << "] " << rhs.m_550_line_icon[i] << " 0x" << std::hex << rhs.m_550_line_icon[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_bitmask_unitenchantment[i] << " 0x" << std::hex << rhs.m_bitmask_unitenchantment[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_5A0_line_related_itemNr=(\n";
+    os << "m_icon_pic=(\n";
     for (unsigned i = 0; i < 40; ++i)
     {
-        os << "[" << i << "] " << rhs.m_5A0_line_related_itemNr[i] << " 0x" << std::hex << rhs.m_5A0_line_related_itemNr[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_icon_pic[i] << " 0x" << std::hex << rhs.m_icon_pic[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_helpIndex=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_helpIndex[i] << " 0x" << std::hex << rhs.m_helpIndex[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "}";
@@ -7230,7 +7231,7 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Zero03=" << (unsigned)rhs.m_Zero03 << " 0x" << std::hex << (unsigned)rhs.m_Zero03 << std::dec << "\n";
     os << "m_Ability_Flags=" << rhs.m_Ability_Flags << "\n";
     os << "m_Attack_Flags=" << rhs.m_Attack_Flags << "\n";
-    os << "m_UNK02=" << (unsigned)rhs.m_UNK02 << " 0x" << std::hex << (unsigned)rhs.m_UNK02 << std::dec << "\n";
+    os << "m_Sound=" << (unsigned)rhs.m_Sound << " 0x" << std::hex << (unsigned)rhs.m_Sound << std::dec << "\n";
     os << "m_Zero04=" << (unsigned)rhs.m_Zero04 << " 0x" << std::hex << (unsigned)rhs.m_Zero04 << std::dec << "\n";
     os << "}";
     return os;
@@ -7369,15 +7370,16 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_BannerColor=" << rhs.m_BannerColor << "\n";
     os << "m_Personality=" << rhs.m_Personality << "\n";
     os << "m_Objective=" << rhs.m_Objective << "\n";
-    os << "m_UNK01C=(\n";
-    for (unsigned i = 0; i < 8; ++i)
+    os << "m_Unk01C=(\n";
+    for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK01C[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK01C[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk01C[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk01C[i] << std::dec << ",\n";
     }
     os << ")\n";
+    os << "m_ResearchCost_SpellofMastery_GUESS=" << rhs.m_ResearchCost_SpellofMastery_GUESS << " 0x" << std::hex << rhs.m_ResearchCost_SpellofMastery_GUESS << std::dec << "\n";
     os << "m_Fame=" << rhs.m_Fame << " 0x" << std::hex << rhs.m_Fame << std::dec << "\n";
     os << "m_Power_Base=" << rhs.m_Power_Base << " 0x" << std::hex << rhs.m_Power_Base << std::dec << "\n";
-    os << "m_UNK028=" << rhs.m_UNK028 << " 0x" << std::hex << rhs.m_UNK028 << std::dec << "\n";
+    os << "m_Unk028=" << rhs.m_Unk028 << " 0x" << std::hex << rhs.m_Unk028 << std::dec << "\n";
     os << "m_Research_Percentage=" << (unsigned)rhs.m_Research_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Research_Percentage << std::dec << "\n";
     os << "m_Mana_Percentage=" << (unsigned)rhs.m_Mana_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Mana_Percentage << std::dec << "\n";
     os << "m_Skill_Percentage=" << (unsigned)rhs.m_Skill_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Skill_Percentage << std::dec << "\n";
@@ -7392,14 +7394,14 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_Research_Spell_candidates[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK044=(\n";
+    os << "m_Unk044=(\n";
     for (unsigned i = 0; i < 4; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK044[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK044[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk044[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk044[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK048=" << rhs.m_UNK048 << " 0x" << std::hex << rhs.m_UNK048 << std::dec << "\n";
-    os << "m_UNK04A=" << rhs.m_UNK04A << " 0x" << std::hex << rhs.m_UNK04A << std::dec << "\n";
+    os << "m_Garrison_average_strength=" << rhs.m_Garrison_average_strength << " 0x" << std::hex << rhs.m_Garrison_average_strength << std::dec << "\n";
+    os << "m_Unk04A=" << rhs.m_Unk04A << " 0x" << std::hex << rhs.m_Unk04A << std::dec << "\n";
     os << "m_Skill_Left_in_combat=" << rhs.m_Skill_Left_in_combat << " 0x" << std::hex << rhs.m_Skill_Left_in_combat << std::dec << "\n";
     os << "m_Cost_Left_of_Spell_being_cast=" << rhs.m_Cost_Left_of_Spell_being_cast << " 0x" << std::hex << rhs.m_Cost_Left_of_Spell_being_cast << std::dec << "\n";
     os << "m_Initial_Cost_of_Spell_being_cast=" << rhs.m_Initial_Cost_of_Spell_being_cast << " 0x" << std::hex << rhs.m_Initial_Cost_of_Spell_being_cast << std::dec << "\n";
@@ -7419,7 +7421,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_Heroes_hired_by_wizard[i] << ",\n";
     }
     os << ")\n";
-    os << "m_UNK11E=" << rhs.m_UNK11E << " 0x" << std::hex << rhs.m_UNK11E << std::dec << "\n";
+    os << "m_Unk11E=" << rhs.m_Unk11E << " 0x" << std::hex << rhs.m_Unk11E << std::dec << "\n";
     os << "m_Items_in_Slots=(\n";
     for (unsigned i = 0; i < 4; ++i)
     {
@@ -7432,22 +7434,22 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << (int)rhs.m_Contacted[i] << " 0x" << std::hex << (int)rhs.m_Contacted[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_12E_Relation=(\n";
+    os << "m_Unk_12E_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK_12E_Relation[i] << " 0x" << std::hex << rhs.m_UNK_12E_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Unk_12E_Relation[i] << " 0x" << std::hex << rhs.m_Unk_12E_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_13A_Relation=(\n";
+    os << "m_Unk_13A_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK_13A_Relation[i] << " 0x" << std::hex << rhs.m_UNK_13A_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Unk_13A_Relation[i] << " 0x" << std::hex << rhs.m_Unk_13A_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK_146_Relation=(\n";
+    os << "m_Unk_146_Relation=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_UNK_146_Relation[i] << " 0x" << std::hex << rhs.m_UNK_146_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Unk_146_Relation[i] << " 0x" << std::hex << rhs.m_Unk_146_Relation[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Current_Wizard_Relations=(\n";
@@ -7503,16 +7505,15 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_Wizard_Casting_Skill=" << rhs.m_Wizard_Casting_Skill << " 0x" << std::hex << rhs.m_Wizard_Casting_Skill << std::dec << "\n";
     os << "m_Researching_Spell=" << rhs.m_Researching_Spell << "\n";
     os << "m_Spells_Known=" << rhs.m_Spells_Known << "\n";
-    os << "m_UNK33A=(\n";
+    os << "m_Unk33A=(\n";
     for (unsigned i = 0; i < 26; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_UNK33A[i] << " 0x" << std::hex << (int)rhs.m_UNK33A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk33A[i] << " 0x" << std::hex << (int)rhs.m_Unk33A[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_UNK354=" << (int)rhs.m_UNK354 << " 0x" << std::hex << (int)rhs.m_UNK354 << std::dec << "\n";
-    os << "m_UNK355=" << (int)rhs.m_UNK355 << " 0x" << std::hex << (int)rhs.m_UNK355 << std::dec << "\n";
+    os << "m_Bitmask_banished_wizards=" << rhs.m_Bitmask_banished_wizards << " 0x" << std::hex << rhs.m_Bitmask_banished_wizards << std::dec << "\n";
     os << "m_Gold_Coins=" << rhs.m_Gold_Coins << " 0x" << std::hex << rhs.m_Gold_Coins << std::dec << "\n";
-    os << "m_UNK358=" << rhs.m_UNK358 << " 0x" << std::hex << rhs.m_UNK358 << std::dec << "\n";
+    os << "m_Unk358=" << rhs.m_Unk358 << " 0x" << std::hex << rhs.m_Unk358 << std::dec << "\n";
     os << "m_Astrologer_Magic_Power=" << rhs.m_Astrologer_Magic_Power << " 0x" << std::hex << rhs.m_Astrologer_Magic_Power << std::dec << "\n";
     os << "m_Astrologer_Spell_Research=" << rhs.m_Astrologer_Spell_Research << " 0x" << std::hex << rhs.m_Astrologer_Spell_Research << std::dec << "\n";
     os << "m_Astrologer_Army_Strength=" << rhs.m_Astrologer_Army_Strength << " 0x" << std::hex << rhs.m_Astrologer_Army_Strength << std::dec << "\n";
@@ -7524,15 +7525,15 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     }
     os << ")\n";
     os << "m_Global_Enchantments=" << rhs.m_Global_Enchantments << "\n";
-    os << "m_UNK49A=(\n";
+    os << "m_Unk49A=(\n";
     for (unsigned i = 0; i < 42; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK49A[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK49A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk49A[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk49A[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Books_Color=" << rhs.m_Books_Color << "\n";
     os << "m_Zero4C5=" << (unsigned)rhs.m_Zero4C5 << " 0x" << std::hex << (unsigned)rhs.m_Zero4C5 << std::dec << "\n";
-    os << "m_UNK4C6=" << rhs.m_UNK4C6 << " 0x" << std::hex << rhs.m_UNK4C6 << std::dec << "\n";
+    os << "m_Unk4C6=" << rhs.m_Unk4C6 << " 0x" << std::hex << rhs.m_Unk4C6 << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -11668,7 +11669,7 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     }
     if (!validate(rhs.m_Game_Data, context + ".m_Game_Data")) ok = false;
     if (!validate(rhs.m_Game_Settings, context + ".m_Game_Settings")) ok = false;
-    if (!validate(rhs.m_addr_UnitView_Lines, context + ".m_addr_UnitView_Lines")) ok = false;
+    if (!validate(rhs.m_UnitView_UnitEnchantment, context + ".m_UnitView_UnitEnchantment")) ok = false;
     if (!validate(rhs.m_External_battle_condition, context + ".m_External_battle_condition")) ok = false;
     if (!validate(rhs.m_addr_Hero_Spells, context + ".m_addr_Hero_Spells")) ok = false;
     if (!validate(rhs.m_addr_Battle_figures_256, context + ".m_addr_Battle_figures_256")) ok = false;

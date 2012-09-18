@@ -15,8 +15,6 @@
 #include "QMoMSettings.h"
 
 // TODO:
-// - Save/restore directories of the file dialogs
-// - Save/restore splitter positions
 // - Save/restore column widths of tree view and table view
 // - Set font??
 
@@ -94,7 +92,7 @@ void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
     QTreeWidget* treewidget = dynamic_cast<QTreeWidget*>(object);
     if (0 != treewidget)
     {
-        QStringList columns = settings.value(treewidget->objectName()).toString().split(",");
+        QStringList columns = settings.value(treewidget->objectName()).toString().split(" ");
         for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
         {
             treewidget->setColumnWidth(i, columns.at(i).toInt());
@@ -154,7 +152,7 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
         {
             columns << QString("%0").arg(treewidget->columnWidth(i));
         }
-        settings.setValue(treewidget->objectName(), columns.join(","));
+        settings.setValue(treewidget->objectName(), columns.join(" "));
         // Do not recurse
         return;
     }

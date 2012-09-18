@@ -1,11 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoMCustomizer", "MoMCustomizer\MoMCustomizer.vcproj", "{8FC81144-F190-4111-944D-368BF950F137}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoMTweaker", "MoMTweaker\MoMTweaker.vcproj", "{BCDC9133-C15F-4905-A54A-113FC9C11987}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoMTest", "MoMTest\MoMTest.vcproj", "{4E77C6B5-F99E-3D3D-9C81-4E867BF437D7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MoMTweaker", "Applications\MoMTweaker\MoMTweaker.vcproj", "{CE4E0F71-64EE-3434-B43F-99CF999A68CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,18 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8FC81144-F190-4111-944D-368BF950F137}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8FC81144-F190-4111-944D-368BF950F137}.Debug|Win32.Build.0 = Debug|Win32
-		{8FC81144-F190-4111-944D-368BF950F137}.Release|Win32.ActiveCfg = Release|Win32
-		{8FC81144-F190-4111-944D-368BF950F137}.Release|Win32.Build.0 = Release|Win32
-		{BCDC9133-C15F-4905-A54A-113FC9C11987}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BCDC9133-C15F-4905-A54A-113FC9C11987}.Debug|Win32.Build.0 = Debug|Win32
-		{BCDC9133-C15F-4905-A54A-113FC9C11987}.Release|Win32.ActiveCfg = Release|Win32
-		{BCDC9133-C15F-4905-A54A-113FC9C11987}.Release|Win32.Build.0 = Release|Win32
-		{4E77C6B5-F99E-3D3D-9C81-4E867BF437D7}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4E77C6B5-F99E-3D3D-9C81-4E867BF437D7}.Debug|Win32.Build.0 = Debug|Win32
-		{4E77C6B5-F99E-3D3D-9C81-4E867BF437D7}.Release|Win32.ActiveCfg = Release|Win32
-		{4E77C6B5-F99E-3D3D-9C81-4E867BF437D7}.Release|Win32.Build.0 = Release|Win32
+		{CE4E0F71-64EE-3434-B43F-99CF999A68CA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CE4E0F71-64EE-3434-B43F-99CF999A68CA}.Debug|Win32.Build.0 = Debug|Win32
+		{CE4E0F71-64EE-3434-B43F-99CF999A68CA}.Release|Win32.ActiveCfg = Release|Win32
+		{CE4E0F71-64EE-3434-B43F-99CF999A68CA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

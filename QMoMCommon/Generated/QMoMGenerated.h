@@ -1,5 +1,5 @@
 // File: QMoMCommon/Generated/QMoMGenerated.h
-// Generated from: MoMModel/MoMTemplate.h
+// Generated from: MoMTemplate.h
 
 #include <iostream>
 

@@ -1,5 +1,5 @@
 // File: MoMModel/Generated/MoMGenerated.h
-// Generated from: MoMModel/MoMTemplate.h
+// Generated from: MoMTemplate.h
 
 #include <iostream>
 

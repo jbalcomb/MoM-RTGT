@@ -1155,6 +1155,7 @@ bool MoMUnit::isColor(eRealm_Type color) const
         case RACE_Chaos:    value = (color == REALM_Chaos); break;
         case RACE_Life:     value = (color == REALM_Life); break;
         case RACE_Death:    value = (color == REALM_Death); break;
+        default:            break;
         }
     }
 
@@ -1232,6 +1233,9 @@ bool MoMUnit::isImmune(eUnitAbility immunity) const
         value |= isInvulnerable();
         value |= (hasUnitEnchantment(UNITENCHANTMENT_Wraith_Form)
                      || hasItemPower(ITEMPOWER_Wraith_Form));
+        break;
+
+    default:
         break;
     }
 

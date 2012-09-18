@@ -88,7 +88,7 @@ struct MoMGamePointers
     Unit*           m_addr_Units    ; // 9EC2
     Hero_Choice*    m_addr_Chosen_Hero_Names;   // 9EC6
 
-    UnitView_Lines*       m_addr_UnitView_Lines;  // C192
+    UnitView_Lines*       m_Offset_UnitView_Lines;  // C192
     Battle_Figure*   m_addr_Battle_figures_256;         // D15A
 };
 
@@ -290,7 +290,8 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Unit, m_addr_Units);
         SET_RELOC_POINTER(Hero_Choice, m_addr_Chosen_Hero_Names);
 
-        gMoMGamePointers.m_addr_UnitView_Lines = derefHeapPointer<UnitView_Lines>(dseg->m_addr_UnitView_Lines, 1);
+        gMoMGamePointers.m_Offset_UnitView_Lines = validateStaticPointer(
+            reinterpret_cast<UnitView_Lines*>((uint8_t*)dseg + dseg->m_Offset_UnitView_Lines), 1);
         gMoMGamePointers.m_addr_Battle_figures_256 = derefHeapPointer<Battle_Figure>(dseg->m_addr_Battle_figures_256, 256);
     }
 

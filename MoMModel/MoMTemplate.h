@@ -13,8 +13,6 @@
 
 #include "MoMCommon.h"
 
-#define SetBackColor(c)     // Macro to suppress info related to the program 010-EditorTemplate
-
 // Specify to pack structures
 #ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma pack(push, 1)
@@ -3470,11 +3468,11 @@ typedef struct PACKED_STRUCT // Events_Status
     uint16_t    m_Bad_Moon_active    ;                 // 50
     uint16_t    m_UNUSED06                         ;   // 52
     uint16_t    m_Conjunction_Sorcery_active ;         // 54
-    uint16_t    m_UNUSED07                         ;   // 56
+    uint16_t    m_Conjunction_Sorcery_Nr_GUESS     ;   // 56
     uint16_t    m_Conjunction_Nature_active ;          // 58
-    uint16_t    m_UNUSED08                         ;   // 5A
+    uint16_t    m_Conjunction_Nature_Nr_GUESS    ;     // 5A
     uint16_t    m_Conjunction_Chaos_active ;           // 5C
-    uint16_t    m_UNUSED09                         ;   // 5E
+    uint16_t    m_Conjunction_Chaos_Nr_GUESS    ;      // 5E
     uint16_t    m_Mana_Short_active  ;                 // 60
     uint16_t    m_UNUSED10 ;                           // 62
                                                        // SIZE 64
@@ -4245,10 +4243,11 @@ typedef struct PACKED_STRUCT // Wizard
     eBannerColor    m_BannerColor;                      // 016 (0-4)
     ePersonality    m_Personality;                      // 018 (0-5)
     eObjective      m_Objective;                        // 01A (0-4)
-    uint8_t         m_UNK01C[8];                         // 01C
+    uint8_t         m_Unk01C[6];                        // 01C
+    uint16_t        m_ResearchCost_SpellofMastery_GUESS;// 022
     uint16_t        m_Fame;                             // 024
     uint16_t        m_Power_Base;                       // 026
-    uint16_t        m_UNK028;                           // 028  // Seems to related to prod/mana terrain bonus types
+    uint16_t        m_Unk028;                           // 028  // Seems to related to prod/mana terrain bonus types
     uint8_t         m_Research_Percentage;              // 02A
     uint8_t         m_Mana_Percentage;                  // 02B
     uint8_t         m_Skill_Percentage;                 // 02C
@@ -4258,9 +4257,9 @@ typedef struct PACKED_STRUCT // Wizard
     ePlane          m_Plane_of_Summoning_Circle;        // 032 (0-1)
     uint8_t         m_Zero01;
     eSpell16        m_Research_Spell_candidates[8];     // 034
-    uint8_t         m_UNK044[4];                        // 044
-    uint16_t        m_UNK048;                           // 048
-    uint16_t        m_UNK04A;                           // 04A
+    uint8_t         m_Unk044[4];                        // 044
+    uint16_t        m_Garrison_average_strength;        // 048  // Average cost of units, units cheaper than half are dismissed
+    uint16_t        m_Unk04A;                           // 04A
     uint16_t        m_Skill_Left_in_combat;             // 04C
     uint16_t        m_Cost_Left_of_Spell_being_cast;    // 04E
     uint16_t        m_Initial_Cost_of_Spell_being_cast; // 050
@@ -4275,12 +4274,12 @@ typedef struct PACKED_STRUCT // Wizard
     int16_t         m_Number_of_Spellbooks_Death;       //
     unionSkills     m_Skills;                           // 064
     Hired_Hero      m_Heroes_hired_by_wizard[gMAX_HIRED_HEROES];    // 076 six slots
-    uint16_t        m_UNK11E;                           // 11E
+    uint16_t        m_Unk11E;                           // 11E
     int16_t         m_Items_in_Slots[4];                // 120 (See below)
     int8_t          m_Contacted[6];                     // 128
-    int16_t         m_UNK_12E_Relation[6];              // 12E
-    int16_t         m_UNK_13A_Relation[6];              // 13A
-    int16_t         m_UNK_146_Relation[6];              // 146
+    int16_t         m_Unk_12E_Relation[6];              // 12E
+    int16_t         m_Unk_13A_Relation[6];              // 13A
+    int16_t         m_Unk_146_Relation[6];              // 146
     int8_t          m_Current_Wizard_Relations[6];      // 152
                                                         //    Notes:
                                                         //    Minimum -100 (if below, game resets to this).
@@ -4314,11 +4313,10 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //     (actual skill is square root of value stored here, rounded up)
     eSpell          m_Researching_Spell;                // 262
     Spells_Known    m_Spells_Known;                     // 263 Spells (0-3) (None-Na-So-Ch-Li-De-Ar)
-    int8_t          m_UNK33A[26];                       // 33A
-    int8_t          m_UNK354;                           // 354
-    int8_t          m_UNK355;                           // 355
+    int8_t          m_Unk33A[26];                       // 33A
+    uint16_t        m_Bitmask_banished_wizards;         // 354
     int16_t         m_Gold_Coins;                       // 356
-    int16_t         m_UNK358;                           // 358
+    int16_t         m_Unk358;                           // 358
     uint16_t        m_Astrologer_Magic_Power;           // 35A (0-200)
     uint16_t        m_Astrologer_Spell_Research;        // 35C (0-200)
     uint16_t        m_Astrologer_Army_Strength;         // 35E (0-200)
@@ -4327,10 +4325,10 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
-    uint8_t         m_UNK49A[42];                       // 49A
+    uint8_t         m_Unk49A[42];                       // 49A
     eRealm_Type     m_Books_Color;                      // 4C4
     uint8_t         m_Zero4C5;                          // 
-    uint16_t        m_UNK4C6;                           // 4C6
+    uint16_t        m_Unk4C6;                           // 4C6
                                                         // SIZE 4C8
 } Wizard; // <read=read_Wizard>;
 
@@ -4524,31 +4522,18 @@ typedef struct PACKED_STRUCT // Hero_Choice
 
 typedef struct PACKED_STRUCT // SaveGame
 {
-SetBackColor( cLtBlue );
     unionList_Hero_stats m_List_Hero_stats[gMAX_WIZARD_RECORDS];
-SetBackColor( cGray );
     Game_Data_Save  m_Game_Data;
-SetBackColor( cPurple );
     Wizard          m_Wizards[gMAX_WIZARD_RECORDS];
-SetBackColor( cGreen );
     Map_Tiles       m_Map_Tiles;
-SetBackColor( cYellow );
     Item            m_Items[128];
-SetBackColor( cDkYellow );
     Item            m_Item_Trashcan[10];
-SetBackColor( cSilver );
     City            m_Cities[gMAX_CITIES];
-SetBackColor( cLtRed );
     Unit            m_Unit[1000];
-SetBackColor( cDkRed );
     Unit            m_Units_Trashcan_GUESS[9];
-SetBackColor( cLtGreen );
     Map_Attr        m_Map_Attr;
-SetBackColor( cGray );
     eGrand_Vizier   m_Grand_Vizier;
-SetBackColor( cYellow );
     uint8_t         m_Items_in_Game[250];   // 00 = not in game, 01 = in game
-SetBackColor( cLtBlue );
     Hero_Choice     m_Hero_Choices[gMAX_HERO_TYPES];
 } SaveGame;
 
@@ -4728,11 +4713,11 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     uint8_t     m_Unit_picture;     // 10  Unit picture
     uint8_t     m_UNK01;            // 11  00
     uint8_t     m_Hitpoints;        // 12  Hit points (hearts) per figure
-    uint8_t     m_Scouting;    // 13  Scouting range
-    uint8_t     m_Transport_Capacity;    // 14  Transport capacity (number of units carried)
+    uint8_t     m_Scouting;         // 13  Scouting range
+    uint8_t     m_Transport_Capacity;   // 14  Transport capacity (number of units carried)
     uint8_t     m_Nr_Figures;        // 15  Number of figures in the unit
-    uint8_t     m_Construction; // 16  Construction capacity (road building)
-    int8_t      m_Gaze_Modifier;     // 17  Special attack or bonus strength
+    uint8_t     m_Construction;     // 16  Construction capacity (road building)
+    int8_t      m_Gaze_Modifier;    // 17  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 18  Movement flags (table 4)
     uint8_t                 m_Zero02;           // 19  00
     unionImmunity_Flags     m_Immunity_Flags;   // 1A  Immunity flags (table 5)
@@ -4743,7 +4728,7 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
                                                 // 1F  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;     // 20  Special attack flags (table 10)
                                                 // 21  Special attack flags (table 11)
-    uint8_t    m_UNK02;             // 22  ??
+    uint8_t    m_Sound;             // 22  Initialized only after starting the game
     uint8_t    m_Zero04;            // 23  00
                                     // SIZE 24
 } Unit_Type_Data;
@@ -4912,11 +4897,11 @@ typedef struct PACKED_STRUCT // UnitView_Line
 
 typedef struct PACKED_STRUCT // UnitView_Lines
 {
-    UnitView_Line   m_lines[40];                // 000
-    uint32_t        m_4B0_line_related[4];      // 4B0
-    uint16_t        m_550_line_icon[40];        // 550
-    uint16_t        m_5A0_line_related_itemNr[40];  // 5A0
-                                                // SIZE 5F0
+    UnitView_Line   m_lines[40];                        // 000
+    uint32_t        m_bitmask_unitenchantment[40];      // 4B0
+    uint16_t        m_icon_pic[40];                     // 550
+    uint16_t        m_helpIndex[40];                    // 5A0
+                                                        // SIZE 5F0
 } UnitView_Lines;
 
 typedef struct PACKED_STRUCT // UnitView_HeroAbility
@@ -5567,9 +5552,10 @@ typedef struct // MoMDataSegment
     uint8_t     m_Unk_BF70[0xC190 - 0xBF70];        // ds:BF70
 
     uint16_t    m_UnitView_nrLines;                 // ds:C190
-    EXE_Reloc   m_addr_UnitView_Lines;              // ds:C192
+    DS_Offset   m_Offset_UnitView_Lines;            // ds:C192
+    unionUnit_Enchantment   m_UnitView_UnitEnchantment; // ds:C194
 
-    uint8_t     m_Unk_C196[0xC51C - 0xC196];        // ds:C196
+    uint8_t     m_Unk_C196[0xC51C - 0xC198];        // ds:C198
 
     int16_t     m_Combat_turn;                      // ds:C51C
     uint16_t    m_Unk_C51E;                         // ds:C51E

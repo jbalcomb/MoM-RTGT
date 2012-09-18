@@ -14,7 +14,8 @@ INCLUDEPATH += \
 	../../Utility \
 	../../QMoMCommon \
 	../../QMoMCommon/Generated \
-	../../QMoMDialogs 
+        ../../QMoMDialogs \
+        ../../Applications/MoMTweaker
 
 HEADERS += \
 	../../Applications/MoMTweaker/mainwindow.h \

@@ -1,13 +1,16 @@
 use strict;
+use warnings;
 
 my $INPUTFILE = "MoMTemplate.h";
-my @INPUTFILENAMES = ("MoMModel/$INPUTFILE", "Platform/MoMCommon.h");
+my @INPUTFILENAMES = ("Platform/MoMCommon.h", "MoMModel/$INPUTFILE");
 my $GENDIR = "MoMModel/Generated";
 my $HFILENAME = "MoMGenerated.h";
 my $CPPFILENAME = "MoMGenerated.cpp";
 my $QT_GENDIR = "QMoMCommon/Generated";
 my $QT_HFILENAME = "QMoMGenerated.h";
 my $QT_CPPFILENAME = "QMoMGenerated.cpp";
+my $IDC_GENDIR = ".";
+my $IDC_FILENAME = "MoMGenerated.idc";
 
 #
 # Read input
@@ -28,33 +31,41 @@ s#\s*//[^\n]*##gm;
 
 
 #
-# Collect structs and unions (also processes embedded enums)
+# Collect constants
 #
-my %gStructUnions = ();
-while (s#\b(struct|union|class)\b[^{]*{((.|\n)*?\n)}\s*(\w+);##m)
+my %gConstants = ();
+while (s#\bconst (unsigned|size_t) (\w+) = (\d+);##m)
 {
-    my ($classbody, $classname) = ($2, $4);
-    process_struct_union($classname, $classbody);
+    my ($name, $value) = ($2, $3);
+    $gConstants{$name} = $value;
 }
 
 #
-# Collect enums
+# Collect enums (includes collecting the enumerators in %gConstants)
 #
 my %gEnums = ();
-while (s#enum\s+(\w+)[^{]*{([^}]*)}[^;]*;##m)
+while (s#enum\s+(\w+)\s*(ENUMSIZE(\d+))?[^{]*{([^}]*)}[^;]*;##m)
 {
-    my ($enumname, $enumbody) = ($1, $2);
+    my ($enumname, $enumsizebits, $enumbody) = ($1, $3, $4);
     next if $enumname =~ m#ENUMSIZE#;
-    process_enum($enumname, $enumbody);
+    process_enum($enumname, $enumsizebits, $enumbody);
 }
 
+#
+# Collect structs and unions
+#
+my %gStructUnions = ();
+while (s#typedef (struct|union|class)\b[^{]*{((.|\n)*?\n)}\s*(\w+);##m)
+{
+    my ($classtype, $classbody, $classname) = ($1, $2, $4);
+    process_struct_union($classtype, $classname, $classbody);
+}
 
 generate_code($GENDIR, $HFILENAME, $CPPFILENAME);
 
 generate_Qt_code($QT_GENDIR, $QT_HFILENAME, $QT_CPPFILENAME);
 
-close CPPFILE;
-close HFILE;
+generate_IDC_code($IDC_GENDIR, $IDC_FILENAME);
 
 exit;
 
@@ -75,7 +86,7 @@ sub generate_code
     select(HFILE);
     
     print "// File: $gendir/$hfilename\n";
-    print "// Generated from: $INPUTFILENAMES[0]\n";
+    print "// Generated from: $INPUTFILE\n";
     print "\n";
     print "#include <iostream>\n";
     print "\n";
@@ -117,7 +128,7 @@ sub generate_code
     select(CPPFILE);
         
     print "// File: $gendir/$cppfilename\n";
-    print "// Generated from: $INPUTFILENAMES[0]\n";
+    print "// Generated from: $INPUTFILE\n";
     print "\n";
     print "#include <ctype.h>\n";
     print "#include <iomanip>\n";
@@ -156,7 +167,7 @@ EOF
 
     foreach my $enumname (sort keys %gEnums)
     {
-        my @enumvalues = @{$gEnums{$enumname}};
+        my @enumvalues = @{$gEnums{$enumname}{'names'}};
         
         print "std::ostream& operator<<(std::ostream& os, const $enumname& rhs)\n";
         print "{\n";
@@ -178,7 +189,7 @@ EOF
     
     foreach my $classname (sort keys %gStructUnions)
     {
-        my @datamembers = @{$gStructUnions{$classname}};
+        my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
         
         if ($classname eq "EXE_Reloc")
         {
@@ -260,7 +271,7 @@ EOF
 
     foreach my $enumname (sort keys %gEnums)
     {
-        my @enumvalues = @{$gEnums{$enumname}};
+        my @enumvalues = @{$gEnums{$enumname}{'names'}};
         
         print "bool validate(const $enumname& rhs, const std::string& context)\n";
         print "{\n";
@@ -290,7 +301,7 @@ EOF
     
     foreach my $classname (sort keys %gStructUnions)
     {
-        my @datamembers = @{$gStructUnions{$classname}};
+        my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
         
         print "bool validate(const $classname& rhs, const std::string& context)\n";
         print "{\n";
@@ -363,7 +374,7 @@ sub generate_Qt_code
     select(HFILE);
     
     print "// File: $gendir/$hfilename\n";
-    print "// Generated from: $INPUTFILENAMES[0]\n";
+    print "// Generated from: $INPUTFILE\n";
     print "\n";
     print "#include <iostream>\n";
     print "\n";
@@ -391,7 +402,7 @@ sub generate_Qt_code
     select(CPPFILE);
         
     print "// File: $gendir/$cppfilename\n";
-    print "// Generated from: $INPUTFILENAMES[0]\n";
+    print "// Generated from: $INPUTFILE\n";
     print "\n";
     print "#include <ctype.h>\n";
     print "#include <iomanip>\n";
@@ -411,7 +422,7 @@ sub generate_Qt_code
 
     foreach my $classname (sort keys %gStructUnions)
     {
-        my @datamembers = @{$gStructUnions{$classname}};
+        my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
         
         print "QMoMTreeItemBase* constructTreeItem($classname* rhs, const QString& context)\n";
         print "{\n";
@@ -442,7 +453,7 @@ sub generate_Qt_code
             {
                 my $psubtree = "ptree${name}";
                 print qq#    QMoMTreeItemBase* $psubtree = ptree;\n#;
-                if (1 * @{$gStructUnions{$classname}} > 2)
+                if (1 * @{$gStructUnions{$classname}{'datamembers'}} > 2)
                 {
                     print qq#    if ($range > 3)\n#;
                     print qq#    {\n#;
@@ -509,13 +520,227 @@ sub generate_Qt_code
     close(CPPFILE);
 }
 
+sub generate_IDC_code
+{
+    my ($gendir, $idcfilename) = @_;
+
+    #
+    # Open output files
+    #
+    open(IDCFILE, ">$gendir/$idcfilename") || die "Cannot open '$gendir/$idcfilename' to write: $!";
+
+    #
+    # Generate .idc file
+    #
+
+    select(IDCFILE);
+        
+    print
+	"// File: $gendir/$idcfilename\n".
+	"// Generated from: $INPUTFILE\n".
+	"\n".
+	"//      This file contains the user-defined type definitions.\n".
+	"//      To use it press F2 in IDA and enter the name of this file.\n".
+	"//\n".
+	"\n".
+	"#define UNLOADED_FILE   1\n".
+	"#include <idc.idc>\n".
+	"\n".
+	"static main(void)\n".
+	"{\n".
+	"  Enums();              // enumerations\n".
+	"  Structures();         // structure types\n".
+	"	LowVoids(0x20);\n".
+	"	HighVoids(0xF978);\n".
+	"}\n".
+	"\n".
+	"static Enums_0(id) {\n".
+	"\n";
+    
+    ## Bitmask enum
+	# id = AddEnum(-1,"eWeaponModification",0x1100000);
+	# SetEnumBf(id,1);
+	# AddConstEx(id,"MODIFICATION_None",	0X1,	0x1);
+	# AddConstEx(id,"MODIFICATION_Heavy",	0X2,	0x2);
+
+    ## Regular enum
+	# id = AddEnum(-1,"eHullSize",0x1100000);
+	# AddConstEx(id,"HULL_Frigate",	0X0,	-1);
+	# AddConstEx(id,"HULL_Destroyer",	0X1,	-1);
+	
+    foreach my $enumname (sort keys %gEnums)
+    {
+        print qq#    id = AddEnum(-1,"$enumname",0x1100000);\n#;
+		my @names = @{$gEnums{$enumname}{'names'}};
+		my @values = @{$gEnums{$enumname}{'values'}};
+        print qq#    SetEnumBf(id,1);\n# if exists $gEnums{$enumname}{'bitmask'};
+		for my $i (0..$#names)
+		{
+			die "Can't find values[$i] for '$enumname' '$names[$i]'" if not defined $values[$i];
+			my $bitmask_value = -1;
+			$bitmask_value = $values[$i] if exists $gEnums{$enumname}{'bitmask'};
+			print qq#    AddConstEx(id,"$names[$i]",	$values[$i],	$bitmask_value);\n#;
+		}
+	}
+	
+	print
+	"\n".	
+	"	return id;\n".
+	"}\n".
+	"\n".
+	"//------------------------------------------------------------------------\n".
+	"// Information about enum types\n".
+	"\n".
+	"static Enums(void) {\n".
+	"        auto id;\n".
+	"	id = Enums_0(id);\n".
+	"}\n".
+	"\n".
+	"static Structures_0(id) {\n".
+	"        auto mid;\n".
+	"\n";
+
+	# id = AddStrucEx(-1,"Battlefield",0);
+	# id = AddStrucEx(-1,"Moo2_Ship",0);
+    foreach my $classname (sort keys %gStructUnions)
+	{
+        print qq#    id = AddStrucEx(-1,"$classname",0);\n#;
+	}
+	print "\n";
+	
+	# id = GetStrucIdByName("Battlefield");
+	# mid = AddStrucMember(id,"field_Terrain",	0X0,	0x10000400,	-1,	924);
+	# SetMemberComment(id,	0X0,	"22 x 21 map (21 squares per line)",	0);
+	# mid = AddStrucMember(id,"field_terrainGroupType",	0X39C,	0x000400,	-1,	462);
+	# SetMemberComment(id,	0X39C,	"\n0=walkable\n1=rough\n2=walkable\n3=river\n4=sea",	1);
+	# mid = AddStrucMember(id,"field_road",	0X56A,	0x000400,	-1,	462);
+	# SetMemberComment(id,	0X56A,	"\n0=no road, 81h=road, other=?",	1);
+	# mid = AddStrucMember(id,"field_Movement_walking",	0X738,	0x000400,	-1,	462);
+	#
+	# mid = AddStrucMember(id,"offset_Label",	0X0,	0x10500400,	0X36AA0,	2,	0XFFFFFFFF,	0X0,	0x000002);
+	#
+	# id = GetStrucIdByName("Moo2_Ship");
+	# mid = AddStrucMember(id,"name",	0X0,	0x000400,	-1,	16);
+	# mid = AddStrucMember(id,"hull_size",	0X10,	0x800400,	GetEnum("eHullSize"),	1);
+	# mid = AddStrucMember(id,"ship_type",	0X11,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"shield_type",	0X12,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"drive_type",	0X13,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"field_14",	0X14,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"computer_type",	0X15,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"armor_type",	0X16,	0x000400,	-1,	1);
+	# mid = AddStrucMember(id,"specials",	0X17,	0x000400,	-1,	5);
+	# mid = AddStrucMember(id,"weapon_slots",	0X1C,	0x60000400,	GetStrucIdByName("Moo2_ShipWeapon"),	64);
+    foreach my $classname (sort keys %gStructUnions)
+    {
+        my @members = @{$gStructUnions{$classname}{'members'}};
+        
+        print qq#    id = GetStrucIdByName("$classname");\n#;
+        
+        foreach my $member (@members)
+        {
+			my $name = $member->{'name'};
+			my $offset = $member->{'offset'};
+            my $type = $member->{'type'};
+            my $size = $member->{'size'};
+			my $idcflags = 0x000400;
+			my $idctype = -1;
+
+			#   0x000400 db ?
+			#   0x200400 db ?   		; base 10
+			#   0x300400 db 30 dup(?)   ; char
+			#   0x800400 enum
+			#  0x1100400 db 2 dup(?)   	; base 16
+			# 0x10800400 dw ?			; enum
+			# 0x11100400 dw ?
+			# 0x21100400 dd ?
+			# 0x12200400 dw ?
+			# 0x14400400 dw ?
+			# 0x50000400 db 16 dup(?)   ; string(C)
+			# 0x10000400 dw 6 dup(?)
+			# 0x20100400 dd ?           ; base 16
+			# 0x10500400 dw ?           ; offset (idctype=00036AA0)
+			
+			#   0x000400 struct-field (always on)
+			#   0x100000 base 16
+			#   0x200000 base 10
+			#   0x300000 char
+			#   0x500000 offset - has extra parameters, in particular idctype=00036AA0 instead of -1
+			#   0x800000 enum-byte
+			# 0x00000000 db
+			# 0x10000000 dw
+			# 0x20000000 dd
+			# 0x50000000 string(C) - has type 0x0 instead of -1
+			# 0x60000000 struct
+			if ($type eq "char")
+			{
+				$idctype = qq#0x0#;
+				$idcflags |= 0x800000;
+			}
+			elsif (exists $gEnums{$type})
+			{
+				$idctype = qq#GetEnum("$type")#;
+				$idcflags |= 0x800000;
+			}
+			elsif (exists $gStructUnions{$type})
+			{
+				$idctype = qq#GetStrucIdByName("$type")#;
+				$idcflags |= 0x60000000;
+			}
+			else
+			{
+			}
+			
+			if ($type =~ m#^u?int16_t# or (exists $gEnums{$type} and $gEnums{$type}{'size'} == 2))
+			{
+				$idcflags |= 0x10000000;
+			}
+			elsif ($type =~ m#^u?int32_t#)
+			{
+				$idcflags |= 0x20000000;
+			}
+			else
+			{
+			}
+
+			if ($type eq "DS_Offset")
+			{
+				printf qq#    mid = AddStrucMember(id,"$name",	0X%X,	0x10500400,	0X36AA0,	2,	0XFFFFFFFF,	0X0,	0x000002);\n#, $offset;
+			}
+			else
+			{
+				printf qq#    mid = AddStrucMember(id,"$name",	0X%X,	0X%06X,	$idctype,	$size);\n#, $offset, $idcflags;
+			}
+        }
+    }
+
+	print	
+	"	return id;\n".
+	"}\n".
+	"\n".
+	"//------------------------------------------------------------------------\n".
+	"// Information about structure types\n".
+	"\n".
+	"static Structures(void) {\n".
+	"        auto id;\n".
+	"	id = Structures_0(id);\n".
+	"}\n".
+	"\n".
+	"// End of file.\n";
+ 
+    close(IDCFILE);
+}
+
 sub process_enum
 {
-    my ($enumname, $enumbody) = @_;
-    my @enumvalues = ();
+    my ($enumname, $enumsizebits, $enumbody) = @_;
+	my $enumsize = 4;
+	$enumsize = $enumsizebits / 8 if defined $enumsizebits;
+    my @enumerator_names = ();
+    my @enumerator_values = ();
+	my $enumerator_value = -1;
     
     # For each line in $enumbody
-    print "enumname = $enumname\n";
+    print "enumname = $enumname ($enumsize)\n";
     while ($enumbody =~ s#^\s*([^\n]*)\n##)
     {
         my $line = $1;
@@ -525,21 +750,45 @@ sub process_enum
         $comment = $1 if ($line =~ s#\s*//\s*(.*)##);
         $line =~ s#^\s*##;
         
-        # Strip initializers
-        $line =~ s#\s*=[^,]*##g;
-        
-        # Collect remaining enum values
-        push(@enumvalues, split(/,\s*/, $line));
+		my @enumerators = split(/,\s*/, $line);
+		foreach my $enumerator (@enumerators)
+		{
+			my $enumerator_name = undef;
+			
+			if ($enumerator =~ m#^(\w+)\s*=\s*([\S]+)$#)
+			{
+				($enumerator_name, $enumerator_value) = ($1, $2);
+			}
+			elsif ($enumerator =~ m#^(\w+)$#)
+			{
+				($enumerator_name, $enumerator_value) = ($1, eval($enumerator_value) + 1);
+			}
+			else
+			{
+				die "Cannot parse enum '$enumname' at line '$line'";
+			}
+		
+			# Collect enumerators
+			push(@enumerator_names, $enumerator_name);
+			push(@enumerator_values, $enumerator_value);
+			$gConstants{$enumerator_name} = $enumerator_value;
+		}
     }
     
     # Register enum
-    $gEnums{$enumname} = \@enumvalues;
+    $gEnums{$enumname}{'size'} = $enumsize;
+    $gEnums{$enumname}{'names'} = \@enumerator_names;
+    $gEnums{$enumname}{'values'} = \@enumerator_values;
 }
 
 sub process_struct_union
 {
-    my ($classname, $classbody) = @_;
-    my @datamembers = ();
+    my ($classtype, $classname, $classbody) = @_;
+    my @datamembers = ();	# old-style
+    my @memberlist = ();
+	my $offset = 0;
+	my $countbits = 0;
+	my $classsize;
 
     # For each declaration in $classbody
     print "classname = $classname\nclassbody = '$classbody'\n\n";
@@ -554,12 +803,105 @@ sub process_struct_union
         next if $declaration !~ m#^([^;]*?)\s*\b(\w+(\[[^\]]*\])*(\s*:\s*\d+)?)$#;
         
         my ($type, $datamember) = ($1, $2);
-        print "type = '$type'\n";
-        print "datamember = $datamember\n";
-        
+		
+		$datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(\d+))?$# 
+			or die "Cannot parse class '$classname' at declaration '$declaration'";
+        my ($name, $range, $bits) = ($1, $3, $5);
+		my ($rangevalue, $typesize, $membersize);
+
+		if (not defined $range)
+		{
+		}
+		elsif (exists $gConstants{$range})
+		{
+			$rangevalue = $gConstants{$range};
+		}
+		else
+		{
+			$rangevalue = eval($range);
+		}
+		
+		$typesize = 0;
+		if ($type =~ m#^char$#)
+		{
+			$typesize = 1;
+		}
+		elsif ($type =~ m#^u?int(\d+)_t$#)
+		{
+			$typesize = $1 / 8;
+		}
+		elsif ($type eq "DS_Offset")
+		{
+			$typesize = 2;
+		}
+		elsif (exists $gEnums{$type})
+		{
+			$typesize = $gEnums{$type}{'size'};
+		}
+		elsif (exists $gStructUnions{$type})
+		{
+			$typesize = $gStructUnions{$type}{'size'};
+		}
+		$membersize = $typesize;
+		$membersize *= $rangevalue if defined $rangevalue;
+		
+		print "$type\t$name";
+		print "[$rangevalue]" if defined $rangevalue;
+		print ":$bits" if defined $bits;
+		printf ";\t// %02X\tsize %03X\n", $offset, $membersize;
+      
         # Register data member
         push(@datamembers, $type, $datamember);
+		my %member = ();
+		$member{'type'} = $type;
+		$member{'name'} = $name;
+		$member{'range'} = $range if defined $range;
+		$member{'rangevalue'} = $rangevalue if defined $rangevalue;
+		$member{'bits'} = $bits if defined $bits;
+		$member{'bitmask'} = (1 << $countbits) if defined $bits;
+		$member{'offset'} = $offset;
+		$member{'typesize'} = $typesize;
+		$member{'size'} = $membersize;
+		push(@memberlist, \%member);
+		
+		if ($classtype eq "union")
+		{
+			$classsize = $membersize;
+		}
+		else
+		{
+			if (defined $bits)
+			{
+				$countbits += $bits;
+			}
+			else
+			{
+				$offset += $membersize;
+			}
+		}
     }
+	$classsize = $offset if $classtype ne "union";
+	printf "SIZE %03X\n", $classsize;
     
-    $gStructUnions{$classname} = \@datamembers;
+#	if ($countbits > 0)
+	if (0)
+	{
+		my $enumname = "e${classname}";
+		my @enumerator_names = ();
+		my @enumerator_values = ();
+		foreach my $member (@memberlist)
+		{
+			return if not exists $member->{'bitmask'};
+			push(@enumerator_names, "${classname}_".$member->{'name'});
+			push(@enumerator_values, $member->{'bitmask'});
+		}
+		$gEnums{$enumname}{'size'} = $classsize;
+		$gEnums{$enumname}{'names'} = \@enumerator_names;
+		$gEnums{$enumname}{'values'} = \@enumerator_values;
+		$gEnums{$enumname}{'bitmask'} = 1;
+	}
+
+	$gStructUnions{$classname}{'datamembers'} = \@datamembers;	# old-style
+	$gStructUnions{$classname}{'size'} = $classsize;
+	$gStructUnions{$classname}{'members'} = \@memberlist;
 }
