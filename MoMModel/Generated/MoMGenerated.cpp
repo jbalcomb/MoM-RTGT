@@ -96,7 +96,7 @@ std::ostream& operator<<(std::ostream& os, const eBattleUnitActive& rhs)
     case BATTLEUNITACTIVE_fleeing: os << "BATTLEUNITACTIVE_fleeing"; break;
     case BATTLEUNITACTIVE_dead: os << "BATTLEUNITACTIVE_dead"; break;
     case BATTLEUNITACTIVE_undeaded: os << "BATTLEUNITACTIVE_undeaded"; break;
-    case BATTLEUNITACTIVE_crackscall: os << "BATTLEUNITACTIVE_crackscall"; break;
+    case BATTLEUNITACTIVE_removed: os << "BATTLEUNITACTIVE_removed"; break;
     case eBattleUnitActive_MAX: os << "eBattleUnitActive_MAX"; break;
     default: os << "<Unknown eBattleUnitActive>"; break;
     }
@@ -219,6 +219,25 @@ std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs)
     case BUILDING8_City_Walls: os << "BUILDING8_City_Walls"; break;
     case eBuilding8_MAX: os << "eBuilding8_MAX"; break;
     default: os << "<Unknown eBuilding8>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eBuildingCategory& rhs)
+{
+    switch (rhs)
+    {
+    case BUILDINGCATEGORY_trade_goods_housing: os << "BUILDINGCATEGORY_trade_goods_housing"; break;
+    case BUILDINGCATEGORY_monetary: os << "BUILDINGCATEGORY_monetary"; break;
+    case BUILDINGCATEGORY_religious: os << "BUILDINGCATEGORY_religious"; break;
+    case BUILDINGCATEGORY_research: os << "BUILDINGCATEGORY_research"; break;
+    case BUILDINGCATEGORY_military: os << "BUILDINGCATEGORY_military"; break;
+    case BUILDINGCATEGORY_productive: os << "BUILDINGCATEGORY_productive"; break;
+    case BUILDINGCATEGORY_food: os << "BUILDINGCATEGORY_food"; break;
+    case BUILDINGCATEGORY_ships: os << "BUILDINGCATEGORY_ships"; break;
+    case eBuildingCategory_MAX: os << "eBuildingCategory_MAX"; break;
+    default: os << "<Unknown eBuildingCategory>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -1719,6 +1738,7 @@ std::ostream& operator<<(std::ostream& os, const ePlane& rhs)
     case PLANE_Dismissed_Deceased: os << "PLANE_Dismissed_Deceased"; break;
     case PLANE_Arcanum: os << "PLANE_Arcanum"; break;
     case PLANE_Myrror: os << "PLANE_Myrror"; break;
+    case PLANE_Limbo: os << "PLANE_Limbo"; break;
     case ePlane_MAX: os << "ePlane_MAX"; break;
     default: os << "<Unknown ePlane>"; break;
     }
@@ -3586,14 +3606,14 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Cost=" << rhs.m_Cost << " 0x" << std::hex << rhs.m_Cost << std::dec << "\n";
     os << "m_Upkeep=" << (unsigned)rhs.m_Upkeep << " 0x" << std::hex << (unsigned)rhs.m_Upkeep << std::dec << "\n";
     os << "m_Race_Code=" << rhs.m_Race_Code << "\n";
-    os << "m_Buildings_Required1_UNK=" << (unsigned)rhs.m_Buildings_Required1_UNK << " 0x" << std::hex << (unsigned)rhs.m_Buildings_Required1_UNK << std::dec << "\n";
-    os << "m_Current_Figures=" << (unsigned)rhs.m_Current_Figures << " 0x" << std::hex << (unsigned)rhs.m_Current_Figures << std::dec << "\n";
+    os << "m_Building1Required_or_PortraitLbxIndex=" << (unsigned)rhs.m_Building1Required_or_PortraitLbxIndex << " 0x" << std::hex << (unsigned)rhs.m_Building1Required_or_PortraitLbxIndex << std::dec << "\n";
+    os << "m_Current_figures=" << (unsigned)rhs.m_Current_figures << " 0x" << std::hex << (unsigned)rhs.m_Current_figures << std::dec << "\n";
     os << "m_BattleUnitNr=" << (unsigned)rhs.m_BattleUnitNr << " 0x" << std::hex << (unsigned)rhs.m_BattleUnitNr << std::dec << "\n";
     os << "m_UNK0F=" << (unsigned)rhs.m_UNK0F << " 0x" << std::hex << (unsigned)rhs.m_UNK0F << std::dec << "\n";
     os << "m_Hitpoints_per_Figure=" << (unsigned)rhs.m_Hitpoints_per_Figure << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints_per_Figure << std::dec << "\n";
     os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Transport_Capacity_GUESS=" << (unsigned)rhs.m_Transport_Capacity_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity_GUESS << std::dec << "\n";
-    os << "m_Total_Figures=" << (unsigned)rhs.m_Total_Figures << " 0x" << std::hex << (unsigned)rhs.m_Total_Figures << std::dec << "\n";
+    os << "m_Max_figures=" << (unsigned)rhs.m_Max_figures << " 0x" << std::hex << (unsigned)rhs.m_Max_figures << std::dec << "\n";
     os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
     os << "m_Gaze_Modifier=" << (unsigned)rhs.m_Gaze_Modifier << " 0x" << std::hex << (unsigned)rhs.m_Gaze_Modifier << std::dec << "\n";
     os << "m_Movement_Flags=" << rhs.m_Movement_Flags << "\n";
@@ -3614,19 +3634,19 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Flags2_UnitEnchantment=" << rhs.m_Flags2_UnitEnchantment << "\n";
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
     os << "m_additional_life_per_figure=" << (unsigned)rhs.m_additional_life_per_figure << " 0x" << std::hex << (unsigned)rhs.m_additional_life_per_figure << std::dec << "\n";
-    os << "m_web_=" << (unsigned)rhs.m_web_ << " 0x" << std::hex << (unsigned)rhs.m_web_ << std::dec << "\n";
+    os << "m_web_strength=" << (unsigned)rhs.m_web_strength << " 0x" << std::hex << (unsigned)rhs.m_web_strength << std::dec << "\n";
     os << "m_Active=" << rhs.m_Active << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
-    os << "m_cur_total_damage_GUESS=" << (unsigned)rhs.m_cur_total_damage_GUESS << " 0x" << std::hex << (unsigned)rhs.m_cur_total_damage_GUESS << std::dec << "\n";
-    os << "m_lifesteal_damage=" << (int)rhs.m_lifesteal_damage << " 0x" << std::hex << (int)rhs.m_lifesteal_damage << std::dec << "\n";
-    os << "m_instant_damage_like_stoning=" << (int)rhs.m_instant_damage_like_stoning << " 0x" << std::hex << (int)rhs.m_instant_damage_like_stoning << std::dec << "\n";
-    os << "m_cur_figure_damage_GUESS=" << (int)rhs.m_cur_figure_damage_GUESS << " 0x" << std::hex << (int)rhs.m_cur_figure_damage_GUESS << std::dec << "\n";
+    os << "m_tracks_regular_damage=" << (int)rhs.m_tracks_regular_damage << " 0x" << std::hex << (int)rhs.m_tracks_regular_damage << std::dec << "\n";
+    os << "m_tracks_lifesteal_damage=" << (int)rhs.m_tracks_lifesteal_damage << " 0x" << std::hex << (int)rhs.m_tracks_lifesteal_damage << std::dec << "\n";
+    os << "m_tracks_instant_damage_like_stoning=" << (int)rhs.m_tracks_instant_damage_like_stoning << " 0x" << std::hex << (int)rhs.m_tracks_instant_damage_like_stoning << std::dec << "\n";
+    os << "m_top_figure_damage=" << (int)rhs.m_top_figure_damage << " 0x" << std::hex << (int)rhs.m_top_figure_damage << std::dec << "\n";
     os << "m_Flags1_UnitEnchantment=" << rhs.m_Flags1_UnitEnchantment << "\n";
     os << "m_Suppression=" << (int)rhs.m_Suppression << " 0x" << std::hex << (int)rhs.m_Suppression << std::dec << "\n";
     os << "m_Mana_points=" << (int)rhs.m_Mana_points << " 0x" << std::hex << (int)rhs.m_Mana_points << std::dec << "\n";
-    os << "m_Current_mana_=" << (int)rhs.m_Current_mana_ << " 0x" << std::hex << (int)rhs.m_Current_mana_ << std::dec << "\n";
-    os << "m_Item_nr_charges_=" << (int)rhs.m_Item_nr_charges_ << " 0x" << std::hex << (int)rhs.m_Item_nr_charges_ << std::dec << "\n";
-    os << "m_Poison_strength_=" << (int)rhs.m_Poison_strength_ << " 0x" << std::hex << (int)rhs.m_Poison_strength_ << std::dec << "\n";
+    os << "m_Current_mana=" << (int)rhs.m_Current_mana << " 0x" << std::hex << (int)rhs.m_Current_mana << std::dec << "\n";
+    os << "m_Item_nr_charges=" << (int)rhs.m_Item_nr_charges << " 0x" << std::hex << (int)rhs.m_Item_nr_charges << std::dec << "\n";
+    os << "m_Poison_strength=" << (int)rhs.m_Poison_strength << " 0x" << std::hex << (int)rhs.m_Poison_strength << std::dec << "\n";
     os << "m_Target_BattleUnitID=" << (int)rhs.m_Target_BattleUnitID << " 0x" << std::hex << (int)rhs.m_Target_BattleUnitID << std::dec << "\n";
     os << "m_xPos=" << rhs.m_xPos << " 0x" << std::hex << rhs.m_xPos << std::dec << "\n";
     os << "m_yPos=" << rhs.m_yPos << " 0x" << std::hex << rhs.m_yPos << std::dec << "\n";
@@ -3849,15 +3869,15 @@ std::ostream& operator<<(std::ostream& os, const Building_Data& rhs)
     os << "m_Produces_Veterans=" << rhs.m_Produces_Veterans << "\n";
     os << "m_Produces_Magic_Weapons=" << rhs.m_Produces_Magic_Weapons << "\n";
     os << "m_Upkeep_yield=" << rhs.m_Upkeep_yield << " 0x" << std::hex << rhs.m_Upkeep_yield << std::dec << "\n";
-    os << "m_Food_and_pop_related=" << rhs.m_Food_and_pop_related << " 0x" << std::hex << rhs.m_Food_and_pop_related << std::dec << "\n";
+    os << "m_AI_trade_goods_housing=" << rhs.m_AI_trade_goods_housing << " 0x" << std::hex << rhs.m_AI_trade_goods_housing << std::dec << "\n";
     os << "m_Zero_24=" << rhs.m_Zero_24 << " 0x" << std::hex << rhs.m_Zero_24 << std::dec << "\n";
-    os << "m_Unk_26=" << rhs.m_Unk_26 << " 0x" << std::hex << rhs.m_Unk_26 << std::dec << "\n";
-    os << "m_Temple_related=" << rhs.m_Temple_related << " 0x" << std::hex << rhs.m_Temple_related << std::dec << "\n";
-    os << "m_Research_related=" << rhs.m_Research_related << " 0x" << std::hex << rhs.m_Research_related << std::dec << "\n";
+    os << "m_Zero_26=" << rhs.m_Zero_26 << " 0x" << std::hex << rhs.m_Zero_26 << std::dec << "\n";
+    os << "m_AI_Religious=" << rhs.m_AI_Religious << " 0x" << std::hex << rhs.m_AI_Religious << std::dec << "\n";
+    os << "m_AI_Research=" << rhs.m_AI_Research << " 0x" << std::hex << rhs.m_AI_Research << std::dec << "\n";
     os << "m_Building_cost=" << rhs.m_Building_cost << " 0x" << std::hex << rhs.m_Building_cost << std::dec << "\n";
     os << "m_Zero_2E=" << rhs.m_Zero_2E << " 0x" << std::hex << rhs.m_Zero_2E << std::dec << "\n";
     os << "m_Animation_related=" << rhs.m_Animation_related << " 0x" << std::hex << rhs.m_Animation_related << std::dec << "\n";
-    os << "m_Unk_32=" << rhs.m_Unk_32 << " 0x" << std::hex << rhs.m_Unk_32 << std::dec << "\n";
+    os << "m_Building_category=" << rhs.m_Building_category << "\n";
     os << "}";
     return os;
 }
@@ -7214,10 +7234,9 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Cost=" << rhs.m_Cost << " 0x" << std::hex << rhs.m_Cost << std::dec << "\n";
     os << "m_Upkeep=" << (unsigned)rhs.m_Upkeep << " 0x" << std::hex << (unsigned)rhs.m_Upkeep << std::dec << "\n";
     os << "m_Race_Code=" << rhs.m_Race_Code << "\n";
-    os << "m_Building_Required1=" << (unsigned)rhs.m_Building_Required1 << " 0x" << std::hex << (unsigned)rhs.m_Building_Required1 << std::dec << "\n";
-    os << "m_Hero_TypeCode_or_Building2=" << rhs.m_Hero_TypeCode_or_Building2 << "\n";
-    os << "m_Unit_picture=" << (unsigned)rhs.m_Unit_picture << " 0x" << std::hex << (unsigned)rhs.m_Unit_picture << std::dec << "\n";
-    os << "m_UNK01=" << (unsigned)rhs.m_UNK01 << " 0x" << std::hex << (unsigned)rhs.m_UNK01 << std::dec << "\n";
+    os << "m_Building1Required_or_PortraitLbxIndex=" << (unsigned)rhs.m_Building1Required_or_PortraitLbxIndex << " 0x" << std::hex << (unsigned)rhs.m_Building1Required_or_PortraitLbxIndex << std::dec << "\n";
+    os << "m_Building2_or_HeroType=" << rhs.m_Building2_or_HeroType << "\n";
+    os << "m_Unit_picture=" << rhs.m_Unit_picture << " 0x" << std::hex << rhs.m_Unit_picture << std::dec << "\n";
     os << "m_Hitpoints=" << (unsigned)rhs.m_Hitpoints << " 0x" << std::hex << (unsigned)rhs.m_Hitpoints << std::dec << "\n";
     os << "m_Scouting=" << (unsigned)rhs.m_Scouting << " 0x" << std::hex << (unsigned)rhs.m_Scouting << std::dec << "\n";
     os << "m_Transport_Capacity=" << (unsigned)rhs.m_Transport_Capacity << " 0x" << std::hex << (unsigned)rhs.m_Transport_Capacity << std::dec << "\n";
@@ -7782,7 +7801,7 @@ bool validate(const eBattleUnitActive& rhs, const std::string& context)
     case BATTLEUNITACTIVE_fleeing: break;
     case BATTLEUNITACTIVE_dead: break;
     case BATTLEUNITACTIVE_undeaded: break;
-    case BATTLEUNITACTIVE_crackscall: break;
+    case BATTLEUNITACTIVE_removed: break;
     default: std::cout << context << ": Unknown eBattleUnitActive = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -7901,6 +7920,24 @@ bool validate(const eBuilding8& rhs, const std::string& context)
     case BUILDING8_Miners_Guild: break;
     case BUILDING8_City_Walls: break;
     default: std::cout << context << ": Unknown eBuilding8 = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eBuildingCategory& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case BUILDINGCATEGORY_trade_goods_housing: break;
+    case BUILDINGCATEGORY_monetary: break;
+    case BUILDINGCATEGORY_religious: break;
+    case BUILDINGCATEGORY_research: break;
+    case BUILDINGCATEGORY_military: break;
+    case BUILDINGCATEGORY_productive: break;
+    case BUILDINGCATEGORY_food: break;
+    case BUILDINGCATEGORY_ships: break;
+    default: std::cout << context << ": Unknown eBuildingCategory = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -9297,6 +9334,7 @@ bool validate(const ePlane& rhs, const std::string& context)
     case PLANE_Dismissed_Deceased: break;
     case PLANE_Arcanum: break;
     case PLANE_Myrror: break;
+    case PLANE_Limbo: break;
     default: std::cout << context << ": Unknown ePlane = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -10923,6 +10961,7 @@ bool validate(const Building_Data& rhs, const std::string& context)
     if (!validate(rhs.m_Produces_Regulars, context + ".m_Produces_Regulars")) ok = false;
     if (!validate(rhs.m_Produces_Veterans, context + ".m_Produces_Veterans")) ok = false;
     if (!validate(rhs.m_Produces_Magic_Weapons, context + ".m_Produces_Magic_Weapons")) ok = false;
+    if (!validate(rhs.m_Building_category, context + ".m_Building_category")) ok = false;
     return ok;
 }
 
@@ -12212,7 +12251,7 @@ bool validate(const Unit_Type_Data& rhs, const std::string& context)
     bool ok = true;
     if (!validate(rhs.m_Ranged_Type, context + ".m_Ranged_Type")) ok = false;
     if (!validate(rhs.m_Race_Code, context + ".m_Race_Code")) ok = false;
-    if (!validate(rhs.m_Hero_TypeCode_or_Building2, context + ".m_Hero_TypeCode_or_Building2")) ok = false;
+    if (!validate(rhs.m_Building2_or_HeroType, context + ".m_Building2_or_HeroType")) ok = false;
     if (!validate(rhs.m_Movement_Flags, context + ".m_Movement_Flags")) ok = false;
     if (!validate(rhs.m_Immunity_Flags, context + ".m_Immunity_Flags")) ok = false;
     if (!validate(rhs.m_Attribute_Flags, context + ".m_Attribute_Flags")) ok = false;

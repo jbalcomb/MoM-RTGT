@@ -343,7 +343,7 @@ bool MoMController::findCheapestUnitToProduce(const City& city, eProducing& prod
 		if (0 == unitData)
 			break;
 
-		if ((city.m_Race == unitData->m_Race_Code) && (unitData->m_Building_Required1 == BUILDING_None))
+		if ((city.m_Race == unitData->m_Race_Code) && (unitData->m_Building1Required_or_PortraitLbxIndex == BUILDING_None))
 		{
 			produce = static_cast<eProducing>(toUInt(unitTypeNr) - toUInt(UNITTYPE_Trireme) + toUInt(PRODUCING_Trireme));
 			found = true;
@@ -510,10 +510,10 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
 	//		 2. Bury the old hero
 
 	// Retrieve the slot types
-    if (toUInt(unitTypeData->m_Hero_TypeCode_or_Building2) <= toUInt(HEROTYPE_Wizard))
+    if (toUInt(unitTypeData->m_Building2_or_HeroType) <= toUInt(HEROTYPE_Wizard))
 	{
-		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + unitTypeData->m_Hero_TypeCode_or_Building2);
-		if (HEROTYPE_Wizard == unitTypeData->m_Hero_TypeCode_or_Building2)
+		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + unitTypeData->m_Building2_or_HeroType);
+		if (HEROTYPE_Wizard == unitTypeData->m_Building2_or_HeroType)
 		{
 			heroSlotTypes[1] = SLOT16_Amulet;
 		}
@@ -525,7 +525,7 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
 	}
 	else
 	{
-		unsigned slotCode = static_cast<unsigned>(unitTypeData->m_Hero_TypeCode_or_Building2);
+		unsigned slotCode = static_cast<unsigned>(unitTypeData->m_Building2_or_HeroType);
 		slotCode -= 6;
 		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
 		slotCode /= 6;

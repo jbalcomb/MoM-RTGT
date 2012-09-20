@@ -174,7 +174,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         momUnit.changeUnit(MoM::UNITTYPE_Barbarian);
 
         newUnitTypeData = momUnit.getUnitTypeData();
-        newUnitTypeData.m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield);
+        newUnitTypeData.m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield);
         newUnitTypeData.m_Upkeep = 4;
         ok |= momUnit.setUnitTypeData(newUnitTypeData);
 
@@ -192,7 +192,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         momUnit.changeUnit(MoM::UNITTYPE_Bard);
 
         newUnitTypeData = momUnit.getUnitTypeData();
-        newUnitTypeData.m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        newUnitTypeData.m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
         ok |= momUnit.setUnitTypeData(newUnitTypeData);
 
         newHeroStats = momUnit.getHeroStats();
@@ -205,7 +205,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         //  item slots: W+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Beastmaster);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Dervish        0     -     -     -     -     -     -     -     -     -
         // specials: Noble, 1x Random
@@ -218,7 +218,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         momUnit.changeUnit(MoM::UNITTYPE_Dervish);
 
         newUnitTypeData = momUnit.getUnitTypeData();
-        newUnitTypeData.m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Sword, MoM::SLOT16_Amulet);
+        newUnitTypeData.m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Sword, MoM::SLOT16_Amulet);
         ok |= momUnit.setUnitTypeData(newUnitTypeData);
 
         newHeroStats = momUnit.getHeroStats();
@@ -235,7 +235,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         momUnit.changeUnit(MoM::UNITTYPE_Dwarf);
 
         newUnitTypeData = momUnit.getUnitTypeData();
-        newUnitTypeData.m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Armor_Shield);
+        newUnitTypeData.m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Armor_Shield);
         newUnitTypeData.m_Upkeep = 4;
         ok |= momUnit.setUnitTypeData(newUnitTypeData);
 
@@ -248,21 +248,21 @@ bool MoMCatnip::apply(MoMGameBase* game)
         //  item slots: W+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Healer);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Huntress       0     -     -     -     -     -     -     -     -     -
         // specials: Blademaster, Forester, Long Range
         //  item slots: W/B+R+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Huntress);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
 
         //Orc Warrior    0     -     -     -     -     -     -     -     -     -
         // specials: Might, First strike
         //  item slots: W+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Orc_Warrior);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Sage           0     -     -     -     -     -     -     -     -     -
         // specials: Sage, Caster 7.5
@@ -274,7 +274,7 @@ bool MoMCatnip::apply(MoMGameBase* game)
         momUnit.changeUnit(MoM::UNITTYPE_Sage);
 
         newUnitTypeData = momUnit.getUnitTypeData();
-        newUnitTypeData.m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        newUnitTypeData.m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
         newUnitTypeData.m_Upkeep = 4;
         ok |= momUnit.setUnitTypeData(newUnitTypeData);
 
@@ -288,77 +288,77 @@ bool MoMCatnip::apply(MoMGameBase* game)
         //  item slots: W+R+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Thief);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
 
         //Assassin       5     -     -     -     -     -     -     -     -     -
         // specials: Poison, Blade Master, Web, 1x Random
         //  item slots: W+W+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Assassin);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Sword, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword, MoM::SLOT16_Sword, MoM::SLOT16_Amulet);
 
         //Druid          5     -     -     -     -     -     -     -     -     -
         // specials: Purification, Regeneration, Caster 7.5
         //  item slots: S+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Druid);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Magician       5     -     -     -     -     -     -     -     -     -
         // specials: Arcane Power, Caster 7.5
         //  item slots: S+S+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Magician);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet);
 
         //War Monk       5     -     -     -     -     -     -     -     -     -
         // specials: Super Agility, First Strike, Negate First Strike, Blademaster
         //  item slots: R+R+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_War_Monk);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Amulet, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Amulet, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
 
         //Warrior Mage   5     -     -     -     -     -     -     -     -     -
         // specials:
         //  item slots: S/W+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Warrior_Mage);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Draconian     10     -     -     -     -     -     -     -     -     -
         // specials: Fire Breath 5, Flying, Might, 1x Random
         //  item slots: S+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Draconian);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Golden One    10     -     -     -     -     -     -     -     -     -
         // specials: Caster 5, 3x Random
         //  item slots: W/S+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Golden_One);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Sword_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Sword_Staff_Wand, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Ranger        10     -     -     -     -     -     -     -     -     -
         // specials: Pathfinding, Caster 5, , Scouting III, 1x Random
         //  item slots: W/B+A+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Ranger);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Bow, MoM::SLOT16_Armor_Shield, MoM::SLOT16_Amulet);
 
         //Wind Mage     10     -     -     -     -     -     -     -     -     -
         // specials: Windwalking, caster 7.5, 1x Random
         //  item slots: S+R+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Wind_Mage);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
 
         //Witch         10     -     -     -     -     -     -     -     -     -
         // specials: Caster 10, Life Steal
         //  item slots: S+R+R
         //   spells:
         data = game->getUnitTypeData(MoM::UNITTYPE_Witch);
-        data->m_Hero_TypeCode_or_Building2 = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
+        data->m_Building2_or_HeroType = heroTypeCode(MoM::SLOT16_Staff_Wand, MoM::SLOT16_Amulet, MoM::SLOT16_Amulet);
 
 
         //

@@ -502,10 +502,9 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPosHeaded", &battleUnit->m_xPosHeaded));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPosHeaded", &battleUnit->m_yPosHeaded));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HalfMovesLeft", &battleUnit->m_MoveHalves));
-    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "CurFigures", &battleUnit->m_Current_Figures));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "CurFigures", &battleUnit->m_Current_figures));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HP figure", &battleUnit->m_Hitpoints_per_Figure));
-    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "TotDamage", &battleUnit->m_cur_total_damage_GUESS));
-    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "FigDamage", &battleUnit->m_cur_figure_damage_GUESS));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TopFigDamage", &battleUnit->m_top_figure_damage));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Suppression", &battleUnit->m_Suppression));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "WeaponType", &battleUnit->m_Weapon_Type_Plus_1));
 }

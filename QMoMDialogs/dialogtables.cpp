@@ -875,18 +875,18 @@ void DialogTables::update_Unit_Types()
 
         if (unitTypeNr < (int)MoM::gMAX_HERO_TYPES)
         {
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building_Required1, 4));
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eHero_TypeCode>(game, (MoM::eHero_TypeCode*)&data->m_Hero_TypeCode_or_Building2, MoM::eHero_TypeCode_MAX));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building1Required_or_PortraitLbxIndex, 4));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eHero_TypeCode>(game, (MoM::eHero_TypeCode*)&data->m_Building2_or_HeroType, MoM::eHero_TypeCode_MAX));
         }
         else if (unitTypeNr < MoM::UNITTYPE_Arcane_Magic_Spirit)
         {
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Building_Required1, MoM::eBuilding8_MAX));
-            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Hero_TypeCode_or_Building2, MoM::eBuilding8_MAX));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Building1Required_or_PortraitLbxIndex, MoM::eBuilding8_MAX));
+            ui->tableWidget->setItem(row, col++, new EnumTableWidgetItem<MoM::eBuilding8>(game, (MoM::eBuilding8*)&data->m_Building2_or_HeroType, MoM::eBuilding8_MAX));
         }
         else
         {
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building_Required1, 4));
-            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, (uint8_t*)&data->m_Hero_TypeCode_or_Building2, 4));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Building1Required_or_PortraitLbxIndex, 4));
+            ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, (uint8_t*)&data->m_Building2_or_HeroType, 4));
         }
 
         ui->tableWidget->setItem(row, col++, new BitmaskTableWidgetItem<uint8_t, MoM::eUnitAbility>(
@@ -909,7 +909,7 @@ void DialogTables::update_Unit_Types()
                                   game, &data->m_Attack_Flags.bits,
                                   MoM::UNITABILITY_Armor_Piercing, MoM::eUnitAbility_MAX));
 
-        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Unit_picture, 3));
+        ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint16_t>(game, &data->m_Unit_picture, 3));
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Scouting, 3));
 
         ui->tableWidget->setItem(row, col++, new NumberTableWidgetItem<uint8_t>(game, &data->m_Transport_Capacity, 3, SHOWNUMBER_noZero));

@@ -95,7 +95,7 @@ enum eBattleUnitActive ENUMSIZE8
     BATTLEUNITACTIVE_fleeing = 2,
     BATTLEUNITACTIVE_dead = 4,
     BATTLEUNITACTIVE_undeaded = 5,
-    BATTLEUNITACTIVE_crackscall = 6,
+    BATTLEUNITACTIVE_removed = 6,   // stoned, destroyed, dispelled, cracks call, combat summoning
 
     eBattleUnitActive_MAX,
     eBattleUnitActive_SIZE__ = 0xFF
@@ -228,6 +228,21 @@ enum eBuilding8 ENUMSIZE8
     BUILDING8_City_Walls,         // 35
 
     eBuilding8_MAX      // 36
+};
+
+enum eBuildingCategory ENUMSIZE16
+{
+    BUILDINGCATEGORY_trade_goods_housing,
+    BUILDINGCATEGORY_monetary,
+    BUILDINGCATEGORY_religious,
+    BUILDINGCATEGORY_research,
+    BUILDINGCATEGORY_military,
+    BUILDINGCATEGORY_productive,
+    BUILDINGCATEGORY_food,
+    BUILDINGCATEGORY_ships,
+
+    eBuildingCategory_MAX,
+    eBuildingCategory__SIZE__ = 0xFFFF
 };
 
 enum eBuildingStatus ENUMSIZE8
@@ -1594,6 +1609,7 @@ enum ePlane ENUMSIZE8
     PLANE_Dismissed_Deceased = 0xFF,
     PLANE_Arcanum = 0,
     PLANE_Myrror = 1,
+    PLANE_Limbo = 9,    // To become undead
     ePlane_MAX,
 };
 
@@ -3303,17 +3319,17 @@ typedef struct PACKED_STRUCT // Building_Data
     eBuilding           m_Replaces_building;    // 18
     eYesNo16            m_Produces_Regulars;    // 1A
     eYesNo16            m_Produces_Veterans;    // 1C
-    eYesNo16            m_Produces_Magic_Weapons;   // 1E
+    eYesNo16            m_Produces_Magic_Weapons;// 1E
     int16_t             m_Upkeep_yield;         // 20
-    uint16_t            m_Food_and_pop_related; // 22
+    uint16_t            m_AI_trade_goods_housing;// 22
     uint16_t            m_Zero_24;              // 24
-    uint16_t            m_Unk_26;               // 26
-    uint16_t            m_Temple_related;       // 28
-    uint16_t            m_Research_related;     // 2A
+    uint16_t            m_Zero_26;              // 26
+    uint16_t            m_AI_Religious;         // 28
+    uint16_t            m_AI_Research;          // 2A
     uint16_t            m_Building_cost;        // 2C
     uint16_t            m_Zero_2E;              // 2E
     uint16_t            m_Animation_related;    // 30
-    uint16_t            m_Unk_32;               // 32
+    eBuildingCategory   m_Building_category;    // 32
                                                 // SIZE 34
 } Building_Data;
 
@@ -4694,30 +4710,29 @@ typedef struct PACKED_STRUCT // Spell_Data
 
 typedef struct PACKED_STRUCT // Unit_Type_Data
 {
-    DS_Offset   m_PtrName;          // 00-01  Pointer to name of unit type (note 1)
-    uint8_t     m_Melee;            // 02  Melee attack strength
-    uint8_t     m_Ranged;           // 03  Ranged attack strength
-    eRanged_Type    m_Ranged_Type;  // 04  Ranged attack type (table 1)
-    uint8_t     m_Ranged_Shots;     // 05  Ranged attack number of shots
-    int8_t      m_To_Hit;           // 06  Plus to hit
-    uint8_t     m_Defense;          // 07  Defense
-    uint8_t     m_Resistance;       // 08  Resistance
-    uint8_t     m_MoveHalves;       // 09  Movement rate (in units of 1/2 MP)
-    uint16_t    m_Cost;             // 0A-0B  Heroes: cost to hire (note 2)
-                                    //     Normal units: cost to build
-                                    //     Summoned units: cost to place in lair, node or rampaging force (note 3)
-    uint8_t     m_Upkeep;           // 0C  Summoned units: upkeep cost  Others: not used (note 4)
-    eRace       m_Race_Code;         // 0D  Race code (table 2)
-    uint8_t     m_Building_Required1;    // 0E  Normal units: building required (table 3), Hero: ID Code, Summoned: 6
-    eHero_TypeCode     m_Hero_TypeCode_or_Building2;      // 0F  Heroes: type code, Regular units: Building required, Summoned: zero
-    uint8_t     m_Unit_picture;     // 10  Unit picture
-    uint8_t     m_UNK01;            // 11  00
-    uint8_t     m_Hitpoints;        // 12  Hit points (hearts) per figure
-    uint8_t     m_Scouting;         // 13  Scouting range
-    uint8_t     m_Transport_Capacity;   // 14  Transport capacity (number of units carried)
-    uint8_t     m_Nr_Figures;        // 15  Number of figures in the unit
-    uint8_t     m_Construction;     // 16  Construction capacity (road building)
-    int8_t      m_Gaze_Modifier;    // 17  Special attack or bonus strength
+    DS_Offset       m_PtrName;                  // 00-01  Pointer to name of unit type (note 1)
+    uint8_t         m_Melee;                    // 02  Melee attack strength
+    uint8_t         m_Ranged;                   // 03  Ranged attack strength
+    eRanged_Type    m_Ranged_Type;              // 04  Ranged attack type (table 1)
+    uint8_t         m_Ranged_Shots;             // 05  Ranged attack number of shots
+    int8_t          m_To_Hit;                   // 06  Plus to hit
+    uint8_t         m_Defense;                  // 07  Defense
+    uint8_t         m_Resistance;               // 08  Resistance
+    uint8_t         m_MoveHalves;               // 09  Movement rate (in units of 1/2 MP)
+    uint16_t        m_Cost;                     // 0A-0B  Heroes: cost to hire (note 2)
+                                                //     Normal units: cost to build
+                                                //     Summoned units: cost to place in lair, node or rampaging force (note 3)
+    uint8_t         m_Upkeep;                   // 0C  Summoned units: upkeep cost  Others: not used (note 4)
+    eRace           m_Race_Code;                // 0D  Race code (table 2)
+    uint8_t         m_Building1Required_or_PortraitLbxIndex;// 0E  Normal units: building required (table 3), Hero: ID Code, Summoned: 6
+    eHero_TypeCode  m_Building2_or_HeroType;    // 0F  Heroes: type code, Regular units: Building required, Summoned: zero
+    uint16_t        m_Unit_picture;             // 10  Unit picture
+    uint8_t         m_Hitpoints;                // 12  Hit points (hearts) per figure
+    uint8_t         m_Scouting;                 // 13  Scouting range
+    uint8_t         m_Transport_Capacity;       // 14  Transport capacity (number of units carried)
+    uint8_t         m_Nr_Figures;               // 15  Number of figures in the unit
+    uint8_t         m_Construction;             // 16  Construction capacity (road building)
+    int8_t          m_Gaze_Modifier;            // 17  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 18  Movement flags (table 4)
     uint8_t                 m_Zero02;           // 19  00
     unionImmunity_Flags     m_Immunity_Flags;   // 1A  Immunity flags (table 5)
@@ -4728,9 +4743,9 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
                                                 // 1F  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;     // 20  Special attack flags (table 10)
                                                 // 21  Special attack flags (table 11)
-    uint8_t    m_Sound;             // 22  Initialized only after starting the game
-    uint8_t    m_Zero04;            // 23  00
-                                    // SIZE 24
+    uint8_t          m_Sound;                   // 22  Initialized only after starting the game
+    uint8_t         m_Zero04;                   // 23  00
+                                                // SIZE 24
 } Unit_Type_Data;
 
 typedef struct PACKED_STRUCT // Battlefield
@@ -4806,15 +4821,15 @@ typedef struct PACKED_STRUCT // Battle_Unit
                                                             //     Summoned units: cost to place in lair, node or rampaging force (note 3)
     uint8_t                 m_Upkeep;                       // 0A  Summoned units: upkeep cost  Others: not used (note 4)
     eRace                   m_Race_Code;                    // 0B  Race code (table 2)
-    uint8_t                 m_Buildings_Required1_UNK;      // 0C-0D  Normal units: buildings required (table 3)
+    uint8_t                 m_Building1Required_or_PortraitLbxIndex;// 0C  Normal units: buildings required (table 3), heroes portraitIndex
                                                             //     Others: note 5
-    uint8_t                 m_Current_Figures;              // 0D
+    uint8_t                 m_Current_figures;              // 0D
     uint8_t                 m_BattleUnitNr;                 // 0E
     uint8_t                 m_UNK0F;                        // 0F  00
     uint8_t                 m_Hitpoints_per_Figure;         // 10  Hit points (hearts) per figure
     uint8_t                 m_Scouting;                     // 11  Scouting range
     uint8_t                 m_Transport_Capacity_GUESS;     // 12  Transport capacity (number of units carried)
-    uint8_t                 m_Total_Figures;                // 13  Number of figures in the unit
+    uint8_t                 m_Max_figures;                // 13  Number of figures in the unit
     uint8_t                 m_Construction;                 // 14  Construction capacity (road building)
     uint8_t                 m_Gaze_Modifier;                // 15  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;               // 16  Movement flags (table 4)
@@ -4839,19 +4854,19 @@ typedef struct PACKED_STRUCT // Battle_Unit
     unionUnit_Enchantment   m_Flags2_UnitEnchantment;       // 2C-2F
     int16_t                 m_unitNr;                       // 30-31
     uint8_t                 m_additional_life_per_figure;   // 32
-    uint8_t                 m_web_;                         // 33
-    eBattleUnitActive       m_Active;                       // 34 Active (0=alive, 1=?, 2=flee?, 3=?, 4=dead, 5=undeaded, 6=crackscall) ??
+    uint8_t                 m_web_strength;                         // 33
+    eBattleUnitActive       m_Active;                       // 34   Active (0=alive, 2=flee?, 4=dead, 5=undeaded, 6=removed)
     ePlayer                 m_Owner;                        // 35
-    uint8_t                 m_cur_total_damage_GUESS;       // 36
-    int8_t                  m_lifesteal_damage;             // 37
-    int8_t                  m_instant_damage_like_stoning;  // 38
-    int8_t                  m_cur_figure_damage_GUESS;      // 39
+    int8_t                  m_tracks_regular_damage;        // 36
+    int8_t                  m_tracks_lifesteal_damage;      // 37
+    int8_t                  m_tracks_instant_damage_like_stoning;// 38   stoning, destruction, dispel
+    int8_t                  m_top_figure_damage;            // 39
     unionUnit_Enchantment   m_Flags1_UnitEnchantment;       // 3A-3D
     int8_t                  m_Suppression;                  // 3E
     int8_t                  m_Mana_points;                  // 3F
-    int8_t                  m_Current_mana_;                // 40
-    int8_t                  m_Item_nr_charges_;             // 41
-    int8_t                  m_Poison_strength_;             // 42
+    int8_t                  m_Current_mana;                 // 40
+    int8_t                  m_Item_nr_charges;              // 41
+    int8_t                  m_Poison_strength;              // 42
     int8_t                  m_Target_BattleUnitID;          // 43
     int16_t                 m_xPos;                         // 44-45
     int16_t                 m_yPos;                         // 46-47

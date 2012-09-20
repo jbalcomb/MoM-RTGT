@@ -450,7 +450,7 @@ eHero_TypeCode MoMUnit::getHeroTypeCode() const
     eHero_TypeCode value = (eHero_TypeCode)-1;
     if ((0 != m_unitType) && isHero())
     {
-        value = m_unitType->m_Hero_TypeCode_or_Building2;
+        value = m_unitType->m_Building2_or_HeroType;
     }
     return value;
 }
@@ -514,10 +514,10 @@ eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
 
         eSlot_Type16 heroSlotTypes[3];
        // Retrieve the slot types
-       if (toUInt(m_unitType->m_Hero_TypeCode_or_Building2) <= toUInt(HEROTYPE_Wizard))
+       if (toUInt(m_unitType->m_Building2_or_HeroType) <= toUInt(HEROTYPE_Wizard))
        {
-           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + m_unitType->m_Hero_TypeCode_or_Building2);
-           if (HEROTYPE_Wizard == m_unitType->m_Hero_TypeCode_or_Building2)
+           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + m_unitType->m_Building2_or_HeroType);
+           if (HEROTYPE_Wizard == m_unitType->m_Building2_or_HeroType)
            {
                heroSlotTypes[1] = SLOT16_Amulet;
            }
@@ -529,7 +529,7 @@ eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
        }
        else
        {
-           unsigned slotCode = static_cast<unsigned>(m_unitType->m_Hero_TypeCode_or_Building2);
+           unsigned slotCode = static_cast<unsigned>(m_unitType->m_Building2_or_HeroType);
            slotCode -= 6;
            heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
            slotCode /= 6;
@@ -667,7 +667,7 @@ int MoMUnit::getCurFigures() const
     int value = 0;
     if (0 != m_battleUnit)
     {
-        value = m_battleUnit->m_Current_Figures;
+        value = m_battleUnit->m_Current_figures;
     }
     else if (0 != m_unitType)
     {
@@ -685,7 +685,8 @@ int MoMUnit::getDamage() const
     int value = 0;
     if (0 != m_battleUnit)
     {
-        value = m_battleUnit->m_cur_total_damage_GUESS;
+        value = (m_battleUnit->m_Max_figures - m_battleUnit->m_Current_figures) * m_battleUnit->m_Hitpoints_per_Figure 
+                + m_battleUnit->m_top_figure_damage; 
     }
     else if (0 != m_unit)
     {
@@ -732,7 +733,7 @@ int MoMUnit::getMaxFigures() const
     int value = 0;
     if (0 != m_battleUnit)
     {
-        value = m_battleUnit->m_Total_Figures;
+        value = m_battleUnit->m_Max_figures;
     }
     else if (0 != m_unitType)
     {
@@ -809,15 +810,15 @@ MoMUnit::ListBuildings MoMUnit::getRequiredBuildings() const
 
     if ((0 != m_unitType) && isNormal())
     {
-        if ((toUInt(m_unitType->m_Building_Required1) >= BUILDING_Barracks)
-            && (toUInt(m_unitType->m_Building_Required1) < eBuilding_MAX))
+        if ((toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) >= BUILDING_Barracks)
+            && (toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) < eBuilding_MAX))
         {
-            value.push_back((eBuilding)m_unitType->m_Building_Required1);
+            value.push_back((eBuilding)m_unitType->m_Building1Required_or_PortraitLbxIndex);
         }
-        if ((toUInt(m_unitType->m_Hero_TypeCode_or_Building2) >= BUILDING_Barracks)
-            && (toUInt(m_unitType->m_Hero_TypeCode_or_Building2) < eBuilding_MAX))
+        if ((toUInt(m_unitType->m_Building2_or_HeroType) >= BUILDING_Barracks)
+            && (toUInt(m_unitType->m_Building2_or_HeroType) < eBuilding_MAX))
         {
-            value.push_back((eBuilding)m_unitType->m_Hero_TypeCode_or_Building2);
+            value.push_back((eBuilding)m_unitType->m_Building2_or_HeroType);
         }
     }
     return value;
@@ -1186,6 +1187,12 @@ bool MoMUnit::isFlying() const
         isWebbed |= (m_battleUnit->m_web_ != 0);
     }
     return (hasFlying && !isWebbed);
+}
+
+bool MoMUnit::isHasted() const
+{
+    return (hasCombatEnchantment(COMBATENCHANTMENT_Haste)
+                 || hasItemPower(ITEMPOWER_Haste));
 }
 
 bool MoMUnit::isHero() const

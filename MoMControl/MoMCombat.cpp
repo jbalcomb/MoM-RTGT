@@ -86,15 +86,18 @@ MoMCombat::MoMCombat(MoMGameBase* game) :
 
 //!
 //! The function combat_round(attacker, defender) resolves 1 melee combat round. That is:\n
-//!   1. Pre-melee: Attacker executes Breath, Thrown, and Gaze attacks.\n
-//!   2. Pre-melee: Defender executes Gaze attacks.\n
-//!   3. Pre-melee: Resolve casualties\n
-//!   4. Melee: Attacker executes Immolation, Poison, Touch, and Melee attacks\n
-//!   5. First Strike: Resolve casualties if attacker has (unnegated) First Strike\n
-//!   6. Melee: Defender executes Immolation, Poison, Touch, and Melee attacks\n
-//!   7. Melee: Resolve casualties\n
+//!   1. Pre-melee: Attacker executes Breath, Thrown, Gaze attacks, and a 2nd Gaze attack if hasted.\n
+//!   2. Pre-melee: Resolve casualties of defender.\n
+//!   3. Pre-melee: Defender executes Gaze attack (2 if hasted) if not sleeping.\n
+//!   4. Pre-melee: Wall of fire.\n
+//!   5. Pre-melee: Resolve casualties of attacker.\n
+//!   7. Melee: Attacker (non-fearful) executes Immolation, Poison, Touch, and Melee attacks.\n
+//!   8. First Strike: Resolve casualties if attacker has (unnegated) First Strike.\n
+//!   9. Melee: If hasted, attacker (non-fearful) executes Immolation, Poison, Touch, and Melee attacks.\n
+//!   10. Melee: Defender (non-fearful) executes Immolation, Poison, Touch, and Melee attacks (2 times if hasted) if not sleeping.\n
+//!   11. Melee: Resolve casualties.\n
 //!
-//! The function shoot_round(attacker, defender, distance) resolves 1 ranged attack.
+//! The function shoot_round(attacker, defender, distance) resolves a ranged attack (TODO: 2 if hasted).
 //!
 
 //
@@ -612,6 +615,8 @@ double MoMCombat::special_attack(const CombatUnit& attacker, const CombatUnit& d
     MoMUnit::BaseAttributes att = attacker.getCombatAttributes();
     MoMUnit::BaseAttributes def = defender.getCombatAttributes();
 
+    // TODO: Color attack (ranged type, melee of summoned, color of special)
+
     int ignore_damage = 0;
     if (defender.isInvulnerable())
     {
@@ -754,6 +759,8 @@ double MoMCombat::special_attack(const CombatUnit& attacker, const CombatUnit& d
 
 void MoMCombat::resolve_casualties(CombatUnit& attacker, CombatUnit& defender, double EDD_att, double EDD_def, std::string& o, std::vector<double>* distr_att)
 {
+    // TODO: Blur ignores each point of damage with a 10% chance
+
     if (EDD_def != 0)
     {
         attacker.m_simulatedDamage += EDD_def;
@@ -823,6 +830,9 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
     {
         double EDD, EDD_att, EDD_def;
 
+        // TODO: Move Eldritch here
+        // TODO: City wall defense
+
         if (attacker.getSuppressionCounter() >= 2)
         {
             att.toHitMelee -= attacker.getSuppressionCounter() / 2;
@@ -881,21 +891,41 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         //! Pre-melee: attacker's Breaths, First Strike, Gazes, Thrown, defender's Gazes
         EDD_att = EDD_def = 0;
 
+        // Pre-melee: Attacker
+        EDD_att += special_attack(attacker, defender, "Thrown", o);
         EDD_att += special_attack(attacker, defender, "Breath", o);
         EDD_att += special_attack(attacker, defender, "Gaze", o);
-        EDD_att += special_attack(attacker, defender, "Thrown", o);
-
-        EDD_def += special_attack(defender, attacker, "Gaze", o);
-
+        if (attacker.isHasted())
+        {
+            EDD_att += special_attack(attacker, defender, "Gaze", o);
+        }
         resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
-
-        //! End combat if anyone defeated
         if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
-            break;
+            break;  // End combat if anyone defeated
+
+        // Pre-melee: Defender
+        if (!defender.hasCombatEnchantment(COMBATENCHANTMENT_Black_Sleep))
+        {
+            EDD_def += special_attack(defender, attacker, "Gaze", o);
+            if (defender.isHasted())
+            {
+                EDD_att += special_attack(attacker, defender, "Gaze", o);
+            }
+            resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
+            if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
+                break;  // End combat if anyone defeated
+        }
+
+        //! TODO: Wall of Fire + resolve
+        //! TODO: Fear on attackers and defenders
 
         //! Attacker attacks with Immolation, Life Steal, Poison, Touch, and Melee
         EDD_att = EDD_def = 0;
 
+        // TODO: centralize sets of attacks
+        // TODO: (repeatedly) Dispel Evil
+        // TODO: (repeatedly) Destruction
+        // TODO: (repeatedly) Heal immediately although after this set of attacks
         EDD_att += special_attack(attacker, defender, "Immolation", o);
         EDD_att += EDD = special_attack(attacker, defender, "Life Steal", o);
         EDD_def -= expected_hp_from_Life_Steal(EDD);
@@ -914,6 +944,16 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
                 break;
         }
 
+        if (attacker.isHasted())
+        {
+            EDD_att += special_attack(attacker, defender, "Immolation", o);
+            EDD_att += EDD = special_attack(attacker, defender, "Life Steal", o);
+            EDD_def -= expected_hp_from_Life_Steal(EDD);
+            EDD_att += special_attack(attacker, defender, "Poison", o);
+            EDD_att += special_attack(attacker, defender, "Touch", o);
+            EDD_att += special_attack(attacker, defender, "Melee", o);
+        }
+
         //! Defender attacks with Immolation, Life Steal, Poison, Touch, and regular Melee
 
         EDD_att += special_attack(defender, attacker, "Immolation", o);
@@ -922,6 +962,16 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         EDD_def += special_attack(defender, attacker, "Poison", o);
         EDD_def += special_attack(defender, attacker, "Touch", o);
         EDD_def += special_attack(defender, attacker, "Melee", o);
+
+        if (defender.isHasted())
+        {
+            EDD_att += special_attack(defender, attacker, "Immolation", o);
+            EDD_def += EDD = special_attack(defender, attacker, "Life Steal", o);
+            EDD_att -= expected_hp_from_Life_Steal(EDD);
+            EDD_def += special_attack(defender, attacker, "Poison", o);
+            EDD_def += special_attack(defender, attacker, "Touch", o);
+            EDD_def += special_attack(defender, attacker, "Melee", o);
+        }
 
         resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
 

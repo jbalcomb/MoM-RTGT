@@ -138,6 +138,7 @@ public:
     bool isCaster() const;
     bool isColor(eRealm_Type color) const;
     bool isFlying() const;
+    bool isHasted() const;
     bool isHero() const;
     bool isImmune(eUnitAbility immunity) const;
     bool isInvisible() const;
