@@ -1184,7 +1184,7 @@ bool MoMUnit::isFlying() const
     bool isWebbed = hasCombatEnchantment(COMBATENCHANTMENT_Web);
     if (0 != m_battleUnit)
     {
-        isWebbed |= (m_battleUnit->m_web_ != 0);
+        isWebbed |= (m_battleUnit->m_web_strength != 0);
     }
     return (hasFlying && !isWebbed);
 }
