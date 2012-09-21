@@ -352,6 +352,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\QMoMCommon\QMoMTableItem.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\QMoMCommon\QMoMTreeCustomExtensions.cpp"
 				>
 			</File>

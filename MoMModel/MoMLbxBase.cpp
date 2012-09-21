@@ -88,7 +88,20 @@ uint8_t* MoMLbxBase::getRecord(size_t recordNr)
     return ptr;
 }
 
-size_t MoMLbxBase::getRecordSize(size_t recordNr)
+const uint8_t* MoMLbxBase::getRecord(size_t recordNr) const
+{
+    const uint8_t* ptr = 0;
+
+    size_t size = getRecordSize(recordNr);  // Includes range checks
+    if (size > 0)
+    {
+        ptr = (const uint8_t*)(&m_contents[0] + m_DataOffsets[recordNr]);
+    }
+
+    return ptr;
+}
+
+size_t MoMLbxBase::getRecordSize(size_t recordNr) const
 {
     if (m_contents.empty())
         return 0;
@@ -100,6 +113,97 @@ size_t MoMLbxBase::getRecordSize(size_t recordNr)
     size_t size = m_DataOffsets[recordNr + 1] - m_DataOffsets[recordNr];
 
     return size;
+}
+
+size_t MoMLbxBase::getNrSubRecords(size_t recordNr) const
+{
+    size_t nrSubRecords = 0;
+    const uint8_t* dataChunk = getRecord(recordNr);
+    size_t   sizeChunk = getRecordSize(recordNr);
+
+    if ((0 != dataChunk) && (sizeChunk >= 4))
+    {
+        size_t nrRecords = *(uint16_t*)&dataChunk[0];
+        size_t recordSize = *(uint16_t*)&dataChunk[2];
+        if (4 + nrRecords * recordSize == sizeChunk)
+        {
+            nrSubRecords = nrRecords;
+        }
+    }
+
+    return nrSubRecords;
+}
+
+const uint8_t *MoMLbxBase::getSubRecord(size_t recordNr, size_t subRecordNr) const
+{
+    const uint8_t* data = 0;
+
+    const uint8_t* dataChunk = getRecord(recordNr);
+    size_t   sizeChunk = getRecordSize(recordNr);
+
+    if ((0 != dataChunk) && (sizeChunk >= 4))
+    {
+        size_t nrRecords = *(const uint16_t*)&dataChunk[0];
+        size_t recordSize = *(const uint16_t*)&dataChunk[2];
+        if ((4 + nrRecords * recordSize == sizeChunk) && (subRecordNr < nrRecords))
+        {
+            data = &dataChunk[4] + subRecordNr * recordSize;
+        }
+    }
+
+    return data;
+}
+
+uint8_t *MoMLbxBase::getSubRecord(size_t recordNr, size_t subRecordNr)
+{
+    uint8_t* data = 0;
+
+    uint8_t* dataChunk = getRecord(recordNr);
+    size_t   sizeChunk = getRecordSize(recordNr);
+
+    if ((0 != dataChunk) && (sizeChunk >= 4))
+    {
+        size_t nrRecords = *(const uint16_t*)&dataChunk[0];
+        size_t recordSize = *(const uint16_t*)&dataChunk[2];
+        if ((4 + nrRecords * recordSize == sizeChunk) && (subRecordNr < nrRecords))
+        {
+            data = &dataChunk[4] + subRecordNr * recordSize;
+        }
+    }
+
+    return data;
+}
+
+bool MoMLbxBase::getSubRecord(size_t recordNr, size_t subRecordNr, std::vector<uint8_t>& subRecordData) const
+{
+    subRecordData.clear();
+    const uint8_t* data = getSubRecord(recordNr, subRecordNr);
+    if (0 != data)
+    {
+        size_t recordSize = getSubRecordSize(recordNr);
+        subRecordData.resize(recordSize);
+        memcpy(&subRecordData[0], data, recordSize);
+    }
+    return (0 != data);
+}
+
+size_t MoMLbxBase::getSubRecordSize(size_t recordNr) const
+{
+    size_t value = 0;
+    const uint8_t* dataChunk = getRecord(recordNr);
+    size_t   sizeChunk = getRecordSize(recordNr);
+
+    if ((0 != dataChunk) && (sizeChunk >= 4))
+    {
+        size_t nrRecords = *(uint16_t*)&dataChunk[0];
+        size_t recordSize = *(uint16_t*)&dataChunk[2];
+        if (4 + nrRecords * recordSize == sizeChunk)
+        {
+            value = recordSize;
+        }
+    }
+
+    return value;
 }
 
 void MoMLbxBase::initPointers()

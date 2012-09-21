@@ -65,7 +65,7 @@ void MoMProcess::constructExeFilepath()
     }
     else
     {
-        if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/')
+        if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/' && m_exeFilepath[m_exeFilepath.size() - 1] != '\\')
         {
             m_exeFilepath += "/";
         }

@@ -59,6 +59,7 @@ public:
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
+    const QMoMImagePtr getImage(MoM::eSlot_Type8 slotType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const;
     const QMoMImagePtr getImage(MoM::eTerrainBattle terrain) const;

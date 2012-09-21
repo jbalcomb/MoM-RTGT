@@ -946,7 +946,7 @@ QMoMTreeItemBase* constructTreeItem(Building_Data* rhs, const QString& context)
     ptree->appendChild("m_AI_Research", new QMoMTreeItem<uint16_t>(&rhs->m_AI_Research));
     ptree->appendChild("m_Building_cost", new QMoMTreeItem<uint16_t>(&rhs->m_Building_cost));
     ptree->appendChild("m_Zero_2E", new QMoMTreeItem<uint16_t>(&rhs->m_Zero_2E));
-    ptree->appendChild("m_Animation_related", new QMoMTreeItem<uint16_t>(&rhs->m_Animation_related));
+    ptree->appendChild("m_Animation_related", new QMoMTreeItem<int16_t>(&rhs->m_Animation_related));
     ptree->appendChild("m_Building_category", new QMoMTreeItem<eBuildingCategory>(&rhs->m_Building_category));
     return ptree;
 }
@@ -2056,37 +2056,41 @@ QMoMTreeItemBase* constructTreeItem(Item* rhs, const QString& context)
     return ptree;
 }
 
-QMoMTreeItemBase* constructTreeItem(ItemLBX* rhs, const QString& context)
+QMoMTreeItemBase* constructTreeItem(ItemDataLbx* rhs, const QString& context)
 {
-    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<ItemLBX>(rhs, context);
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<ItemDataLbx>(rhs, context);
     if (0 == rhs)
         return ptree;
 
-    QMoMTreeItemBase* ptreem_Code = ptree;
-    if (4 > 3)
-    {
-        ptreem_Code = new QMoMTreeItemBase("m_Code");
-        ptree->appendTree(ptreem_Code, "");
-    }
-    for (unsigned i = 0; i < 4; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_Code[" << i << "]";
-          ptreem_Code->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Code[i]));
-    }
     ptree->appendTree(constructTreeItem(&rhs->m_Item, "m_Item"), "");
-    QMoMTreeItemBase* ptreem_UNK01 = ptree;
-    if (2 > 3)
+    QMoMTreeItemBase* ptreem_Index_in_spellbook_GUESS = ptree;
+    if (5 > 3)
     {
-        ptreem_UNK01 = new QMoMTreeItemBase("m_UNK01");
-        ptree->appendTree(ptreem_UNK01, "");
+        ptreem_Index_in_spellbook_GUESS = new QMoMTreeItemBase("m_Index_in_spellbook_GUESS");
+        ptree->appendTree(ptreem_Index_in_spellbook_GUESS, "");
     }
-    for (unsigned i = 0; i < 2; ++i)
+    for (unsigned i = 0; i < 5; ++i)
     {
           std::ostringstream oss;
-          oss << "m_UNK01[" << i << "]";
-          ptreem_UNK01->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_UNK01[i]));
+          oss << "m_Index_in_spellbook_GUESS[" << i << "]";
+          ptreem_Index_in_spellbook_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItem<uint8_t>(&rhs->m_Index_in_spellbook_GUESS[i]));
     }
+    ptree->appendChild("m_Unk_37", new QMoMTreeItem<uint8_t>(&rhs->m_Unk_37));
+    return ptree;
+}
+
+QMoMTreeItemBase* constructTreeItem(ItemPowLbx* rhs, const QString& context)
+{
+    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<ItemPowLbx>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    ptree->appendChild("m_Name", new QMoMTreeItem<char[18]>(rhs->m_Name));
+    ptree->appendChild("m_EnchantibleItems", new QMoMTreeItem<uint16_t>(&rhs->m_EnchantibleItems));
+    ptree->appendChild("m_Mana_cost_to_enchant", new QMoMTreeItem<int16_t>(&rhs->m_Mana_cost_to_enchant));
+    ptree->appendChild("m_PowerType", new QMoMTreeItem<uint16_t>(&rhs->m_PowerType));
+    ptree->appendChild("m_Required_Nr_Spell_Books", new QMoMTreeItem<int16_t>(&rhs->m_Required_Nr_Spell_Books));
+    ptree->appendTree(constructTreeItem(&rhs->m_Bitmask_Powers, "m_Bitmask_Powers"), "");
     return ptree;
 }
 
@@ -5161,7 +5165,7 @@ QMoMTreeItemBase* constructTreeItem(Race_Data* rhs, const QString& context)
     }
     ptree->appendChild("m_Outpost_growth_probability", new QMoMTreeItem<uint16_t>(&rhs->m_Outpost_growth_probability));
     ptree->appendChild("m_City_population_growth_modifier", new QMoMTreeItem<int16_t>(&rhs->m_City_population_growth_modifier));
-    ptree->appendChild("m_Housing_picture", new QMoMTreeItem<uint16_t>(&rhs->m_Housing_picture));
+    ptree->appendChild("m_Housing_picture", new QMoMTreeItem<eHousing>(&rhs->m_Housing_picture));
     return ptree;
 }
 

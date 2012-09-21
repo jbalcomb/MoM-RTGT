@@ -18,24 +18,30 @@ static bool gVerbose = false;
 
 static void dump(const uint8_t* ptr, unsigned n)
 {
-    //std::cout << ":";
-    //for (unsigned i = 0; i < n; ++i)
-    //{
-    //    if (i > 0)
-    //    {
-    //        std::cout << " ";
-    //    }
-    //    std::cout << std::hex << std::setw(2) << std::setfill('0') << (unsigned)*ptr++;
-    //}
+    if (gVerbose)
+    {
+        std::cout << ":";
+        for (unsigned i = 0; i < n; ++i)
+        {
+            if (i > 0)
+            {
+                std::cout << " ";
+            }
+            std::cout << std::hex << std::setw(2) << std::setfill('0') << (unsigned)*ptr++;
+        }
+    }
 }
 
 static void dumpnl(const uint8_t* ptr, unsigned n)
 {
-    //dump(ptr, n);
-    //std::cout << std::dec << std::endl;
+    if (gVerbose)
+    {
+        dump(ptr, n);
+        std::cout << std::dec << std::endl;
+    }
 }
 
-bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string& context)
+bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataBuffer, const std::string&)
 {
     if (images.empty())
         return false;

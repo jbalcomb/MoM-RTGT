@@ -44,36 +44,6 @@
        <string/>
       </property>
      </row>
-     <column>
-      <property name="text">
-       <string>Spellname</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Category</string>
-      </property>
-     </column>
-     <item row="0" column="0">
-      <property name="text">
-       <string>Shatter</string>
-      </property>
-     </item>
-     <item row="0" column="1">
-      <property name="text">
-       <string>Unit spell</string>
-      </property>
-     </item>
-     <item row="1" column="0">
-      <property name="text">
-       <string>Fire Bolt</string>
-      </property>
-     </item>
-     <item row="1" column="1">
-      <property name="text">
-       <string>Combat</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="2" column="3">
@@ -95,12 +65,81 @@
    </item>
    <item row="2" column="2">
     <widget class="QComboBox" name="comboBox_Table">
+     <property name="minimumSize">
+      <size>
+       <width>160</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <item>
       <property name="text">
        <string>(None)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Building Data</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/abilities/Create Outpost.gif</normaloff>:/abilities/Create Outpost.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Cities</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/abilities/Construction.gif</normaloff>:/abilities/Construction.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Item Data</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/abilities/Thrown.gif</normaloff>:/abilities/Thrown.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Item Powers</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/images/thrown.gif</normaloff>:/images/thrown.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Items in game</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/images/thrown.gif</normaloff>:/images/thrown.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Lairs in game</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/spells/Mind Storm.gif</normaloff>:/spells/Mind Storm.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Race Data</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/race/Barbarian.gif</normaloff>:/race/Barbarian.gif</iconset>
       </property>
      </item>
      <item>
@@ -119,6 +158,15 @@
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
         <normaloff>:/images/Level 4.gif</normaloff>:/images/Level 4.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Units in game</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/abilities/Summon Demons 1.gif</normaloff>:/abilities/Summon Demons 1.gif</iconset>
       </property>
      </item>
      <item>

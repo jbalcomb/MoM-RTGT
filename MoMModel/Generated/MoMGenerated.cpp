@@ -170,6 +170,8 @@ std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
     case BUILDING_Miners_Guild: os << "BUILDING_Miners_Guild"; break;
     case BUILDING_City_Walls: os << "BUILDING_City_Walls"; break;
     case eBuilding_MAX: os << "eBuilding_MAX"; break;
+    case BUILDING_Forest: os << "BUILDING_Forest"; break;
+    case BUILDING_Hill: os << "BUILDING_Hill"; break;
     default: os << "<Unknown eBuilding>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -228,7 +230,7 @@ std::ostream& operator<<(std::ostream& os, const eBuildingCategory& rhs)
 {
     switch (rhs)
     {
-    case BUILDINGCATEGORY_trade_goods_housing: os << "BUILDINGCATEGORY_trade_goods_housing"; break;
+    case BUILDINGCATEGORY_trade_housing: os << "BUILDINGCATEGORY_trade_housing"; break;
     case BUILDINGCATEGORY_monetary: os << "BUILDINGCATEGORY_monetary"; break;
     case BUILDINGCATEGORY_religious: os << "BUILDINGCATEGORY_religious"; break;
     case BUILDINGCATEGORY_research: os << "BUILDINGCATEGORY_research"; break;
@@ -1418,6 +1420,20 @@ std::ostream& operator<<(std::ostream& os, const eHero_TypeCode& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eHousing& rhs)
+{
+    switch (rhs)
+    {
+    case HOUSING_wooden_house: os << "HOUSING_wooden_house"; break;
+    case HOUSING_tree_house: os << "HOUSING_tree_house"; break;
+    case HOUSING_mud_hut: os << "HOUSING_mud_hut"; break;
+    case eHousing_MAX: os << "eHousing_MAX"; break;
+    default: os << "<Unknown eHousing>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eItemPower& rhs)
 {
     switch (rhs)
@@ -1528,13 +1544,50 @@ std::ostream& operator<<(std::ostream& os, const eItem_Icon& rhs)
     case Plate_6: os << "Plate_6"; break;
     case Plate_7: os << "Plate_7"; break;
     case Shield_1: os << "Shield_1"; break;
+    case Shield_2: os << "Shield_2"; break;
+    case Shield_3: os << "Shield_3"; break;
+    case Shield_4: os << "Shield_4"; break;
+    case Shield_5: os << "Shield_5"; break;
+    case Shield_6: os << "Shield_6"; break;
+    case Shield_7: os << "Shield_7"; break;
+    case Shield_8: os << "Shield_8"; break;
+    case Shield_9: os << "Shield_9"; break;
+    case Shield_10: os << "Shield_10"; break;
     case Pendant_1: os << "Pendant_1"; break;
+    case Pendant_2: os << "Pendant_2"; break;
     case Brooch_1: os << "Brooch_1"; break;
+    case Brooch_2: os << "Brooch_2"; break;
+    case Brooch_3: os << "Brooch_3"; break;
+    case Brooch_4: os << "Brooch_4"; break;
     case Ring_1: os << "Ring_1"; break;
+    case Ring_2: os << "Ring_2"; break;
+    case Ring_3: os << "Ring_3"; break;
+    case Ring_4: os << "Ring_4"; break;
+    case Ring_5: os << "Ring_5"; break;
+    case Ring_6: os << "Ring_6"; break;
     case Cloak_1: os << "Cloak_1"; break;
+    case Cloak_2: os << "Cloak_2"; break;
+    case Cloak_3: os << "Cloak_3"; break;
+    case Cloak_4: os << "Cloak_4"; break;
+    case Cloak_5: os << "Cloak_5"; break;
+    case Cloak_6: os << "Cloak_6"; break;
     case Gauntlet_1: os << "Gauntlet_1"; break;
+    case Gauntlet_2: os << "Gauntlet_2"; break;
+    case Gauntlet_3: os << "Gauntlet_3"; break;
+    case Gauntlet_4: os << "Gauntlet_4"; break;
     case Helmet_1: os << "Helmet_1"; break;
+    case Helmet_2: os << "Helmet_2"; break;
+    case Helmet_3: os << "Helmet_3"; break;
+    case Helmet_4: os << "Helmet_4"; break;
+    case Helmet_5: os << "Helmet_5"; break;
+    case Helmet_6: os << "Helmet_6"; break;
+    case Helmet_7: os << "Helmet_7"; break;
     case Orb_1: os << "Orb_1"; break;
+    case Orb_2: os << "Orb_2"; break;
+    case Orb_3: os << "Orb_3"; break;
+    case Orb_4: os << "Orb_4"; break;
+    case Orb_5: os << "Orb_5"; break;
+    case Orb_6: os << "Orb_6"; break;
     case Wand_1: os << "Wand_1"; break;
     case Wand_2: os << "Wand_2"; break;
     case Wand_3: os << "Wand_3"; break;
@@ -1564,6 +1617,7 @@ std::ostream& operator<<(std::ostream& os, const eItem_Type& rhs)
     case ITEMTYPE_Shield: os << "ITEMTYPE_Shield"; break;
     case ITEMTYPE_Chain_Mail: os << "ITEMTYPE_Chain_Mail"; break;
     case ITEMTYPE_Plate_Mail: os << "ITEMTYPE_Plate_Mail"; break;
+    case eItem_Type_MAX: os << "eItem_Type_MAX"; break;
     default: os << "<Unknown eItem_Type>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -2172,6 +2226,7 @@ std::ostream& operator<<(std::ostream& os, const eSlot_Type8& rhs)
     case SLOT8_Staff_Wand: os << "SLOT8_Staff_Wand"; break;
     case SLOT8_Armor_Shield: os << "SLOT8_Armor_Shield"; break;
     case SLOT8_Amulet: os << "SLOT8_Amulet"; break;
+    case eSlot_Type8_MAX: os << "eSlot_Type8_MAX"; break;
     default: os << "<Unknown eSlot_Type8>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -3324,6 +3379,7 @@ std::ostream& operator<<(std::ostream& os, const eYesNo16& rhs)
     {
     case YESNO16_No: os << "YESNO16_No"; break;
     case YESNO16_Yes: os << "YESNO16_Yes"; break;
+    case eYesNo16_MAX: os << "eYesNo16_MAX"; break;
     default: os << "<Unknown eYesNo16>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -3336,6 +3392,7 @@ std::ostream& operator<<(std::ostream& os, const eYesNo8& rhs)
     {
     case YESNO8_No: os << "YESNO8_No"; break;
     case YESNO8_Yes: os << "YESNO8_Yes"; break;
+    case eYesNo8_MAX: os << "eYesNo8_MAX"; break;
     default: os << "<Unknown eYesNo8>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -4556,22 +4613,30 @@ std::ostream& operator<<(std::ostream& os, const Item& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const ItemLBX& rhs)
+std::ostream& operator<<(std::ostream& os, const ItemDataLbx& rhs)
 {
     os << "{\n";
-    os << "m_Code=(\n";
-    for (unsigned i = 0; i < 4; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_Code[i] << " 0x" << std::hex << (unsigned)rhs.m_Code[i] << std::dec << ",\n";
-    }
-    os << ")\n";
     os << "m_Item=" << rhs.m_Item << "\n";
-    os << "m_UNK01=(\n";
-    for (unsigned i = 0; i < 2; ++i)
+    os << "m_Index_in_spellbook_GUESS=(\n";
+    for (unsigned i = 0; i < 5; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK01[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK01[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Index_in_spellbook_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.m_Index_in_spellbook_GUESS[i] << std::dec << ",\n";
     }
     os << ")\n";
+    os << "m_Unk_37=" << (unsigned)rhs.m_Unk_37 << " 0x" << std::hex << (unsigned)rhs.m_Unk_37 << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const ItemPowLbx& rhs)
+{
+    os << "{\n";
+    os << "m_Name=" << formatCharArray(rhs.m_Name, 18) << "\n";
+    os << "m_EnchantibleItems=" << rhs.m_EnchantibleItems << " 0x" << std::hex << rhs.m_EnchantibleItems << std::dec << "\n";
+    os << "m_Mana_cost_to_enchant=" << rhs.m_Mana_cost_to_enchant << " 0x" << std::hex << rhs.m_Mana_cost_to_enchant << std::dec << "\n";
+    os << "m_PowerType=" << rhs.m_PowerType << " 0x" << std::hex << rhs.m_PowerType << std::dec << "\n";
+    os << "m_Required_Nr_Spell_Books=" << rhs.m_Required_Nr_Spell_Books << " 0x" << std::hex << rhs.m_Required_Nr_Spell_Books << std::dec << "\n";
+    os << "m_Bitmask_Powers=" << rhs.m_Bitmask_Powers << "\n";
     os << "}";
     return os;
 }
@@ -6376,7 +6441,7 @@ std::ostream& operator<<(std::ostream& os, const Race_Data& rhs)
     os << ")\n";
     os << "m_Outpost_growth_probability=" << rhs.m_Outpost_growth_probability << " 0x" << std::hex << rhs.m_Outpost_growth_probability << std::dec << "\n";
     os << "m_City_population_growth_modifier=" << rhs.m_City_population_growth_modifier << " 0x" << std::hex << rhs.m_City_population_growth_modifier << std::dec << "\n";
-    os << "m_Housing_picture=" << rhs.m_Housing_picture << " 0x" << std::hex << rhs.m_Housing_picture << std::dec << "\n";
+    os << "m_Housing_picture=" << rhs.m_Housing_picture << "\n";
     os << "}";
     return os;
 }
@@ -7872,6 +7937,8 @@ bool validate(const eBuilding& rhs, const std::string& context)
     case BUILDING_Mechanicians_Guild: break;
     case BUILDING_Miners_Guild: break;
     case BUILDING_City_Walls: break;
+    case BUILDING_Forest: break;
+    case BUILDING_Hill: break;
     default: std::cout << context << ": Unknown eBuilding = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -7929,7 +7996,7 @@ bool validate(const eBuildingCategory& rhs, const std::string& context)
     bool ok = true;
     switch (rhs)
     {
-    case BUILDINGCATEGORY_trade_goods_housing: break;
+    case BUILDINGCATEGORY_trade_housing: break;
     case BUILDINGCATEGORY_monetary: break;
     case BUILDINGCATEGORY_religious: break;
     case BUILDINGCATEGORY_research: break;
@@ -9102,6 +9169,19 @@ bool validate(const eHero_TypeCode& rhs, const std::string& context)
     case HEROTYPE_Fighter_Wizard: break;
     case HEROTYPE_Wizard: break;
     default: std::cout << context << ": Unknown eHero_TypeCode = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
+bool validate(const eHousing& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case HOUSING_wooden_house: break;
+    case HOUSING_tree_house: break;
+    case HOUSING_mud_hut: break;
+    default: std::cout << context << ": Unknown eHousing = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
 }
@@ -11228,10 +11308,17 @@ bool validate(const Item& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const ItemLBX& rhs, const std::string& context)
+bool validate(const ItemDataLbx& rhs, const std::string& context)
 {
     bool ok = true;
     if (!validate(rhs.m_Item, context + ".m_Item")) ok = false;
+    return ok;
+}
+
+bool validate(const ItemPowLbx& rhs, const std::string& context)
+{
+    bool ok = true;
+    if (!validate(rhs.m_Bitmask_Powers, context + ".m_Bitmask_Powers")) ok = false;
     return ok;
 }
 
@@ -11790,6 +11877,7 @@ bool validate(const Race_Data& rhs, const std::string& context)
           oss << context << ".m_Prohibited_buildings[" << i << "]";
           if (!validate(rhs.m_Prohibited_buildings[i], oss.str())) ok = false;
     }
+    if (!validate(rhs.m_Housing_picture, context + ".m_Housing_picture")) ok = false;
     return ok;
 }
 

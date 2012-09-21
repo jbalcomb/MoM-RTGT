@@ -496,6 +496,64 @@ std::string MoMGameBase::getHelpText(eUnitMutation unitMutation)
     return value;
 }
 
+ItemDataLbx* MoMGameBase::getItemDataLbx(int itemDataNr)
+{
+    ItemDataLbx* value = 0;
+
+    (void)getNrItemDataLbx();   // Trigger loading of file
+    if (m_ItemDataLbx->getSubRecordSize(0) == sizeof(*value))
+    {
+        std::vector<uint8_t> data;
+        value = (ItemDataLbx*)m_ItemDataLbx->getSubRecord(0, itemDataNr);
+    }
+
+    return value;
+}
+
+ItemPowLbx *MoMGameBase::getItemPowLbx(int itemPowNr)
+{
+    ItemPowLbx* value = 0;
+
+    (void)getNrItemPowLbx();   // Trigger loading of file
+    if (m_ItemPowLbx->getSubRecordSize(0) == sizeof(*value))
+    {
+        std::vector<uint8_t> data;
+        value = (ItemPowLbx*)m_ItemPowLbx->getSubRecord(0, itemPowNr);
+    }
+
+    return value;
+}
+
+int MoMGameBase::getNrItemDataLbx()
+{
+    if (0 == m_ItemDataLbx.get())
+    {
+        m_ItemDataLbx.reset(new MoMLbxBase);
+        // Only try to load once and ignore result.
+        // We'll check if it's there when we use it.
+        if (m_ItemDataLbx->load(this->getGameDirectory() + "/" + "ITEMDATA.LBX"))
+        {
+            // error
+        }
+    }
+    return m_ItemDataLbx->getNrSubRecords(0);
+}
+
+int MoMGameBase::getNrItemPowLbx()
+{
+    if (0 == m_ItemPowLbx.get())
+    {
+        m_ItemPowLbx.reset(new MoMLbxBase);
+        // Only try to load once and ignore result.
+        // We'll check if it's there when we use it.
+        if (m_ItemPowLbx->load(this->getGameDirectory() + "/" + "ITEMPOW.LBX"))
+        {
+            // error
+        }
+    }
+    return m_ItemPowLbx->getNrSubRecords(0);
+}
+
 // TODO: Replace all references in other modules to race names by getRaceName()
 std::string MoMGameBase::getRaceName(eRace race)
 {

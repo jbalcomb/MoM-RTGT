@@ -96,47 +96,65 @@ void DialogLbxEditor::loadLbx(const QString& filename)
 
     QFileInfo fileInfo(filename);
     QString gameDirectory = fileInfo.absoluteDir().absolutePath();
-    std::string fontsLbxFile = std::string(gameDirectory.toAscii()) + "/" + "FONTS.LBX";
 
-    m_colorTable.resize(256);
-    MoM::MoMLbxBase fontsLbx;
-    if (!fontsLbx.load(fontsLbxFile))
+    if (m_colorTable.empty())
     {
-        (void)QMessageBox::warning(this,
-            tr("Load LBX"),
-            tr("Can't load FONTS.LBX file needed for the palette (%0)")
-                                   .arg(fontsLbxFile.c_str()));
-        return;
-    }
-
-    uint8_t* dataPalette = fontsLbx.getRecord(2);
-    MoM::convertLbxToPalette(dataPalette, m_colorTable);
-
-    m_lbxAnimations.resize(m_lbx.getNrRecords());
-    for (size_t i = 0; i < m_lbx.getNrRecords(); ++i)
-    {
-        (void)MoM::convertLbxToImages(m_lbx.getRecord(i), m_lbx.getRecordSize(i), m_colorTable, m_lbxAnimations[i], MoM::toStr(i));
-    }
-
-    int curIndex = ui->comboBox_LbxIndex->currentIndex();
-    ui->comboBox_LbxIndex->clear();
-    for (int i = 0; i < m_lbxAnimations.size(); ++i)
-    {
-        QPixmap pixmap;
-        if (!m_lbxAnimations[i].isEmpty() && (0 != m_lbxAnimations[i][0]))
+        std::string fontsLbxFile = std::string(gameDirectory.toAscii()) + "/" + "FONTS.LBX";
+        m_colorTable.resize(256);
+        MoM::MoMLbxBase fontsLbx;
+        if (!fontsLbx.load(fontsLbxFile))
         {
-            pixmap.convertFromImage(*m_lbxAnimations[i][0]);
+            (void)QMessageBox::warning(this,
+                tr("Load LBX"),
+                tr("Can't load FONTS.LBX file needed for the palette (%0)")
+                                       .arg(fontsLbxFile.c_str()));
+            return;
         }
-        ui->comboBox_LbxIndex->addItem(QIcon(pixmap), QString("%0").arg(i));
+
+        uint8_t* dataPalette = fontsLbx.getRecord(2);
+        MoM::convertLbxToPalette(dataPalette, m_colorTable);
+    }
+
+    // Update caption
+    setWindowTitle(filename);
+
+    m_lbxAnimations.clear();
+    m_lbxAnimations.resize(m_lbx.getNrRecords());
+
+    ui->comboBox_LbxIndex->clear();
+    for (size_t lbxIndex = 0; lbxIndex < m_lbx.getNrRecords(); ++lbxIndex)
+    {
+        if (m_lbx.getNrSubRecords(lbxIndex) > 0)
+        {
+            std::vector<uint8_t> data;
+            for (size_t lbxSubIndex = 0; lbxSubIndex < m_lbx.getNrSubRecords(lbxIndex); ++lbxSubIndex)
+            {
+                QString text = QString("%0-%1").arg(lbxIndex).arg(lbxSubIndex);
+                if (m_lbx.getSubRecord(lbxIndex, lbxSubIndex, data)
+                    && data.size() == sizeof(MoM::HelpLBXentry))
+                {
+                    MoM::HelpLBXentry* helpEntry = (MoM::HelpLBXentry*)&data[0];
+                    text = text + " - " + helpEntry->title;
+                }
+                ui->comboBox_LbxIndex->addItem(text);
+            }
+        }
+        else
+        {
+            (void)MoM::convertLbxToImages(m_lbx.getRecord(lbxIndex), m_lbx.getRecordSize(lbxIndex), m_colorTable, m_lbxAnimations[lbxIndex], MoM::toStr(lbxIndex));
+
+            QPixmap pixmap;
+            if (!m_lbxAnimations[lbxIndex].isEmpty() && (0 != m_lbxAnimations[lbxIndex][0]))
+            {
+                pixmap.convertFromImage(*m_lbxAnimations[lbxIndex][0]);
+            }
+            ui->comboBox_LbxIndex->addItem(QIcon(pixmap), QString("%0").arg(lbxIndex));
+        }
     }
 
     if (ui->comboBox_LbxIndex->count() > 0)
     {
-        if ((curIndex < 0) || (curIndex >= ui->comboBox_LbxIndex->count()))
-        {
-            curIndex = 0;
-        }
-        ui->comboBox_LbxIndex->setCurrentIndex(curIndex);
+        ui->comboBox_LbxIndex->setCurrentIndex(0);
     }
 }
 
@@ -223,9 +241,38 @@ void DialogLbxEditor::updateLbxImage(int lbxIndex)
         QMoMImagePtr& image = curAnimation[0];
         width = image->width();
         height = image->height();
+        ui->label_Status->setText(QString("%0 x %1, %2 image(s)").arg(width).arg(height).arg(curAnimation.size()));
     }
+}
 
-    ui->label_Status->setText(QString("%0 x %1, %2 image(s)").arg(width).arg(height).arg(curAnimation.size()));
+void DialogLbxEditor::updateLbxText(int lbxIndex, int lbxSubIndex)
+{
+    ui->textEdit_lbxText->clear();
+
+    std::vector<uint8_t> data;
+    QString text;
+    if (m_lbx.getSubRecord(lbxIndex, lbxSubIndex, data))
+    {
+        if (data.size() == sizeof(MoM::HelpLBXentry))
+        {
+            MoM::HelpLBXentry* helpEntry = (MoM::HelpLBXentry*)&data[0];
+            text = helpEntry->description;
+            // Replace code for newline by actual newline
+            text.replace("\x14", "\n");
+            ui->label_Status->setText(QString("%0 bytes, textsize %1, '%2' %3")
+                .arg(data.size()).arg(text.length() + 1).arg(helpEntry->lbxFile).arg(helpEntry->lbxIndex));
+        }
+        else
+        {
+            text = QString((char*)&data[0]);
+            ui->label_Status->setText(QString("%0 bytes, textsize %1").arg(data.size()).arg(text.length() + 1));
+        }
+    }
+    else
+    {
+        text = QString("(No text, %0 bytes)").arg(m_lbx.getRecordSize(lbxIndex));
+    }
+    ui->textEdit_lbxText->setText(text);
 }
 
 void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation& curAnimation, int line, bool clearImage)
@@ -292,7 +339,23 @@ void DialogLbxEditor::listBitmapFiles(const QString &directory)
 
 void DialogLbxEditor::on_comboBox_LbxIndex_currentIndexChanged(int index)
 {
-    updateLbxImage(index);
+    QString currentText = ui->comboBox_LbxIndex->currentText();
+    QStringList strings = currentText.split("-");
+    int lbxIndex = index;
+    int lbxSubIndex = 0;
+    if (strings.size() >= 2)
+    {
+        lbxIndex = strings[0].toInt();
+        lbxSubIndex = strings[1].toInt();
+    }
+    else if (strings.size() >= 1)
+    {
+        lbxIndex = strings[0].toInt();
+    }
+
+    updateLbxImage(lbxIndex);
+
+    updateLbxText(lbxIndex, lbxSubIndex);
 }
 
 void DialogLbxEditor::on_comboBox_FileIndex_currentIndexChanged(const QString &arg1)

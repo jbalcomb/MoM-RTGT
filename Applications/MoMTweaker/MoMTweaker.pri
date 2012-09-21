@@ -62,7 +62,8 @@ HEADERS += \
 	../../QMoMDialogs/dialogtables.h \
 	../../QMoMDialogs/dialogtools.h \
 	../../Utility/MoMUtility.h \
-	../../Utility/TeeRedirecter.h
+	../../Utility/TeeRedirecter.h \
+    ../../QMoMCommon/QMoMTableItem.h
 
 SOURCES += \
 	../../Applications/MoMTweaker/mainwindow.cpp \
@@ -104,7 +105,8 @@ SOURCES += \
 	../../QMoMDialogs/dialogselectinitialspells.cpp \
 	../../QMoMDialogs/dialogtables.cpp \
 	../../QMoMDialogs/dialogtools.cpp \
-	../../Utility/MoMUtility.cpp 
+	../../Utility/MoMUtility.cpp \ 
+    ../../QMoMCommon/QMoMTableItem.cpp
 
 FORMS += \
 	../../Applications/MoMTweaker/mainwindow.ui \

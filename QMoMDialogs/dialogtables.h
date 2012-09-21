@@ -13,7 +13,7 @@
 #include <QDialog>
 #include <QModelIndex>
 
-#include <QMoMSharedPointers.h>
+#include "QMoMSharedPointers.h"
 
 namespace Ui {
     class DialogTables;
@@ -27,15 +27,26 @@ public:
     explicit DialogTables(QWidget *parent = 0);
     ~DialogTables();
 
-    void update_Spell_Data();
-    void update_Unit_Types();
-    void update_Unrest_Table();
-
 protected:
     virtual void keyPressEvent(QKeyEvent* event);
 
 private:
-    QMoMGamePtr getGame();
+    QColor getRaceColor(MoM::eRace race) const;
+
+    void initializeTable(const QStringList& labels, int rows);
+    void finalizeTable();
+
+    void update_Building_Data();
+    void update_Item_Data();
+    void update_Item_Powers();
+    void update_Items_in_game();
+    void update_Race_Data();
+    void update_Spell_Data();
+    void update_Unit_Types();
+    void update_Unrest_Table();
+
+private:
+    QMoMGamePtr m_game;
 
     Ui::DialogTables *ui;
 
@@ -44,8 +55,10 @@ private slots:
     void on_tableWidget_clicked(QModelIndex index);
     void on_tableWidget_customContextMenuRequested(const QPoint &pos);
 
-    void slotCopy();
-    void slotItemAction();
+    void slot_Copy();
+    void slot_ItemAction();
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
 };
 
 #endif // DIALOGTABLES_H

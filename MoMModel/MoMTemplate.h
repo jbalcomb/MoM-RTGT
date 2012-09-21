@@ -180,7 +180,11 @@ enum eBuilding ENUMSIZE16
     BUILDING_Miners_Guild,
     BUILDING_City_Walls,         // 35
 
-    eBuilding_MAX,      // 36
+    eBuilding_MAX,               // 36
+
+    BUILDING_Forest,             // 101 prerequisite for sawmill
+    BUILDING_Hill,               // 200 prerequisite for miner's guild
+
     eBuilding__SIZE__ = 0xFFFF
 };
 
@@ -232,7 +236,7 @@ enum eBuilding8 ENUMSIZE8
 
 enum eBuildingCategory ENUMSIZE16
 {
-    BUILDINGCATEGORY_trade_goods_housing,
+    BUILDINGCATEGORY_trade_housing,
     BUILDINGCATEGORY_monetary,
     BUILDINGCATEGORY_religious,
     BUILDINGCATEGORY_research,
@@ -1348,6 +1352,16 @@ enum eHero_TypeCode ENUMSIZE8
     eHero_TypeCode_MAX
 };
 
+enum eHousing ENUMSIZE16
+{
+    HOUSING_wooden_house = 0,
+    HOUSING_tree_house = 1,
+    HOUSING_mud_hut = 2,
+
+    eHousing_MAX,
+    eHousing__SIZE__ = 0xFFFF
+};
+
 enum eItemPower
 {
     ITEMPOWER_Vampiric = 0,
@@ -1406,21 +1420,21 @@ enum eItem_Icon ENUMSIZE16
           // 0x37     0x3D      Plate Mail
     Plate_1 = 0x37, Plate_2, Plate_3, Plate_4, Plate_5, Plate_6, Plate_7,
           // 0x3E     0x47      Shield (Note: Icon 0x46 and 0x47 are identical)
-    Shield_1 = 0x3E,
+    Shield_1 = 0x3E, Shield_2, Shield_3, Shield_4, Shield_5, Shield_6, Shield_7, Shield_8, Shield_9, Shield_10,
           // 0x48     0x49      Pendant
-    Pendant_1 = 0x48,
+    Pendant_1 = 0x48, Pendant_2,
           // 0x4A     0x4D      Brooch
-    Brooch_1 = 0x4A,
+    Brooch_1 = 0x4A, Brooch_2, Brooch_3, Brooch_4,
           // 0x4E     0x53      Ring
-    Ring_1 = 0x4E,
+    Ring_1 = 0x4E, Ring_2, Ring_3, Ring_4, Ring_5, Ring_6,
           // 0x54     0x59      Cloak
-    Cloak_1 = 0x54,
+    Cloak_1 = 0x54, Cloak_2, Cloak_3, Cloak_4, Cloak_5, Cloak_6,
           // 0x5A     0x5D      Gauntlet
-    Gauntlet_1 = 0x5A,
+    Gauntlet_1 = 0x5A, Gauntlet_2, Gauntlet_3, Gauntlet_4,
           // 0x5E     0x64      Helmet
-    Helmet_1 = 0x5E,
+    Helmet_1 = 0x5E, Helmet_2, Helmet_3, Helmet_4, Helmet_5, Helmet_6, Helmet_7,
           // 0x65     0x6A      Orb
-    Orb_1 = 0x65,
+    Orb_1 = 0x65, Orb_2, Orb_3, Orb_4, Orb_5, Orb_6,
           // 0x6B     0x73      Wand
     Wand_1 = 0x6B, Wand_2, Wand_3, Wand_4, Wand_5, Wand_6, Wand_7, Wand_8,
 
@@ -1441,6 +1455,8 @@ enum eItem_Type ENUMSIZE8
     ITEMTYPE_Shield,
     ITEMTYPE_Chain_Mail,
     ITEMTYPE_Plate_Mail,
+
+    eItem_Type_MAX,
     eItem_Type__SIZE__ = 0xFF
 };
 
@@ -1981,6 +1997,8 @@ enum eSlot_Type8 ENUMSIZE8
     SLOT8_Staff_Wand = 4,
     SLOT8_Armor_Shield = 5,
     SLOT8_Amulet = 6,
+
+    eSlot_Type8_MAX,
     eSlot_Type8__SIZE__ = 0xFF
 };
 
@@ -3246,13 +3264,17 @@ enum eYesNo16 ENUMSIZE16
     YESNO16_No = 0,
     YESNO16_Yes = 1,
 
-    eYesNo16_Type16__SIZE__ = 0xFFFF
+    eYesNo16_MAX,
+    eYesNo16__SIZE__ = 0xFFFF
 };
 
 enum eYesNo8 ENUMSIZE8
 {
     YESNO8_No = 0,
-    YESNO8_Yes = 1
+    YESNO8_Yes = 1,
+
+    eYesNo8_MAX,
+    eYesNo8__SIZE__ = 0xFF
 };
 
 //
@@ -3328,7 +3350,7 @@ typedef struct PACKED_STRUCT // Building_Data
     uint16_t            m_AI_Research;          // 2A
     uint16_t            m_Building_cost;        // 2C
     uint16_t            m_Zero_2E;              // 2E
-    uint16_t            m_Animation_related;    // 30
+    int16_t             m_Animation_related;    // 30
     eBuildingCategory   m_Building_category;    // 32
                                                 // SIZE 34
 } Building_Data;
@@ -3678,19 +3700,59 @@ typedef union // unionItem_Powers
 
 typedef struct PACKED_STRUCT // Item
 {
-    //uint8_t m_Data[0x32];
-    char        m_Item_Name[30];            // 00 Item's Name (30 characters + '\0')
-    eItem_Icon  m_Icon;                     // 1E Icon (0-0x73; see below)
-    eSlot_Type8 m_Slot_Required;            // 20 Slot Required (0-6; see above)
-    eItem_Type  m_Item_Type;                // 21 Item Type (0-8; see below)
-    int16_t     m_Cost;                     // 22 Cost
-    Item_Bonuses        m_Bonuses;          // 24 Bonuses
-    eSpell      m_Spell_Number_Charged;     // 2B Spell Number Charged + 1 (-> 0 means no spell charge)
-    int16_t     m_Number_Of_Charges;        // 2C Number Of Charges
-    unionItem_Powers    m_Bitmask_Powers;   // 2E (bitmasks) Powers
-                                            // SIZE 32
+    char                m_Item_Name[30];            // 00 Item's Name (30 characters + '\0')
+    eItem_Icon          m_Icon;                     // 1E Icon (0-0x73; see below)
+    eSlot_Type8         m_Slot_Required;            // 20 Slot Required (0-6; see above)
+    eItem_Type          m_Item_Type;                // 21 Item Type (0-8; see below)
+    int16_t             m_Cost;                     // 22 Cost
+    Item_Bonuses        m_Bonuses;                  // 24 Bonuses
+    eSpell              m_Spell_Number_Charged;     // 2B Spell Number Charged + 1 (-> 0 means no spell charge)
+    int16_t             m_Number_Of_Charges;        // 2C Number Of Charges
+    unionItem_Powers    m_Bitmask_Powers;           // 2E (bitmasks) Powers
+                                                    // SIZE 32
 } Item; // <read=read_Item>;
 
+typedef struct PACKED_STRUCT // ItemPowLbx
+{
+    char                m_Name[18];                 // 00 Artifact special name (17 characters + '\0')
+    uint16_t            m_EnchantibleItems;         // 12 Bitmask with (1 << eItem_Type)
+                                                    //    FOLLOWING ARE msb
+                                                    //    19(1) -> Can be enchanted on a shield
+                                                    //    19(2) -> Can be enchanted on Misc items
+                                                    //    19(3) -> Can be enchanted on a Wand
+                                                    //    19(4) -> Can be enchanted on a Staff
+                                                    //    19(5) -> Can be enchanted on a Bow
+                                                    //    19(6) -> Can be enchanted on a Axe
+                                                    //    19(7) -> Can be enchanted on a Mace
+                                                    //    19(8) -> Can be enchanted on a Sword
+                                                    //    20(1),20(6) - > Unused
+                                                    //    20(7) -> Can be enchanted on Plate armor
+                                                    //    20(8) -> Can be enchanted on Chain armor
+    int16_t             m_Mana_cost_to_enchant;     // 14
+    uint16_t            m_PowerType;                // 16   (uses power Type table below)
+                                                    //    -----------
+                                                    //    Power Type:
+                                                    //    These values describe what type of special it is.
+                                                    //    -----------
+                                                    //    Value	Description
+                                                    //    0	+ to Attack Stat Bonus
+                                                    //    1	+ to Hit Stat Bonus
+                                                    //    2	+ to Defend Stat Bonus
+                                                    //    3	+ to Spell Skill Stat Bonus
+                                                    //    4	- to Spell Save Stat Bonus
+                                                    //    5	+ to Movement Stat Bonus
+                                                    //    6	+ to Resistance Stat Bonus
+                                                    //    7	Nature Specials
+                                                    //    9	Nature Specials
+                                                    //    264	Sorcery Specials
+                                                    //    265	Sorcery Specials
+                                                    //    521	Chaos Specials
+                                                    //    777	Life Specials
+                                                    //    1033	Death Specials
+    int16_t             m_Required_Nr_Spell_Books;  // 18   (if a Stat special, it's the Stat bonus)
+    unionItem_Powers    m_Bitmask_Powers;           // 1A
+                                                    // SIZE 1E
+} ItemPowLbx;
 
 typedef struct PACKED_STRUCT // List_Hero_stats
 {
@@ -5018,7 +5080,7 @@ typedef struct PACKED_STRUCT // Race_Data
     eBuilding   m_Prohibited_buildings[7];          // 04-11  (table 3)
     uint16_t    m_Outpost_growth_probability;       // 12-13  (percent chance to grow in each turn)
     int16_t     m_City_population_growth_modifier;  // 14-15  (in units of 10 people per turn)
-    uint16_t    m_Housing_picture;                  // 16-17  (0 wood frame house, 1 tree house, 2 mud hut)
+    eHousing    m_Housing_picture;                  // 16-17  (0 wood frame house, 1 tree house, 2 mud hut)
                                                     // SIZE 18
 } Race_Data;
 
@@ -5723,19 +5785,23 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 } MoMMagicDataSegment;
 
 
-typedef struct PACKED_STRUCT {
-    char title[30];
-    char lbxFile[14];
-    uint16_t lbxIndex;
-    uint16_t zero;
-    char description[1000];
+typedef struct PACKED_STRUCT // HelpLBXentry
+{
+    char title[30];                                 // 00
+    char lbxFile[14];                               // 1E
+    uint16_t lbxIndex;                              // 2C
+    uint16_t zero;                                  // 2E
+    char description[1000];                         // ?
+                                                    // SIZE ?
 } HelpLBXentry;
 
-typedef struct PACKED_STRUCT {
-    uint8_t     m_Code[4];
-    Item        m_Item;
-    uint8_t     m_UNK01[2];
-} ItemLBX;
+typedef struct PACKED_STRUCT // ItemDataLbx
+{
+    Item        m_Item;                             // 00   Movement is in full moves instead of half moves
+    uint8_t     m_Index_in_spellbook_GUESS[5];      // 32   Index in spell book???
+    uint8_t     m_Unk_37;                           // 37
+                                                    // SIZE 38
+} ItemDataLbx;
 
 }
 

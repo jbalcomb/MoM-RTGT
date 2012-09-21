@@ -10,6 +10,8 @@
 #ifndef MOMLBXBASE_H_
 #define MOMLBXBASE_H_
 
+#include <vector>
+
 #include "MoMCommon.h"
 
 namespace MoM
@@ -42,7 +44,14 @@ public:
 
     size_t getNrRecords() const;
     uint8_t* getRecord(size_t recordNr);
-    size_t getRecordSize(size_t recordNr);
+    const uint8_t* getRecord(size_t recordNr) const;
+    size_t getRecordSize(size_t recordNr) const;
+
+    size_t getNrSubRecords(size_t recordNr) const;
+    const uint8_t* getSubRecord(size_t recordNr, size_t subRecordNr) const;
+    uint8_t* getSubRecord(size_t recordNr, size_t subRecordNr);
+    bool getSubRecord(size_t recordNr, size_t subRecordNr, std::vector<uint8_t>& subRecordData) const;
+    size_t getSubRecordSize(size_t recordNr) const;
 
     bool replaceRecord(size_t recordNr, const std::vector<uint8_t>& dataBuffer);
 

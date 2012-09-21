@@ -30,6 +30,7 @@ private:
     void updateBitmapImage(const QString& bitmapfilename);
     void updateImage(QGraphicsView* view, const MoM::QMoMAnimation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);
+    void updateLbxText(int lbxIndex, int lbxSubIndex);
     void listBitmapFiles(const QString& directory);
 
 private slots:

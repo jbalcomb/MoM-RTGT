@@ -223,6 +223,11 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) 
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(eSlot_Type8 slotType) const
+{
+    return getImage((MoM::eSlot_Type16)slotType);
+}
+
 const QMoMImagePtr QMoMResources::getImage(MoM::eSlot_Type16 slotType) const
 {
     static const int lookupItemisc[MoM::eSlot_Type16_MAX] =

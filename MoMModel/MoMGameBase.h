@@ -127,6 +127,10 @@ public:
         return &wizard->m_Heroes_hired_by_wizard[unit->m_Hero_Slot_Number];
     }
 
+    ItemDataLbx* getItemDataLbx(int itemDataNr);
+
+    ItemPowLbx* getItemPowLbx(int itemPowNr);
+
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
@@ -197,6 +201,8 @@ public:
             return;
         *getNumber_of_Cities() = value;
     }
+    int getNrItemDataLbx();
+    int getNrItemPowLbx();
     int getNrItems()
     {
         Item* items = getItems();
@@ -627,6 +633,8 @@ private:
     // STATUS
     std::string m_errorString;
     std::auto_ptr<class MoMLbxBase> m_HelpLbx;
+    std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
+    std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
 };
 
 }
