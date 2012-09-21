@@ -169,9 +169,11 @@ std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
     case BUILDING_Mechanicians_Guild: os << "BUILDING_Mechanicians_Guild"; break;
     case BUILDING_Miners_Guild: os << "BUILDING_Miners_Guild"; break;
     case BUILDING_City_Walls: os << "BUILDING_City_Walls"; break;
-    case eBuilding_MAX: os << "eBuilding_MAX"; break;
+    case eBuilding_array_MAX: os << "eBuilding_array_MAX"; break;
     case BUILDING_Forest: os << "BUILDING_Forest"; break;
+    case BUILDING_Water: os << "BUILDING_Water"; break;
     case BUILDING_Hill: os << "BUILDING_Hill"; break;
+    case eBuilding_extra_MAX: os << "eBuilding_extra_MAX"; break;
     default: os << "<Unknown eBuilding>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -219,7 +221,11 @@ std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs)
     case BUILDING8_Mechanicians_Guild: os << "BUILDING8_Mechanicians_Guild"; break;
     case BUILDING8_Miners_Guild: os << "BUILDING8_Miners_Guild"; break;
     case BUILDING8_City_Walls: os << "BUILDING8_City_Walls"; break;
-    case eBuilding8_MAX: os << "eBuilding8_MAX"; break;
+    case eBuilding8_array_MAX: os << "eBuilding8_array_MAX"; break;
+    case BUILDING8_Forest: os << "BUILDING8_Forest"; break;
+    case BUILDING8_Water: os << "BUILDING8_Water"; break;
+    case BUILDING8_Hill: os << "BUILDING8_Hill"; break;
+    case eBuilding8_extra_MAX: os << "eBuilding8_extra_MAX"; break;
     default: os << "<Unknown eBuilding8>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -7690,7 +7696,7 @@ std::ostream& operator<<(std::ostream& os, const unionBuilding_Status& rhs)
 {
     os << "{\n";
     os << "a=(\n";
-    for (unsigned i = 0; i < eBuilding_MAX; ++i)
+    for (unsigned i = 0; i < eBuilding_array_MAX; ++i)
     {
         os << "[" << i << "] " << rhs.a[i] << ",\n";
     }
@@ -7938,6 +7944,7 @@ bool validate(const eBuilding& rhs, const std::string& context)
     case BUILDING_Miners_Guild: break;
     case BUILDING_City_Walls: break;
     case BUILDING_Forest: break;
+    case BUILDING_Water: break;
     case BUILDING_Hill: break;
     default: std::cout << context << ": Unknown eBuilding = " << (int)rhs << "\n"; ok = false; break;
     }
@@ -7986,6 +7993,9 @@ bool validate(const eBuilding8& rhs, const std::string& context)
     case BUILDING8_Mechanicians_Guild: break;
     case BUILDING8_Miners_Guild: break;
     case BUILDING8_City_Walls: break;
+    case BUILDING8_Forest: break;
+    case BUILDING8_Water: break;
+    case BUILDING8_Hill: break;
     default: std::cout << context << ": Unknown eBuilding8 = " << (int)rhs << "\n"; ok = false; break;
     }
     return ok;
@@ -12443,7 +12453,7 @@ bool validate(const unionAttribute_Flags& rhs, const std::string& context)
 bool validate(const unionBuilding_Status& rhs, const std::string& context)
 {
     bool ok = true;
-    for (unsigned i = 0; i < eBuilding_MAX; ++i)
+    for (unsigned i = 0; i < eBuilding_array_MAX; ++i)
     {
           std::ostringstream oss;
           oss << context << ".a[" << i << "]";

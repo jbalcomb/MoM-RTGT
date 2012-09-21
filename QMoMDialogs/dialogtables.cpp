@@ -99,7 +99,7 @@ void DialogTables::update_Building_Data()
     int ndata = 0;
     if (!m_game.isNull())
     {
-        ndata = MoM::eBuilding_MAX;
+        ndata = MoM::eBuilding_array_MAX;
     }
 
     QStringList labels;
@@ -121,16 +121,16 @@ void DialogTables::update_Building_Data()
         ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
 
         ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_BuildingName, sizeof(data->m_BuildingName)));
-        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite1, MoM::eBuilding_MAX, SHOWENUM_noZero));
-        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite2, MoM::eBuilding_MAX, SHOWENUM_noZero));
-        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Replaces_building, MoM::eBuilding_MAX, SHOWENUM_minusOne));
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite1, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite2, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Replaces_building, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Regulars, MoM::eYesNo16_MAX, SHOWENUM_noZero));
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Veterans, MoM::eYesNo16_MAX, SHOWENUM_noZero));
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Magic_Weapons, MoM::eYesNo16_MAX, SHOWENUM_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Upkeep_yield, 2, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Building_cost, 2, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuildingCategory>(m_game, &data->m_Building_category, MoM::eBuildingCategory_MAX));
-        ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2));
+        ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_AI_trade_goods_housing, 2, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Zero_24, 2, SHOWNUMBER_noZero));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Zero_26, 2, SHOWNUMBER_noZero));
@@ -316,7 +316,7 @@ void DialogTables::update_Race_Data()
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Number_of_prohibited_buildings, 2));
         for (size_t i = 0; i < ARRAYSIZE(data->m_Prohibited_buildings); ++i)
         {
-            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prohibited_buildings[i], MoM::eBuilding_MAX, SHOWENUM_noZero));
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prohibited_buildings[i], MoM::eBuilding_extra_MAX, SHOWENUM_noZero));
         }
 
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Outpost_growth_probability, 2));
@@ -689,8 +689,8 @@ void DialogTables::update_Unit_Types()
         }
         else if (unitTypeNr < MoM::UNITTYPE_Arcane_Magic_Spirit)
         {
-            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding8>(m_game, (MoM::eBuilding8*)&data->m_Building1Required_or_PortraitLbxIndex, MoM::eBuilding8_MAX, SHOWENUM_noZero));
-            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding8>(m_game, (MoM::eBuilding8*)&data->m_Building2_or_HeroType, MoM::eBuilding8_MAX, SHOWENUM_noZero));
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding8>(m_game, (MoM::eBuilding8*)&data->m_Building1Required_or_PortraitLbxIndex, MoM::eBuilding8_array_MAX, SHOWENUM_noZero));
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding8>(m_game, (MoM::eBuilding8*)&data->m_Building2_or_HeroType, MoM::eBuilding8_array_MAX, SHOWENUM_noZero));
         }
         else
         {
@@ -765,7 +765,7 @@ void DialogTables::update_Unrest_Table()
         for (col = 2; col < labels.size(); ++col)
         {
             MoM::eRace cityRace = (MoM::eRace)(col - 2);
-            ui->tableWidget->setItem(row, col, new NumberTableItem<int8_t>(m_game, &data[cityRace], 3, SHOWNUMBER_positivePlus));
+            ui->tableWidget->setItem(row, col, new NumberTableItem<int8_t>(m_game, &data[cityRace], 3, SHOWNUMBER_plusAndNoZero));
         }
     }
 

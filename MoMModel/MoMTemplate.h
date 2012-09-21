@@ -180,11 +180,13 @@ enum eBuilding ENUMSIZE16
     BUILDING_Miners_Guild,
     BUILDING_City_Walls,         // 35
 
-    eBuilding_MAX,               // 36
+    eBuilding_array_MAX,               // 36
 
     BUILDING_Forest,             // 101 prerequisite for sawmill
+    BUILDING_Water,              // 110 prerequisite for ship's wright
     BUILDING_Hill,               // 200 prerequisite for miner's guild
 
+    eBuilding_extra_MAX,         // 201
     eBuilding__SIZE__ = 0xFFFF
 };
 
@@ -231,7 +233,13 @@ enum eBuilding8 ENUMSIZE8
     BUILDING8_Miners_Guild,
     BUILDING8_City_Walls,         // 35
 
-    eBuilding8_MAX      // 36
+    eBuilding8_array_MAX,                // 36,
+
+    BUILDING8_Forest,             // 101 prerequisite for sawmill
+    BUILDING8_Water,              // 110 prerequisite for ship's wright
+    BUILDING8_Hill,               // 200 prerequisite for miner's guild
+
+    eBuilding8_extra_MAX            // 201
 };
 
 enum eBuildingCategory ENUMSIZE16
@@ -3400,7 +3408,7 @@ typedef struct PACKED_STRUCT // Building_Status
 
 typedef union // unionBuilding_Status
 {
-    eBuildingStatus a[eBuilding_MAX];
+    eBuildingStatus a[eBuilding_array_MAX];
     Building_Status s;
 } unionBuilding_Status;
 

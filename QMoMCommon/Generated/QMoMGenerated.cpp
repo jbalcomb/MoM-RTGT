@@ -7042,12 +7042,12 @@ QMoMTreeItemBase* constructTreeItem(unionBuilding_Status* rhs, const QString& co
         return ptree;
 
     QMoMTreeItemBase* ptreea = ptree;
-    if (eBuilding_MAX > 3)
+    if (eBuilding_array_MAX > 3)
     {
         ptreea = new QMoMTreeItemBase("a");
         ptree->appendTree(ptreea, "");
     }
-    for (unsigned i = 0; i < eBuilding_MAX; ++i)
+    for (unsigned i = 0; i < eBuilding_array_MAX; ++i)
     {
           std::ostringstream oss;
           oss << "a[" << i << "]";

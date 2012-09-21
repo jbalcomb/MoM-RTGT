@@ -402,7 +402,7 @@ void QMoMResources::createBuildingImages()
     if (!lbx.load(lbxFile))
         return;
     m_buildingImages.resize(lbx.getNrRecords());
-    for (MoM::eBuilding building = (MoM::eBuilding)1; building < MoM::eBuilding_MAX; MoM::inc(building))
+    for (MoM::eBuilding building = (MoM::eBuilding)1; building < MoM::eBuilding_array_MAX; MoM::inc(building))
     {
         size_t recordNr = 45 + building - MoM::BUILDING_Barracks;
         if (MoM::BUILDING_Trade_Goods == building)

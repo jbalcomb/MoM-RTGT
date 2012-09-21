@@ -64,7 +64,7 @@ public:
     Building_Data* getBuildingData(eBuilding building)
     {
         Building_Data* buildingData = getBuildingData();
-        if ((0 == buildingData) || !inRange(building, eBuilding_MAX))
+        if ((0 == buildingData) || !inRange(building, eBuilding_array_MAX))
             return 0;
         return &buildingData[building];
     }

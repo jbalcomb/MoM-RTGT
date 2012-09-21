@@ -811,12 +811,12 @@ MoMUnit::ListBuildings MoMUnit::getRequiredBuildings() const
     if ((0 != m_unitType) && isNormal())
     {
         if ((toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) >= BUILDING_Barracks)
-            && (toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) < eBuilding_MAX))
+            && (toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) < eBuilding_array_MAX))
         {
             value.push_back((eBuilding)m_unitType->m_Building1Required_or_PortraitLbxIndex);
         }
         if ((toUInt(m_unitType->m_Building2_or_HeroType) >= BUILDING_Barracks)
-            && (toUInt(m_unitType->m_Building2_or_HeroType) < eBuilding_MAX))
+            && (toUInt(m_unitType->m_Building2_or_HeroType) < eBuilding_array_MAX))
         {
             value.push_back((eBuilding)m_unitType->m_Building2_or_HeroType);
         }

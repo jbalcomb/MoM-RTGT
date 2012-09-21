@@ -399,7 +399,7 @@ Building_Data* MoMGameMemory::getBuildingData()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Building_Data>(pMoMDataSegment->m_addr_Building_Data, eBuilding_MAX);
+    return derefHeapPointer<Building_Data>(pMoMDataSegment->m_addr_Building_Data, eBuilding_array_MAX);
 }
 
 Events_Status* MoMGameMemory::getEvents_Status()

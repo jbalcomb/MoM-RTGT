@@ -463,7 +463,7 @@ bool MoMController::isBuildingAllowed(const City& city, eBuilding building)
 
 bool MoMController::isBuildingPresent(const City& city, eBuilding building)
 {
-	if (toUInt(building) >= eBuilding_MAX)
+	if (toUInt(building) >= eBuilding_array_MAX)
 		return false;
 	return (BUILDINGSTATUS_Built == city.m_Building_Status.a[building])
 			|| (BUILDINGSTATUS_Replaced == city.m_Building_Status.a[building]);

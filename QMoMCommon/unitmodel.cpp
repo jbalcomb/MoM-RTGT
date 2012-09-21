@@ -391,7 +391,7 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 
 void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
 {
-    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (building < MoM::eBuilding_MAX); MoM::inc(building))
+    for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (building < MoM::eBuilding_array_MAX); MoM::inc(building))
     {
         MoM::Building_Data* buildingData = game->getBuildingData(building);
         if (0 == buildingData)
@@ -1190,7 +1190,7 @@ void UnitModel::threadUpdateModelData()
         }
         else
         {
-            nrBuildings = MoM::eBuilding_MAX;
+            nrBuildings = MoM::eBuilding_array_MAX;
             parentItem->child(toprow, 2)->setData(tr("NrBuildings = %0").arg(nrBuildings), Qt::EditRole);
         }
 
