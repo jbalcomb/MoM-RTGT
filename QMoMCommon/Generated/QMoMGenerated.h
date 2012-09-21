@@ -53,9 +53,7 @@ QMoMTreeItemBase* constructTreeItem(MapRow_LandMassID* rhs, const QString& conte
 QMoMTreeItemBase* constructTreeItem(MapRow_Movement* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Terrain* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MapRow_Terrain_Changes* rhs, const QString& context);
-QMoMTreeItemBase* constructTreeItem(Map_Attr* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Map_Movement* rhs, const QString& context);
-QMoMTreeItemBase* constructTreeItem(Map_Tiles* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MoMDataSegment* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString& context);
 QMoMTreeItemBase* constructTreeItem(Movement_Flags* rhs, const QString& context);

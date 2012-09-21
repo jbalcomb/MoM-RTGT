@@ -36,12 +36,12 @@ DialogTables::DialogTables(QWidget *parent) :
 
     slot_gameChanged(MainWindow::getInstance()->getGame());
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 }
 
 DialogTables::~DialogTables()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }
@@ -774,11 +774,18 @@ void DialogTables::update_Unrest_Table()
 
 void DialogTables::on_comboBox_Table_currentIndexChanged(QString newIndex)
 {
+    if (ui->tableWidget->rowCount() > 0)
+    {
+        // Remember the settings of the table view, but only if there was actual data in it
+        QMoMSettings::writeSettingsControl(ui->tableWidget);
+    }
+
     setWindowTitle(newIndex);
 
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setObjectName(newIndex);
 
     if ("Building Data" == newIndex)
     {
@@ -816,6 +823,9 @@ void DialogTables::on_comboBox_Table_currentIndexChanged(QString newIndex)
     {
         // Nothing to show
     }
+
+    // Retrieve the settings of the table view (if there are any)
+    QMoMSettings::readSettingsControl(ui->tableWidget);
 }
 
 void DialogTables::on_tableWidget_clicked(QModelIndex)

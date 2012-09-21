@@ -91,7 +91,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
 	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
@@ -101,7 +101,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
 DialogBuildingQueues::~DialogBuildingQueues()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }

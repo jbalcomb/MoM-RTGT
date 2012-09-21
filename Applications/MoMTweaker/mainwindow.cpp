@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView_MoM->setModel(&m_UnitModel);
 
     // Read settings
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     QObject::connect(ui->treeView_MoM, SIGNAL(clicked(const QModelIndex &)), &m_UnitModel, SLOT(slot_selectionChanged(const QModelIndex &)));
 
@@ -129,7 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }

@@ -4952,52 +4952,6 @@ std::ostream& operator<<(std::ostream& os, const MapRow_Terrain_Changes& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Map_Attr& rhs)
-{
-    os << "{\n";
-    os << "m_Arcanus_Bonus_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Bonus_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Bonus_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Bonus_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_Exploration_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Exploration_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Exploration_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Exploration_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_Movement=" << rhs.m_Arcanus_Movement << "\n";
-    os << "m_Myrror_Movement=" << rhs.m_Myrror_Movement << "\n";
-    os << "m_Events_Status=" << rhs.m_Events_Status << "\n";
-    os << "m_Arcanus_Terrain_Changes_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Terrain_Changes_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Terrain_Changes_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Terrain_Changes_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "}";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const Map_Movement& rhs)
 {
     os << "{\n";
@@ -5035,115 +4989,6 @@ std::ostream& operator<<(std::ostream& os, const Map_Movement& rhs)
     for (unsigned i = 0; i < 40; ++i)
     {
         os << "[" << i << "] " << rhs.m_Sailing_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "}";
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Map_Tiles& rhs)
-{
-    os << "{\n";
-    os << "m_Arcanus_Map_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Map_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Map_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Map_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_UNK01=(\n";
-    for (unsigned i = 0; i < 0x60; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_UNK01[i] << " 0x" << std::hex << rhs.m_Arcanus_UNK01[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_UNK01=(\n";
-    for (unsigned i = 0; i < 0x60; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_UNK01[i] << " 0x" << std::hex << rhs.m_Myrror_UNK01[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_LandMassID_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_LandMassID_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_LandMassID_Row=(\n";
-    for (unsigned i = 0; i < 40; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_LandMassID_Row[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_Node_Attr=(\n";
-    for (unsigned i = 0; i < 16; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Node_Attr[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Attr=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Attr[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Fortresses=(\n";
-    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Fortresses[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Tower_Attr=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Tower_Attr[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_Towers=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Towers[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Towers=(\n";
-    for (unsigned i = 0; i < 6; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Towers[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Arcanus_Nodes=(\n";
-    for (unsigned i = 0; i < 16; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Arcanus_Nodes[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Myrror_Nodes=(\n";
-    for (unsigned i = 0; i < 14; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Myrror_Nodes[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Normal_Lairs=(\n";
-    for (unsigned i = 0; i < 25; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Normal_Lairs[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_Weak_Lairs=(\n";
-    for (unsigned i = 0; i < 32; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_Weak_Lairs[i] << ",\n";
-    }
-    os << ")\n";
-    os << "m_ExtraLairs_GUESS=(\n";
-    for (unsigned i = 0; i < 3; ++i)
-    {
-        os << "[" << i << "] " << rhs.m_ExtraLairs_GUESS[i] << ",\n";
     }
     os << ")\n";
     os << "}";
@@ -6468,19 +6313,122 @@ std::ostream& operator<<(std::ostream& os, const SaveGame& rhs)
         os << "[" << i << "] " << rhs.m_Wizards[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Map_Tiles=" << rhs.m_Map_Tiles << "\n";
+    os << "m_Arcanus_Map_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Map_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Map_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Map_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_UNK01=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_UNK01[i] << " 0x" << std::hex << rhs.m_Arcanus_UNK01[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_UNK01=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_UNK01[i] << " 0x" << std::hex << rhs.m_Myrror_UNK01[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_LandMassID_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_LandMassID_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_LandMassID_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_LandMassID_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Node_Attr=(\n";
+    for (unsigned i = 0; i < 16; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Node_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Node_Attr=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Node_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Fortresses=(\n";
+    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Fortresses[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Tower_Attr=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Tower_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Towers=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Towers[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Towers=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Towers[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Nodes=(\n";
+    for (unsigned i = 0; i < 16; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Nodes[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Nodes=(\n";
+    for (unsigned i = 0; i < 14; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Nodes[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Normal_Lairs=(\n";
+    for (unsigned i = 0; i < 25; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Normal_Lairs[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Weak_Lairs=(\n";
+    for (unsigned i = 0; i < 32; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Weak_Lairs[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_ExtraLairs_GUESS=(\n";
+    for (unsigned i = 0; i < 3; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_ExtraLairs_GUESS[i] << ",\n";
+    }
+    os << ")\n";
     os << "m_Items=(\n";
     for (unsigned i = 0; i < 128; ++i)
     {
         os << "[" << i << "] " << rhs.m_Items[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Item_Trashcan=(\n";
-    for (unsigned i = 0; i < 10; ++i)
+    os << "m_Item_Trashcan_GUESS=(\n";
+    for (unsigned i = 0; i < 8; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Item_Trashcan[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_Item_Trashcan_GUESS[i] << ",\n";
     }
     os << ")\n";
+    os << "m_Item_Found=" << rhs.m_Item_Found << "\n";
+    os << "m_Item_Created=" << rhs.m_Item_Created << "\n";
     os << "m_Cities=(\n";
     for (unsigned i = 0; i < gMAX_CITIES; ++i)
     {
@@ -6499,7 +6447,45 @@ std::ostream& operator<<(std::ostream& os, const SaveGame& rhs)
         os << "[" << i << "] " << rhs.m_Units_Trashcan_GUESS[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Map_Attr=" << rhs.m_Map_Attr << "\n";
+    os << "m_Arcanus_Bonus_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Bonus_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Bonus_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Bonus_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Exploration_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Exploration_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Exploration_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Exploration_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Movement=" << rhs.m_Arcanus_Movement << "\n";
+    os << "m_Myrror_Movement=" << rhs.m_Myrror_Movement << "\n";
+    os << "m_Events_Status=" << rhs.m_Events_Status << "\n";
+    os << "m_Arcanus_Terrain_Changes_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Terrain_Changes_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Terrain_Changes_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Terrain_Changes_Row[i] << ",\n";
+    }
+    os << ")\n";
     os << "m_Grand_Vizier=" << rhs.m_Grand_Vizier << "\n";
     os << "m_Items_in_Game=(\n";
     for (unsigned i = 0; i < 250; ++i)
@@ -11458,51 +11444,6 @@ bool validate(const MapRow_Terrain_Changes& rhs, const std::string& context)
     return ok;
 }
 
-bool validate(const Map_Attr& rhs, const std::string& context)
-{
-    bool ok = true;
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Bonus_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Bonus_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Bonus_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_Bonus_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Exploration_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Exploration_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Exploration_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_Exploration_Row[i], oss.str())) ok = false;
-    }
-    if (!validate(rhs.m_Arcanus_Movement, context + ".m_Arcanus_Movement")) ok = false;
-    if (!validate(rhs.m_Myrror_Movement, context + ".m_Myrror_Movement")) ok = false;
-    if (!validate(rhs.m_Events_Status, context + ".m_Events_Status")) ok = false;
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Terrain_Changes_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Terrain_Changes_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Terrain_Changes_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_Terrain_Changes_Row[i], oss.str())) ok = false;
-    }
-    return ok;
-}
-
 bool validate(const Map_Movement& rhs, const std::string& context)
 {
     bool ok = true;
@@ -11541,102 +11482,6 @@ bool validate(const Map_Movement& rhs, const std::string& context)
           std::ostringstream oss;
           oss << context << ".m_Sailing_Row[" << i << "]";
           if (!validate(rhs.m_Sailing_Row[i], oss.str())) ok = false;
-    }
-    return ok;
-}
-
-bool validate(const Map_Tiles& rhs, const std::string& context)
-{
-    bool ok = true;
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Map_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Map_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Map_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_Map_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_LandMassID_Row[" << i << "]";
-          if (!validate(rhs.m_Arcanus_LandMassID_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 40; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_LandMassID_Row[" << i << "]";
-          if (!validate(rhs.m_Myrror_LandMassID_Row[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 16; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Node_Attr[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Node_Attr[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Attr[" << i << "]";
-          if (!validate(rhs.m_Myrror_Attr[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Fortresses[" << i << "]";
-          if (!validate(rhs.m_Fortresses[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Tower_Attr[" << i << "]";
-          if (!validate(rhs.m_Tower_Attr[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Towers[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Towers[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 6; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Towers[" << i << "]";
-          if (!validate(rhs.m_Myrror_Towers[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 16; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Arcanus_Nodes[" << i << "]";
-          if (!validate(rhs.m_Arcanus_Nodes[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 14; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Myrror_Nodes[" << i << "]";
-          if (!validate(rhs.m_Myrror_Nodes[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 25; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Normal_Lairs[" << i << "]";
-          if (!validate(rhs.m_Normal_Lairs[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 32; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_Weak_Lairs[" << i << "]";
-          if (!validate(rhs.m_Weak_Lairs[i], oss.str())) ok = false;
-    }
-    for (unsigned i = 0; i < 3; ++i)
-    {
-          std::ostringstream oss;
-          oss << context << ".m_ExtraLairs_GUESS[" << i << "]";
-          if (!validate(rhs.m_ExtraLairs_GUESS[i], oss.str())) ok = false;
     }
     return ok;
 }
@@ -11907,13 +11752,104 @@ bool validate(const SaveGame& rhs, const std::string& context)
           oss << context << ".m_Wizards[" << i << "]";
           if (!validate(rhs.m_Wizards[i], oss.str())) ok = false;
     }
-    if (!validate(rhs.m_Map_Tiles, context + ".m_Map_Tiles")) ok = false;
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Map_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Map_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Map_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_Map_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_LandMassID_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_LandMassID_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_LandMassID_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_LandMassID_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 16; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Node_Attr[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Node_Attr[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Node_Attr[" << i << "]";
+          if (!validate(rhs.m_Myrror_Node_Attr[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Fortresses[" << i << "]";
+          if (!validate(rhs.m_Fortresses[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Tower_Attr[" << i << "]";
+          if (!validate(rhs.m_Tower_Attr[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Towers[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Towers[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Towers[" << i << "]";
+          if (!validate(rhs.m_Myrror_Towers[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 16; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Nodes[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Nodes[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 14; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Nodes[" << i << "]";
+          if (!validate(rhs.m_Myrror_Nodes[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 25; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Normal_Lairs[" << i << "]";
+          if (!validate(rhs.m_Normal_Lairs[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 32; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Weak_Lairs[" << i << "]";
+          if (!validate(rhs.m_Weak_Lairs[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 3; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_ExtraLairs_GUESS[" << i << "]";
+          if (!validate(rhs.m_ExtraLairs_GUESS[i], oss.str())) ok = false;
+    }
     for (unsigned i = 0; i < 128; ++i)
     {
           std::ostringstream oss;
           oss << context << ".m_Items[" << i << "]";
           if (!validate(rhs.m_Items[i], oss.str())) ok = false;
     }
+    if (!validate(rhs.m_Item_Found, context + ".m_Item_Found")) ok = false;
+    if (!validate(rhs.m_Item_Created, context + ".m_Item_Created")) ok = false;
     for (unsigned i = 0; i < rhs.m_Game_Data.m_Number_of_Cities; ++i)
     {
           std::ostringstream oss;
@@ -11926,7 +11862,45 @@ bool validate(const SaveGame& rhs, const std::string& context)
           oss << context << ".m_Unit[" << i << "]";
           if (!validate(rhs.m_Unit[i], oss.str())) ok = false;
     }
-    if (!validate(rhs.m_Map_Attr, context + ".m_Map_Attr")) ok = false;
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Bonus_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Bonus_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Bonus_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_Bonus_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Exploration_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Exploration_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Exploration_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_Exploration_Row[i], oss.str())) ok = false;
+    }
+    if (!validate(rhs.m_Arcanus_Movement, context + ".m_Arcanus_Movement")) ok = false;
+    if (!validate(rhs.m_Myrror_Movement, context + ".m_Myrror_Movement")) ok = false;
+    if (!validate(rhs.m_Events_Status, context + ".m_Events_Status")) ok = false;
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Arcanus_Terrain_Changes_Row[" << i << "]";
+          if (!validate(rhs.m_Arcanus_Terrain_Changes_Row[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 40; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_Myrror_Terrain_Changes_Row[" << i << "]";
+          if (!validate(rhs.m_Myrror_Terrain_Changes_Row[i], oss.str())) ok = false;
+    }
     if (!validate(rhs.m_Grand_Vizier, context + ".m_Grand_Vizier")) ok = false;
     for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
     {

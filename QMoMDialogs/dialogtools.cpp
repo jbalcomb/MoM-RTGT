@@ -40,12 +40,12 @@ DialogTools::DialogTools(QWidget *parent) :
     ui->setupUi(this);
     setFont(MoM::QMoMResources::g_Font);
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 }
 
 DialogTools::~DialogTools()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }

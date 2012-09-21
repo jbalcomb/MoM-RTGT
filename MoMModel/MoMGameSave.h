@@ -51,14 +51,14 @@ protected:
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Attr.m_Events_Status;
+        return &m_SaveGame->m_Events_Status;
     }
 
     virtual Fortress* getFortresses()
     {
         if (0 == m_SaveGame.get())
             return 0;
-		return &m_SaveGame->m_Map_Tiles.m_Fortresses[0];
+		return &m_SaveGame->m_Fortresses[0];
     }
 
     virtual std::string getGameDirectory() const;
@@ -103,7 +103,7 @@ protected:
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return m_SaveGame->m_Map_Tiles.m_Arcanus_Towers;
+        return m_SaveGame->m_Arcanus_Towers;
     }
 
     virtual const char* getNameByOffset(DS_Offset offset)
@@ -119,7 +119,7 @@ protected:
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Tiles.m_Arcanus_Node_Attr[0];
+        return &m_SaveGame->m_Arcanus_Node_Attr[0];
     }
 
     virtual uint16_t* getNumber_of_Cities()
@@ -157,37 +157,37 @@ protected:
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Attr.m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
+        return &m_SaveGame->m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
     }
     virtual Terrain_Changes* getTerrain_Changes()
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Attr.m_Arcanus_Terrain_Changes_Row[0].m_Terrain_Changes[0];
+        return &m_SaveGame->m_Arcanus_Terrain_Changes_Row[0].m_Terrain_Changes[0];
     }
     virtual uint8_t* getTerrain_Explored()
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Attr.m_Arcanus_Exploration_Row[0].m_Explored[0];
+        return &m_SaveGame->m_Arcanus_Exploration_Row[0].m_Explored[0];
     }
     virtual uint8_t* getTerrain_LandMassID()
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Tiles.m_Arcanus_LandMassID_Row[0].m_LandMassID[0];
+        return &m_SaveGame->m_Arcanus_LandMassID_Row[0].m_LandMassID[0];
     }
     virtual Map_Movement* getTerrain_Movements()
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Attr.m_Arcanus_Movement;
+        return &m_SaveGame->m_Arcanus_Movement;
     }
     virtual eTerrainType* getTerrain_Types()
     {
         if (0 == m_SaveGame.get())
             return 0;
-        return &m_SaveGame->m_Map_Tiles.m_Arcanus_Map_Row[0].m_Tile[0];
+        return &m_SaveGame->m_Arcanus_Map_Row[0].m_Tile[0];
     }
 
     virtual Unit* getUnits()

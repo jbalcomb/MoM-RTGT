@@ -95,7 +95,7 @@ enum eBattleUnitActive ENUMSIZE8
     BATTLEUNITACTIVE_fleeing = 2,
     BATTLEUNITACTIVE_dead = 4,
     BATTLEUNITACTIVE_undeaded = 5,
-    BATTLEUNITACTIVE_removed = 6,   // stoned, destroyed, dispelled, cracks call, combat summoning
+    BATTLEUNITACTIVE_removed = 6,           // stoned, destroyed, dispelled, cracks call, combat summoning
 
     eBattleUnitActive_MAX,
     eBattleUnitActive_SIZE__ = 0xFF
@@ -141,19 +141,19 @@ enum eBuilding ENUMSIZE16
 {
     BUILDING_Not_applicable = 0xFFFF,
 
-    BUILDING_None = 0,           // 0
+    BUILDING_None = 0,                      // 0
 
-    BUILDING_Trade_Goods,        // 1
-    BUILDING_Housing,            // 2
+    BUILDING_Trade_Goods,                   // 1
+    BUILDING_Housing,                       // 2
 
-    BUILDING_Barracks,           // 3
+    BUILDING_Barracks,                      // 3
     BUILDING_Armory,
     BUILDING_Fighters_Guild,
     BUILDING_Armorers_Guild,
     BUILDING_War_College,
     BUILDING_Smithy,
     BUILDING_Stable,
-    BUILDING_Animists_Guild,     // 10
+    BUILDING_Animists_Guild,                // 10
     BUILDING_Fantastic_Stable,
     BUILDING_Shipwright_Guild,
     BUILDING_Ship_Yard,
@@ -163,7 +163,7 @@ enum eBuilding ENUMSIZE16
     BUILDING_Sages_Guild,
     BUILDING_Oracle,
     BUILDING_Alchemist_Guild,
-    BUILDING_University,         // 20
+    BUILDING_University,                    // 20
     BUILDING_Wizards_Guild,
     BUILDING_Shrine,
     BUILDING_Temple,
@@ -173,20 +173,20 @@ enum eBuilding ENUMSIZE16
     BUILDING_Bank,
     BUILDING_Merchants_Guild,
     BUILDING_Granary,
-    BUILDING_Farmers_Market,     // 30
+    BUILDING_Farmers_Market,                // 30
     BUILDING_Foresters_Guild,
     BUILDING_Builders_Hall,
     BUILDING_Mechanicians_Guild,
     BUILDING_Miners_Guild,
-    BUILDING_City_Walls,         // 35
+    BUILDING_City_Walls,                    // 35
 
-    eBuilding_array_MAX,               // 36
+    eBuilding_array_MAX,                    // 36
 
-    BUILDING_Forest,             // 101 prerequisite for sawmill
-    BUILDING_Water,              // 110 prerequisite for ship's wright
-    BUILDING_Hill,               // 200 prerequisite for miner's guild
+    BUILDING_Forest = 101,                  // 101 prerequisite for sawmill
+    BUILDING_Water = 110,                   // 110 prerequisite for ship's wright
+    BUILDING_Hill = 200,                    // 200 prerequisite for miner's guild
 
-    eBuilding_extra_MAX,         // 201
+    eBuilding_extra_MAX,                    // 201
     eBuilding__SIZE__ = 0xFFFF
 };
 
@@ -194,19 +194,19 @@ enum eBuilding8 ENUMSIZE8
 {
     BUILDING8_Not_applicable = 0xFF,
 
-    BUILDING8_None = 0,           // 0
+    BUILDING8_None = 0,                     // 0
 
-    BUILDING8_Trade_Goods,        // 1
-    BUILDING8_Housing,            // 2
+    BUILDING8_Trade_Goods,                  // 1
+    BUILDING8_Housing,                      // 2
 
-    BUILDING8_Barracks,           // 3
+    BUILDING8_Barracks,                     // 3
     BUILDING8_Armory,
     BUILDING8_Fighters_Guild,
     BUILDING8_Armorers_Guild,
     BUILDING8_War_College,
     BUILDING8_Smithy,
     BUILDING8_Stable,
-    BUILDING8_Animists_Guild,     // 10
+    BUILDING8_Animists_Guild,               // 10
     BUILDING8_Fantastic_Stable,
     BUILDING8_Shipwright_Guild,
     BUILDING8_Ship_Yard,
@@ -216,7 +216,7 @@ enum eBuilding8 ENUMSIZE8
     BUILDING8_Sages_Guild,
     BUILDING8_Oracle,
     BUILDING8_Alchemist_Guild,
-    BUILDING8_University,         // 20
+    BUILDING8_University,                   // 20
     BUILDING8_Wizards_Guild,
     BUILDING8_Shrine,
     BUILDING8_Temple,
@@ -226,20 +226,20 @@ enum eBuilding8 ENUMSIZE8
     BUILDING8_Bank,
     BUILDING8_Merchants_Guild,
     BUILDING8_Granary,
-    BUILDING8_Farmers_Market,     // 30
+    BUILDING8_Farmers_Market,               // 30
     BUILDING8_Foresters_Guild,
     BUILDING8_Builders_Hall,
     BUILDING8_Mechanicians_Guild,
     BUILDING8_Miners_Guild,
-    BUILDING8_City_Walls,         // 35
+    BUILDING8_City_Walls,                   // 35
 
-    eBuilding8_array_MAX,                // 36,
+    eBuilding8_array_MAX,                   // 36,
 
-    BUILDING8_Forest,             // 101 prerequisite for sawmill
-    BUILDING8_Water,              // 110 prerequisite for ship's wright
-    BUILDING8_Hill,               // 200 prerequisite for miner's guild
+    BUILDING8_Forest = 101,                 // 101 prerequisite for sawmill
+    BUILDING8_Water = 110,                  // 110 prerequisite for ship's wright
+    BUILDING8_Hill = 200,                   // 200 prerequisite for miner's guild
 
-    eBuilding8_extra_MAX            // 201
+    eBuilding8_extra_MAX                    // 201
 };
 
 enum eBuildingCategory ENUMSIZE16
@@ -345,7 +345,7 @@ enum eCityWall
 
 enum eCombatEnchantment
 {
-    COMBATENCHANTMENT_Vertigo = 0,              // 01
+    COMBATENCHANTMENT_Vertigo = 0,          // 01
     COMBATENCHANTMENT_Confusion,            // 02
     COMBATENCHANTMENT_Whirlwind,            // 04
     COMBATENCHANTMENT_Mind_Storm,           // 08
@@ -354,8 +354,8 @@ enum eCombatEnchantment
     COMBATENCHANTMENT_Black_Sleep,          // 40
     COMBATENCHANTMENT_Warp_Creature_Attack, // 80
 
-    COMBATENCHANTMENT_Warp_Creature_Defense,    // 01
-    COMBATENCHANTMENT_Warp_Creature_Resistance, // 02
+    COMBATENCHANTMENT_Warp_Creature_Defense,// 01
+    COMBATENCHANTMENT_Warp_Creature_Resistance,// 02
     COMBATENCHANTMENT_Mind_Twist,           // 04
     COMBATENCHANTMENT_Haste,                // 08
     COMBATENCHANTMENT_Web,                  // 10
@@ -955,8 +955,8 @@ enum eHelpIndex
     HELP_SPECIAL_PLANAR_TRAVEL = 477,
     HELP_SPECIAL_HOLY_ARMOR = 478,
     HELP_SPECIAL_RIGHTEOUSNESS = 479,
-    HELP_SPECIAL_INVULNERABILITY = 480, // Unit_Enchantment (last-almost ordered)
-    HELP_SPECIAL_VERTIGO = 481,         // Combat_Enchantment (1st)
+    HELP_SPECIAL_INVULNERABILITY = 480,     // Unit_Enchantment (last-almost ordered)
+    HELP_SPECIAL_VERTIGO = 481,             // Combat_Enchantment (1st)
     HELP_SPECIAL2_CONFUSION = 482,
     HELP_SPECIAL2_WHIRLWIND = 483,
     HELP_SPECIAL2_MIND_STORM = 484,
@@ -970,7 +970,7 @@ enum eHelpIndex
     HELP_SPECIAL_HASTE = 492,
     HELP_SPECIAL_WEB = 493,
     HELP_SPECIAL_CREATURE_BINDING = 494,
-    HELP_SPECIAL_POSSESSION = 495,    // Combat_Enchantment (last-almost ordered)
+    HELP_SPECIAL_POSSESSION = 495,          // Combat_Enchantment (last-almost ordered)
     HELP_2_UPKEEP = 496,
     HELP_UNITVIEW_PAGE_UP = 497,
     HELP_UNITVIEW_PAGE_DOWN = 498,
@@ -1413,37 +1413,21 @@ enum eItemPower
 
 enum eItem_Icon ENUMSIZE16
 {
-          //0x00     0x08      Sword
     Sword_1 = 0x00, Sword_2, Sword_3, Sword_4, Sword_5, Sword_6, Sword_7, Sword_8, Sword_9,
-          //0x09     0x13      Mace
     Mace_01 = 0x09, Mace_02, Mace_03, Mace_04, Mace_05, Mace_06, Mace_07, Mace_08, Mace_09, Mace_10, Mace_11,
-          //0x14     0x1C      Axe
     Axe_1 = 0x14, Axe_2, Axe_3, Axe_4, Axe_5, Axe_6, Axe_7, Axe_8, Axe_9,
-          //0x1D     0x25      Bow
     Bow_1 = 0x1D, Bow_2, Bow_3, Bow_4, Bow_5, Bow_6, Bow_7, Bow_8, Bow_9,
-          //0x26     0x2E      Staff
     Staff_1 = 0x26, Staff_2, Staff_3, Staff_4, Staff_5, Staff_6, Staff_7, Staff_8, Staff_9,
-          //0x2F     0x36      Chain Mail
     Chain_1 = 0x2F, Chain_2, Chain_3, Chain_4, Chain_5, Chain_6, Chain_7, Chain_8, 
-          // 0x37     0x3D      Plate Mail
     Plate_1 = 0x37, Plate_2, Plate_3, Plate_4, Plate_5, Plate_6, Plate_7,
-          // 0x3E     0x47      Shield (Note: Icon 0x46 and 0x47 are identical)
     Shield_1 = 0x3E, Shield_2, Shield_3, Shield_4, Shield_5, Shield_6, Shield_7, Shield_8, Shield_9, Shield_10,
-          // 0x48     0x49      Pendant
     Pendant_1 = 0x48, Pendant_2,
-          // 0x4A     0x4D      Brooch
     Brooch_1 = 0x4A, Brooch_2, Brooch_3, Brooch_4,
-          // 0x4E     0x53      Ring
     Ring_1 = 0x4E, Ring_2, Ring_3, Ring_4, Ring_5, Ring_6,
-          // 0x54     0x59      Cloak
     Cloak_1 = 0x54, Cloak_2, Cloak_3, Cloak_4, Cloak_5, Cloak_6,
-          // 0x5A     0x5D      Gauntlet
     Gauntlet_1 = 0x5A, Gauntlet_2, Gauntlet_3, Gauntlet_4,
-          // 0x5E     0x64      Helmet
     Helmet_1 = 0x5E, Helmet_2, Helmet_3, Helmet_4, Helmet_5, Helmet_6, Helmet_7,
-          // 0x65     0x6A      Orb
     Orb_1 = 0x65, Orb_2, Orb_3, Orb_4, Orb_5, Orb_6,
-          // 0x6B     0x73      Wand
     Wand_1 = 0x6B, Wand_2, Wand_3, Wand_4, Wand_5, Wand_6, Wand_7, Wand_8,
 
     eItem_Icon_MAX,
@@ -2637,19 +2621,19 @@ enum eTerrainBattle ENUMSIZE16
 enum eTerrainBonusDeposit ENUMSIZE8
 {
     DEPOSIT_no_deposit = 0x00,
-    DEPOSIT_Iron_Ore = 0x01, // (-5% unit cost)
-    DEPOSIT_Coal = 0x02, // (-10% unit cost)
-    DEPOSIT_Silver_Ore = 0x03, // (+2 gold)
-    DEPOSIT_Gold_Ore = 0x04, // (+3 gold)
-    DEPOSIT_Gems = 0x05, // (+5 gold)
-    DEPOSIT_Mithril_Ore = 0x06, // (+1 mana)
-    DEPOSIT_Adamantium_Ore = 0x07, // (+2 mana)
-    DEPOSIT_Quork = 0x08, // (+3 mana)
-    DEPOSIT_Crysx = 0x09, // (+5 mana)
+    DEPOSIT_Iron_Ore = 0x01,            // (-5% unit cost)
+    DEPOSIT_Coal = 0x02,                // (-10% unit cost)
+    DEPOSIT_Silver_Ore = 0x03,          // (+2 gold)
+    DEPOSIT_Gold_Ore = 0x04,            // (+3 gold)
+    DEPOSIT_Gems = 0x05,                // (+5 gold)
+    DEPOSIT_Mithril_Ore = 0x06,         // (+1 mana)
+    DEPOSIT_Adamantium_Ore = 0x07,      // (+2 mana)
+    DEPOSIT_Quork = 0x08,               // (+3 mana)
+    DEPOSIT_Crysx = 0x09,               // (+5 mana)
     DEPOSIT_Unk10 = 0x10,
     DEPOSIT_Unk20 = 0x20,
-    DEPOSIT_Wild_Game = 0x40, // (+2 food)
-    DEPOSIT_Nightshade = 0x80, // (50 strength dispel)
+    DEPOSIT_Wild_Game = 0x40,           // (+2 food)
+    DEPOSIT_Nightshade = 0x80,          // (50 strength dispel)
 
     eTerrainBonusDeposit_MAX
 };
@@ -2692,7 +2676,7 @@ enum eTerrainType ENUMSIZE16
 {
     ocean1 = 0x0000,
     grasslands0 = 0x0001,
-    shore1_first = 0x0002, //  160 various joining configurations
+    shore1_first = 0x0002,              //  160 various joining configurations
     shore1_last = 0x00A1,
     grasslands1 = 0x00A2,
     forest1 = 0x00A3,
@@ -2717,25 +2701,25 @@ enum eTerrainType ENUMSIZE16
     tundra3 = 0x00B6,
     forest2 = 0x00B7,
     forest3 = 0x00B8,
-    river1_first = 0x00B9, //  river mouth if adjacent to shore
+    river1_first = 0x00B9,              //  river mouth if adjacent to shore
     river1_last = 0x00C4,
-    shore2_first = 0x00C5, //  4 river joined large lake
+    shore2_first = 0x00C5,              //  4 river joined large lake
     shore2_last = 0x00C8,
-    shore3_first = 0x00C9, //  32 river outlet to ocean
+    shore3_first = 0x00C9,              //  32 river outlet to ocean
     shore3_last = 0x00E8,
-    river2_first = 0x00E9, //  river mouth if adjacent to shore
+    river2_first = 0x00E9,              //  river mouth if adjacent to shore
     river2_last = 0x0102,
-    mountain2_first = 0x0103,  //  various joining configurations
+    mountain2_first = 0x0103,           //  various joining configurations
     mountain2_last = 0x0112,
-    hills2_first = 0x0113, //  various joining configurations
+    hills2_first = 0x0113,              //  various joining configurations
     hills2_last = 0x0123,
-    desert5_first = 0x0124,    //  various joining configurations
+    desert5_first = 0x0124,             //  various joining configurations
     desert5_last = 0x01C3,
-    shore4_first = 0x01C4, //  various joining configurations, including some river outlets
+    shore4_first = 0x01C4,              //  various joining configurations, including some river outlets
     shore4_last = 0x0258,
     ocean2 = 0x0259,
     ocean3 = 0x0260,
-    tundra4_first = 0x0261,     //  various joining configurations
+    tundra4_first = 0x0261,             //  various joining configurations
     tundra4_last = 0x02F9,
 
     eTerrainType_MAX,
@@ -2769,7 +2753,7 @@ enum eUnitAbility
     UNITABILITY_Poison_Immunity,      // 80
 
     // Attribute_Flags
-    UNITABILITY_Weapon_Immunity = 24,      // 01
+    UNITABILITY_Weapon_Immunity = 24, // 01
     UNITABILITY_Flyer,                // 02
     UNITABILITY_Lucky,                // 04
     UNITABILITY_Summon_Demons_1,      // 08
@@ -2824,15 +2808,15 @@ enum eUnitAbility
     UNITABILITY_Dispel_Evil,          // 08
     UNITABILITY_Ball_COMBAT,          // 10
     UNITABILITY_No_effect03_COMBAT,   // 20
-    UNITABILITY_Eldritch_Weapon_COMBAT,   // 40
-    UNITABILITY_Warp_Lightning_COMBAT,   // 80
+    UNITABILITY_Eldritch_Weapon_COMBAT,// 40
+    UNITABILITY_Warp_Lightning_COMBAT,// 80
 
     eUnitAbility_MAX
 };
 
 enum eUnitEnchantment
 {
-    UNITENCHANTMENT_Immolation = 0,       // 01
+    UNITENCHANTMENT_Immolation = 0,   // 01
     UNITENCHANTMENT_Guardian_Wind,    // 02
     UNITENCHANTMENT_Berserk,          // 04
     UNITENCHANTMENT_Cloak_of_Fear,    // 08
@@ -2900,10 +2884,10 @@ enum eUnit_Status8 ENUMSIZE8
     UNITSTATUS8_building_road_in_place = 2,  //   02=building road (in place)
     UNITSTATUS8_going_to_XY = 3,             //   03=going to X,Y destination (could be building road too, see 0x1C)
     UNITSTATUS8_reached_destination = 4,     //   04=reached destination & expended (0x07 == 01)
-                                            //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
+                                             //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
     UNITSTATUS8_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
-                                            //      the SAVE game does not record if we are traversing UP or DOWN the units!
-                                            //   ??=purifying
+                                             //      the SAVE game does not record if we are traversing UP or DOWN the units!
+                                             //   ??=purifying
     UNITSTATUS8_unk6 = 6, 
     UNITSTATUS8_meld_GUESS = 7, 
     UNITSTATUS8_build_GUESS = 8, 
@@ -2922,7 +2906,7 @@ enum eUnit_Status8 ENUMSIZE8
 
 enum eUnit_Type ENUMSIZE8
 {
-    //  * 35 Heroes (00=Brax; 22=Chosen One) => better heroes, higher number
+    //  * 35 Heroes (00=Brax; 0x22=Chosen One) => better heroes, higher number
     UNITTYPE_Dwarf = 0,
     HEROTYPE_FIRST = 0,
     UNITTYPE_Barbarian = 1,
@@ -3314,24 +3298,24 @@ static const unsigned gMAX_WIZARD_RECORDS = 6;
 
 typedef struct PACKED_STRUCT // Skills
 {
-    eYesNo8     Alchemy;        // 00 (0 or 1)
-    eYesNo8     Warlord;
-    eYesNo8     Chaos_Master;
-    eYesNo8     Nature_Master;
-    eYesNo8     Sorcery_Master;
-    eYesNo8     Infernal_Power; // 05
-    eYesNo8     Divine_Power;
-    eYesNo8     Sage_Master;
-    eYesNo8     Channeller;
-    eYesNo8     Myrran;
-    eYesNo8     Archmage;       // 0A
-    eYesNo8     Mana_Focusing;
-    eYesNo8     Node_Mastery;
-    eYesNo8     Famous;
-    eYesNo8     Runemaster;
-    eYesNo8     Conjurer;       // 0F
-    eYesNo8     Charismatic;
-    eYesNo8     Artificer;      // 11
+    eYesNo8             Alchemy;                // 00 (0 or 1)
+    eYesNo8             Warlord;
+    eYesNo8             Chaos_Master;
+    eYesNo8             Nature_Master;
+    eYesNo8             Sorcery_Master;
+    eYesNo8             Infernal_Power;         // 05
+    eYesNo8             Divine_Power;
+    eYesNo8             Sage_Master;
+    eYesNo8             Channeller;
+    eYesNo8             Myrran;
+    eYesNo8             Archmage;               // 0A
+    eYesNo8             Mana_Focusing;
+    eYesNo8             Node_Mastery;
+    eYesNo8             Famous;
+    eYesNo8             Runemaster;
+    eYesNo8             Conjurer;               // 0F
+    eYesNo8             Charismatic;
+    eYesNo8             Artificer;              // 11
                                 // SIZE 12
 } Skills;
 
@@ -3952,44 +3936,6 @@ typedef struct PACKED_STRUCT // Tower_Attr
     uint8_t         m_UNK;              // unused ??
 } Tower_Attr;
 
-typedef struct PACKED_STRUCT // Map_Tiles
-{
-    MapRow_Terrain  m_Arcanus_Map_Row[40];
-    MapRow_Terrain  m_Myrror_Map_Row[40];
-    uint16_t        m_Arcanus_UNK01[0x60];
-    uint16_t        m_Myrror_UNK01[0x60];
-    MapRow_LandMassID  m_Arcanus_LandMassID_Row[40];
-    MapRow_LandMassID  m_Myrror_LandMassID_Row[40];
-    Node_Attr       m_Arcanus_Node_Attr[16];
-    Node_Attr       m_Myrror_Attr[14];
-    Fortress        m_Fortresses[gMAX_WIZARD_RECORDS];
-    Tower_Attr      m_Tower_Attr[6];
-    // Tower_Node_Lair m_Tower_Node_Lair[102];    // Only 99! Or can it be 102 max?
-    //                                           // What happens if a city is reduced to rubble?
-    Tower_Node_Lair m_Arcanus_Towers[6];
-    Tower_Node_Lair m_Myrror_Towers[6];
-    Tower_Node_Lair m_Arcanus_Nodes[16];
-    Tower_Node_Lair m_Myrror_Nodes[14];
-    Tower_Node_Lair m_Normal_Lairs[25];
-    Tower_Node_Lair m_Weak_Lairs[32];
-    Tower_Node_Lair m_ExtraLairs_GUESS[3];
-} Map_Tiles;
-
-
-typedef struct PACKED_STRUCT // Map_Attr
-{
-    MapRow_Bonus            m_Arcanus_Bonus_Row[40];
-    MapRow_Bonus            m_Myrror_Bonus_Row[40];
-    MapRow_Exploration      m_Arcanus_Exploration_Row[40];
-    MapRow_Exploration      m_Myrror_Exploration_Row[40];
-    Map_Movement            m_Arcanus_Movement;
-    Map_Movement            m_Myrror_Movement;
-    Events_Status           m_Events_Status;
-    MapRow_Terrain_Changes  m_Arcanus_Terrain_Changes_Row[40];
-    MapRow_Terrain_Changes  m_Myrror_Terrain_Changes_Row[40];
-} Map_Attr;
-
-
 typedef struct PACKED_STRUCT // Unit_Weapon_Mutation
 {
     //eWeaponType   Weapon_Type:2;
@@ -4608,19 +4554,58 @@ typedef struct PACKED_STRUCT // Hero_Choice
 
 typedef struct PACKED_STRUCT // SaveGame
 {
-    unionList_Hero_stats m_List_Hero_stats[gMAX_WIZARD_RECORDS];
-    Game_Data_Save  m_Game_Data;
-    Wizard          m_Wizards[gMAX_WIZARD_RECORDS];
-    Map_Tiles       m_Map_Tiles;
-    Item            m_Items[128];
-    Item            m_Item_Trashcan[10];
-    City            m_Cities[gMAX_CITIES];
-    Unit            m_Unit[1000];
-    Unit            m_Units_Trashcan_GUESS[9];
-    Map_Attr        m_Map_Attr;
-    eGrand_Vizier   m_Grand_Vizier;
-    uint8_t         m_Items_in_Game[250];   // 00 = not in game, 01 = in game
-    Hero_Choice     m_Hero_Choices[gMAX_HERO_TYPES];
+    unionList_Hero_stats    m_List_Hero_stats[gMAX_WIZARD_RECORDS];
+    Game_Data_Save      m_Game_Data;
+    Wizard              m_Wizards[gMAX_WIZARD_RECORDS];
+
+    // Map section 1
+    MapRow_Terrain      m_Arcanus_Map_Row[40];
+    MapRow_Terrain      m_Myrror_Map_Row[40];
+    uint16_t            m_Arcanus_UNK01[0x60];
+    uint16_t            m_Myrror_UNK01[0x60];
+    MapRow_LandMassID   m_Arcanus_LandMassID_Row[40];
+    MapRow_LandMassID   m_Myrror_LandMassID_Row[40];
+
+    Node_Attr           m_Arcanus_Node_Attr[16];
+    Node_Attr           m_Myrror_Node_Attr[14];
+    Fortress            m_Fortresses[gMAX_WIZARD_RECORDS];
+    Tower_Attr          m_Tower_Attr[6];
+
+    // Tower_Node_Lair m_Tower_Node_Lair[102];          // Only 99! Or can it be 102 max?
+    //                                                  // When a city is reduced to rubble, an old popped lair is recycled
+    Tower_Node_Lair     m_Arcanus_Towers[6];
+    Tower_Node_Lair     m_Myrror_Towers[6];
+    Tower_Node_Lair     m_Arcanus_Nodes[16];
+    Tower_Node_Lair     m_Myrror_Nodes[14];
+    Tower_Node_Lair     m_Normal_Lairs[25];
+    Tower_Node_Lair     m_Weak_Lairs[32];
+    Tower_Node_Lair     m_ExtraLairs_GUESS[3];
+
+    Item                m_Items[128];
+    Item                m_Item_Trashcan_GUESS[8];
+    Item                m_Item_Found;                   // An item from ITEMDATA.LBX is parked here before inserting it into the game
+    Item                m_Item_Created;                 // An item being created is parked here before inserting it into the game
+    City                m_Cities[gMAX_CITIES];
+    Unit                m_Unit[1000];
+    Unit                m_Units_Trashcan_GUESS[9];
+
+    // Map section 2
+    MapRow_Bonus        m_Arcanus_Bonus_Row[40];
+    MapRow_Bonus        m_Myrror_Bonus_Row[40];
+    MapRow_Exploration  m_Arcanus_Exploration_Row[40];
+    MapRow_Exploration  m_Myrror_Exploration_Row[40];
+    Map_Movement        m_Arcanus_Movement;
+    Map_Movement        m_Myrror_Movement;
+
+    Events_Status       m_Events_Status;
+
+    // Map section 3
+    MapRow_Terrain_Changes  m_Arcanus_Terrain_Changes_Row[40];
+    MapRow_Terrain_Changes  m_Myrror_Terrain_Changes_Row[40];
+
+    eGrand_Vizier       m_Grand_Vizier;
+    uint8_t             m_Items_in_Game[250];   // 00 = not in game, 01 = in game
+    Hero_Choice         m_Hero_Choices[gMAX_HERO_TYPES];
 } SaveGame;
 
 //---------------------------------------------

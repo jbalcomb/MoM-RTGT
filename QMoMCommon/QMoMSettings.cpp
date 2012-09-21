@@ -26,7 +26,7 @@ void QMoMSettings::initialize(const QString &applicationName)
     QCoreApplication::setApplicationName(applicationName);
 }
 
-void QMoMSettings::readSettings(QWidget* window)
+void QMoMSettings::readSettingsWindow(QWidget* window)
 {
     QSettings settings;
 
@@ -41,7 +41,7 @@ void QMoMSettings::readSettings(QWidget* window)
     settings.endGroup();
 }
 
-void QMoMSettings::writeSettings(QWidget* window)
+void QMoMSettings::writeSettingsWindow(QWidget* window)
 {
     QSettings settings;
 
@@ -52,47 +52,75 @@ void QMoMSettings::writeSettings(QWidget* window)
     settings.endGroup();
 }
 
+void QMoMSettings::readSettingsControl(QWidget *control)
+{
+    QSettings settings;
+
+    settings.beginGroup(control->objectName());
+    recurseRead(settings, control);
+    settings.endGroup();
+}
+
+void QMoMSettings::writeSettingsControl(QWidget *control)
+{
+    QSettings settings;
+
+    settings.beginGroup(control->objectName());
+    recurseWrite(settings, control);
+    settings.endGroup();
+}
+
 void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
 {
+    QVariant value = settings.value(object->objectName());
+
+    // Do not execute settings that could not be read - keep the dialog default instead
+    if (value.isNull())
+        return;
+
     QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
     if (0 != checkbox)
     {
-        checkbox->setChecked(settings.value(checkbox->objectName()).toBool());
+        checkbox->setChecked(value.toBool());
     }
     QComboBox* combobox = dynamic_cast<QComboBox*>(object);
     if (0 != combobox)
     {
-        combobox->setCurrentIndex(settings.value(combobox->objectName()).toInt());
+        combobox->setCurrentIndex(value.toInt());
     }
     QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
     if (0 != filedialog)
     {
         qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
-        filedialog->setDirectory(settings.value(filedialog->objectName()).toString());
+        filedialog->setDirectory(value.toString());
         // Do not recurse
         return;
     }
     QSlider* slider = dynamic_cast<QSlider*>(object);
     if (0 != slider)
     {
-        slider->setValue(settings.value(slider->objectName()).toInt());
+        slider->setValue(value.toInt());
     }
     QSplitter* splitter = dynamic_cast<QSplitter*>(object);
     if (0 != splitter)
     {
-        splitter->restoreState(settings.value(splitter->objectName()).toByteArray());
+        splitter->restoreState(value.toByteArray());
     }
     QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
     if (0 != tablewidget)
     {
-        tablewidget->restoreGeometry(settings.value(tablewidget->objectName()).toByteArray());
+        QStringList columns = value.toString().split(",");
+        for (int i = 0; (i < tablewidget->columnCount()) && (i < columns.count()); ++i)
+        {
+            tablewidget->setColumnWidth(i, columns.at(i).toInt());
+        }
         // Do not recurse
         return;
     }
     QTreeWidget* treewidget = dynamic_cast<QTreeWidget*>(object);
     if (0 != treewidget)
     {
-        QStringList columns = settings.value(treewidget->objectName()).toString().split(" ");
+        QStringList columns = value.toString().split(",");
         for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
         {
             treewidget->setColumnWidth(i, columns.at(i).toInt());
@@ -140,7 +168,12 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
     QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
     if (0 != tablewidget)
     {
-        settings.setValue(tablewidget->objectName(), tablewidget->saveGeometry());
+        QStringList columns;
+        for (int i = 0; i < tablewidget->columnCount(); ++i)
+        {
+            columns << QString("%0").arg(tablewidget->columnWidth(i));
+        }
+        settings.setValue(tablewidget->objectName(), columns.join(","));
         // Do not recurse
         return;
     }
@@ -152,7 +185,7 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
         {
             columns << QString("%0").arg(treewidget->columnWidth(i));
         }
-        settings.setValue(treewidget->objectName(), columns.join(" "));
+        settings.setValue(treewidget->objectName(), columns.join(","));
         // Do not recurse
         return;
     }

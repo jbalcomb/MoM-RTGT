@@ -12,7 +12,7 @@ DialogExternalAI::DialogExternalAI(QWidget *parent) :
     hookManager(0)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     // Update view when game is changed or updated
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -23,7 +23,7 @@ DialogExternalAI::DialogExternalAI(QWidget *parent) :
 
 DialogExternalAI::~DialogExternalAI()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete hookManager;
 

@@ -36,7 +36,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui(new Ui::DialogAddUnit)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;
@@ -68,7 +68,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 DialogAddUnit::~DialogAddUnit()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
     delete m_sceneUnit;

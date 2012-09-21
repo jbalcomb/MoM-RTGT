@@ -415,7 +415,7 @@ DialogMap::DialogMap(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     setWindowFlags(Qt::Window);
 
@@ -468,7 +468,7 @@ DialogMap::DialogMap(QWidget *parent) :
 
 DialogMap::~DialogMap()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
     delete m_sceneMyrror;

@@ -25,7 +25,7 @@ DialogCalculatorAddress::DialogCalculatorAddress(QWidget *parent) :
     m_updating(false)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
@@ -35,7 +35,7 @@ DialogCalculatorAddress::DialogCalculatorAddress(QWidget *parent) :
 
 DialogCalculatorAddress::~DialogCalculatorAddress()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }

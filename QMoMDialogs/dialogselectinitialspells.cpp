@@ -165,7 +165,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
     m_InitialSpells(0)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     srand(time(NULL));
 
@@ -206,7 +206,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 
 DialogSelectInitialSpells::~DialogSelectInitialSpells()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete m_InitialSpells;
 

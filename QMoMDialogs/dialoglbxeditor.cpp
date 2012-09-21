@@ -53,14 +53,14 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     m_bitmapDirectory = QApplication::applicationDirPath();
     m_filedialogSave->setDirectory(m_bitmapDirectory);
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     listBitmapFiles(m_bitmapDirectory);
 }
 
 DialogLbxEditor::~DialogLbxEditor()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }

@@ -366,7 +366,7 @@ bool MoMGameSave::addLair()
     int lairNr = 0;     // Relocate and change Node[0].
 
     // Note: UNK fields left unchanged
-    Tower_Node_Lair& lair = m_SaveGame->m_Map_Tiles.m_Arcanus_Nodes[lairNr];
+    Tower_Node_Lair& lair = m_SaveGame->m_Arcanus_Nodes[lairNr];
 
     lair.m_XPos = m_SaveGame->m_Wizards[m_playerNr].m_X_Coordinate_of_Summoning_Circle + 2;
     lair.m_YPos = m_SaveGame->m_Wizards[m_playerNr].m_Y_Coordinate_of_Summoning_Circle + 1;
@@ -381,7 +381,7 @@ bool MoMGameSave::addLair()
     lair.m_Inhabitant2.m_Remaining_Nr_of_Inhabitant = 4;
     lair.m_Flags.bits = 7;
 
-    Node_Attr& nodeAttr = m_SaveGame->m_Map_Tiles.m_Arcanus_Node_Attr[lairNr];
+    Node_Attr& nodeAttr = m_SaveGame->m_Arcanus_Node_Attr[lairNr];
     for (unsigned i = 0; i < ARRAYSIZE(nodeAttr.m_XPos_Mana); ++i)
     {
         nodeAttr.m_XPos_Mana[i] += lair.m_XPos - nodeAttr.m_XPos;
@@ -395,11 +395,11 @@ bool MoMGameSave::addLair()
 
     if (PLANE_Arcanum == lair.m_Plane)
     {
-        m_SaveGame->m_Map_Tiles.m_Arcanus_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
+        m_SaveGame->m_Arcanus_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
     }
     else if (PLANE_Myrror == lair.m_Plane)
     {
-        m_SaveGame->m_Map_Tiles.m_Myrror_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
+        m_SaveGame->m_Myrror_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
     }
 
     return ok;

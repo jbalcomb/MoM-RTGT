@@ -72,7 +72,7 @@ struct MoMGamePointers
     Fortress*               m_addr_fortress_data    ; // 9CC8
     Node_Attr*              m_addr_Nodes_Attr    ; // 9CCC
     MapRow_LandMassID*      m_addr_Terrain_LandMassID  ; // 9CD0
-    Map_Tiles*              m_addr_Terrain_Types ; // 9CDC
+    MapRow_Terrain*         m_addr_Terrain_Types ; // 9CDC
     int8_t*                 m_addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
     UnknownBuf*        dword_407CA ; // 9D2A
     UnknownBuf*        dword_407CE ; // 9D2E
@@ -271,7 +271,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Fortress, m_addr_fortress_data);
         SET_RELOC_POINTER(Node_Attr, m_addr_Nodes_Attr);
         SET_RELOC_POINTER(MapRow_LandMassID, m_addr_Terrain_LandMassID);
-        SET_RELOC_POINTER(Map_Tiles, m_addr_Terrain_Types);
+        SET_RELOC_POINTER(MapRow_Terrain, m_addr_Terrain_Types);
         for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.m_addr_Unrest_Table); ++i)
         {
             SET_RELOC_POINTER(int8_t, m_addr_Unrest_Table[i]);

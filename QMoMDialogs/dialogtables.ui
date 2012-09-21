@@ -74,6 +74,9 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="maxVisibleItems">
+      <number>20</number>
+     </property>
      <item>
       <property name="text">
        <string>(None)</string>
