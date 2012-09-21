@@ -2,7 +2,7 @@
 bin/
 Debug/
 doc/
-GeneratedFiles/
+Generated/
 Linux/
 Release/
 Win32/
