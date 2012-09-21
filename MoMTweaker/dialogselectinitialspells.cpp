@@ -177,7 +177,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
         MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
         if (0 != wizard)
         {
-            known = &wizard->m_Spells_Known.None;     // First spell
+            known = &wizard->m_Spells_Known.No_spell;     // First spell
             nrSpellbooks = &wizard->m_Number_of_Spellbooks_Nature;
         }
     }
@@ -218,7 +218,7 @@ bool DialogSelectInitialSpells::apply()
     MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
     if (0 == wizard)
         return false;
-    known = &wizard->m_Spells_Known.None;     // First spell
+    known = &wizard->m_Spells_Known.No_spell;     // First spell
 
     // Check if numbers match
     for (MoM::eRealm_Type color = (MoM::eRealm_Type)0; color < 5; MoM::inc(color))
