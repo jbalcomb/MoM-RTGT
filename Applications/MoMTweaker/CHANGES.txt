@@ -5,13 +5,29 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.7 (2012--)
 -----------------------------
 
-* Drag & drop on the maps:
-  - either moves a stack of units,
-  - or simulates combat and shows the result in a message box.
+* More tables (click Show tables):
+  - Item powers from itempow.lbx (completely new).
+    Can not be saved yet.
+  - Prefab item data from itemdata.lbx (completely new).
+    Can not be saved yet.
+  - Many other tables whose data was already editable in the tree view.
+
+* Lbx editor (click Tools, then click Lbx editor):
+  - loads any lbx file and show its contents
+  - use the proper palette for all pictures
+  - as yet it can only replace pictures
+
+* Drag & drop on the overland map and the battle map:
+  - Either moves a stack of units.
+  - Or simulates combat and shows the result in a message box.
+    However, it's mostly raw melee now with static specials and enchantments.
+	Shooting is not taken into account yet, nor all possible spells
+	and special effects.
   
 * Combat simulator added.
 
-* Save and restore the dialog positions, sizes, check boxes, etcetera.
+* Save and restore all dialog positions, sizes, check boxes, column widths, 
+  directories, etcetera.
 
 
 

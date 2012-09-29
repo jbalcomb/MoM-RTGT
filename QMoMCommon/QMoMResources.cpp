@@ -7,13 +7,13 @@
 
 #include <string>
 
-#include <MoMGameBase.h>
-#include <MoMGenerated.h>
-#include <MoMLbxBase.h>
-#include <MoMUtility.h>
-#include <QMoMLbx.h>
-#include <QMoMTreeItem.h>
-#include <QMoMUtility.h>
+#include "MoMGameBase.h"
+#include "MoMGenerated.h"
+#include "MoMLbxBase.h"
+#include "MoMUtility.h"
+#include "QMoMLbx.h"
+#include "QMoMTreeItemModel.h"
+#include "QMoMUtility.h"
 
 #include "QMoMResources.h"
 
@@ -27,6 +27,7 @@ const QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
 // Note: attribute italic=true is required for URW Chancery L
 const QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
 #endif
+const QFont QMoMResources::g_FontFixed("Courier New", 10, -1, false);
 
 QMoMResources* QMoMResources::m_instance = 0;
 

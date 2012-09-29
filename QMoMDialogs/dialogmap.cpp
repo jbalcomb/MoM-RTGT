@@ -11,6 +11,8 @@
 #include <QTreeWidgetItem>
 
 #include <cmath>
+#include <fstream>
+#include <vector>
 
 #include "dialogmap.h"
 #include "ui_dialogmap.h"
@@ -28,382 +30,11 @@
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
 #include "QMoMSettings.h"
-#include "QMoMTreeItem.h"
+#include "QMoMTreeItemWidget.h"
 #include "QMoMUnitTile.h"
 
 namespace MoM
 {
-
-class QTreeItemBase : public QTreeWidgetItem
-{
-public:
-    enum { COL_Feature, COL_Value, COL_Comment };
-
-    QTreeItemBase(const QMoMGamePtr& game, const QString& feature, const QString& value) :
-        QTreeWidgetItem(),
-        m_game(game)
-    {
-        setText(COL_Feature, feature);
-        setText(COL_Value, value);
-    }
-    virtual void* getMoMPointer() const
-    {
-        return 0;
-    }
-    virtual QList<QAction*> requestActions(QObject*)
-    {
-        return QList<QAction*>();
-    }
-    virtual void slotAction()
-    {
-    }
-    virtual QString toString() const
-    {
-        return QTreeWidgetItem::text(COL_Value);
-    }
-protected:
-    QMoMGamePtr m_game;
-};
-
-///////////////////////////////////////////
-
-template<typename Number>
-class NumberTreeItem : public QTreeItemBase
-{
-public:
-    NumberTreeItem(const QMoMGamePtr& game, const QString& feature, Number* t, Number mask = 0);
-    virtual void setData(int column, int role, const QVariant &value);
-    virtual QString toString() const;
-    virtual void* getMoMPointer() const
-    {
-        return m_ptr;
-    }
-private:
-    Number* m_ptr;
-    Number m_mask;
-    unsigned m_shift;
-};
-
-
-template<typename Number>
-NumberTreeItem<Number>::NumberTreeItem(const QMoMGamePtr& game, const QString& feature, Number* t, Number mask) :
-    QTreeItemBase(game, feature, ""),
-    m_ptr(t),
-    m_mask(mask),
-    m_shift(0)
-{
-    for (unsigned i = 0; (0 != mask) && (i < 32); ++i)
-    {
-        if (((mask >> i) << i) != mask)
-        {
-            break;
-        }
-        m_shift = i;
-    }
-    setFlags(flags() | Qt::ItemIsEditable);
-    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
-}
-
-template<typename Number>
-void NumberTreeItem<Number>::setData(int column, int role, const QVariant &value)
-{
-    if ((COL_Value == column) && (Qt::EditRole == role))
-    {
-        Number newValue = static_cast<Number>(value.toInt());
-        if (0 != m_mask)
-        {
-            unsigned tmp = ((unsigned)*m_ptr & ~m_mask);
-            newValue = static_cast<Number>(tmp | (((unsigned)value.toInt() << m_shift) & m_mask));
-        }
-        (void)m_game->commitData(m_ptr, &newValue, sizeof(Number));
-        QTreeItemBase::setData(COL_Value, role, toString());
-    }
-    else
-    {
-        QTreeItemBase::setData(column, role, value);
-    }
-}
-
-template<typename Number>
-QString NumberTreeItem<Number>::toString() const
-{
-    Number value = *m_ptr;
-    if (0 != m_mask)
-    {
-        value =static_cast<Number>(((unsigned)*m_ptr & m_mask) >> m_shift);
-    }
-    return toQStr(value);
-}
-
-/////////////////////////////////////////
-
-template<typename Enum>
-class EnumTreeItem : public QTreeItemBase
-{
-public:
-    EnumTreeItem(const QMoMGamePtr& game, const QString& feature, Enum* e, Enum max);
-
-    virtual void* getMoMPointer() const
-    {
-        return m_ptr;
-    }
-
-    virtual void setData(int column, int role, const QVariant &value);
-
-    virtual QList<QAction*> requestActions(QObject* parent);
-    virtual void slotAction();
-
-    virtual QString toString() const;
-
-private:
-    void addAction(Enum e);
-    void updateIcon(Enum e);
-
-    // Configuration
-    Enum* m_ptr;
-    Enum m_max;
-
-    // Status
-
-    // Keep track of the action group
-    // m_actionGroup is deleted by its parent (the context menu)
-    QActionGroup* m_actionGroup;
-};
-
-template<typename Enum>
-EnumTreeItem<Enum>::EnumTreeItem(const QMoMGamePtr& game, const QString& feature, Enum* e, Enum max) :
-    QTreeItemBase(game, feature, ""),
-    m_ptr(e),
-    m_max(max),
-    m_actionGroup(0)
-{
-    setFlags(flags() | Qt::ItemIsEditable);
-    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
-    updateIcon(*m_ptr);
-}
-
-template<typename Enum>
-void EnumTreeItem<Enum>::setData(int column, int role, const QVariant &value)
-{
-    if ((COL_Value == column) && (Qt::EditRole == role))
-    {
-        Enum newValue = static_cast<Enum> (value.toInt());
-        (void)m_game->commitData(m_ptr, &newValue, sizeof(Enum));
-        QTreeItemBase::setData(COL_Value, role, toString());
-        updateIcon(*m_ptr);
-    }
-    else
-    {
-        QTreeItemBase::setData(column, role, value);
-    }
-}
-
-template<typename Enum>
-QList<QAction*> EnumTreeItem<Enum>::requestActions(QObject* parent)
-{
-    m_actionGroup = new QActionGroup(parent);
-
-    for (Enum e = (Enum)0; e < m_max; MoM::inc(e))
-    {
-        addAction(e);
-    }
-
-    return m_actionGroup->actions();
-}
-
-template<typename Enum>
-void EnumTreeItem<Enum>::slotAction()
-{
-    QAction* action = m_actionGroup->checkedAction();
-    setData(COL_Value, Qt::EditRole, action->data());
-}
-
-template<typename Enum>
-QString EnumTreeItem<Enum>::toString() const
-{
-    QString str = prettyQStr(*m_ptr);
-    return str;
-}
-
-// Private
-
-template<typename Enum>
-void EnumTreeItem<Enum>::addAction(Enum e)
-{
-    assert(m_actionGroup != 0);
-
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && (e != *m_ptr))
-    {
-        // Skip <Unknown> entries, unless one of them is selected
-    }
-    else
-    {
-        QAction* action = new QAction(name, m_actionGroup);
-        QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
-        if (!iconPtr.isNull())
-        {
-            action->setIcon(*iconPtr);
-        }
-        action->setCheckable(true);
-        action->setData(QVariant((int)e));
-        if (e == *m_ptr)
-        {
-            action->setChecked(true);
-        }
-    }
-}
-
-template<typename Enum>
-void EnumTreeItem<Enum>::updateIcon(Enum e)
-{
-    QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
-    if (!iconPtr.isNull())
-    {
-        QTreeItemBase::setIcon(COL_Value, *iconPtr);
-    }
-}
-
-/////////////////////////////////////////
-
-template<typename Bitmask, typename Enum>
-class BitmaskTreeItem : public QTreeItemBase
-{
-public:
-    BitmaskTreeItem(const QMoMGamePtr& game, const QString& feature, Bitmask* bitmask, Enum min, Enum max);
-
-    virtual void* getMoMPointer() const
-    {
-        return m_ptr;
-    }
-
-    virtual void setData(int column, int role, const QVariant &value);
-
-    virtual QList<QAction*> requestActions(QObject* parent);
-    virtual void slotAction();
-
-    virtual QString toString();
-
-private:
-    void addAction(Enum e);
-    bool has(Enum e) const;
-
-    // Configuration
-    Bitmask* m_ptr;
-    Enum m_min;
-    Enum m_max;
-
-    // Status
-
-    // Keep track of the action group
-    // m_actionGroup is deleted by its parent (the context menu)
-    QActionGroup* m_actionGroup;
-};
-
-template<typename Bitmask, typename Enum>
-BitmaskTreeItem<Bitmask, Enum>::BitmaskTreeItem(const QMoMGamePtr& game, const QString& feature, Bitmask* bitmask, Enum min, Enum max) :
-    QTreeItemBase(game, feature, ""),
-    m_ptr(bitmask),
-    m_min(min),
-    m_max(max),
-    m_actionGroup()
-{
-    setFlags(flags() | Qt::ItemIsEditable);
-    QTreeItemBase::setData(COL_Value, Qt::EditRole, toString());
-}
-
-template<typename Bitmask, typename Enum>
-void BitmaskTreeItem<Bitmask, Enum>::setData(int column, int role, const QVariant &value)
-{
-    if ((COL_Value == column) && (Qt::EditRole == role))
-    {
-        Bitmask newValue = static_cast<Bitmask>(value.toUInt());
-        (void)m_game->commitData(m_ptr, &newValue, sizeof(Bitmask));
-        QTreeItemBase::setData(COL_Value, role, toString());
-    }
-    else
-    {
-        QTreeItemBase::setData(column, role, value);
-    }
-}
-
-template<typename Bitmask, typename Enum>
-void BitmaskTreeItem<Bitmask, Enum>::addAction(Enum e)
-{
-    assert(m_actionGroup != 0);
-
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && !has(e))
-    {
-        // Skip <Unknown> entries, unless one of them is selected
-    }
-    else
-    {
-        QAction* action = new QAction(name, m_actionGroup);
-        action->setCheckable(true);
-        action->setData(QVariant((int)e));
-        if (has(e))
-        {
-            action->setChecked(true);
-        }
-    }
-}
-
-template<typename Bitmask, typename Enum>
-QList<QAction*> BitmaskTreeItem<Bitmask, Enum>::requestActions(QObject* parent)
-{
-    m_actionGroup = new QActionGroup(parent);
-    m_actionGroup->setExclusive(false);
-    for (Enum e = m_min; e < m_max; MoM::inc(e))
-    {
-        addAction(e);
-    }
-    return m_actionGroup->actions();
-}
-
-template<typename Bitmask, typename Enum>
-void BitmaskTreeItem<Bitmask, Enum>::slotAction()
-{
-    Bitmask bitmask = 0;
-    Enum e = m_min;
-    for (int i = 0; i < m_actionGroup->actions().count(); ++i, MoM::inc(e))
-    {
-        if (m_actionGroup->actions().at(i)->isChecked())
-        {
-            bitmask |= (1 << i);
-        }
-    }
-    setData(COL_Value, Qt::EditRole, QVariant((unsigned)bitmask));
-}
-
-template<typename Bitmask, typename Enum>
-bool BitmaskTreeItem<Bitmask, Enum>::has(Enum e) const
-{
-    Bitmask mask = (1 << ((unsigned)e - (unsigned)m_min));
-    return ((*m_ptr & mask) != 0);
-}
-
-template<typename Bitmask, typename Enum>
-QString BitmaskTreeItem<Bitmask, Enum>::toString()
-{
-    QString result;
-    for (Enum e = m_min; e < m_max; MoM::inc(e))
-    {
-        if (has(e))
-        {
-            if (!result.isEmpty())
-            {
-                result += ", ";
-            }
-            QString name = prettyQStr(e);
-            name.replace("Immunity", "Imm");
-            result += name;
-        }
-    }
-    return result;
-}
-
-///////////////////////////////////////////
 
 DialogMap::DialogMap(QWidget *parent) :
     QDialog(parent),
@@ -487,7 +118,7 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
     {
         text += ", " + prettyQStr((eWeaponType)(battleUnit->m_Weapon_Type_Plus_1 - 1));
     }
-    QTreeItemBase* qtreeUnit = new QTreeItemBase(m_game,
+    QMoMTreeItemWidgetBase* qtreeUnit = new QMoMTreeItemWidgetBase(m_game,
                                  QString("battle[%0] unit[%1]").arg(battleUnitNr).arg(battleUnit->m_unitNr),
                                  text);
     treeWidget->addTopLevelItem(qtreeUnit);
@@ -497,16 +128,22 @@ void DialogMap::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battl
     qtreeUnit->addChild(new EnumTreeItem<eBattleUnitActive>(m_game, "Active", &battleUnit->m_Active, eBattleUnitActive_MAX));
     qtreeUnit->addChild(new EnumTreeItem<eBattleUnitTactic>(m_game, "Status", &battleUnit->m_Tactic, eBattleUnitTactic_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TargetID", &battleUnit->m_Target_BattleUnitID));
-    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPos", &battleUnit->m_xPos));
-    qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPos", &battleUnit->m_yPos));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "XPosHeaded", &battleUnit->m_xPosHeaded));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "YPosHeaded", &battleUnit->m_yPosHeaded));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HalfMovesLeft", &battleUnit->m_MoveHalves));
-    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "CurFigures", &battleUnit->m_Current_figures));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "HP figure", &battleUnit->m_Hitpoints_per_Figure));
+    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "CurFigures", &battleUnit->m_Current_figures));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "TopFigDamage", &battleUnit->m_top_figure_damage));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Suppression", &battleUnit->m_Suppression));
     qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "WeaponType", &battleUnit->m_Weapon_Type_Plus_1));
+    if (battleUnit->m_Current_mana > 0)
+    {
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Mana", &battleUnit->m_Current_mana));
+    }
+    if (battleUnit->m_Gaze_Modifier != 0)
+    {
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Gaze/Poison", &battleUnit->m_Gaze_Modifier));
+    }
 }
 
 void DialogMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
@@ -527,7 +164,7 @@ void DialogMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
         {
             text += ", fortress";
         }
-        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game,
+        QMoMTreeItemWidgetBase* qtreeItem = new QMoMTreeItemWidgetBase(m_game,
             QString("City[%0]").arg(cityNr),
             text);
         treeWidget->addTopLevelItem(qtreeItem);
@@ -546,7 +183,7 @@ void DialogMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
 //        ptree->appendTree(constructTreeItem(&rhs->m_City_Enchantments, "m_City_Enchantments"), "");
 //        ptree->appendChild("m_Nightshade", new QMoMTreeItem<eYesNo8>(&rhs->m_Nightshade));
 //        ptree->appendChild("m_Hammers", new QMoMTreeItem<uint8_t>(&rhs->m_Hammers));
-        qtreeItem->addChild(new NumberTreeItem<uint16_t>(m_game, "HammersAccumulated", &city->m_HammersAccumulated));
+        qtreeItem->addChild(new NumberTreeItem<int16_t>(m_game, "HammersAccumulated", &city->m_HammersAccumulated));
 //        ptree->appendChild("m_Coins", new QMoMTreeItem<uint8_t>(&rhs->m_Coins));
 //        ptree->appendChild("m_Maintenance", new QMoMTreeItem<uint8_t>(&rhs->m_Maintenance));
 //        ptree->appendChild("m_Mana_cr", new QMoMTreeItem<uint8_t>(&rhs->m_Mana_cr));
@@ -569,7 +206,7 @@ void DialogMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
         {
             text += QString(",player %0").arg(prettyQStr(nodeAttr->m_Owner));
         }
-        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game,
+        QMoMTreeItemWidgetBase* qtreeItem = new QMoMTreeItemWidgetBase(m_game,
             QString("Lair[%0]").arg(lairNr),
             text);
         treeWidget->addTopLevelItem(qtreeItem);
@@ -609,7 +246,7 @@ void DialogMap::addLairSubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
         if (0 != nodeAttr)
         {
             qtreeItem->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &nodeAttr->m_Owner, ePlayer_MAX));
-            qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Power node", &nodeAttr->m_Power_Node));
+            qtreeItem->addChild(new NumberTreeItem<int8_t>(m_game, "Power node", &nodeAttr->m_Power_Node));
         }
     }
 }
@@ -618,57 +255,78 @@ void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrai
 {
     const MoMLocation& loc = momTerrain.getLocation();
 
-    treeWidget->addTopLevelItem(new QTreeItemBase(m_game,
+    treeWidget->addTopLevelItem(new QMoMTreeItemWidgetBase(m_game,
         "Location",
         QString("%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos)));
 
-    QTreeItemBase* qtreeTerrain = new QTreeItemBase(m_game, "Terrain", "");
+    QMoMTreeItemWidgetBase* qtreeTerrain = new QMoMTreeItemWidgetBase(m_game, "Terrain", "");
     ui->treeWidget_Tile->addTopLevelItem(qtreeTerrain);
-    if (0 != m_game->getTerrainType(loc))
-    {
-        MoM::eTerrainType terrainType = *m_game->getTerrainType(loc);
-        QString text = QString("%0 (%1)")
-                .arg(prettyQStr(MoM::MoMTerrain::getTerrainCategory(terrainType)))
-                .arg((int)terrainType);
-        if ((0 != m_game->getTerrainBonus(loc)) && (MoM::DEPOSIT_no_deposit != *m_game->getTerrainBonus(loc)))
-        {
-            text += ", " + prettyQStr(*m_game->getTerrainBonus(loc));
-        }
-        qtreeTerrain->setText(1, text);
-    }
 
-    if (0 != m_game->getTerrainType(loc))
+    if (MoMLocation::MAP_overland == loc.m_Map)
     {
-        qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainType>(m_game, "TerrainType", m_game->getTerrainType(loc), MoM::eTerrainType_MAX));
+        if (0 != m_game->getTerrainType(loc))
+        {
+            MoM::eTerrainType terrainType = *m_game->getTerrainType(loc);
+            QString text = QString("%0 (%1)")
+                    .arg(prettyQStr(MoM::MoMTerrain::getTerrainCategory(terrainType)))
+                    .arg((int)terrainType);
+            if ((0 != m_game->getTerrainBonus(loc)) && (MoM::DEPOSIT_no_deposit != *m_game->getTerrainBonus(loc)))
+            {
+                text += ", " + prettyQStr(*m_game->getTerrainBonus(loc));
+            }
+            qtreeTerrain->setText(1, text);
+        }
+
+        if (0 != m_game->getTerrainType(loc))
+        {
+            qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainType>(m_game, "TerrainType", m_game->getTerrainType(loc), MoM::eTerrainType_MAX));
+        }
+        if (0 != m_game->getTerrainBonus(loc))
+        {
+            qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainBonusDeposit>(m_game, "TerrainBonus", m_game->getTerrainBonus(loc), MoM::eTerrainBonusDeposit_MAX));
+        }
+        if (0 != m_game->getTerrainChange(loc))
+        {
+            qtreeTerrain->addChild(new BitmaskTreeItem<uint8_t, MoM::eTerrainChange>(m_game, "TerrainChange", (uint8_t*)m_game->getTerrainChange(loc), (MoM::eTerrainChange)0, MoM::eTerrainChange_MAX));
+        }
+        if (0 != m_game->getTerrainExplored(loc))
+        {
+            qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "Explored", m_game->getTerrainExplored(loc)));
+        }
+        if (0 != m_game->getTerrainLandMassID(loc))
+        {
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "LandMassID", m_game->getTerrainLandMassID(loc)));
+        }
+        if (0 == m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+        {
+            qtreeTerrain->addChild(new QMoMTreeItemWidgetBase(m_game, "Moves", "(Not accessible->no road effect)"));
+        }
+        else
+        {
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveUnused", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveWalk", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveForester", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester)));
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveMountaineer", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer)));
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSwimming", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
+            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSailing", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
+        }
     }
-    if (0 != m_game->getTerrainBonus(loc))
+    else if (0 != m_game->getBattlefield())
     {
-        qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainBonusDeposit>(m_game, "TerrainBonus", m_game->getTerrainBonus(loc), MoM::eTerrainBonusDeposit_MAX));
-    }
-    if (0 != m_game->getTerrainChange(loc))
-    {
-        qtreeTerrain->addChild(new BitmaskTreeItem<uint8_t, MoM::eTerrainChange>(m_game, "TerrainChange", (uint8_t*)m_game->getTerrainChange(loc), (MoM::eTerrainChange)0, MoM::eTerrainChange_MAX));
-    }
-    if (0 != m_game->getTerrainExplored(loc))
-    {
-        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "Explored", m_game->getTerrainExplored(loc)));
-    }
-    if (0 != m_game->getTerrainLandMassID(loc))
-    {
-        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "LandMassID", m_game->getTerrainLandMassID(loc)));
-    }
-    if (0 == m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
-    {
-        qtreeTerrain->addChild(new QTreeItemBase(m_game, "Moves", "(Not accessible->no road effect)"));
-    }
-    else
-    {
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveUnused", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused)));
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveWalk", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Walking)));
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveForester", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Forester)));
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveMountaineer", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Mountaineer)));
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSwimming", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
-        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSailing", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
+        Battlefield* battlefield = m_game->getBattlefield();
+        int index = loc.m_YPos * gMAX_BATTLE_COLS + loc.m_XPos;
+
+        qtreeTerrain->addChild(new EnumTreeItem<MoM::eTerrainBattle>(m_game, "TerrainBattle", &battlefield->m_Terrain[index], MoM::eTerrainBattle_MAX));
+        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "TerrainGroup", &battlefield->m_TerrainGroupType[index]));
+        qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "Road", &battlefield->m_Road[index]));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "WalkMove", &battlefield->m_Movement_walking[index]));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "Merge/Tport/Fly", &battlefield->m_Movement_merging_teleporting_fly[index]));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "WalkSimilar", &battlefield->m_Movement_similar_to_walking[index]));
+        qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "SailMove", &battlefield->m_Movement_sailing[index]));
+        if (battlefield->m_Mud[index] != 0)
+        {
+            qtreeTerrain->addChild(new NumberTreeItem<uint8_t>(m_game, "Mud", &battlefield->m_Mud[index]));
+        }
     }
 }
 
@@ -681,7 +339,7 @@ void DialogMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
     {
         text += ", " + prettyQStr((eWeaponType)unit->m_Weapon_Mutation.s.Weapon_Type);
     }
-    QTreeItemBase* qtreeUnit = new QTreeItemBase(m_game,
+    QMoMTreeItemWidgetBase* qtreeUnit = new QMoMTreeItemWidgetBase(m_game,
         QString("unit[%0]").arg(unitNr),
         text);
     treeWidgetItem->addChild(qtreeUnit);
@@ -697,10 +355,10 @@ void DialogMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
     qtreeUnit->addChild(new EnumTreeItem<eLevel>(m_game, "Level", &unit->m_Level, eLevel_MAX));
     qtreeUnit->addChild(new NumberTreeItem<int16_t>(m_game, "Experience", &unit->m_Experience));
     qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Damage", &unit->m_Damage));
-    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "Grouping", &unit->m_Grouping));
+    qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Grouping", &unit->m_Grouping));
     if (1 != unit->m_Scouting)
     {
-        qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "Scouting", &unit->m_Scouting));
+        qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "Scouting", &unit->m_Scouting));
     }
 //    ptree->appendTree(constructTreeItem(&rhs->m_Weapon_Mutation, "m_Weapon_Mutation"), "");
     qtreeUnit->addChild(new BitmaskTreeItem<uint32_t, eUnitEnchantment>(m_game, "Enchantments", &unit->m_Unit_Enchantment.bits, (eUnitEnchantment)0, eUnitEnchantment_MAX));
@@ -710,6 +368,12 @@ void DialogMap::addUnitSubtree(QTreeWidgetItem *treeWidgetItem, Unit* unit)
         qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromXPos", &unit->m_XPos_Road_Building_from));
         qtreeUnit->addChild(new NumberTreeItem<int8_t>(m_game, "fromYPos", &unit->m_YPos_Road_Building_from));
     }
+}
+
+void DialogMap::updateGraying()
+{
+    ui->pushButton_RestoreBookmark->setEnabled((0 != m_game) && (ui->graphicsView->scene() == m_sceneBattle));
+    ui->pushButton_SaveBookmark->setEnabled((0 != m_game) && (ui->graphicsView->scene() == m_sceneBattle));
 }
 
 void DialogMap::on_comboBox_Plane_currentIndexChanged(int index)
@@ -729,6 +393,7 @@ void DialogMap::on_comboBox_Plane_currentIndexChanged(int index)
         ui->graphicsView->setScene(0);
         break;
     }
+    updateGraying();
 }
 
 void DialogMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
@@ -740,7 +405,7 @@ void DialogMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
     QAction* action = contextMenu.addAction("Address calculator");
     action->connect(action, SIGNAL(triggered()), this, SLOT(slot_addressCalculator()));
 
-    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    QMoMTreeItemWidgetBase* pMoMItem = dynamic_cast<QMoMTreeItemWidgetBase*>(pItem);
     if (0 != pMoMItem)
     {
         QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
@@ -756,6 +421,7 @@ void DialogMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
     }
 
     contextMenu.exec(ui->treeWidget_Tile->mapToGlobal(pos));
+    updateGraying();
 }
 
 void DialogMap::on_verticalSlider_Zoom_valueChanged(int value)
@@ -778,7 +444,7 @@ void DialogMap::slot_addressCalculator()
     dialog->show();
 
     QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
-    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    QMoMTreeItemWidgetBase* pMoMItem = dynamic_cast<QMoMTreeItemWidgetBase*>(pItem);
     if (0 != pMoMItem)
     {
         dialog->slot_addressChanged(pMoMItem->getMoMPointer());
@@ -911,6 +577,9 @@ void DialogMap::slot_gameUpdated()
     MoM::Battle_Unit* battleUnits = m_game->getBattleUnit(0);
     if ((0 != battlefield) && (0 != battleUnits))
     {
+        // Update plane of battlefield
+        m_sceneBattle->setPlane((ePlane)battlefield->m_Plane);
+
         // Show battle terrain
         for (int y = 0; y < (int)MoM::gMAX_BATTLE_ROWS; ++y)
         {
@@ -1058,16 +727,18 @@ void DialogMap::slot_gameUpdated()
         QGraphicsPixmapItem* itemMenubar = m_sceneBattle->addPixmap(pixmapMenubar);
         itemMenubar->setPos(0, 164);
     }
+    updateGraying();
 }
 
 void DialogMap::slot_itemAction()
 {
     QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
-    QTreeItemBase* pMoMItem = dynamic_cast<QTreeItemBase*>(pItem);
+    QMoMTreeItemWidgetBase* pMoMItem = dynamic_cast<QMoMTreeItemWidgetBase*>(pItem);
     if (0 != pMoMItem)
     {
         pMoMItem->slotAction();
     }
+    updateGraying();
 }
 
 void DialogMap::slot_tileChanged(const MoM::MoMLocation& loc)
@@ -1177,6 +848,7 @@ void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &
                 ostr.c_str());
         }
     }
+    updateGraying();
 }
 
 void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
@@ -1195,7 +867,7 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
     std::vector<int> units = momTerrain.getUnits();
     if (units.size() > 0)
     {
-        QTreeItemBase* qtreeItem = new QTreeItemBase(m_game, 
+        QMoMTreeItemWidgetBase* qtreeItem = new QMoMTreeItemWidgetBase(m_game,
             QString("Units"), 
             QString("%0 (player %1)").arg(units.size()).arg(prettyQStr(m_game->getUnit(units[0])->m_Owner)));
         ui->treeWidget_Tile->addTopLevelItem(qtreeItem);
@@ -1219,6 +891,7 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
             }
         }
     }
+    updateGraying();
 }
 
 void DialogMap::slot_timerActiveUnit()
@@ -1237,4 +910,266 @@ void DialogMap::slot_timerActiveUnit()
 //    }
 }
 
+}
+
+
+class MoMBookmark
+{
+public:
+    MoMBookmark(MoM::MoMGameBase* game);
+
+    bool save(std::ostream& os);
+    bool restore(std::istream& is);
+
+private:
+    template<typename T>
+    void saveField(const T* t, size_t nitems = 1);
+
+    template<typename T>
+    void restoreField(T* t, size_t nitems = 1);
+
+    static const std::string sFILETYPE_BATTLEBOOKMARK;
+
+    MoM::MoMGameBase* m_game;
+    std::istream* m_is;
+    std::ostream* m_os;
+    bool m_ok;
+};
+
+const std::string MoMBookmark::sFILETYPE_BATTLEBOOKMARK("BATTLEBOOKMARK\x1A");
+
+MoMBookmark::MoMBookmark(MoM::MoMGameBase* game) :
+    m_game(game),
+    m_is(),
+    m_os(),
+    m_ok()
+{
+}
+
+template<typename T>
+void MoMBookmark::saveField(const T* t, size_t nitems)
+{
+    if (!m_ok)
+        return;
+    if ((0 != m_os) && (0 != t))
+    {
+        m_os->write((const char*)t, nitems * sizeof(T));
+        m_ok = m_os->good();
+    }
+}
+
+template<typename T>
+void MoMBookmark::restoreField(T* t, size_t nitems)
+{
+    if (!m_ok)
+        return;
+    std::vector<T> newValue(nitems);
+    if ((0 != m_is) && (0 != t))
+    {
+        m_is->read((char*)&newValue[0], nitems * sizeof(T));
+        m_ok = m_is->good();
+    }
+    if (m_ok)
+    {
+        m_ok = m_game->commitData(t, &newValue[0], nitems * sizeof(T));
+    }
+}
+
+bool MoMBookmark::save(std::ostream& os)
+{
+    if (0 == m_game)
+        return false;
+    m_is = 0;
+    m_os = &os;
+    m_ok = true;
+
+    MoM::MoMDataSegment* dseg = m_game->getDataSegment();
+    assert(0 != dseg);
+
+    // File type marker
+    saveField(sFILETYPE_BATTLEBOOKMARK.c_str(), sFILETYPE_BATTLEBOOKMARK.size());
+
+    // Battle turn
+    saveField(&dseg->m_Combat_turn);
+
+    // Defending wizard's skill left
+    // Defending wizard's mana
+    MoM::Wizard* wizard = m_game->getWizard(dseg->m_Defending_wizard);
+    if (0 == wizard)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        saveField(&wizard->m_Skill_Left_in_combat);
+        saveField(&wizard->m_Mana_Crystals);
+    }
+
+    // Attacking wizard's skill left
+    // Attacking wizard's mana
+    wizard = m_game->getWizard(dseg->m_Attacking_wizard);
+    if (0 == wizard)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        saveField(&wizard->m_Skill_Left_in_combat);
+        saveField(&wizard->m_Mana_Crystals);
+    }
+
+    // Nr of battle units
+    // Battle unit data (always 18 units)
+    saveField(&dseg->m_Nr_Battle_Units);
+    saveField(m_game->getBattleUnit(0), MoM::gMAX_BATTLE_UNITS);
+
+    // Spells cast in battle
+    saveField(m_game->getSpells_Cast_in_Battle());
+
+    // Broken wall (16 positions)
+    MoM::Battlefield* battlefield = m_game->getBattlefield();
+    if (0 == battlefield)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        saveField(battlefield->m_Wall_present_4x4, sizeof(battlefield->m_Wall_present_4x4));
+    }
+
+    return m_ok;
+}
+
+bool MoMBookmark::restore(std::istream& is)
+{
+    if (0 == m_game)
+        return false;
+    m_is = &is;
+    m_os = 0;
+    m_ok = true;
+
+    MoM::MoMDataSegment* dseg = m_game->getDataSegment();
+    assert(0 != dseg);
+
+    // File type marker
+    std::string filetype(sFILETYPE_BATTLEBOOKMARK.size(), '\0');
+    m_is->read(&filetype[0], filetype.size());
+    if (filetype != sFILETYPE_BATTLEBOOKMARK)
+    {
+        m_ok = false;
+    }
+
+    // Battle turn
+    restoreField(&dseg->m_Combat_turn);
+
+    // Defending wizard's skill left
+    // Defending wizard's mana
+    MoM::Wizard* wizard = m_game->getWizard(dseg->m_Defending_wizard);
+    if (0 == wizard)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        restoreField(&wizard->m_Skill_Left_in_combat);
+        restoreField(&wizard->m_Mana_Crystals);
+    }
+
+    // Attacking wizard's skill left
+    // Attacking wizard's mana
+    wizard = m_game->getWizard(dseg->m_Attacking_wizard);
+    if (0 == wizard)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        restoreField(&wizard->m_Skill_Left_in_combat);
+        restoreField(&wizard->m_Mana_Crystals);
+    }
+
+    // Nr of battle units
+    // Battle unit data (always 18 units)
+    restoreField(&dseg->m_Nr_Battle_Units);
+    restoreField(m_game->getBattleUnit(0), MoM::gMAX_BATTLE_UNITS);
+
+    // Spells cast in battle
+    restoreField(m_game->getSpells_Cast_in_Battle());
+
+    // Broken wall (16 positions)
+    MoM::Battlefield* battlefield = m_game->getBattlefield();
+    if (0 == battlefield)
+    {
+        m_ok = false;
+    }
+    else
+    {
+        restoreField(battlefield->m_Wall_present_4x4, sizeof(battlefield->m_Wall_present_4x4));
+    }
+
+    return m_ok;
+}
+
+void MoM::DialogMap::on_pushButton_SaveBookmark_clicked()
+{
+    if ((0 == m_game) || (0 == m_game->getDataSegment()))
+        return;
+
+    QFileDialog saveBookMark;
+
+    saveBookMark.setObjectName("saveBookMark");
+    saveBookMark.setWindowTitle(tr("Save battle bookmark"));
+    saveBookMark.setNameFilter(tr("Battle bookmark files (*.battlebookmark);;All files (*.*)"));
+    saveBookMark.setDefaultSuffix("battlebookmark");
+    saveBookMark.setAcceptMode(QFileDialog::AcceptSave);
+    saveBookMark.setFileMode(QFileDialog::AnyFile);
+    saveBookMark.setViewMode(QFileDialog::Detail);
+    saveBookMark.setDirectory(m_game->getGameDirectory().c_str());
+
+    if (!saveBookMark.exec())
+        return;
+
+    QString filename = saveBookMark.selectedFiles().first();
+
+    std::ofstream ofs(filename.toAscii().data(), std::ios_base::binary);
+    MoMBookmark bookmark(m_game.data());
+    if (bookmark.save(ofs))
+    {
+        QMessageBox::information(this, "Save battle bookmark", "Saved bookmark in '" + filename + "'");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Save battle bookmark", "Failed to save correctly in '" + filename + "'");
+    }
+}
+
+void MoM::DialogMap::on_pushButton_RestoreBookmark_clicked()
+{
+    if ((0 == m_game) || (0 == m_game->getDataSegment()))
+        return;
+
+    QFileDialog restoreBookMark;
+
+    restoreBookMark.setObjectName("restoreBookMark");
+    restoreBookMark.setWindowTitle(tr("Restore battle bookmark"));
+    restoreBookMark.setNameFilter(tr("Battle bookmark files (*.battlebookmark);;All files (*.*)"));
+    restoreBookMark.setAcceptMode(QFileDialog::AcceptOpen);
+    restoreBookMark.setFileMode(QFileDialog::ExistingFile);
+    restoreBookMark.setViewMode(QFileDialog::Detail);
+
+    if (!restoreBookMark.exec())
+        return;
+
+    QString filename = restoreBookMark.selectedFiles().first();
+
+    std::ifstream ifs(filename.toAscii().data(), std::ios_base::binary);
+    MoMBookmark bookmark(m_game.data());
+    if (bookmark.restore(ifs))
+    {
+        QMessageBox::information(this, "Restore battle bookmark", "Restored bookmark from '" + filename + "'");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Restore battle bookmark", "Failed to restore from '" + filename + "'");
+    }
 }

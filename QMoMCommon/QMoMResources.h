@@ -15,6 +15,7 @@
 #include <qimage.h>
 #include <qvector.h>
 
+#include "MoMLbxBase.h"
 #include "MoMTemplate.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
@@ -117,6 +118,7 @@ public:
 public:
     static const QFont g_FontSmall;
     static const QFont g_Font;
+    static const QFont g_FontFixed;
 
 private:
     void changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const;

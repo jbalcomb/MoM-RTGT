@@ -38,6 +38,8 @@ std::string dirFromFilepath(const std::string filepath);
 // \retval the index of the needle in the haystack otherwise
 size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>& haystack);
 
+std::string formatBufferAsHex(const std::vector<uint8_t>& buffer);
+
 template< typename E >
 inline E inc(E& e)
 {
@@ -51,6 +53,12 @@ template< typename E, typename Max >
 inline bool inRange(const E& e, const Max& m)
 {
     return (static_cast<unsigned>(e) < static_cast<unsigned>(m));
+}
+
+template< typename T >
+inline bool inRange(const T& t, const T& lo, const T& hi)
+{
+    return ((t >= lo) && (t <= hi));
 }
 
 std::string lowercase(const std::string& str);
@@ -83,6 +91,14 @@ std::string replaceUnderscoresBySpaces(const std::string& str);
 
 std::string replaceStrInStr(const std::string& str, const std::string& findStr, const std::string& replaceStr);
 
+template< typename E >
+inline E succ(const E& e)
+{
+    unsigned u = (unsigned)e;
+    u++;
+    return (E)u;
+}
+
 template< typename T >
 inline int toInt(const T& t)
 {
@@ -101,14 +117,6 @@ template< typename T >
 inline unsigned toUInt(const T& t)
 {
     return static_cast<unsigned>(t);
-}
-
-template< typename E >
-inline E succ(const E& e)
-{
-    unsigned u = (unsigned)e;
-    u++;
-    return (E)u;
 }
 
 /// \brief Class to set a flag to true while it's in scope.

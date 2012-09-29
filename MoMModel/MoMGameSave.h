@@ -171,7 +171,7 @@ protected:
             return 0;
         return &m_SaveGame->m_Arcanus_Exploration_Row[0].m_Explored[0];
     }
-    virtual uint8_t* getTerrain_LandMassID()
+    virtual int8_t* getTerrain_LandMassID()
     {
         if (0 == m_SaveGame.get())
             return 0;

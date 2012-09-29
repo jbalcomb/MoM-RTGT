@@ -114,7 +114,7 @@ private:
     virtual eTerrainBonusDeposit* getTerrain_Bonuses();
     virtual Terrain_Changes* getTerrain_Changes();
     virtual uint8_t* getTerrain_Explored();
-    virtual uint8_t* getTerrain_LandMassID();
+    virtual int8_t* getTerrain_LandMassID();
     // TODO: Weird. It appears that the terrain-movements are all zero in memory.
     //       Presumably they are swapped out or something.
     //       Either way, we can't do anything with it.

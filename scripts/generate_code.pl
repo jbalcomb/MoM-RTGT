@@ -379,14 +379,14 @@ sub generate_Qt_code
     print "#include <iostream>\n";
     print "\n";
     print "#include \"$INPUTFILE\"\n";
-    print "#include \"QMoMTreeItem.h\"\n";
+    print "#include \"QMoMTreeItemModel.h\"\n";
     print "\n";
     print "namespace MoM {\n";
     print "\n";
    
     foreach my $classname (sort keys %gStructUnions)
     {
-        print "QMoMTreeItemBase* constructTreeItem($classname* rhs, const QString& context);\n";
+        print "QMoMTreeItemModelBase* constructTreeItem($classname* rhs, const QString& context);\n";
     }
     
     print "\n";
@@ -424,9 +424,9 @@ sub generate_Qt_code
     {
         my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
         
-        print "QMoMTreeItemBase* constructTreeItem($classname* rhs, const QString& context)\n";
+        print "QMoMTreeItemModelBase* constructTreeItem($classname* rhs, const QString& context)\n";
         print "{\n";
-        print "    QMoMTreeItemBase* ptree = new QMoMTreeItemSubtree<$classname>(rhs, context);\n";
+        print "    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<$classname>(rhs, context);\n";
         print "    if (0 == rhs)\n";
         print "        return ptree;\n";
         print "\n";
@@ -447,17 +447,17 @@ sub generate_Qt_code
             $cast = "(int)" if $type eq "int8_t";
             if (defined $range and $type eq "char")
             {
-                print "    ptree->appendChild(\"${name}\", new QMoMTreeItem<char[$range]>(rhs->${name}));\n";
+                print "    ptree->appendChild(\"${name}\", new QMoMTreeItemModel<char[$range]>(rhs->${name}));\n";
             }
             elsif (defined $range)
             {
                 my $psubtree = "ptree${name}";
-                print qq#    QMoMTreeItemBase* $psubtree = ptree;\n#;
+                print qq#    QMoMTreeItemModelBase* $psubtree = ptree;\n#;
                 if (1 * @{$gStructUnions{$classname}{'datamembers'}} > 2)
                 {
                     print qq#    if ($range > 3)\n#;
                     print qq#    {\n#;
-                    print qq#        $psubtree = new QMoMTreeItemBase("${name}");\n#;
+                    print qq#        $psubtree = new QMoMTreeItemModelBase("${name}");\n#;
                     print qq#        ptree->appendTree($psubtree, "");\n#;
                     print qq#    }\n#;
                 }
@@ -468,7 +468,7 @@ sub generate_Qt_code
                 print qq#          oss << "${name}\[" << i << "]";\n#;
                 if ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
                 {
-                    print qq#          $psubtree->appendChild(oss.str().c_str(), new QMoMTreeItem<$type>(&rhs->${name}\[i]));\n#;
+                    print qq#          $psubtree->appendChild(oss.str().c_str(), new QMoMTreeItemModel<$type>(&rhs->${name}\[i]));\n#;
                 }
                 else
                 {
@@ -483,26 +483,26 @@ sub generate_Qt_code
                 print qq#    memset(&mask${name}, '\\0', sizeof(mask${name}));\n#;
                 print qq#    mask${name}.${name} = $max_value;\n#;
                 print qq#    if (1 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
                 print qq#    else if (2 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
                 print qq#    else\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
             }
             elsif (exists $gEnums{"${type}"} and exists $gEnums{"${type}140m"})
             {
-                print qq#    if (QMoMTreeItemBase::game()->getMoMVersion() >= std::string("v1.40m"))\n#;
+                print qq#    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<${type}140m>((${type}140m*)&rhs->${name}));\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}140m>((${type}140m*)&rhs->${name}));\n#;
                 print qq#    }\n#;
                 print qq#    else\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItem<${type}>(&rhs->${name}));\n#;
+                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}>(&rhs->${name}));\n#;
                 print qq#    }\n#;
             }
             elsif ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
             {
-                print qq#    ptree->appendChild("${name}", new QMoMTreeItem<$type>(&rhs->${name}));\n#;
+                print qq#    ptree->appendChild("${name}", new QMoMTreeItemModel<$type>(&rhs->${name}));\n#;
             }
             else
             {

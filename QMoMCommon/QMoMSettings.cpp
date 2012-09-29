@@ -72,66 +72,68 @@ void QMoMSettings::writeSettingsControl(QWidget *control)
 
 void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
 {
-    QVariant value = settings.value(object->objectName());
-
-    // Do not execute settings that could not be read - keep the dialog default instead
-    if (value.isNull())
-        return;
+    QVariant value;
+    if (!object->objectName().isEmpty())
+    {
+        value = settings.value(object->objectName());
+    }
 
     QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
-    if (0 != checkbox)
-    {
-        checkbox->setChecked(value.toBool());
-    }
     QComboBox* combobox = dynamic_cast<QComboBox*>(object);
-    if (0 != combobox)
-    {
-        combobox->setCurrentIndex(value.toInt());
-    }
     QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
-    if (0 != filedialog)
-    {
-        qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
-        filedialog->setDirectory(value.toString());
-        // Do not recurse
-        return;
-    }
     QSlider* slider = dynamic_cast<QSlider*>(object);
-    if (0 != slider)
-    {
-        slider->setValue(value.toInt());
-    }
     QSplitter* splitter = dynamic_cast<QSplitter*>(object);
-    if (0 != splitter)
-    {
-        splitter->restoreState(value.toByteArray());
-    }
     QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
-    if (0 != tablewidget)
-    {
-        QStringList columns = value.toString().split(",");
-        for (int i = 0; (i < tablewidget->columnCount()) && (i < columns.count()); ++i)
-        {
-            tablewidget->setColumnWidth(i, columns.at(i).toInt());
-        }
-        // Do not recurse
-        return;
-    }
     QTreeWidget* treewidget = dynamic_cast<QTreeWidget*>(object);
-    if (0 != treewidget)
+
+    if (value.isValid())
     {
-        QStringList columns = value.toString().split(",");
-        for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
+        if (0 != checkbox)
         {
-            treewidget->setColumnWidth(i, columns.at(i).toInt());
+            checkbox->setChecked(value.toBool());
         }
-        // Do not recurse
-        return;
+        if (0 != combobox)
+        {
+            combobox->setCurrentIndex(value.toInt());
+        }
+        if (0 != filedialog)
+        {
+            qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
+            filedialog->setDirectory(value.toString());
+        }
+        if (0 != slider)
+        {
+            slider->setValue(value.toInt());
+        }
+        if (0 != splitter)
+        {
+            splitter->restoreState(value.toByteArray());
+        }
+        if (0 != tablewidget)
+        {
+            QStringList columns = value.toString().split(",");
+            for (int i = 0; (i < tablewidget->columnCount()) && (i < columns.count()); ++i)
+            {
+                tablewidget->setColumnWidth(i, columns.at(i).toInt());
+            }
+        }
+        if (0 != treewidget)
+        {
+            QStringList columns = value.toString().split(",");
+            for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
+            {
+                treewidget->setColumnWidth(i, columns.at(i).toInt());
+            }
+        }
     }
 
-    foreach(QObject* child, object->children())
+    bool recurse = ((0 == filedialog) && (0 == tablewidget) && (0 == treewidget));
+    if (recurse)
     {
-        recurseRead(settings, child);
+        foreach(QObject* child, object->children())
+        {
+            recurseRead(settings, child);
+        }
     }
 }
 

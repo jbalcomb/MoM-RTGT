@@ -738,7 +738,7 @@ bool MoMController::validateConsistency()
                 if (-1 == itemNr)
                    continue;
 
-                if ((unsigned)itemNr >= gMAX_ITEMS)
+                if ((unsigned)itemNr >= gMAX_ITEMS_IN_GAME)
                 {
                     std::cout << "Hero " << unit->m_Unit_Type << " has item with index " << itemNr << " which is out-of-range for player " << wizardNr << std::endl;
                     ok = false;
@@ -756,7 +756,7 @@ bool MoMController::validateConsistency()
             if (-1 == itemNr)
                continue;
 
-            if ((unsigned)itemNr >= gMAX_ITEMS)
+            if ((unsigned)itemNr >= gMAX_ITEMS_IN_GAME)
             {
                 std::cout << "Wizard " << wizardNr << " has item with index " << itemNr << " which is out-of-range" << std::endl;
                 ok = false;

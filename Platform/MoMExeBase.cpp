@@ -24,11 +24,14 @@ MoMExeBase::MoMExeBase() :
     m_EXE_Header(0),
     m_EXE_Reloc(0),
     m_Load_Module(0),
+    m_RegularSegments(0),
     m_StubSegments(0),
     m_DataSegment(0),
     m_BorlandIdentifier(0),
     m_StackSegment(0),
     m_Overlays(0),
+    m_offsetRegularSegmentEntries(0),
+    m_nrRegularSegments(0),
     m_offsetStubSegmentEntries(0),
     m_nrStubSegments(0),
     m_firstStubNr(0)
@@ -44,6 +47,7 @@ void MoMExeBase::close() throw()
     m_EXE_Header = 0;
     m_EXE_Reloc = 0;
     m_Load_Module = 0;
+    m_RegularSegments = 0;
     m_StubSegments = 0;
     m_DataSegment = 0;
     m_BorlandIdentifier = 0;
@@ -131,6 +135,110 @@ bool MoMExeBase::convertOvlOffset_to_ExeOffset(size_t ovlNr, uint16_t ovlOffset,
     return true;
 }
 
+bool MoMExeBase::convertExeOffset_to_SegOffset(size_t exeOffset, size_t &segNr, uint16_t &segOffset) const
+{
+    segNr = 0;
+    segOffset = 0;
+
+    if (m_contents.empty())
+        return false;
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
+
+    for (size_t i = 0; i < m_nrRegularSegments; ++i)
+    {
+        size_t offsetSegment = (m_Load_Module - pContents) + m_RegularSegments[i].base * gPARAGRAPH_SIZE + m_RegularSegments[i].offset;
+        if ((exeOffset >= offsetSegment) && (exeOffset < offsetSegment + m_RegularSegments[i].size))
+        {
+            // Found: set output parameters and return true
+            segNr = i;
+            segOffset = exeOffset - offsetSegment + m_RegularSegments[i].offset;
+            return true;
+        }
+    }
+
+    // Not found: return false
+    return false;
+}
+
+bool MoMExeBase::convertSegOffset_to_ExeOffset(size_t segNr, uint16_t segOffset, size_t &exeOffset) const
+{
+    exeOffset = 0;
+
+    if (segNr >= m_nrRegularSegments)
+        return false;
+    if (m_contents.empty())
+        return false;
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
+
+    exeOffset = (m_Load_Module - pContents) + m_RegularSegments[segNr].base * gPARAGRAPH_SIZE + segOffset;
+
+    return true;
+}
+
+bool MoMExeBase::convertExeOffset_to_StubOffset(size_t exeOffset, size_t &stubNr, uint16_t &stubOffset) const
+{
+    stubNr = 0;
+    stubOffset = 0;
+
+    if (m_contents.empty())
+        return false;
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
+
+    for (size_t i = 0; i < m_nrStubSegments; ++i)
+    {
+        size_t offsetSegment = (m_Load_Module - pContents) + m_StubSegments[i].base * gPARAGRAPH_SIZE + m_StubSegments[i].offset;
+        if ((exeOffset >= offsetSegment) && (exeOffset < offsetSegment + m_StubSegments[i].size))
+        {
+            // Found: set output parameters and return true
+            stubNr = m_firstStubNr + i;
+            stubOffset = exeOffset - offsetSegment + m_StubSegments[i].offset;
+            return true;
+        }
+    }
+
+    // Not found: return false
+    return false;
+}
+
+bool MoMExeBase::convertStubOffset_to_ExeOffset(size_t stubNr, uint16_t stubOffset, size_t &exeOffset) const
+{
+    exeOffset = 0;
+
+    if (stubNr < m_firstStubNr)
+        return false;
+    size_t index = stubNr - m_firstStubNr;
+    if (index >= m_nrStubSegments)
+        return false;
+    if (m_contents.empty())
+        return false;
+    const uint8_t* pContents = (const uint8_t*)&m_contents[0];
+
+    exeOffset = (m_Load_Module - pContents) + m_StubSegments[index].base * gPARAGRAPH_SIZE + stubOffset;
+
+    return true;
+}
+
+uint8_t *MoMExeBase::getSegment(size_t segNr)
+{
+    if (0 == m_RegularSegments)
+        return 0;
+    if (segNr >= m_nrRegularSegments)
+        return 0;
+    uint8_t* ptr = m_Load_Module + (m_RegularSegments[segNr].base - m_RegularSegments[0].base) * gPARAGRAPH_SIZE - m_RegularSegments[segNr].offset;
+
+    return ptr;
+}
+
+BorlandStub *MoMExeBase::getStub(size_t stubNr)
+{
+    if (0 == m_StubSegments)
+        return 0;
+    if (stubNr >= m_nrStubSegments)
+        return 0;
+    BorlandStub* ptr = m_Stubs[stubNr];
+
+    return ptr;
+}
 
 uint8_t* MoMExeBase::getOverlay(size_t ovlNr)
 {
@@ -150,25 +258,6 @@ uint8_t* MoMExeBase::getOverlay(size_t ovlNr)
     // TODO: in range?
 
     return ptr;
-}
-
-void MoMExeBase::initializeStubs()
-{
-    if (m_contents.empty())
-        return;
-
-    uint8_t* pContents = (uint8_t*)&m_contents[0];
-
-    if (0 != m_offsetStubSegmentEntries)
-    {
-        m_StubSegments      = (BorlandSegmentEntry*)(pContents + m_offsetStubSegmentEntries);
-        m_Stubs.resize(m_nrStubSegments);
-        for (size_t i = 0; i < m_nrStubSegments; ++i)
-        {
-            // TODO: in range?
-            m_Stubs[i] = (BorlandStub*)(m_Load_Module + m_StubSegments[i].base * gPARAGRAPH_SIZE + m_StubSegments[i].offset);
-        }
-    }
 }
 
 bool MoMExeBase::load(const std::string& filename)
@@ -254,15 +343,6 @@ bool MoMExeBase::save(const std::string& filename)
     return true;
 }
 
-void MoMExeBase::setOverlayParameters(size_t offsetStubSegmentEntries, size_t nrStubSegments, size_t firstStubNr)
-{
-    m_offsetStubSegmentEntries = offsetStubSegmentEntries;
-    m_nrStubSegments = nrStubSegments;
-    m_firstStubNr = firstStubNr;
-
-    initializeStubs();
-}
-
 bool MoMExeBase::writeData(const void* ptr, const void* pNewValue, size_t size)
 {
     if (0 == getExeContents())
@@ -306,6 +386,54 @@ bool MoMExeBase::writeData(const void* ptr, const void* pNewValue, size_t size)
     }
 
     return true;
+}
+
+size_t MoMExeBase::getOffsetLoadModule() const
+{
+    if (m_contents.empty())
+        return 0;
+    return (m_Load_Module - &m_contents[0]);
+}
+
+size_t MoMExeBase::getOffsetDataSegment() const
+{
+    if (m_contents.empty())
+        return 0;
+    return (m_DataSegment - &m_contents[0]);
+}
+
+void MoMExeBase::setOverlayParameters(size_t offsetRegularSegmentEntries, size_t nrRegularSegments, size_t offsetStubSegmentEntries, size_t nrStubSegments, size_t firstStubNr)
+{
+    m_offsetRegularSegmentEntries = offsetRegularSegmentEntries;
+    m_nrRegularSegments = nrRegularSegments;
+    m_offsetStubSegmentEntries = offsetStubSegmentEntries;
+    m_nrStubSegments = nrStubSegments;
+    m_firstStubNr = firstStubNr;
+
+    initializeStubs();
+}
+
+void MoMExeBase::initializeStubs()
+{
+    if (m_contents.empty())
+        return;
+
+    uint8_t* pContents = (uint8_t*)&m_contents[0];
+
+    if (0 != m_offsetRegularSegmentEntries)
+    {
+        m_RegularSegments      = (BorlandSegmentEntry*)(pContents + m_offsetRegularSegmentEntries);
+    }
+    if (0 != m_offsetStubSegmentEntries)
+    {
+        m_StubSegments      = (BorlandSegmentEntry*)(pContents + m_offsetStubSegmentEntries);
+        m_Stubs.resize(m_nrStubSegments);
+        for (size_t i = 0; i < m_nrStubSegments; ++i)
+        {
+            // TODO: in range?
+            m_Stubs[i] = (BorlandStub*)(m_Load_Module + m_StubSegments[i].base * gPARAGRAPH_SIZE + m_StubSegments[i].offset);
+        }
+    }
 }
 
 }

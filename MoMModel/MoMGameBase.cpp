@@ -589,7 +589,92 @@ std::string MoMGameBase::getRaceName(eRace race)
 		// Replace underscores by spaces
         raceName = replaceUnderscoresBySpaces(raceName);
 	}
-	return raceName;
+    return raceName;
+}
+
+eRealm_Type MoMGameBase::getRealmRace(eRace race) const
+{
+    eRealm_Type value = REALM_None;
+    switch (race)
+    {
+    // Note: different order than eRealm_Type
+    case MoM::RACE_Nature:     value = REALM_Nature;    break;
+    case MoM::RACE_Sorcery:    value = REALM_Sorcery;   break;
+    case MoM::RACE_Chaos:      value = REALM_Chaos;     break;
+    case MoM::RACE_Life:       value = REALM_Life;      break;
+    case MoM::RACE_Death:      value = REALM_Death;     break;
+    case MoM::RACE_Arcane:     value = REALM_Arcane;    break;
+    default:                   value = REALM_None;      break;
+    }
+    return value;
+}
+
+eRealm_Type MoMGameBase::getRealmRangedType(eRanged_Type rangedType) const
+{
+    eRealm_Type value = REALM_None;
+    switch (rangedType)
+    {
+    case RANGED_None:
+    case RANGED_Rock:
+    case RANGED_Arrow:
+    case RANGED_Bullet:                     value = REALM_None;     break;
+
+    case RANGED_Nature_Magic1_Wind_Mage:
+    case RANGED_Nature_Magic2_Shamans:
+    case RANGED_Nature_Magic3_Sprites:
+    case RANGED_Nature_Magic4_Druid:        value = REALM_Nature;   break;
+
+    case RANGED_Sorcery_Magic_Illusionist:  value = REALM_Sorcery;  break;
+
+    case RANGED_Chaos_Magic1_Storm_Giant:   value = REALM_Chaos;    break;
+    case RANGED_Chaos_Magic2_Magician:      value = REALM_Chaos;    break;
+    case RANGED_Chaos_Magic3_Demon:         value = REALM_Chaos;    break;
+    case RANGED_Chaos_Magic4_Dark_Elves:    value = REALM_Chaos;    break;
+
+    case RANGED_Thrown_Weapons:             value = REALM_None;     break;
+
+    case RANGED_Fire_Breath:
+    case RANGED_Lightning_Breath:           value = REALM_Chaos;    break;
+
+    case RANGED_Stoning_Gaze:               value = REALM_Nature;   break;
+    case RANGED_Multiple_Gaze:              value = REALM_Chaos;    break;     // Doom gaze
+    case RANGED_Death_Gaze:                 value = REALM_Death;    break;
+
+    default:                                value = REALM_None;     break;
+    }
+    return value;
+}
+
+eRealm_Type MoMGameBase::getRealmSpecialAttack(eUnitAbility specialAttack) const
+{
+    eRealm_Type value = REALM_None;
+    switch (specialAttack)
+    {
+    case UNITABILITY_Poison_attack:         value = REALM_None;     break;
+
+    case UNITABILITY_Stoning_Touch:         value = REALM_Nature;   break;
+
+    case UNITABILITY_Illusionary_attack:    value = REALM_Sorcery;  break;
+
+    case UNITABILITY_Destruction:           value = REALM_Chaos;    break;
+
+    case UNITABILITY_Dispel_Evil:           value = REALM_Life;     break;
+
+    case UNITABILITY_Life_Stealing:
+    case UNITABILITY_Death_Touch:           value = REALM_Death;    break;
+
+    case UNITABILITY_Armor_Piercing:
+    case UNITABILITY_First_Strike:
+    case UNITABILITY_Automatic_Damage:
+    case UNITABILITY_No_effect05:
+    case UNITABILITY_Power_Drain:
+    case UNITABILITY_Ball_COMBAT:
+    case UNITABILITY_No_effect03_COMBAT:
+    case UNITABILITY_Eldritch_Weapon_COMBAT:
+    case UNITABILITY_Warp_Lightning_COMBAT:
+    default:                                value = REALM_None;     break;
+    }
+    return value;
 }
 
 }

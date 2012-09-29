@@ -47,7 +47,6 @@ HEADERS += \
 	../../QMoMCommon/QMoMSettings.h \
 	../../QMoMCommon/QMoMSharedPointers.h \
 	../../QMoMCommon/QMoMTreeCustomExtensions.h \
-	../../QMoMCommon/QMoMTreeItem.h \
 	../../QMoMCommon/QMoMUnitTile.h \
 	../../QMoMCommon/QMoMUtility.h \
 	../../QMoMCommon/unitmodel.h \
@@ -63,7 +62,10 @@ HEADERS += \
 	../../QMoMDialogs/dialogtools.h \
 	../../Utility/MoMUtility.h \
 	../../Utility/TeeRedirecter.h \
-    ../../QMoMCommon/QMoMTableItem.h
+    ../../QMoMCommon/QMoMTableItem.h \
+    ../../QMoMCommon/QMoMTreeItemModel.h \
+    ../../QMoMCommon/QMoMTreeItemWidget.h \
+    ../../MoMModel/MoMFli.h
 
 SOURCES += \
 	../../Applications/MoMTweaker/mainwindow.cpp \
@@ -92,7 +94,6 @@ SOURCES += \
 	../../QMoMCommon/QMoMResources.cpp \
 	../../QMoMCommon/QMoMSettings.cpp \
 	../../QMoMCommon/QMoMTreeCustomExtensions.cpp \
-	../../QMoMCommon/QMoMTreeItem.cpp \
 	../../QMoMCommon/QMoMUnitTile.cpp \
 	../../QMoMCommon/QMoMUtility.cpp \
 	../../QMoMCommon/unitmodel.cpp \
@@ -106,7 +107,10 @@ SOURCES += \
 	../../QMoMDialogs/dialogtables.cpp \
 	../../QMoMDialogs/dialogtools.cpp \
 	../../Utility/MoMUtility.cpp \ 
-    ../../QMoMCommon/QMoMTableItem.cpp
+    ../../QMoMCommon/QMoMTableItem.cpp \
+    ../../QMoMCommon/QMoMTreeItemModel.cpp \
+    ../../QMoMCommon/QMoMTreeItemWidget.cpp \
+    ../../MoMModel/MoMFli.cpp
 
 FORMS += \
 	../../Applications/MoMTweaker/mainwindow.ui \

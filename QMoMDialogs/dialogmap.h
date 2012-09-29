@@ -43,6 +43,8 @@ private:
     void addTerrainSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
     void addUnitSubtree(class QTreeWidgetItem* treeWidgetItem, Unit* unit);
 
+    void updateGraying();
+
 private:
     QMoMGamePtr m_game;
 
@@ -65,6 +67,8 @@ private slots:
     void slot_tileDragged(const MoM::MoMLocation& locFrom, const MoM::MoMLocation& locTo);
     void slot_tileSelected(const MoM::MoMLocation& loc);
     void slot_timerActiveUnit();
+    void on_pushButton_SaveBookmark_clicked();
+    void on_pushButton_RestoreBookmark_clicked();
 };
 
 }

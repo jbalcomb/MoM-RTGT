@@ -92,7 +92,9 @@ enum eBattleEnchantment
 enum eBattleUnitActive ENUMSIZE8
 {
     BATTLEUNITACTIVE_alive = 0,
+    BATTLEUNITACTIVE_recalled = 1,
     BATTLEUNITACTIVE_fleeing = 2,
+    BATTLEUNITACTIVE_not_involved = 3,      // floating island, non-flying ship
     BATTLEUNITACTIVE_dead = 4,
     BATTLEUNITACTIVE_undeaded = 5,
     BATTLEUNITACTIVE_removed = 6,           // stoned, destroyed, dispelled, cracks call, combat summoning
@@ -106,6 +108,7 @@ enum eBattleUnitTactic ENUMSIZE16
     TACTIC_ready = 0,
 
     TACTIC_done = 4,
+    TACTIC_wait = 5,
 
     TACTIC_melee = 100,
     TACTIC_shoot = 101,
@@ -113,12 +116,14 @@ enum eBattleUnitTactic ENUMSIZE16
     TACTIC_unclear_103 = 103,
     TACTIC_doom_bolt = 104,
     TACTIC_fireball = 105,
-    TACTIC_healing_GUESS106 = 106,
-    TACTIC_cast_spell_107 = 107,
-    TACTIC_cast_spell_108 = 108,
+    TACTIC_healing = 106,
+    TACTIC_cast_item_spell = 107,
+    TACTIC_cast_spell = 108,
     TACTIC_summon_demon = 109,
+    TACTIC_web = 110,
 
     TACTIC_flee_150 = 150,
+    TACTIC_unset_333 = 333,
 
     eBattleUnitTactic_MAX,
     eBattleUnitTactic_SIZE__ = 0xFFFF
@@ -1615,10 +1620,13 @@ enum ePlayer ENUMSIZE8
 enum ePlane ENUMSIZE8
 {
     PLANE_Dismissed_Deceased = 0xFF,
+    PLANE_Limbo = 9,    // To become undead
+
     PLANE_Arcanum = 0,
     PLANE_Myrror = 1,
-    PLANE_Limbo = 9,    // To become undead
+
     ePlane_MAX,
+    ePlane__SIZE__ = 0xFF
 };
 
 enum ePortrait ENUMSIZE8
@@ -1638,6 +1646,7 @@ enum ePortrait ENUMSIZE8
     PORTRAIT_Tlaloc = 12,
     PORTRAIT_Kali = 13,
     PORTRAIT_Custom = 14,
+
     ePortrait_MAX,
     ePortrait_SIZE__ = 0xFF
 };
@@ -1868,16 +1877,12 @@ enum eRandomPickType ENUMSIZE16 {
 enum eRanged_Type ENUMSIZE8 {
     RANGED_None = 0xFF,
 
-    RANGED_Unk0 = 0,
-
     // 10-19 Rocks
     RANGED_Rock = 10,
-    RANGED_Unk11 = 11,
 
     // 20-29 Missiles
     RANGED_Arrow = 20,
     RANGED_Bullet = 21,                     // Slingers
-    RANGED_Unk22 = 22,
 
     // 30-39 Magic ranged attack
     RANGED_Chaos_Magic1_Storm_Giant = 30,   // Warlock, Chaos Warrior, Storm Giant
@@ -1896,6 +1901,7 @@ enum eRanged_Type ENUMSIZE8 {
     RANGED_Lightning_Breath = 102,          // (Chaos)  Sky_Drake
     RANGED_Stoning_Gaze = 103,              // (Nature) Basilisk, Gorgons (resistance modifier in byte 17)
     RANGED_Multiple_Gaze = 104,             // (Chaos)  Chaos Spawn
+                                            //          This is actually 3 gazes, including stoning and death
     RANGED_Death_Gaze = 105,                // (Death)  Night stalker (resistance modifier in byte 17)
 
     eRanged_Type_MAX
@@ -1912,12 +1918,15 @@ enum eRarity
 
 enum eRealm_Type ENUMSIZE8
 {
+    REALM_None = 0xFF,
+
     REALM_Nature = 0,
     REALM_Sorcery = 1,
     REALM_Chaos = 2,
     REALM_Life = 3,
     REALM_Death = 4,
     REALM_Arcane = 5,
+
     eRealm_Type_MAX
 };
 
@@ -2887,18 +2896,19 @@ enum eUnit_Status8 ENUMSIZE8
                                              //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
     UNITSTATUS8_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
                                              //      the SAVE game does not record if we are traversing UP or DOWN the units!
-                                             //   ??=purifying
     UNITSTATUS8_unk6 = 6, 
-    UNITSTATUS8_meld_GUESS = 7, 
-    UNITSTATUS8_build_GUESS = 8, 
-    UNITSTATUS8_seek_transport_GUESS = 9, 
-    UNITSTATUS8_unk10 = 10, 
-    UNITSTATUS8_unk11 = 11, 
+    UNITSTATUS8_unk7 = 7,
+    UNITSTATUS8_purify = 8,
+    UNITSTATUS8_meld = 9,
+    UNITSTATUS8_settle = 10,
+    UNITSTATUS8_seek_transport = 11,
     UNITSTATUS8_unk12 = 12, 
     UNITSTATUS8_unk13 = 13, 
     UNITSTATUS8_unk14 = 14, 
     UNITSTATUS8_unk15 = 15, 
     UNITSTATUS8_move = 16,                      
+
+    UNITSTATUS8_finished_purifying = 111,
 
     eUnit_Status8_MAX,
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
@@ -3281,7 +3291,8 @@ static const unsigned gMAX_FIGURES_IN_UNIT = 8;
 static const unsigned gMAX_HERO_TYPES = 35;
 static const unsigned gMAX_HIRED_HEROES = 6;
 static const unsigned gMAX_ITEMSLOTS = 3;
-static const unsigned gMAX_ITEMS = 138;
+static const unsigned gMAX_ITEMS_IN_GAME = 128;
+static const unsigned gMAX_ITEMS_VALID = 138;
 static const unsigned gMAX_MAP_COLS = 60;
 static const unsigned gMAX_MAP_ROWS = 40;
 static const unsigned gMAX_NODES = 30;
@@ -3290,7 +3301,6 @@ static const unsigned gMAX_RACES = 14;
 static const unsigned gMAX_UNITS = 1009;
 static const unsigned gMAX_VALID_WIZARDS = 5;
 static const unsigned gMAX_WIZARD_RECORDS = 6;
-
 
 //
 // STRUCTS / UNIONS
@@ -3335,13 +3345,13 @@ typedef struct PACKED_STRUCT // Building_Data
     eYesNo16            m_Produces_Veterans;    // 1C
     eYesNo16            m_Produces_Magic_Weapons;// 1E
     int16_t             m_Upkeep_yield;         // 20
-    uint16_t            m_AI_trade_goods_housing;// 22
-    uint16_t            m_Zero_24;              // 24
-    uint16_t            m_Zero_26;              // 26
-    uint16_t            m_AI_Religious;         // 28
-    uint16_t            m_AI_Research;          // 2A
-    uint16_t            m_Building_cost;        // 2C
-    uint16_t            m_Zero_2E;              // 2E
+    int16_t             m_AI_trade_goods_housing;// 22
+    int16_t             m_Zero_24;              // 24
+    int16_t             m_Zero_26;              // 26
+    int16_t             m_AI_Religious;         // 28
+    int16_t             m_AI_Research;          // 2A
+    int16_t             m_Building_cost;        // 2C
+    int16_t             m_Zero_2E;              // 2E
     int16_t             m_Animation_related;    // 30
     eBuildingCategory   m_Building_category;    // 32
                                                 // SIZE 34
@@ -3806,7 +3816,7 @@ typedef struct PACKED_STRUCT // MapRow_Exploration
 
 typedef struct PACKED_STRUCT // MapRow_LandMassID
 {
-    uint8_t         m_LandMassID[60];
+    int8_t          m_LandMassID[60];
 } MapRow_LandMassID; // <read=read_MapRow_LandMassID>;
 
 
@@ -3907,13 +3917,13 @@ typedef struct PACKED_STRUCT // Tower_Node_Lair
 
 typedef struct PACKED_STRUCT // Node_Attr
 {
-    uint8_t         m_XPos;             // 0
-    uint8_t         m_YPos;             // 01
+    int8_t          m_XPos;             // 0
+    int8_t          m_YPos;             // 01
     ePlane          m_Plane;            // 02
     ePlayer         m_Owner;            // 03    // FF = Not owned by a player
-    uint8_t         m_Power_Node;       // 04
-    uint8_t         m_XPos_Mana[20];    // 05 
-    uint8_t         m_YPos_Mana[20];    // 19
+    int8_t          m_Power_Node;       // 04
+    int8_t          m_XPos_Mana[20];    // 05
+    int8_t          m_YPos_Mana[20];    // 19
     eNode_Type      m_Node_Type;        // 2D
     uint8_t         m_Status;           // 2E    // 01=warped, 02=guardian spirit, 03=both
     uint8_t         m_Unk_2F;           // 2F
@@ -3922,16 +3932,16 @@ typedef struct PACKED_STRUCT // Node_Attr
 
 typedef struct PACKED_STRUCT // Fortress
 {
-    uint8_t         m_XPos;
-    uint8_t         m_YPos;
+    int8_t          m_XPos;
+    int8_t          m_YPos;
     ePlane          m_Plane;
-    uint8_t         m_Active;           // 00 or 01=non-Eliminated or FF??=not-in-play??
+    int8_t          m_Active;           // 00 or 01=non-Eliminated or FF??=not-in-play??
 } Fortress;
 
 typedef struct PACKED_STRUCT // Tower_Attr
 {
-    uint8_t         m_XPos;
-    uint8_t         m_YPos;
+    int8_t          m_XPos;
+    int8_t          m_YPos;
     uint8_t         m_Closed;           // 00=opened, FF=closed, sealed??
     uint8_t         m_UNK;              // unused ??
 } Tower_Attr;
@@ -4290,11 +4300,11 @@ typedef struct PACKED_STRUCT // Wizard
     uint8_t         m_Zero01;
     eSpell16        m_Research_Spell_candidates[8];     // 034
     uint8_t         m_Unk044[4];                        // 044
-    uint16_t        m_Garrison_average_strength;        // 048  // Average cost of units, units cheaper than half are dismissed
+    int16_t         m_Garrison_average_strength;        // 048  // Average cost of units, units cheaper than half are dismissed
     uint16_t        m_Unk04A;                           // 04A
-    uint16_t        m_Skill_Left_in_combat;             // 04C
-    uint16_t        m_Cost_Left_of_Spell_being_cast;    // 04E
-    uint16_t        m_Initial_Cost_of_Spell_being_cast; // 050
+    int16_t         m_Skill_Left_in_combat;             // 04C
+    int16_t         m_Cost_Left_of_Spell_being_cast;    // 04E
+    int16_t         m_Initial_Cost_of_Spell_being_cast; // 050
     eSpell16        m_Spell_being_cast;                 // 052
     int16_t         m_Unused_Casting_Skill_available_this_turn;     // 054
     int16_t         m_Nominal_Casting_Skill_available_this_turn;    // 056
@@ -4349,11 +4359,11 @@ typedef struct PACKED_STRUCT // Wizard
     uint16_t        m_Bitmask_banished_wizards;         // 354
     int16_t         m_Gold_Coins;                       // 356
     int16_t         m_Unk358;                           // 358
-    uint16_t        m_Astrologer_Magic_Power;           // 35A (0-200)
-    uint16_t        m_Astrologer_Spell_Research;        // 35C (0-200)
-    uint16_t        m_Astrologer_Army_Strength;         // 35E (0-200)
-    uint16_t        m_Astrologer_Power_GUESS;           // 360
-    uint8_t         m_Historian[288];                   // 362
+    int16_t         m_Astrologer_Magic_Power;           // 35A (0-200)
+    int16_t         m_Astrologer_Spell_Research;        // 35C (0-200)
+    int16_t         m_Astrologer_Army_Strength;         // 35E (0-200)
+    int16_t         m_Astrologer_Power_GUESS;           // 360
+    int8_t          m_Historian[288];                   // 362
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
@@ -4386,9 +4396,9 @@ typedef struct PACKED_STRUCT // City
     ePlayer         m_Owner;                    // 12 (0-4)
     eCity_Size      m_Size;                     // 13 (0-5; see below)
     uint8_t         m_Population;               // 14 (in thousands) (0-25)
-    uint8_t         m_Number_of_farmers_allocated;  // 15 (should be <= population)
+    int8_t          m_Number_of_farmers_allocated;  // 15 (should be <= population)
     uint8_t         m_UNK01a[2];                // 16-17
-    uint8_t         m_PopulationDekaPop;        // 18 (in tenths) (Outpost is 1-9, else 0-99)
+    int8_t          m_PopulationDekaPop;        // 18 (in tenths) (Outpost is 1-9, else 0-99)
     uint8_t         m_UNK01b;                   // 19
     uint8_t         m_Player_as_bitmask_GUESS;  // 1A
     uint8_t         m_UNK01c;                   // 1B
@@ -4397,13 +4407,13 @@ typedef struct PACKED_STRUCT // City
     unionBuilding_Status     m_Building_Status; // 1F-42
     City_Enchantments   m_City_Enchantments;    // 43-5B (0 = not present, 1-5 = owner + 1)
     eYesNo8         m_Nightshade;               // 5C (0 or 1)
-    uint8_t         m_Hammers;                  // 5D
-    uint16_t        m_HammersAccumulated;       // 5E-5F
-    uint8_t         m_Coins;                    // 60
-    uint8_t         m_Maintenance;              // 61
-    uint8_t         m_Mana_cr;                  // 62
-    uint8_t         m_Research;                 // 63
-    uint8_t         m_Food_Produced;            // 64
+    int8_t          m_Hammers;                  // 5D
+    int16_t         m_HammersAccumulated;       // 5E-5F
+    int8_t          m_Coins;                    // 60
+    int8_t          m_Maintenance;              // 61
+    int8_t          m_Mana_cr;                  // 62
+    int8_t          m_Research;                 // 63
+    int8_t          m_Food_Produced;            // 64
     int8_t          m_Road_Connection_GUESS;    // 65
     uint8_t         m_UNK03[12];                // 66-71
                                                 // SIZE 72
@@ -4439,11 +4449,11 @@ typedef struct PACKED_STRUCT // Unit
                                             //  (Units: 0-120; Heroes: 0-1000; Summon (other than Torin): 0)
     int8_t      m_Guess_Lifedrain_Damage;   // 10
     int8_t      m_Damage;                   // 11
-    uint8_t     m_Grouping;                 // 12
+    int8_t      m_Grouping;                 // 12 group=Me+Ra, +50 if transport, -1=invisible or dead, 0=active stack
     int8_t      m_Guess_Combat_Enchantment_Flag1; // 13
     int8_t      m_In_Tower_without_Seal;	// 14
     int8_t      m_Guess_Combat_Enchantment_Flag3; // 15
-    uint8_t     m_Scouting;                 // 16
+    int8_t      m_Scouting;                 // 16
     unionUnit_Weapon_Mutation   m_Weapon_Mutation;  // 17
     unionUnit_Enchantment       m_Unit_Enchantment; // 18-1B <format=hex>;
     int8_t      m_Road_Building_left_to_complete;   // 1C
@@ -4753,8 +4763,8 @@ typedef struct PACKED_STRUCT // Spell_Data
                                                 //          0,2,3,4=combat-or-overland,
                                                 //          5=spell-of-return
     int8_t          m_UNK01;                    // 19,   0x000400,   -1, 1);
-    uint16_t        m_Casting_cost;             // 1A,   0x10000400, -1, 2);
-    uint16_t        m_Research_cost;            // 1C,   0x10000400, -1, 2);
+    int16_t         m_Casting_cost;             // 1A,   0x10000400, -1, 2);
+    int16_t         m_Research_cost;            // 1C,   0x10000400, -1, 2);
     int16_t         m_Sound_effect_when_casting_spell;  // 1E,   0x10000400, -1, 2);
     uint8_t         m_Parameters[4];            // 20-23
 //    eUnit_Type      m_Unit_Summoned_or_Spell_Strength;            // 20,   0x000400,   -1, 1);
@@ -4798,7 +4808,7 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
                                                 // 1F  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;     // 20  Special attack flags (table 10)
                                                 // 21  Special attack flags (table 11)
-    uint8_t          m_Sound;                   // 22  Initialized only after starting the game
+    uint8_t         m_Sound;                    // 22  Initialized only after starting the game
     uint8_t         m_Zero04;                   // 23  00
                                                 // SIZE 24
 } Unit_Type_Data;
@@ -4808,10 +4818,10 @@ typedef struct PACKED_STRUCT // Battlefield
     eTerrainBattle  m_Terrain[462];             // 0        // Map is 22 rows by 11 columns, corresponding to 22 x 21 squares (lines of 21 bytes/words)
     uint8_t     m_TerrainGroupType[462];        // 039C     // 0=walkable, 1=rough, 2=walkable, 3=river, 4=sea
     uint8_t     m_Road[462];                    // 056A     // 0=no road, 81h=road, other=?
-    uint8_t     m_Movement_walking[462];        // 0738
-    uint8_t     m_Movement_merging_teleporting_fly[462];// 09D6
-    uint8_t     m_Movement_similar_to_walking[462];     // 0AD4
-    uint8_t     m_Movement_sailing[462];        // 0CA2
+    int8_t      m_Movement_walking[462];        // 0738
+    int8_t      m_Movement_merging_teleporting_fly[462];// 09D6
+    int8_t      m_Movement_similar_to_walking[462];     // 0AD4
+    int8_t      m_Movement_sailing[462];        // 0CA2
     uint16_t    m_Nr_tree_pics;                 // 0E70
     uint16_t    m_xpel_tree_pics[100];          // 0E72
     uint16_t    m_ypel_tree_pics[100];          // 0F3A
@@ -4820,15 +4830,12 @@ typedef struct PACKED_STRUCT // Battlefield
     uint16_t    m_xpel_rock_pics[100];          // 10CC
     uint16_t    m_ypel_rock_pics[100];          // 1194
     uint16_t    m_rock_pics[100];               // 125C
-    uint8_t field_11F8[462]; // 1324
+    uint8_t     m_Mud[462];                     // 1324     // 0=no mud, 1=mud, 2=?;  move->12
     eCentralStructure   m_Central_structure;    // 14F2
-    uint16_t field_14F4; // 14F4
-    uint16_t field_14F6; // 14F6
-    uint8_t field_14F8[30]; // 14F8
-    uint16_t field_1516; // 1516
-    uint8_t field_1518[30]; // 1518
-    uint16_t field_1536; // 1536
-    uint8_t field_1538[30]; // 1538
+    uint16_t    m_Nr_houses;                    // 14F4
+    uint16_t    m_xpos_houses[16];              // 14F6
+    uint16_t    m_ypos_houses[16];              // 1516
+    uint16_t    m_house_pics[16];               // 1536
     eYesNo16    m_City_Walls;                   // 1556     // 00=No City Walls, 01=City Walls
     uint16_t    m_Wall_present_4x4[16];         // 1558     // 00=No Wall, 01=Whole Wall, 02=Broken Wall
     eYesNo16    m_Wall_of_Fire;                 // 1578
@@ -4841,9 +4848,9 @@ typedef struct PACKED_STRUCT // Battlefield
 
 typedef struct PACKED_STRUCT // Battle_Figure
 {
-    uint16_t                m_xpel;             // 0
-    uint16_t                m_ypel;             // 02
-    uint16_t                m_Pic;              // 04
+    int16_t                 m_xpel;             // 0
+    int16_t                 m_ypel;             // 02
+    int16_t                 m_Pic;              // 04
     uint16_t                m_Unk_6_sound;      // 06
     uint16_t                m_Unk_8;            // 08
     uint16_t                m_Unk_A;            // 0A
@@ -4879,14 +4886,14 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_Building1Required_or_PortraitLbxIndex;// 0C  Normal units: buildings required (table 3), heroes portraitIndex
                                                             //     Others: note 5
     uint8_t                 m_Current_figures;              // 0D
-    uint8_t                 m_BattleUnitNr;                 // 0E
-    uint8_t                 m_UNK0F;                        // 0F  00
+    int8_t                  m_BattleUnitNr;                 // 0E
+    uint8_t                 m_Unk0F;                        // 0F  00
     uint8_t                 m_Hitpoints_per_Figure;         // 10  Hit points (hearts) per figure
     uint8_t                 m_Scouting;                     // 11  Scouting range
     uint8_t                 m_Transport_Capacity_GUESS;     // 12  Transport capacity (number of units carried)
     uint8_t                 m_Max_figures;                // 13  Number of figures in the unit
     uint8_t                 m_Construction;                 // 14  Construction capacity (road building)
-    uint8_t                 m_Gaze_Modifier;                // 15  Special attack or bonus strength
+    int8_t                  m_Gaze_Modifier;                // 15  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;               // 16  Movement flags (table 4)
     uint8_t                 m_Zero01;                       // 17  00
     unionImmunity_Flags     m_Immunity_Flags;               // 18  Immunity flags (table 5)
@@ -4908,8 +4915,8 @@ typedef struct PACKED_STRUCT // Battle_Unit
     unionAttack_Flags       m_Item_Attack_Flags;            // 2A-2B
     unionUnit_Enchantment   m_Flags2_UnitEnchantment;       // 2C-2F
     int16_t                 m_unitNr;                       // 30-31
-    uint8_t                 m_additional_life_per_figure;   // 32
-    uint8_t                 m_web_strength;                         // 33
+    int8_t                  m_additional_life_per_figure;   // 32
+    int8_t                  m_web_strength;                         // 33
     eBattleUnitActive       m_Active;                       // 34   Active (0=alive, 2=flee?, 4=dead, 5=undeaded, 6=removed)
     ePlayer                 m_Owner;                        // 35
     int8_t                  m_tracks_regular_damage;        // 36
@@ -4955,7 +4962,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_Lost_Ranged;                  // 6A
     uint8_t                 m_Lost_Defense;                 // 6B
     uint8_t                 m_Lost_Resistance;              // 6C
-    uint8_t                 m_UNUSED6D;                     // 6D db ?
+    uint8_t                 m_Unused6D;                     // 6D db ?
                                                             // SIZE 6E
 } Battle_Unit;
 
@@ -5788,6 +5795,16 @@ typedef struct PACKED_STRUCT // HelpLBXentry
                                                     // SIZE ?
 } HelpLBXentry;
 
+typedef struct PACKED_STRUCT // HlpEntryLbx
+{
+    uint16_t        lbxIndex;                       // 00
+    int16_t         left;                           // 02
+    int16_t         top;                            // 04
+    int16_t         right;                          // 06
+    int16_t         bottom;                         // 08
+                                                    // SIZE 0A
+} HlpEntryLbx;
+
 typedef struct PACKED_STRUCT // ItemDataLbx
 {
     Item        m_Item;                             // 00   Movement is in full moves instead of half moves
@@ -5795,6 +5812,27 @@ typedef struct PACKED_STRUCT // ItemDataLbx
     uint8_t     m_Unk_37;                           // 37
                                                     // SIZE 38
 } ItemDataLbx;
+
+typedef struct PACKED_STRUCT // LBX_ImageHeader
+{
+    uint16_t width;                 // 00
+    uint16_t height;                // 02
+    uint16_t compression;           // 04   0=RLE, 0xDE0A=uncompressed
+    uint16_t nframes;               // 06   0=uncompressed, 1+=RLE
+    uint16_t frameDelay;            // 08
+    uint16_t flags;                 // 0A
+    uint16_t reserved_0C;           // 0C
+    uint32_t paletteInfoOffset;     // 0E
+                                    // SIZE 12
+} MoMImageHeaderLbx;
+
+typedef struct PACKED_STRUCT // LBX_PaletteInfo
+{
+    uint16_t paletteOffset;         // 00
+    uint16_t firstPaletteColorIndex;// 02
+    uint16_t paletteColorCount;     // 04
+                                    // SIZE 6
+} MoMPaletteInfoLbx;
 
 }
 

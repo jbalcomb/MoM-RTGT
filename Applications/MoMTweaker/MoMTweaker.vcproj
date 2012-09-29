@@ -276,6 +276,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\MoMModel\MoMFli.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\MoMModel\MoMGameBase.cpp"
 				>
 			</File>
@@ -360,7 +364,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\QMoMCommon\QMoMTreeItem.cpp"
+				RelativePath="..\..\QMoMCommon\QMoMTreeItemModel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\QMoMCommon\QMoMTreeItemWidget.cpp"
 				>
 			</File>
 			<File
@@ -1616,10 +1624,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="attack.gif"
-				>
-			</File>
-			<File
 				RelativePath="Attack.gif"
 				>
 			</File>
@@ -1642,6 +1646,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="attack.gif"
+				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\heroes\aureus.gif"
@@ -1728,7 +1736,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\units\Barbarian.gif"
+				RelativePath="..\..\Resources\race\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1748,7 +1756,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\race\Barbarian.gif"
+				RelativePath="..\..\Resources\units\Barbarian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2312,15 +2320,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\units\Chaos"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Resources\abilities\Chaos"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\spells\Chaos"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Resources\units\Chaos"
 				>
 			</File>
 			<File
@@ -2736,11 +2744,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Creature"
+				RelativePath="Creature"
 				>
 			</File>
 			<File
-				RelativePath="Creature"
+				RelativePath="..\..\Resources\spells\Creature"
 				>
 			</File>
 			<File
@@ -2976,11 +2984,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Dispel"
+				RelativePath="..\..\Resources\spells\Dispel"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Dispel"
+				RelativePath="..\..\Resources\abilities\Dispel"
 				>
 			</File>
 			<File
@@ -3072,7 +3080,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\race\Draconian.gif"
+				RelativePath="..\..\Resources\units\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3092,7 +3100,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\units\Draconian.gif"
+				RelativePath="..\..\Resources\race\Draconian.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3528,11 +3536,11 @@
 				>
 			</File>
 			<File
-				RelativePath="First"
+				RelativePath="..\..\Resources\abilities\First"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\First"
+				RelativePath="First"
 				>
 			</File>
 			<File
@@ -3904,7 +3912,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Healer.gif"
+				RelativePath="..\..\Resources\units\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3924,7 +3932,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\units\Healer.gif"
+				RelativePath="..\..\Resources\abilities\Healer.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4360,7 +4368,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Immolation.gif"
+				RelativePath="..\..\Resources\abilities\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4380,7 +4388,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Immolation.gif"
+				RelativePath="..\..\Resources\spells\Immolation.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4430,7 +4438,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Invisibility.gif"
+				RelativePath="..\..\Resources\abilities\Invisibility.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4450,7 +4458,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Invisibility.gif"
+				RelativePath="..\..\Resources\spells\Invisibility.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -4594,10 +4602,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Knight.gif"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Resources\units\Knight.gif"
 				>
 				<FileConfiguration
@@ -4616,6 +4620,10 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="Knight.gif"
+				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\abilities\Land"
@@ -4962,6 +4970,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="Life.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Resources\images\Life.gif"
 				>
 				<FileConfiguration
@@ -4980,10 +4992,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Life.gif"
-				>
 			</File>
 			<File
 				RelativePath="Light.gif"
@@ -5166,15 +5174,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Magic"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Resources\abilities\Magic"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Magic Immunity.gif"
+				RelativePath="..\..\Resources\spells\Magic"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Resources\abilities\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -5194,7 +5202,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Magic Immunity.gif"
+				RelativePath="..\..\Resources\spells\Magic Immunity.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6046,11 +6054,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Power"
+				RelativePath="..\..\Resources\abilities\Power"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Power"
+				RelativePath="Power"
 				>
 			</File>
 			<File
@@ -6078,6 +6086,10 @@
 				>
 			</File>
 			<File
+				RelativePath="Prayer.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Resources\spells\Prayer.gif"
 				>
 				<FileConfiguration
@@ -6096,10 +6108,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Prayer.gif"
-				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\abilities\Prayermaster"
@@ -6274,6 +6282,10 @@
 				>
 			</File>
 			<File
+				RelativePath="Ranged.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Resources\images\Ranged.gif"
 				>
 				<FileConfiguration
@@ -6292,10 +6304,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Ranged.gif"
-				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\images\ranged_unknown.gif"
@@ -6402,7 +6410,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Regeneration.gif"
+				RelativePath="..\..\Resources\abilities\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6422,7 +6430,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Regeneration.gif"
+				RelativePath="..\..\Resources\spells\Regeneration.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6858,7 +6866,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Sage.gif"
+				RelativePath="..\..\Resources\units\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -6878,7 +6886,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\units\Sage.gif"
+				RelativePath="..\..\Resources\abilities\Sage.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -7978,7 +7986,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\images\thrown.gif"
+				RelativePath="..\..\Resources\abilities\Thrown.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -7998,7 +8006,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Thrown.gif"
+				RelativePath="..\..\Resources\images\thrown.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8282,6 +8290,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="Undead.gif"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Resources\abilities\Undead.gif"
 				>
 				<FileConfiguration
@@ -8300,10 +8312,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="Undead.gif"
-				>
 			</File>
 			<File
 				RelativePath="..\..\Resources\units\Unknown.gif"
@@ -8726,7 +8734,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Web.gif"
+				RelativePath="..\..\Resources\abilities\Web.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8746,7 +8754,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Web.gif"
+				RelativePath="..\..\Resources\spells\Web.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8818,7 +8826,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\abilities\Wind Walking.gif"
+				RelativePath="..\..\Resources\spells\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -8838,7 +8846,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\Resources\spells\Wind Walking.gif"
+				RelativePath="..\..\Resources\abilities\Wind Walking.gif"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

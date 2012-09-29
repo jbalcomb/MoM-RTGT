@@ -72,6 +72,7 @@ void DialogCalculatorAddress::update(const QWidget* originator)
     {
         bool ok = false;
         memOffset = ui->lineEdit_OffsetMem->text().toULong(&ok, 16);
+        convertMemtoExeOffset(memOffset, exeOffset);
     }
     if (originator == ui->lineEdit_OffsetDOS)
     {
@@ -367,17 +368,29 @@ void DialogCalculatorAddress::convertExetoIDAString(size_t exeOffset, QString& s
 
     const MoM::MoMExeBase* exeBase = getExeBase();
 
+    size_t segNr = 0;
+    uint16_t segOffset = 0;
+    size_t stubNr = 0;
+    uint16_t stubOffset = 0;
     size_t ovlNr = 0;
     uint16_t ovlOffset = 0;
     uint16_t dsegOffset = 0;
 
-    if ((0 != exeBase) && exeBase->convertExeOffset_to_OvlOffset(exeOffset, ovlNr, ovlOffset))
+    if ((0 != exeBase) && exeBase->convertExeOffset_to_SegOffset(exeOffset, segNr, segOffset))
     {
-        sIDAOffset = QString("ovr%0:%1").arg(ovlNr, 3, 10, QChar('0')).arg(ovlOffset, 4, 16, QChar('0'));
+        sIDAOffset = QString("seg%0:%1").arg(segNr, 3, 10, QChar('0')).arg(segOffset, 4, 16, QChar('0'));
+    }
+    else if ((0 != exeBase) && exeBase->convertExeOffset_to_StubOffset(exeOffset, stubNr, stubOffset))
+    {
+        sIDAOffset = QString("stub%0:%1").arg(stubNr, 3, 10, QChar('0')).arg(stubOffset, 4, 16, QChar('0'));
     }
     else if ((0 != exeBase) && exeBase->convertExeOffset_to_DsegOffset(exeOffset, dsegOffset))
     {
         sIDAOffset = QString("dseg:%0").arg(dsegOffset, 4, 16, QChar('0'));
+    }
+    else if ((0 != exeBase) && exeBase->convertExeOffset_to_OvlOffset(exeOffset, ovlNr, ovlOffset))
+    {
+        sIDAOffset = QString("ovr%0:%1").arg(ovlNr, 3, 10, QChar('0')).arg(ovlOffset, 4, 16, QChar('0'));
     }
     else
     {
@@ -396,6 +409,10 @@ void DialogCalculatorAddress::convertExetoMemOffset(size_t exeOffset, size_t& me
     {
         memOffset = (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment() + dsegOffset;
     }
+    else if ((0 != exeBase) && (0 != momProcess) && (exeOffset >= exeBase->getOffsetLoadModule()) && (exeOffset < exeBase->getOffsetDataSegment()))
+    {
+        memOffset = (size_t)momProcess->getBaseAddress() + momProcess->getOffsetCode() + (exeOffset - exeBase->getOffsetLoadModule());
+    }
 }
 
 void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, size_t& exeOffset)
@@ -405,9 +422,27 @@ void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, s
         return;
     MoM::MoMExeBase* exeBase = getExeBase();
 
+    unsigned segField = 0;
+    unsigned stubField = 0;
     unsigned ovrField = 0;
     unsigned offsetField = 0;
-    if (2 == sscanf(sIDAOffset.toAscii().data(), " ovr%u:%x", &ovrField, &offsetField))
+    if (2 == sscanf(sIDAOffset.toAscii().data(), " seg%u:%x", &segField, &offsetField))
+    {
+        size_t segNr = segField;
+        uint16_t segOffset = offsetField;
+        if ((0 != exeBase) && exeBase->convertSegOffset_to_ExeOffset(segNr, segOffset, exeOffset))
+        {
+        }
+    }
+    else if (2 == sscanf(sIDAOffset.toAscii().data(), " stub%u:%x", &stubField, &offsetField))
+    {
+        size_t stubNr = stubField;
+        uint16_t stubOffset = offsetField;
+        if ((0 != exeBase) && exeBase->convertStubOffset_to_ExeOffset(stubNr, stubOffset, exeOffset))
+        {
+        }
+    }
+    else if (2 == sscanf(sIDAOffset.toAscii().data(), " ovr%u:%x", &ovrField, &offsetField))
     {
         size_t ovlNr = ovrField;
         uint16_t ovlOffset = offsetField;
@@ -432,11 +467,12 @@ void DialogCalculatorAddress::convertMemtoExeOffset(size_t memOffset, size_t& ex
     MoM::MoMExeBase* exeBase = getExeBase();
     if ((0 != momProcess) && (0 != exeBase))
     {
-        if ((memOffset >= (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment())
+        if ((memOffset >= (size_t)momProcess->getBaseAddress() + momProcess->getOffsetCode())
                 && (memOffset < (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment() + 0xFFFF))
         {
-            uint16_t dsegOffset = (uint16_t)(memOffset - (size_t)momProcess->getBaseAddress() - momProcess->getOffsetDatasegment());
-            (void)exeBase->convertDsegOffset_to_ExeOffset(dsegOffset, exeOffset);
+//            uint16_t dsegOffset = (uint16_t)(memOffset - (size_t)momProcess->getBaseAddress() - momProcess->getOffsetDatasegment());
+//            (void)exeBase->convertDsegOffset_to_ExeOffset(dsegOffset, exeOffset);
+            exeOffset = exeBase->getOffsetLoadModule() + (memOffset - (size_t)momProcess->getBaseAddress() - momProcess->getOffsetCode());
         }
     }
 }

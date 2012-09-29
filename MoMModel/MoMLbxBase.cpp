@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string.h>
 
+#include "MoMUtility.h"
+
 #include "MoMLbxBase.h"
 
 namespace MoM
@@ -75,6 +77,57 @@ size_t MoMLbxBase::getNrRecords() const
     return m_LBX_Header->n;
 }
 
+MoMLbxBase::eRecordType MoMLbxBase::getRecordType(size_t recordNr) const
+{
+    size_t size = getRecordSize(recordNr);
+
+    if (size == 0)
+    {
+        return TYPE_empty;
+    }
+    if (size < 4)
+    {
+        return TYPE_custom;
+    }
+    if (getNrSubRecords(recordNr) > 0)
+    {
+        return TYPE_array;
+    }
+
+    const uint8_t* data = getRecord(recordNr);
+    assert(0 != data);
+    uint16_t signature1 = *(uint16_t*)&data[0];
+    uint16_t signature2 = *(uint16_t*)&data[2];
+    if ((0xDEAF == signature1) && (1 == signature2))
+    {
+        return TYPE_midi;
+    }
+    if ((0xDEAF == signature1) && (2 == signature2))
+    {
+        return TYPE_wave;
+    }
+
+    std::string lowercase_filename = lowercase(m_filename);
+    if (std::string::npos != lowercase_filename.find("fonts.lbx"))
+    {
+        if (recordNr == 0)
+        {
+            return TYPE_font;
+        }
+        if (recordNr >= 2)
+        {
+            return TYPE_palette;
+        }
+    }
+
+    if (inRange((int)signature1, 3, 320) && inRange((int)signature2, 3, 200))
+    {
+        return TYPE_images;
+    }
+
+    return TYPE_custom;
+}
+
 uint8_t* MoMLbxBase::getRecord(size_t recordNr)
 {
     uint8_t* ptr = 0;
@@ -113,6 +166,33 @@ size_t MoMLbxBase::getRecordSize(size_t recordNr) const
     size_t size = m_DataOffsets[recordNr + 1] - m_DataOffsets[recordNr];
 
     return size;
+}
+
+bool MoMLbxBase::getRecord(size_t recordNr, std::vector<uint8_t> &recordData) const
+{
+    recordData.clear();
+    const uint8_t* data = getRecord(recordNr);
+    if (0 != data)
+    {
+        size_t size = getRecordSize(recordNr);
+        recordData.resize(size);
+        memcpy(&recordData[0], data, size);
+    }
+    return (0 != data);
+}
+
+size_t MoMLbxBase::getNrAnnotations() const
+{
+    if (m_contents.empty())
+        return 0;
+    return ((Annotation*)m_Data - m_Annotations);
+}
+
+const MoMLbxBase::Annotation *MoMLbxBase::getAnnotation(size_t recordNr) const
+{
+    if (recordNr >= getNrAnnotations())
+        return 0;
+    return &m_Annotations[recordNr];
 }
 
 size_t MoMLbxBase::getNrSubRecords(size_t recordNr) const

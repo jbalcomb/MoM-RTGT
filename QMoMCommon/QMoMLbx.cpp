@@ -14,6 +14,77 @@
 namespace MoM
 {
 
+// From: http://masteroforion2.blogspot.nl/
+// The flags is a two byte value also stored as little endian. Contrary to previous multibyte values this doesn’t represent decimal value, but a binary value. Each flag is represented as one bit within the value. Take a look:
+// 0000 0000 0000 0000
+// ..JI FB.N .... ....
+// This is the binary representation of the two byte flags. The first line shows bits and the line below corresponding flags. The dot in the second line means that setting this bit either doesn’t do anything (is not used) or the behaviour of the flag is unknown. I have given those flags unique letters and they are as follows:
+// J - Junction - I don’t know really what it’s for. Grig de Griz has pointed out this flag in his format description so I’m including it here. (TAlchemist pointed out that: “Junction flag means that you add each frame to the frame before it making a composted image. and start from the begining on the first frame. That is how only the first frame of the big animations is large and all other frames just include the pixels that changed.”)
+// I - Internal palette - Tells if the image has internal palette
+// F - Functional color - Tells if the image has functional color. This color is used for effects like transparency or shading.
+// B - Fill background - Tells the game if it should clear the area on which the image is going to be drawn.
+// N - No compression - Tells if the image uses compression. For me it’s behaviour is unknown. It’s probably a left-over from MOO1 graphic formats which are almost identical to MOO2.
+
+//struct LBX_IMAGE_HEADER
+//{
+//    uint16_t width;                 // 00
+//    uint16_t height;                // 02
+//    uint16_t compression;           // 04     0=RLE, 0xDE0A=uncompressed
+//    uint16_t nframes;               // 06
+//    uint16_t frameDelay;            // 08
+//    uint16_t flags;                 // 0A
+//    uint16_t reserved_0C;           // 0C
+//    uint16_t paletteInfoOffset;     // 0E
+//    uint16_t reserved_10;           // 10
+//                                    // SIZE 12
+//    uint32_t frameOffsets[1];       // 12 [nframes + 1]
+//};
+
+//struct LBX_PALETTE_INFO
+//{
+//    uint16_t paletteOffset;         // 00
+//    uint16_t firstPaletteColorIndex;// 02
+//    uint16_t paletteColorCount;     // 04
+//                                    // SIZE 6
+//};
+
+// RLE row codes
+// FFh   empty row
+// 00h   set of raw RLE sequences
+// 80h   set of encoded RLE sequences
+//
+// chunk            :   image_header
+//                      frameoffsets[nframes+1]
+//                      palette?
+//                      frames
+//                  |   (image_header uncompressed_frame)+
+//
+// palette          :   palette_info
+//                      palette_entries
+//
+// palette_entries  :   (red green blue)+
+//
+// red, green, blue :   0-63
+//
+// frames           :   full_frame delta_frame*
+//
+// full_frame       :   01h frame
+//
+// delta_frame      :   00h frame
+//
+// frame            :   rle_row+
+//
+// rle_row          :   FFh
+//                  |   00h <nrowbytes> raw_sequence+
+//                  |   80h <nrowbytes> encoded_sequence+
+//
+// raw_sequence     :   <nseqbytes> <delta> <color>+
+//
+// encoded_sequence :   <nseqbytes> <delta> (DFh + <count>) <color>
+//                  |   <nseqbytes> <delta> <color 0-DFh>+
+//
+
+
 static bool gVerbose = false;
 
 static void dump(const uint8_t* ptr, unsigned n)
@@ -178,6 +249,7 @@ bool convertLbxToImages(const uint8_t* data, size_t size, const QMoMPalette& def
                   << " nframes=" << (unsigned)nframes
                   << " paletteInfoOffset=" << (unsigned)paletteInfoOffset
                   << std::endl;
+dumpnl(data, 32);
     }
 
     // TODO: Range checks
@@ -247,8 +319,8 @@ dumpnl(palette + 3 * i, 3);
             }
 dumpnl(ptr, 1);
 
-            uint8_t frameCode = *ptr++;     // TODO: Check - Should be 01 for first frame,
-                                            //       and either 00 (incremental), or 01 (complete) for the following frames
+            uint8_t frameCode = *ptr++;     // Should be 01 for first frame,
+                                            // and either 00 (incremental), or 01 (complete) for the following frames
             if ((0 == frameCode) && (frameNr > 0))
             {
                 // Copy previous image
@@ -366,6 +438,12 @@ dumpnl(ptr, 1);
             }
 dumpnl(ptr, 16);
             ptr += 16;
+
+            if (ptr + width * height > data + size)
+            {
+                std::cout << "Lbx bitmap '" << context << "' has corrupt uncompressed data" << std::endl;
+                ok = false;
+            }
 
             for (int row = 0; ok && (row < width); ++row)
             {

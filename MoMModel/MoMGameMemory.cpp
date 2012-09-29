@@ -465,7 +465,7 @@ Item* MoMGameMemory::getItems()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Item>(pMoMDataSegment->m_addr_Items, MoM::gMAX_ITEMS);
+    return derefHeapPointer<Item>(pMoMDataSegment->m_addr_Items, MoM::gMAX_ITEMS_VALID);
 }
 
 eSpell16* MoMGameMemory::getHero_spells()
@@ -609,12 +609,12 @@ uint8_t* MoMGameMemory::getTerrain_Explored()
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
-uint8_t* MoMGameMemory::getTerrain_LandMassID()
+int8_t* MoMGameMemory::getTerrain_LandMassID()
 {
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Terrain_LandMassID,
+    return derefHeapPointer<int8_t>(pMoMDataSegment->m_addr_Terrain_LandMassID,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 

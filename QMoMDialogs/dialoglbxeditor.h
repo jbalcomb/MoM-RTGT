@@ -7,6 +7,7 @@ class QAbstractButton;
 class QGraphicsScene;
 class QGraphicsView;
 
+#include "MoMFli.h"
 #include "MoMLbxBase.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
@@ -27,6 +28,7 @@ private:
     QString constructFrameFilename(const QString& bitmapFilename, int frameNr);
     void loadBitmap(const QString& filename);
     void loadLbx(const QString& filename);
+    void loadPaletteForFile(const QString& filename);
     void updateBitmapImage(const QString& bitmapfilename);
     void updateImage(QGraphicsView* view, const MoM::QMoMAnimation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);
@@ -55,6 +57,7 @@ private:
     QString m_bitmapFilename;
     QString m_lbxFilename;
     MoM::MoMLbxBase m_lbx;
+    MoM::MoMFli m_fli;
     QVector<MoM::QMoMAnimation> m_lbxAnimations;
     MoM::QMoMAnimation m_bitmapAnimation;
 };

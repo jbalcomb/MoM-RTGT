@@ -1428,7 +1428,7 @@ void MoMUnit::applyBattleSpells(const Spells_Cast_in_Battle *battleSpells)
         if (isNormal() && !hasUnitEnchantment(UNITENCHANTMENT_Flame_Blade))
         {
             if (baseunit.melee) up.melee += +1;
-            if (baseunit.ranged && (getRangedType() == MoM::RANGED_Arrow) || (getRangedType() == MoM::RANGED_Bullet)) up.ranged += +1;
+            if (baseunit.ranged && ((getRangedType() == MoM::RANGED_Arrow) || (getRangedType() == MoM::RANGED_Bullet))) up.ranged += +1;
 //            if (melee) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
         }
     }

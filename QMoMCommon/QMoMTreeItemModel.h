@@ -18,22 +18,22 @@
 #include "QMoMSharedPointers.h"
 #include "QMoMUtility.h"
 
-class QMoMTreeItemBase
+class QMoMTreeItemModelBase
 {
 public:
-    QMoMTreeItemBase(const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr());
+    QMoMTreeItemModelBase(const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr());
 
-    virtual ~QMoMTreeItemBase();
+    virtual ~QMoMTreeItemModelBase();
 
-    virtual void appendChild(const QString& feature, QMoMTreeItemBase* value, const QString& comment = "");
+    virtual void appendChild(const QString& feature, QMoMTreeItemModelBase* value, const QString& comment = "");
 
-    virtual void appendTree(QMoMTreeItemBase* tree, const QString& value);
+    virtual void appendTree(QMoMTreeItemModelBase* tree, const QString& value);
 
-    void appendRow(const QList<QMoMTreeItemBase*>& items);
+    void appendRow(const QList<QMoMTreeItemModelBase*>& items);
 
     void appendEmptyRow();
 
-    QMoMTreeItemBase* child(int row, int col);
+    QMoMTreeItemModelBase* child(int row, int col);
 
     bool commitData(void* ptr, void* pNewValue, size_t size);
 
@@ -54,7 +54,7 @@ public:
         return m_icon;
     }
 
-    QMoMTreeItemBase* parent() const
+    QMoMTreeItemModelBase* parent() const
     {
         return m_parent;
     }
@@ -78,7 +78,7 @@ public:
         return m_children.count();
     }
 
-    void setChild(int row, int col, QMoMTreeItemBase* item);
+    void setChild(int row, int col, QMoMTreeItemModelBase* item);
 
     virtual void setData(const QVariant &value, int role);
 
@@ -118,7 +118,7 @@ public:
 
 private:
 
-    void setParent(QMoMTreeItemBase* parent)
+    void setParent(QMoMTreeItemModelBase* parent)
     {
         m_parent = parent;
     }
@@ -127,31 +127,31 @@ private:
         m_row = row;
     }
 
-    QMoMTreeItemBase* m_parent;
+    QMoMTreeItemModelBase* m_parent;
     int m_row;
     mutable QMoMLazyIconPtr m_icon;
     QString m_data;
     QString m_toolTip;
-    QList< QList<QMoMTreeItemBase*> > m_children;
+    QList< QList<QMoMTreeItemModelBase*> > m_children;
     Qt::ItemFlags m_flags;
 
     static QMoMGamePtr m_game;
 };
 
 template< typename T >
-class QMoMTreeItem : public QMoMTreeItemBase
+class QMoMTreeItemModel : public QMoMTreeItemModelBase
 {
 public:
-    explicit QMoMTreeItem(T* ptr) :
-        QMoMTreeItemBase(),
+    explicit QMoMTreeItemModel(T* ptr) :
+        QMoMTreeItemModelBase(),
         m_ptr(ptr),
         m_mask(0),
         m_shift(0)
     {
         setFlagsEditable();
     }
-    QMoMTreeItem(T* ptr, unsigned mask) :
-        QMoMTreeItemBase(),
+    QMoMTreeItemModel(T* ptr, unsigned mask) :
+        QMoMTreeItemModelBase(),
         m_ptr(ptr),
         m_mask(mask),
         m_shift(0)
@@ -194,10 +194,10 @@ public:
                 // Strip number information
                 value.replace(QRegExp(" \\(\\d+\\)"), "");
                 setLazyIcon("images:" + value + ".gif");
-                return QMoMTreeItemBase::data(role);
+                return QMoMTreeItemModelBase::data(role);
             }
         default:
-            return QMoMTreeItemBase::data(role);
+            return QMoMTreeItemModelBase::data(role);
         }
     }
 
@@ -242,11 +242,11 @@ private:
 };
 
 template< size_t N>
-class QMoMTreeItem< char[N] > : public QMoMTreeItemBase
+class QMoMTreeItemModel< char[N] > : public QMoMTreeItemModelBase
 {
 public:
-    explicit QMoMTreeItem(char ptr[N]) :
-        QMoMTreeItemBase(),
+    explicit QMoMTreeItemModel(char ptr[N]) :
+        QMoMTreeItemModelBase(),
         m_ptr(ptr)
     {
         setFlagsEditable();
@@ -265,9 +265,9 @@ public:
             return value;
         case Qt::DecorationRole:
 //            return QIcon("images:" + value + ".gif");
-            return QMoMTreeItemBase::data(role);
+            return QMoMTreeItemModelBase::data(role);
         default:
-            return QMoMTreeItemBase::data(role);
+            return QMoMTreeItemModelBase::data(role);
         }
     }
 
@@ -297,17 +297,17 @@ public slots:
 
 private:
     // NOT IMPLEMENTED
-    QMoMTreeItem();
+    QMoMTreeItemModel();
 
     char* m_ptr;
 };
 
 template<>
-class QMoMTreeItem< const char* > : public QMoMTreeItemBase
+class QMoMTreeItemModel< const char* > : public QMoMTreeItemModelBase
 {
 public:
-    explicit QMoMTreeItem(const char* ptr) :
-        QMoMTreeItemBase(),
+    explicit QMoMTreeItemModel(const char* ptr) :
+        QMoMTreeItemModelBase(),
         m_ptr(ptr),
         m_size(strlen(ptr) + 1)
     {
@@ -327,9 +327,9 @@ public:
             return value;
         case Qt::DecorationRole:
 //            return QIcon("images:" + value + ".gif");
-            return QMoMTreeItemBase::data(role);
+            return QMoMTreeItemModelBase::data(role);
         default:
-            return QMoMTreeItemBase::data(role);
+            return QMoMTreeItemModelBase::data(role);
         }
     }
 
@@ -358,7 +358,7 @@ public slots:
 
 private:
     // NOT IMPLEMENTED
-    QMoMTreeItem();
+    QMoMTreeItemModel();
 
     const char* m_ptr;
     size_t m_size;
@@ -369,11 +369,11 @@ private:
 //
 
 template< typename T >
-class QMoMTreeItemSubtree : public QMoMTreeItemBase
+class QMoMTreeItemModelSubtree : public QMoMTreeItemModelBase
 {
 public:
-    explicit QMoMTreeItemSubtree(T* ptr, const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr()) :
-        QMoMTreeItemBase(data, icon),
+    explicit QMoMTreeItemModelSubtree(T* ptr, const QString& data = QString(), const QMoMLazyIconPtr& icon = QMoMLazyIconPtr()) :
+        QMoMTreeItemModelBase(data, icon),
         m_ptr(ptr)
     {
     }

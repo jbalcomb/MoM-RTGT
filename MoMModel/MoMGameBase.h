@@ -134,7 +134,7 @@ public:
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
-        if ((0 == items) || !inRange(itemNr, gMAX_ITEMS))
+        if ((0 == items) || !inRange(itemNr, gMAX_ITEMS_VALID))
             return 0;
         return &items[itemNr];
     }
@@ -203,15 +203,30 @@ public:
     }
     int getNrItemDataLbx();
     int getNrItemPowLbx();
-    int getNrItems()
+    int getNrItemsInGame()
     {
         Item* items = getItems();
         if (0 == items)
             return 0;
         int nrItems = 0;
-        for (int itemNr = 0; itemNr < 128; ++itemNr)
+        for (int itemNr = 0; itemNr < MoM::gMAX_ITEMS_IN_GAME; ++itemNr)
         {
             if ((0 != items[itemNr].m_Cost) && (-1 != items[itemNr].m_Cost))
+            {
+                nrItems++;
+            }
+        }
+        return nrItems;
+    }
+    int getNrItemsValid()
+    {
+        Item* items = getItems();
+        if (0 == items)
+            return 0;
+        int nrItems = 0;
+        for (int itemNr = 0; itemNr < MoM::gMAX_ITEMS_VALID; ++itemNr)
+        {
+            if (0 != items[itemNr].m_Cost)
             {
                 nrItems++;
             }
@@ -286,6 +301,10 @@ public:
 
     std::string getRaceName(eRace race);
 
+    eRealm_Type getRealmRace(eRace race) const;
+    eRealm_Type getRealmRangedType(eRanged_Type rangedType) const;
+    eRealm_Type getRealmSpecialAttack(eUnitAbility specialAttack) const;
+
     virtual std::string getSources() const = 0;
 
     Spell_Data* getSpellData(eSpell spell)
@@ -329,13 +348,13 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    uint8_t* getTerrainLandMassID(const MoMLocation& loc)
+    int8_t* getTerrainLandMassID(const MoMLocation& loc)
     {
         return getTerrainLandMassID(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
-    uint8_t* getTerrainLandMassID(ePlane plane, int x, int y)
+    int8_t* getTerrainLandMassID(ePlane plane, int x, int y)
     {
-        uint8_t* data = getTerrain_LandMassID();
+        int8_t* data = getTerrain_LandMassID();
 		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
@@ -539,7 +558,7 @@ protected:
     {
         return 0;
     }
-    virtual uint8_t* getTerrain_LandMassID()
+    virtual int8_t* getTerrain_LandMassID()
     {
         return 0;
     }

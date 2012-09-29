@@ -28,7 +28,7 @@ public:
 
     virtual void close() throw();
 
-    bool load(const std::string& filename);
+    virtual bool load(const std::string& filename);
 
     size_t getNrSpellSaves() const;
     SpellSaveEntry getSpellSave(size_t nr);

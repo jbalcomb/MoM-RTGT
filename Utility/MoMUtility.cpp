@@ -70,6 +70,68 @@ size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>&
     return findKnuthMorrisPratt((const uint8_t*)&needle[0], needle.size(), &haystack[0], haystack.size());
 }
 
+std::string formatBufferAsHex(const std::vector<uint8_t>& buffer)
+{
+    std::ostringstream oss;
+
+    // Set formatting to hex with leading zeroes for the rest of this function
+    oss << std::hex << std::setfill('0');
+
+    for (size_t lineIndex = 0; lineIndex < buffer.size(); lineIndex += 16)
+    {
+        if (lineIndex > 0)
+        {
+            oss << "\n";
+        }
+
+        // Output address within buffer
+        oss << std::setw(4) << lineIndex << "|";
+
+        // Output hex
+        for (int col = 0; col < 16; ++col)
+        {
+            if (col == 8)
+            {
+                oss << "-";
+            }
+            else if (col > 0)
+            {
+                oss << " ";
+            }
+
+            if (lineIndex + col >= buffer.size())
+            {
+                oss << "  ";
+            }
+            else
+            {
+                oss << std::setw(2) << (unsigned)buffer[lineIndex + col];
+            }
+        }
+
+        oss << "|";
+
+        // Output ascii
+        for (int col = 0; col < 16; ++col)
+        {
+            if (lineIndex + col >= buffer.size())
+            {
+                oss << " ";
+            }
+            else if (isprint((int)buffer[lineIndex + col]))
+            {
+                oss << buffer[lineIndex + col];
+            }
+            else
+            {
+                oss << ".";
+            }
+        }
+    }
+
+    return oss.str();
+}
+
 std::string lowercase(const std::string& str)
 {
     std::string result = str;
