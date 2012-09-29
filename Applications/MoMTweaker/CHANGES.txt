@@ -5,15 +5,19 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.7 (2012--)
 -----------------------------
 
+* Save/restore bookmark during battle (on battle map).
+  To restore a bookmark from scratch, first a save game from before
+  the battle must be restored, and then enter battle again.
+
 * More tables (click Show tables):
-  - Item powers from itempow.lbx (completely new).
+  - Item powers from itempow.lbx (new).
     Can not be saved yet.
-  - Prefab item data from itemdata.lbx (completely new).
+  - Prefab item data from itemdata.lbx (new).
     Can not be saved yet.
   - Many other tables whose data was already editable in the tree view.
 
 * Lbx editor (click Tools, then click Lbx editor):
-  - loads any lbx file and show its contents
+  - loads any lbx file and shows its contents
   - use the proper palette for all pictures
   - as yet it can only replace pictures
 
@@ -27,7 +31,7 @@ CHANGES IN 0.2.7 (2012--)
 * Combat simulator added.
 
 * Save and restore all dialog positions, sizes, check boxes, column widths, 
-  directories, etcetera.
+  directories, and combo boxes.
 
 
 

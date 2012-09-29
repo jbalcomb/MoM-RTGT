@@ -55,6 +55,8 @@ public:
     double getCurTotalHp() const;
     double getCurFiguresFrac() const;
 
+    std::string toString() const;
+
 public:
     double m_simulatedDamage;
 private:
@@ -80,22 +82,22 @@ public:
     //! \param n      The number of elements in the array.
     //! \param stdev  An Object that receives the standard deviation, if it is not null.
     //! \return       The mean of the array.
-    double calc_mean_stdev(const std::vector<double>& a, double* stdev = 0);
+    static double calc_mean_stdev(const std::vector<double>& a, double* stdev = 0);
 
     //! Returns a dice roll between 1 and n.
-    int dice(int n);
+    static int dice(int n);
 
     //! Returns a string in which the argument is formatted as a modifier (e.g. +1,-2,+0)
-    std::string format_modifier(int modifier);
+    static std::string format_modifier(int modifier);
 
     //! Returns the argument v rounded to within 1 digit after the decimal point.
-    std::string prec1(double v);
+    static std::string prec1(double v);
 
     //! Returns the number val rounded to have a limited number of digits after the decimal point.
     //! \param val       The number to be rounded.
     //! \param decimals  The number of digits after the decimal point.
     //!                  This may also be a negative number, in which case the number is rounded so that is ends in zeroes.
-    std::string round(double val, int decimals);
+    static std::string round(double val, int decimals);
 
     //
     // PROJECT SPECIFIC FUNCTIONS
