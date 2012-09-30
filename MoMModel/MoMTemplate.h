@@ -1416,6 +1416,23 @@ enum eItemPower
     eItemPower_MAX
 };
 
+enum eItemPowerType ENUMSIZE8
+{
+    ITEMPOWERTYPE_Strength = 0,
+    ITEMPOWERTYPE_Accuracy = 1,
+    ITEMPOWERTYPE_Defense = 2,
+    ITEMPOWERTYPE_Wizardry = 3,
+    ITEMPOWERTYPE_Power = 4,
+    ITEMPOWERTYPE_Speed = 5,
+    ITEMPOWERTYPE_Protection = 6,
+    ITEMPOWERTYPE_mutex_resist_elements = 7,
+    ITEMPOWERTYPE_mutex_resist_magic = 8,
+    ITEMPOWERTYPE_other_specials = 9,
+
+    eItemPowerType_MAX,
+    eItemPowerType__SIZE__ = 0xFF
+};
+
 enum eItem_Icon ENUMSIZE16
 {
     Sword_1 = 0x00, Sword_2, Sword_3, Sword_4, Sword_5, Sword_6, Sword_7, Sword_8, Sword_9,
@@ -2599,7 +2616,7 @@ enum eSpell16 ENUMSIZE16
     SPELL16_Spell_Of_Mastery  = 213,
     SPELL16_Spell_Of_Return  = 214,
 
-    eSPELL16_MAX,
+    eSpell16_MAX,
     eSpell16__SIZE__ = 0xFFFF
 };
 
@@ -3283,6 +3300,7 @@ enum eYesNo8 ENUMSIZE8
 // CONSTANTS
 //
 
+static const unsigned gMAX_ARTIFACTS_IN_GAME = 250;
 static const unsigned gMAX_BATTLE_COLS = 21;
 static const unsigned gMAX_BATTLE_ROWS = 22;
 static const unsigned gMAX_BATTLE_UNITS = 18;
@@ -3714,47 +3732,28 @@ typedef struct PACKED_STRUCT // Item
                                                     // SIZE 32
 } Item; // <read=read_Item>;
 
+
+typedef struct PACKED_STRUCT // ItemDataLbx
+{
+    Item        m_Item;                             // 00   Movement is in full moves instead of half moves
+    uint8_t     m_Index_in_spellbook_GUESS[5];      // 32   Index in spell book???
+    uint8_t     m_Unk_37;                           // 37
+                                                    // SIZE 38
+} ItemDataLbx;
+
+
 typedef struct PACKED_STRUCT // ItemPowLbx
 {
     char                m_Name[18];                 // 00 Artifact special name (17 characters + '\0')
     uint16_t            m_EnchantibleItems;         // 12 Bitmask with (1 << eItem_Type)
-                                                    //    FOLLOWING ARE msb
-                                                    //    19(1) -> Can be enchanted on a shield
-                                                    //    19(2) -> Can be enchanted on Misc items
-                                                    //    19(3) -> Can be enchanted on a Wand
-                                                    //    19(4) -> Can be enchanted on a Staff
-                                                    //    19(5) -> Can be enchanted on a Bow
-                                                    //    19(6) -> Can be enchanted on a Axe
-                                                    //    19(7) -> Can be enchanted on a Mace
-                                                    //    19(8) -> Can be enchanted on a Sword
-                                                    //    20(1),20(6) - > Unused
-                                                    //    20(7) -> Can be enchanted on Plate armor
-                                                    //    20(8) -> Can be enchanted on Chain armor
     int16_t             m_Mana_cost_to_enchant;     // 14
-    uint16_t            m_PowerType;                // 16   (uses power Type table below)
-                                                    //    -----------
-                                                    //    Power Type:
-                                                    //    These values describe what type of special it is.
-                                                    //    -----------
-                                                    //    Value	Description
-                                                    //    0	+ to Attack Stat Bonus
-                                                    //    1	+ to Hit Stat Bonus
-                                                    //    2	+ to Defend Stat Bonus
-                                                    //    3	+ to Spell Skill Stat Bonus
-                                                    //    4	- to Spell Save Stat Bonus
-                                                    //    5	+ to Movement Stat Bonus
-                                                    //    6	+ to Resistance Stat Bonus
-                                                    //    7	Nature Specials
-                                                    //    9	Nature Specials
-                                                    //    264	Sorcery Specials
-                                                    //    265	Sorcery Specials
-                                                    //    521	Chaos Specials
-                                                    //    777	Life Specials
-                                                    //    1033	Death Specials
+    eItemPowerType      m_PowerType;                // 16
+    eRealm_Type         m_Color;                    // 17
     int16_t             m_Required_Nr_Spell_Books;  // 18   (if a Stat special, it's the Stat bonus)
     unionItem_Powers    m_Bitmask_Powers;           // 1A
                                                     // SIZE 1E
 } ItemPowLbx;
+
 
 typedef struct PACKED_STRUCT // List_Hero_stats
 {
@@ -3796,11 +3795,13 @@ typedef struct PACKED_STRUCT // List_Hero_stats
     Hero_stats      Chosen;
 } List_Hero_stats;
 
+
 typedef union // unionList_Hero_stats
 {
     Hero_stats      a[gMAX_HERO_TYPES];
     List_Hero_stats s;
 } unionList_Hero_stats;
+
 
 typedef struct PACKED_STRUCT // MapRow_Bonus
 {
@@ -4557,9 +4558,9 @@ typedef struct PACKED_STRUCT // Upkeep_Enchantments
 
 typedef struct PACKED_STRUCT // Hero_Choice
 {
-    char        m_Name[14];
-    uint8_t     m_UNK[2];
-                                // SIZE 10
+    char        m_Name[14];         // 00
+    int16_t     m_Experience;       // 0E
+                                    // SIZE 10
 } Hero_Choice;
 
 typedef struct PACKED_STRUCT // SaveGame
@@ -4614,8 +4615,8 @@ typedef struct PACKED_STRUCT // SaveGame
     MapRow_Terrain_Changes  m_Myrror_Terrain_Changes_Row[40];
 
     eGrand_Vizier       m_Grand_Vizier;
-    uint8_t             m_Items_in_Game[250];   // 00 = not in game, 01 = in game
-    Hero_Choice         m_Hero_Choices[gMAX_HERO_TYPES];
+    uint8_t             m_Artifacts_in_Game[gMAX_ARTIFACTS_IN_GAME];   // 00 = not in game, 01 = in game
+    Hero_Choice         m_Chosen_Hero_Names[gMAX_HERO_TYPES];
 } SaveGame;
 
 //---------------------------------------------
@@ -5243,7 +5244,7 @@ typedef struct // MoMDataSegment
     uint16_t    w_sound_x   ; // 9132
     uint16_t    word_3FBD4  ; // 9134
     EXE_Reloc   m_addr_Items;                       // 9136
-    EXE_Reloc   addr_item_in_game_GUESS   ; // 913A
+    EXE_Reloc   m_addr_Artifacts_in_Game;           // 913A
     uint16_t    m_item_pics_116[116];               // 913E
     EXE_Reloc   m_addr_Battle_Unit_View;            // 9226
     EXE_Reloc   m_addr_Battle_Unit;                 // 922A
@@ -5804,14 +5805,6 @@ typedef struct PACKED_STRUCT // HlpEntryLbx
     int16_t         bottom;                         // 08
                                                     // SIZE 0A
 } HlpEntryLbx;
-
-typedef struct PACKED_STRUCT // ItemDataLbx
-{
-    Item        m_Item;                             // 00   Movement is in full moves instead of half moves
-    uint8_t     m_Index_in_spellbook_GUESS[5];      // 32   Index in spell book???
-    uint8_t     m_Unk_37;                           // 37
-                                                    // SIZE 38
-} ItemDataLbx;
 
 typedef struct PACKED_STRUCT // LBX_ImageHeader
 {

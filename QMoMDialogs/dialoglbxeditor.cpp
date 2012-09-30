@@ -74,9 +74,14 @@ QString DialogLbxEditor::constructFrameFilename(const QString& bitmapFilename, i
     if (frameNr > 0)
     {
         int indexExt = frameFilename.lastIndexOf(QChar('.'));
-        if ((indexExt > 0) && (frameFilename[indexExt - 1] == '0'))
+        if ((indexExt > 0) && (frameFilename[indexExt - 1] == '0') && (frameNr < 10))
         {
             frameFilename[indexExt - 1] = QChar('0' + frameNr);
+        }
+        else if ((indexExt > 1) && (frameFilename[indexExt - 1] == '0') && (frameFilename[indexExt - 2] == '0') && (frameNr < 100))
+        {
+            frameFilename[indexExt - 2] = QChar('0' + frameNr / 10);
+            frameFilename[indexExt - 1] = QChar('0' + frameNr % 10);
         }
         else
         {
@@ -356,13 +361,13 @@ void DialogLbxEditor::updateLbxText(int lbxIndex, int lbxSubIndex)
             text = helpEntry->description;
             // Replace code for newline by actual newline
             text.replace("\x14", "\n");
-            ui->label_Status->setText(QString("%0 bytes, textsize %1, '%2' %3")
-                .arg(data.size()).arg(text.length() + 1).arg(helpEntry->lbxFile).arg(helpEntry->lbxIndex));
+            ui->label_Status->setText(QString("%0 bytes, '%1' %2")
+                .arg(data.size()).arg(helpEntry->lbxFile).arg(helpEntry->lbxIndex));
         }
         else
         {
             text = MoM::formatBufferAsHex(data).c_str();
-            ui->label_Status->setText(QString("%0 bytes, textsize %1").arg(data.size()).arg(text.length() + 1));
+            ui->label_Status->setText(QString("%0 bytes").arg(data.size()));
         }
     }
     else

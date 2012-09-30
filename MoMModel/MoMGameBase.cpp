@@ -314,19 +314,9 @@ const HelpLBXentry* MoMGameBase::getHelpEntry(eHelpIndex helpTextNr)
             //}
         }
     }
-    if (m_HelpLbx->getNrRecords() < 3)
-    {
-        return 0;
-    }
 
-    const HelpLBXentry* helpEntry = 0;
-    if ((helpTextNr >= 0) && (helpTextNr < eHelpIndex_MAX))
-    {
-        // TODO: Check ranges
-        const HelpLBXentry* helpLbxEntries = reinterpret_cast<const HelpLBXentry*>(m_HelpLbx->getRecord(2) + 4);
-        helpEntry = &helpLbxEntries[helpTextNr];
-    }
-
+    const HelpLBXentry* helpEntry = (const HelpLBXentry*)m_HelpLbx->getSubRecord(2, helpTextNr);
+    
     return helpEntry;
 }
 
@@ -492,6 +482,60 @@ std::string MoMGameBase::getHelpText(eUnitMutation unitMutation)
     if (toUInt(unitMutation) < ARRAYSIZE(gTableUnitMutations))
     {
         value = getHelpText(gTableUnitMutations[unitMutation].helpIndex);
+    }
+    return value;
+}
+
+void MoMGameBase::getHeroSlotTypes(eHero_TypeCode heroTypeCode, eSlot_Type16 heroSlotTypes[3])
+{
+    if (toUInt(heroTypeCode) <= toUInt(HEROTYPE_Wizard))
+    {
+        heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + heroTypeCode);
+        if (HEROTYPE_Wizard == heroTypeCode)
+        {
+            heroSlotTypes[1] = SLOT16_Amulet;
+        }
+        else
+        {
+            heroSlotTypes[1] = SLOT16_Armor_Shield;
+        }
+        heroSlotTypes[2] = SLOT16_Amulet;
+    }
+    else
+    {
+        unsigned slotCode = static_cast<unsigned>(heroTypeCode);
+        slotCode -= 6;
+        heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+        slotCode /= 6;
+        heroSlotTypes[1] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+        slotCode /= 6;
+        heroSlotTypes[2] = static_cast<eSlot_Type16>(1 + slotCode % 6);
+    }
+}
+
+eHero_TypeCode MoMGameBase::getHeroTypeCode(eSlot_Type16 slotSword, eSlot_Type16 slotShield, eSlot_Type16 slotRing)
+{
+    unsigned codeSword = static_cast<unsigned>(slotSword) - 1;
+    unsigned codeShield = static_cast<unsigned>(slotShield) - 1;
+    unsigned codeRing = static_cast<unsigned>(slotRing) - 1;
+    unsigned slotCode = 6 + codeSword + 6 *(codeShield + 6 * codeRing);
+    return static_cast<MoM::eHero_TypeCode>(slotCode);
+}
+
+Hired_Hero *MoMGameBase::getHiredHero(ePlayer playerNr, eUnit_Type unitType)
+{
+    Hired_Hero* value = 0;
+    Wizard* wizard = getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+    for (size_t slotNr = 0; (slotNr < gMAX_HIRED_HEROES) && (0 == value); ++slotNr)
+    {
+        Hired_Hero* hh = &wizard->m_Heroes_hired_by_wizard[slotNr];
+        Unit* unit = getUnit(hh->m_Unit_Nr);
+        if ((0 != unit) && (unit->m_Unit_Type == unitType))
+        {
+            value = hh;
+        }
     }
     return value;
 }

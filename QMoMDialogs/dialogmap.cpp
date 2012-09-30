@@ -936,7 +936,7 @@ private:
     bool m_ok;
 };
 
-const std::string MoMBookmark::sFILETYPE_BATTLEBOOKMARK("BATTLEBOOKMARK\x1A");
+const std::string MoMBookmark::sFILETYPE_BATTLEBOOKMARK("BATTLEBOOKMARK\r\n\x1A");
 
 MoMBookmark::MoMBookmark(MoM::MoMGameBase* game) :
     m_game(game),

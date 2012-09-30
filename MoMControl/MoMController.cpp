@@ -510,29 +510,7 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
 	//		 2. Bury the old hero
 
 	// Retrieve the slot types
-    if (toUInt(unitTypeData->m_Building2_or_HeroType) <= toUInt(HEROTYPE_Wizard))
-	{
-		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + unitTypeData->m_Building2_or_HeroType);
-		if (HEROTYPE_Wizard == unitTypeData->m_Building2_or_HeroType)
-		{
-			heroSlotTypes[1] = SLOT16_Amulet;
-		}
-		else
-		{
-			heroSlotTypes[1] = SLOT16_Armor_Shield;
-		}
-		heroSlotTypes[2] = SLOT16_Amulet;
-	}
-	else
-	{
-		unsigned slotCode = static_cast<unsigned>(unitTypeData->m_Building2_or_HeroType);
-		slotCode -= 6;
-		heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-		slotCode /= 6;
-		heroSlotTypes[1] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-		slotCode /= 6;
-		heroSlotTypes[2] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-	}
+    game.getHeroSlotTypes(unitTypeData->m_Building2_or_HeroType, heroSlotTypes);
 
     // Check if hero slot is free or search for first free slot
     if (-1 != wizard->m_Heroes_hired_by_wizard[heroSlotNr].m_Unit_Nr)

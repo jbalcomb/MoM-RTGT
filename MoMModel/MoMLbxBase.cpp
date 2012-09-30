@@ -286,16 +286,41 @@ size_t MoMLbxBase::getSubRecordSize(size_t recordNr) const
     return value;
 }
 
-void MoMLbxBase::initPointers()
+bool MoMLbxBase::initPointers()
 {
     assert(!m_contents.empty());
     uint8_t* pContents = (uint8_t*)&m_contents[0];
+    bool ok = true;
 
-    // TODO: Range checks
     m_LBX_Header        = (LBXHEADER*)pContents;
     m_DataOffsets       = (uint32_t*)(pContents + sizeof(LBXHEADER));
     m_Annotations       = (Annotation*)(pContents + 0x200);
     m_Data              = (uint8_t*)(pContents + m_DataOffsets[0]);
+
+    // Check signature "AD FE 00 00"
+    if (0xFEAD != m_LBX_Header->magic_number)
+    {
+        std::cout << "File does not have the LBX signature" << std::endl;
+        ok = false;
+    }
+
+    if ((uint8_t*)&m_DataOffsets[m_LBX_Header->n + 2] > pContents + m_contents.size())
+    {
+        // Not enough space for dataoffset array
+        ok = false;
+    }
+    if ((uint8_t*)&m_Annotations[m_LBX_Header->n + 1] > pContents + m_contents.size())
+    {
+        // Not enough space for annotations array
+        ok = false;
+    }
+    if (m_DataOffsets[m_LBX_Header->n + 1] > m_contents.size())
+    {
+        // Not enough space for last record
+        ok = false;
+    }
+
+    return ok;
 }
 
 bool MoMLbxBase::load(const std::string& filename)
@@ -330,13 +355,9 @@ bool MoMLbxBase::load(const std::string& filename)
         return false;
     }
 
-    initPointers();
-
-    // Check signature "AD FE 00 00"
-    if (0xFEAD != m_LBX_Header->magic_number)
+    if (!initPointers())
     {
-        std::cout << "File is not an LBX file '"<< filename << "'" << std::endl;
-        close();
+        std::cout << "File is not a correct LBX file '"<< filename << "'" << std::endl;
         return false;
     }
 

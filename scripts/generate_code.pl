@@ -127,17 +127,22 @@ sub generate_code
 
     select(CPPFILE);
         
-    print "// File: $gendir/$cppfilename\n";
-    print "// Generated from: $INPUTFILE\n";
-    print "\n";
-    print "#include <ctype.h>\n";
-    print "#include <iomanip>\n";
-    print "#include <sstream>\n";
-    print "\n";
-    print "#include \"$hfilename\"\n";
-    print "\n";
-    print "namespace MoM {\n";
-    print "\n";
+    print 
+	"// File: $gendir/$cppfilename\n".
+    "// Generated from: $INPUTFILE\n".
+    "\n".
+    "#include <ctype.h>\n".
+    "#include <iomanip>\n".
+    "#include <sstream>\n".
+    "\n".
+    "#include \"$hfilename\"\n".
+    "\n".
+	"#ifdef _MSC_VER                // Compiler MS Visual Studio\n".
+    "#pragma warning(disable: 4100) // MSVC: unreferenced formal parameter\n".
+	"#endif\n".
+    "\n".
+    "namespace MoM {\n".
+    "\n";
 
 print <<'EOF';
 std::string formatCharArray(const char* buffer, unsigned size)

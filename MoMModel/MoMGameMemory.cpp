@@ -41,7 +41,7 @@ struct MoMGamePointers
 
     Spell_Data*     m_addr_Spell_Data ; // 912C
     Item*           m_addr_Items  ; // 9136
-    UnknownBuf*        addr_item_in_game_GUESS   ; // 913A
+    UnknownBuf*        m_addr_Artifacts_in_Game   ; // 913A
     Battle_Unit*        m_addr_Battle_Unit_View  ; // 9226
     Battle_Unit*    m_addr_Battle_Unit  ; // 922A
     Spells_Cast_in_Battle*  m_addr_Spells_Cast_in_Battle   ; // 922E
@@ -236,7 +236,7 @@ bool MoMGameMemory::readData()
 
         SET_RELOC_POINTER(Spell_Data, m_addr_Spell_Data);
         SET_RELOC_POINTER(Item, m_addr_Items);
-        SET_RELOC_POINTER(UnknownBuf, addr_item_in_game_GUESS);
+        SET_RELOC_POINTER(UnknownBuf, m_addr_Artifacts_in_Game);
         SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit_View);
         SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit);
 
@@ -336,6 +336,14 @@ bool MoMGameMemory::save(const char* filename)
     return ok;
 }
 
+uint8_t *MoMGameMemory::getArtifacts_in_game()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Artifacts_in_Game, gMAX_ARTIFACTS_IN_GAME);
+}
+
 Available_spell_page* MoMGameMemory::getAvailable_spell_pages()
 {
     if (0 == m_process.get())
@@ -400,6 +408,14 @@ Building_Data* MoMGameMemory::getBuildingData()
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
     return derefHeapPointer<Building_Data>(pMoMDataSegment->m_addr_Building_Data, eBuilding_array_MAX);
+}
+
+Hero_Choice *MoMGameMemory::getChosen_Hero_Names()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Hero_Choice>(pMoMDataSegment->m_addr_Chosen_Hero_Names, gMAX_HERO_TYPES);
 }
 
 Events_Status* MoMGameMemory::getEvents_Status()

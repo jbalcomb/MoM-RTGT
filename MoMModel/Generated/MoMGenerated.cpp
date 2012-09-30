@@ -7,6 +7,10 @@
 
 #include "MoMGenerated.h"
 
+#ifdef _MSC_VER                // Compiler MS Visual Studio
+#pragma warning(disable: 4100) // MSVC: unreferenced formal parameter
+#endif
+
 namespace MoM {
 
 std::string formatCharArray(const char* buffer, unsigned size)
@@ -1488,6 +1492,27 @@ std::ostream& operator<<(std::ostream& os, const eItemPower& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eItemPowerType& rhs)
+{
+    switch (rhs)
+    {
+    case ITEMPOWERTYPE_Strength: os << "ITEMPOWERTYPE_Strength"; break;
+    case ITEMPOWERTYPE_Accuracy: os << "ITEMPOWERTYPE_Accuracy"; break;
+    case ITEMPOWERTYPE_Defense: os << "ITEMPOWERTYPE_Defense"; break;
+    case ITEMPOWERTYPE_Wizardry: os << "ITEMPOWERTYPE_Wizardry"; break;
+    case ITEMPOWERTYPE_Power: os << "ITEMPOWERTYPE_Power"; break;
+    case ITEMPOWERTYPE_Speed: os << "ITEMPOWERTYPE_Speed"; break;
+    case ITEMPOWERTYPE_Protection: os << "ITEMPOWERTYPE_Protection"; break;
+    case ITEMPOWERTYPE_mutex_resist_elements: os << "ITEMPOWERTYPE_mutex_resist_elements"; break;
+    case ITEMPOWERTYPE_mutex_resist_magic: os << "ITEMPOWERTYPE_mutex_resist_magic"; break;
+    case ITEMPOWERTYPE_other_specials: os << "ITEMPOWERTYPE_other_specials"; break;
+    case eItemPowerType_MAX: os << "eItemPowerType_MAX"; break;
+    default: os << "<Unknown eItemPowerType>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eItem_Icon& rhs)
 {
     switch (rhs)
@@ -2687,7 +2712,7 @@ std::ostream& operator<<(std::ostream& os, const eSpell16& rhs)
     case SPELL16_Summon_Champion: os << "SPELL16_Summon_Champion"; break;
     case SPELL16_Spell_Of_Mastery: os << "SPELL16_Spell_Of_Mastery"; break;
     case SPELL16_Spell_Of_Return: os << "SPELL16_Spell_Of_Return"; break;
-    case eSPELL16_MAX: os << "eSPELL16_MAX"; break;
+    case eSpell16_MAX: os << "eSpell16_MAX"; break;
     default: os << "<Unknown eSpell16>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
@@ -4576,12 +4601,7 @@ std::ostream& operator<<(std::ostream& os, const Hero_Choice& rhs)
 {
     os << "{\n";
     os << "m_Name=" << formatCharArray(rhs.m_Name, 14) << "\n";
-    os << "m_UNK=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_UNK[i] << " 0x" << std::hex << (unsigned)rhs.m_UNK[i] << std::dec << ",\n";
-    }
-    os << ")\n";
+    os << "m_Experience=" << rhs.m_Experience << " 0x" << std::hex << rhs.m_Experience << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -4729,7 +4749,8 @@ std::ostream& operator<<(std::ostream& os, const ItemPowLbx& rhs)
     os << "m_Name=" << formatCharArray(rhs.m_Name, 18) << "\n";
     os << "m_EnchantibleItems=" << rhs.m_EnchantibleItems << " 0x" << std::hex << rhs.m_EnchantibleItems << std::dec << "\n";
     os << "m_Mana_cost_to_enchant=" << rhs.m_Mana_cost_to_enchant << " 0x" << std::hex << rhs.m_Mana_cost_to_enchant << std::dec << "\n";
-    os << "m_PowerType=" << rhs.m_PowerType << " 0x" << std::hex << rhs.m_PowerType << std::dec << "\n";
+    os << "m_PowerType=" << rhs.m_PowerType << "\n";
+    os << "m_Color=" << rhs.m_Color << "\n";
     os << "m_Required_Nr_Spell_Books=" << rhs.m_Required_Nr_Spell_Books << " 0x" << std::hex << rhs.m_Required_Nr_Spell_Books << std::dec << "\n";
     os << "m_Bitmask_Powers=" << rhs.m_Bitmask_Powers << "\n";
     os << "}";
@@ -5324,7 +5345,7 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "w_sound_x=" << rhs.w_sound_x << " 0x" << std::hex << rhs.w_sound_x << std::dec << "\n";
     os << "word_3FBD4=" << rhs.word_3FBD4 << " 0x" << std::hex << rhs.word_3FBD4 << std::dec << "\n";
     os << "m_addr_Items=" << rhs.m_addr_Items << "\n";
-    os << "addr_item_in_game_GUESS=" << rhs.addr_item_in_game_GUESS << "\n";
+    os << "m_addr_Artifacts_in_Game=" << rhs.m_addr_Artifacts_in_Game << "\n";
     os << "m_item_pics_116=(\n";
     for (unsigned i = 0; i < 116; ++i)
     {
@@ -6601,16 +6622,16 @@ std::ostream& operator<<(std::ostream& os, const SaveGame& rhs)
     }
     os << ")\n";
     os << "m_Grand_Vizier=" << rhs.m_Grand_Vizier << "\n";
-    os << "m_Items_in_Game=(\n";
-    for (unsigned i = 0; i < 250; ++i)
+    os << "m_Artifacts_in_Game=(\n";
+    for (unsigned i = 0; i < gMAX_ARTIFACTS_IN_GAME; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Items_in_Game[i] << " 0x" << std::hex << (unsigned)rhs.m_Items_in_Game[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Artifacts_in_Game[i] << " 0x" << std::hex << (unsigned)rhs.m_Artifacts_in_Game[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Hero_Choices=(\n";
+    os << "m_Chosen_Hero_Names=(\n";
     for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Hero_Choices[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_Chosen_Hero_Names[i] << ",\n";
     }
     os << ")\n";
     os << "}";
@@ -9343,6 +9364,26 @@ bool validate(const eItemPower& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const eItemPowerType& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case ITEMPOWERTYPE_Strength: break;
+    case ITEMPOWERTYPE_Accuracy: break;
+    case ITEMPOWERTYPE_Defense: break;
+    case ITEMPOWERTYPE_Wizardry: break;
+    case ITEMPOWERTYPE_Power: break;
+    case ITEMPOWERTYPE_Speed: break;
+    case ITEMPOWERTYPE_Protection: break;
+    case ITEMPOWERTYPE_mutex_resist_elements: break;
+    case ITEMPOWERTYPE_mutex_resist_magic: break;
+    case ITEMPOWERTYPE_other_specials: break;
+    default: std::cout << context << ": Unknown eItemPowerType = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const eItem_Icon& rhs, const std::string& context)
 {
     bool ok = true;
@@ -11462,6 +11503,8 @@ bool validate(const ItemDataLbx& rhs, const std::string& context)
 bool validate(const ItemPowLbx& rhs, const std::string& context)
 {
     bool ok = true;
+    if (!validate(rhs.m_PowerType, context + ".m_PowerType")) ok = false;
+    if (!validate(rhs.m_Color, context + ".m_Color")) ok = false;
     if (!validate(rhs.m_Bitmask_Powers, context + ".m_Bitmask_Powers")) ok = false;
     return ok;
 }
@@ -11731,7 +11774,7 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     }
     if (!validate(rhs.m_addr_Spell_Data, context + ".m_addr_Spell_Data")) ok = false;
     if (!validate(rhs.m_addr_Items, context + ".m_addr_Items")) ok = false;
-    if (!validate(rhs.addr_item_in_game_GUESS, context + ".addr_item_in_game_GUESS")) ok = false;
+    if (!validate(rhs.m_addr_Artifacts_in_Game, context + ".m_addr_Artifacts_in_Game")) ok = false;
     if (!validate(rhs.m_addr_Battle_Unit_View, context + ".m_addr_Battle_Unit_View")) ok = false;
     if (!validate(rhs.m_addr_Battle_Unit, context + ".m_addr_Battle_Unit")) ok = false;
     if (!validate(rhs.m_addr_Spells_Cast_in_Battle, context + ".m_addr_Spells_Cast_in_Battle")) ok = false;
@@ -12065,8 +12108,8 @@ bool validate(const SaveGame& rhs, const std::string& context)
     for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
     {
           std::ostringstream oss;
-          oss << context << ".m_Hero_Choices[" << i << "]";
-          if (!validate(rhs.m_Hero_Choices[i], oss.str())) ok = false;
+          oss << context << ".m_Chosen_Hero_Names[" << i << "]";
+          if (!validate(rhs.m_Chosen_Hero_Names[i], oss.str())) ok = false;
     }
     return ok;
 }

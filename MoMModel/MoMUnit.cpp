@@ -508,40 +508,15 @@ eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
     {
         value = m_hiredHero->m_Slot_Types[itemSlotNr];
     }
-    else if ((0 != m_unitType) && isHero())
+    else if ((0 != m_unitType) && isHero() && (0 != m_game))
     {
-        // TODO: Centralize hero->itemslot code, including the same code in MoMController
-
+        // Retrieve the slot types
         eSlot_Type16 heroSlotTypes[3];
-       // Retrieve the slot types
-       if (toUInt(m_unitType->m_Building2_or_HeroType) <= toUInt(HEROTYPE_Wizard))
-       {
-           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + m_unitType->m_Building2_or_HeroType);
-           if (HEROTYPE_Wizard == m_unitType->m_Building2_or_HeroType)
-           {
-               heroSlotTypes[1] = SLOT16_Amulet;
-           }
-           else
-           {
-               heroSlotTypes[1] = SLOT16_Armor_Shield;
-           }
-           heroSlotTypes[2] = SLOT16_Amulet;
-       }
-       else
-       {
-           unsigned slotCode = static_cast<unsigned>(m_unitType->m_Building2_or_HeroType);
-           slotCode -= 6;
-           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-           slotCode /= 6;
-           heroSlotTypes[1] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-           slotCode /= 6;
-           heroSlotTypes[2] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-       }
-
-       if (toUInt(itemSlotNr) < 3)
-       {
-           value = heroSlotTypes[itemSlotNr];
-       }
+        m_game->getHeroSlotTypes(m_unitType->m_Building2_or_HeroType, heroSlotTypes);
+        if (toUInt(itemSlotNr) < 3)
+        {
+            value = heroSlotTypes[itemSlotNr];
+        }
     }
     return value;
 }

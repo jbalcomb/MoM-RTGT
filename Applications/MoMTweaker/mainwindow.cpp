@@ -63,14 +63,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_filedialogLoadGame.setObjectName("filedialogLoadGame");
     m_filedialogLoadGame.setWindowTitle(tr("Open MoM file"));
-    m_filedialogLoadGame.setNameFilter(tr("MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
+    m_filedialogLoadGame.setNameFilter(tr("MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx itemdata.lbx itempow.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptOpen);
     m_filedialogLoadGame.setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoadGame.setViewMode(QFileDialog::Detail);
 
     m_filedialogSaveGame.setObjectName("filedialogSaveGame");
     m_filedialogSaveGame.setWindowTitle(tr("Save MoM file"));
-    m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
+    m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx itemdata.lbx itempow.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptSave);
     m_filedialogSaveGame.setFileMode(QFileDialog::AnyFile);
     m_filedialogSaveGame.setViewMode(QFileDialog::Detail);
@@ -275,6 +275,7 @@ void MainWindow::update()
             (0 != dynamic_cast<MoM::MoMGameMemory*>(m_game.data()))
             || (0 != dynamic_cast<MoM::MoMGameCustom*>(m_game.data()))
             );
+    ui->pushButton_Save->setEnabled(0 != dynamic_cast<MoM::MoMGameSave*>(m_game.data()));
     ui->checkBox_UseIcons->setEnabled(ui->checkBox_UpdateTree->isChecked());
 }
 

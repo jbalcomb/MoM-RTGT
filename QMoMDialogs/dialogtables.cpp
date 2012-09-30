@@ -142,95 +142,150 @@ void DialogTables::update_HeroData()
     int ndata = 0;
     if (!m_game.isNull())
     {
-        ndata = MoM::gMAX_HERO_TYPES;
+        if (0 != m_game->getHeroStatsInitializer((MoM::eUnit_Type)0))
+        {
+            ndata = MoM::gMAX_HERO_TYPES;
+        }
+        else if (0 != m_game->getHeroStats(MoM::PLAYER_YOU, (MoM::eUnit_Type)0))
+        {
+            ndata = MoM::gMAX_VALID_WIZARDS * MoM::gMAX_HERO_TYPES;
+        }
+        else
+        {
+        }
     }
 
     QStringList labels;
     labels << "Nr";
-    labels << "HeroType" << "HS:Abilities" << "HS:Casting" << "HS:Spells" << "HS:Picks" << "HS:PickType" << "HS:Status";
-    labels << "UnitNr" << "HeroName" << "SlotTypes" << "Items";
+    labels << "Player" << "HeroType";
+    labels << "Abilities" << "Casting" << "Spell 1" << "Spell 2" << "Spell 3" << "Spell 4"
+           << "Picks" << "PickType" << "Status" << "XP";
+    labels << "UnitNr" << "HeroName" << "Slot 1" << "Slot 2" << "Slot 3" << "Item 1" << "Item 2" << "Item 3";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_HeroData(int)));
 }
 
 void DialogTables::slot_addRow_to_HeroData(int row)
 {
-    MoM::ePlayer playerNr = MoM::PLAYER_YOU;    // TODO: other players
-    MoM::eUnit_Type unitType = (MoM::eUnit_Type)row;
-    int unitNr = -1;
+    MoM::ePlayer playerNr = (MoM::ePlayer)(row / MoM::gMAX_HERO_TYPES);
+    MoM::eUnit_Type unitTypeNr = (MoM::eUnit_Type)(row % MoM::gMAX_HERO_TYPES);
 
     int col = 0;
     ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
 
-    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, prettyQStr(unitType)));
-
-    if (0 != m_game->getHeroStatsInitializer(unitType))
+    if (0 != m_game->getHeroStatsInitializer(unitTypeNr))
     {
-        MoM::Hero_Stats_Initializer* data = m_game->getHeroStatsInitializer(unitType);
-        col = 8;
+        MoM::Hero_Stats_Initializer* data = m_game->getHeroStatsInitializer(unitTypeNr);
+
+        // PlayerNr
+        col++;
+        // HeroType
+        ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, prettyQStr(unitTypeNr)));
+        ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eHeroAbility>(
+                                     m_game, &data->m_Hero_Abilities.bits, (MoM::eHeroAbility)0, MoM::eHeroAbility_MAX));
+        ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Hero_Casting_Skill, 2, SHOWNUMBER_noZero));
+        // Spells
+        for (size_t i = 0; i < ARRAYSIZE(data->m_Spell); ++i)
+        {
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpell16>(m_game, &data->m_Spell[i], MoM::eSpell16_MAX, SHOWENUM_minusOneAndnoZero));
+        }
+        // Picks
+        ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Nr_Random_picks, 2, SHOWNUMBER_noZero));
+        // PickType
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eRandomPickType>(m_game, &data->m_Random_pick_type, MoM::eRandomPickType_MAX, SHOWENUM_normal));
+        // Status
+        col++;
+        // XP
+        col++;
     }
-    else if (0 != m_game->getHeroStats(playerNr, unitType))
+    else if (0 != m_game->getHeroStats(playerNr, unitTypeNr))
     {
-        MoM::Hero_stats* data = m_game->getHeroStats(playerNr, unitType);
+        MoM::Hero_stats* data = m_game->getHeroStats(playerNr, unitTypeNr);
 
+        // PlayerNr
+        ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, prettyQStr(playerNr)));
+        // HeroType
+        ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, prettyQStr(unitTypeNr)));
         ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eHeroAbility>(
                                      m_game, &data->m_Hero_Abilities.bits, (MoM::eHeroAbility)0, MoM::eHeroAbility_MAX));
         ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Hero_Casting_Skill, 2, SHOWNUMBER_noZero));
         // Spells
-        col++;
+        for (size_t i = 0; i < ARRAYSIZE(data->m_Spell); ++i)
+        {
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpell>(m_game, &data->m_Spell[i], MoM::eSpell_MAX, SHOWENUM_minusOneAndnoZero));
+        }
         // Picks
         col++;
         // PickType
         col++;
-        // TODO: negative values
-        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eHero_Level_Status>(m_game, &data->m_Level_Status, MoM::succ(MoM::HEROLEVELSTATUS_Level_9), SHOWENUM_minusOneAndnoZero));
+        // Status
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eHero_Level_Status>(
+                                     m_game, &data->m_Level_Status,
+                                     MoM::HEROLEVELSTATUS_Active_in_Wizards_army, MoM::succ(MoM::HEROLEVELSTATUS_Level_9),
+                                     SHOWENUM_normal));
+        // XP
+        col++;
     }
     else
     {
-        col = 8;
+        col = 13;
     }
 
-    if (0 != m_game->getHiredHero(playerNr, unitType))
+    if (0 != m_game->getHiredHero(playerNr, unitTypeNr))
     {
-        MoM::Hired_Hero* data = m_game->getHiredHero(playerNr, unitType);
+        MoM::Hired_Hero* data = m_game->getHiredHero(playerNr, unitTypeNr);
+
+        ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Unit_Nr, 3, SHOWNUMBER_normal));
+        ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_Hero_name, sizeof(data->m_Hero_name)));
+        // Slots
+        for (size_t i = 0; i < ARRAYSIZE(data->m_Slot_Types); ++i)
+        {
+            ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSlot_Type16>(m_game, &data->m_Slot_Types[i], MoM::eSlot_Type16_MAX, SHOWENUM_minusOneAndnoZero));
+        }
+        for (size_t i = 0; i < ARRAYSIZE(data->m_Slot_Types); ++i)
+        {
+            ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Items_In_Slot[i], 2, SHOWNUMBER_normal));
+        }
     }
+    else
+    {
+        // UnitNr
+        col++;
 
-//    labels << "Nr";
-//labels << "HeroType" << "HS:Abilities" << "HS:Casting" << "HS:Spells" << "HS:Picks" << "HS:PickType" << "HS:Status";
-//labels << "UnitNr" << "HeroName" << "SlotTypes" << "Items";
+        // HeroName
+        MoM::Hero_Choice* heroChoices = m_game->getChosen_Hero_Names();
+        MoM::Hero_stats* heroStats = m_game->getHeroStats(playerNr, unitTypeNr);
+        if ((playerNr == MoM::PLAYER_YOU) && (0 != heroChoices) && (0 != heroStats) && (heroStats->m_Level_Status != 0))
+        {
+            MoM::Hero_Choice* data = &heroChoices[unitTypeNr];
 
-//buildTable(labels, ndata, SLOT(slot_addRow_to_HeroData(int)));
+            // Retro actively fill in column XP
+            ui->tableWidget->setItem(row, 12, new NumberTableItem<int16_t>(m_game, &data->m_Experience, 4, SHOWNUMBER_normal));
 
-//typedef struct PACKED_STRUCT // Hero_Stats_Initializer
-//{
-//    uint16_t    m_Nr_Random_picks;          // 00
-//    eRandomPickType    m_Random_pick_type;  // 02
-//    unionHero_Abilities m_Hero_Abilities;   // 04
-//    uint16_t    m_Hero_Casting_Skill;       // 08 <read=read_Hero_Casting_Skill>;
-//    eSpell16    m_Spell[4];                 // 0A-11
-//                                            // SIZE 12
-//} Hero_Stats_Initializer;
+            // Hero name
+            ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_Name, sizeof(data->m_Name)));
+        }
+        else
+        {
+            col++;
+        }
 
-//typedef struct PACKED_STRUCT // Hero_stats
-//{
-//    eHero_Level_Status  m_Level_Status;     // 00
-//    unionHero_Abilities m_Hero_Abilities;   // 02
-//    uint8_t     m_Hero_Casting_Skill;       // 06 <read=read_Hero_Casting_Skill>;
-//    eSpell      m_Spell[4];                 // 07-0A
-//    uint8_t     m_Garbage;                  // 0B
-//                                            // SIZE 0C
-//} Hero_stats; // <read=read_Hero_stats>;
-
-//typedef struct PACKED_STRUCT // Hired_Hero
-//{
-//    int16_t     m_Unit_Nr;              // 00 (see below)
-//    char        m_Hero_name[14];        // 02 (13 characters + '\0')
-//    int16_t     m_Items_In_Slot[3];     // 10 (see below)
-//    eSlot_Type16 m_Slot_Types[3];       // 16 (0-6; see below)
-//                                        // SIZE 1C
-//} Hired_Hero;    // <read=read_Hired_Hero>;
-
-
+        // Slots
+        MoM::Unit_Type_Data* unitType = m_game->getUnitTypeData(unitTypeNr);
+        if (0 != unitType)
+        {
+            MoM::eSlot_Type16 heroSlotTypes[3];
+            m_game->getHeroSlotTypes(unitType->m_Building2_or_HeroType, heroSlotTypes);
+            for (size_t i = 0; i < ARRAYSIZE(heroSlotTypes); ++i)
+            {
+                ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, prettyQStr(heroSlotTypes[i])));
+            }
+        }
+        else
+        {
+            col += 3;
+        }
+    }
 }
 
 void DialogTables::slot_addRow_to_BuildingData(int row)
@@ -275,7 +330,7 @@ void DialogTables::update_ItemData()
     labels << "ItemName" << "Icon" << "Slot" << "Item Type" << "Cost";
     labels << "Att" << "ToHit" << "Def" << "Move" << "Resist" << "Mana" << "Save";
     labels << "Spell" << "NrCharges" << "Powers";
-    labels << "Unk32[0]" << "Unk32[1]" << "Unk32[2]" << "Unk32[3]" << "Unk32[4]" << "Unk37";
+    labels << "Nature" << "Sorcery" << "Chaos" << "Life" << "Death" << "Unk37" << "InGame";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_ItemData(int)));
 }
@@ -313,6 +368,16 @@ void DialogTables::slot_addRow_to_ItemData(int row)
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[3], 3, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[4], 3, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Unk_37, 3, SHOWNUMBER_noZero));
+
+    uint8_t* artifactsInGame = m_game->getArtifacts_in_game();
+    if (0 != artifactsInGame)
+    {
+        ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &artifactsInGame[row], 1, SHOWNUMBER_noZero));
+    }
+    else
+    {
+        col++;
+    }
 }
 
 void DialogTables::update_ItemPowers()
@@ -325,7 +390,7 @@ void DialogTables::update_ItemPowers()
 
     QStringList labels;
     labels << "Nr";
-    labels << "PowerName" << "Enchantible" << "Mana" << "Power Type" << "Bonus/NrBooks" << "Powers";
+    labels << "PowerName" << "Enchantible" << "Mana" << "Power Type" << "Color" << "Bonus/NrBooks" << "Powers";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_ItemPowers(int)));
 }
@@ -343,7 +408,15 @@ void DialogTables::slot_addRow_to_ItemPowers(int row)
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eItem_Type>(
                                  m_game, &data->m_Bitmask_Powers.bits, (MoM::eItem_Type)0, MoM::eItem_Type_MAX));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Mana_cost_to_enchant, 5));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_PowerType, 1, SHOWNUMBER_hex));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eItemPowerType>(m_game, &data->m_PowerType, MoM::eItemPowerType_MAX));
+    if ((row >= 33) && (row < 66))  // Hard coded in MoM
+    {
+        ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eRealm_Type>(m_game, &data->m_Color, MoM::eRealm_Type_MAX));
+    }
+    else
+    {
+        col++;
+    }
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Required_Nr_Spell_Books, 2));
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eItemPower>(
                                  m_game, &data->m_Bitmask_Powers.bits, (MoM::eItemPower)0, MoM::eItemPower_MAX));
@@ -846,7 +919,7 @@ void DialogTables::update_UnitsInGame()
     labels << "Nr";
     labels << "XPos" << "YPos" << "Plane" << "Owner" << "MaxMove" << "Type" << "HeroSlot"  << "Active"  << "CurMove" << "XDest" << "YDest"
            << "Status" << "Level" << "Experience" << "Lifedrain??" << "Damage" << "Grouping" << "Combat??" << "TowerPass" << "Combat??"
-           << "Scout" << "Mutation" << "Enchantment" << "RoadLeft" << "XRoad" << "YRoad";
+           << "Scout" << "Weapon" << "Mutation" << "Enchantment" << "RoadLeft" << "XRoad" << "YRoad";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_UnitsInGame(int)));
 }
@@ -881,10 +954,10 @@ void DialogTables::slot_addRow_to_UnitsInGame(int row)
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_In_Tower_without_Seal, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Guess_Combat_Enchantment_Flag3, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Scouting, 2));
-    // TODO: Split mutation into enum-field-with-bitmask and bitmask-field-with-bitmask
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eWeaponType>(m_game, (MoM::eWeaponType*)&data->m_Weapon_Mutation.bits, MoM::eWeaponType_MAX, SHOWENUM_noZero, 0x3));
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint8_t, MoM::eUnitMutation>(
                               m_game, &data->m_Weapon_Mutation.bits,
-                              (MoM::eUnitMutation)0, MoM::eUnitMutation_MAX));
+                              (MoM::eUnitMutation)0, MoM::eUnitMutation_MAX, 0xFC));
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eUnitEnchantment>(
                               m_game, &data->m_Unit_Enchantment.bits,
                               (MoM::eUnitEnchantment)0, MoM::eUnitEnchantment_MAX));
@@ -934,6 +1007,43 @@ void DialogTables::slot_addRow_to_UnrestTable(int row)
         ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data[cityRace], 3, SHOWNUMBER_plusAndNoZero));
     }
 }
+
+//void DialogTables::update_Wizards()
+//{
+//    int ndata = 0;
+//    if (!m_game.isNull())
+//    {
+//        ndata = m_game->getNrWizards();
+//    }
+
+//    QStringList labels;
+//    labels << "Nr";
+//    labels << "Name" << "Banner" << "Power" << "SkillCombat" << "Mana" << "Gold" << "Skills" << "Spells known" << "Global enchantments";
+
+//    buildTable(labels, ndata, SLOT(slot_addRow_to_Wizards(int)));
+//}
+
+//void DialogTables::slot_addRow_to_Wizards(int row)
+//{
+//    MoM::Wizard* data = m_game->getWizard(row);
+//    if (0 == data)
+//        return;
+
+//    int col = 0;
+//    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
+
+//    ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_Name, sizeof(data->m_Name)));
+//    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBannerColor>(m_game, data->m_BannerColor, MoM::eBannerColor_MAX));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<MoM::uint16_t>(m_game, data->m_Power_Base, 4));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<MoM::int16_t>(m_game, data->m_Skill_Left_in_combat, 4));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<MoM::int16_t>(m_game, data->m_Mana_Crystals, 5));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<MoM::int16_t>(m_game, data->m_Gold_Coins, 5));
+
+////    MoM::unionSkills     m_Skills;                           // 064
+////    MoM::Spells_Known    m_Spells_Known;                     // 263 Spells (0-3) (None-Na-So-Ch-Li-De-Ar)
+////    MoM::Global_Enchantments  m_Global_Enchantments;         // 482
+
+//}
 
 void DialogTables::on_comboBox_Table_currentIndexChanged(QString newIndex)
 {

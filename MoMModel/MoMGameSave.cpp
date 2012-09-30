@@ -79,6 +79,55 @@ MoMGameSave::~MoMGameSave()
     closeGame();
 }
 
+bool MoMGameSave::addLair()
+{
+    setErrorString("");
+    if (0 == m_SaveGame.get())
+        return false;
+
+    bool ok = true;
+    int lairNr = 0;     // Relocate and change Node[0].
+
+    // Note: UNK fields left unchanged
+    Tower_Node_Lair& lair = m_SaveGame->m_Arcanus_Nodes[lairNr];
+
+    lair.m_XPos = m_SaveGame->m_Wizards[m_playerNr].m_X_Coordinate_of_Summoning_Circle + 2;
+    lair.m_YPos = m_SaveGame->m_Wizards[m_playerNr].m_Y_Coordinate_of_Summoning_Circle + 1;
+    lair.m_Plane = m_SaveGame->m_Wizards[m_playerNr].m_Plane_of_Summoning_Circle;
+    lair.m_Status = LAIRSTATUS_intact;
+    lair.m_Type = LAIRTYPE_Sorcery_node;
+    lair.m_Inhabitant1.m_Inhabitant = UNITTYPE_Blue_Air_Elemental;
+    lair.m_Inhabitant1.m_Initial_Nr_of_Inhabitant = 2;
+    lair.m_Inhabitant1.m_Remaining_Nr_of_Inhabitant = 2;
+    lair.m_Inhabitant2.m_Inhabitant = UNITTYPE_Blue_Phantom_Beast;
+    lair.m_Inhabitant2.m_Initial_Nr_of_Inhabitant = 4;
+    lair.m_Inhabitant2.m_Remaining_Nr_of_Inhabitant = 4;
+    lair.m_Flags.bits = 7;
+
+    Node_Attr& nodeAttr = m_SaveGame->m_Arcanus_Node_Attr[lairNr];
+    for (unsigned i = 0; i < ARRAYSIZE(nodeAttr.m_XPos_Mana); ++i)
+    {
+        nodeAttr.m_XPos_Mana[i] += lair.m_XPos - nodeAttr.m_XPos;
+        nodeAttr.m_YPos_Mana[i] += lair.m_YPos - nodeAttr.m_YPos;
+    }
+    nodeAttr.m_XPos = lair.m_XPos;
+    nodeAttr.m_YPos = lair.m_YPos;
+    nodeAttr.m_Plane = lair.m_Plane;
+    nodeAttr.m_Owner = PLAYER_Dismissed_Deceased;
+    nodeAttr.m_Node_Type = NODETYPE_Sorcery;
+
+    if (PLANE_Arcanum == lair.m_Plane)
+    {
+        m_SaveGame->m_Arcanus_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
+    }
+    else if (PLANE_Myrror == lair.m_Plane)
+    {
+        m_SaveGame->m_Myrror_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
+    }
+
+    return ok;
+}
+
 void MoMGameSave::closeGame() throw()
 {
 }
@@ -91,21 +140,89 @@ bool MoMGameSave::commitData(void* ptr, const void* pNewValue, size_t size)
     return true;
 }
 
+bool MoMGameSave::findYourFirstUnit(int& unitNr)
+{
+    setErrorString("");
+    if (0 == m_SaveGame.get())
+        return false;
+
+    bool found = false;
+    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
+    {
+        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
+
+        if (PLAYER_YOU == unit.m_Owner)
+        {
+            found = true;
+            unitNr = (int)lUnitNr;
+            break;
+        }
+    }
+    return found;
+}
+
+bool MoMGameSave::findOthersFirstUnit(int& unitNr)
+{
+    setErrorString("");
+    if (0 == m_SaveGame.get())
+        return false;
+
+    bool found = false;
+    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
+    {
+        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
+
+        if (PLAYER_YOU != unit.m_Owner)
+        {
+            found = true;
+            unitNr = (int)lUnitNr;
+            break;
+        }
+    }
+    return found;
+}
+
 std::string MoMGameSave::getGameDirectory() const
 {
     return m_GameDirectory;
 }
 
-uint8_t* MoMGameSave::getWizardsOverlay(size_t ovlNr)
+std::string MoMGameSave::getSources() const
 {
-    uint8_t* ptr = 0;
-
-    if (0 != m_WizardsExe.get())
+    std::string sources;
+    if (!m_GameDirectory.empty())
     {
-        ptr = m_WizardsExe->getOverlay(ovlNr);
+        sources += m_GameDirectory + " - ";
     }
-
-    return ptr;
+    if (!m_filename_SaveGame.empty())
+    {
+        sources += " " + m_filename_SaveGame;
+    }
+    if (!m_filename_MagicExe.empty())
+    {
+        sources += " " + m_filename_MagicExe;
+    }
+    if (!m_filename_WizardsExe.empty())
+    {
+        sources += " " + m_filename_WizardsExe;
+    }
+    if (0 != m_BuilddatLbx.get())
+    {
+        sources += " " + m_BuilddatLbx->getFilename();
+    }
+    if (0 != m_SpelldatLbx.get())
+    {
+        sources += " " + m_SpelldatLbx->getFilename();
+    }
+    if (0 != m_TerrstatLbx.get())
+    {
+        sources += " " + m_TerrstatLbx->getFilename();
+    }
+    if (sources.empty())
+    {
+        sources = "MASTER OF MAGIC - Real-Time Game Tweaker";
+    }
+    return sources;
 }
 
 uint8_t* MoMGameSave::getMagicOverlay(size_t ovlNr)
@@ -120,10 +237,23 @@ uint8_t* MoMGameSave::getMagicOverlay(size_t ovlNr)
     return ptr;
 }
 
+uint8_t* MoMGameSave::getWizardsOverlay(size_t ovlNr)
+{
+    uint8_t* ptr = 0;
+
+    if (0 != m_WizardsExe.get())
+    {
+        ptr = m_WizardsExe->getOverlay(ovlNr);
+    }
+
+    return ptr;
+}
+
 bool MoMGameSave::load(const char* filename)
 {
     assert(0 != filename);
     setErrorString("");
+    bool ok = true;
 
     std::string lower_filetitle = lowercase_filetitle(filename);
     std::string ext = lowercase_extension(filename);
@@ -150,46 +280,27 @@ bool MoMGameSave::load(const char* filename)
     else if ("builddat.lbx" == lower_filetitle)
     {
         m_BuilddatLbx.reset(new MoMLbxBase);
-        bool ok = m_BuilddatLbx->load(filename);
-        if (!ok)
-        {
-            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = loadLbx(filename, m_BuilddatLbx.get());
+    }
+    else if ("itemdata.lbx" == lower_filetitle)
+    {
+        m_ItemDataLbx.reset(new MoMLbxBase);
+        ok = loadLbx(filename, m_ItemDataLbx.get());
+    }
+    else if ("itempow.lbx" == lower_filetitle)
+    {
+        m_ItemPowLbx.reset(new MoMLbxBase);
+        ok = loadLbx(filename, m_ItemPowLbx.get());
     }
     else if ("spelldat.lbx" == lower_filetitle)
     {
         m_SpelldatLbx.reset(new MoMLbxBase);
-        bool ok = m_SpelldatLbx->load(filename);
-        if (!ok)
-        {
-            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = loadLbx(filename, m_SpelldatLbx.get());
     }
     else if ("terrstat.lbx" == lower_filetitle)
     {
         m_TerrstatLbx.reset(new MoMLbxBase);
-        bool ok = m_TerrstatLbx->load(filename);
-        if (!ok)
-        {
-            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
-    }
-    else if (".lbx" == ext)
-    {
-        MoMLbxBase lbxFile;
-        bool ok = lbxFile.load(filename);
-        if (!ok)
-        {
-            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = loadLbx(filename, m_TerrstatLbx.get());
     }
     else if ((lower_filetitle.substr(0, gLowercaseMagicPrefix.size()) == gLowercaseMagicPrefix) && (".exe" == ext))
     {
@@ -228,11 +339,24 @@ bool MoMGameSave::load(const char* filename)
     return true;
 }
 
+bool MoMGameSave::loadLbx(const std::string &filename, MoMLbxBase *lbxBase)
+{
+    assert(0 != lbxBase);
+    lbxBase->close();
+    bool ok = lbxBase->load(filename);
+    if (!ok)
+    {
+        setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+        std::cout << errorString() << std::endl;
+    }
+    return ok;
+}
 
 bool MoMGameSave::save(const char* filename)
 {
     assert(0 != filename);
     setErrorString("");
+    bool ok = true;
 
     std::string lower_filetitle = lowercase_filetitle(filename);
     std::string ext = lowercase_extension(filename);
@@ -300,189 +424,50 @@ bool MoMGameSave::save(const char* filename)
     }
     else if ("builddat.lbx" == lower_filetitle)
     {
-        if (0 == m_BuilddatLbx.get())
-        {
-            setErrorString("Cannot save to '" + toStr(filename) + "' because no BUILDDAT.LBX was loaded");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
-
-        if (!m_BuilddatLbx->save(filename))
-        {
-            setErrorString("Could not write BUILDDAT.LBX data (fully) to file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = saveLbx(lower_filetitle, m_BuilddatLbx.get(), filename);
+    }
+    else if ("itemdata.lbx" == lower_filetitle)
+    {
+        ok = saveLbx(lower_filetitle, m_ItemDataLbx.get(), filename);
+    }
+    else if ("itempow.lbx" == lower_filetitle)
+    {
+        ok = saveLbx(lower_filetitle, m_ItemPowLbx.get(), filename);
     }
     else if ("spelldat.lbx" == lower_filetitle)
     {
-        if (0 == m_SpelldatLbx.get())
-        {
-            setErrorString("Cannot save to '" + toStr(filename) + "' because no SPELLDAT.LBX was loaded");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
-
-        if (!m_SpelldatLbx->save(filename))
-        {
-            setErrorString("Could not write SPELLDAT.LBX data (fully) to file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = saveLbx(lower_filetitle, m_SpelldatLbx.get(), filename);
     }
     else if ("terrstat.lbx" == lower_filetitle)
     {
-        if (0 == m_TerrstatLbx.get())
-        {
-            setErrorString("Cannot save to '" + toStr(filename) + "' because no TERRSTAT.LBX was loaded");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
-
-        if (!m_TerrstatLbx->save(filename))
-        {
-            setErrorString("Could not write TERRSTAT.LBX data (fully) to file '" + toStr(filename) + "'");
-            std::cout << errorString() << std::endl;
-            return false;
-        }
+        ok = saveLbx(lower_filetitle, m_TerrstatLbx.get(), filename);
     }
     else
     {
-        setErrorString("Could not write WIZARDS.EXE data (fully) to file '" + toStr(filename) + "'");
+        setErrorString("Could not recognize filename pattern to save to file '" + toStr(filename) + "'");
         std::cout << errorString() << std::endl;
         return false;
-    }
-
-    return true;
-}
-
-bool MoMGameSave::addLair()
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool ok = true;
-    int lairNr = 0;     // Relocate and change Node[0].
-
-    // Note: UNK fields left unchanged
-    Tower_Node_Lair& lair = m_SaveGame->m_Arcanus_Nodes[lairNr];
-
-    lair.m_XPos = m_SaveGame->m_Wizards[m_playerNr].m_X_Coordinate_of_Summoning_Circle + 2;
-    lair.m_YPos = m_SaveGame->m_Wizards[m_playerNr].m_Y_Coordinate_of_Summoning_Circle + 1;
-    lair.m_Plane = m_SaveGame->m_Wizards[m_playerNr].m_Plane_of_Summoning_Circle;
-    lair.m_Status = LAIRSTATUS_intact;
-    lair.m_Type = LAIRTYPE_Sorcery_node;
-    lair.m_Inhabitant1.m_Inhabitant = UNITTYPE_Blue_Air_Elemental;
-    lair.m_Inhabitant1.m_Initial_Nr_of_Inhabitant = 2;
-    lair.m_Inhabitant1.m_Remaining_Nr_of_Inhabitant = 2;
-    lair.m_Inhabitant2.m_Inhabitant = UNITTYPE_Blue_Phantom_Beast;
-    lair.m_Inhabitant2.m_Initial_Nr_of_Inhabitant = 4;
-    lair.m_Inhabitant2.m_Remaining_Nr_of_Inhabitant = 4;
-    lair.m_Flags.bits = 7;
-
-    Node_Attr& nodeAttr = m_SaveGame->m_Arcanus_Node_Attr[lairNr];
-    for (unsigned i = 0; i < ARRAYSIZE(nodeAttr.m_XPos_Mana); ++i)
-    {
-        nodeAttr.m_XPos_Mana[i] += lair.m_XPos - nodeAttr.m_XPos;
-        nodeAttr.m_YPos_Mana[i] += lair.m_YPos - nodeAttr.m_YPos;
-    }
-    nodeAttr.m_XPos = lair.m_XPos;
-    nodeAttr.m_YPos = lair.m_YPos;
-    nodeAttr.m_Plane = lair.m_Plane;
-    nodeAttr.m_Owner = PLAYER_Dismissed_Deceased;
-    nodeAttr.m_Node_Type = NODETYPE_Sorcery;
-
-    if (PLANE_Arcanum == lair.m_Plane)
-    {
-        m_SaveGame->m_Arcanus_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
-    }
-    else if (PLANE_Myrror == lair.m_Plane)
-    {
-        m_SaveGame->m_Myrror_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
     }
 
     return ok;
 }
 
-bool MoMGameSave::findYourFirstUnit(int& unitNr)
+bool MoMGameSave::saveLbx(const std::string& lbxTitle, MoMLbxBase *lbxBase, const std::string &filename)
 {
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool found = false;
-    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
+    bool ok = true;
+    if (0 == lbxBase)
     {
-        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
-
-        if (PLAYER_YOU == unit.m_Owner)
-        {
-            found = true;
-            unitNr = (int)lUnitNr;
-            break;
-        }
+        setErrorString("Cannot save to '" + filename + "' because no " + lbxTitle + " was loaded");
+        std::cout << errorString() << std::endl;
+        ok = false;
     }
-    return found;
-}
-
-bool MoMGameSave::findOthersFirstUnit(int& unitNr)
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool found = false;
-    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
+    if (ok && !lbxBase->save(filename))
     {
-        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
-
-        if (PLAYER_YOU != unit.m_Owner)
-        {
-            found = true;
-            unitNr = (int)lUnitNr;
-            break;
-        }
+        setErrorString("Could not write " + lbxTitle + " data (fully) to file '" + filename + "'");
+        std::cout << errorString() << std::endl;
+        ok = false;
     }
-    return found;
-}
-
-std::string MoMGameSave::getSources() const
-{
-    std::string sources;
-    if (!m_GameDirectory.empty())
-    {
-        sources += m_GameDirectory + " - ";
-    }
-    if (!m_filename_SaveGame.empty())
-    {
-        sources += " " + m_filename_SaveGame;
-    }
-    if (!m_filename_MagicExe.empty())
-    {
-        sources += " " + m_filename_MagicExe;
-    }
-    if (!m_filename_WizardsExe.empty())
-    {
-        sources += " " + m_filename_WizardsExe;
-    }
-    if (0 != m_BuilddatLbx.get())
-    {
-        sources += " " + m_BuilddatLbx->getFilename();
-    }
-    if (0 != m_SpelldatLbx.get())
-    {
-        sources += " " + m_SpelldatLbx->getFilename();
-    }
-    if (0 != m_TerrstatLbx.get())
-    {
-        sources += " " + m_TerrstatLbx->getFilename();
-    }
-    if (sources.empty())
-    {
-        sources = "MASTER OF MAGIC - Real-Time Game Tweaker";
-    }
-    return sources;
+    return ok;
 }
 
 bool MoMGameSave::validate()

@@ -88,7 +88,7 @@ public:
     bool replaceRecord(size_t recordNr, const std::vector<uint8_t>& dataBuffer);
 
 private:
-    void initPointers();
+    bool initPointers();
 
     std::string             m_filename;
     std::vector<uint8_t>    m_contents;

@@ -88,25 +88,7 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/abilities/Create Outpost.gif</normaloff>:/abilities/Create Outpost.gif</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Cities</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
         <normaloff>:/abilities/Construction.gif</normaloff>:/abilities/Construction.gif</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Events</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/images/Arcane.gif</normaloff>:/images/Arcane.gif</iconset>
       </property>
      </item>
      <item>
@@ -143,15 +125,6 @@
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
         <normaloff>:/images/thrown.gif</normaloff>:/images/thrown.gif</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Lairs in game</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/lucern.png</normaloff>:/heroes/lucern.png</iconset>
       </property>
      </item>
      <item>
@@ -197,15 +170,6 @@
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
         <normaloff>:/race/Klackon.gif</normaloff>:/race/Klackon.gif</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Wizards</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/wizards/Freya.gif</normaloff>:/wizards/Freya.gif</iconset>
       </property>
      </item>
     </widget>

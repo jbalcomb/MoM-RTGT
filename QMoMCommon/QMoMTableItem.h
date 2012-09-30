@@ -202,14 +202,12 @@ template<typename Enum>
 class EnumTableItem : public QMoMTableItemBase
 {
 public:
-    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum = SHOWENUM_normal);
+    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum = SHOWENUM_normal, unsigned bitmask = 0);
+    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum = SHOWENUM_normal);
 
     virtual void setData(int role, const QVariant &value);
-
     virtual QList<QAction*> requestActions(QObject* parent);
-
     virtual void slotAction();
-
     virtual QString toString() const;
 
 private:
@@ -217,6 +215,8 @@ private:
 
     // Configuration
     Enum* m_ptr;
+    unsigned m_bitmask;
+    Enum m_min;
     Enum m_max;
     eShowEnum m_showEnum;
 
@@ -228,9 +228,24 @@ private:
 };
 
 template<typename Enum>
-EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum) :
+EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum, unsigned bitmask) :
     QMoMTableItemBase(game),
     m_ptr(e),
+    m_bitmask(bitmask),
+    m_min(),
+    m_max(max),
+    m_showEnum(showEnum),
+    m_actionGroup()
+{
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Enum>
+EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum) :
+    QMoMTableItemBase(game),
+    m_ptr(e),
+    m_bitmask(),
+    m_min(min),
     m_max(max),
     m_showEnum(showEnum),
     m_actionGroup()
@@ -245,7 +260,12 @@ void EnumTableItem<Enum>::setData(int role, const QVariant &value)
     {
     case Qt::EditRole:
         {
-            Enum newValue = static_cast<Enum> (value.toInt());
+            unsigned unsignedValue = value.toUInt();
+            if (0 != m_bitmask)
+            {
+                unsignedValue = ((*m_ptr & ~m_bitmask) | (unsignedValue & m_bitmask));
+            }
+            Enum newValue = static_cast<Enum>(unsignedValue);
             (void)m_game->commitData(m_ptr, &newValue, sizeof(Enum));
             QTableWidgetItem::setData(role, toString());
         }
@@ -288,13 +308,14 @@ QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
 {
     m_actionGroup = new QActionGroup(parent);
 
-    if ((m_showEnum == SHOWENUM_minusOne) || (m_showEnum == SHOWENUM_minusOneAndnoZero))
+    if (((m_showEnum == SHOWENUM_minusOne) || (m_showEnum == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
     {
         addAction((Enum)-1);
     }
 
-    for (Enum e = (Enum)0; e < m_max; MoM::inc(e))
+    for (int16_t index = (int16_t)m_min; index < (int16_t)m_max; ++index)
     {
+        Enum e = (Enum)index;
         addAction(e);
     }
 
@@ -311,14 +332,21 @@ void EnumTableItem<Enum>::slotAction()
 template<typename Enum>
 QString EnumTableItem<Enum>::toString() const
 {
-    QString str = prettyQStr(*m_ptr);
+    unsigned unsignedValue = static_cast<unsigned>(*m_ptr);
+    if (0 != m_bitmask)
+    {
+        unsignedValue = (unsignedValue & m_bitmask);
+    }
+    Enum enumValue = static_cast<Enum>(unsignedValue);
+    QString str = prettyQStr(enumValue);
+
     if (((m_showEnum == SHOWENUM_minusOne) || (m_showEnum == SHOWENUM_minusOneAndnoZero))
-            && (*m_ptr == (Enum)-1))
+            && (enumValue == (Enum)-1))
     {
         str = "";
     }
     else if (((m_showEnum == SHOWENUM_noZero) || (m_showEnum == SHOWENUM_minusOneAndnoZero))
-            && (*m_ptr == (Enum)0))
+            && (enumValue == (Enum)0))
     {
         str = "-";
     }
@@ -333,7 +361,7 @@ class BitmaskTableItem : public QMoMTableItemBase
 public:
     // g++ complains that it cannot bind an uint16_t to a reference in this template, probably due to some alignment issue,
     // but it does accept a pointer. :).
-    BitmaskTableItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max);
+    BitmaskTableItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max, unsigned maskbits = 0);
 
     virtual void setData(int role, const QVariant &value);
 
@@ -342,6 +370,7 @@ public:
     virtual void slotAction();
 
 private:
+    void addAction(Enum e);
     bool has(Enum e) const;
     QString toString();
 
@@ -349,6 +378,7 @@ private:
     Bitmask* m_ptr;
     Enum m_min;
     Enum m_max;
+    unsigned m_maskbits;
 
     // Status
 
@@ -358,11 +388,12 @@ private:
 };
 
 template<typename Bitmask, typename Enum>
-BitmaskTableItem<Bitmask, Enum>::BitmaskTableItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max) :
+BitmaskTableItem<Bitmask, Enum>::BitmaskTableItem(const QMoMGamePtr& game, Bitmask* bitmask, Enum min, Enum max, unsigned maskbits) :
     QMoMTableItemBase(game),
     m_ptr(bitmask),
     m_min(min),
     m_max(max),
+    m_maskbits(maskbits),
     m_actionGroup()
 {
     QTableWidgetItem::setData(Qt::EditRole, toString());
@@ -375,7 +406,12 @@ void BitmaskTableItem<Bitmask, Enum>::setData(int role, const QVariant &value)
     {
     case Qt::EditRole:
         {
-            Bitmask newValue = static_cast<Bitmask>(value.toUInt());
+            unsigned unsignedValue = value.toUInt();
+            if (0 != m_maskbits)
+            {
+                unsignedValue = ((*m_ptr & ~m_maskbits) | (unsignedValue & m_maskbits));
+            }
+            Bitmask newValue = static_cast<Bitmask>(unsignedValue);
             (void)m_game->commitData(m_ptr, &newValue, sizeof(Bitmask));
             QTableWidgetItem::setData(role, toString());
         }
@@ -387,19 +423,35 @@ void BitmaskTableItem<Bitmask, Enum>::setData(int role, const QVariant &value)
 }
 
 template<typename Bitmask, typename Enum>
-QList<QAction*> BitmaskTableItem<Bitmask, Enum>::requestActions(QObject* parent)
+void BitmaskTableItem<Bitmask, Enum>::addAction(Enum e)
 {
-    m_actionGroup = new QActionGroup(parent);
-    m_actionGroup->setExclusive(false);
-    for (Enum e = m_min; e < m_max; MoM::inc(e))
+    assert(m_actionGroup != 0);
+
+    QString name = prettyQStr(e);
+    if (!name.isEmpty() && (name[0] == '<') && !has(e))
     {
-        QAction* action = new QAction(prettyQStr(e), m_actionGroup);
+        // Skip <Unknown> entries, unless one of them is selected
+    }
+    else
+    {
+        QAction* action = new QAction(name, m_actionGroup);
         action->setCheckable(true);
         action->setData(QVariant((int)e));
         if (has(e))
         {
             action->setChecked(true);
         }
+    }
+}
+
+template<typename Bitmask, typename Enum>
+QList<QAction*> BitmaskTableItem<Bitmask, Enum>::requestActions(QObject* parent)
+{
+    m_actionGroup = new QActionGroup(parent);
+    m_actionGroup->setExclusive(false);
+    for (Enum e = m_min; e < m_max; MoM::inc(e))
+    {
+        addAction(e);
     }
     return m_actionGroup->actions();
 }
@@ -413,7 +465,8 @@ void BitmaskTableItem<Bitmask, Enum>::slotAction()
     {
         if (m_actionGroup->actions().at(i)->isChecked())
         {
-            bitmask |= (1 << i);
+            Enum e = static_cast<Enum>(m_actionGroup->actions().at(i)->data().toUInt());
+            bitmask |= (1 << ((unsigned)e - (unsigned)m_min));
         }
     }
     setData(Qt::EditRole, QVariant((unsigned)bitmask));
@@ -423,6 +476,10 @@ template<typename Bitmask, typename Enum>
 bool BitmaskTableItem<Bitmask, Enum>::has(Enum e) const
 {
     Bitmask mask = (1 << ((unsigned)e - (unsigned)m_min));
+    if (0 != m_maskbits)
+    {
+        mask = (mask & m_maskbits);
+    }
     return ((*m_ptr & mask) != 0);
 }
 

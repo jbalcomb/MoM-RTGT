@@ -32,12 +32,26 @@ protected:
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
+    virtual uint8_t* getArtifacts_in_game()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return m_SaveGame->m_Artifacts_in_Game;
+    }
+
     virtual Building_Data* getBuildingData()
     {
         if (0 == m_BuilddatLbx.get())
             return 0;
         uint8_t* data = m_BuilddatLbx->getRecord(0);
         return (Building_Data*)(data + 4);
+    }
+
+    virtual Hero_Choice* getChosen_Hero_Names()
+    {
+        if (0 == m_SaveGame.get())
+            return 0;
+        return m_SaveGame->m_Chosen_Hero_Names;
     }
 
     virtual City* getCities()
@@ -282,6 +296,10 @@ protected:
     }
 
     virtual uint8_t* getWizardsOverlay(size_t ovlNr);
+
+private:
+    bool loadLbx(const std::string& filename, MoMLbxBase* lbxBase);
+    bool saveLbx(const std::string& lbxTitle, MoMLbxBase* lbxBase, const std::string& filename);
 
 private:
     std::auto_ptr<SaveGame> m_SaveGame;

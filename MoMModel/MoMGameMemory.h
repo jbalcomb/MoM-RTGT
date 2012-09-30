@@ -89,11 +89,13 @@ private:
         return ptr;
     }
 
+    virtual uint8_t* getArtifacts_in_game();
     virtual Available_spell_page* getAvailable_spell_pages();
     virtual Battlefield* getBattlefield();
     virtual Battle_Unit* getBattleUnitViewed();
     virtual Battle_Unit* getBattle_Units();
     virtual Building_Data* getBuildingData();
+    virtual Hero_Choice* getChosen_Hero_Names();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
     virtual Fortress* getFortresses();

@@ -47,6 +47,7 @@ private:
     void update_UnitTypes();
     void update_UnitsInGame();
     void update_UnrestTable();
+//    void update_Wizards();
 
 private slots:
     void on_comboBox_Table_currentIndexChanged(QString );
@@ -63,6 +64,7 @@ private slots:
     void slot_addRow_to_UnitTypes(int row);
     void slot_addRow_to_UnitsInGame(int row);
     void slot_addRow_to_UnrestTable(int row);
+//    void slot_addRow_to_Wizards(int row);
 
     void slot_Copy();
     void slot_ItemAction();

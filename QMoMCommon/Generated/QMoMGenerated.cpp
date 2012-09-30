@@ -1950,18 +1950,7 @@ QMoMTreeItemModelBase* constructTreeItem(Hero_Choice* rhs, const QString& contex
         return ptree;
 
     ptree->appendChild("m_Name", new QMoMTreeItemModel<char[14]>(rhs->m_Name));
-    QMoMTreeItemModelBase* ptreem_UNK = ptree;
-    if (2 > 3)
-    {
-        ptreem_UNK = new QMoMTreeItemModelBase("m_UNK");
-        ptree->appendTree(ptreem_UNK, "");
-    }
-    for (unsigned i = 0; i < 2; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_UNK[" << i << "]";
-          ptreem_UNK->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_UNK[i]));
-    }
+    ptree->appendChild("m_Experience", new QMoMTreeItemModel<int16_t>(&rhs->m_Experience));
     return ptree;
 }
 
@@ -2195,7 +2184,8 @@ QMoMTreeItemModelBase* constructTreeItem(ItemPowLbx* rhs, const QString& context
     ptree->appendChild("m_Name", new QMoMTreeItemModel<char[18]>(rhs->m_Name));
     ptree->appendChild("m_EnchantibleItems", new QMoMTreeItemModel<uint16_t>(&rhs->m_EnchantibleItems));
     ptree->appendChild("m_Mana_cost_to_enchant", new QMoMTreeItemModel<int16_t>(&rhs->m_Mana_cost_to_enchant));
-    ptree->appendChild("m_PowerType", new QMoMTreeItemModel<uint16_t>(&rhs->m_PowerType));
+    ptree->appendChild("m_PowerType", new QMoMTreeItemModel<eItemPowerType>(&rhs->m_PowerType));
+    ptree->appendChild("m_Color", new QMoMTreeItemModel<eRealm_Type>(&rhs->m_Color));
     ptree->appendChild("m_Required_Nr_Spell_Books", new QMoMTreeItemModel<int16_t>(&rhs->m_Required_Nr_Spell_Books));
     ptree->appendTree(constructTreeItem(&rhs->m_Bitmask_Powers, "m_Bitmask_Powers"), "");
     return ptree;
@@ -3246,7 +3236,7 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     ptree->appendChild("w_sound_x", new QMoMTreeItemModel<uint16_t>(&rhs->w_sound_x));
     ptree->appendChild("word_3FBD4", new QMoMTreeItemModel<uint16_t>(&rhs->word_3FBD4));
     ptree->appendTree(constructTreeItem(&rhs->m_addr_Items, "m_addr_Items"), "");
-    ptree->appendTree(constructTreeItem(&rhs->addr_item_in_game_GUESS, "addr_item_in_game_GUESS"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_Artifacts_in_Game, "m_addr_Artifacts_in_Game"), "");
     QMoMTreeItemModelBase* ptreem_item_pics_116 = ptree;
     if (116 > 3)
     {
@@ -5381,29 +5371,29 @@ QMoMTreeItemModelBase* constructTreeItem(SaveGame* rhs, const QString& context)
           ptreem_Myrror_Terrain_Changes_Row->appendTree(constructTreeItem(&rhs->m_Myrror_Terrain_Changes_Row[i], oss.str().c_str()), "");
     }
     ptree->appendChild("m_Grand_Vizier", new QMoMTreeItemModel<eGrand_Vizier>(&rhs->m_Grand_Vizier));
-    QMoMTreeItemModelBase* ptreem_Items_in_Game = ptree;
-    if (250 > 3)
+    QMoMTreeItemModelBase* ptreem_Artifacts_in_Game = ptree;
+    if (gMAX_ARTIFACTS_IN_GAME > 3)
     {
-        ptreem_Items_in_Game = new QMoMTreeItemModelBase("m_Items_in_Game");
-        ptree->appendTree(ptreem_Items_in_Game, "");
+        ptreem_Artifacts_in_Game = new QMoMTreeItemModelBase("m_Artifacts_in_Game");
+        ptree->appendTree(ptreem_Artifacts_in_Game, "");
     }
-    for (unsigned i = 0; i < 250; ++i)
+    for (unsigned i = 0; i < gMAX_ARTIFACTS_IN_GAME; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Items_in_Game[" << i << "]";
-          ptreem_Items_in_Game->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Items_in_Game[i]));
+          oss << "m_Artifacts_in_Game[" << i << "]";
+          ptreem_Artifacts_in_Game->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Artifacts_in_Game[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Hero_Choices = ptree;
+    QMoMTreeItemModelBase* ptreem_Chosen_Hero_Names = ptree;
     if (gMAX_HERO_TYPES > 3)
     {
-        ptreem_Hero_Choices = new QMoMTreeItemModelBase("m_Hero_Choices");
-        ptree->appendTree(ptreem_Hero_Choices, "");
+        ptreem_Chosen_Hero_Names = new QMoMTreeItemModelBase("m_Chosen_Hero_Names");
+        ptree->appendTree(ptreem_Chosen_Hero_Names, "");
     }
     for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Hero_Choices[" << i << "]";
-          ptreem_Hero_Choices->appendTree(constructTreeItem(&rhs->m_Hero_Choices[i], oss.str().c_str()), "");
+          oss << "m_Chosen_Hero_Names[" << i << "]";
+          ptreem_Chosen_Hero_Names->appendTree(constructTreeItem(&rhs->m_Chosen_Hero_Names[i], oss.str().c_str()), "");
     }
     return ptree;
 }
