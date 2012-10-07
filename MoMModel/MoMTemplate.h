@@ -5209,47 +5209,51 @@ typedef struct // MoMDataSegment
     DS_Offset               m_Offsets_HeroLevelNames[9];        // ds:3F52
     UnitView_ItemText       m_ItemPower_text[32];               // ds:3F64
 
-    char        m_NameBuffer_4064[0x5E92 - 0x4064]; // ds:4064
+    char        m_NameBuffer_4064[0x5bd8 - 0x4064];             // ds:4064
+
+    int16_t     m_BaseItemPowerCosts[eItemPowerType_MAX];       // dseg:5BD8
+
+    char        m_NameBuffer_5BEC[0x5E92 - 0x5BEC];             // dseg:5BEC
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
-    uint16_t    m_Next_Turn_seed_storage_lo;        // ds:5E92
-    uint16_t    m_Next_Turn_seed_storage_hi;        // ds:5E94
+    uint16_t    m_Next_Turn_seed_storage_lo;                    // ds:5E92
+    uint16_t    m_Next_Turn_seed_storage_hi;                    // ds:5E94
 
-    uint8_t     m_UNK_5E96[0x6E9E - 0x5E96];        // ds:5E96
+    uint8_t     m_UNK_5E96[0x6E9E - 0x5E96];                    // ds:5E96
 
-    uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];  // ds:6E9E
+    uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];              // ds:6E9E
 
-    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];        // ds:6EAC
+    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];                    // ds:6EAC
 
-    char        m_Copyright_and_Version[41];        // ds:7151  Offset version is at [34]
+    char        m_Copyright_and_Version[41];                    // ds:7151  Offset version is at [34]
 
-    uint8_t     m_UNK_717A[0x71E0 - 0x717A];        // ds:717A
+    uint8_t     m_UNK_717A[0x71E0 - 0x717A];                    // ds:717A
 
-    uint32_t    m_BIOS_clock_snapshot;              // ds:71E0
+    uint32_t    m_BIOS_clock_snapshot;                          // ds:71E0
 
-    uint8_t     m_UNK_71E4[0x7846 - 0x71E4];        // ds:71E4
+    uint8_t     m_UNK_71E4[0x7846 - 0x71E4];                    // ds:71E4
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
-    uint16_t    m_RNG_seed_lo;                      // ds:7846
-    uint16_t    m_RNG_seed_hi;                      // ds:7848
+    uint16_t    m_RNG_seed_lo;                                  // ds:7846
+    uint16_t    m_RNG_seed_hi;                                  // ds:7848
 
-    uint8_t     m_UNK06c[0x7876 - 0x784A];          // ds:784A
+    uint8_t     m_UNK06c[0x7876 - 0x784A];                      // ds:784A
 
-    uint16_t    m_DEBUG_Off;                        // ds:7876
+    uint16_t    m_DEBUG_Off;                                    // ds:7876
 
-    uint8_t     m_UNK06d[0x912C - 0x7878];          // ds:7878
+    uint8_t     m_UNK06d[0x912C - 0x7878];                      // ds:7878
 
-    EXE_Reloc   m_addr_Spell_Data;                  // 912C
+    EXE_Reloc   m_addr_Spell_Data;                              // 912C
     uint16_t    word_3FBD0  ; // 9130
     uint16_t    w_sound_x   ; // 9132
     uint16_t    word_3FBD4  ; // 9134
-    EXE_Reloc   m_addr_Items;                       // 9136
-    EXE_Reloc   m_addr_Artifacts_in_Game;           // 913A
-    uint16_t    m_item_pics_116[116];               // 913E
-    EXE_Reloc   m_addr_Battle_Unit_View;            // 9226
-    EXE_Reloc   m_addr_Battle_Unit;                 // 922A
-    EXE_Reloc   m_addr_Spells_Cast_in_Battle;       // 922E
-    EXE_Reloc   m_addr_Hero_stat[6];                // 9232
+    EXE_Reloc   m_addr_Items;                                   // 9136
+    EXE_Reloc   m_addr_Artifacts_in_Game;                       // 913A
+    uint16_t    m_item_pics_116[116];                           // 913E
+    EXE_Reloc   m_addr_Battle_Unit_View;                        // 9226
+    EXE_Reloc   m_addr_Battle_Unit;                             // 922A
+    EXE_Reloc   m_addr_Spells_Cast_in_Battle;                   // 922E
+    EXE_Reloc   m_addr_Hero_stat[6];                            // 9232
     uint8_t w_AI_flees[20]  ; // 924A
     uint8_t word_3FCFE[10]  ; // 925E
     uint16_t    word_3FD08  ; // 9268
@@ -5258,18 +5262,18 @@ typedef struct // MoMDataSegment
     uint16_t    word_3FD0E  ; // 926E
     uint16_t    word_3FD10  ; // 9270
     uint16_t    word_3FD12  ; // 9272
-    EXE_Reloc   m_addr_Battlefield;                 // 9274
+    EXE_Reloc   m_addr_Battlefield;                             // 9274
     uint16_t    word_3FD18  ; // 9278
     uint16_t    word_3FD1A  ; // 927A
     uint16_t    w_AI_on_the_move_GUESS  ; // 927C
     uint16_t    w_coo_X_Y_clicked   ; // 927E
     uint16_t    w_coo_Y_X_clicked   ; // 9280
     uint16_t    word_3FD22  ; // 9282
-    int16_t     m_clash_place_type; // 9284         // -1=undef,0=overland,1=city,5=lair
-    int16_t     m_clash_cityNr_or_lairNr; // 9286
+    int16_t     m_clash_place_type;                             // 9284         // -1=undef,0=overland,1=city,5=lair
+    int16_t     m_clash_cityNr_or_lairNr;                       // 9286
     uint8_t word_3FD28[12]    ; // 9288
-    int16_t     m_kyrub_dseg_9294  ; // 9294
-    int16_t     m_kyrub_dseg_9296  ; // 9296
+    int16_t     m_kyrub_dseg_9294  ;                            // 9294
+    int16_t     m_kyrub_dseg_9296  ;                            // 9296
     uint8_t word_3FD38[20]  ; // 9298
     uint16_t    w_negat_encha_x17_flag_def  ; // 92AC
     uint16_t    w_aggre_spell_color_flag_att    ; // 92AE

@@ -5290,7 +5290,14 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << rhs.m_ItemPower_text[i] << ",\n";
     }
     os << ")\n";
-    os << "m_NameBuffer_4064=" << formatCharArray(rhs.m_NameBuffer_4064, 0x5E92 - 0x4064) << "\n";
+    os << "m_NameBuffer_4064=" << formatCharArray(rhs.m_NameBuffer_4064, 0x5bd8 - 0x4064) << "\n";
+    os << "m_BaseItemPowerCosts=(\n";
+    for (unsigned i = 0; i < eItemPowerType_MAX; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_BaseItemPowerCosts[i] << " 0x" << std::hex << rhs.m_BaseItemPowerCosts[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_NameBuffer_5BEC=" << formatCharArray(rhs.m_NameBuffer_5BEC, 0x5E92 - 0x5BEC) << "\n";
     os << "m_Next_Turn_seed_storage_lo=" << rhs.m_Next_Turn_seed_storage_lo << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_lo << std::dec << "\n";
     os << "m_Next_Turn_seed_storage_hi=" << rhs.m_Next_Turn_seed_storage_hi << " 0x" << std::hex << rhs.m_Next_Turn_seed_storage_hi << std::dec << "\n";
     os << "m_UNK_5E96=(\n";

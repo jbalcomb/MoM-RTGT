@@ -5,9 +5,10 @@ Author: Klaas van Aarsen
 CHANGES IN 0.2.7 (2012--)
 -----------------------------
 
-* Save/restore bookmark during battle (on battle map).
+* Save/restore bookmark during battle (on battle map) [FrancoK].
   To restore a bookmark from scratch, first a save game from before
   the battle must be restored, and then enter battle again.
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/25/
 
 * More tables (click Show tables):
   - Item powers from itempow.lbx (new).

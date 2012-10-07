@@ -3139,7 +3139,20 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
           oss << "m_ItemPower_text[" << i << "]";
           ptreem_ItemPower_text->appendTree(constructTreeItem(&rhs->m_ItemPower_text[i], oss.str().c_str()), "");
     }
-    ptree->appendChild("m_NameBuffer_4064", new QMoMTreeItemModel<char[0x5E92 - 0x4064]>(rhs->m_NameBuffer_4064));
+    ptree->appendChild("m_NameBuffer_4064", new QMoMTreeItemModel<char[0x5bd8 - 0x4064]>(rhs->m_NameBuffer_4064));
+    QMoMTreeItemModelBase* ptreem_BaseItemPowerCosts = ptree;
+    if (eItemPowerType_MAX > 3)
+    {
+        ptreem_BaseItemPowerCosts = new QMoMTreeItemModelBase("m_BaseItemPowerCosts");
+        ptree->appendTree(ptreem_BaseItemPowerCosts, "");
+    }
+    for (unsigned i = 0; i < eItemPowerType_MAX; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_BaseItemPowerCosts[" << i << "]";
+          ptreem_BaseItemPowerCosts->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_BaseItemPowerCosts[i]));
+    }
+    ptree->appendChild("m_NameBuffer_5BEC", new QMoMTreeItemModel<char[0x5E92 - 0x5BEC]>(rhs->m_NameBuffer_5BEC));
     ptree->appendChild("m_Next_Turn_seed_storage_lo", new QMoMTreeItemModel<uint16_t>(&rhs->m_Next_Turn_seed_storage_lo));
     ptree->appendChild("m_Next_Turn_seed_storage_hi", new QMoMTreeItemModel<uint16_t>(&rhs->m_Next_Turn_seed_storage_hi));
     QMoMTreeItemModelBase* ptreem_UNK_5E96 = ptree;
