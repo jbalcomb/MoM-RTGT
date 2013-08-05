@@ -319,7 +319,7 @@ bool MoMController::createUnit(int& unitNr)
         return false;
 	}
 
-    memset(unit, '\0', sizeof(unit));
+    memset(unit, '\0', sizeof(Unit));
 
     // Make sure the unit contains "reasonable" data
     unit->m_Hero_Slot_Number = -1;
