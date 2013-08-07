@@ -10,7 +10,7 @@ include(../Common/Common.pri)
 TEMPLATE = app
 
 #unix:VERSION = $$system(svn info . | grep 'Changed\ Rev' | cut -b 19-)
-VERSION = 6
+VERSION = 7
 !isEmpty(VERSION){
   VERSION = 0.2.$${VERSION}
 }

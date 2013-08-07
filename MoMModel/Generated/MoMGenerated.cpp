@@ -1836,6 +1836,19 @@ std::ostream& operator<<(std::ostream& os, const ePlane& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const ePlane16& rhs)
+{
+    switch (rhs)
+    {
+    case PLANE16_Arcanum: os << "PLANE16_Arcanum"; break;
+    case PLANE16_Myrror: os << "PLANE16_Myrror"; break;
+    case ePlane16_MAX: os << "ePlane16_MAX"; break;
+    default: os << "<Unknown ePlane16>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const ePlayer& rhs)
 {
     switch (rhs)
@@ -6025,9 +6038,26 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "m_Offset_UnitView_Lines=" << rhs.m_Offset_UnitView_Lines << " 0x" << std::hex << rhs.m_Offset_UnitView_Lines << std::dec << "\n";
     os << "m_UnitView_UnitEnchantment=" << rhs.m_UnitView_UnitEnchantment << "\n";
     os << "m_Unk_C196=(\n";
-    for (unsigned i = 0; i < 0xC51C - 0xC198; ++i)
+    for (unsigned i = 0; i < 0xC292 - 0xC198; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_C196[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C196[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Location_Item=" << rhs.m_Location_Item << " 0x" << std::hex << rhs.m_Location_Item << std::dec << "\n";
+    os << "m_Selected_Item=" << rhs.m_Selected_Item << " 0x" << std::hex << rhs.m_Selected_Item << std::dec << "\n";
+    os << "m_Unk_C296=(\n";
+    for (unsigned i = 0; i < 0xC300 - 0xC296; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C296[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C296[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Plane_Item=" << rhs.m_Plane_Item << "\n";
+    os << "m_YPos_Item=" << rhs.m_YPos_Item << " 0x" << std::hex << rhs.m_YPos_Item << std::dec << "\n";
+    os << "m_XPos_Item=" << rhs.m_XPos_Item << " 0x" << std::hex << rhs.m_XPos_Item << std::dec << "\n";
+    os << "m_Unk_C306=(\n";
+    for (unsigned i = 0; i < 0xC51C - 0xC306; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_C306[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_C306[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Combat_turn=" << rhs.m_Combat_turn << " 0x" << std::hex << rhs.m_Combat_turn << std::dec << "\n";
@@ -9583,6 +9613,18 @@ bool validate(const ePlane& rhs, const std::string& context)
     return ok;
 }
 
+bool validate(const ePlane16& rhs, const std::string& context)
+{
+    bool ok = true;
+    switch (rhs)
+    {
+    case PLANE16_Arcanum: break;
+    case PLANE16_Myrror: break;
+    default: std::cout << context << ": Unknown ePlane16 = " << (int)rhs << "\n"; ok = false; break;
+    }
+    return ok;
+}
+
 bool validate(const ePlayer& rhs, const std::string& context)
 {
     bool ok = true;
@@ -11849,6 +11891,7 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
     if (!validate(rhs.m_Game_Data, context + ".m_Game_Data")) ok = false;
     if (!validate(rhs.m_Game_Settings, context + ".m_Game_Settings")) ok = false;
     if (!validate(rhs.m_UnitView_UnitEnchantment, context + ".m_UnitView_UnitEnchantment")) ok = false;
+    if (!validate(rhs.m_Plane_Item, context + ".m_Plane_Item")) ok = false;
     if (!validate(rhs.m_External_battle_condition, context + ".m_External_battle_condition")) ok = false;
     if (!validate(rhs.m_addr_Hero_Spells, context + ".m_addr_Hero_Spells")) ok = false;
     if (!validate(rhs.m_addr_Battle_figures_256, context + ".m_addr_Battle_figures_256")) ok = false;

@@ -634,6 +634,11 @@ void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int
             ptree->child(row, 0)->appendChild(QString("Game_State"), new QMoMTreeItemModel<MoM::eGameState>(&dataSegment->m_Game_flow));
             ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9294"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_kyrub_dseg_9294));
             ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_kyrub_dseg_9296));
+            ptree->child(row, 0)->appendChild(QString("m_Selected_Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_Selected_Item));
+            ptree->child(row, 0)->appendChild(QString("m_Location_Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_Location_Item));
+            ptree->child(row, 0)->appendChild(QString("XPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_XPos_Item));
+            ptree->child(row, 0)->appendChild(QString("YPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_YPos_Item));
+            ptree->child(row, 0)->appendChild(QString("Plane Item"), new QMoMTreeItemModel<MoM::ePlane16>(&dataSegment->m_Plane_Item));
         }
 
         if ((0 != magicDataSegment) && game->getGameData_WizardsExe())

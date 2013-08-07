@@ -2,7 +2,7 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.7 (2012--)
+CHANGES IN 0.2.7 (2013-08-07)
 -----------------------------
 
 * Save/restore bookmark during battle (on battle map) [FrancoK].
@@ -31,6 +31,8 @@ CHANGES IN 0.2.7 (2012--)
 
 * Save and restore all dialog positions, sizes, check boxes, column widths, 
   directories, and combo boxes.
+  
+* Track created item location in the "MEM:Game Data" section.
 
 
 

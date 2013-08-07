@@ -4270,16 +4270,45 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     ptree->appendChild("m_Offset_UnitView_Lines", new QMoMTreeItemModel<uint16_t>(&rhs->m_Offset_UnitView_Lines));
     ptree->appendTree(constructTreeItem(&rhs->m_UnitView_UnitEnchantment, "m_UnitView_UnitEnchantment"), "");
     QMoMTreeItemModelBase* ptreem_Unk_C196 = ptree;
-    if (0xC51C - 0xC198 > 3)
+    if (0xC292 - 0xC198 > 3)
     {
         ptreem_Unk_C196 = new QMoMTreeItemModelBase("m_Unk_C196");
         ptree->appendTree(ptreem_Unk_C196, "");
     }
-    for (unsigned i = 0; i < 0xC51C - 0xC198; ++i)
+    for (unsigned i = 0; i < 0xC292 - 0xC198; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_C196[" << i << "]";
           ptreem_Unk_C196->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_C196[i]));
+    }
+    ptree->appendChild("m_Location_Item", new QMoMTreeItemModel<int16_t>(&rhs->m_Location_Item));
+    ptree->appendChild("m_Selected_Item", new QMoMTreeItemModel<int16_t>(&rhs->m_Selected_Item));
+    QMoMTreeItemModelBase* ptreem_Unk_C296 = ptree;
+    if (0xC300 - 0xC296 > 3)
+    {
+        ptreem_Unk_C296 = new QMoMTreeItemModelBase("m_Unk_C296");
+        ptree->appendTree(ptreem_Unk_C296, "");
+    }
+    for (unsigned i = 0; i < 0xC300 - 0xC296; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C296[" << i << "]";
+          ptreem_Unk_C296->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_C296[i]));
+    }
+    ptree->appendChild("m_Plane_Item", new QMoMTreeItemModel<ePlane16>(&rhs->m_Plane_Item));
+    ptree->appendChild("m_YPos_Item", new QMoMTreeItemModel<int16_t>(&rhs->m_YPos_Item));
+    ptree->appendChild("m_XPos_Item", new QMoMTreeItemModel<int16_t>(&rhs->m_XPos_Item));
+    QMoMTreeItemModelBase* ptreem_Unk_C306 = ptree;
+    if (0xC51C - 0xC306 > 3)
+    {
+        ptreem_Unk_C306 = new QMoMTreeItemModelBase("m_Unk_C306");
+        ptree->appendTree(ptreem_Unk_C306, "");
+    }
+    for (unsigned i = 0; i < 0xC51C - 0xC306; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_C306[" << i << "]";
+          ptreem_Unk_C306->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_C306[i]));
     }
     ptree->appendChild("m_Combat_turn", new QMoMTreeItemModel<int16_t>(&rhs->m_Combat_turn));
     ptree->appendChild("m_Unk_C51E", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_C51E));

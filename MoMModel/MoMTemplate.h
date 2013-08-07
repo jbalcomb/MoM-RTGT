@@ -1646,6 +1646,15 @@ enum ePlane ENUMSIZE8
     ePlane__SIZE__ = 0xFF
 };
 
+enum ePlane16 ENUMSIZE16
+{
+    PLANE16_Arcanum = 0,
+    PLANE16_Myrror = 1,
+
+    ePlane16_MAX,
+    ePlane16__SIZE__ = 0xFFFF
+};
+
 enum ePortrait ENUMSIZE8
 {
     PORTRAIT_Merlin = 0,
@@ -5637,7 +5646,18 @@ typedef struct // MoMDataSegment
     DS_Offset   m_Offset_UnitView_Lines;            // ds:C192
     unionUnit_Enchantment   m_UnitView_UnitEnchantment; // ds:C194
 
-    uint8_t     m_Unk_C196[0xC51C - 0xC198];        // ds:C198
+    uint8_t     m_Unk_C196[0xC292 - 0xC198];        // ds:C198
+
+    int16_t     m_Location_Item;                    // dseg:C292
+    int16_t     m_Selected_Item;                    // dseg:C294
+
+    uint8_t     m_Unk_C296[0xC300 - 0xC296];        // ds:C296
+
+    ePlane16    m_Plane_Item;                       // ds:C300
+    int16_t     m_YPos_Item;                        // ds:C302
+    int16_t     m_XPos_Item;                        // ds:C304
+
+    uint8_t     m_Unk_C306[0xC51C - 0xC306];        // ds:C306
 
     int16_t     m_Combat_turn;                      // ds:C51C
     uint16_t    m_Unk_C51E;                         // ds:C51E
