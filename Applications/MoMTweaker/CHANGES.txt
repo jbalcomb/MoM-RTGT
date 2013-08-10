@@ -6,8 +6,10 @@ CHANGES IN 0.2.7 (2013-08-07)
 -----------------------------
 
 * Save/restore bookmark during battle (on battle map) [FrancoK].
-  To restore a bookmark from scratch, first a save game from before
-  the battle must be restored, and then enter battle again.
+  This works during the same battle. 
+  To restore a battle bookmark after leaving the game, first restore 
+  a save game from before the battle, enter battle again, and then 
+  you can restore the bookmark. 
   Ticket: https://sourceforge.net/p/momrtgt/tickets/25/
 
 * More tables (click Show tables):
@@ -24,8 +26,8 @@ CHANGES IN 0.2.7 (2013-08-07)
   - Either moves a stack of units.
   - Or simulates combat and shows the result in a message box.
     However, it's mostly raw melee now with static specials and enchantments.
-	Shooting is not taken into account yet, nor all possible spells
-	and special effects.
+    Shooting is not taken into account yet, nor all possible spells
+    and special effects.
   
 * Combat simulator added.
 
