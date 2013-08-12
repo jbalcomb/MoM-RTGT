@@ -29,6 +29,8 @@
 #include <QMoMResources.h>
 #include <QMoMSettings.h>
 
+#include <QMoMGifHandler.h>
+
 // Local
 #include "dialogaddunit.h"
 #include "dialogcalculatoraddress.h"
@@ -503,6 +505,43 @@ void MainWindow::on_pushButton_Map_clicked()
 
 void MainWindow::on_pushButton_CatnipMod_clicked()
 {
+    QString testFilenameRead = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fire.gif";
+    qDebug() << "Opening file " << testFilenameRead << " to read from";
+    QFile testFileRead(testFilenameRead);
+    qDebug() << "exists() -> " << testFileRead.exists();
+    bool result = testFileRead.open(QFile::ReadOnly);
+    qDebug() << "open(ReadOnly) -> " << result;
+    qDebug() << "canReadLine() -> " << testFileRead.canReadLine();
+
+    QMoMGifHandler gifHandlerRead;
+    gifHandlerRead.setDevice(&testFileRead);
+    QMoMAnimation animation;
+    result = gifHandlerRead.readAnimation(animation);
+    qDebug() << "gifHandler.read(animation) -> " << result;
+    if (animation.count() >= 2)
+    {
+        ui->label->setPixmap(QPixmap::fromImage(*animation[0]));
+        ui->label_2->setPixmap(QPixmap::fromImage(*animation[1]));
+    }
+
+    QString testFilenameWrite = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fireWrite.gif";
+    qDebug() << "Opening file " << testFilenameWrite << " to write to";
+    QFile testFileWrite(testFilenameWrite);
+    qDebug() << "exists() -> " << testFileWrite.exists();
+    result = testFileWrite.open(QFile::WriteOnly | QFile::Truncate);
+    qDebug() << "open(WriteOnly | Truncate) -> " << result;
+
+    QMoMGifHandler gifHandlerWrite;
+    gifHandlerWrite.setDevice(&testFileWrite);
+    if (!animation.empty())
+    {
+        result = gifHandlerWrite.write(*animation[animation.count() - 1]);
+    }
+    qDebug() << "gifHandler.write(image) -> " << result;
+
+    return;
+
+
     MainWindow* controller = MainWindow::getInstance();
     QMoMGamePtr game = getGame();
     if (game.isNull())

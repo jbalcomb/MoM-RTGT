@@ -56,5 +56,8 @@ typedef QSharedPointer<QMoMTreeItemModelBase> QMoMTreeItemPtr;
 /// \brief Shared pointer to a MoMUnit
 typedef QSharedPointer<MoM::MoMUnit> QMoMUnitPtr;
 
+/// \brief Container for a vector of shared pointers to QImage instances
+typedef QVector<QMoMImagePtr> QMoMAnimation;
+
 
 #endif // QMOMSHAREDPOINTERS_H

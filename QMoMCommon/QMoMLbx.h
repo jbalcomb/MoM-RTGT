@@ -19,7 +19,6 @@
 namespace MoM
 {
 
-typedef QVector<QMoMImagePtr> QMoMAnimation;
 typedef QVector<QRgb> QMoMPalette;
 
 const uint8_t gTRANSPARENT_COLOR = 0;
