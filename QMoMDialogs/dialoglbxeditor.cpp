@@ -7,6 +7,7 @@
 #include <QMessageBox>
 
 #include "MoMUtility.h"
+#include "QMoMGifHandler.h"
 #include "QMoMLbx.h"
 #include "QMoMResources.h"
 #include "QMoMSettings.h"
@@ -189,6 +190,7 @@ void DialogLbxEditor::loadPaletteForFile(const QString &filename)
     QString filetitle = fileInfo.fileName();
     int lbxIndex = 0;
 
+    // CONQUEST???
     if (0 == filetitle.compare("LOAD.LBX", Qt::CaseInsensitive))
     {
         lbxIndex = 3;
@@ -235,6 +237,45 @@ void DialogLbxEditor::loadPaletteForFile(const QString &filename)
     MoM::convertLbxToPalette(dataPalette, m_colorTable);
 }
 
+void DialogLbxEditor::listBitmapFiles(const QString &directory)
+{
+    ui->comboBox_FileIndex->clear();
+    ui->comboBox_FileIndex->addItem(QString("(Images in '%0')").arg(directory));
+    QDir subdirs(directory);
+    subdirs.setFilter(QDir::AllDirs | QDir::NoDotDot);
+    foreach(QString subdir, subdirs.entryList())
+    {
+        QDir dir(directory + "/" + subdir, "*.bmp *.gif *.jpg *.png *.fli");
+        foreach(QString filename, dir.entryList())
+        {
+            ui->comboBox_FileIndex->addItem(QIcon(), subdir + "/" + filename);
+        }
+    }
+}
+
+void DialogLbxEditor::saveAnimationAsGif(const QMoMAnimation& curAnimation, const QString& gifFilename)
+{
+    QFile fileGif(gifFilename);
+    qDebug() << "Writing to " << fileGif.fileName();
+    if (!fileGif.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        (void)QMessageBox::warning(this,
+            tr("Convert all LBX"),
+            tr("Failed to create '%0'").arg(fileGif.fileName()));
+        return;
+    }
+
+    QMoMGifHandler gifHandler;
+    gifHandler.setDevice(&fileGif);
+    if (!gifHandler.writeAnimation(curAnimation))
+    {
+        (void)QMessageBox::warning(this,
+            tr("Convert all LBX"),
+            tr("Failed to convert to '%0'").arg(fileGif.fileName()));
+        return;
+    }
+}
+
 void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
 {
     // Track converted image for later use
@@ -248,7 +289,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
     }
 
     // Load bitmap(s) into an Animation
-    MoM::QMoMAnimation origAnimation;
+    QMoMAnimation origAnimation;
     int height = 0;
     for (int frameNr = 0; frameNr < nframes; ++frameNr)
     {
@@ -290,7 +331,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
         }
     }
 
-    MoM::QMoMAnimation convertedAnimation;
+    QMoMAnimation convertedAnimation;
     for (int frameNr = 0; frameNr < origAnimation.count(); ++frameNr)
     {
         QMoMImagePtr origImage = origAnimation[frameNr];
@@ -328,7 +369,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
 
 void DialogLbxEditor::updateLbxImage(int lbxIndex)
 {
-    MoM::QMoMAnimation curAnimation;
+    QMoMAnimation curAnimation;
     if ((lbxIndex >= 0) && (lbxIndex < m_lbxAnimations.count()))
     {
         curAnimation = m_lbxAnimations[lbxIndex];
@@ -379,7 +420,7 @@ void DialogLbxEditor::updateLbxText(int lbxIndex, int lbxSubIndex)
     ui->textEdit_lbxText->setText(text);
 }
 
-void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation& curAnimation, int line, bool clearImage)
+void DialogLbxEditor::updateImage(QGraphicsView *view, const QMoMAnimation& curAnimation, int line, bool clearImage)
 {
     if (clearImage)
     {
@@ -425,22 +466,6 @@ void DialogLbxEditor::updateImage(QGraphicsView *view, const MoM::QMoMAnimation&
     }
 }
 
-void DialogLbxEditor::listBitmapFiles(const QString &directory)
-{
-    ui->comboBox_FileIndex->clear();
-    ui->comboBox_FileIndex->addItem(QString("(Images in '%0')").arg(directory));
-    QDir subdirs(directory);
-    subdirs.setFilter(QDir::AllDirs | QDir::NoDotDot);
-    foreach(QString subdir, subdirs.entryList())
-    {
-        QDir dir(directory + "/" + subdir, "*.bmp *.gif *.jpg *.png *.fli");
-        foreach(QString filename, dir.entryList())
-        {
-            ui->comboBox_FileIndex->addItem(QIcon(), subdir + "/" + filename);
-        }
-    }
-}
-
 void DialogLbxEditor::on_comboBox_LbxIndex_currentIndexChanged(int index)
 {
     QString currentText = ui->comboBox_LbxIndex->currentText();
@@ -481,7 +506,7 @@ void DialogLbxEditor::on_pushButton_Load_clicked()
 
 void DialogLbxEditor::on_pushButton_SavePics_clicked()
 {
-    MoM::QMoMAnimation curAnimation;
+    QMoMAnimation curAnimation;
     int lbxIndex = ui->comboBox_LbxIndex->currentIndex();
     if ((lbxIndex >= 0) && (lbxIndex < m_lbxAnimations.count()))
     {
@@ -495,22 +520,48 @@ void DialogLbxEditor::on_pushButton_SavePics_clicked()
         return;
     }
 
+    m_filedialogSave->setFileMode(QFileDialog::AnyFile);
     if (m_filedialogSave->exec())
     {
         QString filenameBase = m_filedialogSave->selectedFiles().first();
+        QFileInfo fileInfo(filenameBase);
 
-        for (int frameNr = 0; frameNr < curAnimation.size(); ++frameNr)
+        if (0 == fileInfo.suffix().compare("gif", Qt::CaseInsensitive))
         {
-            QMoMImagePtr& image = curAnimation[frameNr];
-            if (0 == image)
-                continue;
-            QString filename = constructFrameFilename(filenameBase, frameNr);
-            if (!image->save(filename))
+            QFile qfile(filenameBase);
+            if (!qfile.open(QFile::WriteOnly | QFile::Truncate))
             {
                 (void)QMessageBox::warning(this,
                     tr("Save picture(s)"),
-                    tr("Failed to save the picture(s)"));
-                break;
+                    tr("Failed to create file for writing"));
+            }
+            else
+            {
+                QMoMGifHandler gifHandlerWrite;
+                gifHandlerWrite.setDevice(&qfile);
+                if (!gifHandlerWrite.writeAnimation(curAnimation))
+                {
+                    (void)QMessageBox::warning(this,
+                        tr("Save picture(s)"),
+                        tr("Failed to save the picture(s)"));
+                }
+            }
+        }
+        else
+        {
+            for (int frameNr = 0; frameNr < curAnimation.size(); ++frameNr)
+            {
+                QMoMImagePtr& image = curAnimation[frameNr];
+                if (0 == image)
+                    continue;
+                QString filename = constructFrameFilename(filenameBase, frameNr);
+                if (!image->save(filename))
+                {
+                    (void)QMessageBox::warning(this,
+                        tr("Save picture(s)"),
+                        tr("Failed to save the picture(s)"));
+                    break;
+                }
             }
         }
     }
@@ -562,5 +613,66 @@ void DialogLbxEditor::on_pushButton_Replace_clicked()
         (void)QMessageBox::warning(this,
             tr("Replace LBX"),
             tr("Failed to replace LBX file '%0'").arg(m_lbx.getFilename().c_str()));
+    }
+}
+
+void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
+{
+    if (!m_filedialogLoad->exec())
+        return;
+
+    m_filedialogSave->setFileMode(QFileDialog::Directory);
+    if (!m_filedialogSave->exec())
+        return;
+
+    QDir directory = m_filedialogSave->directory();
+    QString filename = m_filedialogLoad->selectedFiles().first();
+
+    qDebug() << "Reading " << filename;
+    loadLbx(filename);
+
+    QFileInfo fileInfoLbx(m_lbx.getFilename().c_str());
+
+    bool joinAnimations = false;
+    if (joinAnimations)
+    {
+        QMoMAnimation completeAnimation;
+        for (size_t lbxIndex = 0; lbxIndex < m_lbx.getNrRecords(); ++lbxIndex)
+        {
+            for (int frameNr = 0; frameNr < m_lbxAnimations[lbxIndex].count(); ++frameNr)
+            {
+                completeAnimation.append(m_lbxAnimations[lbxIndex][frameNr]);
+            }
+        }
+
+        QString filenameGif = fileInfoLbx.completeBaseName() + ".gif";
+        QFileInfo fileInfoGif(directory, filenameGif);
+
+        saveAnimationAsGif(completeAnimation, fileInfoGif.absoluteFilePath());
+    }
+    else
+    {
+        for (size_t lbxIndex = 0; lbxIndex < m_lbx.getNrRecords(); ++lbxIndex)
+        {
+            const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
+            if (!m_lbxAnimations[lbxIndex].empty())
+            {
+                QString filenameGif = QString("%0 - %1")
+                        .arg(fileInfoLbx.completeBaseName())
+                        .arg((int)lbxIndex, 3, 10, QChar('0'));
+                if ((0 != annotation) && (annotation->subfile[0] != '\0'))
+                {
+                    filenameGif = filenameGif + " - " + annotation->subfile;
+                }
+                if ((0 != annotation) && (annotation->comment[0] != '\0'))
+                {
+                    filenameGif = filenameGif + " - " + annotation->comment;
+                }
+                filenameGif += ".gif";
+                QFileInfo fileInfoGif(directory, filenameGif);
+
+                saveAnimationAsGif(m_lbxAnimations[lbxIndex], fileInfoGif.absoluteFilePath());
+            }
+        }
     }
 }

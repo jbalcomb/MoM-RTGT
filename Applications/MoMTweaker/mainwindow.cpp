@@ -505,23 +505,33 @@ void MainWindow::on_pushButton_Map_clicked()
 
 void MainWindow::on_pushButton_CatnipMod_clicked()
 {
-    QString testFilenameRead = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fire.gif";
+    QString testFilenameRead = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\ANIBUILD - Wizard's Guild.gif";
+    QString testFilenameRead2 = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\wizardsguild.gif";
     qDebug() << "Opening file " << testFilenameRead << " to read from";
     QFile testFileRead(testFilenameRead);
+    QFile testFileRead2(testFilenameRead2);
     qDebug() << "exists() -> " << testFileRead.exists();
     bool result = testFileRead.open(QFile::ReadOnly);
     qDebug() << "open(ReadOnly) -> " << result;
     qDebug() << "canReadLine() -> " << testFileRead.canReadLine();
+    result = testFileRead2.open(QFile::ReadOnly);
+    qDebug() << "open2(ReadOnly) -> " << result;
 
     QMoMGifHandler gifHandlerRead;
-    gifHandlerRead.setDevice(&testFileRead);
     QMoMAnimation animation;
+    gifHandlerRead.setDevice(&testFileRead);
     result = gifHandlerRead.readAnimation(animation);
     qDebug() << "gifHandler.read(animation) -> " << result;
-    if (animation.count() >= 2)
+    if (animation.count() >= 1)
     {
         ui->label->setPixmap(QPixmap::fromImage(*animation[0]));
-        ui->label_2->setPixmap(QPixmap::fromImage(*animation[1]));
+    }
+    gifHandlerRead.setDevice(&testFileRead2);
+    animation.clear();
+    result = gifHandlerRead.readAnimation(animation);
+    if (animation.count() >= 1)
+    {
+        ui->label_2->setPixmap(QPixmap::fromImage(*animation[0]));
     }
 
     QString testFilenameWrite = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fireWrite.gif";
@@ -535,9 +545,9 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
     gifHandlerWrite.setDevice(&testFileWrite);
     if (!animation.empty())
     {
-        result = gifHandlerWrite.write(*animation[animation.count() - 1]);
+        result = gifHandlerWrite.writeAnimation(animation);
     }
-    qDebug() << "gifHandler.write(image) -> " << result;
+    qDebug() << "gifHandler.writeAnimation(animation) -> " << result;
 
     return;
 

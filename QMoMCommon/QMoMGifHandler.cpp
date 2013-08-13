@@ -24,7 +24,8 @@ int doInput(GifFileType* gif, GifByteType* data, int i)
 }
 
 QMoMGifHandler::QMoMGifHandler() :
-		QImageIOHandler()
+    QImageIOHandler(),
+    m_disposalMode(DISPOSE_PREVIOUS)
 {
 }
 
@@ -235,38 +236,24 @@ bool QMoMGifHandler::canRead(QIODevice *device)
 	return false;
 }
 
-bool QMoMGifHandler::write ( const QImage & image )
+bool QMoMGifHandler::write(const QImage & image)
 {
-	QImage toWrite(image);
-	/// @todo how to specify dithering method
-	if (toWrite.numColors() == 0 || toWrite.numColors() > 256)
-		toWrite = image.convertToFormat(QImage::Format_Indexed8);
+    QMoMAnimation animation;
+    animation.append(QMoMImagePtr(new QImage(image)));
+    return writeAnimation(animation);
+}
 
-	QVector<QRgb> colorTable = toWrite.colorTable();
-	ColorMapObject cmap;
-	// numColors must be a power of 2
-    int numColors = 1 << GifBitSize(toWrite.numColors());
-	cmap.ColorCount = numColors;
-	cmap.BitsPerPixel = 8;	/// @todo based on numColors (or not? we did ask for Format_Indexed8, so the data is always 8-bit, right?)
-	GifColorType* colorValues = (GifColorType*)malloc(cmap.ColorCount * sizeof(GifColorType));
-	cmap.Colors = colorValues;
-	int c = 0;
-	for(; c < toWrite.numColors(); ++c)
-	{
-//qDebug("color %d has %02X%02X%02X", c, qRed(colorTable[c]), qGreen(colorTable[c]), qBlue(colorTable[c]));
-		colorValues[c].Red = qRed(colorTable[c]);
-		colorValues[c].Green = qGreen(colorTable[c]);
-		colorValues[c].Blue = qBlue(colorTable[c]);
-	}
-	// In case we had an actual number of colors that's not a power of 2,
-	// fill the rest with something (black perhaps).
-	for (; c < numColors; ++c)
-	{
-		colorValues[c].Red = 0;
-		colorValues[c].Green = 0;
-		colorValues[c].Blue = 0;
-	}
-	/// @todo transparent GIFs (use alpha?)
+bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
+{
+    if (animation.empty())
+        return false;
+
+    QMoMImagePtr toWrite = animation.front();
+	/// @todo how to specify dithering method
+    if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
+    {
+        toWrite = QMoMImagePtr(new QImage(toWrite->convertToFormat(QImage::Format_Indexed8)));
+    }
 
 	/// @todo write to m_device
     int gifError = 0;
@@ -275,8 +262,11 @@ bool QMoMGifHandler::write ( const QImage & image )
     EGifSetGifVersion(gif, true); // 89a
     /// @todo how to specify background
 
-	if (EGifPutScreenDesc(gif, toWrite.width(), toWrite.height(), numColors, 0, &cmap) == GIF_ERROR)
+    ColorMapObject* colorMap = createColorMap(toWrite);
+    if (EGifPutScreenDesc(gif, toWrite->width(), toWrite->height(), 256, 0, colorMap) == GIF_ERROR)
         qCritical("EGifPutScreenDesc returned error %d", gif->Error);
+    GifFreeMapObject(colorMap);
+    colorMap = NULL;
 
 	QVariant descText = option(QImageIOHandler::Description);
 	if (descText.type() == QVariant::String)
@@ -295,25 +285,74 @@ bool QMoMGifHandler::write ( const QImage & image )
 //	else
 //		qDebug("description is of qvariant type %d", descText.type());
 
-	/// @todo foreach of multiple images in an animation...
-	if (EGifPutImageDesc(gif, 0, 0, toWrite.width(), toWrite.height(), 0, &cmap) == GIF_ERROR)
-        qCritical("EGifPutImageDesc returned error %d", gif->Error);
 
-	int lc = toWrite.height();
-    int llen = toWrite.width();
-//	qDebug("will write %d lines, %d bytes each", lc, llen);
-	for (int l = 0; l < lc; ++l)
-	{
-		uchar* line = toWrite.scanLine(l);
-		if (EGifPutLine(gif, (GifPixelType*)line, llen) == GIF_ERROR)
-		{
-            int i = gif->Error;
-			qCritical("EGifPutLine returned error %d", i);
-		}
-	}
+    // Loop image
+    int loop_count = 0;
+    char nsle[12] = "NETSCAPE2.0";
+    char subblock[3];
+    subblock[0] = 1;
+    subblock[2] = loop_count % 256;
+    subblock[1] = loop_count / 256;
+    if (EGifPutExtensionLeader(gif, APPLICATION_EXT_FUNC_CODE) == GIF_ERROR) {
+        qCritical("EGifPutExtensionLeader returned error %d", gif->Error);
+    }
+    if (EGifPutExtensionBlock(gif, 11, nsle) == GIF_ERROR) {
+        qCritical("EGifPutExtensionBlock returned error %d", gif->Error);
+    }
+    if (EGifPutExtensionBlock(gif, 3, subblock) == GIF_ERROR) {
+        qCritical("EGifPutExtensionBlock returned error %d", gif->Error);
+    }
+    if (EGifPutExtensionTrailer(gif) == GIF_ERROR) {
+        qCritical("EGifPutExtensionTrailer returned error %d", gif->Error);
+    }
+
+	/// @todo foreach of multiple images in an animation...
+    for (int imageNr = 0; imageNr < animation.count(); ++imageNr)
+    {
+        if (imageNr > 0)
+        {
+            toWrite = animation[imageNr];
+            /// @todo how to specify dithering method
+            if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
+            {
+                toWrite = QMoMImagePtr(new QImage(toWrite->convertToFormat(QImage::Format_Indexed8)));
+            }
+        }
+
+        GraphicsControlBlock GCB = { 0 };
+        GCB.DisposalMode        = m_disposalMode; // what to do with the background of the image
+        GCB.UserInputFlag       = 0;    // whether user input is expected
+        GCB.DelayTime           = 0;    // 0.01 sec increments
+        GCB.TransparentColor    = 0;    // palette index (default is not transparent)
+        GifByteType GifExtension[4] = { 0 };
+        size_t sizeExtension = EGifGCBToExtension(&GCB, GifExtension);
+        if (sizeExtension != sizeof(GifExtension)) {
+            qCritical("EGifGCBToExtension returnd wrong size %u instead of %u", sizeExtension, sizeof(GifExtension));
+        }
+        EGifPutExtension(gif, GRAPHICS_EXT_FUNC_CODE, sizeExtension, GifExtension);
+
+        ColorMapObject* colorMap = createColorMap(toWrite);
+        if (EGifPutImageDesc(gif, 0, 0, toWrite->width(), toWrite->height(), 0, colorMap) == GIF_ERROR)
+            qCritical("EGifPutImageDesc returned error %d", gif->Error);
+        GifFreeMapObject(colorMap);
+        colorMap = NULL;
+
+        int lc = toWrite->height();
+        int llen = toWrite->width();
+    //	qDebug("will write %d lines, %d bytes each", lc, llen);
+        for (int l = 0; l < lc; ++l)
+        {
+            uchar* line = toWrite->scanLine(l);
+            if (EGifPutLine(gif, (GifPixelType*)line, llen) == GIF_ERROR)
+            {
+                int i = gif->Error;
+                qCritical("EGifPutLine returned error %d", i);
+            }
+        }
+    }
 
 	EGifCloseFile(gif);
-	return true;
+    return true;
 }
 
 bool QMoMGifHandler::supportsOption ( ImageOption option ) const
@@ -355,5 +394,36 @@ QVariant QMoMGifHandler::option( ImageOption option ) const
 			break;
 		default:
 			return QVariant();
-	}
+    }
+}
+
+struct ColorMapObject* QMoMGifHandler::createColorMap(const QMoMImagePtr& image)
+{
+    QVector<QRgb> colorTable = image->colorTable();
+
+    // numColors must be a power of 2
+    int numColors = 1 << GifBitSize(image->numColors());
+    GifColorType* colorValues = (GifColorType*)malloc(numColors * sizeof(GifColorType));
+    int c = 0;
+    for(; c < image->numColors(); ++c)
+    {
+//qDebug("color %d has %02X%02X%02X", c, qRed(colorTable[c]), qGreen(colorTable[c]), qBlue(colorTable[c]));
+        colorValues[c].Red = qRed(colorTable[c]);
+        colorValues[c].Green = qGreen(colorTable[c]);
+        colorValues[c].Blue = qBlue(colorTable[c]);
+    }
+    // In case we had an actual number of colors that's not a power of 2,
+    // fill the rest with something (black perhaps).
+    for (; c < numColors; ++c)
+    {
+        colorValues[c].Red = 0;
+        colorValues[c].Green = 0;
+        colorValues[c].Blue = 0;
+    }
+
+    ColorMapObject* colorMap = GifMakeMapObject(numColors, colorValues);
+
+    colorMap->BitsPerPixel = 8;	/// @todo based on numColors (or not? we did ask for Format_Indexed8, so the data is always 8-bit, right?)
+
+    return colorMap;
 }
