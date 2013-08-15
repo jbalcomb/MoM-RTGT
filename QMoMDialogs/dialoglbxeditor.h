@@ -9,6 +9,7 @@ class QGraphicsView;
 
 #include "MoMFli.h"
 #include "MoMLbxBase.h"
+#include "QMoMAnimation.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
 
@@ -30,7 +31,6 @@ private:
     void loadLbx(const QString& filename);
     void loadPaletteForFile(const QString& filename);
     void listBitmapFiles(const QString& directory);
-    void saveAnimationAsGif(const QMoMAnimation& curAnimation, const QString& gifFilename);
     void updateBitmapImage(const QString& bitmapfilename);
     void updateImage(QGraphicsView* view, const QMoMAnimation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);

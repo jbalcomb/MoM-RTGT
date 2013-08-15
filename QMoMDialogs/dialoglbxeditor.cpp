@@ -11,6 +11,7 @@
 #include "QMoMLbx.h"
 #include "QMoMResources.h"
 #include "QMoMSettings.h"
+#include "QMoMUnitTile.h"
 
 DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
     QDialog(parent),
@@ -250,29 +251,6 @@ void DialogLbxEditor::listBitmapFiles(const QString &directory)
         {
             ui->comboBox_FileIndex->addItem(QIcon(), subdir + "/" + filename);
         }
-    }
-}
-
-void DialogLbxEditor::saveAnimationAsGif(const QMoMAnimation& curAnimation, const QString& gifFilename)
-{
-    QFile fileGif(gifFilename);
-    qDebug() << "Writing to " << fileGif.fileName();
-    if (!fileGif.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
-        (void)QMessageBox::warning(this,
-            tr("Convert all LBX"),
-            tr("Failed to create '%0'").arg(fileGif.fileName()));
-        return;
-    }
-
-    QMoMGifHandler gifHandler;
-    gifHandler.setDevice(&fileGif);
-    if (!gifHandler.writeAnimation(curAnimation))
-    {
-        (void)QMessageBox::warning(this,
-            tr("Convert all LBX"),
-            tr("Failed to convert to '%0'").arg(fileGif.fileName()));
-        return;
     }
 }
 
@@ -618,22 +596,19 @@ void DialogLbxEditor::on_pushButton_Replace_clicked()
 
 void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
 {
-    if (!m_filedialogLoad->exec())
+    if (m_lbx.getFilename().empty())
         return;
 
     m_filedialogSave->setFileMode(QFileDialog::Directory);
     if (!m_filedialogSave->exec())
         return;
-
     QDir directory = m_filedialogSave->directory();
-    QString filename = m_filedialogLoad->selectedFiles().first();
-
-    qDebug() << "Reading " << filename;
-    loadLbx(filename);
 
     QFileInfo fileInfoLbx(m_lbx.getFilename().c_str());
 
     bool joinAnimations = false;
+    bool crop = true;
+    double scale = 2.0;
     if (joinAnimations)
     {
         QMoMAnimation completeAnimation;
@@ -648,7 +623,12 @@ void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
         QString filenameGif = fileInfoLbx.completeBaseName() + ".gif";
         QFileInfo fileInfoGif(directory, filenameGif);
 
-        saveAnimationAsGif(completeAnimation, fileInfoGif.absoluteFilePath());
+        if (!completeAnimation.saveAsGif(fileInfoGif.absoluteFilePath()))
+        {
+            (void)QMessageBox::warning(this,
+                tr("Convert all LBX"),
+                tr("Failed to save animation as '%0'").arg(fileInfoGif.absoluteFilePath()));
+        }
     }
     else
     {
@@ -657,21 +637,43 @@ void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
             const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
             if (!m_lbxAnimations[lbxIndex].empty())
             {
-                QString filenameGif = QString("%0 - %1")
+                QString filenameGif = QString("%0-%1")
                         .arg(fileInfoLbx.completeBaseName())
                         .arg((int)lbxIndex, 3, 10, QChar('0'));
                 if ((0 != annotation) && (annotation->subfile[0] != '\0'))
                 {
-                    filenameGif = filenameGif + " - " + annotation->subfile;
+                    filenameGif = filenameGif + "-" + annotation->subfile;
                 }
                 if ((0 != annotation) && (annotation->comment[0] != '\0'))
                 {
-                    filenameGif = filenameGif + " - " + annotation->comment;
+                    filenameGif = filenameGif + "-" + annotation->comment;
                 }
+                if (m_lbxAnimations[lbxIndex].count() >= 2)
+                {
+                    filenameGif += "-anim";
+                }
+                filenameGif.replace(QRegExp("[^-0-9A-Za-z]+"), "_");
                 filenameGif += ".gif";
                 QFileInfo fileInfoGif(directory, filenameGif);
 
-                saveAnimationAsGif(m_lbxAnimations[lbxIndex], fileInfoGif.absoluteFilePath());
+                QMoMAnimation saveAnimation(m_lbxAnimations[lbxIndex]);
+
+                if (crop)
+                {
+                    saveAnimation.crop();
+                }
+
+                if (scale != 1)
+                {
+                    saveAnimation.scale(scale);
+                }
+
+                if (!saveAnimation.saveAsGif(fileInfoGif.absoluteFilePath()))
+                {
+                    (void)QMessageBox::warning(this,
+                        tr("Convert all LBX"),
+                        tr("Failed to save animation as '%0'").arg(fileInfoGif.absoluteFilePath()));
+                }
             }
         }
     }

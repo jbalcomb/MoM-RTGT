@@ -17,6 +17,7 @@
 
 #include "MoMLbxBase.h"
 #include "MoMTemplate.h"
+#include "QMoMAnimation.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
 

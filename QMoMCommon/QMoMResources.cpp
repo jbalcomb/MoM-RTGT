@@ -441,7 +441,13 @@ void QMoMResources::createCitySizeImages()
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return;
-    MoM::convertLbxToImages(lbx.getRecord(20), lbx.getRecordSize(20), m_colorTable, m_citySizeImages, "city sizes");
+    QMoMAnimation citySizeAnimation;
+    MoM::convertLbxToImages(lbx.getRecord(20), lbx.getRecordSize(20), m_colorTable, citySizeAnimation, "city sizes");
+    m_citySizeImages.resize(citySizeAnimation.count());
+    for (int i = 0; i < citySizeAnimation.count(); ++i)
+    {
+        m_citySizeImages[i] = citySizeAnimation[i];
+    }
 }
 
 void QMoMResources::createFigureImages()

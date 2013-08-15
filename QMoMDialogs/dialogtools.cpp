@@ -18,6 +18,7 @@
 #include <MoMProcess.h>
 #include <MoMGameSave.h>
 #include <MoMUtility.h>
+#include <QMoMAnimation.h>
 #include <QMoMLbx.h>
 #include <QMoMResources.h>
 #include <QMoMSettings.h>

@@ -3,7 +3,7 @@
 #include <QVariant>
 #include <gif_lib.h>
 #include <string.h>		// memset
-#include <QPainter>
+#include "QMoMAnimation.h"
 
 //extern int _GifError;
 
@@ -25,8 +25,13 @@ int doInput(GifFileType* gif, GifByteType* data, int i)
 
 QMoMGifHandler::QMoMGifHandler() :
     QImageIOHandler(),
-    m_disposalMode(DISPOSE_PREVIOUS)
+    m_disposalMode(DISPOSE_PREVIOUS),
+    m_animationOptions(AnimationOptionMax)
 {
+    m_animationOptions[Loop] = 0;
+    m_animationOptions[Disposal] = DISPOSE_BACKGROUND;
+    m_animationOptions[Delay] = 0;
+    m_animationOptions[TransparentColor] = 0;
 }
 
 bool QMoMGifHandler::canRead () const
@@ -252,6 +257,7 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
 	/// @todo how to specify dithering method
     if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
     {
+        qDebug() << "Converting to QImage::Format_Indexed8";
         toWrite = QMoMImagePtr(new QImage(toWrite->convertToFormat(QImage::Format_Indexed8)));
     }
 
@@ -259,6 +265,11 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
     int gifError = 0;
     GifFileType * gif = EGifOpen(device(), doOutput, &gifError);
 //	GifFileType* gif = EGifOpenFileName("/tmp/out.gif", 0);
+    if (!gif) {
+        qDebug("DGifOpen() failed with error %d", gifError);
+        return false;
+    }
+    qDebug() << "EGifSetGifVersion";
     EGifSetGifVersion(gif, true); // 89a
     /// @todo how to specify background
 
@@ -287,7 +298,7 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
 
 
     // Loop image
-    int loop_count = 0;
+    int loop_count = m_animationOptions[QMoMGifHandler::Loop].toInt();
     char nsle[12] = "NETSCAPE2.0";
     char subblock[3];
     subblock[0] = 1;
@@ -320,10 +331,10 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
         }
 
         GraphicsControlBlock GCB = { 0 };
-        GCB.DisposalMode        = m_disposalMode; // what to do with the background of the image
+        GCB.DisposalMode        = m_animationOptions[QMoMGifHandler::Disposal].toInt(); // what to do with the background of the image
         GCB.UserInputFlag       = 0;    // whether user input is expected
-        GCB.DelayTime           = 0;    // 0.01 sec increments
-        GCB.TransparentColor    = 0;    // palette index (default is not transparent)
+        GCB.DelayTime           = m_animationOptions[QMoMGifHandler::Delay].toInt();    // 0.01 sec increments
+        GCB.TransparentColor    = m_animationOptions[QMoMGifHandler::TransparentColor].toInt();    // palette index (default is not transparent)
         GifByteType GifExtension[4] = { 0 };
         size_t sizeExtension = EGifGCBToExtension(&GCB, GifExtension);
         if (sizeExtension != sizeof(GifExtension)) {

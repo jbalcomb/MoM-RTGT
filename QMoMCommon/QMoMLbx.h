@@ -14,6 +14,7 @@
 #include <QVector>
 
 #include "MoMCommon.h"
+#include "QMoMAnimation.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM

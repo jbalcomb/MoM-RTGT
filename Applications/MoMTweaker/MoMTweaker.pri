@@ -66,7 +66,8 @@ HEADERS += \
         ../../QMoMCommon/QMoMTreeItemModel.h \
         ../../QMoMCommon/QMoMTreeItemWidget.h \
         ../../MoMModel/MoMFli.h \
-        ../../QMoMCommon/QMoMGifHandler.h
+        ../../QMoMCommon/QMoMGifHandler.h \
+        ../../QMoMCommon/QMoMAnimation.h
 
 SOURCES += \
 	../../Applications/MoMTweaker/mainwindow.cpp \
@@ -112,7 +113,8 @@ SOURCES += \
     ../../QMoMCommon/QMoMTreeItemModel.cpp \
     ../../QMoMCommon/QMoMTreeItemWidget.cpp \
     ../../MoMModel/MoMFli.cpp \
-    ../../QMoMCommon/QMoMGifHandler.cpp
+    ../../QMoMCommon/QMoMGifHandler.cpp \
+    ../../QMoMCommon/QMoMAnimation.cpp
 
 FORMS += \
 	../../Applications/MoMTweaker/mainwindow.ui \

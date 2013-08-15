@@ -29,7 +29,10 @@
 #include <QMoMResources.h>
 #include <QMoMSettings.h>
 
+// TODO: Remove again
+#include <QPainter>
 #include <QMoMGifHandler.h>
+#include <QMoMUnitTile.h>
 
 // Local
 #include "dialogaddunit.h"
@@ -505,53 +508,6 @@ void MainWindow::on_pushButton_Map_clicked()
 
 void MainWindow::on_pushButton_CatnipMod_clicked()
 {
-    QString testFilenameRead = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\ANIBUILD - Wizard's Guild.gif";
-    QString testFilenameRead2 = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\wizardsguild.gif";
-    qDebug() << "Opening file " << testFilenameRead << " to read from";
-    QFile testFileRead(testFilenameRead);
-    QFile testFileRead2(testFilenameRead2);
-    qDebug() << "exists() -> " << testFileRead.exists();
-    bool result = testFileRead.open(QFile::ReadOnly);
-    qDebug() << "open(ReadOnly) -> " << result;
-    qDebug() << "canReadLine() -> " << testFileRead.canReadLine();
-    result = testFileRead2.open(QFile::ReadOnly);
-    qDebug() << "open2(ReadOnly) -> " << result;
-
-    QMoMGifHandler gifHandlerRead;
-    QMoMAnimation animation;
-    gifHandlerRead.setDevice(&testFileRead);
-    result = gifHandlerRead.readAnimation(animation);
-    qDebug() << "gifHandler.read(animation) -> " << result;
-    if (animation.count() >= 1)
-    {
-        ui->label->setPixmap(QPixmap::fromImage(*animation[0]));
-    }
-    gifHandlerRead.setDevice(&testFileRead2);
-    animation.clear();
-    result = gifHandlerRead.readAnimation(animation);
-    if (animation.count() >= 1)
-    {
-        ui->label_2->setPixmap(QPixmap::fromImage(*animation[0]));
-    }
-
-    QString testFilenameWrite = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fireWrite.gif";
-    qDebug() << "Opening file " << testFilenameWrite << " to write to";
-    QFile testFileWrite(testFilenameWrite);
-    qDebug() << "exists() -> " << testFileWrite.exists();
-    result = testFileWrite.open(QFile::WriteOnly | QFile::Truncate);
-    qDebug() << "open(WriteOnly | Truncate) -> " << result;
-
-    QMoMGifHandler gifHandlerWrite;
-    gifHandlerWrite.setDevice(&testFileWrite);
-    if (!animation.empty())
-    {
-        result = gifHandlerWrite.writeAnimation(animation);
-    }
-    qDebug() << "gifHandler.writeAnimation(animation) -> " << result;
-
-    return;
-
-
     MainWindow* controller = MainWindow::getInstance();
     QMoMGamePtr game = getGame();
     if (game.isNull())
@@ -561,6 +517,90 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
             tr("There is no game to operate on"));
         return;
     }
+
+    int unitNr = 999;
+    MoM::Unit* unit = game->getUnit(unitNr);
+    if (0 == unit)
+        return;
+    memset(unit, '\0', sizeof(MoM::Unit));
+    unit->m_Unit_Type = MoM::UNITTYPE_Draconian_Spearmen;
+    unit->m_Hero_Slot_Number = -1;
+
+    MoM::Unit_Type_Data* unitType = game->getUnitTypeData(unit->m_Unit_Type);
+    if (0 == unitType)
+        return;
+
+    MoM::Battle_Unit battleUnit = { 0 };
+    memcpy(&battleUnit.m_Melee, &unitType->m_Melee, sizeof(MoM::Unit_Type_Data) - offsetof(MoM::Unit_Type_Data, m_Melee));
+    battleUnit.m_unitNr = unitNr;
+
+    QMoMUnitPtr momUnit = QMoMUnitPtr(new MoM::MoMUnit(game.data()));
+    qDebug() << "momUnit empty" << momUnit->getDisplayName().c_str();
+    momUnit->changeUnit(&battleUnit);
+    qDebug() << "momUnit" << momUnit->getDisplayName().c_str();
+
+    MoM::QMoMUnitTile unitTile(true);
+    unitTile.setGame(game);
+    unitTile.setUnit(momUnit);
+    QRectF rect = unitTile.boundingRect();
+    qDebug() << "unitTile rect" << rect;
+    QMoMImagePtr image(new QImage(rect.width(), rect.height(), QImage::Format_RGB32));
+    QRgb rgbTransparent = MoM::QMoMResources::instance().getColorTable().at(0);
+    qDebug() << "rgbTransparent" << rgbTransparent;
+    image->fill(rgbTransparent);
+    QPainter painter(image.data());
+    qDebug() << "paint";
+    unitTile.paint(&painter, NULL, NULL);
+
+    qDebug() << "setPixmap";
+    ui->label->setPixmap(QPixmap::fromImage(*image));
+
+//    QString testFilenameRead = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\ANIBUILD - Wizard's Guild.gif";
+//    QString testFilenameRead2 = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\wizardsguild.gif";
+//    qDebug() << "Opening file " << testFilenameRead << " to read from";
+//    QFile testFileRead(testFilenameRead);
+//    QFile testFileRead2(testFilenameRead2);
+//    qDebug() << "exists() -> " << testFileRead.exists();
+//    bool result = testFileRead.open(QFile::ReadOnly);
+//    qDebug() << "open(ReadOnly) -> " << result;
+//    qDebug() << "canReadLine() -> " << testFileRead.canReadLine();
+//    result = testFileRead2.open(QFile::ReadOnly);
+//    qDebug() << "open2(ReadOnly) -> " << result;
+
+//    QMoMGifHandler gifHandlerRead;
+//    QMoMAnimation animation;
+//    gifHandlerRead.setDevice(&testFileRead);
+//    result = gifHandlerRead.readAnimation(animation);
+//    qDebug() << "gifHandler.read(animation) -> " << result;
+//    if (animation.count() >= 1)
+//    {
+//        ui->label->setPixmap(QPixmap::fromImage(*animation[0]));
+//    }
+//    gifHandlerRead.setDevice(&testFileRead2);
+//    animation.clear();
+//    result = gifHandlerRead.readAnimation(animation);
+//    if (animation.count() >= 1)
+//    {
+//        ui->label_2->setPixmap(QPixmap::fromImage(*animation[0]));
+//    }
+
+//    QString testFilenameWrite = "C:/GIT/momrtgt-code/giflib-5.0.4/pic/fireWrite.gif";
+//    qDebug() << "Opening file " << testFilenameWrite << " to write to";
+//    QFile testFileWrite(testFilenameWrite);
+//    qDebug() << "exists() -> " << testFileWrite.exists();
+//    result = testFileWrite.open(QFile::WriteOnly | QFile::Truncate);
+//    qDebug() << "open(WriteOnly | Truncate) -> " << result;
+
+//    QMoMGifHandler gifHandlerWrite;
+//    gifHandlerWrite.setDevice(&testFileWrite);
+//    if (!animation.empty())
+//    {
+//        result = gifHandlerWrite.writeAnimation(animation);
+//    }
+//    qDebug() << "gifHandler.writeAnimation(animation) -> " << result;
+
+    return;
+
 
     MoM::MoMCatnip catnip;
 
