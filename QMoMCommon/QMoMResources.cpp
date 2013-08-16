@@ -64,11 +64,11 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         (void)createColorTable();
 
-        createBuildingImages();
+        createBuildingAnimations();
         createCitySizeImages();
         createLbxImages("CMBTCITY", m_cmbtcityImages);
         createLbxAnimations("CITYWALL", m_citywallAnimations);
-        createFigureImages();
+        createFigureAnimations();
         createLbxImages("ITEMISC", m_itemiscImages);
         createLbxImages("ITEMS", m_itemsImages);
         createLairImages();
@@ -92,6 +92,40 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
+}
+
+const QMoMAnimation QMoMResources::getAnimation(MoM::eUnit_Type unitType, int heading, MoM::eBannerColor bannerColor) const
+{
+    QMoMAnimation animation;
+    if (heading >= 0 && heading < 8)
+    {
+        int figureIndex = (int)unitType * 8 + heading;
+        if (inVectorRange(m_figureAnimations, figureIndex) && m_figureAnimations[figureIndex].size() >= 4)
+        {
+            animation = m_figureAnimations[figureIndex];
+        }
+
+        changeBannerColor(bannerColor, animation);
+    }
+    else
+    {
+        if (inVectorRange(m_unitImages, unitType))
+        {
+            animation.append(m_unitImages[unitType]);
+        }
+    }
+
+    return animation;
+}
+
+const QMoMAnimation QMoMResources::getAnimation(MoM::eBuilding building) const
+{
+    QMoMAnimation animation;
+    if (inVectorRange(m_buildingAnimations, building))
+    {
+        animation = m_buildingAnimations[building];
+    }
+    return animation;
 }
 
 const QMoMImagePtr QMoMResources::getImage(const LBXRecordID &lbxRecordID) const
@@ -121,9 +155,9 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eBannerColor bannerColor) const
 const QMoMImagePtr QMoMResources::getImage(MoM::eBuilding building) const
 {
     QMoMImagePtr image;
-    if (inVectorRange(m_buildingImages, building))
+    if (inVectorRange(m_buildingAnimations, building) && !m_buildingAnimations[building].empty())
     {
-        image = m_buildingImages[building];
+        image = m_buildingAnimations[building].at(0);
     }
     return image;
 }
@@ -333,26 +367,26 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
 
 const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading, MoM::eBannerColor bannerColor) const
 {
+    QMoMAnimation animation = getAnimation(unitType, heading, bannerColor);
     QMoMImagePtr image;
-    if (heading >= 0 && heading < 8)
+    if (animation.count() > 1)
     {
-        int figureIndex = (int)unitType * 8 + heading;
-        if (inVectorRange(m_figureAnimations, figureIndex) && m_figureAnimations[figureIndex].size() >= 4)
-        {
-            image = m_figureAnimations[figureIndex].at(1);
-        }
-
-        changeBannerColor(bannerColor, image);
+        image = animation[1];
     }
-    else
+    else if (animation.count() > 0)
     {
-        if (inVectorRange(m_unitImages, unitType))
-        {
-            image = m_unitImages[unitType];
-        }
+        image = animation[0];
     }
 
     return image;
+}
+
+void QMoMResources::changeBannerColor(MoM::eBannerColor bannerColor, QMoMAnimation& animation) const
+{
+    for (int i = 0; i < animation.count(); ++i)
+    {
+        changeBannerColor(bannerColor, animation[i]);
+    }
 }
 
 void QMoMResources::changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const
@@ -394,7 +428,7 @@ bool QMoMResources::createColorTable()
     return true;
 }
 
-void QMoMResources::createBuildingImages()
+void QMoMResources::createBuildingAnimations()
 {
     if (m_game.isNull())
         return;
@@ -402,7 +436,7 @@ void QMoMResources::createBuildingImages()
     MoM::MoMLbxBase lbx;
     if (!lbx.load(lbxFile))
         return;
-    m_buildingImages.resize(lbx.getNrRecords());
+    m_buildingAnimations.resize(lbx.getNrRecords());
     for (MoM::eBuilding building = (MoM::eBuilding)1; building < MoM::eBuilding_array_MAX; MoM::inc(building))
     {
         size_t recordNr = 45 + building - MoM::BUILDING_Barracks;
@@ -429,7 +463,8 @@ void QMoMResources::createBuildingImages()
         else
         {
         }
-        m_buildingImages[building] = MoM::convertLbxToImage(lbx.getRecord(recordNr), lbx.getRecordSize(recordNr), m_colorTable, toStr(building));
+
+        MoM::convertLbxToImages(lbx.getRecord(recordNr), lbx.getRecordSize(recordNr), m_colorTable, m_buildingAnimations[building], toStr(building));
     }
 }
 
@@ -450,7 +485,7 @@ void QMoMResources::createCitySizeImages()
     }
 }
 
-void QMoMResources::createFigureImages()
+void QMoMResources::createFigureAnimations()
 {
     int firstUnused = 0;
     // Reserve fir 16 files with max 120 images per file

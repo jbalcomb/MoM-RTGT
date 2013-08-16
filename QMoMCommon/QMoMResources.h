@@ -39,6 +39,9 @@ public:
 
     void setGame(const QMoMGamePtr& game);
 
+    const QMoMAnimation getAnimation(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
+    const QMoMAnimation getAnimation(MoM::eBuilding building) const;
+
     const QMoMPalette& getColorTable()
 	{
 		return m_colorTable;
@@ -122,13 +125,14 @@ public:
     static const QFont g_FontFixed;
 
 private:
+    void changeBannerColor(MoM::eBannerColor bannerColor, QMoMAnimation& animation) const;
     void changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const;
 
     bool createColorTable();
 
-    void createBuildingImages();
+    void createBuildingAnimations();
     void createCitySizeImages();
-    void createFigureImages();
+    void createFigureAnimations();
     void createLairImages();
     void createLbxAnimations(const std::string& lbxTitle, QVector<QMoMAnimation>& vecAnimations);
     void createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
@@ -147,7 +151,7 @@ private:
     QMoMGamePtr m_game;
 
     QMoMPalette m_colorTable;
-    QVector<QMoMImagePtr> m_buildingImages;
+    QVector<QMoMAnimation> m_buildingAnimations;
     QVector<QMoMImagePtr> m_citySizeImages;
     QVector<QMoMAnimation> m_citywallAnimations;
     QVector<QMoMImagePtr> m_cmbtcityImages;

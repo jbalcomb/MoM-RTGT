@@ -53,6 +53,7 @@ private:
     QMoMGamePtr m_game;
     QMoMUnitPtr m_momUnit;
     bool m_isBattlefield;
+    int m_frameNr;
 };
 
 }

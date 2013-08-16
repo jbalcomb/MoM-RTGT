@@ -38,7 +38,8 @@ QMoMUnitTile::QMoMUnitTile(bool isBattlefield) :
 	QObject(),
     QGraphicsItem(),
     m_momUnit(),
-    m_isBattlefield(isBattlefield)
+    m_isBattlefield(isBattlefield),
+    m_frameNr(0)
 {
 }
 
@@ -88,7 +89,13 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         {
             banner = wizard->m_BannerColor;
         }
-        const QMoMImagePtr imageUnit = QMoMResources::instance().getImage(m_momUnit->getUnitTypeNr(), heading, banner);
+        const QMoMAnimation animationUnit = QMoMResources::instance().getAnimation(m_momUnit->getUnitTypeNr(), heading, banner);
+        QMoMImagePtr imageUnit;
+        if (!animationUnit.empty())
+        {
+            imageUnit = animationUnit[m_frameNr % animationUnit.count()];
+            m_frameNr = (m_frameNr + 1) % animationUnit.count();
+        }
         qDebug() << "QMoMUnitTile::paint imageUnit" << imageUnit->rect();
         QMoMImagePtr imageBack;
         if (!m_isBattlefield && (0 != wizard))

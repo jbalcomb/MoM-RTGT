@@ -255,6 +255,7 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
 
     QMoMImagePtr toWrite = animation.front();
 	/// @todo how to specify dithering method
+    qDebug("toWrite %dx%d numColors %d", toWrite->width(), toWrite->height(), toWrite->numColors());
     if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
     {
         qDebug() << "Converting to QImage::Format_Indexed8";

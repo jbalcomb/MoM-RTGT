@@ -30,6 +30,8 @@ QMoMAnimation::~QMoMAnimation()
 
 void QMoMAnimation::crop()
 {
+    // TODO: Handle cases that picture is not 8-bit
+
     QRect rect(1000, 1000, -1000, -1000);
     for (int frameNr = 0; frameNr < this->count(); ++frameNr)
     {
@@ -74,6 +76,7 @@ bool QMoMAnimation::saveAsGif(const QString& gifFilename)
 
     QMoMGifHandler gifHandler;
     gifHandler.setDevice(&fileGif);
+    // TODO: Make options accessible
     gifHandler.setAnimationOption(QMoMGifHandler::Loop, 0);
     gifHandler.setAnimationOption(QMoMGifHandler::TransparentColor, 0);
     gifHandler.setAnimationOption(QMoMGifHandler::Disposal, 2);

@@ -318,6 +318,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
         {
             // Convert image to MoM format
 
+            // TODO: Centralize
             // Adjust color table for proper color matching
             MoM::QMoMPalette colorTable(m_colorTable);
             colorTable.resize(244);
