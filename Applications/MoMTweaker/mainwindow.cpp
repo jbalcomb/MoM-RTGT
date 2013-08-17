@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QMoMGifHandler.h>
 #include <QMoMUnitTile.h>
+#include <math.h>
 
 // Local
 #include "dialogaddunit.h"
@@ -517,7 +518,7 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
             tr("There is no game to operate on"));
         return;
     }
-/*
+
     MOM_FOREACH(eUnit_Type, unitTypeNr, eUnit_Type_MAX)
     {
         int unitNr = 999;
@@ -537,8 +538,6 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
         battleUnit.m_unitNr = unitNr;
         battleUnit.m_xPos = 0;
         battleUnit.m_yPos = 0;
-        battleUnit.m_xPosHeaded = +1;
-        battleUnit.m_yPosHeaded = -1;
 
         QMoMUnitPtr momUnit = QMoMUnitPtr(new MoM::MoMUnit(game.data()));
         qDebug() << "momUnit empty" << momUnit->getDisplayName().c_str();
@@ -550,10 +549,22 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
         unitTile.setUnit(momUnit);
         QRectF rect = unitTile.boundingRect();
         qDebug() << "unitTile rect" << rect;
+        const int arrFrameNr[10] = {1,0,1,2,1,0,1,2,3,1};
         QMoMAnimation animation;
-        for (int i = 0; i < 4; ++i)
+        for (int heading = 2; heading < 10; ++heading)
+        for (int frame = 0; frame < 10; ++frame)
         {
-            QMoMImagePtr image(new QImage(rect.width() * 2, rect.height() * 3, QImage::Format_RGB32));
+            unitTile.setFrameNr(arrFrameNr[frame]);
+            int step = MoM::Min(frame, 8);
+
+            double angle = (heading - 3) * 3.14159 / 4;
+            int dx = MoM::Round(cos(angle));
+            int dy = MoM::Round(sin(angle));
+            battleUnit.m_xPosHeaded = dx;
+            battleUnit.m_yPosHeaded = dy;
+            qDebug("heading %d %d,%d", heading, battleUnit.m_xPosHeaded, battleUnit.m_yPosHeaded);
+
+            QMoMImagePtr image(new QImage(rect.width() * 4, rect.height() * 4, QImage::Format_RGB32));
             qDebug() << "numColors" << image->numColors();
 
             MoM::QMoMPalette colorTable = MoM::QMoMResources::instance().getColorTable();
@@ -566,13 +577,21 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
             image->fill(rgbTransparent);
             QPainter painter(image.data());
             qDebug() << "translate";
-            painter.translate(rect.width(), rect.height() * 2);
+            painter.translate(rect.width() * 2, rect.height() * 3);
             qDebug() << "paint terrain";
             const QMoMImagePtr imageTerrain = MoM::QMoMResources::instance().getImage(MoM::TERRAINBATTLE_firstbasic);
             if (0 != imageTerrain)
             {
-                painter.drawImage(QRectF(-30/2, -16, 30, 16), *imageTerrain);
+                QRectF rectTerrain(-30/2, -16, 30, 16);
+                rectTerrain.translate(-(dx - dy) * (step) * 16 / 8, -(dx + dy) * (step) * 8 / 8 );
+                painter.drawImage(rectTerrain, *imageTerrain);
+                if (step != 0)
+                {
+                    rectTerrain.translate((dx - dy) * 16, (dx + dy) * 8 );
+                    painter.drawImage(rectTerrain, *imageTerrain);
+                }
             }
+
 
             qDebug() << "paint unit";
             unitTile.paint(&painter, NULL, NULL);
@@ -630,13 +649,14 @@ void MainWindow::on_pushButton_CatnipMod_clicked()
             animation.crop();
             animation.scale(2.0);
             gifHandlerWrite.setAnimationOption(QMoMGifHandler::Disposal, QMoMGifHandler::DisposalBackground);
+            gifHandlerWrite.setAnimationOption(QMoMGifHandler::Delay, 20);
             result = gifHandlerWrite.writeAnimation(animation);
         }
         qDebug() << "gifHandler.writeAnimation(animation) -> " << result;
     }
 
     return;
-*/
+
 
     MoM::MoMCatnip catnip;
 

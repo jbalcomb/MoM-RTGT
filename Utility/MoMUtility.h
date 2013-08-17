@@ -87,6 +87,8 @@ inline T Range(const T& value, const T& minimum, const T& maximum)
     return value;
 }
 
+int Round(double value);
+
 std::string replaceUnderscoresBySpaces(const std::string& str);
 
 std::string replaceStrInStr(const std::string& str, const std::string& findStr, const std::string& replaceStr);

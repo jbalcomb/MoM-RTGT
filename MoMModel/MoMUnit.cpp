@@ -958,7 +958,7 @@ bool MoMUnit::hasMagicalGazeAttack() const
 bool MoMUnit::hasMagicalRangedAttack() const
 {
     eRanged_Type rangedType = getRangedType();
-    bool value = ((rangedType >= MoM::RANGED_Chaos_Magic1_Storm_Giant)
+    bool value = ((rangedType >= MoM::RANGED_Chaos_Lightning)
                   && (rangedType < MoM::RANGED_Thrown_Weapons));
     return value;
 }

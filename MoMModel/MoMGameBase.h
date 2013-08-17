@@ -81,21 +81,6 @@ public:
 
     virtual std::string getGameDirectory() const = 0;
 
-    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
-    std::string getHelpText(eHelpIndex helpTextNr);
-
-    std::string getHelpText(eBuilding building);
-    std::string getHelpText(eHeroAbility heroAbility);
-    std::string getHelpText(eItemPower itemPower);
-    std::string getHelpText(ePortrait wizardPortrait);
-    std::string getHelpText(eRace race);
-    std::string getHelpText(eRanged_Type rangedType);
-    const HelpLBXentry* getHelpEntry(eSpell spell);
-    std::string getHelpText(eSpell spell);
-    std::string getHelpText(eUnitAbility unitAbility);
-    std::string getHelpText(eUnitEnchantment unitEnchantment);
-    std::string getHelpText(eUnitMutation unitMutation);
-
     Hero_stats* getHeroStats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
@@ -660,7 +645,6 @@ protected:
     }
 
 protected:
-    std::auto_ptr<class MoMLbxBase> m_HelpLbx;
     std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
     std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
 

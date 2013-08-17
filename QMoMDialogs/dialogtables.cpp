@@ -513,7 +513,7 @@ void DialogTables::slot_addRow_to_RaceData(int row)
     char* ptrName = const_cast<char*>(m_game->getNameByOffset(data->m_PtrName));
     ui->tableWidget->setItem(row, col, new TextTableItem(m_game, ptrName, strlen(ptrName) + 1));
     ui->tableWidget->item(row, col)->setTextColor(getRealmColor(m_game->getRealmRace(race)));
-    ui->tableWidget->item(row, col++)->setToolTip(m_game->getHelpText(race).c_str());
+    ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(race).c_str());
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Number_of_prohibited_buildings, 2));
     for (size_t i = 0; i < ARRAYSIZE(data->m_Prohibited_buildings); ++i)
@@ -597,7 +597,7 @@ void DialogTables::slot_addRow_to_SpellData(int row)
 
     ui->tableWidget->setItem(row, col, new TextTableItem(m_game, data->m_SpellName, sizeof(data->m_SpellName)));
     ui->tableWidget->item(row, col)->setTextColor(color);
-    ui->tableWidget->item(row, col++)->setToolTip(m_game->getHelpText(spell).c_str());
+    ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(spell).c_str());
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Spell_desirability, 6));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpellCategory>(m_game, &data->m_Spell_Category, MoM::eSpellCategory_MAX));
@@ -1000,7 +1000,7 @@ void DialogTables::slot_addRow_to_UnrestTable(int row)
     int col = 0;
     ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(raceNr, 2)));
     ui->tableWidget->setItem(row, col, new QMoMTableItemBase(m_game, prettyQStr(homeRace)));
-    ui->tableWidget->item(row, col++)->setToolTip(m_game->getHelpText(homeRace).c_str());
+    ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(homeRace).c_str());
 
     for (MoM::eRace cityRace = (MoM::eRace)0; MoM::toUInt(cityRace) < MoM::gMAX_RACES; MoM::inc(cityRace))
     {

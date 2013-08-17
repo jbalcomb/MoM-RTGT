@@ -1911,15 +1911,15 @@ enum eRanged_Type ENUMSIZE8 {
     RANGED_Bullet = 21,                     // Slingers
 
     // 30-39 Magic ranged attack
-    RANGED_Chaos_Magic1_Storm_Giant = 30,   // Warlock, Chaos Warrior, Storm Giant
-    RANGED_Chaos_Magic2_Magician = 31,      // Warrior Mage, Magician, Witch, Golden One, Unknown, Magicians, Warlocks
-    RANGED_Sorcery_Magic_Illusionist = 32,  // Sage, Illusionist
-    RANGED_Chaos_Magic3_Demon = 33,         // Necromancer, Shadow_Demons, Demon_Lord
-    RANGED_Nature_Magic1_Wind_Mage = 34,    // Wind_Mage
-    RANGED_Nature_Magic2_Shamans = 35,      // Healer, Priestess, Shamans, Priests
-    RANGED_Chaos_Magic4_Dark_Elves = 36,    // Dark Elves (Spearmen, Swordsmen, Halberdiers, Cavalry, Nightmares)
-    RANGED_Nature_Magic3_Sprites = 37,      // Sprites
-    RANGED_Nature_Magic4_Druid = 38,        // Druid
+    RANGED_Chaos_Lightning = 30,            // Warlock, Chaos Warrior, Storm Giant
+    RANGED_Chaos_Fireball = 31,             // Warrior Mage, Magician, Witch, Golden One, Unknown, Magicians, Warlocks
+    RANGED_Sorcery_Illusion = 32,           // Sage, Illusionist
+    RANGED_Chaos_Deathbolt = 33,            // Necromancer, Shadow_Demons, Demon_Lord
+    RANGED_Nature_Icebolt = 34,             // Wind_Mage
+    RANGED_Nature_Priest = 35,              // Healer, Priestess, Shamans, Priests
+    RANGED_Chaos_Drow = 36,                 // Dark Elves (Spearmen, Swordsmen, Halberdiers, Cavalry, Nightmares)
+    RANGED_Nature_Shimmer = 37,             // Sprites
+    RANGED_Nature_Green = 38,               // Druid
 
     // 100-109 Thrown/Breath/Gaze
     RANGED_Thrown_Weapons = 100,
@@ -2841,10 +2841,10 @@ enum eUnitAbility
     UNITABILITY_Death_Touch,          // 02
     UNITABILITY_Power_Drain,          // 04
     UNITABILITY_Dispel_Evil,          // 08
-    UNITABILITY_Ball_COMBAT,          // 10
-    UNITABILITY_No_effect03_COMBAT,   // 20
-    UNITABILITY_Eldritch_Weapon_COMBAT,// 40
-    UNITABILITY_Warp_Lightning_COMBAT,// 80
+    UNITABILITY_Ball_COMBAT,                // 10
+    UNITABILITY_Simultaneous_Damage_COMBAT, // 20
+    UNITABILITY_Eldritch_Weapon_COMBAT,     // 40
+    UNITABILITY_Warp_Lightning_COMBAT,      // 80
 
     eUnitAbility_MAX
 };

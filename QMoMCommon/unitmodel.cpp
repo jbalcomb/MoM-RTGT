@@ -402,7 +402,7 @@ void UnitModel::update_Buildings(QMoMTreeItemModelBase* ptree, const QMoMGamePtr
 
             ptree->child(row, 0)->setData(prettyQStr(building), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(building);
-            QString toolTip = game->getHelpText(building).c_str();
+            QString toolTip = MoM::QMoMResources::instance().getHelpText(building).c_str();
             ptree->child(row, 0)->setToolTip(toolTip);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
 //                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
@@ -849,7 +849,7 @@ void update_Races(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& ro
 
             ptree->child(row, 0)->setData(prettyQStr((MoM::eRace)row), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(race);
-            QString toolTip = QString(game->getHelpText(race).c_str());
+            QString toolTip = QString(MoM::QMoMResources::instance().getHelpText(race).c_str());
             ptree->child(row, 0)->setToolTip(toolTip);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
@@ -878,7 +878,7 @@ void UnitModel::update_Spell_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePt
 
         ptree->child(spellNr, 0)->setData(prettyQStr(spell), Qt::EditRole);
         ptree->child(spellNr, 0)->setLazyIcon(spell);
-        QString toolTip = game->getHelpText(spell).c_str();
+        QString toolTip = MoM::QMoMResources::instance().getHelpText(spell).c_str();
         ptree->child(row, 0)->setToolTip(toolTip);
 
         if ((spellNr <= MoM::SPELL_Magic_Spirit) && (spellNr - 1) % 10 == 0)
@@ -1054,7 +1054,7 @@ void update_Wizards(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& 
         if (wizardNr >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(wizard, ""));
-            QString toolTip = game->getHelpText(wizard->m_Portrait).c_str();
+            QString toolTip = MoM::QMoMResources::instance().getHelpText(wizard->m_Portrait).c_str();
             ptree->child(row, 0)->setToolTip(toolTip);
 
             QMoMTreeItemModelBase* subtree = ptree->child(row, 0);

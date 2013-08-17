@@ -41,6 +41,7 @@ QMoMUnitTile::QMoMUnitTile(bool isBattlefield) :
     m_isBattlefield(isBattlefield),
     m_frameNr(0)
 {
+//    startTimer(200);
 }
 
 QMoMUnitTile::~QMoMUnitTile()
@@ -91,10 +92,9 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         }
         const QMoMAnimation animationUnit = QMoMResources::instance().getAnimation(m_momUnit->getUnitTypeNr(), heading, banner);
         QMoMImagePtr imageUnit;
-        if (!animationUnit.empty())
+        if (!animationUnit.empty() && inRange(m_frameNr, 0, animationUnit.count() - 1))
         {
             imageUnit = animationUnit[m_frameNr % animationUnit.count()];
-            m_frameNr = (m_frameNr + 1) % animationUnit.count();
         }
         qDebug() << "QMoMUnitTile::paint imageUnit" << imageUnit->rect();
         QMoMImagePtr imageBack;
@@ -198,6 +198,12 @@ void QMoMUnitTile::drawOverlandUnit(QPainter *painter, const QMoMImagePtr &image
     }
 
     painter->drawImage(dst, *imageUnit);
+}
+
+void QMoMUnitTile::timerEvent(QTimerEvent *)
+{
+//    m_frameNr = (m_frameNr + 1) % 3;
+//    update();
 }
 
 }

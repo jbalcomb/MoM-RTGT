@@ -41,6 +41,10 @@ public:
     {
         m_momUnit = momUnit;
     }
+    void setFrameNr(int frameNr)
+    {
+        m_frameNr = frameNr;
+    }
 
 private slots:
     void slot_actionUnitView();
@@ -49,6 +53,7 @@ private:
     int calcHeading() const;
     void drawBattleUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
     void drawOverlandUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
+    void timerEvent(QTimerEvent*);
 
     QMoMGamePtr m_game;
     QMoMUnitPtr m_momUnit;

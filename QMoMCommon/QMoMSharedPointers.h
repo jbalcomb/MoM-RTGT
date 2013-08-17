@@ -19,6 +19,7 @@ namespace MoM {
 	class MoMGameCustom;
 	class MoMGameMemory;
     class MoMGameSave;
+    class MoMLbxBase;
     class MoMUnit;
     class QMoMLazyIconBase;
 }
@@ -55,5 +56,7 @@ typedef QSharedPointer<QMoMTreeItemModelBase> QMoMTreeItemPtr;
 
 /// \brief Shared pointer to a MoMUnit
 typedef QSharedPointer<MoM::MoMUnit> QMoMUnitPtr;
+
+typedef QSharedPointer<MoM::MoMLbxBase> QMoMLbxPtr;
 
 #endif // QMOMSHAREDPOINTERS_H

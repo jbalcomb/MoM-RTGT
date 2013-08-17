@@ -6,6 +6,7 @@
 // ---------------------------------------------------------------------------
 
 #include <cctype>
+#include <cmath>
 #include <iomanip>
 
 #include "MoMUtility.h"
@@ -210,6 +211,11 @@ std::string replaceStrInStr(const std::string& str, const std::string& findStr, 
     }
     result += str.substr(pos);
     return result;
+}
+
+int Round(double value)
+{
+    return (int)(std::floor(value + 0.5));
 }
 
 bool writeDataToStream(std::ostream& os, const unsigned char* pdata, size_t size)

@@ -22,8 +22,13 @@ struct LBXRecordID
     explicit LBXRecordID(const char aLbxTitle[9], int aLbxIndex, int aLbxSubindex = 0) :
         lbxIndex(aLbxIndex), lbxSubindex(aLbxSubindex)
     {
-        memset(lbxTitle, '\0', 9);
+        memset(lbxTitle, '\0', sizeof(lbxTitle));
         strncpy(lbxTitle, aLbxTitle, 8);
+        char* extension = strchr(lbxTitle, '.');
+        if (0 != extension)
+        {
+            *extension = '\0';
+        }
     }
     char        lbxTitle[9];
     int         lbxIndex;

@@ -39,13 +39,30 @@ public:
 
     void setGame(const QMoMGamePtr& game);
 
-    const QMoMAnimation getAnimation(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
+    const QMoMAnimation getAnimation(const LBXRecordID& lbxRecordID) const;
     const QMoMAnimation getAnimation(MoM::eBuilding building) const;
+    const QMoMAnimation getAnimation(MoM::eRanged_Type rangedType, int heading = 3) const;
+    const QMoMAnimation getAnimation(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
 
     const QMoMPalette& getColorTable()
 	{
 		return m_colorTable;
 	}
+
+    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
+    std::string getHelpText(eHelpIndex helpTextNr);
+
+    std::string getHelpText(eBuilding building);
+    std::string getHelpText(eHeroAbility heroAbility);
+    std::string getHelpText(eItemPower itemPower);
+    std::string getHelpText(ePortrait wizardPortrait);
+    std::string getHelpText(eRace race);
+    std::string getHelpText(eRanged_Type rangedType);
+    const HelpLBXentry* getHelpEntry(eSpell spell);
+    std::string getHelpText(eSpell spell);
+    std::string getHelpText(eUnitAbility unitAbility);
+    std::string getHelpText(eUnitEnchantment unitEnchantment);
+    std::string getHelpText(eUnitMutation unitMutation);
 
     template<typename T>
     const QMoMIconPtr getIcon(T t, double scale = 1) const
@@ -64,6 +81,7 @@ public:
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
+    const QMoMImagePtr getImage(MoM::eRanged_Type rangedType, int heading = 3) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type8 slotType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const;
@@ -149,6 +167,8 @@ private:
     static QMoMResources* m_instance;
 
     QMoMGamePtr m_game;
+
+    QMoMLbxPtr m_helpLbx;
 
     QMoMPalette m_colorTable;
     QVector<QMoMAnimation> m_buildingAnimations;
