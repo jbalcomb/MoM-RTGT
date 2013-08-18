@@ -2665,8 +2665,8 @@ enum eTerrainBonusDeposit ENUMSIZE8
     DEPOSIT_Adamantium_Ore = 0x07,      // (+2 mana)
     DEPOSIT_Quork = 0x08,               // (+3 mana)
     DEPOSIT_Crysx = 0x09,               // (+5 mana)
-    DEPOSIT_Unk10 = 0x10,
-    DEPOSIT_Unk20 = 0x20,
+    DEPOSIT_Unk_10 = 0x10,
+    DEPOSIT_Unk_20 = 0x20,
     DEPOSIT_Wild_Game = 0x40,           // (+2 food)
     DEPOSIT_Nightshade = 0x80,          // (50 strength dispel)
 
@@ -2701,7 +2701,7 @@ enum eTerrainChange
     TERRAINCHANGE_Road = 3,             // 08
     TERRAINCHANGE_Enchanted_Road = 4,   // 10 // Only visible if 'road' is also set
     TERRAINCHANGE_Corruption = 5,       // 20
-    TERRAINCHANGE_Unk40 = 6,            // 40
+    TERRAINCHANGE_Unk_40 = 6,           // 40
     TERRAINCHANGE_NoRoad80 = 7,         // 80
 
     eTerrainChange_MAX
@@ -2914,27 +2914,27 @@ enum eUnit_Active ENUMSIZE8
 
 enum eUnit_Status8 ENUMSIZE8
 {
-    UNITSTATUS8_ready = 0,                   //   00=ready
-    UNITSTATUS8_patrol = 1,                  //   01=patrol
-    UNITSTATUS8_building_road_in_place = 2,  //   02=building road (in place)
-    UNITSTATUS8_going_to_XY = 3,             //   03=going to X,Y destination (could be building road too, see 0x1C)
-    UNITSTATUS8_reached_destination = 4,     //   04=reached destination & expended (0x07 == 01)
+    UNITSTATUS8_Ready = 0,                   //   00=ready
+    UNITSTATUS8_Patrol = 1,                  //   01=patrol
+    UNITSTATUS8_Building_road_in_place = 2,  //   02=building road (in place)
+    UNITSTATUS8_Going_to_XY = 3,             //   03=going to X,Y destination (could be building road too, see 0x1C)
+    UNITSTATUS8_Reached_destination = 4,     //   04=reached destination & expended (0x07 == 01)
                                              //      NOTE: it is a STATE MACHINE FAILURE to have 0x07 = 00 & 0x0B == 04!
-    UNITSTATUS8_wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
+    UNITSTATUS8_Wait = 5,                    //   05=wait until all other units have had a chance to go (then clears all flags)
                                              //      the SAVE game does not record if we are traversing UP or DOWN the units!
-    UNITSTATUS8_unk6 = 6, 
-    UNITSTATUS8_unk7 = 7,
-    UNITSTATUS8_purify = 8,
-    UNITSTATUS8_meld = 9,
-    UNITSTATUS8_settle = 10,
-    UNITSTATUS8_seek_transport = 11,
-    UNITSTATUS8_unk12 = 12, 
-    UNITSTATUS8_unk13 = 13, 
-    UNITSTATUS8_unk14 = 14, 
-    UNITSTATUS8_unk15 = 15, 
-    UNITSTATUS8_move = 16,                      
+    UNITSTATUS8_Ink_6 = 6,
+    UNITSTATUS8_Ink_7 = 7,
+    UNITSTATUS8_Purify = 8,
+    UNITSTATUS8_Meld = 9,
+    UNITSTATUS8_Settle = 10,
+    UNITSTATUS8_Seek_transport = 11,
+    UNITSTATUS8_Unk_12 = 12,
+    UNITSTATUS8_Unk_13 = 13,
+    UNITSTATUS8_Unk_14 = 14,
+    UNITSTATUS8_Unk_15 = 15,
+    UNITSTATUS8_Move = 16,
 
-    UNITSTATUS8_finished_purifying = 111,
+    UNITSTATUS8_Finished_purifying = 111,
 
     eUnit_Status8_MAX,
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
@@ -3904,7 +3904,7 @@ typedef struct PACKED_STRUCT // Tower_Node_Lair
     eTower_Node_Lair_Type    m_Type;    // 04 (e.g., 0ATemple)
     Lair_Inhabitant m_Inhabitant1;      // 05-06
     Lair_Inhabitant m_Inhabitant2;      // 07-08
-    uint8_t         m_UNK01;            // 09
+    uint8_t         m_Unk_09;           // 09
     uint16_t        m_Reward_Gold;      // 0A (0, 10 - 200 gold)
     uint16_t        m_Reward_Mana;      // 0C (0, 10 - 200 mana)
     eReward_Specials    m_Reward_Specials;   // 0E
@@ -3942,18 +3942,18 @@ typedef struct PACKED_STRUCT // Node_Attr
 
 typedef struct PACKED_STRUCT // Fortress
 {
-    int8_t          m_XPos;
-    int8_t          m_YPos;
-    ePlane          m_Plane;
-    int8_t          m_Active;           // 00 or 01=non-Eliminated or FF??=not-in-play??
+    int8_t          m_XPos;             // 00
+    int8_t          m_YPos;             // 01
+    ePlane          m_Plane;            // 02
+    int8_t          m_Active;           // 03   // 00 or 01=non-Eliminated or FF??=not-in-play??
 } Fortress;
 
 typedef struct PACKED_STRUCT // Tower_Attr
 {
-    int8_t          m_XPos;
-    int8_t          m_YPos;
-    uint8_t         m_Closed;           // 00=opened, FF=closed, sealed??
-    uint8_t         m_UNK;              // unused ??
+    int8_t          m_XPos;             // 00
+    int8_t          m_YPos;             // 01
+    uint8_t         m_Closed;           // 02   // 00=opened, FF=closed, sealed??
+    uint8_t         m_Unk_03;           // 03   // unused ??
 } Tower_Attr;
 
 typedef struct PACKED_STRUCT // Unit_Weapon_Mutation
@@ -4287,47 +4287,8 @@ typedef struct PACKED_STRUCT { // Spells_Known (order in file):
                                         // SIZE D7
 } Spells_Known;
 
-typedef struct PACKED_STRUCT // Wizard
+typedef struct PACKED_STRUCT // Wizard_Diplomacy
 {
-    ePortrait       m_Portrait;                         // 000 (0-13)
-    char            m_Name[20];                         // 001 (20 characters incl. '\0')
-    eRace           m_Home_Race;                        // 015
-    eBannerColor    m_BannerColor;                      // 016 (0-4)
-    ePersonality    m_Personality;                      // 018 (0-5)
-    eObjective      m_Objective;                        // 01A (0-4)
-    uint8_t         m_Unk01C[6];                        // 01C
-    uint16_t        m_ResearchCost_SpellofMastery_GUESS;// 022
-    uint16_t        m_Fame;                             // 024
-    uint16_t        m_Power_Base;                       // 026
-    uint16_t        m_Unk028;                           // 028  // Seems to related to prod/mana terrain bonus types
-    uint8_t         m_Research_Percentage;              // 02A
-    uint8_t         m_Mana_Percentage;                  // 02B
-    uint8_t         m_Skill_Percentage;                 // 02C
-    uint8_t         m_Mana_generated_by_volcanoes;      // 02D
-    int16_t         m_X_Coordinate_of_Summoning_Circle; // 02E (0-59)
-    int16_t         m_Y_Coordinate_of_Summoning_Circle; // 030 (0-59)
-    ePlane          m_Plane_of_Summoning_Circle;        // 032 (0-1)
-    uint8_t         m_Zero01;
-    eSpell16        m_Research_Spell_candidates[8];     // 034
-    uint8_t         m_Unk044[4];                        // 044
-    int16_t         m_Garrison_average_strength;        // 048  // Average cost of units, units cheaper than half are dismissed
-    uint16_t        m_Unk04A;                           // 04A
-    int16_t         m_Skill_Left_in_combat;             // 04C
-    int16_t         m_Cost_Left_of_Spell_being_cast;    // 04E
-    int16_t         m_Initial_Cost_of_Spell_being_cast; // 050
-    eSpell16        m_Spell_being_cast;                 // 052
-    int16_t         m_Unused_Casting_Skill_available_this_turn;     // 054
-    int16_t         m_Nominal_Casting_Skill_available_this_turn;    // 056
-    eTax_Rate       m_Tax_Rate;                         // 058
-    int16_t         m_Number_of_Spellbooks_Nature;      // 05A (0-12) (Na-So-Ch-Li-De)
-    int16_t         m_Number_of_Spellbooks_Sorcery;     //
-    int16_t         m_Number_of_Spellbooks_Chaos;       //
-    int16_t         m_Number_of_Spellbooks_Life;        //
-    int16_t         m_Number_of_Spellbooks_Death;       //
-    unionSkills     m_Skills;                           // 064
-    Hired_Hero      m_Heroes_hired_by_wizard[gMAX_HIRED_HEROES];    // 076 six slots
-    uint16_t        m_Unk11E;                           // 11E
-    int16_t         m_Items_in_Slots[4];                // 120 (See below)
     int8_t          m_Contacted[6];                     // 128
     int16_t         m_Unk_12E_Relation[6];              // 12E
     int16_t         m_Unk_13A_Relation[6];              // 13A
@@ -4353,22 +4314,66 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //    Harmony   100...119
                                                         //    No Treaty 120...127
     eWar_Status     m_War_Status[6];                    // 158 (0=None, 1=Wizard Pact, 2=Alliance, 3+=War)
-    int8_t          m_Unk15E[0x24];                     // 15E
-    int8_t          m_Unk182_Relation[6];               // 182
-    int8_t          m_Unk188_Relation[6];               // 188
-    int8_t          m_Unk18E[18];                       // 18E
+    int8_t          m_Unk_15E[0x24];                    // 15E
+    int8_t          m_Unk_182_Relation[6];              // 182
+    int8_t          m_Unk_188_Relation[6];              // 188
+    int8_t          m_Unk_18E[18];                      // 18E
     int8_t          m_Diplomacy_penalty_GUESS[6];       // 1A0
-    int8_t          m_Unk1A6[0xB4];                     // 1A6
+    int8_t          m_Unk_1A6[0xB4];                    // 1A6
+} Wizard_Diplomacy;
+
+typedef struct PACKED_STRUCT // Wizard
+{
+    ePortrait       m_Portrait;                         // 000 (0-13)
+    char            m_Name[20];                         // 001 (20 characters incl. '\0')
+    eRace           m_Home_Race;                        // 015
+    eBannerColor    m_BannerColor;                      // 016 (0-4)
+    ePersonality    m_Personality;                      // 018 (0-5)
+    eObjective      m_Objective;                        // 01A (0-4)
+    uint8_t         m_Unk_01C[6];                       // 01C
+    uint16_t        m_ResearchCost_SpellofMastery_GUESS;// 022
+    uint16_t        m_Fame;                             // 024
+    uint16_t        m_Power_Base;                       // 026
+    uint16_t        m_Unk_028;                          // 028  // Seems to related to prod/mana terrain bonus types
+    uint8_t         m_Research_Percentage;              // 02A
+    uint8_t         m_Mana_Percentage;                  // 02B
+    uint8_t         m_Skill_Percentage;                 // 02C
+    uint8_t         m_Mana_generated_by_volcanoes;      // 02D
+    int16_t         m_X_Coordinate_of_Summoning_Circle; // 02E (0-59)
+    int16_t         m_Y_Coordinate_of_Summoning_Circle; // 030 (0-59)
+    ePlane          m_Plane_of_Summoning_Circle;        // 032 (0-1)
+    uint8_t         m_Zero_033;
+    eSpell16        m_Research_Spell_candidates[8];     // 034
+    uint8_t         m_Unk_044[4];                       // 044
+    int16_t         m_Garrison_average_strength;        // 048  // Average cost of units, units cheaper than half are dismissed
+    uint16_t        m_Unk_04A;                          // 04A
+    int16_t         m_Skill_Left_in_combat;             // 04C
+    int16_t         m_Cost_Left_of_Spell_being_cast;    // 04E
+    int16_t         m_Initial_Cost_of_Spell_being_cast; // 050
+    eSpell16        m_Spell_being_cast;                 // 052
+    int16_t         m_Unused_Casting_Skill_available_this_turn;     // 054
+    int16_t         m_Nominal_Casting_Skill_available_this_turn;    // 056
+    eTax_Rate       m_Tax_Rate;                         // 058
+    int16_t         m_Number_of_Spellbooks_Nature;      // 05A (0-12) (Na-So-Ch-Li-De)
+    int16_t         m_Number_of_Spellbooks_Sorcery;     //
+    int16_t         m_Number_of_Spellbooks_Chaos;       //
+    int16_t         m_Number_of_Spellbooks_Life;        //
+    int16_t         m_Number_of_Spellbooks_Death;       //
+    unionSkills     m_Skills;                           // 064
+    Hired_Hero      m_Heroes_hired_by_wizard[gMAX_HIRED_HEROES];    // 076 six slots
+    uint16_t        m_Unk_11E;                          // 11E
+    int16_t         m_Items_in_Slots[4];                // 120 (See below)
+    Wizard_Diplomacy    m_Diplomacy;                    // 128
     int16_t         m_Researching_Left;                 // 25A
     int16_t         m_Mana_Crystals;                    // 25C
     int32_t         m_Wizard_Casting_Skill;             // 25E <read=read_Wizard_Casting_Skill>;
                                                         //     (actual skill is square root of value stored here, rounded up)
     eSpell          m_Researching_Spell;                // 262
     Spells_Known    m_Spells_Known;                     // 263 Spells (0-3) (None-Na-So-Ch-Li-De-Ar)
-    int8_t          m_Unk33A[26];                       // 33A
+    int8_t          m_Unk_33A[26];                      // 33A
     uint16_t        m_Bitmask_banished_wizards;         // 354
     int16_t         m_Gold_Coins;                       // 356
-    int16_t         m_Unk358;                           // 358
+    int16_t         m_Unk_358;                          // 358
     int16_t         m_Astrologer_Magic_Power;           // 35A (0-200)
     int16_t         m_Astrologer_Spell_Research;        // 35C (0-200)
     int16_t         m_Astrologer_Army_Strength;         // 35E (0-200)
@@ -4377,10 +4382,10 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
-    uint8_t         m_Unk49A[42];                       // 49A
+    uint8_t         m_Unk_49A[42];                      // 49A
     eRealm_Type     m_Books_Color;                      // 4C4
-    uint8_t         m_Zero4C5;                          // 
-    uint16_t        m_Unk4C6;                           // 4C6
+    uint8_t         m_Zero_4C5;                         //
+    uint16_t        m_Unk_4C6;                          // 4C6
                                                         // SIZE 4C8
 } Wizard; // <read=read_Wizard>;
 
@@ -4407,15 +4412,15 @@ typedef struct PACKED_STRUCT // City
     eCity_Size      m_Size;                     // 13 (0-5; see below)
     uint8_t         m_Population;               // 14 (in thousands) (0-25)
     int8_t          m_Number_of_farmers_allocated;  // 15 (should be <= population)
-    uint8_t         m_UNK01a[2];                // 16-17
+    uint8_t         m_Unk_16[2];                // 16-17
     int8_t          m_PopulationDekaPop;        // 18 (in tenths) (Outpost is 1-9, else 0-99)
-    uint8_t         m_UNK01b;                   // 19
+    uint8_t         m_Unk_19;                   // 19
     uint8_t         m_Player_as_bitmask_GUESS;  // 1A
-    uint8_t         m_UNK01c;                   // 1B
+    uint8_t         m_Unk_1B;                   // 1B
     eProducing      m_Producing;                // 1C-1D (0-??; see below)
-    uint8_t         m_UNK02;                    // 1E
-    unionBuilding_Status     m_Building_Status; // 1F-42
-    City_Enchantments   m_City_Enchantments;    // 43-5B (0 = not present, 1-5 = owner + 1)
+    uint8_t         m_Unk_1E;                   // 1E
+    unionBuilding_Status    m_Building_Status;  // 1F-42
+    City_Enchantments       m_City_Enchantments;// 43-5B (0 = not present, 1-5 = owner + 1)
     eYesNo8         m_Nightshade;               // 5C (0 or 1)
     int8_t          m_Hammers;                  // 5D
     int16_t         m_HammersAccumulated;       // 5E-5F
@@ -4425,7 +4430,7 @@ typedef struct PACKED_STRUCT // City
     int8_t          m_Research;                 // 63
     int8_t          m_Food_Produced;            // 64
     int8_t          m_Road_Connection_GUESS;    // 65
-    uint8_t         m_UNK03[12];                // 66-71
+    uint8_t         m_Unk_66[12];               // 66-71
                                                 // SIZE 72
 } City; // <read=read_City>;
 
@@ -4454,7 +4459,7 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_YPos_of_destination;      // 0A Y-Pos of destination (should be 0 if status is not GOING TO)
     eUnit_Status8   m_Status;               // 0B Status (0-5)
     eLevel      m_Level;                    // 0C Level (Units: 0-5; Heroes: 0-8; Summon (other than Torin): 0)
-    int8_t      m_UNK01;                    // 0D ?? 00
+    int8_t      m_Unk_0D;                   // 0D ?? 00
     int16_t     m_Experience;               // 0E-0F Experience (should match level or level will be lowered)
                                             //  (Units: 0-120; Heroes: 0-1000; Summon (other than Torin): 0)
     int8_t      m_Guess_Lifedrain_Damage;   // 10
@@ -4469,7 +4474,7 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_Road_Building_left_to_complete;   // 1C
     int8_t      m_XPos_Road_Building_from;  // 1D
     int8_t      m_YPos_Road_Building_from;  // 1E
-    int8_t      m_UNK02;					// 1F
+    int8_t      m_Unk_1F;					// 1F
                                             // SIZE 20
 } Unit; // <read=read_Unit>;
 
@@ -4772,7 +4777,7 @@ typedef struct PACKED_STRUCT // Spell_Data
                                                 //          1=overland(non-combat) spells, 
                                                 //          0,2,3,4=combat-or-overland,
                                                 //          5=spell-of-return
-    int8_t          m_UNK01;                    // 19,   0x000400,   -1, 1);
+    int8_t          m_Unk_19;                   // 19,   0x000400,   -1, 1);
     int16_t         m_Casting_cost;             // 1A,   0x10000400, -1, 2);
     int16_t         m_Research_cost;            // 1C,   0x10000400, -1, 2);
     int16_t         m_Sound_effect_when_casting_spell;  // 1E,   0x10000400, -1, 2);
@@ -4809,17 +4814,17 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     uint8_t         m_Construction;             // 16  Construction capacity (road building)
     int8_t          m_Gaze_Modifier;            // 17  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 18  Movement flags (table 4)
-    uint8_t                 m_Zero02;           // 19  00
+    uint8_t                 m_Zero_19;          // 19  00
     unionImmunity_Flags     m_Immunity_Flags;   // 1A  Immunity flags (table 5)
     unionAttribute_Flags    m_Attribute_Flags;  // 1B  Attribute flags (table 6)
                                                 // 1C  Attribute flags (table 7)
-    uint8_t                 m_Zero03;           // 1D  00
+    uint8_t                 m_Zero_1D;          // 1D  00
     unionAbility_Flags      m_Ability_Flags;    // 1E  Attribute flags (table 8)
                                                 // 1F  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;     // 20  Special attack flags (table 10)
                                                 // 21  Special attack flags (table 11)
     uint8_t         m_Sound;                    // 22  Initialized only after starting the game
-    uint8_t         m_Zero04;                   // 23  00
+    uint8_t         m_Zero_23;                  // 23  00
                                                 // SIZE 24
 } Unit_Type_Data;
 
@@ -4897,7 +4902,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
                                                             //     Others: note 5
     uint8_t                 m_Current_figures;              // 0D
     int8_t                  m_BattleUnitNr;                 // 0E
-    uint8_t                 m_Unk0F;                        // 0F  00
+    uint8_t                 m_Unk_0F;                       // 0F  00
     uint8_t                 m_Hitpoints_per_Figure;         // 10  Hit points (hearts) per figure
     uint8_t                 m_Scouting;                     // 11  Scouting range
     uint8_t                 m_Transport_Capacity_GUESS;     // 12  Transport capacity (number of units carried)
@@ -4905,17 +4910,17 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_Construction;                 // 14  Construction capacity (road building)
     int8_t                  m_Gaze_Modifier;                // 15  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;               // 16  Movement flags (table 4)
-    uint8_t                 m_Zero01;                       // 17  00
+    uint8_t                 m_Zero_17;                      // 17  00
     unionImmunity_Flags     m_Immunity_Flags;               // 18  Immunity flags (table 5)
     unionAttribute_Flags    m_Attribute_Flags;              // 19  Attribute flags (table 6)
                                                             // 1A  Attribute flags (table 7)
-    uint8_t                 m_Zero02;                       // 1B  00
+    uint8_t                 m_Zero_1B;                      // 1B  00
     unionAbility_Flags      m_Ability_Flags;                // 1C  Attribute flags (table 8)
                                                             // 1D  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;                 // 1E  Special attack flags (table 10)
                                                             // 1F  Special attack flags (table 11)
 
-    uint16_t                m_Zero03;                       // 20-21 ; unused
+    uint16_t                m_Zero_20;                      // 20-21 ; unused
     unionCombat_Enchantment m_Flags_Combat_Enchantment;     // 22-23
     uint8_t                 m_Extra_ToHit_Melee;            // 24
     uint8_t                 m_Extra_ToHit_Ranged;           // 25
@@ -4944,14 +4949,14 @@ typedef struct PACKED_STRUCT // Battle_Unit
     int16_t                 m_yPos;                         // 46-47
     int16_t                 m_xPosHeaded;                   // 48-49
     int16_t                 m_yPosHeaded;                   // 4A-4B
-    uint16_t                m_UNK4C_display_GUESS;          // 4C
-    uint16_t                m_UNK4E;                        // 4E
-    uint16_t                m_UNK50;                        // 50
-    uint16_t                m_UNK52_sound_GUESS;            // 52
+    uint16_t                m_Unk_4C_display;               // 4C
+    uint16_t                m_Unk_4E;                       // 4E
+    uint16_t                m_Unk_50;                       // 50
+    uint16_t                m_Unk_52_sound;                 // 52
     eBattleUnitTactic       m_Tactic;                       // 54 Tactic (0=ready, 4=done, 100=melee, 101=shoot, ...)
     int8_t                  m_Confused_State;               // 56 (0=stunned?, 1=move randomly, 2=change allegiance, 3=?)
-    uint8_t                 m_UNK57;                        // 57
-    uint16_t                m_UNK58[6];                     // 58
+    uint8_t                 m_Unk_57;                       // 57
+    uint16_t                m_Unk_58[6];                    // 58
                                                             // 59
                                                             // 5A
                                                             // 5B
@@ -5118,7 +5123,7 @@ typedef struct PACKED_STRUCT // WizardsExe_Save_Name
 typedef struct PACKED_STRUCT // Game_Settings
 {
                                                 // ds:BD9E  Maps 1-1 on the MAGIC.SET file (466 bytes)
-    eYesNo16    m_Sound_Effects;                        // 00
+    eYesNo16    m_Sound_Effects;                        // 000
     eYesNo16    m_Background_Music;
     eYesNo16    m_Event_Music;
     eYesNo16    m_City_Spell_Events;
@@ -5126,7 +5131,7 @@ typedef struct PACKED_STRUCT // Game_Settings
     eYesNo16    m_Summoning_Events;
     eYesNo16    m_End_of_Turn_Summary;
     eYesNo16    m_Raze_City;
-    eYesNo16    m_Random_Events;                        // 10
+    eYesNo16    m_Random_Events;                        // 010
     eYesNo16    m_End_of_Turn_Wait;
     eYesNo16    m_Stratic_Combat_Only;
     eYesNo16    m_Auto_Unit_Information;
@@ -5134,27 +5139,27 @@ typedef struct PACKED_STRUCT // Game_Settings
     eYesNo16    m_Enemy_Spells;
     eYesNo16    m_Spell_Book_Ordering;
     eYesNo16    m_Spell_Animations;
-    eYesNo16    m_Show_Node_Owners;                     // 20
+    eYesNo16    m_Show_Node_Owners;                     // 020
     eYesNo16    m_Expanding_Help;
-    uint16_t    m_UNK01;                                // 24
-    uint16_t    m_UNK02;                                // 26
-    eDifficulty m_Difficulty;                           // 28
-    uint16_t    m_Nr_Opponents;                         // 2A
-    eLand_Size  m_Land_Size;                            // 2C
-    eMagic_Powerful m_Magic_Powerful;                   // 2E
-    eYesNo16    m_Slots_Saved[8];                       // 30
-    WizardsExe_Save_Name   m_Save_Names[8];             // 40   // 8 slots with each 18 letters and 2 ending zeroes
-    eYesNo16    m_Movement_Animations;                  // E0
-    WizardsExe_Save_Name   m_Save_Wizard_Names[10];     // E2   // 10 (?) slots of each 20 bytes (incl. ending zero)
-    uint16_t    m_UNK03[20];                            // 1AA
-                                                // SIZE 1D2h = 466d
+    uint16_t    m_Unk_024;                              // 024
+    uint16_t    m_Unk_026;                              // 026
+    eDifficulty m_Difficulty;                           // 028
+    uint16_t    m_Nr_Opponents;                         // 02A
+    eLand_Size  m_Land_Size;                            // 02C
+    eMagic_Powerful m_Magic_Powerful;                   // 02E
+    eYesNo16    m_Slots_Saved[8];                       // 030
+    WizardsExe_Save_Name   m_Save_Names[8];             // 040   // 8 slots with each 18 letters and 2 ending zeroes
+    eYesNo16    m_Movement_Animations;                  // 0E0
+    WizardsExe_Save_Name   m_Save_Wizard_Names[10];     // 0E2   // 10 (?) slots of each 20 bytes (incl. ending zero)
+    uint16_t    m_Unk_1AA[20];                          // 1AA
+                                                        // SIZE 1D2h = 466d
 } Game_Settings;
 
 typedef struct PACKED_STRUCT {   // Available_spell_page
     char        m_Page_Name[0x10];          // 00
     eSpell16    m_Spells_on_page[6];        // 10
     uint8_t     m_Nr_spells_on_page;        // 1C
-    uint8_t     m_Zero;                     // 1D
+    uint8_t     m_Zero_1D;                  // 1D
                                             // SIZE 1E
 } Available_spell_page;
 
@@ -5167,42 +5172,42 @@ typedef struct PACKED_STRUCT {   // Lbx_ems_info
 
 typedef struct // MoMDataSegment
 {
-    char        m_DataSegmentStart[0x0130];          // ds:0 / EXE:294A0
+    char        m_DataSegmentStart[0x0130];                     // ds:0 / EXE:294A0
     // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
 
-    DS_Offset   m_Offsets_SkillNames[eSkill_MAX];   // ds:0130
-    uint16_t    m_unk0154;                          // ds:0154
-    DS_Offset   m_Offsets_CitySizeNames[eCity_Size_MAX]; // ds:0156
-    DS_Offset   m_Offsets_CitySpecialNames[7];      // ds:0162
-    uint16_t    m_Unk0170[22];                      // ds:0170
+    DS_Offset   m_Offsets_SkillNames[eSkill_MAX];               // ds:0130
+    uint16_t    m_Unk_0154;                                     // ds:0154
+    DS_Offset   m_Offsets_CitySizeNames[eCity_Size_MAX];        // ds:0156
+    DS_Offset   m_Offsets_CitySpecialNames[7];                  // ds:0162
+    uint16_t    m_Unk_0170[22];                                 // ds:0170
 
-    Unit_Data_Hero_Types  m_Hero_Types;             // ds:019C / EXE:2963C
-    Unit_Type_Data   m_Normal_Units[4 + 115];
-    Unit_Type_Data   m_Summoned_Units[44];
+    Unit_Data_Hero_Types    m_Hero_Types;                       // ds:019C / EXE:2963C
+    Unit_Type_Data          m_Normal_Units[4 + 115];
+    Unit_Type_Data          m_Summoned_Units[44];
 
-    uint16_t    m_XP_Level_Table[9];                // ds:1D74 / EXE:2B214
+    uint16_t    m_XP_Level_Table[9];                            // ds:1D74 / EXE:2B214
 
-    Race_Data   m_Race_Data[14];                    // ds:1D86 / EXE:2B226
+    Race_Data   m_Race_Data[14];                                // ds:1D86 / EXE:2B226
 
-    uint16_t    m_Unk1ED6;                          // ds:1ED6 / EXE:2B376
-    DS_Offset   m_Offset_Arcane;                    // ds:1ED8  // UNREFERENCED???
-    DS_Offset   m_Offsets_RealmNames_5[5];          // ds:1EDA
+    uint16_t    m_Unk_1ED6;                                     // ds:1ED6 / EXE:2B376
+    DS_Offset   m_Offset_Arcane;                                // ds:1ED8  // UNREFERENCED???
+    DS_Offset   m_Offsets_RealmNames_5[5];                      // ds:1EDA
     DS_Offset   m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
 
-    Upkeep_Enchantments m_Upkeep_Enchantments;      // ds:1F18 / EXE:2B3B8
+    Upkeep_Enchantments m_Upkeep_Enchantments;                  // ds:1F18 / EXE:2B3B8
 
     DS_Offset   m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
     int16_t     m_Values_Personalities_GUESS[ePersonality_MAX]; // ds:1FC8
     DS_Offset   m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
-    uint16_t    m_Unk1FDE;                                      // ds:1FDE
+    uint16_t    m_Unk_1FDE;                                     // ds:1FDE
     int16_t     m_Values_Objectives_GUESS[eObjective_MAX];      // ds:1FE0
 
     // 5 x 8 entries for each difficulty level
-    Difficulty_Table m_DifficultyTable[eDifficulty_MAX];    // ds:1FEA / EXE:2B48A
+    Difficulty_Table m_DifficultyTable[eDifficulty_MAX];        // ds:1FEA / EXE:2B48A
 
-    uint8_t     m_UNK06a[72];                       // ds:203A / EXE:2B4DA
+    uint8_t     m_Unk_203A[72];                                 // ds:203A / EXE:2B4DA
 
-    char        m_NameBuffer_2082[0x3A50 - 0x2082];    // ds:2082 / EXE:2B522
+    char        m_NameBuffer_2082[0x3A50 - 0x2082];             // ds:2082 / EXE:2B522
 
     UnitView_HeroAbility    m_UnitView_HeroAbility_data[23];    // ds:3A50
     UnitView_UnitData       m_UnitView_UnitAbility_data[17];    // ds:3B08
@@ -5228,29 +5233,29 @@ typedef struct // MoMDataSegment
     uint16_t    m_Next_Turn_seed_storage_lo;                    // ds:5E92
     uint16_t    m_Next_Turn_seed_storage_hi;                    // ds:5E94
 
-    uint8_t     m_UNK_5E96[0x6E9E - 0x5E96];                    // ds:5E96
+    uint8_t     m_Unk_5E96[0x6E9E - 0x5E96];                    // ds:5E96
 
     uint16_t    m_Tax_Unrest_Table[eTax_Rate_MAX];              // ds:6E9E
 
-    uint8_t     m_UNK_6EAC[0x7151 - 0x6EAC];                    // ds:6EAC
+    uint8_t     m_Unk_6EAC[0x7151 - 0x6EAC];                    // ds:6EAC
 
     char        m_Copyright_and_Version[41];                    // ds:7151  Offset version is at [34]
 
-    uint8_t     m_UNK_717A[0x71E0 - 0x717A];                    // ds:717A
+    uint8_t     m_Unk_717A[0x71E0 - 0x717A];                    // ds:717A
 
     uint32_t    m_BIOS_clock_snapshot;                          // ds:71E0
 
-    uint8_t     m_UNK_71E4[0x7846 - 0x71E4];                    // ds:71E4
+    uint8_t     m_Unk_71E4[0x7846 - 0x71E4];                    // ds:71E4
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
     uint16_t    m_RNG_seed_lo;                                  // ds:7846
     uint16_t    m_RNG_seed_hi;                                  // ds:7848
 
-    uint8_t     m_UNK06c[0x7876 - 0x784A];                      // ds:784A
+    uint8_t     m_Unk_784A[0x7876 - 0x784A];                    // ds:784A
 
     uint16_t    m_DEBUG_Off;                                    // ds:7876
 
-    uint8_t     m_UNK06d[0x912C - 0x7878];                      // ds:7878
+    uint8_t     m_Unk_7878[0x912C - 0x7878];                    // ds:7878
 
     EXE_Reloc   m_addr_Spell_Data;                              // 912C
     uint16_t    word_3FBD0  ; // 9130
@@ -5634,7 +5639,7 @@ typedef struct // MoMDataSegment
 
     Wizard      m_Wizards[gMAX_WIZARD_RECORDS];     // ds:9ECA / EXE:3336A
 
-    uint8_t     m_UNK07[0xBD8E - 0xBB7A];           // ds:BB7A
+    uint8_t     m_Unk_BB7A[0xBD8E - 0xBB7A];        // ds:BB7A
 
     WizardsExe_Game_Data    m_Game_Data;            // ds:BD8E / EXE:3522E
 
@@ -5734,77 +5739,77 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
     char            m_DataSegmentStart[47];         // ds:0 / cs:21D10 / EXE:24510
     // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
 
-    uint8_t         m_UNK_2F[0x2AD0 - 47];          // ds:2F
+    uint8_t         m_Unk_002F[0x2AD0 - 47];        // ds:002F
 
     Wizard_Type_Data    m_Wizard_Types[ePortrait_MAX];  // ds:2AD0
 
-    int16_t         m_UNK_2C1A[10];					// ds:2C1A
+    int16_t         m_Unk_2C1A[10];					// ds:2C1A
 
     int16_t         m_Nr_spell_choices[10];			// ds:2C2E
-    uint8_t         m_UNK_2C40[0x2C6A - 0x2C42];    // ds:2C42
-    eSpell16        m_Preselected_spell_choices[65];       // ds:2C6A
+    uint8_t         m_Unk_2C40[0x2C6A - 0x2C42];    // ds:2C42
+    eSpell16        m_Preselected_spell_choices[65];// ds:2C6A
 
-    uint8_t         m_UNK_2CEC[0x3067 - 0x2CEC];    // ds:2CEC
+    uint8_t         m_Unk_2CEC[0x3067 - 0x2CEC];    // ds:2CEC
 
     char            m_Copyright1_and_Version[41];   // ds:3067  Offset version is at [34]
 
-    uint8_t         m_UNK_3090[0x35D0 - 0x3090];    // ds:3090
+    uint8_t         m_Unk_3090[0x35D0 - 0x3090];    // ds:3090
 
     Hero_Stats_Initializer  m_Hero_Stats_Initializers[gMAX_HERO_TYPES];  // ds:35D0
 
-    uint8_t         m_UNK_3846[0x389A - 0x3846];    // ds:3846
+    uint8_t         m_Unk_3846[0x389A - 0x3846];    // ds:3846
 
     char            m_Copyright2_and_Version[41];   // ds:389A  Offset version is at [34]
 
-    uint8_t         m_UNK_38C3[0x6900 - 0x38C3];    // ds:38C3
+    uint8_t         m_Unk_38C3[0x6900 - 0x38C3];    // ds:38C3
 
     Wizard          m_Wizards[6];                   // ds:6900
 
     eSpell16        m_Spells_selected_of_Realm[150]; // ds:85B0
 
-    uint8_t         m_UNK_86DC[0x87C4 - 0x86DC];    // ds:86DC
+    uint8_t         m_Unk_86DC[0x87C4 - 0x86DC];    // ds:86DC
 
     WizardsExe_Game_Data    m_Game_Data;            // ds:87C4
 
     Game_Settings   m_Game_Settings;                // ds:87D4
 
-    uint8_t         m_UNK_89A6[0x8A14 - 0x89A6];    // ds:89A6
+    uint8_t         m_Unk_89A6[0x8A14 - 0x89A6];    // ds:89A6
 
     eSpell          m_Spell_Selected[eSpell_MAX];   // ds:8A14
 
-    uint8_t         m_UNK_8AEB[0x8D52 - 0x8AEB];    // ds:8AEB
+    uint8_t         m_Unk_8AEB[0x8D52 - 0x8AEB];    // ds:8AEB
 
     uint16_t        m_Spells_Known_Realm[66];       // ds:8D52
-    uint16_t        m_UNK_8DD6;                     // ds:8DD6
+    uint16_t        m_Unk_8DD6;                     // ds:8DD6
     uint16_t        m_Sorcery_Picks_Divider;        // ds:8DD8
     uint16_t        m_Nature_Picks_Divider;         // ds:8DDA
     uint16_t        m_Chaos_Picks_Divider;          // ds:8DDC
     uint16_t        m_Death_Picks_Divider;          // ds:8DDE
     uint16_t        m_Life_Picks_Divider;           // ds:8DE0
 
-    uint16_t        m_UNK_8DE2[2];                  // ds:8DE2
+    uint16_t        m_Unk_8DE2[2];                  // ds:8DE2
 
     uint16_t        m_Spells_Known_Realm_Indexed[15];    // ds:8DE6
 
-    uint8_t         m_UNK_8E04[0x8E48 - 0x8E04];    // ds:8E04
+    uint8_t         m_Unk_8E04[0x8E48 - 0x8E04];    // ds:8E04
 
     ePortrait       m_Select_Wizard_Shown;          // ds:8E48
 
-    uint8_t         m_UNK_8E49[0x8E94 - 0x8E49];    // ds:8E49
+    uint8_t         m_Unk_8E49[0x8E94 - 0x8E49];    // ds:8E49
 
     uint16_t        m_Total_Picks_Left;             // ds:8E94
 
-    uint8_t         m_UNK_8E96[0xAA4A - 0x8E96];    // ds:8E96
+    uint8_t         m_Unk_8E96[0xAA4A - 0x8E96];    // ds:8E96
 
                                                     // ds:AA4A  END DATA SEGMENT (DS)
 
     //    uint8_t     m_PARALIGN09[0x0C];                 // Offset EXE:37EF4 / ds:EA54
 
-    uint8_t         m_UNK_AA4A[0xFE68 - 0xAA4A];    // ds:AA4A
+    uint8_t         m_Unk_AA4A[0xFE68 - 0xAA4A];    // ds:AA4A
 
     char            m_Wizards_Name_Shown_1[11];     // ds:FE68
 
-    uint8_t         m_UNK_FE73[0xFEC2 - 0xFE73];    // ds:FE73
+    uint8_t         m_Unk_FE73[0xFEC2 - 0xFE73];    // ds:FE73
 
     char            m_Wizards_Name_Shown_2[11];     // ds:FEC2
 } MoMMagicDataSegment;
@@ -5812,43 +5817,43 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
 typedef struct PACKED_STRUCT // HelpLBXentry
 {
-    char title[30];                                 // 00
-    char lbxFile[14];                               // 1E
-    uint16_t lbxIndex;                              // 2C
-    uint16_t zero;                                  // 2E
-    char description[1000];                         // ?
-                                                    // SIZE ?
+    char        title[30];                          // 00
+    char        lbxFile[14];                        // 1E
+    uint16_t    lbxIndex;                           // 2C
+    uint16_t    zero_2E;                            // 2E
+    char        description[1000];                  // 30
+                                                    // SIZE 418?
 } HelpLBXentry;
 
 typedef struct PACKED_STRUCT // HlpEntryLbx
 {
-    uint16_t        lbxIndex;                       // 00
-    int16_t         left;                           // 02
-    int16_t         top;                            // 04
-    int16_t         right;                          // 06
-    int16_t         bottom;                         // 08
+    uint16_t    lbxIndex;                           // 00
+    int16_t     left;                               // 02
+    int16_t     top;                                // 04
+    int16_t     right;                              // 06
+    int16_t     bottom;                             // 08
                                                     // SIZE 0A
 } HlpEntryLbx;
 
 typedef struct PACKED_STRUCT // LBX_ImageHeader
 {
-    uint16_t width;                 // 00
-    uint16_t height;                // 02
-    uint16_t compression;           // 04   0=RLE, 0xDE0A=uncompressed
-    uint16_t nframes;               // 06   0=uncompressed, 1+=RLE
-    uint16_t frameDelay;            // 08
-    uint16_t flags;                 // 0A
-    uint16_t reserved_0C;           // 0C
-    uint32_t paletteInfoOffset;     // 0E
-                                    // SIZE 12
+    uint16_t    width;                              // 00
+    uint16_t    height;                             // 02
+    uint16_t    compression;                        // 04   0=RLE, 0xDE0A=uncompressed
+    uint16_t    nframes;                            // 06   0=uncompressed, 1+=RLE
+    uint16_t    frameDelay;                         // 08
+    uint16_t    flags;                              // 0A
+    uint16_t    reserved_0C;                        // 0C
+    uint32_t    paletteInfoOffset;                  // 0E
+                                                    // SIZE 12
 } MoMImageHeaderLbx;
 
 typedef struct PACKED_STRUCT // LBX_PaletteInfo
 {
-    uint16_t paletteOffset;         // 00
-    uint16_t firstPaletteColorIndex;// 02
-    uint16_t paletteColorCount;     // 04
-                                    // SIZE 6
+    uint16_t    paletteOffset;                      // 00
+    uint16_t    firstPaletteColorIndex;             // 02
+    uint16_t    paletteColorCount;                  // 04
+                                                    // SIZE 6
 } MoMPaletteInfoLbx;
 
 }

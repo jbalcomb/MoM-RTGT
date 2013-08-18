@@ -37,10 +37,7 @@ public:
     {
         m_game = game;
     }
-    void setUnit(const QMoMUnitPtr& momUnit)
-    {
-        m_momUnit = momUnit;
-    }
+    void setUnit(const QMoMUnitPtr& momUnit);
     void setFrameNr(int frameNr)
     {
         m_frameNr = frameNr;
@@ -59,6 +56,7 @@ private:
     QMoMUnitPtr m_momUnit;
     bool m_isBattlefield;
     int m_frameNr;
+    int m_idTimer;
 };
 
 }

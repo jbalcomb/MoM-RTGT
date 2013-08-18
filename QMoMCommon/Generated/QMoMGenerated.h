@@ -90,6 +90,7 @@ QMoMTreeItemModelBase* constructTreeItem(Unit_Type_Data* rhs, const QString& con
 QMoMTreeItemModelBase* constructTreeItem(Unit_Weapon_Mutation* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Upkeep_Enchantments* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(Wizard_Diplomacy* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Wizard_Type_Data* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(WizardsExe_Save_Name* rhs, const QString& context);

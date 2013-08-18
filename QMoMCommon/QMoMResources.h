@@ -106,7 +106,7 @@ public:
         {
             if (1.0 != scale)
 			{
-                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::FastTransformation);
 	            pixmap.convertFromImage(image);
 			}
 			else
@@ -126,7 +126,7 @@ public:
         {
             if (1.0 != scale)
 			{
-                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::FastTransformation);
 	            pixmap.convertFromImage(image);
 			}
 			else
