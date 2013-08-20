@@ -48,8 +48,8 @@ public slots:
     void slot_unitChanged(const QMoMUnitPtr& unit);
 
 private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
     void on_comboBox_Unit_currentIndexChanged(int index);
+    void on_pushButton_Summon_clicked();
 
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, const QString& helpText = "");

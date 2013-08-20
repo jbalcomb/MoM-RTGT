@@ -602,20 +602,6 @@ void DialogAddUnit::displayToHit(QPointF& pos, int toHit, const QString& labelTe
   pos.ry() += 10;
 }
 
-void DialogAddUnit::on_buttonBox_clicked(QAbstractButton *button)
-{
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return;
-
-    QDialogButtonBox::ButtonRole buttonRole = ui->buttonBox->buttonRole(button);
-    if (QDialogButtonBox::ApplyRole == buttonRole)
-    {
-        MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex() - 1);
-        controller->addUnit(unitType);
-    }
-}
-
 void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 {
     // Do nothing if we are busy with an external update
@@ -624,6 +610,16 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 
     m_unit->changeUnit(static_cast<MoM::eUnit_Type>(index - 1));
 	update();
+}
+
+void MoM::DialogAddUnit::on_pushButton_Summon_clicked()
+{
+    MainWindow* controller = MainWindow::getInstance();
+    if (0 == controller)
+        return;
+
+    MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex() - 1);
+    controller->addUnit(unitType);
 }
 
 void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)
@@ -683,10 +679,6 @@ void DialogAddUnit::update()
 {
     // Remove old QGraphicsItems
     m_sceneUnit->clear();
-
-    QPixmap pixmapBack = QMoMResources::instance().getPixmap(LBXRecordID("UNITVIEW", 1), 2.0);
-    QGraphicsItem* itemBack = m_sceneUnit->addPixmap(pixmapBack);
-    itemBack->setPos(-8, 0);
 
     if (0 == m_game)
         return;

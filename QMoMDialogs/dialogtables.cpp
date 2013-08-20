@@ -15,6 +15,7 @@
 #include "dialogtables.h"
 #include "ui_dialogtables.h"
 
+#include "MoMController.h"
 #include "MoMExeWizards.h"
 #include "MoMGenerated.h"
 #include "MoMTemplate.h"
@@ -23,6 +24,7 @@
 #include "QMoMSettings.h"
 #include "QMoMTableItem.h"
 
+using namespace MoM;
 
 DialogTables::DialogTables(QWidget *parent) :
     QDialog(parent),
@@ -135,6 +137,92 @@ void DialogTables::update_BuildingData()
     labels << "Trade/housing" << "Zero_24" << "Zero_26" << "Religious" << "Research" << "Zero_2E";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_BuildingData(int)));
+}
+
+void DialogTables::slot_addRow_to_BuildingData(int row)
+{
+    MoM::eBuilding building = (MoM::eBuilding)row;
+    MoM::Building_Data* data = m_game->getBuildingData(building);
+    if (0 == data)
+        return;
+
+    int col = 0;
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
+
+    ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_BuildingName, sizeof(data->m_BuildingName)));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite1, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite2, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Replaces_building, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Regulars, MoM::eYesNo16_MAX, SHOWENUM_noZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Veterans, MoM::eYesNo16_MAX, SHOWENUM_noZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Magic_Weapons, MoM::eYesNo16_MAX, SHOWENUM_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Upkeep_yield, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Building_cost, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuildingCategory>(m_game, &data->m_Building_category, MoM::eBuildingCategory_MAX));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_trade_goods_housing, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_24, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_26, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Religious, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Research, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_2E, 2, SHOWNUMBER_noZero));
+}
+
+void DialogTables::update_Cities()
+{
+    int ndata = 0;
+    if (!m_game.isNull())
+    {
+        ndata = m_game->getNrCities();
+    }
+
+    QStringList labels;
+    labels << "Nr";
+    labels << "Owner" << "CityName" << "Race" << "Pop" << "Farmers" << "Gold" << "Maint" << "Mana" << "Research" << "Food"
+           << "Prd" << "Producing" << "Produced";
+    labels << "Cost" << "Time" << "Garrison";
+
+    buildTable(labels, ndata, SLOT(slot_addRow_to_Cities(int)));
+}
+
+void DialogTables::slot_addRow_to_Cities(int row)
+{
+    int cityNr = row;
+    City* data = m_game->getCity(cityNr);
+    if (0 == data)
+        return;
+    int buildingCost = m_game->getCostToProduce(data->m_Producing);
+    int timeCompletion = 999;
+    if (data->m_Hammers > 0)
+    {
+       timeCompletion = (buildingCost - data->m_HammersAccumulated) / data->m_Hammers + 1;
+    }
+
+    std::vector<int> unitsInCity;
+    MoM::MoMLocation location(data->m_XPos, data->m_YPos, data->m_Plane);
+    MoM::MoMController(m_game.data()).findUnitsAtLocation(location, unitsInCity);
+    int garrisonSize = unitsInCity.size();
+
+    int col = 0;
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
+
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::ePlayer>(m_game, &data->m_Owner, MoM::ePlayer_MAX, SHOWENUM_normal));
+    ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_City_Name, sizeof(data->m_City_Name)));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eRace>(m_game, &data->m_Race, MoM::eRace_MAX, SHOWENUM_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Population, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Coins, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Maintenance, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Mana_cr, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Research, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Food_Produced, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Hammers, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eProducing>(m_game, &data->m_Producing, MoM::eProducing_MAX, SHOWENUM_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_HammersAccumulated, 3, SHOWNUMBER_normal));
+
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(buildingCost, 4)));
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(timeCompletion, 3)));
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(garrisonSize, 1)));
 }
 
 void DialogTables::update_HeroData()
@@ -286,35 +374,6 @@ void DialogTables::slot_addRow_to_HeroData(int row)
             col += 3;
         }
     }
-}
-
-void DialogTables::slot_addRow_to_BuildingData(int row)
-{
-    MoM::eBuilding building = (MoM::eBuilding)row;
-    MoM::Building_Data* data = m_game->getBuildingData(building);
-    if (0 == data)
-        return;
-
-    int col = 0;
-    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
-
-    ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_BuildingName, sizeof(data->m_BuildingName)));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite1, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite2, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Replaces_building, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Regulars, MoM::eYesNo16_MAX, SHOWENUM_noZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Veterans, MoM::eYesNo16_MAX, SHOWENUM_noZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Magic_Weapons, MoM::eYesNo16_MAX, SHOWENUM_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Upkeep_yield, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Building_cost, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuildingCategory>(m_game, &data->m_Building_category, MoM::eBuildingCategory_MAX));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_trade_goods_housing, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_24, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_26, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Religious, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Research, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_2E, 2, SHOWNUMBER_noZero));
 }
 
 void DialogTables::update_ItemData()
@@ -1063,6 +1122,10 @@ void DialogTables::on_comboBox_Table_currentIndexChanged(QString newIndex)
     if ("Building Data" == newIndex)
     {
         update_BuildingData();
+    }
+    else if ("Cities" == newIndex)
+    {
+        update_Cities();
     }
     else if ("Hero Data" == newIndex)
     {

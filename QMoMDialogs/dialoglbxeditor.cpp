@@ -507,23 +507,11 @@ void DialogLbxEditor::on_pushButton_SavePics_clicked()
 
         if (0 == fileInfo.suffix().compare("gif", Qt::CaseInsensitive))
         {
-            QFile qfile(filenameBase);
-            if (!qfile.open(QFile::WriteOnly | QFile::Truncate))
+            if (!curAnimation.saveAsGif(filenameBase))
             {
                 (void)QMessageBox::warning(this,
                     tr("Save picture(s)"),
-                    tr("Failed to create file for writing"));
-            }
-            else
-            {
-                QMoMGifHandler gifHandlerWrite;
-                gifHandlerWrite.setDevice(&qfile);
-                if (!gifHandlerWrite.writeAnimation(curAnimation))
-                {
-                    (void)QMessageBox::warning(this,
-                        tr("Save picture(s)"),
-                        tr("Failed to save the picture(s)"));
-                }
+                    tr("Failed to save animation as '%0'").arg(filenameBase));
             }
         }
         else

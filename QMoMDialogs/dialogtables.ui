@@ -93,6 +93,15 @@
      </item>
      <item>
       <property name="text">
+       <string>Cities</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/abilities/Create Outpost.gif</normaloff>:/abilities/Create Outpost.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Hero Data</string>
       </property>
       <property name="icon">

@@ -80,6 +80,7 @@ bool QMoMAnimation::saveAsGif(const QString& gifFilename)
     gifHandler.setAnimationOption(QMoMGifHandler::Loop, 0);
     gifHandler.setAnimationOption(QMoMGifHandler::TransparentColor, 0);
     gifHandler.setAnimationOption(QMoMGifHandler::Disposal, 2);
+    gifHandler.setAnimationOption(QMoMGifHandler::Delay, 20);
     if (!gifHandler.writeAnimation(*this))
         return false;
 

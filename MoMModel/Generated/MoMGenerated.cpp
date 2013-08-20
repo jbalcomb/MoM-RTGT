@@ -4039,18 +4039,13 @@ std::ostream& operator<<(std::ostream& os, const City& rhs)
     os << "m_Size=" << rhs.m_Size << "\n";
     os << "m_Population=" << (unsigned)rhs.m_Population << " 0x" << std::hex << (unsigned)rhs.m_Population << std::dec << "\n";
     os << "m_Number_of_farmers_allocated=" << (int)rhs.m_Number_of_farmers_allocated << " 0x" << std::hex << (int)rhs.m_Number_of_farmers_allocated << std::dec << "\n";
-    os << "m_Unk_16=(\n";
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        os << "[" << i << "] " << (unsigned)rhs.m_Unk_16[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_16[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_PopulationDekaPop=" << (int)rhs.m_PopulationDekaPop << " 0x" << std::hex << (int)rhs.m_PopulationDekaPop << std::dec << "\n";
-    os << "m_Unk_19=" << (unsigned)rhs.m_Unk_19 << " 0x" << std::hex << (unsigned)rhs.m_Unk_19 << std::dec << "\n";
+    os << "m_Building_sold=" << rhs.m_Building_sold << "\n";
+    os << "m_Unk_17=" << (unsigned)rhs.m_Unk_17 << " 0x" << std::hex << (unsigned)rhs.m_Unk_17 << std::dec << "\n";
+    os << "m_PopulationDekaPop=" << rhs.m_PopulationDekaPop << " 0x" << std::hex << rhs.m_PopulationDekaPop << std::dec << "\n";
     os << "m_Player_as_bitmask_GUESS=" << (unsigned)rhs.m_Player_as_bitmask_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Player_as_bitmask_GUESS << std::dec << "\n";
     os << "m_Unk_1B=" << (unsigned)rhs.m_Unk_1B << " 0x" << std::hex << (unsigned)rhs.m_Unk_1B << std::dec << "\n";
     os << "m_Producing=" << rhs.m_Producing << "\n";
-    os << "m_Unk_1E=" << (unsigned)rhs.m_Unk_1E << " 0x" << std::hex << (unsigned)rhs.m_Unk_1E << std::dec << "\n";
+    os << "m_Nr_buildings=" << (unsigned)rhs.m_Nr_buildings << " 0x" << std::hex << (unsigned)rhs.m_Nr_buildings << std::dec << "\n";
     os << "m_Building_Status=" << rhs.m_Building_Status << "\n";
     os << "m_City_Enchantments=" << rhs.m_City_Enchantments << "\n";
     os << "m_Nightshade=" << rhs.m_Nightshade << "\n";
@@ -11306,6 +11301,7 @@ bool validate(const City& rhs, const std::string& context)
     if (!validate(rhs.m_Plane, context + ".m_Plane")) ok = false;
     if (!validate(rhs.m_Owner, context + ".m_Owner")) ok = false;
     if (!validate(rhs.m_Size, context + ".m_Size")) ok = false;
+    if (!validate(rhs.m_Building_sold, context + ".m_Building_sold")) ok = false;
     if (!validate(rhs.m_Producing, context + ".m_Producing")) ok = false;
     if (!validate(rhs.m_Building_Status, context + ".m_Building_Status")) ok = false;
     if (!validate(rhs.m_City_Enchantments, context + ".m_City_Enchantments")) ok = false;

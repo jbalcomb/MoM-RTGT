@@ -1008,24 +1008,13 @@ QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context)
     ptree->appendChild("m_Size", new QMoMTreeItemModel<eCity_Size>(&rhs->m_Size));
     ptree->appendChild("m_Population", new QMoMTreeItemModel<uint8_t>(&rhs->m_Population));
     ptree->appendChild("m_Number_of_farmers_allocated", new QMoMTreeItemModel<int8_t>(&rhs->m_Number_of_farmers_allocated));
-    QMoMTreeItemModelBase* ptreem_Unk_16 = ptree;
-    if (2 > 3)
-    {
-        ptreem_Unk_16 = new QMoMTreeItemModelBase("m_Unk_16");
-        ptree->appendTree(ptreem_Unk_16, "");
-    }
-    for (unsigned i = 0; i < 2; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_Unk_16[" << i << "]";
-          ptreem_Unk_16->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_16[i]));
-    }
-    ptree->appendChild("m_PopulationDekaPop", new QMoMTreeItemModel<int8_t>(&rhs->m_PopulationDekaPop));
-    ptree->appendChild("m_Unk_19", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_19));
+    ptree->appendChild("m_Building_sold", new QMoMTreeItemModel<eYesNo8>(&rhs->m_Building_sold));
+    ptree->appendChild("m_Unk_17", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_17));
+    ptree->appendChild("m_PopulationDekaPop", new QMoMTreeItemModel<int16_t>(&rhs->m_PopulationDekaPop));
     ptree->appendChild("m_Player_as_bitmask_GUESS", new QMoMTreeItemModel<uint8_t>(&rhs->m_Player_as_bitmask_GUESS));
     ptree->appendChild("m_Unk_1B", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_1B));
     ptree->appendChild("m_Producing", new QMoMTreeItemModel<eProducing>(&rhs->m_Producing));
-    ptree->appendChild("m_Unk_1E", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_1E));
+    ptree->appendChild("m_Nr_buildings", new QMoMTreeItemModel<uint8_t>(&rhs->m_Nr_buildings));
     ptree->appendTree(constructTreeItem(&rhs->m_Building_Status, "m_Building_Status"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_City_Enchantments, "m_City_Enchantments"), "");
     ptree->appendChild("m_Nightshade", new QMoMTreeItemModel<eYesNo8>(&rhs->m_Nightshade));

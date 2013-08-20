@@ -4412,13 +4412,13 @@ typedef struct PACKED_STRUCT // City
     eCity_Size      m_Size;                     // 13 (0-5; see below)
     uint8_t         m_Population;               // 14 (in thousands) (0-25)
     int8_t          m_Number_of_farmers_allocated;  // 15 (should be <= population)
-    uint8_t         m_Unk_16[2];                // 16-17
-    int8_t          m_PopulationDekaPop;        // 18 (in tenths) (Outpost is 1-9, else 0-99)
-    uint8_t         m_Unk_19;                   // 19
+    eYesNo8         m_Building_sold;            // 16
+    uint8_t         m_Unk_17;                   // 17
+    int16_t         m_PopulationDekaPop;        // 18-19 (in tenths) (Outpost is 1-9, else 0-99)
     uint8_t         m_Player_as_bitmask_GUESS;  // 1A
     uint8_t         m_Unk_1B;                   // 1B
     eProducing      m_Producing;                // 1C-1D (0-??; see below)
-    uint8_t         m_Unk_1E;                   // 1E
+    uint8_t         m_Nr_buildings;             // 1E
     unionBuilding_Status    m_Building_Status;  // 1F-42
     City_Enchantments       m_City_Enchantments;// 43-5B (0 = not present, 1-5 = owner + 1)
     eYesNo8         m_Nightshade;               // 5C (0 or 1)

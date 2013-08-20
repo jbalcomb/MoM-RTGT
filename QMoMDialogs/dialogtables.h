@@ -38,6 +38,7 @@ private:
     void finalizeTable();
 
     void update_BuildingData();
+    void update_Cities();
     void update_HeroData();
     void update_ItemData();
     void update_ItemPowers();
@@ -55,6 +56,7 @@ private slots:
     void on_tableWidget_customContextMenuRequested(const QPoint &pos);
 
     void slot_addRow_to_BuildingData(int row);
+    void slot_addRow_to_Cities(int row);
     void slot_addRow_to_HeroData(int row);
     void slot_addRow_to_ItemData(int row);
     void slot_addRow_to_ItemPowers(int row);
