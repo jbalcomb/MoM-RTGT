@@ -3736,7 +3736,7 @@ std::ostream& operator<<(std::ostream& os, const Battle_Unit& rhs)
     os << "m_Weapon_Type_Plus_1=" << (unsigned)rhs.m_Weapon_Type_Plus_1 << " 0x" << std::hex << (unsigned)rhs.m_Weapon_Type_Plus_1 << std::dec << "\n";
     os << "m_Cur_Attack_Flags=" << rhs.m_Cur_Attack_Flags << "\n";
     os << "m_Item_Attack_Flags=" << rhs.m_Item_Attack_Flags << "\n";
-    os << "m_Flags2_UnitEnchantment=" << rhs.m_Flags2_UnitEnchantment << "\n";
+    os << "m_Item_UnitEnchantment=" << rhs.m_Item_UnitEnchantment << "\n";
     os << "m_unitNr=" << rhs.m_unitNr << " 0x" << std::hex << rhs.m_unitNr << std::dec << "\n";
     os << "m_additional_life_per_figure=" << (int)rhs.m_additional_life_per_figure << " 0x" << std::hex << (int)rhs.m_additional_life_per_figure << std::dec << "\n";
     os << "m_web_strength=" << (int)rhs.m_web_strength << " 0x" << std::hex << (int)rhs.m_web_strength << std::dec << "\n";
@@ -11190,7 +11190,7 @@ bool validate(const Battle_Unit& rhs, const std::string& context)
     if (!validate(rhs.m_Flags_Combat_Enchantment, context + ".m_Flags_Combat_Enchantment")) ok = false;
     if (!validate(rhs.m_Cur_Attack_Flags, context + ".m_Cur_Attack_Flags")) ok = false;
     if (!validate(rhs.m_Item_Attack_Flags, context + ".m_Item_Attack_Flags")) ok = false;
-    if (!validate(rhs.m_Flags2_UnitEnchantment, context + ".m_Flags2_UnitEnchantment")) ok = false;
+    if (!validate(rhs.m_Item_UnitEnchantment, context + ".m_Item_UnitEnchantment")) ok = false;
     if (!validate(rhs.m_Active, context + ".m_Active")) ok = false;
     if (!validate(rhs.m_Owner, context + ".m_Owner")) ok = false;
     if (!validate(rhs.m_Flags1_UnitEnchantment, context + ".m_Flags1_UnitEnchantment")) ok = false;

@@ -559,7 +559,7 @@ QMoMTreeItemModelBase* constructTreeItem(Battle_Unit* rhs, const QString& contex
     ptree->appendChild("m_Weapon_Type_Plus_1", new QMoMTreeItemModel<uint8_t>(&rhs->m_Weapon_Type_Plus_1));
     ptree->appendTree(constructTreeItem(&rhs->m_Cur_Attack_Flags, "m_Cur_Attack_Flags"), "");
     ptree->appendTree(constructTreeItem(&rhs->m_Item_Attack_Flags, "m_Item_Attack_Flags"), "");
-    ptree->appendTree(constructTreeItem(&rhs->m_Flags2_UnitEnchantment, "m_Flags2_UnitEnchantment"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_Item_UnitEnchantment, "m_Item_UnitEnchantment"), "");
     ptree->appendChild("m_unitNr", new QMoMTreeItemModel<int16_t>(&rhs->m_unitNr));
     ptree->appendChild("m_additional_life_per_figure", new QMoMTreeItemModel<int8_t>(&rhs->m_additional_life_per_figure));
     ptree->appendChild("m_web_strength", new QMoMTreeItemModel<int8_t>(&rhs->m_web_strength));

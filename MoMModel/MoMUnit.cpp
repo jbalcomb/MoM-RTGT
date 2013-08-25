@@ -1095,7 +1095,7 @@ bool MoMUnit::hasUnitEnchantment(eUnitEnchantment unitEnchantment) const
     if (m_battleUnit != 0)
     {
         value |= (1 & (m_battleUnit->m_Flags1_UnitEnchantment.bits >> unitEnchantment));
-        value |= (1 & (m_battleUnit->m_Flags2_UnitEnchantment.bits >> unitEnchantment));
+        value |= (1 & (m_battleUnit->m_Item_UnitEnchantment.bits >> unitEnchantment));
     }
     return value;
 }

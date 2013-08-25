@@ -4928,7 +4928,7 @@ typedef struct PACKED_STRUCT // Battle_Unit
     uint8_t                 m_Weapon_Type_Plus_1;           // 27
     unionAttack_Flags       m_Cur_Attack_Flags;             // 28-29
     unionAttack_Flags       m_Item_Attack_Flags;            // 2A-2B
-    unionUnit_Enchantment   m_Flags2_UnitEnchantment;       // 2C-2F
+    unionUnit_Enchantment   m_Item_UnitEnchantment;         // 2C-2F
     int16_t                 m_unitNr;                       // 30-31
     int8_t                  m_additional_life_per_figure;   // 32
     int8_t                  m_web_strength;                         // 33
