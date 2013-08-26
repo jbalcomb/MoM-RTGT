@@ -14,7 +14,11 @@
 namespace MoM
 {
 
+//
+// IMAGE AND ANIMATION DATA:
+//
 // From: http://masteroforion2.blogspot.nl/
+//
 // The flags is a two byte value also stored as little endian. Contrary to previous multibyte values this doesn’t represent decimal value, but a binary value. Each flag is represented as one bit within the value. Take a look:
 // 0000 0000 0000 0000
 // ..JI FB.N .... ....
@@ -84,6 +88,49 @@ namespace MoM
 //                  |   <nseqbytes> <delta> <color 0-DFh>+
 //
 
+
+//
+// FONT DATA
+//
+// Inspired from: http://www.spheriumnorth.com/orion-forum/nfphpbb/viewtopic.php?t=91
+// But taken from MoM code.
+//
+// Scratch area that the font data is copied into
+// 0000
+// 0010 font height
+// 0012
+// 0014
+// 0024
+// 0034
+// 0048 horizontal spacing
+// 004A widths of ascii characters 20h - 7Dh with a spare for 7E and 7F
+// 00AA word for the glyph offset of each ascii character starting from 20h - 7Dh with a spare for 7E and 7F
+//
+// 016A font heights (word) for 8 fonts
+// 017A horizontal spacing (word) for 8 fonts
+// 018A something heights (word) for 8 fonts (x-height? C-height? left leader?)
+// 019A character widths (byte) for 8 fonts (8 x 60h)
+// 049A glyph data offsets (word) for 4 fonts (4 x 120h)
+// 0A9A glyph data (3ADAh)
+// 4574 (SIZE FontsStyleData)
+//
+struct MoMFontsStyleData
+{
+    uint8_t     m_Unk_0000[0x0010];             // 0000
+    int16_t     m_curFontHeight;                // 0010
+    uint8_t     m_Unk_0012[0x0036];             // 0012
+    int16_t     m_curHorizontalSpacing;         // 0048
+    int8_t      m_curCharacterWidths[0x60];     // 004A
+    uint16_t    m_curGlyphOffsets[0x60];        // 00AA
+
+    int16_t     m_allFontHeights[8];            // 016A
+    int16_t     m_allHorizontalSpacings[8];     // 017A
+    int16_t     m_allSomethingSizes[8];         // 018A
+    int8_t      m_allCharacterWidths[8][0x60];  // 019A
+    uint16_t    m_allGlyphOffsets[4][0x60];     // 049A
+
+    uint8_t     m_glyphData[1];                 // 0A9A
+};
 
 static bool gVerbose = false;
 

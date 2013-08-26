@@ -491,19 +491,79 @@ void DialogLbxEditor::on_pushButton_SavePics_clicked()
     {
         curAnimation = m_lbxAnimations[lbxIndex];
     }
-    if ((curAnimation.size() <= 0) || (0 == curAnimation[0]))
-    {
-        (void)QMessageBox::warning(this,
-            tr("Save picture(s)"),
-            tr("There are no pictures to save"));
-        return;
-    }
+//    if (curAnimation.empty() || (0 == curAnimation[0]))
+//    {
+//        (void)QMessageBox::warning(this,
+//            tr("Save picture(s)"),
+//            tr("There are no pictures to save"));
+//        return;
+//    }
 
     m_filedialogSave->setFileMode(QFileDialog::AnyFile);
     if (m_filedialogSave->exec())
     {
         QString filenameBase = m_filedialogSave->selectedFiles().first();
         QFileInfo fileInfo(filenameBase);
+
+        if (curAnimation.empty())
+        {
+            std::vector<uint8_t> data;
+            if (m_lbx.getRecord(0, data))
+            {
+                QMoMImagePtr image(new QImage(512, 512, QImage::Format_Indexed8));
+                image->fill(0);
+                image->setColorTable(MoM::QMoMResources::instance().getColorTable());
+                int x = 0;
+                int y = 0;
+                int frameNr = 0;
+                for (int i = 0; i < data.size(); i ++)
+                {
+                    // Decode pixel
+                    if (data[i] <= 0x7F)
+                    {
+                        image->setPixel(x, y, data[i]);
+                        x++;
+                    }
+                    else if (data[i] == 0x80)
+                    {
+                        y++;
+                        x = 0;
+                    }
+                    else if (data[i] <= 0x8F)
+                    {
+                        x += (data[i] - 0x80);
+                    }
+                    else
+                    {
+                        image->setPixel(x, y, data[i]);
+                        x++;
+                    }
+
+                    // Wrap line
+                    if (x >= image->width())
+                    {
+                        y++;
+                        x = 0;
+                    }
+
+                    if (y >= image->height())
+                    {
+                        QString filename = constructFrameFilename(filenameBase, frameNr);
+                        if (!image->save(filename))
+                        {
+                            (void)QMessageBox::warning(this,
+                                tr("Save picture(s)"),
+                                tr("Failed to save the picture(s)"));
+                            break;
+                        }
+
+                        frameNr++;
+                        x = y = 0;
+                        image->fill(0);
+                    }
+                }
+            }
+        }
 
         if (0 == fileInfo.suffix().compare("gif", Qt::CaseInsensitive))
         {
