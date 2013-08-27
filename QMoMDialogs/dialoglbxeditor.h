@@ -31,6 +31,7 @@ private:
     void loadLbx(const QString& filename);
     void loadPaletteForFile(const QString& filename);
     void listBitmapFiles(const QString& directory);
+    void processFont(int lbxIndex);
     void updateBitmapImage(const QString& bitmapfilename);
     void updateImage(QGraphicsView* view, const QMoMAnimation& curAnimation, int line = 0, bool clearImage = true);
     void updateLbxImage(int lbxIndex);
