@@ -562,10 +562,16 @@ protected:
     {
         return 0;
     }
+public:
     virtual Map_Movement* getTerrain_Movements()
     {
         return 0;
     }
+    virtual Map_Movement* getTerrain_Movements_copy()
+    {
+        return 0;
+    }
+protected:
     virtual eTerrainType* getTerrain_Types()
     {
         return 0;

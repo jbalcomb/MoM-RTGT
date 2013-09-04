@@ -4528,6 +4528,169 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     return ptree;
 }
 
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsCharacterWidths* rhs, const QString& context)
+{
+    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<MoMFontsCharacterWidths>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    QMoMTreeItemModelBase* ptreem_characterWidths = ptree;
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_characterWidths[" << i << "]";
+          ptreem_characterWidths->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_characterWidths[i]));
+    }
+    return ptree;
+}
+
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsGlyphOffsets* rhs, const QString& context)
+{
+    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<MoMFontsGlyphOffsets>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    QMoMTreeItemModelBase* ptreem_glyphOffsets = ptree;
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_glyphOffsets[" << i << "]";
+          ptreem_glyphOffsets->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint16_t>(&rhs->m_glyphOffsets[i]));
+    }
+    return ptree;
+}
+
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsStyleData* rhs, const QString& context)
+{
+    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<MoMFontsStyleData>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    QMoMTreeItemModelBase* ptreem_Unk_0000 = ptree;
+    if (0x0010 > 3)
+    {
+        ptreem_Unk_0000 = new QMoMTreeItemModelBase("m_Unk_0000");
+        ptree->appendTree(ptreem_Unk_0000, "");
+    }
+    for (unsigned i = 0; i < 0x0010; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_0000[" << i << "]";
+          ptreem_Unk_0000->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_0000[i]));
+    }
+    ptree->appendChild("m_curFontHeight", new QMoMTreeItemModel<int16_t>(&rhs->m_curFontHeight));
+    QMoMTreeItemModelBase* ptreem_Unk_0012 = ptree;
+    if (0x0036 > 3)
+    {
+        ptreem_Unk_0012 = new QMoMTreeItemModelBase("m_Unk_0012");
+        ptree->appendTree(ptreem_Unk_0012, "");
+    }
+    for (unsigned i = 0; i < 0x0036; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_0012[" << i << "]";
+          ptreem_Unk_0012->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_0012[i]));
+    }
+    ptree->appendChild("m_curHorizontalSpacing", new QMoMTreeItemModel<int16_t>(&rhs->m_curHorizontalSpacing));
+    QMoMTreeItemModelBase* ptreem_curCharacterWidths = ptree;
+    if (0x60 > 3)
+    {
+        ptreem_curCharacterWidths = new QMoMTreeItemModelBase("m_curCharacterWidths");
+        ptree->appendTree(ptreem_curCharacterWidths, "");
+    }
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_curCharacterWidths[" << i << "]";
+          ptreem_curCharacterWidths->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_curCharacterWidths[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_curGlyphOffsets = ptree;
+    if (0x60 > 3)
+    {
+        ptreem_curGlyphOffsets = new QMoMTreeItemModelBase("m_curGlyphOffsets");
+        ptree->appendTree(ptreem_curGlyphOffsets, "");
+    }
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_curGlyphOffsets[" << i << "]";
+          ptreem_curGlyphOffsets->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint16_t>(&rhs->m_curGlyphOffsets[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_allFontHeights = ptree;
+    if (8 > 3)
+    {
+        ptreem_allFontHeights = new QMoMTreeItemModelBase("m_allFontHeights");
+        ptree->appendTree(ptreem_allFontHeights, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_allFontHeights[" << i << "]";
+          ptreem_allFontHeights->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_allFontHeights[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_allHorizontalSpacings = ptree;
+    if (8 > 3)
+    {
+        ptreem_allHorizontalSpacings = new QMoMTreeItemModelBase("m_allHorizontalSpacings");
+        ptree->appendTree(ptreem_allHorizontalSpacings, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_allHorizontalSpacings[" << i << "]";
+          ptreem_allHorizontalSpacings->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_allHorizontalSpacings[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_allLineSpacings = ptree;
+    if (8 > 3)
+    {
+        ptreem_allLineSpacings = new QMoMTreeItemModelBase("m_allLineSpacings");
+        ptree->appendTree(ptreem_allLineSpacings, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_allLineSpacings[" << i << "]";
+          ptreem_allLineSpacings->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_allLineSpacings[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_allCharacterWidths = ptree;
+    if (8 > 3)
+    {
+        ptreem_allCharacterWidths = new QMoMTreeItemModelBase("m_allCharacterWidths");
+        ptree->appendTree(ptreem_allCharacterWidths, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_allCharacterWidths[" << i << "]";
+          ptreem_allCharacterWidths->appendTree(constructTreeItem(&rhs->m_allCharacterWidths[i], oss.str().c_str()), "");
+    }
+    QMoMTreeItemModelBase* ptreem_allGlyphOffsets = ptree;
+    if (8 > 3)
+    {
+        ptreem_allGlyphOffsets = new QMoMTreeItemModelBase("m_allGlyphOffsets");
+        ptree->appendTree(ptreem_allGlyphOffsets, "");
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_allGlyphOffsets[" << i << "]";
+          ptreem_allGlyphOffsets->appendTree(constructTreeItem(&rhs->m_allGlyphOffsets[i], oss.str().c_str()), "");
+    }
+    QMoMTreeItemModelBase* ptreem_glyphData = ptree;
+    if (1 > 3)
+    {
+        ptreem_glyphData = new QMoMTreeItemModelBase("m_glyphData");
+        ptree->appendTree(ptreem_glyphData, "");
+    }
+    for (unsigned i = 0; i < 1; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_glyphData[" << i << "]";
+          ptreem_glyphData->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_glyphData[i]));
+    }
+    return ptree;
+}
+
 QMoMTreeItemModelBase* constructTreeItem(MoMImageHeaderLbx* rhs, const QString& context)
 {
     QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<MoMImageHeaderLbx>(rhs, context);
@@ -6076,7 +6239,7 @@ QMoMTreeItemModelBase* constructTreeItem(Unit* rhs, const QString& context)
     ptree->appendChild("m_Level", new QMoMTreeItemModel<eLevel>(&rhs->m_Level));
     ptree->appendChild("m_Unk_0D", new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_0D));
     ptree->appendChild("m_Experience", new QMoMTreeItemModel<int16_t>(&rhs->m_Experience));
-    ptree->appendChild("m_Guess_Lifedrain_Damage", new QMoMTreeItemModel<int8_t>(&rhs->m_Guess_Lifedrain_Damage));
+    ptree->appendChild("m_Unk_10", new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_10));
     ptree->appendChild("m_Damage", new QMoMTreeItemModel<int8_t>(&rhs->m_Damage));
     ptree->appendChild("m_Grouping", new QMoMTreeItemModel<int8_t>(&rhs->m_Grouping));
     ptree->appendChild("m_Guess_Combat_Enchantment_Flag1", new QMoMTreeItemModel<int8_t>(&rhs->m_Guess_Combat_Enchantment_Flag1));

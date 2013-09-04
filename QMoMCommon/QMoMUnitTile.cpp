@@ -70,11 +70,8 @@ void QMoMUnitTile::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    qDebug() << "QMoMUnitTile::paint *" << m_momUnit.data();
     if (0 != m_momUnit)
     {
-        qDebug() << "QMoMUnitTile::paint" << m_momUnit->getDisplayName().c_str();
-
         // Calculate heading
         int heading = calcHeading();
 
@@ -95,7 +92,6 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         if (!animationUnit.empty() && inRange(m_frameNr, 0, animationUnit.count() - 1))
         {
             imageUnit = animationUnit[m_frameNr % animationUnit.count()];
-            qDebug() << "QMoMUnitTile::paint imageUnit" << imageUnit->rect();
         }
         QMoMImagePtr imageBack;
         if (!m_isBattlefield && (0 != wizard))
@@ -112,7 +108,6 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         {
             if (m_isBattlefield)
             {
-                qDebug() << "drawBattleUnit" << imageUnit->rect();
                 drawBattleUnit(painter, imageUnit);
             }
             else
@@ -188,7 +183,6 @@ void QMoMUnitTile::drawBattleUnit(QPainter *painter, const QMoMImagePtr &imageUn
     assert(0 != imageUnit);
     assert(m_isBattlefield);
 
-    qDebug() << "drawBattleUnit figures" << m_momUnit->getMaxFigures();
     int maxFigures = MoM::Range(0, m_momUnit->getMaxFigures(), (int)MoM::gMAX_FIGURES_IN_UNIT);
     for (int figureNr = 0; figureNr < maxFigures; ++figureNr)
     {

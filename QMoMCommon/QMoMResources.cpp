@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include <QFontDatabase>
+
 #include "MoMGameBase.h"
 #include "MoMGenerated.h"
 #include "MoMLbxBase.h"
@@ -322,10 +324,10 @@ static Special<eUnitMutation> gTableUnitMutations[eUnitMutation_MAX] =
 
 const QFont QMoMResources::g_FontSmall("Sans Serif", 10, -1, false);
 #ifdef _WIN32
-const QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
+QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
 #else
 // Note: attribute italic=true is required for URW Chancery L
-const QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
+QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
 #endif
 const QFont QMoMResources::g_FontFixed("Courier New", 10, -1, false);
 
@@ -333,6 +335,11 @@ QMoMResources* QMoMResources::m_instance = 0;
 
 QMoMResources::QMoMResources(const QMoMGamePtr& game) : m_game()
 {
+//    int idMoMFont4 = QFontDatabase::addApplicationFont(":/fonts/MoMFont4.ttf");
+//    qDebug() << "Loading/setting MoMFont4:" << idMoMFont4;
+//    int idMoMFont7 = QFontDatabase::addApplicationFont(":/fonts/MoMFont7.ttf");
+//    g_Font = QFont("MoMFont4");
+
     setGame(game);
 }
 

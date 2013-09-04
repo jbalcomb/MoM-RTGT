@@ -120,7 +120,8 @@ private:
     // TODO: Weird. It appears that the terrain-movements are all zero in memory.
     //       Presumably they are swapped out or something.
     //       Either way, we can't do anything with it.
-//    virtual Map_Movement* getTerrain_Movements();
+    virtual Map_Movement* getTerrain_Movements();
+    virtual Map_Movement* getTerrain_Movements_copy();
     virtual eTerrainType* getTerrain_Types();
 
     virtual Unit* getUnits();

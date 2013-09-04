@@ -139,7 +139,7 @@ public:
 
 public:
     static const QFont g_FontSmall;
-    static const QFont g_Font;
+    static QFont g_Font;
     static const QFont g_FontFixed;
 
 private:
