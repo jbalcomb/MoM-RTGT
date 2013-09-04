@@ -68,7 +68,9 @@ HEADERS += \
         ../../MoMModel/MoMFli.h \
         ../../QMoMCommon/QMoMGifHandler.h \
         ../../QMoMCommon/QMoMAnimation.h \
-    ../../QMoMCommon/QMoMAnimationTile.h
+    ../../QMoMCommon/QMoMAnimationTile.h \
+    ../../giflib-5.0.4/lib/gif_stdint.h \
+    ../../giflib-5.0.4/lib/gif_unistd.h
 
 SOURCES += \
 	../../Applications/MoMTweaker/mainwindow.cpp \

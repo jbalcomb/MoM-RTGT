@@ -8,7 +8,7 @@ two modules will be linked.  Preserve this property!
 
 *****************************************************************************/
 
-//#include <unistd.h>
+#include "gif_unistd.h"
 #include "gif_stdint.h"
 #include <stdlib.h>
 #include <stdio.h>
