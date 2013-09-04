@@ -18,24 +18,30 @@ INCLUDEPATH += \
         ../../Applications/MoMCustomizer
 
 HEADERS += ./mainwindow.h \
+        ../../MoMModel/MoMExeMagic.h \
     ../../MoMModel/MoMGameCustom.h \
     ../../MoMModel/Generated/MoMGenerated.h \
+        ../../MoMModel/MoMLbxBase.h \
+    ../../MoMModel/MoMTemplate.h \
         ../../Platform/MoMCommon.h \
         ../../Platform/MoMExeBase.h \
         ../../Platform/MoMProcess.h \
-    ../../MoMModel/MoMTemplate.h \
+    ../../QMoMCommon/QMoMLbx.h \
+    ../../QMoMCommon/QMoMTreeItemModel.h \
     ../../Utility/MoMUtility.h \
-    ../../QMoMModel/QMoMTreeItem.h \
     ../../Utility/TeeRedirecter.h
 SOURCES += \
     ./mainwindow.cpp \
+        ../../MoMModel/MoMExeMagic.cpp \
     ../../MoMModel/MoMGameBase.cpp \
     ../../MoMModel/MoMGameCustom.cpp \
+        ../../MoMModel/MoMLbxBase.cpp \
     ../../MoMModel/Generated/MoMGenerated.cpp \
         ../../Platform/MoMExeBase.cpp \
         ../../Platform/MoMProcessCommon.cpp \
         ../../Platform/MoMProcess$${PLATF}.cpp \
-    ../../Utility/MoMUtility.cpp \
-    ../../QMoMCommon/QMoMTreeItemModel.cpp
+    ../../QMoMCommon/QMoMLbx.cpp \
+    ../../QMoMCommon/QMoMTreeItemModel.cpp \
+    ../../Utility/MoMUtility.cpp
 FORMS += ./mainwindow.ui
 RESOURCES += ../../Resources/InteractiveGameTweaker.qrc

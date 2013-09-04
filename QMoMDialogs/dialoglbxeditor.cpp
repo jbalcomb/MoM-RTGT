@@ -193,7 +193,7 @@ bool DialogLbxEditor::decodeGlyph(const std::vector<uint8_t>& data, int fontInde
     return true;
 }
 
-void DialogLbxEditor::exportFont(int lbxIndex, QString& directory)
+void DialogLbxEditor::exportFont(size_t lbxIndex, const QString& directory)
 {
     MoM::MoMLbxBase::eRecordType recordType = m_lbx.getRecordType(lbxIndex);
     if (recordType != MoM::MoMLbxBase::TYPE_font)

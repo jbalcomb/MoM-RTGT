@@ -30,7 +30,7 @@ private:
     QString constructFileTitle(const QString& baseName, int lbxIndex, int subIndex);
     QString constructFrameFilename(const QString& bitmapFilename, int frameNr);
     bool decodeGlyph(const std::vector<uint8_t>& data, int fontIndex, int characterIndex, int left, int top, QMoMImagePtr& image);
-    void exportFont(int lbxIndex, QString& directory);
+    void exportFont(size_t lbxIndex, const QString& directory);
     void loadBitmap(const QString& filename);
     void loadLbx(const QString& filename);
     void loadPaletteForFile(const QString& filename);
