@@ -10,7 +10,7 @@ two modules will be linked.  Preserve this property!
 
 #include <stdlib.h>
 #include <limits.h>
-//#include <stdint.h>
+#include "gif_unistd.h"
 #include <fcntl.h>
 #include "gif_stdint.h"
 #include <stdio.h>
