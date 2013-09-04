@@ -4462,7 +4462,7 @@ typedef struct PACKED_STRUCT // Unit
     int8_t      m_Unk_0D;                   // 0D ?? 00
     int16_t     m_Experience;               // 0E-0F Experience (should match level or level will be lowered)
                                             //  (Units: 0-120; Heroes: 0-1000; Summon (other than Torin): 0)
-    int8_t      m_Guess_Lifedrain_Damage;   // 10
+    int8_t      m_Unk_10;                   // 10
     int8_t      m_Damage;                   // 11
     int8_t      m_Grouping;                 // 12 group=Me+Ra, +50 if transport, -1=invisible or dead, 0=active stack
     int8_t      m_Guess_Combat_Enchantment_Flag1; // 13
@@ -5835,6 +5835,16 @@ typedef struct PACKED_STRUCT // HlpEntryLbx
                                                     // SIZE 0A
 } HlpEntryLbx;
 
+typedef struct PACKED_STRUCT // MoMFontsCharacterWidths
+{
+    int8_t      m_characterWidths[0x60];
+} MoMFontsCharacterWidths;
+
+typedef struct PACKED_STRUCT // MoMFontsGlyphOffsets
+{
+    uint16_t    m_glyphOffsets[0x60];
+} MoMFontsGlyphOffsets;
+
 typedef struct PACKED_STRUCT // MoMFontsStyleData
 {
     uint8_t     m_Unk_0000[0x0010];             // 0000
@@ -5847,10 +5857,11 @@ typedef struct PACKED_STRUCT // MoMFontsStyleData
     int16_t     m_allFontHeights[8];            // 016A
     int16_t     m_allHorizontalSpacings[8];     // 017A
     int16_t     m_allLineSpacings[8];           // 018A
-    int8_t      m_allCharacterWidths[8][0x60];  // 019A
-    uint16_t    m_allGlyphOffsets[8][0x60];     // 049A
+    MoMFontsCharacterWidths m_allCharacterWidths[8];// 019A
+    MoMFontsGlyphOffsets    m_allGlyphOffsets[8];   // 049A
 
     uint8_t     m_glyphData[1];                 // 0A9A
+                                                // SIZE 4574
 } MoMFontsStyleData;
 
 typedef struct PACKED_STRUCT // LBX_ImageHeader

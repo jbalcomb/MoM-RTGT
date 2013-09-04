@@ -60,6 +60,9 @@ QMoMTreeItemModelBase* constructTreeItem(MapRow_Terrain* rhs, const QString& con
 QMoMTreeItemModelBase* constructTreeItem(MapRow_Terrain_Changes* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Map_Movement* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsCharacterWidths* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsGlyphOffsets* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(MoMFontsStyleData* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MoMImageHeaderLbx* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MoMPaletteInfoLbx* rhs, const QString& context);

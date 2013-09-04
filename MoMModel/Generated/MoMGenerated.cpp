@@ -6183,6 +6183,101 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const MoMFontsCharacterWidths& rhs)
+{
+    os << "{\n";
+    os << "m_characterWidths=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_characterWidths[i] << " 0x" << std::hex << (int)rhs.m_characterWidths[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const MoMFontsGlyphOffsets& rhs)
+{
+    os << "{\n";
+    os << "m_glyphOffsets=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_glyphOffsets[i] << " 0x" << std::hex << rhs.m_glyphOffsets[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const MoMFontsStyleData& rhs)
+{
+    os << "{\n";
+    os << "m_Unk_0000=(\n";
+    for (unsigned i = 0; i < 0x0010; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_0000[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_0000[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_curFontHeight=" << rhs.m_curFontHeight << " 0x" << std::hex << rhs.m_curFontHeight << std::dec << "\n";
+    os << "m_Unk_0012=(\n";
+    for (unsigned i = 0; i < 0x0036; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_0012[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_0012[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_curHorizontalSpacing=" << rhs.m_curHorizontalSpacing << " 0x" << std::hex << rhs.m_curHorizontalSpacing << std::dec << "\n";
+    os << "m_curCharacterWidths=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_curCharacterWidths[i] << " 0x" << std::hex << (int)rhs.m_curCharacterWidths[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_curGlyphOffsets=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_curGlyphOffsets[i] << " 0x" << std::hex << rhs.m_curGlyphOffsets[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_allFontHeights=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_allFontHeights[i] << " 0x" << std::hex << rhs.m_allFontHeights[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_allHorizontalSpacings=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_allHorizontalSpacings[i] << " 0x" << std::hex << rhs.m_allHorizontalSpacings[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_allLineSpacings=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_allLineSpacings[i] << " 0x" << std::hex << rhs.m_allLineSpacings[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_allCharacterWidths=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_allCharacterWidths[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_allGlyphOffsets=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_allGlyphOffsets[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_glyphData=(\n";
+    for (unsigned i = 0; i < 1; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_glyphData[i] << " 0x" << std::hex << (unsigned)rhs.m_glyphData[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const MoMImageHeaderLbx& rhs)
 {
     os << "{\n";
@@ -7146,7 +7241,7 @@ std::ostream& operator<<(std::ostream& os, const Unit& rhs)
     os << "m_Level=" << rhs.m_Level << "\n";
     os << "m_Unk_0D=" << (int)rhs.m_Unk_0D << " 0x" << std::hex << (int)rhs.m_Unk_0D << std::dec << "\n";
     os << "m_Experience=" << rhs.m_Experience << " 0x" << std::hex << rhs.m_Experience << std::dec << "\n";
-    os << "m_Guess_Lifedrain_Damage=" << (int)rhs.m_Guess_Lifedrain_Damage << " 0x" << std::hex << (int)rhs.m_Guess_Lifedrain_Damage << std::dec << "\n";
+    os << "m_Unk_10=" << (int)rhs.m_Unk_10 << " 0x" << std::hex << (int)rhs.m_Unk_10 << std::dec << "\n";
     os << "m_Damage=" << (int)rhs.m_Damage << " 0x" << std::hex << (int)rhs.m_Damage << std::dec << "\n";
     os << "m_Grouping=" << (int)rhs.m_Grouping << " 0x" << std::hex << (int)rhs.m_Grouping << std::dec << "\n";
     os << "m_Guess_Combat_Enchantment_Flag1=" << (int)rhs.m_Guess_Combat_Enchantment_Flag1 << " 0x" << std::hex << (int)rhs.m_Guess_Combat_Enchantment_Flag1 << std::dec << "\n";
@@ -11904,6 +11999,36 @@ bool validate(const MoMDataSegment& rhs, const std::string& context)
           std::ostringstream oss;
           oss << context << ".m_lbx_filenames_x_0C[" << i << "]";
           if (!validate(rhs.m_lbx_filenames_x_0C[i], oss.str())) ok = false;
+    }
+    return ok;
+}
+
+bool validate(const MoMFontsCharacterWidths& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const MoMFontsGlyphOffsets& rhs, const std::string& context)
+{
+    bool ok = true;
+    return ok;
+}
+
+bool validate(const MoMFontsStyleData& rhs, const std::string& context)
+{
+    bool ok = true;
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_allCharacterWidths[" << i << "]";
+          if (!validate(rhs.m_allCharacterWidths[i], oss.str())) ok = false;
+    }
+    for (unsigned i = 0; i < 8; ++i)
+    {
+          std::ostringstream oss;
+          oss << context << ".m_allGlyphOffsets[" << i << "]";
+          if (!validate(rhs.m_allGlyphOffsets[i], oss.str())) ok = false;
     }
     return ok;
 }

@@ -72,6 +72,50 @@ DialogLbxEditor::~DialogLbxEditor()
     delete ui;
 }
 
+QString DialogLbxEditor::constructComboBoxTitle(int lbxIndex, int subIndex)
+{
+    const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
+    QString text = QString("%0").arg(lbxIndex);
+    if (subIndex >= 0)
+    {
+        text += QString("-%1").arg(subIndex);
+    }
+    if ((0 != annotation) && (annotation->subfile[0] != '\0'))
+    {
+        text = text + " - " + annotation->subfile;
+    }
+    if ((0 != annotation) && (annotation->comment[0] != '\0'))
+    {
+        text = text + " - " + annotation->comment;
+    }
+    return text;
+}
+
+QString DialogLbxEditor::constructFileTitle(const QString& baseName, int lbxIndex, int subIndex)
+{
+    const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
+    QString fileTitle(baseName);
+    if (!baseName.isEmpty())
+    {
+        fileTitle += "-";
+    }
+    fileTitle += QString("%0").arg((int)lbxIndex, 3, 10, QChar('0'));
+    if (subIndex >= 0)
+    {
+        fileTitle += QString("-%1").arg((int)subIndex, 2, 10, QChar('0'));
+    }
+    if ((0 != annotation) && (annotation->subfile[0] != '\0'))
+    {
+        fileTitle = fileTitle + "-" + annotation->subfile;
+    }
+    if ((0 != annotation) && (annotation->comment[0] != '\0'))
+    {
+        fileTitle = fileTitle + "-" + annotation->comment;
+    }
+    fileTitle.replace(QRegExp("[^-0-9A-Za-z]+"), "_");
+    return fileTitle;
+}
+
 QString DialogLbxEditor::constructFrameFilename(const QString& bitmapFilename, int frameNr)
 {
     QString frameFilename = bitmapFilename;
@@ -96,6 +140,124 @@ QString DialogLbxEditor::constructFrameFilename(const QString& bitmapFilename, i
     return frameFilename;
 }
 
+bool DialogLbxEditor::decodeGlyph(const std::vector<uint8_t>& data, int fontIndex, int characterIndex, int left, int top, QMoMImagePtr& image)
+{
+    if (data.size() < sizeof(MoMFontsStyleData))
+        return false;
+    const MoMFontsStyleData* fontsData = reinterpret_cast<const MoMFontsStyleData*>(&data[0]);
+    const uint8_t* ptrGlyphData = &data[0] + fontsData->m_allGlyphOffsets[fontIndex].m_glyphOffsets[characterIndex];
+    const uint8_t* ptrEndData = &data[0] + data.size();
+    if (ptrGlyphData > ptrEndData)
+    {
+        qDebug() << "Failed to decode glyph" << characterIndex << "in font" << fontIndex << ": offset glyph after end of data";
+        return false;
+    }
+
+    int x = left;
+    int y = top;
+    for (int line = 0; (line < fontsData->m_allCharacterWidths[fontIndex].m_characterWidths[characterIndex]) && (ptrGlyphData < ptrEndData); ptrGlyphData++)
+    {
+        // Decode pixel
+        uint8_t code = *ptrGlyphData;
+        if (code < 0x80)
+        {
+            uint8_t nrPixels = (code >> 4);
+            uint8_t colorIndex = (code & 0x0F);
+            if (image->format() == QImage::Format_Mono)
+            {
+                colorIndex = 0;
+            }
+            while (nrPixels-- > 0)
+            {
+                image->setPixel(x, y, colorIndex);
+                y++;
+            }
+        }
+        else if (code == 0x80)
+        {
+            x++;
+            line++;
+            y = top;
+        }
+        else if (code <= 0x8F)
+        {
+            y += (code - 0x80);
+        }
+        else
+        {
+            qDebug() << "Failed to decode glyph" << characterIndex << "in font" << fontIndex << ": code" << (int)code << "out of range";
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void DialogLbxEditor::exportFont(int lbxIndex, QString& directory)
+{
+    MoM::MoMLbxBase::eRecordType recordType = m_lbx.getRecordType(lbxIndex);
+    if (recordType != MoM::MoMLbxBase::TYPE_font)
+        return;
+    std::vector<uint8_t> data;
+    if (!m_lbx.getRecord(lbxIndex, data))
+        return;
+    if (data.size() < sizeof(MoMFontsStyleData))
+        return;
+    const MoMFontsStyleData* fontsData = reinterpret_cast<const MoMFontsStyleData*>(&data[0]);
+
+    // For each font
+    for (int fontIndex = 0; fontIndex < 8; ++fontIndex)
+    {
+        // For each glyph
+        for (int ch = 0x20; ch < 0x7E; ++ch)
+        {
+            int characterIndex = ch - 0x20;
+
+            // include 1 free line left and right
+            int width = 2 + fontsData->m_allCharacterWidths[fontIndex].m_characterWidths[characterIndex];
+            int height = 2 + fontsData->m_allFontHeights[fontIndex];
+
+            // Create bitmap
+            QMoMImagePtr image(new QImage(width, height, QImage::Format_Indexed8));
+            QVector<QRgb> colorTable = QMoMResources::instance().getColorTable();
+            colorTable.resize(256);
+            colorTable[255] = qRgb(255, 255, 255);
+            image->setColorTable(colorTable);
+            image->fill(255);
+
+            // Decode glyph
+            if (!decodeGlyph(data, fontIndex, characterIndex, 1, 1, image))
+            {
+                (void)QMessageBox::warning(this,
+                    tr("Export font"),
+                    tr("Failed to decode glyph %0 in font %1").arg(characterIndex).arg(fontIndex));
+                //break;
+            }
+
+            // Scale image
+            image = QMoMImagePtr(new QImage(image->scaled(width * 2, height * 2, Qt::IgnoreAspectRatio, Qt::FastTransformation)));
+
+            // Construct save filename
+            QString fileTitle = QString("Font%0-%1").arg(fontIndex).arg(ch, 2, 16, QChar('0'));
+            QString charStr = QString("%0").arg((QChar)ch);
+            if (charStr.contains(QRegExp("[0-9A-Za-z]")))
+            {
+                fileTitle = fileTitle + "-" + charStr;
+            }
+            QFileInfo fileInfoPng(QDir(directory), fileTitle + ".png");
+
+            // Save bitmap
+            if (!image->save(fileInfoPng.absoluteFilePath()))
+            {
+                (void)QMessageBox::warning(this,
+                    tr("Export font"),
+                    tr("Failed to save font character as '%0'").arg(fileInfoPng.absoluteFilePath()));
+                break;
+            }
+        }
+    }
+}
+
 void DialogLbxEditor::loadLbx(const QString& filename)
 {
     if (!m_lbx.load(filename.toAscii().data()))
@@ -117,22 +279,13 @@ void DialogLbxEditor::loadLbx(const QString& filename)
     ui->comboBox_LbxIndex->clear();
     for (size_t lbxIndex = 0; lbxIndex < m_lbx.getNrRecords(); ++lbxIndex)
     {
-        const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
         if (m_lbx.getNrSubRecords(lbxIndex) > 0)
         {
             // Record has sub records: treat as TYPE_array
             std::vector<uint8_t> data;
             for (size_t lbxSubIndex = 0; lbxSubIndex < m_lbx.getNrSubRecords(lbxIndex); ++lbxSubIndex)
             {
-                QString text = QString("%0-%1").arg(lbxIndex).arg(lbxSubIndex);
-                if ((0 != annotation) && (annotation->subfile[0] != '\0'))
-                {
-                    text = text + " - " + annotation->subfile;
-                }
-                if ((0 != annotation) && (annotation->comment[0] != '\0'))
-                {
-                    text = text + " - " + annotation->comment;
-                }
+                QString text = constructComboBoxTitle(lbxIndex, lbxSubIndex);
                 if (m_lbx.getSubRecord(lbxIndex, lbxSubIndex, data)
                     && data.size() == sizeof(MoM::HelpLBXentry))
                 {
@@ -145,15 +298,7 @@ void DialogLbxEditor::loadLbx(const QString& filename)
         }
         else
         {
-            QString text = QString("%0").arg(lbxIndex);
-            if ((0 != annotation) && (annotation->subfile[0] != '\0'))
-            {
-                text = text + " - " + annotation->subfile;
-            }
-            if ((0 != annotation) && (annotation->comment[0] != '\0'))
-            {
-                text = text + " - " + annotation->comment;
-            }
+            QString text = constructComboBoxTitle(lbxIndex, -1);
 
             MoM::MoMLbxBase::eRecordType recordType = m_lbx.getRecordType(lbxIndex);
             if (recordType == MoM::MoMLbxBase::TYPE_images)
@@ -286,28 +431,19 @@ void DialogLbxEditor::processFont(int lbxIndex)
     }
     colorTable[0] = qRgb(148, 105, 48);
 
-    const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
     for (int fontIndex = 0; fontIndex < 8; ++fontIndex)
     {
-        QString text = QString("%0-%1").arg(lbxIndex).arg(fontIndex);
-        if ((0 != annotation) && (annotation->subfile[0] != '\0'))
-        {
-            text = text + " - " + annotation->subfile;
-        }
-        if ((0 != annotation) && (annotation->comment[0] != '\0'))
-        {
-            text = text + " - " + annotation->comment;
-        }
+        QString text = constructComboBoxTitle(lbxIndex, fontIndex);
 
         int height = fontsData->m_allFontHeights[fontIndex];
         int width = 0;
         for (int ch = 0x20; ch < 0x7E; ++ch)
         {
             int characterIndex = ch - 0x20;
-            width += fontsData->m_allCharacterWidths[fontIndex][characterIndex] + fontsData->m_allHorizontalSpacings[fontIndex];
+            width += fontsData->m_allCharacterWidths[fontIndex].m_characterWidths[characterIndex] + fontsData->m_allHorizontalSpacings[fontIndex];
         }
         qDebug("Font %d has height %d width %d lineSpacing %d at 0x%04X"
-               , fontIndex, height, width, fontsData->m_allLineSpacings[fontIndex], fontsData->m_allGlyphOffsets[fontIndex][0]);
+               , fontIndex, height, width, fontsData->m_allLineSpacings[fontIndex], fontsData->m_allGlyphOffsets[fontIndex].m_glyphOffsets[0]);
 
         QMoMImagePtr image(new QImage(width, height, QImage::Format_Indexed8));
         image->setColorTable(colorTable);
@@ -319,43 +455,13 @@ void DialogLbxEditor::processFont(int lbxIndex)
         {
             int characterIndex = ch - 0x20;
 //            qDebug("Glyph data for '%c' at 0x%04X", ch, fontsData->m_allGlyphOffsets[fontIndex][characterIndex]);
-            const uint8_t* ptrGlyphData = &data[0] + fontsData->m_allGlyphOffsets[fontIndex][characterIndex];
-            const uint8_t* endGlyphData = &data[0] + fontsData->m_allGlyphOffsets[fontIndex][characterIndex + 1];
-            if ((ptrGlyphData > endGlyphData) || (endGlyphData > &data[0] + data.size()))
-                break;
 
-            for (int line = 0; (line < fontsData->m_allCharacterWidths[fontIndex][characterIndex]) && (ptrGlyphData < endGlyphData); ptrGlyphData++)
+            if (!decodeGlyph(data, fontIndex, characterIndex, x, y, image))
             {
-                // Decode pixel
-                uint8_t code = *ptrGlyphData;
-                if (code < 0x80)
-                {
-                    uint8_t nrPixels = (code >> 4);
-                    uint8_t colorIndex = (code & 0x0F);
-                    while (nrPixels-- > 0)
-                    {
-                        image->setPixel(x, y, colorIndex);
-                        y++;
-                    }
-                }
-                else if (code == 0x80)
-                {
-                    x++;
-                    line++;
-                    y = 0;
-                }
-                else if (code <= 0x8F)
-                {
-                    y += (code - 0x80);
-                }
-                else
-                {
-                    image->setPixel(x, y, code);
-                    y++;
-                }
+                break;
             }
 
-            x += fontsData->m_allHorizontalSpacings[fontIndex];
+            x += fontsData->m_allCharacterWidths[fontIndex].m_characterWidths[characterIndex] + fontsData->m_allHorizontalSpacings[fontIndex];
         }
 
         m_lbxAnimations[lbxIndex].append(image);
@@ -615,73 +721,6 @@ void DialogLbxEditor::on_pushButton_SavePics_clicked()
         QString filenameBase = m_filedialogSave->selectedFiles().first();
         QFileInfo fileInfo(filenameBase);
 
-//        if (curAnimation.empty())
-//        {
-//            std::vector<uint8_t> data;
-//            if (m_lbx.getRecord(0, data))
-//            {
-//                QMoMImagePtr image(new QImage(512, 32, QImage::Format_Indexed8));
-//                QVector<QRgb> colorTable(256);
-//                for (int i = 0; i < 256; ++i)
-//                {
-//                    colorTable[i] = qRgb(i, i, i);
-//                }
-//                colorTable[255] = qRgb(192, 192, 192);
-//                image->setColorTable(colorTable);
-//                image->fill(255);
-//                int x = 0;
-//                int y = 0;
-//                int frameNr = 0;
-//                for (int i = 0xA9A; i < data.size(); i++)
-//                {
-//                    // Decode pixel
-//                    uint8_t code = data[i];
-//                    if (code <= 0x7F)
-//                    {
-//                        image->setPixel(y, x, code);
-//                        x++;
-//                    }
-//                    else if (code == 0x80)
-//                    {
-//                        y++;
-//                        x = 0;
-//                    }
-//                    else if (code <= 0x8F)
-//                    {
-//                        x += (code - 0x80);
-//                    }
-//                    else
-//                    {
-//                        image->setPixel(y, x, data[i]);
-//                        x++;
-//                    }
-
-//                    // Wrap line
-//                    if (x >= image->height())
-//                    {
-//                        y++;
-//                        x = 0;
-//                    }
-
-//                    if (y >= image->width())
-//                    {
-//                        QString filename = constructFrameFilename(filenameBase, frameNr);
-//                        if (!image->save(filename))
-//                        {
-//                            (void)QMessageBox::warning(this,
-//                                tr("Save picture(s)"),
-//                                tr("Failed to save the picture(s)"));
-//                            break;
-//                        }
-
-//                        frameNr++;
-//                        x = y = 0;
-//                        image->fill(255);
-//                    }
-//                }
-//            }
-//        }
-
         if (0 == fileInfo.suffix().compare("gif", Qt::CaseInsensitive))
         {
             if (!curAnimation.saveAsGif(filenameBase))
@@ -800,25 +839,13 @@ void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
     {
         for (size_t lbxIndex = 0; lbxIndex < m_lbx.getNrRecords(); ++lbxIndex)
         {
-            const MoM::MoMLbxBase::Annotation* annotation = m_lbx.getAnnotation(lbxIndex);
             if (!m_lbxAnimations[lbxIndex].empty())
             {
-                QString filenameGif = QString("%0-%1")
-                        .arg(fileInfoLbx.completeBaseName())
-                        .arg((int)lbxIndex, 3, 10, QChar('0'));
-                if ((0 != annotation) && (annotation->subfile[0] != '\0'))
-                {
-                    filenameGif = filenameGif + "-" + annotation->subfile;
-                }
-                if ((0 != annotation) && (annotation->comment[0] != '\0'))
-                {
-                    filenameGif = filenameGif + "-" + annotation->comment;
-                }
+                QString filenameGif = constructFileTitle(fileInfoLbx.completeBaseName(), lbxIndex, -1);
                 if (m_lbxAnimations[lbxIndex].count() >= 2)
                 {
                     filenameGif += "-anim";
                 }
-                filenameGif.replace(QRegExp("[^-0-9A-Za-z]+"), "_");
                 filenameGif += ".gif";
                 QFileInfo fileInfoGif(directory, filenameGif);
 
@@ -840,6 +867,11 @@ void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
                         tr("Convert all LBX"),
                         tr("Failed to save animation as '%0'").arg(fileInfoGif.absoluteFilePath()));
                 }
+            }
+
+            if (m_lbx.getRecordType(lbxIndex) == MoMLbxBase::TYPE_font)
+            {
+                exportFont(lbxIndex, directory.absolutePath());
             }
         }
     }

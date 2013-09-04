@@ -1006,7 +1006,7 @@ void DialogTables::slot_addRow_to_UnitsInGame(int row)
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eUnit_Status8>(m_game, &data->m_Status, MoM::eUnit_Status8_MAX, SHOWENUM_minusOne));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eLevel>(m_game, &data->m_Level, MoM::eLevel_MAX, SHOWENUM_minusOne));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Experience, 4));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Guess_Lifedrain_Damage, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Unk_10, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Damage, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Grouping, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Guess_Combat_Enchantment_Flag1, 2, SHOWNUMBER_noZero));
