@@ -23,6 +23,7 @@ public:
     bool openGame(std::auto_ptr<MoMProcess>& momProcess);
 
 protected:
+public:
     virtual void closeGame() throw();
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
@@ -40,7 +41,6 @@ protected:
     {
         return ((0 != m_process.get()) && m_process->readData());
     }
-
     virtual std::string getSources() const
     {
         return "Connected setup " + m_filename_MagicExe;

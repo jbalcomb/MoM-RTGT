@@ -5,27 +5,37 @@
 ## Created:     2010-05-01
 ## ---------------------------------------------------------------------------
 
+INCLUDEPATH += \
+        . \
+        ../../Platform \
+        ../../MoMControl \
+        ../../MoMModel \
+        ../../MoMModel/Generated \
+        ../../Utility \
+        ../../QMoMCommon \
+        ../../QMoMCommon/Generated \
+        ../../QMoMDialogs \
+        ../../Applications/MoMCustomizer
 
 HEADERS += ./mainwindow.h \
-    ../MoMEditorTemplate/MoMGameCustom.h \
-    ../MoMEditorTemplate/MoMcommon.h \
-    ../MoMEditorTemplate/MoMExeBase.h \
-    ../MoMEditorTemplate/MoMGenerated.h \
-    ../MoMEditorTemplate/MoMExeMagic.h \
-    ../MoMEditorTemplate/MoMProcess.h \
-    ../MoMEditorTemplate/MoMTemplate.h \
-    ../MoMEditorTemplate/MoMUtility.h \
-    ../MoMEditorTemplate/QMoMTreeItem.h \
-    ../MoMEditorTemplate/TeeRedirecter.h
+    ../../MoMModel/MoMGameCustom.h \
+    ../../MoMModel/Generated/MoMGenerated.h \
+        ../../Platform/MoMCommon.h \
+        ../../Platform/MoMExeBase.h \
+        ../../Platform/MoMProcess.h \
+    ../../MoMModel/MoMTemplate.h \
+    ../../Utility/MoMUtility.h \
+    ../../QMoMModel/QMoMTreeItem.h \
+    ../../Utility/TeeRedirecter.h
 SOURCES += \
     ./mainwindow.cpp \
-    ../MoMEditorTemplate/MoMGameBase.cpp \
-    ../MoMEditorTemplate/MoMGameCustom.cpp \
-    ../MoMEditorTemplate/MoMExeBase.cpp \
-    ../MoMEditorTemplate/MoMGenerated.cpp \
-    ../MoMEditorTemplate/MoMExeMagic.cpp \
-    ../MoMEditorTemplate/MoMProcessCommon.cpp \
-    ../MoMEditorTemplate/MoMUtility.cpp \
-    ../MoMEditorTemplate/QMoMTreeItem.cpp
+    ../../MoMModel/MoMGameBase.cpp \
+    ../../MoMModel/MoMGameCustom.cpp \
+    ../../MoMModel/Generated/MoMGenerated.cpp \
+        ../../Platform/MoMExeBase.cpp \
+        ../../Platform/MoMProcessCommon.cpp \
+        ../../Platform/MoMProcess$${PLATF}.cpp \
+    ../../Utility/MoMUtility.cpp \
+    ../../QMoMCommon/QMoMTreeItemModel.cpp
 FORMS += ./mainwindow.ui
-RESOURCES += ../Resources/InteractiveGameTweaker.qrc
+RESOURCES += ../../Resources/InteractiveGameTweaker.qrc

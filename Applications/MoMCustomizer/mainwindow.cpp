@@ -23,7 +23,7 @@
 // Library
 #include <MoMGenerated.h>
 #include <MoMUtility.h>
-#include <QMoMTreeItem.h>
+#include <QMoMTreeItemModel.h>
 
 // Local
 

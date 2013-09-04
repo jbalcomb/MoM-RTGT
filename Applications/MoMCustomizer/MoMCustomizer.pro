@@ -52,5 +52,4 @@ RCC_DIR += ./GeneratedFiles
 include(MoMCustomizer.pri)
 
 SOURCES += \
-    ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
     ./main.cpp
