@@ -26,7 +26,7 @@ void QMoMSettings::initialize(const QString &applicationName)
     QCoreApplication::setApplicationName(applicationName);
 }
 
-void QMoMSettings::readSettings(QWidget* window)
+void QMoMSettings::readSettingsWindow(QWidget* window)
 {
     QSettings settings;
 
@@ -41,7 +41,7 @@ void QMoMSettings::readSettings(QWidget* window)
     settings.endGroup();
 }
 
-void QMoMSettings::writeSettings(QWidget* window)
+void QMoMSettings::writeSettingsWindow(QWidget* window)
 {
     QSettings settings;
 
@@ -52,58 +52,88 @@ void QMoMSettings::writeSettings(QWidget* window)
     settings.endGroup();
 }
 
+void QMoMSettings::readSettingsControl(QWidget *control)
+{
+    QSettings settings;
+
+    settings.beginGroup(control->objectName());
+    recurseRead(settings, control);
+    settings.endGroup();
+}
+
+void QMoMSettings::writeSettingsControl(QWidget *control)
+{
+    QSettings settings;
+
+    settings.beginGroup(control->objectName());
+    recurseWrite(settings, control);
+    settings.endGroup();
+}
+
 void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
 {
-    QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
-    if (0 != checkbox)
+    QVariant value;
+    if (!object->objectName().isEmpty())
     {
-        checkbox->setChecked(settings.value(checkbox->objectName()).toBool());
-    }
-    QComboBox* combobox = dynamic_cast<QComboBox*>(object);
-    if (0 != combobox)
-    {
-        combobox->setCurrentIndex(settings.value(combobox->objectName()).toInt());
-    }
-    QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
-    if (0 != filedialog)
-    {
-        qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
-        filedialog->setDirectory(settings.value(filedialog->objectName()).toString());
-        // Do not recurse
-        return;
-    }
-    QSlider* slider = dynamic_cast<QSlider*>(object);
-    if (0 != slider)
-    {
-        slider->setValue(settings.value(slider->objectName()).toInt());
-    }
-    QSplitter* splitter = dynamic_cast<QSplitter*>(object);
-    if (0 != splitter)
-    {
-        splitter->restoreState(settings.value(splitter->objectName()).toByteArray());
-    }
-    QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
-    if (0 != tablewidget)
-    {
-        tablewidget->restoreGeometry(settings.value(tablewidget->objectName()).toByteArray());
-        // Do not recurse
-        return;
-    }
-    QTreeWidget* treewidget = dynamic_cast<QTreeWidget*>(object);
-    if (0 != treewidget)
-    {
-        QStringList columns = settings.value(treewidget->objectName()).toString().split(" ");
-        for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
-        {
-            treewidget->setColumnWidth(i, columns.at(i).toInt());
-        }
-        // Do not recurse
-        return;
+        value = settings.value(object->objectName());
     }
 
-    foreach(QObject* child, object->children())
+    QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
+    QComboBox* combobox = dynamic_cast<QComboBox*>(object);
+    QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
+    QSlider* slider = dynamic_cast<QSlider*>(object);
+    QSplitter* splitter = dynamic_cast<QSplitter*>(object);
+    QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
+    QTreeWidget* treewidget = dynamic_cast<QTreeWidget*>(object);
+
+    if (value.isValid())
     {
-        recurseRead(settings, child);
+        if (0 != checkbox)
+        {
+            checkbox->setChecked(value.toBool());
+        }
+        if (0 != combobox)
+        {
+            combobox->setCurrentIndex(value.toInt());
+        }
+        if (0 != filedialog)
+        {
+            qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
+            filedialog->setDirectory(value.toString());
+        }
+        if (0 != slider)
+        {
+            slider->setValue(value.toInt());
+        }
+        if (0 != splitter)
+        {
+            splitter->restoreState(value.toByteArray());
+        }
+        if (0 != tablewidget)
+        {
+            QStringList columns = value.toString().split(",");
+            for (int i = 0; (i < tablewidget->columnCount()) && (i < columns.count()); ++i)
+            {
+                tablewidget->setColumnWidth(i, columns.at(i).toInt());
+            }
+        }
+        if (0 != treewidget)
+        {
+            QStringList columns = value.toString().split(",");
+            for (int i = 0; (i < treewidget->columnCount()) && (i < columns.count()); ++i)
+            {
+                treewidget->setColumnWidth(i, columns.at(i).toInt());
+            }
+        }
+    }
+
+    bool recurse = ((0 == filedialog) && (0 == tablewidget) && (0 == treewidget));
+    if (recurse)
+    {
+        foreach(QObject* child, object->children())
+        {
+            recurseRead(settings, child);
+        }
     }
 }
 
@@ -140,7 +170,12 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
     QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
     if (0 != tablewidget)
     {
-        settings.setValue(tablewidget->objectName(), tablewidget->saveGeometry());
+        QStringList columns;
+        for (int i = 0; i < tablewidget->columnCount(); ++i)
+        {
+            columns << QString("%0").arg(tablewidget->columnWidth(i));
+        }
+        settings.setValue(tablewidget->objectName(), columns.join(","));
         // Do not recurse
         return;
     }
@@ -152,7 +187,7 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
         {
             columns << QString("%0").arg(treewidget->columnWidth(i));
         }
-        settings.setValue(treewidget->objectName(), columns.join(" "));
+        settings.setValue(treewidget->objectName(), columns.join(","));
         // Do not recurse
         return;
     }

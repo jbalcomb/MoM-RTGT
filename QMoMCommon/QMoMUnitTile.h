@@ -37,9 +37,10 @@ public:
     {
         m_game = game;
     }
-    void setUnit(const QMoMUnitPtr& momUnit)
+    void setUnit(const QMoMUnitPtr& momUnit);
+    void setFrameNr(int frameNr)
     {
-        m_momUnit = momUnit;
+        m_frameNr = frameNr;
     }
 
 private slots:
@@ -49,10 +50,13 @@ private:
     int calcHeading() const;
     void drawBattleUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
     void drawOverlandUnit(QPainter* painter, const QMoMImagePtr& imageUnit);
+    void timerEvent(QTimerEvent*);
 
     QMoMGamePtr m_game;
     QMoMUnitPtr m_momUnit;
     bool m_isBattlefield;
+    int m_frameNr;
+    int m_idTimer;
 };
 
 }

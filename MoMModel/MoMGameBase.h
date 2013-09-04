@@ -81,21 +81,6 @@ public:
 
     virtual std::string getGameDirectory() const = 0;
 
-    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
-    std::string getHelpText(eHelpIndex helpTextNr);
-
-    std::string getHelpText(eBuilding building);
-    std::string getHelpText(eHeroAbility heroAbility);
-    std::string getHelpText(eItemPower itemPower);
-    std::string getHelpText(ePortrait wizardPortrait);
-    std::string getHelpText(eRace race);
-    std::string getHelpText(eRanged_Type rangedType);
-    const HelpLBXentry* getHelpEntry(eSpell spell);
-    std::string getHelpText(eSpell spell);
-    std::string getHelpText(eUnitAbility unitAbility);
-    std::string getHelpText(eUnitEnchantment unitEnchantment);
-    std::string getHelpText(eUnitMutation unitMutation);
-
     Hero_stats* getHeroStats(ePlayer playerNr, eUnit_Type heroNr)
     {
         Hero_stats* listHeroStats = getList_Hero_stats(playerNr);
@@ -110,6 +95,10 @@ public:
             return 0;
         return &listHeroStatsInitializer[heroNr];
     }
+
+    void getHeroSlotTypes(eHero_TypeCode heroTypeCode, eSlot_Type16 heroSlotTypes[3]);
+    eHero_TypeCode getHeroTypeCode(MoM::eSlot_Type16 slotSword, MoM::eSlot_Type16 slotShield, MoM::eSlot_Type16 slotRing);
+
     Hired_Hero* getHiredHero(ePlayer playerNr, int slotNr)
     {
         Wizard* wizard = getWizard(playerNr);
@@ -117,6 +106,7 @@ public:
             return 0;
         return &wizard->m_Heroes_hired_by_wizard[slotNr];
     }
+    Hired_Hero* getHiredHero(ePlayer playerNr, eUnit_Type unitType);
     Hired_Hero* getHiredHero(const Unit* unit)
     {
         if (0 == unit)
@@ -134,7 +124,7 @@ public:
     Item* getItem(int itemNr)
     {
         Item* items = getItems();
-        if ((0 == items) || !inRange(itemNr, gMAX_ITEMS))
+        if ((0 == items) || !inRange(itemNr, gMAX_ITEMS_VALID))
             return 0;
         return &items[itemNr];
     }
@@ -203,15 +193,30 @@ public:
     }
     int getNrItemDataLbx();
     int getNrItemPowLbx();
-    int getNrItems()
+    int getNrItemsInGame()
     {
         Item* items = getItems();
         if (0 == items)
             return 0;
         int nrItems = 0;
-        for (int itemNr = 0; itemNr < 128; ++itemNr)
+        for (size_t itemNr = 0; itemNr < MoM::gMAX_ITEMS_IN_GAME; ++itemNr)
         {
             if ((0 != items[itemNr].m_Cost) && (-1 != items[itemNr].m_Cost))
+            {
+                nrItems++;
+            }
+        }
+        return nrItems;
+    }
+    int getNrItemsValid()
+    {
+        Item* items = getItems();
+        if (0 == items)
+            return 0;
+        int nrItems = 0;
+        for (size_t itemNr = 0; itemNr < MoM::gMAX_ITEMS_VALID; ++itemNr)
+        {
+            if (0 != items[itemNr].m_Cost)
             {
                 nrItems++;
             }
@@ -286,6 +291,10 @@ public:
 
     std::string getRaceName(eRace race);
 
+    eRealm_Type getRealmRace(eRace race) const;
+    eRealm_Type getRealmRangedType(eRanged_Type rangedType) const;
+    eRealm_Type getRealmSpecialAttack(eUnitAbility specialAttack) const;
+
     virtual std::string getSources() const = 0;
 
     Spell_Data* getSpellData(eSpell spell)
@@ -329,13 +338,13 @@ public:
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
     }
-    uint8_t* getTerrainLandMassID(const MoMLocation& loc)
+    int8_t* getTerrainLandMassID(const MoMLocation& loc)
     {
         return getTerrainLandMassID(loc.m_Plane, loc.m_XPos, loc.m_YPos);
     }
-    uint8_t* getTerrainLandMassID(ePlane plane, int x, int y)
+    int8_t* getTerrainLandMassID(ePlane plane, int x, int y)
     {
-        uint8_t* data = getTerrain_LandMassID();
+        int8_t* data = getTerrain_LandMassID();
 		if ((0 == data) || !inRange(plane, MoM::ePlane_MAX) || !inRange(x, MoM::gMAX_MAP_COLS) || !inRange(y, MoM::gMAX_MAP_ROWS))
             return 0;
         return (data + (static_cast<int>(plane) * gMAX_MAP_ROWS + y) * gMAX_MAP_COLS + x);
@@ -446,6 +455,10 @@ public:
     {
         return 0;
     }
+    virtual uint8_t* getArtifacts_in_game()
+    {
+        return 0;
+    }
 public:
     virtual Battlefield* getBattlefield()
     {
@@ -464,6 +477,12 @@ protected:
     {
         return 0;
     }
+public:
+    virtual Hero_Choice* getChosen_Hero_Names()
+    {
+        return 0;
+    }
+protected:
     virtual City* getCities() = 0;
 public:
     virtual Events_Status* getEvents_Status()
@@ -539,7 +558,7 @@ protected:
     {
         return 0;
     }
-    virtual uint8_t* getTerrain_LandMassID()
+    virtual int8_t* getTerrain_LandMassID()
     {
         return 0;
     }
@@ -625,6 +644,10 @@ protected:
         m_errorString = value;
     }
 
+protected:
+    std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
+    std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
+
 private:
     // NOT IMPLEMENTED
     MoMGameBase(const MoMGameBase& rhs);
@@ -632,9 +655,6 @@ private:
 
     // STATUS
     std::string m_errorString;
-    std::auto_ptr<class MoMLbxBase> m_HelpLbx;
-    std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
-    std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
 };
 
 }

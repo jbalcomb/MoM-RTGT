@@ -48,11 +48,11 @@ public slots:
     void slot_unitChanged(const QMoMUnitPtr& unit);
 
 private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
     void on_comboBox_Unit_currentIndexChanged(int index);
+    void on_pushButton_Summon_clicked();
 
 private:
-    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, bool fixed = false, const QString& helpText = "");
+    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, const QString& helpText = "");
 
 	void displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const MoM::Item* momItem);
 	void displayLevel(QPointF& pos, const std::string& levelName, int level, int experience);
@@ -65,7 +65,7 @@ private:
     void displaySpecial(QPointF& pos, const Enum special, int specialValue)
     {
         QString specialName = prettyQStr(special);
-        std::string helpText = m_game->getHelpText(special);
+        std::string helpText = MoM::QMoMResources::instance().getHelpText(special);
         QPixmap pixmap = QMoMResources::instance().getPixmap(special);
         displaySpecial(pos, specialName, specialValue, pixmap, helpText.c_str());
     }
@@ -75,6 +75,7 @@ private:
         displaySpecial(pos, specialName, specialValue, pixmap, helpText);
     }
     void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QPixmap& pixmap, const QString& helpText);
+    void displaySpecial(QPointF& pos, const QString& specialName, int specialValue, const QMoMAnimation& animation, const QString& helpText);
 
     void displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName, const QString& helpText);
     void displayToHit(QPointF& pos, int toHit, const QString& labelText);
@@ -90,7 +91,6 @@ private:
     int m_labelWidth;
     int m_lineHeight;
     int m_pictureHeight;
-    QVector<QGraphicsItem*> m_unitSpecificItems;
     QGraphicsScene* m_sceneUnit;
     Ui::DialogAddUnit *ui;
 };

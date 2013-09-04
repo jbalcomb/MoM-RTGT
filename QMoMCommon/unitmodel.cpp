@@ -34,7 +34,7 @@ QString toQStr(const QModelIndex& index)
 
 UnitModel::UnitModel(QObject *parent) :
     QAbstractItemModel(parent),
-    m_rootItem(new QMoMTreeItemBase),
+    m_rootItem(new QMoMTreeItemModelBase),
 	m_abortUpdate(false)
 {
 }
@@ -68,7 +68,7 @@ QVariant UnitModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    QMoMTreeItemBase* item = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
+    QMoMTreeItemModelBase* item = reinterpret_cast<QMoMTreeItemModelBase*> (index.internalPointer());
 
     return item->data(role);
 }
@@ -78,7 +78,7 @@ Qt::ItemFlags UnitModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    QMoMTreeItemBase* item = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
+    QMoMTreeItemModelBase* item = reinterpret_cast<QMoMTreeItemModelBase*> (index.internalPointer());
     return item->flags();
 }
 
@@ -114,14 +114,14 @@ QModelIndex UnitModel::index(int row, int column, const QModelIndex &parent) con
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    QMoMTreeItemBase *parentItem;
+    QMoMTreeItemModelBase *parentItem;
 
     if (!parent.isValid())
         parentItem = m_rootItem.data();
     else
-        parentItem = static_cast<QMoMTreeItemBase*> (parent.internalPointer());
+        parentItem = static_cast<QMoMTreeItemModelBase*> (parent.internalPointer());
 
-    QMoMTreeItemBase *childItem = parentItem->child(row, column);
+    QMoMTreeItemModelBase *childItem = parentItem->child(row, column);
     if (childItem)
     {
         return createIndex(row, column, childItem);
@@ -137,8 +137,8 @@ QModelIndex UnitModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    QMoMTreeItemBase *childItem = static_cast<QMoMTreeItemBase*> (index.internalPointer());
-    QMoMTreeItemBase *parentItem = childItem->parent();
+    QMoMTreeItemModelBase *childItem = static_cast<QMoMTreeItemModelBase*> (index.internalPointer());
+    QMoMTreeItemModelBase *parentItem = childItem->parent();
 
     if (parentItem == m_rootItem.data())
     {
@@ -152,14 +152,14 @@ QModelIndex UnitModel::parent(const QModelIndex &index) const
 
 int UnitModel::rowCount(const QModelIndex &parent) const
 {
-    QMoMTreeItemBase *parentItem;
+    QMoMTreeItemModelBase *parentItem;
     if (parent.column() > 0)
         return 0;
 
     if (!parent.isValid())
         parentItem = m_rootItem.data();
     else
-        parentItem = static_cast<QMoMTreeItemBase*> (parent.internalPointer());
+        parentItem = static_cast<QMoMTreeItemModelBase*> (parent.internalPointer());
 
     if (0 == parentItem)
     {
@@ -176,7 +176,7 @@ bool UnitModel::setData(const QModelIndex& index, const QVariant& value, int rol
 //    qDebug() << QString("UnitModel: setData(%0, %1, role=%2)").arg(toQStr(index)).arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
     if (index.isValid() && role == Qt::EditRole)
     {
-        QMoMTreeItemBase* item = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
+        QMoMTreeItemModelBase* item = reinterpret_cast<QMoMTreeItemModelBase*> (index.internalPointer());
         item->setData(value, role);
 
 //        qDebug() << QString("UnitModel: emit dataChanged(%0, %1)").arg(toQStr(index)).arg(toQStr(index));
@@ -196,13 +196,13 @@ void UnitModel::slot_gameChanged(const QMoMGamePtr &game)
 
     // Destroy all references to the old game and make sure they are complete
     QMoMGamePtr emptyGame;
-    QMoMTreeItemBase::setGame(emptyGame);
+    QMoMTreeItemModelBase::setGame(emptyGame);
     startUpdate();
     waitForUpdate();
 
     // Install new game
     MoM::QMoMResources::instance().setGame(game);	// Load resources if they are changed
-    QMoMTreeItemBase::setGame(game);
+    QMoMTreeItemModelBase::setGame(game);
     startUpdate();
 
     qDebug() << getDateTimeStr() << "<UnitModel::slot_gameChanged() end";
@@ -221,7 +221,7 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
 {
     // Check if a unit was clicked.
     // If so, emit a signal
-    QMoMTreeItemBase* itemBase = reinterpret_cast<QMoMTreeItemBase*> (index.internalPointer());
+    QMoMTreeItemModelBase* itemBase = reinterpret_cast<QMoMTreeItemModelBase*> (index.internalPointer());
 
     checkUnitChanged<MoM::Battle_Unit>(itemBase);
     checkUnitChanged<MoM::Hero_stats>(itemBase);
@@ -235,13 +235,13 @@ void UnitModel::slot_selectionChanged(const QModelIndex &index)
 }
 
 template<class T>
-void UnitModel::checkUnitChanged(QMoMTreeItemBase* itemBase)
+void UnitModel::checkUnitChanged(QMoMTreeItemModelBase* itemBase)
 {
-    QMoMTreeItemSubtree<T>* itemSubtree = dynamic_cast< QMoMTreeItemSubtree<T>* >(itemBase);
+    QMoMTreeItemModelSubtree<T>* itemSubtree = dynamic_cast< QMoMTreeItemModelSubtree<T>* >(itemBase);
     if (0 != itemSubtree)
     {
         T* t = itemSubtree->getMoMPointer();
-        QMoMUnitPtr momUnit(new MoM::MoMUnit(QMoMTreeItemBase::game().data()));
+        QMoMUnitPtr momUnit(new MoM::MoMUnit(QMoMTreeItemModelBase::game().data()));
         momUnit->changeUnit(t);
 
         emit signal_unitChanged(momUnit);
@@ -253,7 +253,7 @@ void UnitModel::checkUnitChanged(QMoMTreeItemBase* itemBase)
 //    setupModelData(QMoMTreeItemBase::game());
 //}
 
-void UnitModel::removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstUnusedRow)
+void UnitModel::removeUnusedRows(int toprow, QMoMTreeItemModelBase* ptree, int firstUnusedRow)
 {
     if (ptree->rowCount() > firstUnusedRow)
     {
@@ -264,7 +264,7 @@ void UnitModel::removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstU
 }
 
 
-void update_Battlefield(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Battlefield(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -281,7 +281,7 @@ void update_Battlefield(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& r
     ++row;
 }
 
-void update_Battle_Unit_View(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Battle_Unit_View(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -314,7 +314,7 @@ void update_Battle_Unit_View(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
     ++row;
 }
 
-void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Battle_Units(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -325,7 +325,7 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 
     if (row >= ptree->rowCount())
     {
-        ptree->appendChild("m_Number_of_Battle_Units", new QMoMTreeItem<uint16_t>(game->getNumber_of_Battle_Units()));
+        ptree->appendChild("m_Number_of_Battle_Units", new QMoMTreeItemModel<uint16_t>(game->getNumber_of_Battle_Units()));
     }
     row++;
 
@@ -389,7 +389,7 @@ void update_Battle_Units(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
 //    T* m_ptr;
 //};
 
-void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void UnitModel::update_Buildings(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (MoM::eBuilding building = (MoM::eBuilding)0; (0 != game) && (building < MoM::eBuilding_array_MAX); MoM::inc(building))
     {
@@ -402,7 +402,7 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
 
             ptree->child(row, 0)->setData(prettyQStr(building), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(building);
-            QString toolTip = game->getHelpText(building).c_str();
+            QString toolTip = MoM::QMoMResources::instance().getHelpText(building).c_str();
             ptree->child(row, 0)->setToolTip(toolTip);
 //            ptree->child(row, 1)->setData(QString("(%0, %1, %2) %3")
 //                                                    .arg(lair->m_XPos).arg(lair->m_YPos).arg(lair->m_Plane)
@@ -564,7 +564,7 @@ void UnitModel::update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& gam
 //    }
 //}
 
-void update_Cities(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Cities(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (int cityNr = 0; (0 != game) && (cityNr < game->getNrCities()) && (cityNr < (int)MoM::gMAX_CITIES); ++cityNr)
     {
@@ -584,43 +584,7 @@ void update_Cities(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
     }
 }
 
-void update_Custom_extensions(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
-{
-    // TODO
-//    if (0 == game)
-//        return;
-//    MoM::Battle_Unit* pBattle_Unit_View = game->getBattle_Unit_View();
-//    if (0 == pBattle_Unit_View)
-//        return;
-
-//    if (row >= ptree->rowCount())
-//    {
-//        ptree->setChild(row, 0, constructTreeItem(pBattle_Unit_View, ""));
-//    }
-//    QString id;
-//    int unitNr = pBattle_Unit_View->m_unitNr;
-//    if ((unitNr >= 0) && (unitNr < game->getNrUnits()) && (unitNr < (int)MoM::gMAX_UNITS))
-//    {
-//        MoM::Unit* unit = game->getUnit(unitNr);
-//        if (0 != unit)
-//        {
-//            id = toQStr(unit->m_Unit_Type);
-//        }
-//    }
-//    else
-//    {
-//        id = toQStr(pBattle_Unit_View->m_Race_Code);
-//    }
-//    ptree->child(row, 0)->setData(id, Qt::UserRole);
-//    ptree->child(row, 1)->setData(toQStr(pBattle_Unit_View->m_Owner), Qt::UserRole);
-//    ptree->child(row, 2)->setData(QString(), Qt::EditRole);
-
-//    ++row;
-    //QMoMTreeCustomExtensions parser;
-    //parser.load("C:/GIT/momrtgt-code/xml/momrtgt.xml");
-}
-
-void update_Events(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Events(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -633,17 +597,13 @@ void update_Events(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
         if (row >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(eventStatus, "Events Status"));
-
-//            ptree->child(row, 0)->setData(toQStr((MoM::eRace)row), Qt::UserRole);
-//            ptree->child(row, 1)->setData(QString(), Qt::EditRole);
-//            ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
         }
 
         ++row;
     }
 }
 
-void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -666,20 +626,25 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
         if ((0 != dataSegment) && game->getGameData_WizardsExe())
         {
-            ptree->child(row, 0)->appendChild(QString("Copyright/Version"), new QMoMTreeItem<char[41]>(dataSegment->m_Copyright_and_Version));
-            ptree->child(row, 0)->appendChild(QString(" RNG_Next_Turn_Seed"), new QMoMTreeItem<uint32_t>((uint32_t*)&dataSegment->m_Next_Turn_seed_storage_lo));
-            ptree->child(row, 0)->appendChild(QString(" RNG_Seed"), new QMoMTreeItem<uint32_t>((uint32_t*)&dataSegment->m_RNG_seed_lo));
-            ptree->child(row, 0)->appendChild(QString(" DEBUG Off"), new QMoMTreeItem<uint16_t>(&dataSegment->m_DEBUG_Off));
-            ptree->child(row, 0)->appendChild(QString(" BIOS Clock snapshot"), new QMoMTreeItem<uint32_t>(&dataSegment->m_BIOS_clock_snapshot));
-            ptree->child(row, 0)->appendChild(QString("Game_State"), new QMoMTreeItem<MoM::eGameState>(&dataSegment->m_Game_flow));
-            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9294"), new QMoMTreeItem<int16_t>(&dataSegment->m_kyrub_dseg_9294));
-            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItem<int16_t>(&dataSegment->m_kyrub_dseg_9296));
+            ptree->child(row, 0)->appendChild(QString("Copyright/Version"), new QMoMTreeItemModel<char[41]>(dataSegment->m_Copyright_and_Version));
+            ptree->child(row, 0)->appendChild(QString(" RNG_Next_Turn_Seed"), new QMoMTreeItemModel<uint32_t>((uint32_t*)&dataSegment->m_Next_Turn_seed_storage_lo));
+            ptree->child(row, 0)->appendChild(QString(" RNG_Seed"), new QMoMTreeItemModel<uint32_t>((uint32_t*)&dataSegment->m_RNG_seed_lo));
+            ptree->child(row, 0)->appendChild(QString(" DEBUG Off"), new QMoMTreeItemModel<uint16_t>(&dataSegment->m_DEBUG_Off));
+            ptree->child(row, 0)->appendChild(QString(" BIOS Clock snapshot"), new QMoMTreeItemModel<uint32_t>(&dataSegment->m_BIOS_clock_snapshot));
+            ptree->child(row, 0)->appendChild(QString("Game_State"), new QMoMTreeItemModel<MoM::eGameState>(&dataSegment->m_Game_flow));
+            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9294"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_kyrub_dseg_9294));
+            ptree->child(row, 0)->appendChild(QString("Kyrub_ds:9296"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_kyrub_dseg_9296));
+            ptree->child(row, 0)->appendChild(QString("m_Selected_Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_Selected_Item));
+            ptree->child(row, 0)->appendChild(QString("m_Location_Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_Location_Item));
+            ptree->child(row, 0)->appendChild(QString("XPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_XPos_Item));
+            ptree->child(row, 0)->appendChild(QString("YPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_YPos_Item));
+            ptree->child(row, 0)->appendChild(QString("Plane Item"), new QMoMTreeItemModel<MoM::ePlane16>(&dataSegment->m_Plane_Item));
         }
 
         if ((0 != magicDataSegment) && game->getGameData_WizardsExe())
         {
-            ptree->child(row, 0)->appendChild(QString("Copyright1/Version"), new QMoMTreeItem<char[41]>(magicDataSegment->m_Copyright1_and_Version));
-            ptree->child(row, 0)->appendChild(QString("Copyright2/Version"), new QMoMTreeItem<char[41]>(magicDataSegment->m_Copyright2_and_Version));
+            ptree->child(row, 0)->appendChild(QString("Copyright1/Version"), new QMoMTreeItemModel<char[41]>(magicDataSegment->m_Copyright1_and_Version));
+            ptree->child(row, 0)->appendChild(QString("Copyright2/Version"), new QMoMTreeItemModel<char[41]>(magicDataSegment->m_Copyright2_and_Version));
         }
     }
     ptree->child(row, 0)->setData(QString("MEM:Game Data"), Qt::EditRole);
@@ -698,7 +663,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("Difficulty Table");
+        QMoMTreeItemModelBase* psubtree = new QMoMTreeItemModelBase("Difficulty Table");
         ptree->appendTree(psubtree, "");
     }
     ptree->child(row, 0)->setData(QString("Difficulty Table"), Qt::EditRole);
@@ -706,7 +671,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
     ptree->child(row, 2)->setData(QString(), Qt::EditRole);
     for (int subrow = 0; (0 != dataSegment) && (subrow < (int)ARRAYSIZE(dataSegment->m_DifficultyTable)); ++subrow)
     {
-        QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+        QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
         if (subrow >= psubtree->rowCount())
         {
             MoM::eDifficulty difficulty = (MoM::eDifficulty)subrow;
@@ -717,7 +682,7 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
 
     if (row >= ptree->rowCount())
     {
-        QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("Tax");
+        QMoMTreeItemModelBase* psubtree = new QMoMTreeItemModelBase("Tax");
         ptree->appendTree(psubtree, "");
     }
     ptree->child(row, 0)->setData(QString("Tax unrest table"), Qt::EditRole);
@@ -725,17 +690,17 @@ void update_Game_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row
     ptree->child(row, 2)->setData(QString(), Qt::EditRole);
     for (int subrow = 0; (0 != dataSegment) && (subrow < ARRAYSIZE(dataSegment->m_Tax_Unrest_Table)); ++subrow)
     {
-        QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+        QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
         if (subrow >= psubtree->rowCount())
         {
             MoM::eTax_Rate taxRate = (MoM::eTax_Rate)subrow;
-            psubtree->appendChild(prettyQStr(taxRate), new QMoMTreeItem<uint16_t> ((uint16_t*)&dataSegment->m_Tax_Unrest_Table[taxRate]));
+            psubtree->appendChild(prettyQStr(taxRate), new QMoMTreeItemModel<uint16_t> ((uint16_t*)&dataSegment->m_Tax_Unrest_Table[taxRate]));
         }
     }
     ++row;
 }
 
-void update_Heroes_Hired(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row, MoM::ePlayer wizardNr)
+void update_Heroes_Hired(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row, MoM::ePlayer wizardNr)
 {
     if (0 == game)
         return;
@@ -769,7 +734,7 @@ void update_Heroes_Hired(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& 
     }
 }
 
-void update_Hero_Stats(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row, MoM::ePlayer wizardNr)
+void update_Hero_Stats(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row, MoM::ePlayer wizardNr)
 {
     if (0 == game)
         return;
@@ -794,9 +759,9 @@ void update_Hero_Stats(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& ro
     }
 }
 
-void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void UnitModel::update_Items_in_Game(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
-    for (int i = 0; (0 != game) && (i < (int)MoM::gMAX_ITEMS); ++i)
+    for (int i = 0; (0 != game) && (i < (int)MoM::gMAX_ITEMS_VALID); ++i)
     {
 		MoM::Item* item = game->getItem(i);
         if (0 == item)
@@ -825,7 +790,7 @@ void UnitModel::update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr&
     }
 }
 
-void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void UnitModel::update_Lairs(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (int lairNr = 0; (0 != game) && (lairNr < (int)MoM::gMAX_NODES_LAIRS_TOWERS); ++lairNr)
     {
@@ -834,7 +799,7 @@ void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
             break;
         if (lairNr >= ptree->rowCount())
         {
-            QMoMTreeItemBase* subtree = constructTreeItem(lair, "");
+            QMoMTreeItemModelBase* subtree = constructTreeItem(lair, "");
             ptree->setChild(row, 0, subtree);
 
             MoM::Node_Attr* nodeAttr = MoM::MoMController(game.data()).findNodeAttrAtLocation(MoM::MoMLocation(*lair));
@@ -858,7 +823,7 @@ void UnitModel::update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, i
     }
 }
 
-void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Races(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -879,12 +844,12 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
             const char* ptrName = game->getNameByOffset(dataSegment->m_Race_Data[raceNr].m_PtrName);
             if (0 != ptrName)
             {
-                ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItem<const char*>(ptrName));
+                ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItemModel<const char*>(ptrName));
             }
 
             ptree->child(row, 0)->setData(prettyQStr((MoM::eRace)row), Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(race);
-            QString toolTip = QString(game->getHelpText(race).c_str());
+            QString toolTip = QString(MoM::QMoMResources::instance().getHelpText(race).c_str());
             ptree->child(row, 0)->setToolTip(toolTip);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Race[%0]").arg(raceNr), Qt::EditRole);
@@ -894,7 +859,7 @@ void update_Races(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
     }
 }
 
-void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void UnitModel::update_Spell_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -913,7 +878,7 @@ void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
 
         ptree->child(spellNr, 0)->setData(prettyQStr(spell), Qt::EditRole);
         ptree->child(spellNr, 0)->setLazyIcon(spell);
-        QString toolTip = game->getHelpText(spell).c_str();
+        QString toolTip = MoM::QMoMResources::instance().getHelpText(spell).c_str();
         ptree->child(row, 0)->setToolTip(toolTip);
 
         if ((spellNr <= MoM::SPELL_Magic_Spirit) && (spellNr - 1) % 10 == 0)
@@ -933,7 +898,7 @@ void UnitModel::update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
     }
 }
 
-void update_Spells_Cast_in_Battle(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Spells_Cast_in_Battle(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -950,7 +915,7 @@ void update_Spells_Cast_in_Battle(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
     ++row;
 }
 
-void update_Units_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Units_in_Game(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (int unitNr = 0; (0 != game) && (unitNr < game->getNrUnits()) && (unitNr < (int)MoM::gMAX_UNITS); ++unitNr)
     {
@@ -967,7 +932,7 @@ void update_Units_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int&
             MoM::unionUnit_Weapon_Mutation mask;
             mask.bits = 0;
             mask.s.Weapon_Type = 0x03;
-            ptree->child(row, 0)->appendChild(QString("Weapon_Type"), new QMoMTreeItem<MoM::eWeaponType>((MoM::eWeaponType*)&unit->m_Weapon_Mutation.bits, mask.bits));
+            ptree->child(row, 0)->appendChild(QString("Weapon_Type"), new QMoMTreeItemModel<MoM::eWeaponType>((MoM::eWeaponType*)&unit->m_Weapon_Mutation.bits, mask.bits));
 /*
             // Unit Type Data, if available
             if ((unsigned)unit.m_Unit_Type < MoM::eUnit_Type_MAX)
@@ -1006,7 +971,7 @@ void update_Units_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int&
     }
 }
 
-void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void UnitModel::update_Unit_Types(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     if (0 == game)
         return;
@@ -1037,7 +1002,7 @@ void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
             const char* ptrName = game->getNameByOffset(pUnitData->m_PtrName);
             if (0 != ptrName)
             {
-                ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItem<const char*>(ptrName));
+                ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItemModel<const char*>(ptrName));
             }
 
 //            std::string gameDir = game->getGameDirectory();
@@ -1079,7 +1044,7 @@ void UnitModel::update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& ga
     }
 }
 
-void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
+void update_Wizards(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row)
 {
     for (int wizardNr = 0; (0 != game) && (wizardNr < game->getNrWizards()) && (wizardNr < (int)MoM::gMAX_WIZARD_RECORDS); ++wizardNr)
     {
@@ -1089,10 +1054,10 @@ void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
         if (wizardNr >= ptree->rowCount())
         {
             ptree->setChild(row, 0, constructTreeItem(wizard, ""));
-            QString toolTip = game->getHelpText(wizard->m_Portrait).c_str();
+            QString toolTip = MoM::QMoMResources::instance().getHelpText(wizard->m_Portrait).c_str();
             ptree->child(row, 0)->setToolTip(toolTip);
 
-            QMoMTreeItemBase* subtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* subtree = ptree->child(row, 0);
             MoM::Fortress* fortresses = game->getFortresses();
             if (0 != fortresses)
             {
@@ -1105,7 +1070,7 @@ void update_Wizards(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row)
                 if (0 != city)
                 {
                     int cityNr = (int)(city - game->getCity(0));
-                    subtree->child(subrow,0)->appendChild("Fortress city", new QMoMTreeItem<char[14]>(city->m_City_Name),
+                    subtree->child(subrow,0)->appendChild("Fortress city", new QMoMTreeItemModel<char[14]>(city->m_City_Name),
                                                           QString("city[%0]").arg(cityNr));
                 }
             }
@@ -1122,7 +1087,7 @@ void UnitModel::threadUpdateModelData()
 {
     QMoMTreeItemPtr parentItem = m_rootItem;
 
-    QMoMGamePtr game = QMoMTreeItemBase::game();
+    QMoMGamePtr game = QMoMTreeItemModelBase::game();
 
 	int toprow = 0;
 
@@ -1149,7 +1114,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrGameData > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrGameData - 1);
@@ -1195,7 +1160,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrBuildings > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrBuildings - 1);
@@ -1231,7 +1196,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrRaces > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrRaces - 1);
@@ -1267,7 +1232,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if ((nrWizards > ptree->rowCount()))
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrWizards - 1);
@@ -1303,7 +1268,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrLairs > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrLairs - 1);
@@ -1339,7 +1304,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrCities > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrCities - 1);
@@ -1367,7 +1332,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 //        if (nrCities > ptree->rowCount())
 //        {
 //            beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrCities - 1);
@@ -1403,7 +1368,7 @@ void UnitModel::threadUpdateModelData()
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 
         int oldRowCount = ptree->rowCount();
         if (nrUnitSections > oldRowCount)
@@ -1414,7 +1379,7 @@ void UnitModel::threadUpdateModelData()
         {
             if (row >= ptree->rowCount())
             {
-                QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("XP Level Table");
+                QMoMTreeItemModelBase* psubtree = new QMoMTreeItemModelBase("XP Level Table");
                 ptree->appendTree(psubtree, "");
             }
 
@@ -1428,13 +1393,13 @@ void UnitModel::threadUpdateModelData()
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString(), Qt::EditRole);
 
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             int subrow = 0;
             for (subrow = 0; (0 != dataSegment) && (subrow < (int)ARRAYSIZE(dataSegment->m_XP_Level_Table)); ++subrow)
             {
                 if (subrow >= psubtree->rowCount())
                 {
-                    psubtree->appendChild(QString("Level %0").arg(subrow + 1), new QMoMTreeItem<uint16_t> (&dataSegment->m_XP_Level_Table[subrow]));
+                    psubtree->appendChild(QString("Level %0").arg(subrow + 1), new QMoMTreeItemModel<uint16_t> (&dataSegment->m_XP_Level_Table[subrow]));
                 }
             }
             removeUnusedRows(row, psubtree, subrow);
@@ -1459,7 +1424,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             update_Unit_Types(psubtree, game, subrow);
             removeUnusedRows(row, psubtree, subrow);
 
@@ -1484,7 +1449,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             update_Hero_Stats(psubtree, game, subrow, playerNr);
             removeUnusedRows(row, psubtree, subrow);
 
@@ -1508,7 +1473,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             update_Heroes_Hired(psubtree, game, subrow, MoM::PLAYER_YOU);
             removeUnusedRows(row, psubtree, subrow);
 
@@ -1532,7 +1497,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             update_Units_in_Game(psubtree, game, subrow);
             removeUnusedRows(row, psubtree, subrow);
 
@@ -1560,12 +1525,12 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
         if (0 != game)
         {
-            nrItems = game->getNrItems();
+            nrItems = game->getNrItemsValid();
             parentItem->child(toprow, 2)->setData(tr("NrItems = %0").arg(nrItems), Qt::EditRole);
         }
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         if (nrItems > ptree->rowCount())
         {
             beginInsertRows(createIndex(toprow, 0, ptree), ptree->rowCount(), nrItems - 1);
@@ -1593,7 +1558,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 
         int oldRowCount = ptree->rowCount();
         if (nrSpellSections > oldRowCount)
@@ -1604,7 +1569,7 @@ void UnitModel::threadUpdateModelData()
         {
             if (row >= ptree->rowCount())
             {
-                QMoMTreeItemBase* psubtree = new QMoMTreeItemBase("Spell Data");
+                QMoMTreeItemModelBase* psubtree = new QMoMTreeItemModelBase("Spell Data");
                 ptree->appendTree(psubtree, "");
             }
 
@@ -1619,7 +1584,7 @@ void UnitModel::threadUpdateModelData()
             ptree->child(row, 2)->setData(QString("Memory only"), Qt::EditRole);
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             update_Spell_Data(psubtree, game, subrow);
             removeUnusedRows(row, psubtree, subrow);
 
@@ -1629,7 +1594,7 @@ void UnitModel::threadUpdateModelData()
         {
             if (row >= ptree->rowCount())
             {
-                ptree->setChild(row, 0, new QMoMTreeItemBase(""));
+                ptree->setChild(row, 0, new QMoMTreeItemModelBase(""));
             }
             if ((0 != game) && (0 != game->getDataSegment()))
             {
@@ -1656,7 +1621,7 @@ void UnitModel::threadUpdateModelData()
         {
             if (row >= ptree->rowCount())
             {
-                ptree->setChild(row, 0, new QMoMTreeItemBase("EXE:Spell Saves"));
+                ptree->setChild(row, 0, new QMoMTreeItemModelBase("EXE:Spell Saves"));
             }
 
             uint8_t* ovl112 = 0;
@@ -1667,20 +1632,20 @@ void UnitModel::threadUpdateModelData()
                 wizardsExe = game->getWizardsExe();
             }
 
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             int subrow = 0;
             if ((0 != ovl112) && (0 != wizardsExe) && (0 == psubtree->rowCount()))
             {
                 for (subrow = 0; subrow < (int)wizardsExe->getNrSpellSaves(); ++subrow)
                 {
-                    psubtree->appendChild("Spell", new QMoMTreeItem<MoM::eSpell>((MoM::eSpell*)&ovl112[ wizardsExe->getSpellSave(subrow).spellOffset ]));
+                    psubtree->appendChild("Spell", new QMoMTreeItemModel<MoM::eSpell>((MoM::eSpell*)&ovl112[ wizardsExe->getSpellSave(subrow).spellOffset ]));
                     if (0 == wizardsExe->getSpellSave(subrow).saveOffset)
                     {
                         psubtree->child(subrow, 2)->setData(QString("0 (unchangeable)"), Qt::EditRole);
                     }
                     else
                     {
-                        psubtree->setChild(subrow, 2, new QMoMTreeItem<int16_t>((int16_t*)&ovl112[ wizardsExe->getSpellSave(subrow).saveOffset ]));
+                        psubtree->setChild(subrow, 2, new QMoMTreeItemModel<int16_t>((int16_t*)&ovl112[ wizardsExe->getSpellSave(subrow).saveOffset ]));
                     }
                 }
             }
@@ -1721,7 +1686,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString("Memory only"), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 
         int oldRowCount = ptree->rowCount();
         if (nrBattleSections > oldRowCount)
@@ -1754,7 +1719,7 @@ void UnitModel::threadUpdateModelData()
             }
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             if (nrEntries > psubtree->rowCount())
             {
                 beginInsertRows(createIndex(row, 0, psubtree), psubtree->rowCount(), nrEntries - 1);
@@ -1779,11 +1744,11 @@ void UnitModel::threadUpdateModelData()
         {
             if (ptree->rowCount() == row)
             {
-                ptree->appendChild("m_Combat_turn", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Combat_turn));
-                ptree->appendChild("m_External_battle_condition", new QMoMTreeItem<MoM::eBattleCondition>(&game->getDataSegment()->m_External_battle_condition));
-                ptree->appendChild("m_BattleUnit_on_move", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_BattleUnit_on_move));
-                ptree->appendChild("m_Defending_wizard", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Defending_wizard));
-                ptree->appendChild("m_Attacking_wizard", new QMoMTreeItem<int16_t>(&game->getDataSegment()->m_Attacking_wizard));
+                ptree->appendChild("m_Combat_turn", new QMoMTreeItemModel<int16_t>(&game->getDataSegment()->m_Combat_turn));
+                ptree->appendChild("m_External_battle_condition", new QMoMTreeItemModel<MoM::eBattleCondition>(&game->getDataSegment()->m_External_battle_condition));
+                ptree->appendChild("m_BattleUnit_on_move", new QMoMTreeItemModel<int16_t>(&game->getDataSegment()->m_BattleUnit_on_move));
+                ptree->appendChild("m_Defending_wizard", new QMoMTreeItemModel<int16_t>(&game->getDataSegment()->m_Defending_wizard));
+                ptree->appendChild("m_Attacking_wizard", new QMoMTreeItemModel<int16_t>(&game->getDataSegment()->m_Attacking_wizard));
             }
             row += 5;
         }
@@ -1808,7 +1773,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
         update_Battle_Unit_View(ptree, game, row);
         removeUnusedRows(toprow, ptree, row);
 
@@ -1827,7 +1792,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString("MODIFIES Wizards.exe"), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 
         uint8_t* ovl083 = 0;
         uint8_t* ovl117 = 0;
@@ -1866,160 +1831,160 @@ void UnitModel::threadUpdateModelData()
 				// 0
                 if (game->getMoMVersion() >= std::string("v1.40j"))
                 {
-                    ptree->appendChild("City Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));
+                    ptree->appendChild("City Wall Defense", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));
                     ptree->child(row, 2)->setData("Default +3 shields", Qt::EditRole);
                     row++;
-                    ptree->appendChild("Broken Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FF1 ]));
+                    ptree->appendChild("Broken Wall Defense", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl122[ 0x0FF1 ]));
                     ptree->child(row, 2)->setData("Default +1 shields", Qt::EditRole);
                     row++;
                 }
                 else
                 {
-                    ptree->appendChild("City Wall Defense", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x0FEC ]));
+                    ptree->appendChild("City Wall Defense", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl122[ 0x0FEC ]));
                     ptree->child(row, 2)->setData("Default +3 shields", Qt::EditRole);
                     row++;
-                    ptree->appendChild("Broken Wall Defense", new QMoMTreeItemBase("1 (unchangeable)"));
+                    ptree->appendChild("Broken Wall Defense", new QMoMTreeItemModelBase("1 (unchangeable)"));
                     ptree->child(row, 2)->setData("Default +1 shields", Qt::EditRole);
                     row++;
                 }
-                ptree->appendChild("Large Shield", new QMoMTreeItem<int8_t>((int8_t*)&ovl122[ 0x16F1 ]));
+                ptree->appendChild("Large Shield", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl122[ 0x16F1 ]));
                 ptree->child(row, 2)->setData("Default +2 shields", Qt::EditRole);
                 row++;
 
-                ptree->appendChild("Noble", new QMoMTreeItem<int8_t>((int8_t*)&ovl140[ 0x068F ]));
+                ptree->appendChild("Noble", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl140[ 0x068F ]));
                 ptree->child(row, 2)->setData("Default 10 gold/turn", Qt::EditRole);
                 row++;
 
-                ptree->appendChild("Turns before AI aggressive", new QMoMTreeItem<int8_t>((int8_t*)&ovl164[ 0x12BB ]));
+                ptree->appendChild("Turns before AI aggressive", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl164[ 0x12BB ]));
                 ptree->child(row, 2)->setData("Default 100 turns", Qt::EditRole);
                 row++;
 
 				// 5
-                ptree->appendChild("Max spells of colored unit", new QMoMTreeItem<int8_t>((int8_t*)&ovl117[ 0x0179 ]));
+                ptree->appendChild("Max spells of colored unit", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl117[ 0x0179 ]));
                 ptree->child(row, 2)->setData("Default 40 spells", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Max city size", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl140[ 0x1660 ]));
+                ptree->appendChild("Max city size", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl140[ 0x1660 ]));
                 ptree->child(row, 2)->setData("Default 25 pop", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Wild game: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x04E8 ]));
+                ptree->appendChild("Wild game: food bonus", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl142[ 0x04E8 ]));
                 ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Granary: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x073C ]));
+                ptree->appendChild("Granary: food bonus", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl142[ 0x073C ]));
                 ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Farmer's market: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x0767 ]));
+                ptree->appendChild("Farmer's market: food bonus", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl142[ 0x0767 ]));
                 ptree->child(row, 2)->setData("Default 3 food/turn", Qt::EditRole);
                 row++;
 
 				// 10
-				ptree->appendChild("Forester's guild: food bonus", new QMoMTreeItem<int8_t>((int8_t*)&ovl142[ 0x06DE ]));
+                ptree->appendChild("Forester's guild: food bonus", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl142[ 0x06DE ]));
                 ptree->child(row, 2)->setData("Default 2 food/turn", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Animist's guild: food/farmer", new QMoMTreeItem<int16_t>((int16_t*)&ovl142[ 0x0698 ]));
+                ptree->appendChild("Animist's guild: food/farmer", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl142[ 0x0698 ]));
                 ptree->child(row, 2)->setData("Default 3 food/turn", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Race with implicit Animist's guild", new QMoMTreeItem<MoM::eRace>((MoM::eRace*)&ovl142[ 0x065A ]));
+                ptree->appendChild("Race with implicit Animist's guild", new QMoMTreeItemModel<MoM::eRace>((MoM::eRace*)&ovl142[ 0x065A ]));
                 ptree->child(row, 2)->setData("Default Halfling (6)", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Max spell pump mana (power of 2)", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl136[ 0x097E ]));
+                ptree->appendChild("Max spell pump mana (power of 2)", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl136[ 0x097E ]));
                 ptree->child(row, 2)->setData("Default 2 (max pump=2^2*cost)", Qt::EditRole);
                 row++;
 
 
-				ptree->appendChild("Sage master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x173F ]));
+                ptree->appendChild("Sage master rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x173F ]));
                 ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
                 row++;
                 // 15
-				ptree->appendChild("Conjurer rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1766 ]));
+                ptree->appendChild("Conjurer rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1766 ]));
                 ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
                 row++;
-				ptree->appendChild("Runemaster rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1893 ]));
+                ptree->appendChild("Runemaster rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1893 ]));
                 ptree->child(row, 2)->setData("Default 25%", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Chaos master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x178B ]));
+                ptree->appendChild("Chaos master rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x178B ]));
                 ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
                 row++;
-				ptree->appendChild("Min chaos books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1799 ]));
+                ptree->appendChild("Min chaos books for rp", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1799 ]));
                 ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Added to chaos books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17AA ]));
+                ptree->appendChild("Added to chaos books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x17AA ]));
                 ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
                 row++;
                 // 20
-				ptree->appendChild("Multiplier to chaos books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17AD ]));
+                ptree->appendChild("Multiplier to chaos books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x17AD ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Nature master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x17C8 ]));
+                ptree->appendChild("Nature master rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x17C8 ]));
                 ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
                 row++;
-				ptree->appendChild("Min nature books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x17D6 ]));
+                ptree->appendChild("Min nature books for rp", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x17D6 ]));
                 ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Added to nature books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17E7 ]));
+                ptree->appendChild("Added to nature books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x17E7 ]));
                 ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Multiplier to nature books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x17EA ]));
+                ptree->appendChild("Multiplier to nature books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x17EA ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
                 row++;
 
                 // 25
-				ptree->appendChild("Sorcery master rp bonus", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1805 ]));
+                ptree->appendChild("Sorcery master rp bonus", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1805 ]));
                 ptree->child(row, 2)->setData("Default 15%", Qt::EditRole);
                 row++;
-				ptree->appendChild("Min sorcery books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1813 ]));
+                ptree->appendChild("Min sorcery books for rp", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1813 ]));
                 ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Added to sorcery books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1824 ]));
+                ptree->appendChild("Added to sorcery books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x1824 ]));
                 ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Multiplier to sorcery books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1827 ]));
+                ptree->appendChild("Multiplier to sorcery books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x1827 ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
                 row++;
 
- 				ptree->appendChild("Min life books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x183C ]));
+                ptree->appendChild("Min life books for rp", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x183C ]));
                 ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
                 row++;
                 // 30
-				ptree->appendChild("Added to life books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x184D ]));
+                ptree->appendChild("Added to life books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x184D ]));
                 ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Multiplier to life books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1850 ]));
+                ptree->appendChild("Multiplier to life books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x1850 ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
                 row++;
 
-				ptree->appendChild("Min death books for rp", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl120[ 0x1865 ]));
+                ptree->appendChild("Min death books for rp", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl120[ 0x1865 ]));
                 ptree->child(row, 2)->setData("Default 7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Added to death books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1876 ]));
+                ptree->appendChild("Added to death books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x1876 ]));
                 ptree->child(row, 2)->setData("Default -7", Qt::EditRole);
                 row++;
-				ptree->appendChild("Multiplier to death books for rp", new QMoMTreeItem<int16_t>((int16_t*)&ovl120[ 0x1879 ]));
+                ptree->appendChild("Multiplier to death books for rp", new QMoMTreeItemModel<int16_t>((int16_t*)&ovl120[ 0x1879 ]));
                 ptree->child(row, 2)->setData("Default 10%", Qt::EditRole);
                 row++;
 
                 //35
-                ptree->appendChild("Max books condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14c6 ]));
+                ptree->appendChild("Max books condition", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl083[ 0x14c6 ]));
                 ptree->child(row, 2)->setData("Default 12, allowing 13 books", Qt::EditRole);
                 row++;
-                ptree->appendChild("Max books condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14e5 ]));
+                ptree->appendChild("Max books condition", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl083[ 0x14e5 ]));
                 ptree->child(row, 2)->setData("Always set to same as the one before", Qt::EditRole);
                 row++;
-                ptree->appendChild("Max skills condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14c0 ]));
+                ptree->appendChild("Max skills condition", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl083[ 0x14c0 ]));
                 ptree->child(row, 2)->setData("Default 5, allowing 6 skills", Qt::EditRole);
                 row++;
-                ptree->appendChild("Max skills condition", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14da ]));
+                ptree->appendChild("Max skills condition", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl083[ 0x14da ]));
                 ptree->child(row, 2)->setData("Always set to same as the one before", Qt::EditRole);
                 row++;
-                ptree->appendChild("Chance book (vs skill)", new QMoMTreeItem<uint8_t>((uint8_t*)&ovl083[ 0x14f0 ]));
+                ptree->appendChild("Chance book (vs skill)", new QMoMTreeItemModel<uint8_t>((uint8_t*)&ovl083[ 0x14f0 ]));
                 ptree->child(row, 2)->setData("Default 75%", Qt::EditRole);
                 row++;
            }
@@ -2054,7 +2019,7 @@ void UnitModel::threadUpdateModelData()
         parentItem->child(toprow, 2)->setData(QString("Setup only"), Qt::EditRole);
 
         int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
+        QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
 
         int oldRowCount = ptree->rowCount();
         if (nrCustomizerSections > oldRowCount)
@@ -2074,29 +2039,29 @@ void UnitModel::threadUpdateModelData()
             ptree->child(row, 2)->setData(QString(), Qt::EditRole);
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
             MoM::MoMMagicDataSegment* pMagicDataSegment = game->getMagicDataSegment();
 
             if (0 == psubtree->rowCount())
             {
 				for (int i = 0; i < 10; ++i)
 				{
-					psubtree->appendChild(QString("Nr spells %0 books").arg(i+2), new QMoMTreeItem<int16_t>(&pMagicDataSegment->m_Nr_spell_choices[i]));
+                    psubtree->appendChild(QString("Nr spells %0 books").arg(i+2), new QMoMTreeItemModel<int16_t>(&pMagicDataSegment->m_Nr_spell_choices[i]));
 					subrow++;
 				}				
 				
-				psubtree->appendChild("Sorcery_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Sorcery_Picks_Divider));
+                psubtree->appendChild("Sorcery_Picks_Divider", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Sorcery_Picks_Divider));
                 subrow++;
-                psubtree->appendChild("Nature_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Nature_Picks_Divider));
+                psubtree->appendChild("Nature_Picks_Divider", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Nature_Picks_Divider));
                 subrow++;
-                psubtree->appendChild("Chaos_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Chaos_Picks_Divider));
+                psubtree->appendChild("Chaos_Picks_Divider", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Chaos_Picks_Divider));
                 subrow++;
-                psubtree->appendChild("Death_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Death_Picks_Divider));
+                psubtree->appendChild("Death_Picks_Divider", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Death_Picks_Divider));
                 subrow++;
-                psubtree->appendChild("Life_Picks_Divider", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Life_Picks_Divider));
+                psubtree->appendChild("Life_Picks_Divider", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Life_Picks_Divider));
                 subrow++;
 
-                psubtree->appendChild("Total_Picks_Left", new QMoMTreeItem<uint16_t>(&pMagicDataSegment->m_Total_Picks_Left));
+                psubtree->appendChild("Total_Picks_Left", new QMoMTreeItemModel<uint16_t>(&pMagicDataSegment->m_Total_Picks_Left));
                 subrow++;
 
 //                psubtree->appendChild("Select_Wizard_Shown", new TreeItem<MoM::ePortrait>(&pMagicDataSegment->m_Select_Wizard_Shown));
@@ -2143,103 +2108,103 @@ void UnitModel::threadUpdateModelData()
             ptree->child(row, 2)->setData(QString("MODIFIES Magic.exe"), Qt::EditRole);
 
             int subrow = 0;
-            QMoMTreeItemBase* psubtree = ptree->child(row, 0);
+            QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
 
             if (0 == psubtree->rowCount())
             {
-                psubtree->appendChild("Total picks", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x3394B]));
+                psubtree->appendChild("Total picks", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x3394B]));
                 psubtree->child(subrow, 2)->setData("(default 11)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Landmass_total_tiles Small", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1E9A + 3]));
+                psubtree->appendChild("Landmass_total_tiles Small", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1E9A + 3]));
                 psubtree->child(subrow, 2)->setData("(default 360)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Landmass_total_tiles Medium", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1EA1 + 3]));
+                psubtree->appendChild("Landmass_total_tiles Medium", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1EA1 + 3]));
                 psubtree->child(subrow, 2)->setData("(default 480)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Landmass_total_tiles Large", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1EA8 + 3]));
+                psubtree->appendChild("Landmass_total_tiles Large", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1EA8 + 3]));
                 psubtree->child(subrow, 2)->setData("Game may freeze if too high 1200 < n <= 1720  (default 720)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Landmass_min continent_tiles Small", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1F61 + 1]));
+                psubtree->appendChild("Landmass_min continent_tiles Small", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1F61 + 1]));
                 psubtree->child(subrow, 2)->setData("10 + dice(n)  (default 5: 6-15)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Landmass_min continent_tiles Medium", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1F73 + 1]));
+                psubtree->appendChild("Landmass_min continent_tiles Medium", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1F73 + 1]));
                 psubtree->child(subrow, 2)->setData("10 + dice(n)  (default 10: 11-20)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Landmass_min continent_tiles Large", new QMoMTreeItem<uint16_t>((uint16_t*)&ovl51[0x1F82 + 1]));
+                psubtree->appendChild("Landmass_min continent_tiles Large", new QMoMTreeItemModel<uint16_t>((uint16_t*)&ovl51[0x1F82 + 1]));
                 psubtree->child(subrow, 2)->setData("10 + dice(n)  (default 20: 21-30)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Nr of Towers", new QMoMTreeItem<uint8_t>(&ovl51[0x08C1 + 2]));
+                psubtree->appendChild("Nr of Towers", new QMoMTreeItemModel<uint8_t>(&ovl51[0x08C1 + 2]));
                 psubtree->child(subrow, 2)->setData("Max 6 towers  (default 6)", Qt::EditRole);
                 subrow++;
 //                psubtree->appendChild("Offset Myrror Towers (don't change)", new TreeItem<uint8_t>(&ovl51[0x2EE1 + 2]));
 //                subrow++;
-                psubtree->appendChild("Nr of Towers + 6", new QMoMTreeItem<uint8_t>(&ovl51[0x2F31 + 2]));
+                psubtree->appendChild("Nr of Towers + 6", new QMoMTreeItemModel<uint8_t>(&ovl51[0x2F31 + 2]));
                 psubtree->child(subrow, 2)->setData("Always set to towers + 6", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Nr Normal lairs", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x3933E + 3]));
+                psubtree->appendChild("Nr Normal lairs", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x3933E + 3]));
                 psubtree->child(subrow, 2)->setData("Max 25  (default 25)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Nr Weak lairs", new QMoMTreeItem<uint8_t>(&magicExeContents[0x396A2 + 2]));
+                psubtree->appendChild("Nr Weak lairs", new QMoMTreeItemModel<uint8_t>(&magicExeContents[0x396A2 + 2]));
                 psubtree->child(subrow, 2)->setData("Max 32  (default 32)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Normal lair monster cash Arcanus", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39574 + 1]));
+                psubtree->appendChild("Normal lair monster cash Arcanus", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39574 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) * 50 + 50  (default 29: 100-1500)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Normal lair monster cash Myrror", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39588 + 1]));
+                psubtree->appendChild("Normal lair monster cash Myrror", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39588 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) * 100 + 100  (default 24: 200-2500)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Weak lair monster cash Arcanus", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x3966B + 1]));
+                psubtree->appendChild("Weak lair monster cash Arcanus", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x3966B + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) * 10  (default 10: 10-100)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Weak lair monster cash Myrror", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39670 + 1]));
+                psubtree->appendChild("Weak lair monster cash Myrror", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39670 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) * 10  (default 20: 20-200)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Nr monsters in lair (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39987 + 1]));
+                psubtree->appendChild("Nr monsters in lair (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39987 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n)  See OSG p.416-418  (default n = 4)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Nr secondary monsters in lair (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39B6E + 1]));
+                psubtree->appendChild("Nr secondary monsters in lair (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39B6E + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n - Nr primary monsters)  (default n = 10)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Lower primary monsters (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x39A93 + 1]));
+                psubtree->appendChild("Lower primary monsters (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x39A93 + 1]));
                 psubtree->child(subrow, 2)->setData("1 in dice(n) throws primary back  (default n = 2)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Chance same race on continents (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x3DD82 + 1]));
+                psubtree->appendChild("Chance same race on continents (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x3DD82 + 1]));
                 psubtree->child(subrow, 2)->setData("1 in dice(n) makes the race random  (default n = 4)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Distance to connect cities", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x3EAF0 + 1]));
+                psubtree->appendChild("Distance to connect cities", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x3EAF0 + 1]));
                 psubtree->child(subrow, 2)->setData("Diagonal tiles count as 1.5  (default 11 squares)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Turns before random events start", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x47C32 + 3]));
+                psubtree->appendChild("Turns before random events start", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x47C32 + 3]));
                 psubtree->child(subrow, 2)->setData("(default 50 turns)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Random picks of opponents on Normal (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x467f2 + 1]));
+                psubtree->appendChild("Random picks of opponents on Normal (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x467f2 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n)  (default n = 3)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Random picks of opponents on Hard (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x46801 + 1]));
+                psubtree->appendChild("Random picks of opponents on Hard (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x46801 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) + d3  (default n = 3)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Random picks of opponents on Impossible (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x46811 + 1]));
+                psubtree->appendChild("Random picks of opponents on Impossible (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x46811 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) + d5  (default n = 5)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Random picks of opponents on Impossible+1 (dice)", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x46821 + 1]));
+                psubtree->appendChild("Random picks of opponents on Impossible+1 (dice)", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x46821 + 1]));
                 psubtree->child(subrow, 2)->setData("dice(n) + d8  (default n = 8)", Qt::EditRole);
                 subrow++;
 
-                psubtree->appendChild("Total nr of AI picks on Normal and below", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x469ed + 3]));
+                psubtree->appendChild("Total nr of AI picks on Normal and below", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x469ed + 3]));
                 psubtree->child(subrow, 2)->setData("(default 11 picks)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Total nr of AI picks on Hard", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x469f9 + 3]));
+                psubtree->appendChild("Total nr of AI picks on Hard", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x469f9 + 3]));
                 psubtree->child(subrow, 2)->setData("(default 13 picks)", Qt::EditRole);
                 subrow++;
-                psubtree->appendChild("Total nr of AI picks on Impossible", new QMoMTreeItem<uint16_t>((uint16_t*)&magicExeContents[0x46a05 + 3]));
+                psubtree->appendChild("Total nr of AI picks on Impossible", new QMoMTreeItemModel<uint16_t>((uint16_t*)&magicExeContents[0x46a05 + 3]));
                 psubtree->child(subrow, 2)->setData("(default 15 picks)", Qt::EditRole);
                 subrow++;
             }
@@ -2261,38 +2226,28 @@ void UnitModel::threadUpdateModelData()
         toprow++;
     }
 
-    if (0 != game)
-    {
-        // TODO: Display
-        MoM::Available_spell_page* availableSpellPages = game->getAvailable_spell_pages();
-        MoM::Available_spell_page& first = *availableSpellPages;
+    //{
+    //    if (toprow == parentItem->rowCount())
+    //    {
+    //        parentItem->appendEmptyRow();
+    //    }
 
-        MoM::eSpell16* hero_spells = game->getHero_spells();
-        MoM::eSpell16& spell = *hero_spells;
-    }
+    //    parentItem->child(toprow, 0)->setData(tr("Custom extensions"), Qt::UserRole);
+    //    parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
+    //    parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
 
-    {
-        if (toprow == parentItem->rowCount())
-        {
-            parentItem->appendEmptyRow();
-        }
+    //    int row = 0;
+    //    QMoMTreeItemModelBase* ptree = parentItem->child(toprow, 0);
+    //    update_Custom_extensions(ptree, game, row);
+    //    removeUnusedRows(toprow, ptree, row);
 
-        parentItem->child(toprow, 0)->setData(tr("Custom extensions"), Qt::UserRole);
-        parentItem->child(toprow, 1)->setData(QString(), Qt::EditRole);
-        parentItem->child(toprow, 2)->setData(QString(), Qt::EditRole);
-
-        int row = 0;
-        QMoMTreeItemBase* ptree = parentItem->child(toprow, 0);
-        update_Custom_extensions(ptree, game, row);
-        removeUnusedRows(toprow, ptree, row);
-
-        toprow++;
-    }
+    //    toprow++;
+    //}
 
     emit dataChanged(index(0, 0), index(parentItem->rowCount() - 1, m_columnCount - 1));
 }
 
-void UnitModel::traverseTree(QMoMTreeItemBase* node, int& nrToResolve)
+void UnitModel::traverseTree(QMoMTreeItemModelBase* node, int& nrToResolve)
 {
     bool succesfulResolution = false;
     for (int row = 0; (nrToResolve > 0) && (row < node->rowCount()); ++row)

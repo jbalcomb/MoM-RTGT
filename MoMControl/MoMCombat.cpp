@@ -76,6 +76,16 @@ double CombatUnit::getCurFiguresFrac() const
     else return nr_full_figures + hp_last_figure;
 }
 
+std::string CombatUnit::toString() const
+{
+    BaseAttributes attr = getActualAttributes();
+    char buf[4096] = "";
+    sprintf(buf, "%.1fx %d-%d-%d-%d-%d (%.1f) %+d/%+d",
+            getCurFiguresFrac(), attr.melee, attr.ranged, attr.defense, attr.resistance, attr.hitpoints,
+            getCurTotalHp(), attr.toHitMelee, attr.toDefend);
+    return getDisplayName() + " " + buf;
+}
+
 MoMCombat::MoMCombat(MoMGameBase* game) :
     m_game(game),
     m_verbose(false),
@@ -902,6 +912,7 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
         if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
             break;  // End combat if anyone defeated
+        EDD_att = EDD_def = 0;
 
         // Pre-melee: Defender
         if (!defender.hasCombatEnchantment(COMBATENCHANTMENT_Black_Sleep))
@@ -914,14 +925,13 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
             resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
             if (attacker.getCurTotalHp() <= 0 || defender.getCurTotalHp() <= 0)
                 break;  // End combat if anyone defeated
+            EDD_att = EDD_def = 0;
         }
 
         //! TODO: Wall of Fire + resolve
         //! TODO: Fear on attackers and defenders
 
         //! Attacker attacks with Immolation, Life Steal, Poison, Touch, and Melee
-        EDD_att = EDD_def = 0;
-
         // TODO: centralize sets of attacks
         // TODO: (repeatedly) Dispel Evil
         // TODO: (repeatedly) Destruction
@@ -974,6 +984,7 @@ std::string MoMCombat::combat_attack(CombatUnit& attacker, CombatUnit& defender)
         }
 
         resolve_casualties(attacker, defender, EDD_att, EDD_def, o);
+        EDD_att = EDD_def = 0;
 
     } while (0);   // Single-iteration-loop to allow for a break followed by a centralized clean-up
 
@@ -1172,6 +1183,8 @@ std::string MoMCombat::shoot_attack(CombatUnit& attacker, CombatUnit& defender, 
 //! \param defender The defender
 std::string MoMCombat::combat_round(CombatUnit& attacker, CombatUnit& defender)
 {
+    std::string ostr = "Unit " + attacker.toString() + "\nattacks unit " + defender.toString() + "\n";
+
     /*
    if (g_defender == attacker && g_defender.other_effects["suppressionCounter"] > 0)
    {
@@ -1187,7 +1200,7 @@ std::string MoMCombat::combat_round(CombatUnit& attacker, CombatUnit& defender)
    }
    */
 
-    std::string ostr = combat_attack(attacker, defender);
+    ostr += combat_attack(attacker, defender);
 
     return ostr;
 }
@@ -1195,9 +1208,11 @@ std::string MoMCombat::combat_round(CombatUnit& attacker, CombatUnit& defender)
 
 std::string MoMCombat::shoot_round(CombatUnit& attacker, CombatUnit& defender, int distance)
 {
+    std::string ostr = "Unit " + attacker.toString() + "\nshoots unit " + defender.toString() + "\n";
+
     // g_defender.other_effects["suppressionCounter"] = g_attacker.other_effects["suppressionCounter"] = 0;
 
-    std::string ostr = shoot_attack(attacker, defender, distance);
+    ostr += shoot_attack(attacker, defender, distance);
 
     return ostr;
 }
@@ -1256,14 +1271,18 @@ std::string MoMCombat::full_combat(StackUnits& attackers, StackUnits& defenders,
             }
             else
             {
-                CombatUnit& attacker = defenders[defender_nr];
+                CombatUnit& attacker = attackers[attacker_nr];
                 // Counter attack
                 o += combat_round(defender, attacker);
             }
         }
     }
 
-
+    // Discard intermediary log
+//    if (!m_verbose)
+//    {
+//        o.clear();
+//    }
 
     o += "\nResult is " + toStr(result) + "\n";
 

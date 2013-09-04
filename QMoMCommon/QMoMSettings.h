@@ -10,10 +10,21 @@ public:
     static void initialize(const QString& applicationName);
 
     /// \brief  Read and execute the common settings for a window
-    static void readSettings(QWidget* window);
+    ///         The objectName() of the window is used as key.
+    static void readSettingsWindow(QWidget* window);
 
     /// \brief  Write the common settings for a window
-    static void writeSettings(QWidget* window);
+    ///         The objectName() of the window is used as key.
+    static void writeSettingsWindow(QWidget* window);
+
+    /// \brief  Read and execute the common settings for a specific control
+    ///         The objectName() of the control is used as key.
+    ///         Note that it can be changed with setObjectName().
+    static void readSettingsControl(QWidget* control);
+
+    /// \brief  Write the common settings for a specific control
+    ///         The objectName() of the control is used as key.
+    static void writeSettingsControl(QWidget* control);
 
 private:
     static void recurseRead(class QSettings& settings, QObject* object);

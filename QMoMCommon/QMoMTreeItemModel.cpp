@@ -5,11 +5,11 @@
 // Created:     2011-09-30
 // ---------------------------------------------------------------------------
 
-#include "QMoMTreeItem.h"
+#include "QMoMTreeItemModel.h"
 
-QMoMGamePtr QMoMTreeItemBase::m_game;
+QMoMGamePtr QMoMTreeItemModelBase::m_game;
 
-QMoMTreeItemBase::QMoMTreeItemBase(const QString& data, const QMoMLazyIconPtr& icon) :
+QMoMTreeItemModelBase::QMoMTreeItemModelBase(const QString& data, const QMoMLazyIconPtr& icon) :
         m_parent(),
         m_row(),
         m_icon(icon),
@@ -32,7 +32,7 @@ QMoMTreeItemBase::QMoMTreeItemBase(const QString& data, const QMoMLazyIconPtr& i
     }
 }
 
-QMoMTreeItemBase::~QMoMTreeItemBase()
+QMoMTreeItemModelBase::~QMoMTreeItemModelBase()
 {
     for (int row = 0; row < m_children.count(); ++row)
     {
@@ -43,50 +43,50 @@ QMoMTreeItemBase::~QMoMTreeItemBase()
     }
 }
 
-void QMoMTreeItemBase::appendChild(const QString& feature, QMoMTreeItemBase* value, const QString& comment)
+void QMoMTreeItemModelBase::appendChild(const QString& feature, QMoMTreeItemModelBase* value, const QString& comment)
 {
-    QList<QMoMTreeItemBase*> items;
+    QList<QMoMTreeItemModelBase*> items;
 
-    items.append(new QMoMTreeItemBase(feature));
+    items.append(new QMoMTreeItemModelBase(feature));
     items.append(value);
-    items.append(new QMoMTreeItemBase(comment));
+    items.append(new QMoMTreeItemModelBase(comment));
 
     appendRow(items);
 }
 
-void QMoMTreeItemBase::appendTree(QMoMTreeItemBase* tree, const QString& value)
+void QMoMTreeItemModelBase::appendTree(QMoMTreeItemModelBase* tree, const QString& value)
 {
-    QList<QMoMTreeItemBase*> items;
+    QList<QMoMTreeItemModelBase*> items;
 
     items.append(tree);
-    items.append(new QMoMTreeItemBase(value));
-    items.append(new QMoMTreeItemBase);
+    items.append(new QMoMTreeItemModelBase(value));
+    items.append(new QMoMTreeItemModelBase);
 
     appendRow(items);
 }
 
-void QMoMTreeItemBase::appendRow(const QList<QMoMTreeItemBase*>& items)
+void QMoMTreeItemModelBase::appendRow(const QList<QMoMTreeItemModelBase*>& items)
 {
     int newRow = m_children.count();
     m_children.append(items);
     for (int i = 0; i < m_children.back().count(); ++i)
     {
-        QMoMTreeItemBase* item = m_children.back().at(i);
+        QMoMTreeItemModelBase* item = m_children.back().at(i);
         item->setParent(this);
         item->setRow(newRow);
     }
 }
 
-void QMoMTreeItemBase::appendEmptyRow()
+void QMoMTreeItemModelBase::appendEmptyRow()
 {
-    QList<QMoMTreeItemBase*> items;
-    items.append(new QMoMTreeItemBase());
-    items.append(new QMoMTreeItemBase());
-    items.append(new QMoMTreeItemBase());
+    QList<QMoMTreeItemModelBase*> items;
+    items.append(new QMoMTreeItemModelBase());
+    items.append(new QMoMTreeItemModelBase());
+    items.append(new QMoMTreeItemModelBase());
     appendRow(items);
 }
 
-QMoMTreeItemBase* QMoMTreeItemBase::child(int row, int col)
+QMoMTreeItemModelBase* QMoMTreeItemModelBase::child(int row, int col)
 {
     if (row >= m_children.count())
         return 0;
@@ -95,7 +95,7 @@ QMoMTreeItemBase* QMoMTreeItemBase::child(int row, int col)
     return m_children[row][col];
 }
 
-bool QMoMTreeItemBase::commitData(void* ptr, void* pNewValue, size_t size)
+bool QMoMTreeItemModelBase::commitData(void* ptr, void* pNewValue, size_t size)
 {
     bool ok = true;
     if (0 != m_game)
@@ -105,7 +105,7 @@ bool QMoMTreeItemBase::commitData(void* ptr, void* pNewValue, size_t size)
     return ok;
 }
 
-QVariant QMoMTreeItemBase::data(int role) const
+QVariant QMoMTreeItemModelBase::data(int role) const
 {
 //        qDebug() << QString("data(%0)=%1").arg((Qt::ItemDataRole)role).arg(m_data);
 
@@ -126,7 +126,7 @@ QVariant QMoMTreeItemBase::data(int role) const
     }
 }
 
-void QMoMTreeItemBase::removeRows(int firstRow, int lastRow)
+void QMoMTreeItemModelBase::removeRows(int firstRow, int lastRow)
 {
     if (lastRow >= m_children.count())
     {
@@ -134,7 +134,7 @@ void QMoMTreeItemBase::removeRows(int firstRow, int lastRow)
     }
     for (int row = lastRow; row >= firstRow; --row)
     {
-        QList<QMoMTreeItemBase*>& curRow = m_children[row];
+        QList<QMoMTreeItemModelBase*>& curRow = m_children[row];
         for (int col = curRow.count() - 1; col >= 0; --col)
         {
             delete curRow[col];
@@ -143,7 +143,7 @@ void QMoMTreeItemBase::removeRows(int firstRow, int lastRow)
     }
 }
 
-void QMoMTreeItemBase::setChild(int row, int col, QMoMTreeItemBase* item)
+void QMoMTreeItemModelBase::setChild(int row, int col, QMoMTreeItemModelBase* item)
 {
     if (row > m_children.count())
         return;
@@ -161,7 +161,7 @@ void QMoMTreeItemBase::setChild(int row, int col, QMoMTreeItemBase* item)
     item->setRow(row);
 }
 
-void QMoMTreeItemBase::setData(const QVariant &value, int role)
+void QMoMTreeItemModelBase::setData(const QVariant &value, int role)
 {
 //        qDebug() << QString("setData(value='%0', role=%1)").arg(value.value<QString>()).arg((Qt::ItemDataRole)role);
     if (Qt::EditRole == role)

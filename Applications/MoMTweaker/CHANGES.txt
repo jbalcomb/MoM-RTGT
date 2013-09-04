@@ -2,16 +2,39 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.7 (2012--)
+CHANGES IN 0.2.7 (2013-08-07)
 -----------------------------
 
-* Drag & drop on the maps:
-  - either moves a stack of units,
-  - or simulates combat and shows the result in a message box.
+* Save/restore bookmark during battle (on battle map) [FrancoK].
+  This works during the same battle. 
+  To restore a battle bookmark after leaving the game, first restore 
+  a save game from before the battle, enter battle again, and then 
+  you can restore the bookmark. 
+  Ticket: https://sourceforge.net/p/momrtgt/tickets/25/
+
+* More tables (click Show tables):
+  - Item powers from itempow.lbx (new).
+  - Prefab item data from itemdata.lbx (new).
+  - Many other tables whose data was already editable in the tree view.
+
+* Lbx editor (click Tools, then click Lbx editor):
+  - loads any lbx file and shows its contents
+  - use the proper palette for all pictures
+  - as yet it can only replace pictures and sequences of pictures.
+
+* Drag & drop on the overland map and the battle map:
+  - Either moves a stack of units.
+  - Or simulates combat and shows the result in a message box.
+    However, it's mostly raw melee now with static specials and enchantments.
+    Shooting is not taken into account yet, nor all possible spells
+    and special effects.
   
 * Combat simulator added.
 
-* Save and restore the dialog positions, sizes, check boxes, etcetera.
+* Save and restore all dialog positions, sizes, check boxes, column widths, 
+  directories, and combo boxes.
+  
+* Track created item location in the "MEM:Game Data" section.
 
 
 

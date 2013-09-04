@@ -15,7 +15,9 @@
 #include <qimage.h>
 #include <qvector.h>
 
+#include "MoMLbxBase.h"
 #include "MoMTemplate.h"
+#include "QMoMAnimation.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
 
@@ -37,10 +39,30 @@ public:
 
     void setGame(const QMoMGamePtr& game);
 
+    const QMoMAnimation getAnimation(const LBXRecordID& lbxRecordID) const;
+    const QMoMAnimation getAnimation(MoM::eBuilding building) const;
+    const QMoMAnimation getAnimation(MoM::eRanged_Type rangedType, int heading = 3) const;
+    const QMoMAnimation getAnimation(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
+
     const QMoMPalette& getColorTable()
 	{
 		return m_colorTable;
 	}
+
+    const HelpLBXentry* getHelpEntry(eHelpIndex helpTextNr);
+    std::string getHelpText(eHelpIndex helpTextNr);
+
+    std::string getHelpText(eBuilding building);
+    std::string getHelpText(eHeroAbility heroAbility);
+    std::string getHelpText(eItemPower itemPower);
+    std::string getHelpText(ePortrait wizardPortrait);
+    std::string getHelpText(eRace race);
+    std::string getHelpText(eRanged_Type rangedType);
+    const HelpLBXentry* getHelpEntry(eSpell spell);
+    std::string getHelpText(eSpell spell);
+    std::string getHelpText(eUnitAbility unitAbility);
+    std::string getHelpText(eUnitEnchantment unitEnchantment);
+    std::string getHelpText(eUnitMutation unitMutation);
 
     template<typename T>
     const QMoMIconPtr getIcon(T t, double scale = 1) const
@@ -59,6 +81,7 @@ public:
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
+    const QMoMImagePtr getImage(MoM::eRanged_Type rangedType, int heading = 3) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type8 slotType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
     const QMoMImagePtr getImage(MoM::eSpell spell) const;
@@ -83,7 +106,7 @@ public:
         {
             if (1.0 != scale)
 			{
-                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::FastTransformation);
 	            pixmap.convertFromImage(image);
 			}
 			else
@@ -103,7 +126,7 @@ public:
         {
             if (1.0 != scale)
 			{
-                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                QImage image = pImage->scaled(pImage->size() * scale, Qt::IgnoreAspectRatio, Qt::FastTransformation);
 	            pixmap.convertFromImage(image);
 			}
 			else
@@ -117,15 +140,17 @@ public:
 public:
     static const QFont g_FontSmall;
     static const QFont g_Font;
+    static const QFont g_FontFixed;
 
 private:
+    void changeBannerColor(MoM::eBannerColor bannerColor, QMoMAnimation& animation) const;
     void changeBannerColor(MoM::eBannerColor bannerColor, QMoMImagePtr& image) const;
 
     bool createColorTable();
 
-    void createBuildingImages();
+    void createBuildingAnimations();
     void createCitySizeImages();
-    void createFigureImages();
+    void createFigureAnimations();
     void createLairImages();
     void createLbxAnimations(const std::string& lbxTitle, QVector<QMoMAnimation>& vecAnimations);
     void createLbxImages(const std::string& lbxTitle, QVector<QMoMImagePtr>& vecImages);
@@ -143,8 +168,10 @@ private:
 
     QMoMGamePtr m_game;
 
+    QMoMLbxPtr m_helpLbx;
+
     QMoMPalette m_colorTable;
-    QVector<QMoMImagePtr> m_buildingImages;
+    QVector<QMoMAnimation> m_buildingAnimations;
     QVector<QMoMImagePtr> m_citySizeImages;
     QVector<QMoMAnimation> m_citywallAnimations;
     QVector<QMoMImagePtr> m_cmbtcityImages;

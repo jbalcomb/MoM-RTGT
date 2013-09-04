@@ -136,25 +136,72 @@ typedef struct PACKED_STRUCT // BorlandStub
                                     //      EA <offset> <base-addr> ; jmp <base-addr>:<offset>
 } BorlandStub;
 
-typedef struct PACKED_STRUCT {   // LBXHEADER
+typedef struct PACKED_STRUCT // LBXHEADER
+{
     uint16_t    n;                  // 00
     uint32_t    magic_number;       // 02: AD FE 00 00
     uint16_t    reserved;           // 06
                                     // SIZE 08
 } LBXHEADER;
 
-struct LBXRecordID
+typedef struct PACKED_STRUCT // FLIC_HEADER
 {
-    explicit LBXRecordID(const char aLbxTitle[9], int aLbxIndex, int aLbxSubindex = 0) :
-        lbxIndex(aLbxIndex), lbxSubindex(aLbxSubindex)
-    {
-        memset(lbxTitle, '\0', 9);
-        strncpy(lbxTitle, aLbxTitle, 8);
-    }
-    char        lbxTitle[9];
-    int         lbxIndex;
-    int         lbxSubindex;
-};
+  uint32_t      size;               // Size of FLIC including this header
+  uint16_t      type;               // File type 0xAF11, 0xAF12, 0xAF30, 0xAF44, ...
+  uint16_t      frames;             // Number of frames in first segment
+  uint16_t      width;              // FLIC width in pixels
+  uint16_t      height;             // FLIC height in pixels
+  uint16_t      depth;              // Bits per pixel (usually 8)
+  uint16_t      flags;              // Set to zero or to three
+  uint32_t      speed;              // Delay between frames
+  uint16_t      reserved1;          // Set to zero
+  uint32_t      created;            // Date of FLIC creation (FLC only)
+  uint32_t      creator;            // Serial number or compiler id (FLC only)
+  uint32_t      updated;            // Date of FLIC update (FLC only)
+  uint32_t      updater;            // Serial number (FLC only), see creator
+  uint16_t      aspect_dx;          // Width of square rectangle (FLC only)
+  uint16_t      aspect_dy;          // Height of square rectangle (FLC only)
+  uint16_t      ext_flags;          // EGI: flags for specific EGI extensions
+  uint16_t      keyframes;          // EGI: key-image frequency
+  uint16_t      totalframes;        // EGI: total number of frames (segments)
+  uint32_t      req_memory;         // EGI: maximum chunk size (uncompressed)
+  uint16_t      max_regions;        // EGI: max. number of regions in a CHK_REGION chunk
+  uint16_t      transp_num;         // EGI: number of transparent levels
+  uint8_t       reserved2[24];      // Set to zero
+  uint32_t      oframe1;            // Offset to frame 1 (FLC only)
+  uint32_t      oframe2;            // Offset to frame 2 (FLC only)
+  uint8_t       reserved3[40];      // Set to zero
+} FLIC_HEADER;
+
+typedef struct PACKED_STRUCT // FLIC_FRAME_TYPE
+{
+  uint32_t      size;               // Size of the chunk, including subchunks
+  uint16_t      type;               // Chunk type: 0xF1FA
+  uint16_t      chunks;             // Number of subchunks
+  uint16_t      delay;              // Delay in milliseconds
+  int16_t       reserved;           // Always zero
+  uint16_t      width;              // Frame width override (if non-zero)
+  uint16_t      height;             // Frame height override (if non-zero)
+} FLIC_FRAME_TYPE;
+
+typedef struct PACKED_STRUCT // FLIC_COLOR_64
+{
+    uint32_t    size;               // Size of the chunk, including subchunks
+    uint16_t    type;               // Chunk type: 11
+    uint16_t    chunks;             // Number of subchunks
+    uint16_t    skip;               // Number of entries to skip
+} FLIC_COLOR_64;
+
+typedef struct PACKED_STRUCT // FLIC_FLI_COPY
+{
+    uint32_t    size;               // Size of the chunk, including subchunks
+    uint16_t    type;               // Chunk type: 16
+} FLIC_FLI_COPY;
+
+const uint16_t gFLIC_file_type_FLI = 0xAF11;        // For FLI files
+const uint16_t gFLIC_chunk_type_FRAME = 0xF1FA;     // frame type
+const uint16_t gFLIC_chunk_type_COLOR_64 = 11;      // 64-level colour palette
+const uint16_t gFLIC_chunk_type_FLI_COPY = 16;      // uncompressed image
 
 }
 

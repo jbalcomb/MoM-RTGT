@@ -165,7 +165,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
     m_InitialSpells(0)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 
     srand(time(NULL));
 
@@ -206,7 +206,7 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 
 DialogSelectInitialSpells::~DialogSelectInitialSpells()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete m_InitialSpells;
 
@@ -365,7 +365,7 @@ void DialogSelectInitialSpells::update()
     }
 }
 
-void DialogSelectInitialSpells::on_listWidget_Common_itemClicked(QListWidgetItem* item)
+void DialogSelectInitialSpells::on_listWidget_Common_itemClicked(QListWidgetItem*)
 {
 //    Qt::CheckState checkState;
 //    switch (item->checkState())
@@ -378,7 +378,7 @@ void DialogSelectInitialSpells::on_listWidget_Common_itemClicked(QListWidgetItem
 //    item->setCheckState(checkState);
 }
 
-void DialogSelectInitialSpells::on_listWidget_Uncommon_itemClicked(QListWidgetItem* item)
+void DialogSelectInitialSpells::on_listWidget_Uncommon_itemClicked(QListWidgetItem*)
 {
 //    Qt::CheckState checkState;
 //    switch (item->checkState())
@@ -391,7 +391,7 @@ void DialogSelectInitialSpells::on_listWidget_Uncommon_itemClicked(QListWidgetIt
 //    item->setCheckState(checkState);
 }
 
-void DialogSelectInitialSpells::on_listWidget_Rare_itemClicked(QListWidgetItem* item)
+void DialogSelectInitialSpells::on_listWidget_Rare_itemClicked(QListWidgetItem*)
 {
 //    Qt::CheckState checkState;
 //    switch (item->checkState())
@@ -404,7 +404,7 @@ void DialogSelectInitialSpells::on_listWidget_Rare_itemClicked(QListWidgetItem* 
 //    item->setCheckState(checkState);
 }
 
-void DialogSelectInitialSpells::on_listWidget_VeryRare_itemClicked(QListWidgetItem* item)
+void DialogSelectInitialSpells::on_listWidget_VeryRare_itemClicked(QListWidgetItem*)
 {
 //    Qt::CheckState checkState;
 //    switch (item->checkState())

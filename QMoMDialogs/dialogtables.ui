@@ -74,6 +74,9 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="maxVisibleItems">
+      <number>20</number>
+     </property>
      <item>
       <property name="text">
        <string>(None)</string>
@@ -85,7 +88,7 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/abilities/Create Outpost.gif</normaloff>:/abilities/Create Outpost.gif</iconset>
+        <normaloff>:/abilities/Construction.gif</normaloff>:/abilities/Construction.gif</iconset>
       </property>
      </item>
      <item>
@@ -94,7 +97,16 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/abilities/Construction.gif</normaloff>:/abilities/Construction.gif</iconset>
+        <normaloff>:/abilities/Create Outpost.gif</normaloff>:/abilities/Create Outpost.gif</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hero Data</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/heroes/serena.gif</normaloff>:/heroes/serena.gif</iconset>
       </property>
      </item>
      <item>
@@ -126,15 +138,6 @@
      </item>
      <item>
       <property name="text">
-       <string>Lairs in game</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/spells/Mind Storm.gif</normaloff>:/spells/Mind Storm.gif</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Race Data</string>
       </property>
       <property name="icon">
@@ -157,7 +160,7 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/images/Level 4.gif</normaloff>:/images/Level 4.gif</iconset>
+        <normaloff>:/abilities/Summon Demons 1.gif</normaloff>:/abilities/Summon Demons 1.gif</iconset>
       </property>
      </item>
      <item>
@@ -166,7 +169,7 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/abilities/Summon Demons 1.gif</normaloff>:/abilities/Summon Demons 1.gif</iconset>
+        <normaloff>:/images/Level 4.gif</normaloff>:/images/Level 4.gif</iconset>
       </property>
      </item>
      <item>

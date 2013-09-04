@@ -22,7 +22,7 @@ public:
 
     virtual void close() throw();
 
-    bool load(const std::string& filename);
+    virtual bool load(const std::string& filename);
 
     virtual uint8_t* getMagicExeContents()
     {

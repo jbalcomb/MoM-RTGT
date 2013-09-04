@@ -5,6 +5,7 @@
 // Created:     2011-09-30
 // ---------------------------------------------------------------------------
 
+#include <QDebug>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
@@ -37,7 +38,9 @@ QMoMUnitTile::QMoMUnitTile(bool isBattlefield) :
 	QObject(),
     QGraphicsItem(),
     m_momUnit(),
-    m_isBattlefield(isBattlefield)
+    m_isBattlefield(isBattlefield),
+    m_frameNr(0),
+    m_idTimer(-1)
 {
 }
 
@@ -67,8 +70,11 @@ void QMoMUnitTile::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
+    qDebug() << "QMoMUnitTile::paint *" << m_momUnit.data();
     if (0 != m_momUnit)
     {
+        qDebug() << "QMoMUnitTile::paint" << m_momUnit->getDisplayName().c_str();
+
         // Calculate heading
         int heading = calcHeading();
 
@@ -84,7 +90,13 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         {
             banner = wizard->m_BannerColor;
         }
-        const QMoMImagePtr imageUnit = QMoMResources::instance().getImage(m_momUnit->getUnitTypeNr(), heading, banner);
+        const QMoMAnimation animationUnit = QMoMResources::instance().getAnimation(m_momUnit->getUnitTypeNr(), heading, banner);
+        QMoMImagePtr imageUnit;
+        if (!animationUnit.empty() && inRange(m_frameNr, 0, animationUnit.count() - 1))
+        {
+            imageUnit = animationUnit[m_frameNr % animationUnit.count()];
+            qDebug() << "QMoMUnitTile::paint imageUnit" << imageUnit->rect();
+        }
         QMoMImagePtr imageBack;
         if (!m_isBattlefield && (0 != wizard))
         {
@@ -100,6 +112,7 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         {
             if (m_isBattlefield)
             {
+                qDebug() << "drawBattleUnit" << imageUnit->rect();
                 drawBattleUnit(painter, imageUnit);
             }
             else
@@ -114,6 +127,27 @@ void QMoMUnitTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
 //            double scale = 2 * rectfTile.height() / pixmapUnit.height();
 //            pixmapUnit = MoM::QMoMResources::instance().getPixmap(unit->m_Unit_Type, scale);
 //        }
+    }
+}
+
+void QMoMUnitTile::setUnit(const QMoMUnitPtr& momUnit)
+{
+    m_momUnit = momUnit;
+
+    if (m_idTimer != -1)
+    {
+        killTimer(m_idTimer);
+        m_idTimer = -1;
+    }
+    m_frameNr = 0;
+
+    if (this->m_isBattlefield)
+    {
+        m_frameNr = 1;
+        if (momUnit->isFlying())
+        {
+            m_idTimer = startTimer(200);
+        }
     }
 }
 
@@ -154,6 +188,7 @@ void QMoMUnitTile::drawBattleUnit(QPainter *painter, const QMoMImagePtr &imageUn
     assert(0 != imageUnit);
     assert(m_isBattlefield);
 
+    qDebug() << "drawBattleUnit figures" << m_momUnit->getMaxFigures();
     int maxFigures = MoM::Range(0, m_momUnit->getMaxFigures(), (int)MoM::gMAX_FIGURES_IN_UNIT);
     for (int figureNr = 0; figureNr < maxFigures; ++figureNr)
     {
@@ -184,6 +219,12 @@ void QMoMUnitTile::drawOverlandUnit(QPainter *painter, const QMoMImagePtr &image
     }
 
     painter->drawImage(dst, *imageUnit);
+}
+
+void QMoMUnitTile::timerEvent(QTimerEvent *)
+{
+    m_frameNr = (m_frameNr + 1) % 3;
+    update();
 }
 
 }

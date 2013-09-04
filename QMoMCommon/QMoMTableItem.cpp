@@ -12,7 +12,7 @@ QMoMTableItemBase::QMoMTableItemBase(const QMoMGamePtr& game, const QString& tex
     setTextAlignment(Qt::AlignCenter);
 }
 
-QList<QAction*> QMoMTableItemBase::requestActions(QObject* parent)
+QList<QAction*> QMoMTableItemBase::requestActions(QObject*)
 {
     return QList<QAction*>();
 }

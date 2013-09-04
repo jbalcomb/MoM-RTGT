@@ -41,7 +41,7 @@ struct MoMGamePointers
 
     Spell_Data*     m_addr_Spell_Data ; // 912C
     Item*           m_addr_Items  ; // 9136
-    UnknownBuf*        addr_item_in_game_GUESS   ; // 913A
+    UnknownBuf*        m_addr_Artifacts_in_Game   ; // 913A
     Battle_Unit*        m_addr_Battle_Unit_View  ; // 9226
     Battle_Unit*    m_addr_Battle_Unit  ; // 922A
     Spells_Cast_in_Battle*  m_addr_Spells_Cast_in_Battle   ; // 922E
@@ -72,7 +72,7 @@ struct MoMGamePointers
     Fortress*               m_addr_fortress_data    ; // 9CC8
     Node_Attr*              m_addr_Nodes_Attr    ; // 9CCC
     MapRow_LandMassID*      m_addr_Terrain_LandMassID  ; // 9CD0
-    Map_Tiles*              m_addr_Terrain_Types ; // 9CDC
+    MapRow_Terrain*         m_addr_Terrain_Types ; // 9CDC
     int8_t*                 m_addr_Unrest_Table[gMAX_RACES]  ; // 9CE0
     UnknownBuf*        dword_407CA ; // 9D2A
     UnknownBuf*        dword_407CE ; // 9D2E
@@ -236,7 +236,7 @@ bool MoMGameMemory::readData()
 
         SET_RELOC_POINTER(Spell_Data, m_addr_Spell_Data);
         SET_RELOC_POINTER(Item, m_addr_Items);
-        SET_RELOC_POINTER(UnknownBuf, addr_item_in_game_GUESS);
+        SET_RELOC_POINTER(UnknownBuf, m_addr_Artifacts_in_Game);
         SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit_View);
         SET_RELOC_POINTER(Battle_Unit, m_addr_Battle_Unit);
 
@@ -271,7 +271,7 @@ bool MoMGameMemory::readData()
         SET_RELOC_POINTER(Fortress, m_addr_fortress_data);
         SET_RELOC_POINTER(Node_Attr, m_addr_Nodes_Attr);
         SET_RELOC_POINTER(MapRow_LandMassID, m_addr_Terrain_LandMassID);
-        SET_RELOC_POINTER(Map_Tiles, m_addr_Terrain_Types);
+        SET_RELOC_POINTER(MapRow_Terrain, m_addr_Terrain_Types);
         for (size_t i = 0; i < ARRAYSIZE(gMoMGamePointers.m_addr_Unrest_Table); ++i)
         {
             SET_RELOC_POINTER(int8_t, m_addr_Unrest_Table[i]);
@@ -334,6 +334,14 @@ bool MoMGameMemory::save(const char* filename)
         ok = true;
     }
     return ok;
+}
+
+uint8_t *MoMGameMemory::getArtifacts_in_game()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Artifacts_in_Game, gMAX_ARTIFACTS_IN_GAME);
 }
 
 Available_spell_page* MoMGameMemory::getAvailable_spell_pages()
@@ -402,6 +410,14 @@ Building_Data* MoMGameMemory::getBuildingData()
     return derefHeapPointer<Building_Data>(pMoMDataSegment->m_addr_Building_Data, eBuilding_array_MAX);
 }
 
+Hero_Choice *MoMGameMemory::getChosen_Hero_Names()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return derefHeapPointer<Hero_Choice>(pMoMDataSegment->m_addr_Chosen_Hero_Names, gMAX_HERO_TYPES);
+}
+
 Events_Status* MoMGameMemory::getEvents_Status()
 {
     if (0 == m_process.get())
@@ -465,7 +481,7 @@ Item* MoMGameMemory::getItems()
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Item>(pMoMDataSegment->m_addr_Items, MoM::gMAX_ITEMS);
+    return derefHeapPointer<Item>(pMoMDataSegment->m_addr_Items, MoM::gMAX_ITEMS_VALID);
 }
 
 eSpell16* MoMGameMemory::getHero_spells()
@@ -609,12 +625,12 @@ uint8_t* MoMGameMemory::getTerrain_Explored()
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
-uint8_t* MoMGameMemory::getTerrain_LandMassID()
+int8_t* MoMGameMemory::getTerrain_LandMassID()
 {
     if (0 == m_process.get())
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<uint8_t>(pMoMDataSegment->m_addr_Terrain_LandMassID,
+    return derefHeapPointer<int8_t>(pMoMDataSegment->m_addr_Terrain_LandMassID,
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 

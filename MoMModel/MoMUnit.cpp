@@ -508,40 +508,15 @@ eSlot_Type16 MoMUnit::getSlotType(int itemSlotNr) const
     {
         value = m_hiredHero->m_Slot_Types[itemSlotNr];
     }
-    else if ((0 != m_unitType) && isHero())
+    else if ((0 != m_unitType) && isHero() && (0 != m_game))
     {
-        // TODO: Centralize hero->itemslot code, including the same code in MoMController
-
+        // Retrieve the slot types
         eSlot_Type16 heroSlotTypes[3];
-       // Retrieve the slot types
-       if (toUInt(m_unitType->m_Building2_or_HeroType) <= toUInt(HEROTYPE_Wizard))
-       {
-           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + m_unitType->m_Building2_or_HeroType);
-           if (HEROTYPE_Wizard == m_unitType->m_Building2_or_HeroType)
-           {
-               heroSlotTypes[1] = SLOT16_Amulet;
-           }
-           else
-           {
-               heroSlotTypes[1] = SLOT16_Armor_Shield;
-           }
-           heroSlotTypes[2] = SLOT16_Amulet;
-       }
-       else
-       {
-           unsigned slotCode = static_cast<unsigned>(m_unitType->m_Building2_or_HeroType);
-           slotCode -= 6;
-           heroSlotTypes[0] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-           slotCode /= 6;
-           heroSlotTypes[1] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-           slotCode /= 6;
-           heroSlotTypes[2] = static_cast<eSlot_Type16>(1 + slotCode % 6);
-       }
-
-       if (toUInt(itemSlotNr) < 3)
-       {
-           value = heroSlotTypes[itemSlotNr];
-       }
+        m_game->getHeroSlotTypes(m_unitType->m_Building2_or_HeroType, heroSlotTypes);
+        if (toUInt(itemSlotNr) < 3)
+        {
+            value = heroSlotTypes[itemSlotNr];
+        }
     }
     return value;
 }
@@ -983,7 +958,7 @@ bool MoMUnit::hasMagicalGazeAttack() const
 bool MoMUnit::hasMagicalRangedAttack() const
 {
     eRanged_Type rangedType = getRangedType();
-    bool value = ((rangedType >= MoM::RANGED_Chaos_Magic1_Storm_Giant)
+    bool value = ((rangedType >= MoM::RANGED_Chaos_Lightning)
                   && (rangedType < MoM::RANGED_Thrown_Weapons));
     return value;
 }
@@ -1120,7 +1095,7 @@ bool MoMUnit::hasUnitEnchantment(eUnitEnchantment unitEnchantment) const
     if (m_battleUnit != 0)
     {
         value |= (1 & (m_battleUnit->m_Flags1_UnitEnchantment.bits >> unitEnchantment));
-        value |= (1 & (m_battleUnit->m_Flags2_UnitEnchantment.bits >> unitEnchantment));
+        value |= (1 & (m_battleUnit->m_Item_UnitEnchantment.bits >> unitEnchantment));
     }
     return value;
 }
@@ -1428,7 +1403,7 @@ void MoMUnit::applyBattleSpells(const Spells_Cast_in_Battle *battleSpells)
         if (isNormal() && !hasUnitEnchantment(UNITENCHANTMENT_Flame_Blade))
         {
             if (baseunit.melee) up.melee += +1;
-            if (baseunit.ranged && (getRangedType() == MoM::RANGED_Arrow) || (getRangedType() == MoM::RANGED_Bullet)) up.ranged += +1;
+            if (baseunit.ranged && ((getRangedType() == MoM::RANGED_Arrow) || (getRangedType() == MoM::RANGED_Bullet))) up.ranged += +1;
 //            if (melee) add_special("Magic Weapon");      // Can hit creatures with Weapon Immunity
         }
     }

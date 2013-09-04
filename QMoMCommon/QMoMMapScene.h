@@ -22,6 +22,10 @@ public:
     void convertLocationToScenePos(const MoM::MoMLocation& location, QPointF& scenePos) const;
     void convertScenePosToLocation(const QPointF& scenePos, MoM::MoMLocation& location) const;
     int convertScenePosToZValue(const QPointF& scenePos) const;
+    void setPlane(MoM::ePlane plane)
+    {
+        m_plane = plane;
+    }
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

@@ -14,12 +14,12 @@
 #include <QVector>
 
 #include "MoMCommon.h"
+#include "QMoMAnimation.h"
 #include "QMoMSharedPointers.h"
 
 namespace MoM
 {
 
-typedef QVector<QMoMImagePtr> QMoMAnimation;
 typedef QVector<QRgb> QMoMPalette;
 
 const uint8_t gTRANSPARENT_COLOR = 0;

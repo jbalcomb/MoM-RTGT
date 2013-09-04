@@ -18,6 +18,7 @@
 #include <MoMProcess.h>
 #include <MoMGameSave.h>
 #include <MoMUtility.h>
+#include <QMoMAnimation.h>
 #include <QMoMLbx.h>
 #include <QMoMResources.h>
 #include <QMoMSettings.h>
@@ -40,12 +41,12 @@ DialogTools::DialogTools(QWidget *parent) :
     ui->setupUi(this);
     setFont(MoM::QMoMResources::g_Font);
 
-    QMoMSettings::readSettings(this);
+    QMoMSettings::readSettingsWindow(this);
 }
 
 DialogTools::~DialogTools()
 {
-    QMoMSettings::writeSettings(this);
+    QMoMSettings::writeSettingsWindow(this);
 
     delete ui;
 }
@@ -217,7 +218,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Replace UNITS2/0 by Lucern/FIGURES4_077_001
-    const MoM::QMoMAnimation images(1, image);
+    const QMoMAnimation images(1, image);
     std::vector<uint8_t> dataBuffer;
     if (ok)
     {
@@ -232,7 +233,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     // Replace FIGURES9/0-8 by Lucern/FIGURES4_072-079 (4 images each)
     for (int direction = 0; direction < 8; ++direction)
     {
-        MoM::QMoMAnimation images(4);
+        QMoMAnimation images(4);
         for (int movement = 0; movement < 4; ++movement)
         {
             QImage image;

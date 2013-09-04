@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>969</width>
-    <height>639</height>
+    <height>684</height>
    </rect>
   </property>
   <property name="palette">
@@ -85,7 +85,7 @@
    <string>Real-Time Game Tweaker for MASTER of MAGIC</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+   <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
     <normaloff>:/heroes/serena.gif</normaloff>:/heroes/serena.gif</iconset>
   </property>
   <property name="styleSheet">
@@ -121,8 +121,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>196</width>
-         <height>596</height>
+         <width>147</width>
+         <height>646</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -144,7 +144,7 @@
            <string>Connect</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/allora.gif</normaloff>:/heroes/allora.gif</iconset>
           </property>
           <property name="iconSize">
@@ -173,7 +173,7 @@
            <string>Reread</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/shalla.gif</normaloff>:/heroes/shalla.gif</iconset>
           </property>
           <property name="iconSize">
@@ -202,7 +202,7 @@
            <string>Load</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/valana.gif</normaloff>:/heroes/valana.gif</iconset>
           </property>
           <property name="iconSize">
@@ -231,7 +231,7 @@
            <string>Save</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/greyfar.gif</normaloff>:/heroes/greyfar.gif</iconset>
           </property>
           <property name="iconSize">
@@ -267,7 +267,7 @@
            <string>Show Tables</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/zaldron.gif</normaloff>:/heroes/zaldron.gif</iconset>
           </property>
           <property name="iconSize">
@@ -296,7 +296,7 @@
            <string>Map</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/rakir.gif</normaloff>:/heroes/rakir.gif</iconset>
           </property>
           <property name="iconSize">
@@ -325,7 +325,7 @@
            <string>Summon</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/shuri.gif</normaloff>:/heroes/shuri.gif</iconset>
           </property>
           <property name="iconSize">
@@ -360,7 +360,7 @@
            <string>Address calculator</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/shin_bo.gif</normaloff>:/heroes/shin_bo.gif</iconset>
           </property>
           <property name="iconSize">
@@ -402,7 +402,7 @@
            <string>Catnip mod (exp)</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/catwalk.jpg</normaloff>:/heroes/catwalk.jpg</iconset>
           </property>
           <property name="iconSize">
@@ -438,7 +438,7 @@
            <string>Tools...</string>
           </property>
           <property name="icon">
-           <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+           <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
             <normaloff>:/heroes/mystic_x.gif</normaloff>:/heroes/mystic_x.gif</iconset>
           </property>
           <property name="iconSize">
@@ -512,6 +512,26 @@
           </property>
           <property name="checked">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../Resources/InteractiveGameTweaker.qrc">:/abilities/Agility X.gif</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../Resources/InteractiveGameTweaker.qrc">:/abilities/Agility X.gif</pixmap>
           </property>
          </widget>
         </item>
@@ -621,7 +641,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../Resources/InteractiveGameTweaker.qrc"/>
+  <include location="../../Resources/InteractiveGameTweaker.qrc"/>
  </resources>
  <connections/>
  <slots>

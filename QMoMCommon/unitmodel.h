@@ -13,10 +13,10 @@
 #include <QAbstractItemModel>
 #include <QSharedPointer>
 
-#include <MoMGameBase.h>
-#include <MoMUnit.h>
-#include <QMoMSharedPointers.h>
-#include <QMoMTreeItem.h>
+#include "MoMGameBase.h"
+#include "MoMUnit.h"
+#include "QMoMSharedPointers.h"
+#include "QMoMTreeItemModel.h"
 
 class UnitModel : public QAbstractItemModel
 {
@@ -58,20 +58,20 @@ private:
 	void startUpdate();
     void waitForUpdate();
 	void threadUpdateModelData();
-    void traverseTree(QMoMTreeItemBase* node, int& nrToResolve);
+    void traverseTree(QMoMTreeItemModelBase* node, int& nrToResolve);
 
 //    void setupModelData(const QMoMGamePtr& game);
 
     template<class T>
-    void checkUnitChanged(QMoMTreeItemBase* itemBase);
+    void checkUnitChanged(QMoMTreeItemModelBase* itemBase);
 
-    void removeUnusedRows(int toprow, QMoMTreeItemBase* ptree, int firstUnusedRow);
+    void removeUnusedRows(int toprow, QMoMTreeItemModelBase* ptree, int firstUnusedRow);
 
-    void update_Buildings(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
-    void update_Items_in_Game(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
-    void update_Lairs(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
-    void update_Spell_Data(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
-    void update_Unit_Types(QMoMTreeItemBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Buildings(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Items_in_Game(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Lairs(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Spell_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row);
+    void update_Unit_Types(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int& row);
 
 
     static const int m_columnCount = 3;

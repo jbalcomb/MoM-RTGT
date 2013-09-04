@@ -12,11 +12,11 @@
 namespace MoM
 {
 
-namespace
-{
-const size_t gOFFSET_STUB_SEGMENT_ENTRIES = (0x2A0 + 0x2369) * gPARAGRAPH_SIZE + 0x0330;    // seg040:0330
-const size_t gNR_STUB_SEGMENTS = 115;
-const size_t gFIRST_STUB_NR = 50;
+static const size_t gOFFSET_REGULAR_SEGMENT_ENTRIES = (0x2A0 + 0x2369) * gPARAGRAPH_SIZE + 0x01A0; // seg040:01A0
+static const size_t gNR_REGULAR_SEGMENTS = 40;
+static const size_t gOFFSET_STUB_SEGMENT_ENTRIES = (0x2A0 + 0x2369) * gPARAGRAPH_SIZE + 0x0330;    // seg040:0330
+static const size_t gNR_STUB_SEGMENTS = 115;
+static const size_t gFIRST_STUB_NR = 50;
 
 static SpellSaveEntry gSpellSaveTableV131[] =
 {
@@ -66,8 +66,6 @@ static SpellSaveEntry gSpellSaveTableV140j[] =
     { 0x1D25, 0x1D29 },
 };
 
-}
-
 MoMExeWizards::MoMExeWizards() :
     MoMExeBase()
 {
@@ -98,7 +96,7 @@ SpellSaveEntry MoMExeWizards::getSpellSave(size_t nr)
 
 bool MoMExeWizards::load(const std::string& filename)
 {
-    setOverlayParameters(gOFFSET_STUB_SEGMENT_ENTRIES, gNR_STUB_SEGMENTS, gFIRST_STUB_NR);
+    setOverlayParameters(gOFFSET_REGULAR_SEGMENT_ENTRIES, gNR_REGULAR_SEGMENTS, gOFFSET_STUB_SEGMENT_ENTRIES, gNR_STUB_SEGMENTS, gFIRST_STUB_NR);
 
     bool ok = MoMExeBase::load(filename);
 

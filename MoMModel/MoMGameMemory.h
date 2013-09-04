@@ -89,11 +89,13 @@ private:
         return ptr;
     }
 
+    virtual uint8_t* getArtifacts_in_game();
     virtual Available_spell_page* getAvailable_spell_pages();
     virtual Battlefield* getBattlefield();
     virtual Battle_Unit* getBattleUnitViewed();
     virtual Battle_Unit* getBattle_Units();
     virtual Building_Data* getBuildingData();
+    virtual Hero_Choice* getChosen_Hero_Names();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
     virtual Fortress* getFortresses();
@@ -114,7 +116,7 @@ private:
     virtual eTerrainBonusDeposit* getTerrain_Bonuses();
     virtual Terrain_Changes* getTerrain_Changes();
     virtual uint8_t* getTerrain_Explored();
-    virtual uint8_t* getTerrain_LandMassID();
+    virtual int8_t* getTerrain_LandMassID();
     // TODO: Weird. It appears that the terrain-movements are all zero in memory.
     //       Presumably they are swapped out or something.
     //       Either way, we can't do anything with it.
