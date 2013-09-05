@@ -37,6 +37,7 @@ std::string dirFromFilepath(const std::string filepath);
 // \retval haystack.size() if the needle was not found
 // \retval the index of the needle in the haystack otherwise
 size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>& haystack);
+size_t findStringInBuffer(const std::string& needle, const uint8_t* haystack, size_t haystack_size);
 
 std::string formatBufferAsHex(const std::vector<uint8_t>& buffer);
 

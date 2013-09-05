@@ -135,9 +135,26 @@ bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& 
         {
             std::cout << "Found '" << gLOCAL_DIRECTORY << "' in BaseAddress 0x" << std::hex << baseAddress
                       << " with size 0x"<< data.size() << std::dec << std::endl;
-            m_exeFilepath = localDirectory;
-            std::cout << "Result of '" << gLOCAL_DIRECTORY << "' is '" << m_exeFilepath
+            std::cout << "Result of '" << gLOCAL_DIRECTORY << "' is '" << localDirectory
                       << "' at offset 0x" << std::hex << indexLocalDirectory << std::dec << std::endl;
+
+            // Local directory is only the directory that was mounted.
+            // Search again immediately after for a second occurence of the found local directory.
+            // That will be the full path, consisting of the local directory and the long directory name path.
+
+            m_exeFilepath = localDirectory;   // Default to the local directory
+            size_t indexAfterLocalDirectory = (size_t)(localDirectory + strlen(localDirectory) - (const char*)&data[0]);
+            if (indexAfterLocalDirectory < data.size())
+            {
+                size_t relativeIndexExeFilepath = findStringInBuffer(localDirectory, &data[indexAfterLocalDirectory], data.size() - indexAfterLocalDirectory);
+                size_t indexExeFilepath = indexAfterLocalDirectory + relativeIndexExeFilepath;
+                if (indexExeFilepath < data.size())
+                {
+                    m_exeFilepath = (const char*)&data[indexExeFilepath];
+                    std::cout << "Found '" << localDirectory << "' again afterward at offset 0x" << std::hex << indexExeFilepath << std::endl;
+                    std::cout << "Resulting exe path is '" << m_exeFilepath << "'" << std::endl;
+                }
+            }
         }
     }
 
