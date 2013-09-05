@@ -1087,7 +1087,7 @@ DGifSlurp(GifFileType *GifFile)
               }
               ImageSize = sp->ImageDesc.Width * sp->ImageDesc.Height;
 
-              if (ImageSize > (SIZE_MAX / sizeof(GifPixelType))) {
+              if (ImageSize > ((size_t)-1 / sizeof(GifPixelType))) {
                   return GIF_ERROR;
               }
               sp->RasterBits = (unsigned char *)malloc(ImageSize *
