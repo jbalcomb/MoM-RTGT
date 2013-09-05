@@ -77,7 +77,12 @@ double getPerformanceTime()
 
 void MoMProcess::closeProcess() throw()
 {
-    m_hProcess = NULL;
+    if (NULL != m_hProcess)
+    {
+        pid_t* ppid = (pid_t*)m_hProcess;
+        delete ppid;
+        m_hProcess = NULL;
+    }
 }
 
 bool MoMProcess::findProcessAndData()
@@ -103,7 +108,7 @@ bool MoMProcess::findProcessAndData()
 
         std::cout << "Trying process '" << title << "' with pid=" << pid << std::endl;
 
-        ok = tryLinuxPid((void*)pid);
+        ok = tryLinuxPid(new pid_t(pid));
     }
 
     return ok;
@@ -111,7 +116,8 @@ bool MoMProcess::findProcessAndData()
 
 bool MoMProcess::tryLinuxPid(void* vPid)
 {
-    pid_t pid = (pid_t)vPid;
+    // Ownership of vPid is transfered
+    pid_t pid = *(pid_t*)vPid;
     m_hProcess = vPid;
 
     bool ok = true;
@@ -187,7 +193,7 @@ bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, s
     if (0 == size)
         return false;
 
-    pid_t pid = (pid_t)hProcess;
+    pid_t pid = *(pid_t*)hProcess;
 
     if (!attachProcess(pid))
     {
@@ -240,7 +246,7 @@ bool MoMProcess::writeData(const void* pointer, size_t size)
     if (offset + size > m_dataSegmentAndUp.size())
         return false;
 
-    pid_t pid = (pid_t)m_hProcess;
+    pid_t pid = *(pid_t*)m_hProcess;
 
     if (!attachProcess(pid))
     {

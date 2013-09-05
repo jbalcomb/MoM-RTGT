@@ -50,17 +50,16 @@ include(../MoMTweaker/MoMTweaker.pri)
 
 # Additional platform specific sources
 SOURCES += \
-    ../MoMEditorTemplate/MoMProcess$${PLATF}.cpp \
-    tst_momcombat.cpp \
-    test_utility.cpp
+    Test/tst_momcombat.cpp \
+    Test/test_utility.cpp
 
 # Test sources
 SOURCES += \
-    test_main.cpp \
-    tst_momgamebase.cpp \
-    tst_momtweaker_mainwindow.cpp
+    Test/test_main.cpp \
+    Test/tst_momgamebase.cpp \
+    Test/tst_momtweaker_mainwindow.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    test_utility.h
+    Test/test_utility.h

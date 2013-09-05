@@ -162,6 +162,7 @@ private:
 
     static bool readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, uint8_t* data);
 
+    //! vPid must be allocated with new. Ownership is transfered.
     bool tryLinuxPid(void* vPid);
     bool tryWindowTitle(const std::string& windowTitle);
 
