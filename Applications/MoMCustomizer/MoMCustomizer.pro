@@ -16,8 +16,8 @@ win32-msvc2008:COMPILER = msvc2008
 message(COMPILER: $$COMPILER)
 message(Compiler Binary: $$QMAKE_CXX)
 
-unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
-win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
+unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -Wno-sign-compare
+win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -Wno-sign-compare
 win32-msvc2008:QMAKE_CXXFLAGS +=
 message(QMAKE_CXXFLAGS: $$QMAKE_CXXFLAGS)
 

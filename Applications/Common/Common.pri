@@ -9,8 +9,8 @@ unix:COMPILER = gcc
 win32-g++:COMPILER = mingw
 win32-msvc2008:COMPILER = msvc2008
 
-unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -fno-strict-aliasing
-win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -fno-strict-aliasing
+unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -fno-strict-aliasing -Wno-sign-compare
+win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter -fno-strict-aliasing -Wno-sign-compare
 win32-msvc2008:QMAKE_CXXFLAGS +=
 
 unix:QMAKE_LIBS +=
