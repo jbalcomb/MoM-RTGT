@@ -7,41 +7,41 @@
 
 INCLUDEPATH += \
         . \
+        ../../Applications/MoMCustomizer \
         ../../Platform \
         ../../MoMControl \
         ../../MoMModel \
-        ../../MoMModel/Generated \
         ../../Utility \
         ../../QMoMCommon \
         ../../QMoMCommon/Generated \
         ../../QMoMDialogs \
-        ../../Applications/MoMCustomizer
+        ../../MoMModel/Generated
 
 HEADERS += ./mainwindow.h \
+        ../../MoMModel/Generated/MoMGenerated.h \
         ../../MoMModel/MoMExeMagic.h \
-    ../../MoMModel/MoMGameCustom.h \
-    ../../MoMModel/Generated/MoMGenerated.h \
+        ../../MoMModel/MoMGameCustom.h \
         ../../MoMModel/MoMLbxBase.h \
-    ../../MoMModel/MoMTemplate.h \
+        ../../MoMModel/MoMTemplate.h \
         ../../Platform/MoMCommon.h \
         ../../Platform/MoMExeBase.h \
         ../../Platform/MoMProcess.h \
-    ../../QMoMCommon/QMoMLbx.h \
-    ../../QMoMCommon/QMoMTreeItemModel.h \
-    ../../Utility/MoMUtility.h \
-    ../../Utility/TeeRedirecter.h
+        ../../QMoMCommon/QMoMLbx.h \
+        ../../QMoMCommon/QMoMTreeItemModel.h \
+        ../../Utility/MoMUtility.h \
+        ../../Utility/TeeRedirecter.h
 SOURCES += \
-    ./mainwindow.cpp \
+        ./mainwindow.cpp \
+        ../../MoMModel/Generated/MoMGenerated.cpp \
         ../../MoMModel/MoMExeMagic.cpp \
-    ../../MoMModel/MoMGameBase.cpp \
-    ../../MoMModel/MoMGameCustom.cpp \
+        ../../MoMModel/MoMGameBase.cpp \
+        ../../MoMModel/MoMGameCustom.cpp \
         ../../MoMModel/MoMLbxBase.cpp \
-    ../../MoMModel/Generated/MoMGenerated.cpp \
         ../../Platform/MoMExeBase.cpp \
         ../../Platform/MoMProcessCommon.cpp \
         ../../Platform/MoMProcess$${PLATF}.cpp \
-    ../../QMoMCommon/QMoMLbx.cpp \
-    ../../QMoMCommon/QMoMTreeItemModel.cpp \
-    ../../Utility/MoMUtility.cpp
+        ../../QMoMCommon/QMoMLbx.cpp \
+        ../../QMoMCommon/QMoMTreeItemModel.cpp \
+        ../../Utility/MoMUtility.cpp
 FORMS += ./mainwindow.ui
 RESOURCES += ../../Resources/InteractiveGameTweaker.qrc

@@ -71,6 +71,11 @@ size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>&
     return findKnuthMorrisPratt((const uint8_t*)&needle[0], needle.size(), &haystack[0], haystack.size());
 }
 
+size_t findStringInBuffer(const std::string& needle, const uint8_t* haystack, size_t haystack_size)
+{
+    return findKnuthMorrisPratt((const uint8_t*)&needle[0], needle.size(), haystack, haystack_size);
+}
+
 std::string formatBufferAsHex(const std::vector<uint8_t>& buffer)
 {
     std::ostringstream oss;
