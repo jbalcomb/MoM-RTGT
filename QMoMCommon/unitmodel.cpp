@@ -1573,12 +1573,6 @@ void UnitModel::threadUpdateModelData()
                 ptree->appendTree(psubtree, "");
             }
 
-            MoM::MoMDataSegment* dataSegment = 0;
-            if (0 != game)
-            {
-                dataSegment = game->getDataSegment();
-            }
-
             ptree->child(row, 0)->setData(QString("Spell Data"), Qt::EditRole);
             ptree->child(row, 1)->setData(QString(), Qt::EditRole);
             ptree->child(row, 2)->setData(QString("Memory only"), Qt::EditRole);

@@ -16,6 +16,7 @@
 #include <MoMTemplate.h>
 #include <QMoMResources.h>
 #include <QMoMSharedPointers.h>
+#include <QMoMUtility.h>
 
 class QAbstractButton;
 class QGraphicsItem;

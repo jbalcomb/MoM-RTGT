@@ -1326,9 +1326,9 @@ void MoMCombat::countHitpointsUnits(const StackUnits& units, double& totalHitpoi
     }
 }
 
-size_t MoMCombat::countLivingUnits(const StackUnits& units)
+int MoMCombat::countLivingUnits(const StackUnits& units)
 {
-    size_t count = 0;
+    int count = 0;
     for (size_t i = 0; i < units.size(); ++i)
     {
         if (units[i].getCurTotalHp() > 0)

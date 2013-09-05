@@ -336,7 +336,7 @@ MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
 {
     BaseAttributes base = getBaseAttributes();
     BaseAttributes bonus = m_bonuses;
-    BaseAttributes penalty = m_penalties;
+//    BaseAttributes penalty = m_penalties;
     BaseAttributes actual = base;
     bonus.addBonus(m_upAbilities);
     bonus.addBonus(m_upLevel);

@@ -336,7 +336,7 @@ bool MoMGameSave::load(const char* filename)
     // Use last succesfully loaded file to identify the game directory
     m_GameDirectory = dirFromFilepath(filename);
 
-    return true;
+    return ok;
 }
 
 bool MoMGameSave::loadLbx(const std::string &filename, MoMLbxBase *lbxBase)

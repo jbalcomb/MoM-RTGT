@@ -86,7 +86,6 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
         return;
 
     QPointF tmpPos = pos;
-    QGraphicsItem* item = 0;
 
     QPixmap pixmapSlot = MoM::QMoMResources::instance().getPixmap(slotType, 2.0);
     if (!pixmapSlot.isNull())
@@ -108,7 +107,7 @@ void DialogAddUnit::displayItem(QPointF &pos, MoM::eSlot_Type16 slotType, const 
 		}
 
 		QString text = QString("%0").arg(momItem->m_Item_Name);
-		item = addText(tmpPos, text);
+        (void)addText(tmpPos, text);
 	}
 
     pos.ry() += MoM::Max(pixmapItem.height() + 2, 34);
@@ -141,15 +140,15 @@ void DialogAddUnit::displaySectionBasicAttributes(QPointF &pos)
     posLabel.rx() = 0;
     QGraphicsSimpleTextItem* textItem = 0;
 
-    textItem = addText(posLabel, "Melee", MoM::QMoMResources::instance().getHelpText(MoM::HELP_MELEE).c_str());
+    (void)addText(posLabel, "Melee", MoM::QMoMResources::instance().getHelpText(MoM::HELP_MELEE).c_str());
     posLabel.ry() += m_lineHeight;
-    textItem = addText(posLabel, "Range", MoM::QMoMResources::instance().getHelpText(MoM::HELP_RANGE_1).c_str() + QString("\nRANGED TYPE: ") + prettyQStr(m_unit->getRangedType()));
+    (void)addText(posLabel, "Range", MoM::QMoMResources::instance().getHelpText(MoM::HELP_RANGE_1).c_str() + QString("\nRANGED TYPE: ") + prettyQStr(m_unit->getRangedType()));
     posLabel.ry() += m_lineHeight;
-    textItem = addText(posLabel, "Armor", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
+    (void)addText(posLabel, "Armor", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_ARMOR).c_str());
     posLabel.ry() += m_lineHeight;
-    textItem = addText(posLabel, "Resist", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
+    (void)addText(posLabel, "Resist", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_RESISTANCE).c_str());
     posLabel.ry() += m_lineHeight;
-    textItem = addText(posLabel, "Hits", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
+    (void)addText(posLabel, "Hits", MoM::QMoMResources::instance().getHelpText(MoM::HELP_UNITVIEW_HITS).c_str());
     posLabel.ry() += m_lineHeight;
 
     QString imageBaseName;
@@ -501,7 +500,9 @@ void DialogAddUnit::displaySpecial(QPointF& pos, const QString& specialName, int
 void DialogAddUnit::displayStrength(QPointF& pos, int strength, int bonusStrength, const QString& imageBaseName, const QString& helpText)
 {
   // calculate number of normal, lost_normal, gold, and lost_gold icons
-  int normal = strength - bonusStrength, lost_normal = 0, gold = bonusStrength, lost_gold = 0;
+  int normal = strength - bonusStrength;
+  int gold = bonusStrength;
+//      int lost_normal = 0, lost_gold = 0;
 //      if (m_unit.bonuses[strength] >= m_unit.penalties[strength])
 //      {
 //         // Bonus at least as large as the penalty - only lost gold

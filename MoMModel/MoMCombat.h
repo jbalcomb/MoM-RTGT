@@ -198,7 +198,7 @@ public:
 
 private:
     static void countHitpointsUnits(const StackUnits& units, double& totalHitpoints, double& currentHitpoints);
-    static size_t countLivingUnits(const StackUnits& units);
+    static int countLivingUnits(const StackUnits& units);
     static size_t findFirstLivingUnit(const StackUnits& units);
 
 private:

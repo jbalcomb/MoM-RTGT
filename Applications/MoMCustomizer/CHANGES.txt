@@ -2,6 +2,16 @@ MoMCustomizer
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.2.8 (2013--)
+-----------------------------
+
+* Make it work on 64-bit linux platforms.
+  
+* Improve detection of the actual location of the MoM directory.
+  In particular if the mounted directory is not the MoM directory.
+
+
+
 CHANGES IN 0.2.2 (2012-03-29)
 ----------------------------
 

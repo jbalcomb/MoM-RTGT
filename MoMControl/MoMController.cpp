@@ -357,7 +357,7 @@ City *MoMController::findCityAtLocation(const MoMLocation &location)
     City* value = 0;
 
     if (0 == m_game)
-        return false;
+        return value;
     MoMGameBase& game = *m_game;
 
     for (int i = 0; i < game.getNrCities(); ++i)
@@ -379,7 +379,7 @@ Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
     Node_Attr* value = 0;
 
     if (0 == m_game)
-        return false;
+        return value;
     MoMGameBase& game = *m_game;
 
     for (size_t i = 0; i < gMAX_NODES; ++i)

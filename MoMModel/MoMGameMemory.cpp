@@ -358,7 +358,7 @@ Battlefield* MoMGameMemory::getBattlefield()
         return 0;
     MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
     if (0 == pMoMDataSegment)
-        return false;
+        return 0;
     return derefHeapPointer<Battlefield>(pMoMDataSegment->m_addr_Battlefield, 1);
 }
 
