@@ -812,7 +812,7 @@ void DialogLbxEditor::on_pushButton_ConvertAll_clicked()
     QFileInfo fileInfoLbx(m_lbx.getFilename().c_str());
 
     bool joinAnimations = false;
-    bool crop = true;
+    bool crop = false;
     double scale = 2.0;
     if (joinAnimations)
     {

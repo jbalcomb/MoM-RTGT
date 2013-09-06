@@ -58,6 +58,7 @@ private slots:
     void on_pushButton_Reread_clicked();
 
     void onTimer();
+    void on_pushButton_Wizard_clicked();
 };
 
 #endif // MAINWINDOW_H

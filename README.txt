@@ -39,11 +39,11 @@ BUILDING FROM SOURCES
 Windows
 -------
 1. Install compiler.
-   Either Microsoft's Visual Studio 2010 (commercial), 
+   Either Microsoft's Visual Studio 2008 (commercial), 
    or QtCreator with MinGW (opensource), 
    or both.
 		You can download QtCreator with MinGW from: http://qt.nokia.com/downloads/
-2. Install the so called Qt Libraries if you didn't already do so in step 1.
+2. Install the Qt Libraries if you didn't already do so in step 1.
 		Download from: http://qt.nokia.com/downloads/
 3. Install Perl for Windows.
 		Download for Windows from: http://www.activestate.com/activeperl/downloads
@@ -66,7 +66,7 @@ Linux
 1. Install QtCreator for g++ (opensource).
    This is optional.
 		You can download QtCreator for g++ from: http://qt.nokia.com/downloads/
-2. Install the so called Qt Libraries if you didn't already do so in step 1.
+2. Install the Qt Libraries if you didn't already do so in step 1.
 		Download from: http://qt.nokia.com/downloads/
 3. You should already have Perl, or else you need to install it from you distribution.
 4. Generate extra sources

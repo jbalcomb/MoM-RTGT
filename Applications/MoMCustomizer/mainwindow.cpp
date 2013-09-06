@@ -5,11 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-// OS specific
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
+// Third party
 #include <QRegExp>
 #include <qtimer.h>
 #include "mainwindow.h"
@@ -26,7 +22,7 @@
 #include <QMoMTreeItemModel.h>
 
 // Local
-
+#include "DialogWizard.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -377,17 +373,17 @@ void MainWindow::on_comboBox_InitialRoads_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::on_comboBox_NrTowers_currentIndexChanged(int index)
+void MainWindow::on_comboBox_NrTowers_currentIndexChanged(int)
 {
 
 }
 
-void MainWindow::on_comboBox_NrNodes_currentIndexChanged(int index)
+void MainWindow::on_comboBox_NrNodes_currentIndexChanged(int)
 {
 
 }
 
-void MainWindow::on_comboBox_NrNormalLairs_currentIndexChanged(int index)
+void MainWindow::on_comboBox_NrNormalLairs_currentIndexChanged(int)
 {
 
 }
@@ -422,7 +418,7 @@ void MainWindow::on_comboBox_NormalLairMonsterStrength_currentIndexChanged(int i
     }
 }
 
-void MainWindow::on_comboBox_NrWeakLairs_currentIndexChanged(int index)
+void MainWindow::on_comboBox_NrWeakLairs_currentIndexChanged(int)
 {
 
 }
@@ -668,4 +664,11 @@ void MainWindow::slot_WizardType_editingFinished()
     {
         statusBar()->showMessage(tr("Failed to commit"), 1000);
     }
+}
+
+void MainWindow::on_pushButton_Wizard_clicked()
+{
+    DialogWizard* dialog = new DialogWizard(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
 }
