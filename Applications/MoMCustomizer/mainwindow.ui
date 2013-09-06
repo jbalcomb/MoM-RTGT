@@ -85,7 +85,7 @@
    <string>MASTER of MAGIC - Customizer</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+   <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
     <normaloff>:/heroes/serena.gif</normaloff>:/heroes/serena.gif</iconset>
   </property>
   <property name="windowOpacity">
@@ -116,7 +116,7 @@
          <string>Connect</string>
         </property>
         <property name="icon">
-         <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+         <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
           <normaloff>:/heroes/allora.gif</normaloff>:/heroes/allora.gif</iconset>
         </property>
         <property name="iconSize">
@@ -145,7 +145,7 @@
          <string>Reread</string>
         </property>
         <property name="icon">
-         <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+         <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
           <normaloff>:/heroes/shalla.gif</normaloff>:/heroes/shalla.gif</iconset>
         </property>
         <property name="iconSize">
@@ -178,7 +178,7 @@
       </property>
       <widget class="QWidget" name="tab_Landmass">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/rakir.gif</normaloff>:/heroes/rakir.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -290,7 +290,7 @@
       </widget>
       <widget class="QWidget" name="tab_Races">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/wizards/Sharee.gif</normaloff>:/wizards/Sharee.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -337,7 +337,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Barbarian.gif</normaloff>:/race/Barbarian.gif</iconset>
          </property>
         </item>
@@ -349,7 +349,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Beastmen.gif</normaloff>:/race/Beastmen.gif</iconset>
          </property>
         </item>
@@ -369,7 +369,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Dark Elf.gif</normaloff>:/race/Dark Elf.gif</iconset>
          </property>
         </item>
@@ -381,7 +381,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Draconian.gif</normaloff>:/race/Draconian.gif</iconset>
          </property>
         </item>
@@ -393,7 +393,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Dwarven.gif</normaloff>:/race/Dwarven.gif</iconset>
          </property>
         </item>
@@ -413,7 +413,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Gnoll.gif</normaloff>:/race/Gnoll.gif</iconset>
          </property>
         </item>
@@ -441,7 +441,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Halfling.gif</normaloff>:/race/Halfling.gif</iconset>
          </property>
         </item>
@@ -453,7 +453,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/High Elf.gif</normaloff>:/race/High Elf.gif</iconset>
          </property>
         </item>
@@ -465,7 +465,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/High Men.gif</normaloff>:/race/High Men.gif</iconset>
          </property>
         </item>
@@ -485,7 +485,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Klackon.gif</normaloff>:/race/Klackon.gif</iconset>
          </property>
         </item>
@@ -505,7 +505,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Lizardman.gif</normaloff>:/race/Lizardman.gif</iconset>
          </property>
         </item>
@@ -517,7 +517,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Nomad.gif</normaloff>:/race/Nomad.gif</iconset>
          </property>
         </item>
@@ -529,7 +529,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Orc.gif</normaloff>:/race/Orc.gif</iconset>
          </property>
         </item>
@@ -549,7 +549,7 @@
           <enum>Checked</enum>
          </property>
          <property name="icon">
-          <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+          <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
            <normaloff>:/race/Troll.gif</normaloff>:/race/Troll.gif</iconset>
          </property>
         </item>
@@ -570,7 +570,7 @@
       </widget>
       <widget class="QWidget" name="tab_Lairs">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/marcus.gif</normaloff>:/heroes/marcus.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -838,7 +838,7 @@
       </widget>
       <widget class="QWidget" name="tab_Picks">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/mystic_x.gif</normaloff>:/heroes/mystic_x.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -872,7 +872,7 @@
          <string>Save to Magic.exe</string>
         </property>
         <property name="icon">
-         <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+         <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
           <normaloff>:/heroes/greyfar.gif</normaloff>:/heroes/greyfar.gif</iconset>
         </property>
         <property name="iconSize">
@@ -899,7 +899,7 @@
              <string>Merlin</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Merlin.gif</normaloff>:/wizards/Merlin.gif</iconset>
             </property>
            </item>
@@ -908,7 +908,7 @@
              <string>Raven</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Raven.gif</normaloff>:/wizards/Raven.gif</iconset>
             </property>
            </item>
@@ -917,7 +917,7 @@
              <string>Sharee</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Sharee.gif</normaloff>:/wizards/Sharee.gif</iconset>
             </property>
            </item>
@@ -926,7 +926,7 @@
              <string>Lo Pan</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Lo Pan.gif</normaloff>:/wizards/Lo Pan.gif</iconset>
             </property>
            </item>
@@ -935,7 +935,7 @@
              <string>Jafar</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Jafar.gif</normaloff>:/wizards/Jafar.gif</iconset>
             </property>
            </item>
@@ -944,7 +944,7 @@
              <string>Oberic</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Oberic.gif</normaloff>:/wizards/Oberic.gif</iconset>
             </property>
            </item>
@@ -953,7 +953,7 @@
              <string>Rjak</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Rjak.gif</normaloff>:/wizards/Rjak.gif</iconset>
             </property>
            </item>
@@ -962,7 +962,7 @@
              <string>Sss'ra</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Sssra.gif</normaloff>:/wizards/Sssra.gif</iconset>
             </property>
            </item>
@@ -971,7 +971,7 @@
              <string>Tauron</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Tauron.gif</normaloff>:/wizards/Tauron.gif</iconset>
             </property>
            </item>
@@ -980,7 +980,7 @@
              <string>Freya</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Freya.gif</normaloff>:/wizards/Freya.gif</iconset>
             </property>
            </item>
@@ -989,7 +989,7 @@
              <string>Horus</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Horus.gif</normaloff>:/wizards/Horus.gif</iconset>
             </property>
            </item>
@@ -998,7 +998,7 @@
              <string>Ariel</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Ariel.gif</normaloff>:/wizards/Ariel.gif</iconset>
             </property>
            </item>
@@ -1007,7 +1007,7 @@
              <string>Tlaloc</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Tlaloc.gif</normaloff>:/wizards/Tlaloc.gif</iconset>
             </property>
            </item>
@@ -1016,7 +1016,7 @@
              <string>Kali</string>
             </property>
             <property name="icon">
-             <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+             <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
               <normaloff>:/wizards/Kali.gif</normaloff>:/wizards/Kali.gif</iconset>
             </property>
            </item>
@@ -1111,7 +1111,7 @@
       </widget>
       <widget class="QWidget" name="tab_Spells">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/aerie.gif</normaloff>:/heroes/aerie.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -1120,7 +1120,7 @@
       </widget>
       <widget class="QWidget" name="tab_Heroes">
        <attribute name="icon">
-        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
          <normaloff>:/heroes/reywind.gif</normaloff>:/heroes/reywind.gif</iconset>
        </attribute>
        <attribute name="title">
@@ -1139,7 +1139,7 @@
          <string>Randomize hero abilities</string>
         </property>
         <property name="icon">
-         <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+         <iconset resource="../../Resources/InteractiveGameTweaker.qrc">
           <normaloff>:/heroes/mystic_x.gif</normaloff>:/heroes/mystic_x.gif</iconset>
         </property>
        </widget>
@@ -1152,7 +1152,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../Resources/InteractiveGameTweaker.qrc"/>
+  <include location="../../Resources/InteractiveGameTweaker.qrc"/>
  </resources>
  <connections>
   <connection>

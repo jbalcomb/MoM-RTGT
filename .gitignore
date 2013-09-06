@@ -2,20 +2,28 @@
 bin/
 Debug/
 doc/
+gcc/
 Generated/
-Linux/
-Release/
-Win32/
-Windows/
+GeneratedFiles/
 msvc2008/
+Release/
+swig/
+Win32/
 
 # Wild cards
+*.Debug
+*.dll
+*.exp
+*.lib
 *.log
 *.ncb
 *.o
 *.obj
 *.pdb
 *.pro.user
+*.pyc
+*.pyd
+*.Release
 *.suo
 *.vcproj.*.user
 .goutputstream-*
@@ -26,8 +34,8 @@ core.*
 .project
 core
 dosbox.pid
-MoMCustomizer/Makefile
-MoMTest/Makefile
-MoMTweaker/Makefile
+Applications/MoMCustomizer/Makefile
+Applications/MoMTest/Makefile
+Applications/MoMTweaker/Makefile
 Makefile.Debug
 Makefile.Release

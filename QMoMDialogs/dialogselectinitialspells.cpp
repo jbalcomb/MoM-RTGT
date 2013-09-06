@@ -171,7 +171,6 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 
     m_InitialSpells = new InitialSpells;
 
-    int16_t* nrSpellbooks = 0;
     MoM::eSpellKnown* known = 0;
     QMoMGamePtr game = getGame();
     if (!game.isNull())
@@ -180,7 +179,6 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
         if (0 != wizard)
         {
             known = &wizard->m_Spells_Known.No_spell;     // First spell
-            nrSpellbooks = &wizard->m_Number_of_Spellbooks_Nature;
         }
     }
 

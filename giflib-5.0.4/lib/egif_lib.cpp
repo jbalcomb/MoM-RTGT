@@ -184,7 +184,7 @@ EGifOpen(void *userData, OutputFunc writeFunc, int *Error)
 /******************************************************************************
  Routine to compute the GIF version that will be written on output.
 ******************************************************************************/
-char *
+const char *
 EGifGetGifVersion(GifFileType *GifFile)
 {
     GifFilePrivateType *Private = (GifFilePrivateType *) GifFile->Private;
@@ -265,7 +265,7 @@ EGifPutScreenDesc(GifFileType *GifFile,
 {
     GifByteType Buf[3];
     GifFilePrivateType *Private = (GifFilePrivateType *) GifFile->Private;
-    char *write_version;
+    const char *write_version;
 
     if (Private->FileState & FILE_STATE_SCREEN) {
         /* If already has screen descriptor - something is wrong! */
@@ -281,7 +281,7 @@ EGifPutScreenDesc(GifFileType *GifFile,
     write_version = EGifGetGifVersion(GifFile);
 
     /* First write the version prefix into the file. */
-    if (InternalWrite(GifFile, (unsigned char *)write_version,
+    if (InternalWrite(GifFile, (const unsigned char *)write_version,
               strlen(write_version)) != strlen(write_version)) {
         GifFile->Error = E_GIF_ERR_WRITE_FAILED;
         return GIF_ERROR;

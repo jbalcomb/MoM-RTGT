@@ -339,7 +339,8 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
         GifByteType GifExtension[4] = { 0 };
         size_t sizeExtension = EGifGCBToExtension(&GCB, GifExtension);
         if (sizeExtension != sizeof(GifExtension)) {
-            qCritical("EGifGCBToExtension returnd wrong size %u instead of %u", sizeExtension, sizeof(GifExtension));
+            qCritical("EGifGCBToExtension returnd wrong size %u instead of %u",
+                      static_cast<unsigned>(sizeExtension), static_cast<unsigned>(sizeof(GifExtension)));
         }
         EGifPutExtension(gif, GRAPHICS_EXT_FUNC_CODE, sizeExtension, GifExtension);
 

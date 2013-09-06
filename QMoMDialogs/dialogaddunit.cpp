@@ -138,7 +138,6 @@ void DialogAddUnit::displaySectionBasicAttributes(QPointF &pos)
 
     QPointF posLabel = pos;
     posLabel.rx() = 0;
-    QGraphicsSimpleTextItem* textItem = 0;
 
     (void)addText(posLabel, "Melee", MoM::QMoMResources::instance().getHelpText(MoM::HELP_MELEE).c_str());
     posLabel.ry() += m_lineHeight;
