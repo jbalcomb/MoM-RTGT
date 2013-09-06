@@ -444,8 +444,6 @@ public:
         return true;
     }
 
-    virtual bool validate() = 0;
-
 //
 // TODO: Make all methods below protected/private
 //

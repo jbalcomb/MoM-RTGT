@@ -45,10 +45,6 @@ public:
     {
         return "Connected setup " + m_filename_MagicExe;
     }
-    virtual bool validate()
-    {
-        return true;
-    }
     virtual MoM::City* getCities()
     {
         return 0;

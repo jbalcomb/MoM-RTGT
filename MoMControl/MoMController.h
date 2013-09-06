@@ -42,8 +42,6 @@ public:
 
     bool repopLairs(bool maxOut = false);
 
-    bool validateConsistency();
-
 private:
     bool createUnit(int& unitNr);
 

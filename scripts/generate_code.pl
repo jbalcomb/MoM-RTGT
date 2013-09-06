@@ -104,16 +104,6 @@ sub generate_code
     {
         print "std::ostream& operator<<(std::ostream& os, const $classname& rhs);\n";
     }
-    print "\n";
-    foreach my $enumname (sort keys %gEnums)
-    {
-        print "bool validate(const $enumname& rhs, const std::string& context);\n";
-    }
-    print "\n";
-    foreach my $classname (sort keys %gStructUnions)
-    {
-        print "bool validate(const $classname& rhs, const std::string& context);\n";
-    }
     
     print "\n";
     print "}\n";
@@ -265,93 +255,6 @@ EOF
         }
         print "    os << \"}\";\n";
         print "    return os;\n";
-        print "}\n";
-        print "\n";
-    }
-
-
-    #
-    # Generate bool validate()
-    #
-
-    foreach my $enumname (sort keys %gEnums)
-    {
-        my @enumvalues = @{$gEnums{$enumname}{'names'}};
-        
-        print "bool validate(const $enumname& rhs, const std::string& context)\n";
-        print "{\n";
-        print "    bool ok = true;\n";
-        if ($enumname eq "eTerrainType" || $enumname eq "eItem_Icon")
-        {
-            print "    ok = (rhs < ${enumname}_MAX);\n";
-        }
-        else
-        {
-            print "    switch (rhs)\n";
-            print "    {\n";
-            foreach my $enumvalue (@enumvalues)
-            {
-                next if $enumvalue =~ m#_SIZE__$#;
-                next if $enumvalue =~ m#_FIRST$#;
-                next if $enumvalue =~ m#_MAX$#;
-                print "    case $enumvalue: break;\n"
-            }
-            print "    default: std::cout << context << \": Unknown $enumname = \" << (int)rhs << \"\\n\"; ok = false; break;\n";
-            print "    }\n";
-        }
-        print "    return ok;\n";
-        print "}\n";
-        print "\n";
-    }
-    
-    foreach my $classname (sort keys %gStructUnions)
-    {
-        my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
-        
-        print "bool validate(const $classname& rhs, const std::string& context)\n";
-        print "{\n";
-        print "    bool ok = true;\n";
-        if ($classname eq "Hired_Hero")
-        {
-            print "    if (-1 == rhs.m_Unit_Nr) { return true; }\n";
-        }
-        elsif ($classname eq "Item")
-        {
-            print "    if (-1 == rhs.m_Cost || 0 == rhs.m_Cost) { return true; }\n";
-        }
-        
-        while (1)
-        {
-            my $type = shift @datamembers;
-            my $datamember = shift @datamembers;
-            last if not defined $datamember;
-            
-            $type = "uint16_t" if ($type eq "DS_Offset");
-            next if ($type =~ m#^u?int\d+_t$#);
-            next if ($type eq "char");
-            next if ($datamember =~ m#trash#i);
-            
-            $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
-            my ($name, $range, $bitmask) = ($1, $3, $5);
-            if (defined $range)
-            {
-                $range = "rhs.m_Game_Data.m_Number_of_Wizards" if ($name eq "m_Wizards");
-                $range = "rhs.m_Game_Data.m_Number_of_Cities" if ($name eq "m_Cities");
-                $range = "rhs.m_Game_Data.m_Number_of_Units" if ($name eq "m_Unit");
-                
-                print qq#    for (unsigned i = 0; i < $range; ++i)\n#;
-                print qq#    {\n#;
-                print qq#          std::ostringstream oss;\n#;
-                print qq#          oss << context << ".${name}\[" << i << "]";\n#;
-                print qq#          if (!validate(rhs.${name}\[i], oss.str())) ok = false;\n#;
-                print qq#    }\n#;
-            }
-            else
-            {
-                print "    if (!validate(rhs.${name}, context + \".${name}\")) ok = false;\n"
-            }
-        }
-        print "    return ok;\n";
         print "}\n";
         print "\n";
     }

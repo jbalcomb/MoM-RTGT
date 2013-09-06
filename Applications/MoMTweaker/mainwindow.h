@@ -76,8 +76,8 @@ public slots:
     void on_checkBox_UpdateTree_clicked();
     void on_pushButton_AddUnit_clicked();
     void on_pushButton_Calculator_clicked();
-    void on_pushButton_CatnipMod_clicked();
     void on_pushButton_Connect_clicked();
+    void on_pushButton_LbxEditor_clicked();
     void on_pushButton_Load_clicked();
     void on_pushButton_Map_clicked();
     void on_pushButton_Reread_clicked();

@@ -1,8 +1,9 @@
 // ---------------------------------------------------------------------------
-// Copyright:   2011 Klaas van Aarsen
+// Copyright:   2011-2013 Klaas van Aarsen
 // License:     GPL
 // Author:      I like Serena (aka Klaas van Aarsen)
 // Created:     2011-04-03
+// Modified:    2013-09-06
 // ---------------------------------------------------------------------------
 
 SUPPORTED PLATFORMS
@@ -10,7 +11,7 @@ SUPPORTED PLATFORMS
 Windows     Developed and tested with Windows XP and Windows 7 
 			with Visual Studio 2008 
 			and also with QtCreator with MinGW
-Linux       Developed and tested with Ubuntu 10.04 LTS (with g++ 4.4.3)
+Linux       Developed and tested with Ubuntu 12.04 LTS 32-bits (with g++ 4.6)
 
 DEPENDENCIES
 ------------
@@ -38,7 +39,7 @@ BUILDING FROM SOURCES
 Windows
 -------
 1. Install compiler.
-   Either Microsoft's Visual Studio 2008 (commercial), 
+   Either Microsoft's Visual Studio 2010 (commercial), 
    or QtCreator with MinGW (opensource), 
    or both.
 		You can download QtCreator with MinGW from: http://qt.nokia.com/downloads/
@@ -46,15 +47,14 @@ Windows
 		Download from: http://qt.nokia.com/downloads/
 3. Install Perl for Windows.
 		Download for Windows from: http://www.activestate.com/activeperl/downloads
-4. Generate extra sources
-        cd MoMEditorTemplate
-        perl generate_code.pl
+4. Generate extra sources (optional)
+        perl scripts/generate_code.pl
 5. Build the MoMCustomizer executable
-        cd MoMCustomizer
+        cd Applications/MoMCustomizer
         qmake                   # To update the location of Qt
         make  or  nmake -f Makefile.Release
 6. Build the MoMTweaker executable
-        cd MoMTweaker
+        cd Applications/MoMTweaker
         qmake                   # To update the location of Qt
         make  or  nmake -f Makefile.Release
 7. Alternative you can use Visual Studio to open MoMRTGT.sln and build from there.
@@ -70,14 +70,13 @@ Linux
 		Download from: http://qt.nokia.com/downloads/
 3. You should already have Perl, or else you need to install it from you distribution.
 4. Generate extra sources
-        cd MoMEditorTemplate
-        perl generate_code.pl
+        perl scripts/generate_code.pl
 5. Build the MoMCustomizer executable
-        cd MoMCustomizer
+        cd Applications/MoMCustomizer
         qmake                   # To update the location of Qt
         make  or  nmake -f Makefile.Release
 6. Build the MoMTweaker executable
-        cd MoMTweaker
+        cd Applications/MoMTweaker
         qmake                   # To update the location of Qt
         make  or  nmake -f Makefile.Release
 7. Alternative you can use QtCreator to open MoMCustomizer/MoMCustomizer.pro 

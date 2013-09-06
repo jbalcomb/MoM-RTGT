@@ -470,18 +470,4 @@ bool MoMGameSave::saveLbx(const std::string& lbxTitle, MoMLbxBase *lbxBase, cons
     return ok;
 }
 
-bool MoMGameSave::validate()
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool ok = MoM::validate(*m_SaveGame,  "MoM files");
-
-    MoMController momController(this);
-    ok |= momController.validateConsistency();
-
-    return ok;
-}
-
 }

@@ -52,8 +52,6 @@ protected:
 
     virtual bool readData();
 
-    virtual bool validate();
-
 private:
     template< typename T >
     T* derefHeapPointer(const EXE_Reloc& pointer, size_t nr_elements)
@@ -120,7 +118,8 @@ private:
     // TODO: Weird. It appears that the terrain-movements are all zero in memory.
     //       Presumably they are swapped out or something.
     //       Either way, we can't do anything with it.
-    virtual Map_Movement* getTerrain_Movements();
+    //       Commented out for now, so it is treated as not accessible
+    //virtual Map_Movement* getTerrain_Movements();
     virtual Map_Movement* getTerrain_Movements_copy();
     virtual eTerrainType* getTerrain_Types();
 

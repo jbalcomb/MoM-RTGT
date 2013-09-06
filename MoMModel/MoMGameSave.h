@@ -245,8 +245,6 @@ protected:
         m_playerNr = playerNr;
     }
 
-    virtual bool validate();
-
 //private:
     virtual MoMDataSegment* getDataSegment()
     {

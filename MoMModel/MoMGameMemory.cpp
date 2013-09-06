@@ -634,14 +634,14 @@ int8_t* MoMGameMemory::getTerrain_LandMassID()
             ePlane_MAX * gMAX_MAP_ROWS * gMAX_MAP_COLS);
 }
 
-Map_Movement* MoMGameMemory::getTerrain_Movements()
-{
-    if (0 == m_process.get())
-        return 0;
-    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_addr_Terrain_Movement,
-            ePlane_MAX);
-}
+//Map_Movement* MoMGameMemory::getTerrain_Movements()
+//{
+//    if (0 == m_process.get())
+//        return 0;
+//    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+//    return derefHeapPointer<Map_Movement>(pMoMDataSegment->m_addr_Terrain_Movement,
+//            ePlane_MAX);
+//}
 
 Map_Movement* MoMGameMemory::getTerrain_Movements_copy()
 {
@@ -722,34 +722,6 @@ bool MoMGameMemory::openGame(std::auto_ptr<MoMProcess>& momProcess)
     }
 
     return true;
-}
-
-bool MoMGameMemory::validate()
-{
-    if (0 == m_process.get())
-        return 0;
-    bool ok = true;
-
-    std::cout << "NOTE: Validation in Memory currently only checks consistency and not any ranges" << std::endl;
-
-    char* pDATASEGMENT_IDENTIFIER = validateStaticPointer((char*)m_process->getDatasegmentData(), sizeof(gDATASEGMENT_IDENTIFIER));
-    if (0 == pDATASEGMENT_IDENTIFIER)
-    {
-        std::cout << "Access Violation: Not enough space for the DATASEGMENT IDENTIFIER" << std::endl;
-        ok = false;
-    }
-    else if (0 != memcmp(pDATASEGMENT_IDENTIFIER, gDATASEGMENT_IDENTIFIER, sizeof(gDATASEGMENT_IDENTIFIER)))
-    {
-        std::cout << "Access Violation: The DATASEGMENT IDENTIFIER has been corrupted" << std::endl;
-        ok = false;
-    }
-    else
-    {
-        MoMController momController(this);
-        ok = momController.validateConsistency();
-    }
-
-    return ok;
 }
 
 }

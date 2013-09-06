@@ -10,6 +10,7 @@
 // Standard C++ Library
 
 // Library
+#include <MoMCatnip.h>
 #include <MoMController.h>
 #include <MoMGameCustom.h>
 #include <MoMGenerated.h>
@@ -26,7 +27,6 @@
 // Local
 #include "dialogbuildingqueues.h"
 #include "dialogexternalai.h"
-#include "dialoglbxeditor.h"
 #include "dialogselectinitialspells.h"
 #include "mainwindow.h"
 
@@ -62,43 +62,6 @@ QMoMGamePtr DialogTools::getGame()
     return game;
 }
 
-void DialogTools::on_pushButton_Validate_clicked()
-{
-    MainWindow* controller = MainWindow::getInstance();
-	QMoMGamePtr game = getGame();
-    if (game.isNull())
-    {
-        (void)QMessageBox::warning(this, 
-            tr("Repop Lairs"),
-            tr("There is no game to operate on"));
-        return;
-    }
-
-    bool ok = controller->refreshMemory();
-
-    if (ok)
-    {
-        ok = game->validate();
-        if (!ok)
-        {
-            (void)QMessageBox::warning(this,
-                tr("Validate"),
-                tr("The game failed validation"));
-        }
-    }
-
-    if (!ok)
-    {
-        statusBar()->showMessage(tr("Game failed validation"));
-    }
-    else
-    {
-        statusBar()->showMessage(tr("Game checks out Ok"));
-    }
-
-    update();
-}
-
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
     DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
@@ -106,11 +69,152 @@ void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
     dialog->show();
 }
 
-void DialogTools::on_pushButton_LbxEditor_clicked()
+void DialogTools::on_pushButton_CatnipMod_clicked()
 {
-    DialogLbxEditor* dialog = new DialogLbxEditor(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->show();
+    MainWindow* controller = MainWindow::getInstance();
+    QMoMGamePtr game = getGame();
+    if (game.isNull())
+    {
+        (void)QMessageBox::warning(this,
+            tr("Catnip mod"),
+            tr("There is no game to operate on"));
+        return;
+    }
+
+//    MOM_FOREACH(eUnit_Type, unitTypeNr, eUnit_Type_MAX)
+//    {
+//        int unitNr = 999;
+//        MoM::Unit* unit = game->getUnit(unitNr);
+//        if (0 == unit)
+//            return;
+//        memset(unit, '\0', sizeof(MoM::Unit));
+//        unit->m_Unit_Type = unitTypeNr;
+//        unit->m_Hero_Slot_Number = -1;
+
+//        MoM::Unit_Type_Data* unitType = game->getUnitTypeData(unit->m_Unit_Type);
+//        if (0 == unitType)
+//            return;
+
+//        MoM::Battle_Unit battleUnit = { 0 };
+//        memcpy(&battleUnit.m_Melee, &unitType->m_Melee, sizeof(MoM::Unit_Type_Data) - offsetof(MoM::Unit_Type_Data, m_Melee));
+//        battleUnit.m_unitNr = unitNr;
+//        battleUnit.m_xPos = 0;
+//        battleUnit.m_yPos = 0;
+
+//        QMoMUnitPtr momUnit = QMoMUnitPtr(new MoM::MoMUnit(game.data()));
+//        qDebug() << "momUnit empty" << momUnit->getDisplayName().c_str();
+//        momUnit->changeUnit(&battleUnit);
+//        qDebug() << "momUnit" << momUnit->getDisplayName().c_str();
+
+//        MoM::QMoMUnitTile unitTile(true);
+//        unitTile.setGame(game);
+//        unitTile.setUnit(momUnit);
+//        QRectF rect = unitTile.boundingRect();
+//        qDebug() << "unitTile rect" << rect;
+//        const int arrFrameNr[10] = {1,0,1,2,1,0,1,2,3,1};
+//        QMoMAnimation animation;
+//        for (int heading = 2; heading < 10; ++heading)
+//        for (int frame = 0; frame < 10; ++frame)
+//        {
+//            unitTile.setFrameNr(arrFrameNr[frame]);
+//            int step = MoM::Min(frame, 8);
+
+//            double angle = (heading - 3) * 3.14159 / 4;
+//            int dx = MoM::Round(cos(angle));
+//            int dy = MoM::Round(sin(angle));
+//            battleUnit.m_xPosHeaded = dx;
+//            battleUnit.m_yPosHeaded = dy;
+//            qDebug("heading %d %d,%d", heading, battleUnit.m_xPosHeaded, battleUnit.m_yPosHeaded);
+
+//            QMoMImagePtr image(new QImage(rect.width() * 4, rect.height() * 4, QImage::Format_RGB32));
+//            qDebug() << "numColors" << image->numColors();
+
+//            MoM::QMoMPalette colorTable = MoM::QMoMResources::instance().getColorTable();
+//            colorTable.resize(244);
+//            colorTable[0] = qRgb(255, 0, 255);                  // Treat MAGENTA RGB(255, 0, 255) as TRANSPARENT (0)!
+//            colorTable[MoM::gSHADOW_COLOR] = qRgb(0, 255, 0);   // Treat GREEN RGB(0, 255, 0) as SHADOW (232)
+
+//            QRgb rgbTransparent = colorTable[0];
+//            qDebug() << "rgbTransparent" << rgbTransparent;
+//            image->fill(rgbTransparent);
+//            QPainter painter(image.data());
+//            qDebug() << "translate";
+//            painter.translate(rect.width() * 2, rect.height() * 3);
+//            qDebug() << "paint terrain";
+//            const QMoMImagePtr imageTerrain = MoM::QMoMResources::instance().getImage(MoM::TERRAINBATTLE_firstbasic);
+//            if (0 != imageTerrain)
+//            {
+//                QRectF rectTerrain(-30/2, -16, 30, 16);
+//                rectTerrain.translate(-(dx - dy) * (step) * 16 / 8, -(dx + dy) * (step) * 8 / 8 );
+//                painter.drawImage(rectTerrain, *imageTerrain);
+//                if (step != 0)
+//                {
+//                    rectTerrain.translate((dx - dy) * 16, (dx + dy) * 8 );
+//                    painter.drawImage(rectTerrain, *imageTerrain);
+//                }
+//            }
+
+
+//            qDebug() << "paint unit";
+//            unitTile.paint(&painter, NULL, NULL);
+//            painter.end();
+
+//            image = QMoMImagePtr(new QImage(image->convertToFormat(QImage::Format_Indexed8, colorTable, Qt::AutoColor)));
+//            image->setColorTable(MoM::QMoMResources::instance().getColorTable());
+//            animation.append(image);
+
+//            qDebug() << "setPixmap";
+//            ui->label->setPixmap(QPixmap::fromImage(*image));
+//        }
+
+//        QString title = "Tactical_" + QString(momUnit->getDisplayName().c_str()).replace(QRegExp("[^A-Za-z0-9]"), "");
+//        QString testFilenameWrite = "C:\\GAMES\\Klaas_Master_of_Magic\\LBX\\gif\\_crop\\Units\\" + title + ".gif";
+//        qDebug() << "Opening file " << testFilenameWrite << " to write to";
+//        QFile testFileWrite(testFilenameWrite);
+//        qDebug() << "exists() -> " << testFileWrite.exists();
+//        bool result = testFileWrite.open(QFile::WriteOnly | QFile::Truncate);
+//        qDebug() << "open(WriteOnly | Truncate) -> " << result;
+
+//        QMoMGifHandler gifHandlerWrite;
+//        gifHandlerWrite.setDevice(&testFileWrite);
+//        if (!animation.empty())
+//        {
+//            animation.crop();
+//            animation.scale(2.0);
+//            gifHandlerWrite.setAnimationOption(QMoMGifHandler::Disposal, QMoMGifHandler::DisposalBackground);
+//            gifHandlerWrite.setAnimationOption(QMoMGifHandler::Delay, 20);
+//            result = gifHandlerWrite.writeAnimation(animation);
+//        }
+//        qDebug() << "gifHandler.writeAnimation(animation) -> " << result;
+//    }
+
+//    return;
+
+
+    MoM::MoMCatnip catnip;
+
+    bool ok = catnip.apply(game.data());
+    if (!ok)
+    {
+        statusBar()->showMessage(tr("Failed to apply Catnip mod"));
+        (void)QMessageBox::warning(this,
+            tr("Catnip mod"),
+            catnip.errorString().c_str());
+    }
+    else
+    {
+        statusBar()->showMessage(tr("Catnip mod applied"));
+        (void)QMessageBox::warning(this,
+            tr("Catnip mod"),
+            tr( "Catnip mod applied\n"
+                "\n"
+                "1. All units have an additional half move\n"
+                "2. The heroes have alternative slots (and a couple of changes)\n"
+                "3. Magicians, priests, and shamen have been renamed and have different abilities\n"
+            ));
+    }
+
+    controller->update();
 }
 
 void DialogTools::on_pushButton_RepopLairs_clicked()

@@ -142,7 +142,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_LbxEditor">
+     <widget class="QPushButton" name="pushButton_ExternalAI">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -162,81 +162,11 @@
        </font>
       </property>
       <property name="text">
-       <string>LBX editor</string>
+       <string>External AI (exp)</string>
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/taki.gif</normaloff>:/heroes/taki.gif</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_LucernMod">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Lucern mod (exp)</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/lucern.png</normaloff>:/heroes/lucern.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_Validate">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
-      <property name="text">
-       <string>Validate (exp)</string>
-      </property>
-      <property name="icon">
-       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/elana.gif</normaloff>:/heroes/elana.gif</iconset>
+        <normaloff>:/heroes/roland.gif</normaloff>:/heroes/roland.gif</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -282,7 +212,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_ExternalAI">
+     <widget class="QPushButton" name="pushButton_CatnipMod">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -302,11 +232,46 @@
        </font>
       </property>
       <property name="text">
-       <string>External AI (exp)</string>
+       <string>Catnip mod (exp)</string>
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/roland.gif</normaloff>:/heroes/roland.gif</iconset>
+        <normaloff>:/heroes/catwalk.jpg</normaloff>:/heroes/catwalk.jpg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_LucernMod">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="text">
+       <string>Lucern mod (exp)</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources/InteractiveGameTweaker.qrc">
+        <normaloff>:/heroes/lucern.png</normaloff>:/heroes/lucern.png</iconset>
       </property>
       <property name="iconSize">
        <size>

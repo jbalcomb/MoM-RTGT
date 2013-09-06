@@ -301,7 +301,7 @@ void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrai
         int8_t* terrainMovementUnused = m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused);
         Map_Movement* terrainMovementCopy = m_game->getTerrain_Movements_copy();
         qDebug("TerrMove %p TerrMoveUnused %p TerrMoveCopy %p", terrainMovement, terrainMovementUnused, terrainMovementCopy);
-        if (0 == m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused))
+        if (0 == terrainMovementUnused)
         {
             qtreeTerrain->addChild(new QMoMTreeItemWidgetBase(m_game, "Moves", "(Not accessible->no road effect)"));
         }
@@ -314,19 +314,19 @@ void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrai
             qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSwimming", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Swimming)));
             qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveSailing", m_game->getTerrainMovement(loc, MoM::MOVEMENT_Sailing)));
         }
-        if (0 == terrainMovementCopy)
-        {
-            qtreeTerrain->addChild(new QMoMTreeItemWidgetBase(m_game, "MovesCopy", "(Not accessible)"));
-        }
-        else
-        {
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCUnused", &terrainMovementCopy[loc.m_Plane].m_Unused_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCWalk", &terrainMovementCopy[loc.m_Plane].m_Walking_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCForester", &terrainMovementCopy[loc.m_Plane].m_Forester_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCMountaineer", &terrainMovementCopy[loc.m_Plane].m_Mountaineer_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCSwimming", &terrainMovementCopy[loc.m_Plane].m_Swimming_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCSailing", &terrainMovementCopy[loc.m_Plane].m_Sailing_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
-        }
+//        if (0 == terrainMovementCopy)
+//        {
+//            qtreeTerrain->addChild(new QMoMTreeItemWidgetBase(m_game, "MovesCopy", "(Not accessible)"));
+//        }
+//        else
+//        {
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCUnused", &terrainMovementCopy[loc.m_Plane].m_Unused_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCWalk", &terrainMovementCopy[loc.m_Plane].m_Walking_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCForester", &terrainMovementCopy[loc.m_Plane].m_Forester_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCMountaineer", &terrainMovementCopy[loc.m_Plane].m_Mountaineer_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCSwimming", &terrainMovementCopy[loc.m_Plane].m_Swimming_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//            qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "MoveCSailing", &terrainMovementCopy[loc.m_Plane].m_Sailing_Row[loc.m_YPos].m_Moves[loc.m_XPos]));
+//        }
 
     }
     else if (0 != m_game->getBattlefield())

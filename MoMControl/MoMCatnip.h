@@ -10,6 +10,8 @@
 #ifndef MOMCATNIP_H
 #define MOMCATNIP_H
 
+#include <string>
+
 namespace MoM
 {
 
