@@ -331,7 +331,7 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
             }
         }
 
-        GraphicsControlBlock GCB = { 0 };
+        GraphicsControlBlock GCB = { 0, 0, 0, 0 };
         GCB.DisposalMode        = m_animationOptions[QMoMGifHandler::Disposal].toInt(); // what to do with the background of the image
         GCB.UserInputFlag       = 0;    // whether user input is expected
         GCB.DelayTime           = m_animationOptions[QMoMGifHandler::Delay].toInt();    // 0.01 sec increments
