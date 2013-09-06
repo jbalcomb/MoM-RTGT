@@ -18,7 +18,7 @@ INCLUDEPATH += \
     ../../Utility \
     ../../giflib-5.0.4/lib
 
-HEADERS += ./mainwindow.h \
+HEADERS += ./MainWindow.h \
     ../../MoMModel/Generated/MoMGenerated.h \
     ../../MoMModel/MoMExeMagic.h \
     ../../MoMModel/MoMGameCustom.h \
@@ -48,7 +48,7 @@ HEADERS += ./mainwindow.h \
     FormSelectBanner.h
 
 SOURCES += \
-    ./mainwindow.cpp \
+    ./MainWindow.cpp \
     ../../MoMModel/Generated/MoMGenerated.cpp \
     ../../MoMModel/MoMExeMagic.cpp \
     ../../MoMModel/MoMGameBase.cpp \
@@ -78,7 +78,7 @@ SOURCES += \
     FormSelectRaces.cpp \
     FormSelectBanner.cpp
 
-FORMS += ./mainwindow.ui \
+FORMS += ./MainWindow.ui \
     FormSelectWizard.ui \
     FormGameOptions.ui \
     DialogWizard.ui \

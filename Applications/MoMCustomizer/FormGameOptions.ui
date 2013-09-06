@@ -69,6 +69,88 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_Difficulty">
+    <property name="geometry">
+     <rect>
+      <x>172</x>
+      <y>78</y>
+      <width>130</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: url(:/dialogs/Difficulty_button.gif);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Opponents">
+    <property name="geometry">
+     <rect>
+      <x>172</x>
+      <y>132</y>
+      <width>130</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: url(:/dialogs/Opponents_button.gif);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_LandSize">
+    <property name="geometry">
+     <rect>
+      <x>172</x>
+      <y>186</y>
+      <width>130</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: url(:/dialogs/Land_Size_button.gif);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Magic">
+    <property name="geometry">
+     <rect>
+      <x>172</x>
+      <y>240</y>
+      <width>130</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: url(:/dialogs/Magic_button.gif);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>pushButton_Cancel</zorder>
+   <zorder>pushButton_OK</zorder>
+   <zorder>pushButton_LandSize</zorder>
+   <zorder>pushButton_Magic</zorder>
+   <zorder>pushButton_Difficulty</zorder>
+   <zorder>pushButton_Opponents</zorder>
   </widget>
  </widget>
  <resources/>
