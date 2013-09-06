@@ -8,8 +8,8 @@
 // Third party
 #include <QRegExp>
 #include <qtimer.h>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 // Standard C++ Library
 #include <stdlib.h>     // rand(), srand()
