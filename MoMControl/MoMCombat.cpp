@@ -780,24 +780,24 @@ void MoMCombat::resolve_casualties(CombatUnit& attacker, CombatUnit& defender, d
     }
     if (EDD_att != 0)
     {
-        double kill_damage = defender.getCurTotalHp();
         defender.m_simulatedDamage += EDD_att;
         if (defender.m_simulatedDamage < 0)
             defender.m_simulatedDamage = 0;
         o += "Unit of " + defender.getDisplayName() + " has " + prec1(defender.getCurFiguresFrac()) + " units left with a total of " + prec1(defender.getCurTotalHp()) + " hp\n";
 
-        if (distr_att != null)
-        {
-            double kill_probability = 0;
-            for (int damage = std::ceil(kill_damage); damage < distr_att->size(); ++damage)
-            {
-                kill_probability += distr_att->at(damage);
-            }
-            if (kill_probability >= 0.0005)
-            {
+//        if (distr_att != null)
+//        {
+//            double kill_damage = defender.getCurTotalHp();
+//            double kill_probability = 0;
+//            for (int damage = std::ceil(kill_damage); damage < distr_att->size(); ++damage)
+//            {
+//                kill_probability += distr_att->at(damage);
+//            }
+//            if (kill_probability >= 0.0005)
+//            {
 //                o += "Chance to be killed was " + prec1(100 * kill_probability) + "% (experimental feature)\n";
-            }
-        }
+//            }
+//        }
     }
 }
 
