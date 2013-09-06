@@ -314,7 +314,7 @@ double MoMCombat::expected_dam_per_figure(int A, int Th, int D, int Tb, int igno
                 expectation_hits += P_blocks * damage;
                 if (distr != null)
                 {
-                    if (distr->size() <= damage)
+                    if (distr->size() <= static_cast<size_t>(damage))
                     {
                         distr->resize(damage + 1);
                     }
@@ -356,7 +356,7 @@ double MoMCombat::expected_dam_per_figure(int A, int Th, int D, int Tb, int igno
     if (distr != null)
     {
         double pdam0 = 1.0;
-        for (int damage = 1; damage < distr->size(); ++damage)
+        for (size_t damage = 1; damage < distr->size(); ++damage)
         {
             pdam0 -= distr->at(damage);
         }
@@ -370,7 +370,7 @@ double MoMCombat::expected_dam_per_figure(int A, int Th, int D, int Tb, int igno
         {
             verbose_log("Figure damage distribution:");
             verbose_log("<table border=1 cellspacing=0><tr><th>dam<th>probability");
-            for (int damage = 0; damage < distr->size(); ++damage)
+            for (size_t damage = 0; damage < distr->size(); ++damage)
             {
                 verbose_log("<tr><td>" + toStr(damage) + "<td>" + round(distr->at(damage), 3));
             }
@@ -406,9 +406,9 @@ double MoMCombat::expected_dam_per_unit(int N, int A, int Th, int D, int Tb, int
     for (int n = 0; n < N; ++n)
     {
         std::vector<double> new_cum_distr;
-        for (int cum_dam = 0; cum_dam < cum_distr.size(); ++cum_dam)
+        for (size_t cum_dam = 0; cum_dam < cum_distr.size(); ++cum_dam)
         {
-            for (int fig_dam = 0; fig_dam < fig_distr.size(); ++fig_dam)
+            for (size_t fig_dam = 0; fig_dam < fig_distr.size(); ++fig_dam)
             {
                 if (new_cum_distr.size() <= cum_dam + fig_dam)
                 {
@@ -426,7 +426,7 @@ double MoMCombat::expected_dam_per_unit(int N, int A, int Th, int D, int Tb, int
     {
         verbose_log("Unit cumulative damage distribution:");
         verbose_log("<table border=1 cellspacing=0><tr><th>dam<th>probability");
-        for (int damage = 0; damage < distr->size(); ++damage)
+        for (size_t damage = 0; damage < distr->size(); ++damage)
         {
             verbose_log("<tr><td>" + toStr(damage) + "<td>" + round(distr->at(damage), 3));
         }
@@ -1236,7 +1236,7 @@ std::string MoMCombat::full_combat(StackUnits& attackers, StackUnits& defenders,
     for (int round_nr = 1; (round_nr <= 50) && (result == 0); ++round_nr)
     {
         // For each live attacker
-        for (int attacker_nr = 0; attacker_nr < attackers.size(); ++attacker_nr)
+        for (size_t attacker_nr = 0; attacker_nr < attackers.size(); ++attacker_nr)
         {
             CombatUnit& attacker = attackers[attacker_nr];
             if (attacker.getCurTotalHp() <= 0)
@@ -1257,7 +1257,7 @@ std::string MoMCombat::full_combat(StackUnits& attackers, StackUnits& defenders,
         }
 
         // For each live defender
-        for (int defender_nr = 0; defender_nr < defenders.size(); ++defender_nr)
+        for (size_t defender_nr = 0; defender_nr < defenders.size(); ++defender_nr)
         {
             CombatUnit& defender = defenders[defender_nr];
             if (defender.getCurTotalHp() <= 0)
