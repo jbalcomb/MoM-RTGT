@@ -17,3 +17,8 @@ void FormGameOptions::on_pushButton_OK_clicked()
 {
     emit signal_accepted();
 }
+
+void FormGameOptions::on_pushButton_Cancel_clicked()
+{
+    emit signal_rejected();
+}

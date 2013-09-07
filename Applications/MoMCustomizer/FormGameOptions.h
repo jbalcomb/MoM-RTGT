@@ -18,8 +18,11 @@ public:
 private slots:
     void on_pushButton_OK_clicked();
 
+    void on_pushButton_Cancel_clicked();
+
 signals:
     void signal_accepted();
+    void signal_rejected();
 
 private:
     Ui::FormGameOptions *ui;

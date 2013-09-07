@@ -58,6 +58,7 @@ void DialogWizard::slot_selectGameOptions()
 
     FormGameOptions* form = new FormGameOptions(this);
     QObject::connect(this, SIGNAL(signal_rejected()), this, SLOT(slot_rejected()));
+    QObject::connect(form, SIGNAL(signal_rejected()), this, SLOT(slot_rejected()));
     QObject::connect(this, SIGNAL(signal_accepted()), this, SLOT(slot_selectWizard()));
     QObject::connect(form, SIGNAL(signal_accepted()), this, SLOT(slot_selectWizard()));
     form->show();

@@ -88,5 +88,5 @@ FORMS += ./MainWindow.ui \
     FormSelectRaces.ui \
     FormSelectBanner.ui
 
-RESOURCES += Resources/QMoMCustomizer.qrc \
-    ../../Resources/InteractiveGameTweaker.qrc
+#RESOURCES += Resources/QMoMCustomizer.qrc \
+#    ../../Resources/InteractiveGameTweaker.qrc
