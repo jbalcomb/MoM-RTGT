@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include <MoMProcess.h>
+
 namespace Ui {
 class DialogWizard;
 }
@@ -36,6 +38,7 @@ signals:
 private:
     Ui::DialogWizard *ui;
     QWidget* m_form;
+    MoM::MoMProcess momProcess;
 };
 
 #endif // DIALOGWIZARD_H

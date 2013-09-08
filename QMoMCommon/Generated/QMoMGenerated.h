@@ -24,6 +24,7 @@ QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(City_Enchantments* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Combat_Enchantment* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Difficulty_Table* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(EMS_descriptor* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(EXE_Header* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(EXE_Reloc* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Events_Status* rhs, const QString& context);
@@ -50,7 +51,6 @@ QMoMTreeItemModelBase* constructTreeItem(Item_Bonuses* rhs, const QString& conte
 QMoMTreeItemModelBase* constructTreeItem(Item_Powers* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(LBXHEADER* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Lair_Inhabitant* rhs, const QString& context);
-QMoMTreeItemModelBase* constructTreeItem(Lbx_EMS_info* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(List_Hero_stats* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MapRow_Bonus* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(MapRow_Exploration* rhs, const QString& context);

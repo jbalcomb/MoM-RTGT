@@ -39,29 +39,30 @@ struct MoMGamePointers
     char*       m_Offsets_UnitLevelNames[6];          // ds:3F46
     char*       m_Offsets_HeroLevelNames[9];          // ds:3F52
 
-    Spell_Data*     m_addr_Spell_Data ; // 912C
-    Item*           m_addr_Items  ; // 9136
+    UnknownBuf*             m_EMS_data_reference_point; // 760C
+    Spell_Data*             m_addr_Spell_Data ; // 912C
+    Item*                   m_addr_Items  ; // 9136
     UnknownBuf*        m_addr_Artifacts_in_Game   ; // 913A
-    Battle_Unit*        m_addr_Battle_Unit_View  ; // 9226
-    Battle_Unit*    m_addr_Battle_Unit  ; // 922A
+    Battle_Unit*            m_addr_Battle_Unit_View  ; // 9226
+    Battle_Unit*            m_addr_Battle_Unit  ; // 922A
     Spells_Cast_in_Battle*  m_addr_Spells_Cast_in_Battle   ; // 922E
-    Hero_stats*     m_addr_Hero_stat[6]   ; // 9232
-    Battlefield*    m_addr_Battlefield    ; // 9274
+    Hero_stats*             m_addr_Hero_stat[6]   ; // 9232
+    Battlefield*            m_addr_Battlefield    ; // 9274
     UnknownBuf*        dword_3FD50 ; // 92B0
     UnknownBuf*        addr_3FDE6  ; // 9346
-    Building_Data*  m_addr_Building_Data ; // 938C
+    Building_Data*          m_addr_Building_Data ; // 938C
     UnknownBuf*        dword_3FE32 ; // 9392
     UnknownBuf*        word_3FF00  ; // 9460
     UnknownBuf*        word_3FFBE  ; // 951E
     UnknownBuf*        word_3FFC8  ; // 9528
     UnknownBuf*        word_403FE  ; // 995E
     UnknownBuf*        word_40428  ; // 9988
-    Events_Status*  m_addr_events ; // 9998
+    Events_Status*          m_addr_events ; // 9998
     UnknownBuf*        dword_40730 ; // 9C90
     UnknownBuf*        dword_4073C ; // 9C9C
     UnknownBuf*        dword_40740 ; // 9CA0
-    UnknownBuf*                m_addr_terrain_Movement_copy   ; // 9CA4
-    UnknownBuf*                dword_40748 ; // 9CA8
+    UnknownBuf*        m_addr_terrain_Movement_copy   ; // 9CA4
+    UnknownBuf*        dword_40748 ; // 9CA8
     Map_Movement*           m_addr_Terrain_Movement ; // 9CAC
     MapRow_Exploration*     m_addr_Terrain_Explored    ; // 9CB0
     MapRow_Terrain_Changes* m_addr_Terrain_Changes  ; // 9CB4
@@ -90,6 +91,7 @@ struct MoMGamePointers
 
     UnitView_Lines*       m_Offset_UnitView_Lines;  // C192
     Battle_Figure*   m_addr_Battle_figures_256;         // D15A
+    ClickableArea*   m_addr_ClickableArea;          // E8AC
 };
 
 static MoMGamePointers gMoMGamePointers;    // TODO: For DEBUG purposes
@@ -234,6 +236,9 @@ bool MoMGameMemory::readData()
         SET_ARRAY_OFFSET(m_Offsets_UnitLevelNames);
         SET_ARRAY_OFFSET(m_Offsets_HeroLevelNames);
 
+        EXE_Reloc ems_page = { 0, dseg->m_EMS_data_reference_point };
+        gMoMGamePointers.m_EMS_data_reference_point = (UnknownBuf*)m_process->derefPointer(ems_page, 0x4000);
+
         SET_RELOC_POINTER(Spell_Data, m_addr_Spell_Data);
         SET_RELOC_POINTER(Item, m_addr_Items);
         SET_RELOC_POINTER(UnknownBuf, m_addr_Artifacts_in_Game);
@@ -293,6 +298,8 @@ bool MoMGameMemory::readData()
         gMoMGamePointers.m_Offset_UnitView_Lines = validateStaticPointer(
             reinterpret_cast<UnitView_Lines*>((uint8_t*)dseg + dseg->m_Offset_UnitView_Lines), 1);
         gMoMGamePointers.m_addr_Battle_figures_256 = derefHeapPointer<Battle_Figure>(dseg->m_addr_Battle_figures_256, 256);
+
+        SET_RELOC_POINTER(ClickableArea, m_addr_ClickableArea);
     }
 
     return ok;

@@ -3463,6 +3463,29 @@ typedef struct PACKED_STRUCT // City_Enchantments
                                     // SIZE 18
 } City_Enchantments;
 
+struct ClickableArea
+{
+    uint16_t                 left;                                    //   0 -1 0x10000400
+    uint16_t                 top;                                     //   2 -1 0x10000400
+    uint16_t                 right;                                   //   4 -1 0x10000400
+    uint16_t                 bottom;                                  //   6 -1 0x10000400
+    uint16_t                 type;                                    //   8 -1 0x10000400
+    // 0X8 \n0=button\n7=clickable area
+    uint16_t                 field_A_argument;                        //   A -1 0x10000400
+    uint16_t                 fontNr;                                  //   C -1 0x10000400
+    uint16_t                 fontPaletteSection;                      //   E -1 0x10000400
+    uint8_t                  m_gap_16[6];                             //  10
+    uint16_t                 field_16_text;                           //  16 -1 0x10000400
+    uint8_t                  m_gap_24[4];                             //  18
+    uint16_t                 field_1C_pic_attr;                       //  1C -1 0x10000400
+    uint8_t                  m_gap_30[2];                             //  1E
+    uint16_t                 pic_seg;                                 //  20 -1 0x10000400
+    uint8_t                  m_gap_34[2];                             //  22
+    uint8_t                  hotkey;                                  //  24 -1 0x400
+    uint8_t                  field_25;                                //  25 -1 0x400
+    // SIZE 0x26
+};
+
 typedef struct PACKED_STRUCT // Combat_Enchantment
 {
     uint8_t     Vertigo:1;              // 01
@@ -5164,11 +5187,11 @@ typedef struct PACKED_STRUCT {   // Available_spell_page
 } Available_spell_page;
 
 typedef struct PACKED_STRUCT {   // Lbx_ems_info
-    char        m_buffer[8];                // 00
-    uint16_t    m_Unk_08;                   // 08
+    char        m_name[9];                  // 00
+    uint8_t     m_Unk_09;                   // 09
     uint16_t    m_Unk_0A;                   // 0A
                                             // SIZE 0C
-} Lbx_EMS_info;
+} EMS_descriptor;
 
 typedef struct // MoMDataSegment
 {
@@ -5245,7 +5268,11 @@ typedef struct // MoMDataSegment
 
     uint32_t    m_BIOS_clock_snapshot;                          // ds:71E0
 
-    uint8_t     m_Unk_71E4[0x7846 - 0x71E4];                    // ds:71E4
+    uint8_t     m_Unk_71E4[0x760C - 0x71E4];                    // ds:71E4
+
+    uint16_t    m_EMS_data_reference_point;                     // ds:760C
+
+    uint8_t     m_Unk_760E[0x7846 - 0x760E];                    // ds:760E
 
     // Note: this can not be uint32_t because g++ will align it on a 32-bit boundary
     uint16_t    m_RNG_seed_lo;                                  // ds:7846
@@ -5721,9 +5748,34 @@ typedef struct // MoMDataSegment
 
     uint8_t     m_Unk_E5CA[0xE5FC - 0xE5CA];        // ds:E5CA
 
-    Lbx_EMS_info    m_lbx_filenames_x_0C[0x10];     // ds:E5FC
+    EMS_descriptor    m_EMS_lbx_descriptors_0C[40]; // ds:E5FC
+    uint16_t    m_required_EMS_memory;              // ds:E7DC
 
-    uint8_t     m_Unk_E6BC[0xEA54 - 0xE6BC];        // ds:E6BC
+    uint8_t     m_Unk_E7DE[0xE800 - 0xE7DE];        // ds:E7DE
+
+    uint8_t     m_arr16_font_palette[16];           // ds:E800
+    uint8_t     m_byte_00h_from_fonts_style_data;   // ds:E810
+    uint8_t     m_byte_14h_from_fonts_style_data;   // ds:E811
+    uint8_t     m_byte_24h_from_fonts_style_data;   // ds:E812
+    uint8_t     m_byte_34h_from_fonts_style_data;   // ds:E813
+    uint16_t    m_Unk_E814;                         // ds:E814
+    uint16_t    m_Unk_E816;                         // ds:E816
+    int16_t     m_font_palette_section_index;       // ds:E818
+    int16_t     m_cur_font_nr;                      // ds:E81A
+    int16_t     m_display_text_xpel;                // ds:E81C
+    int16_t     m_display_text_ypel;                // ds:E81E
+    uint16_t    m_seg_fonts_style_data;             // ds:E820
+    uint16_t    m_seg_fonts_border_style_data;      // ds:E822
+
+    uint8_t     m_Unk_E824[0xE860 - 0xE824];        // ds:E824
+
+    EMS_descriptor    m_EMS_lbx_descriptor;         // ds:E860
+    uint8_t     m_Unk_E86C[0xE8A2 - 0xE86C];        // ds:E86C
+    int16_t     m_clickable_area_nr;                // ds:E8A2
+    uint8_t     m_Unk_E8A4[0xE8AC - 0xE8A4];        // ds:E8A4
+    EXE_Reloc   m_addr_ClickableArea;               // ds:E8AC
+
+    uint8_t     m_Unk_E8B0[0xEA54 - 0xE8B0];        // ds:E8B0
 
     // Offset ds:EA54  END DATA SEGMENT (DS)
 
@@ -5761,7 +5813,29 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
     char            m_Copyright2_and_Version[41];   // ds:389A  Offset version is at [34]
 
-    uint8_t         m_Unk_38C3[0x6900 - 0x38C3];    // ds:38C3
+    uint8_t         m_Unk_38C3[0x3CB8 - 0x38C3];    // ds:38C3
+
+    uint32_t        m_BIOS_clock_snapshot;          // ds:3CB8
+
+    uint8_t         m_Unk_3CBC[0x40E4 - 0x3CBC];    // ds:3CBC
+
+    uint16_t        m_EMS_data_reference_point;     // ds:40E4
+
+    uint8_t         m_Unk_40E6[0x431E - 0x40E6];    // ds:40E6
+
+    // Duplicated from Wizards datasegement, where it could not be uint32_t because g++ would align it on a 32-bit boundary
+    uint16_t        m_RNG_seed_lo;                  // ds:431E
+    uint16_t        m_RNG_seed_hi;                  // ds:4320
+
+    uint8_t         m_Unk_4322[0x434E - 0x4322];    // ds:4322
+
+    uint16_t        m_DEBUG_Off;                    // ds:434E
+
+    uint8_t         m_Unk_4350[0x4D44 - 0x4350];    // ds:4350
+
+    int16_t         m_Want_input_GUESS;             // ds:4D44
+
+    uint8_t         m_Unk_4D46[0x6900 - 0x4D46];    // ds:4D46
 
     Wizard          m_Wizards[6];                   // ds:6900
 
@@ -5799,7 +5873,11 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
     uint16_t        m_Total_Picks_Left;             // ds:8E94
 
-    uint8_t         m_Unk_8E96[0xAA4A - 0x8E96];    // ds:8E96
+    uint8_t         m_Unk_8E96[0xA8A2 - 0x8E96];    // ds:8E96
+
+    EXE_Reloc       m_addr_ClickableArea;           // ds:A8A2
+
+    uint8_t         m_Unk_A8A6[0xAA4A - 0xA8A6];    // ds:A8A6
 
                                                     // ds:AA4A  END DATA SEGMENT (DS)
 

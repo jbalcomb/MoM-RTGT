@@ -46,6 +46,8 @@ public:
 
     void close() throw();
 
+    bool createProcess(const char* applicationName, const char* commandLine, const char* currentDirectory);
+    bool terminateProcess();
     bool findProcessAndData();
 
     const uint8_t* getBaseAddress() const
@@ -165,7 +167,9 @@ private:
     //! vPid must be allocated with new. Ownership is transfered.
     bool tryLinuxPid(void* vPid);
     bool tryWindowTitle(const std::string& windowTitle);
+    bool tryProcessId(size_t dwProcessId);
 
+    void*       m_hCreatedProcess;
     void*       m_hProcess;
     uint8_t*    m_lpBaseAddress;
     size_t      m_dwBaseAddressSize;

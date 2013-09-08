@@ -4185,6 +4185,16 @@ std::ostream& operator<<(std::ostream& os, const Difficulty_Table& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const EMS_descriptor& rhs)
+{
+    os << "{\n";
+    os << "m_name=" << formatCharArray(rhs.m_name, 9) << "\n";
+    os << "m_Unk_09=" << (unsigned)rhs.m_Unk_09 << " 0x" << std::hex << (unsigned)rhs.m_Unk_09 << std::dec << "\n";
+    os << "m_Unk_0A=" << rhs.m_Unk_0A << " 0x" << std::hex << rhs.m_Unk_0A << std::dec << "\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const EXE_Header& rhs)
 {
     os << "{\n";
@@ -4940,16 +4950,6 @@ std::ostream& operator<<(std::ostream& os, const Lair_Inhabitant& rhs)
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Lbx_EMS_info& rhs)
-{
-    os << "{\n";
-    os << "m_buffer=" << formatCharArray(rhs.m_buffer, 8) << "\n";
-    os << "m_Unk_08=" << rhs.m_Unk_08 << " 0x" << std::hex << rhs.m_Unk_08 << std::dec << "\n";
-    os << "m_Unk_0A=" << rhs.m_Unk_0A << " 0x" << std::hex << rhs.m_Unk_0A << std::dec << "\n";
-    os << "}";
-    return os;
-}
-
 std::ostream& operator<<(std::ostream& os, const List_Hero_stats& rhs)
 {
     os << "{\n";
@@ -5335,9 +5335,16 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << ")\n";
     os << "m_BIOS_clock_snapshot=" << rhs.m_BIOS_clock_snapshot << " 0x" << std::hex << rhs.m_BIOS_clock_snapshot << std::dec << "\n";
     os << "m_Unk_71E4=(\n";
-    for (unsigned i = 0; i < 0x7846 - 0x71E4; ++i)
+    for (unsigned i = 0; i < 0x760C - 0x71E4; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_71E4[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_71E4[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_EMS_data_reference_point=" << rhs.m_EMS_data_reference_point << " 0x" << std::hex << rhs.m_EMS_data_reference_point << std::dec << "\n";
+    os << "m_Unk_760E=(\n";
+    for (unsigned i = 0; i < 0x7846 - 0x760E; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_760E[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_760E[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_RNG_seed_lo=" << rhs.m_RNG_seed_lo << " 0x" << std::hex << rhs.m_RNG_seed_lo << std::dec << "\n";
@@ -6155,16 +6162,62 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_E5CA[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E5CA[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_lbx_filenames_x_0C=(\n";
-    for (unsigned i = 0; i < 0x10; ++i)
+    os << "m_EMS_lbx_descriptors_0C=(\n";
+    for (unsigned i = 0; i < 40; ++i)
     {
-        os << "[" << i << "] " << rhs.m_lbx_filenames_x_0C[i] << ",\n";
+        os << "[" << i << "] " << rhs.m_EMS_lbx_descriptors_0C[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_E6BC=(\n";
-    for (unsigned i = 0; i < 0xEA54 - 0xE6BC; ++i)
+    os << "m_required_EMS_memory=" << rhs.m_required_EMS_memory << " 0x" << std::hex << rhs.m_required_EMS_memory << std::dec << "\n";
+    os << "m_Unk_E7DE=(\n";
+    for (unsigned i = 0; i < 0xE800 - 0xE7DE; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E6BC[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E6BC[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E7DE[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E7DE[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_arr16_font_palette=(\n";
+    for (unsigned i = 0; i < 16; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_arr16_font_palette[i] << " 0x" << std::hex << (unsigned)rhs.m_arr16_font_palette[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_byte_00h_from_fonts_style_data=" << (unsigned)rhs.m_byte_00h_from_fonts_style_data << " 0x" << std::hex << (unsigned)rhs.m_byte_00h_from_fonts_style_data << std::dec << "\n";
+    os << "m_byte_14h_from_fonts_style_data=" << (unsigned)rhs.m_byte_14h_from_fonts_style_data << " 0x" << std::hex << (unsigned)rhs.m_byte_14h_from_fonts_style_data << std::dec << "\n";
+    os << "m_byte_24h_from_fonts_style_data=" << (unsigned)rhs.m_byte_24h_from_fonts_style_data << " 0x" << std::hex << (unsigned)rhs.m_byte_24h_from_fonts_style_data << std::dec << "\n";
+    os << "m_byte_34h_from_fonts_style_data=" << (unsigned)rhs.m_byte_34h_from_fonts_style_data << " 0x" << std::hex << (unsigned)rhs.m_byte_34h_from_fonts_style_data << std::dec << "\n";
+    os << "m_Unk_E814=" << rhs.m_Unk_E814 << " 0x" << std::hex << rhs.m_Unk_E814 << std::dec << "\n";
+    os << "m_Unk_E816=" << rhs.m_Unk_E816 << " 0x" << std::hex << rhs.m_Unk_E816 << std::dec << "\n";
+    os << "m_font_palette_section_index=" << rhs.m_font_palette_section_index << " 0x" << std::hex << rhs.m_font_palette_section_index << std::dec << "\n";
+    os << "m_cur_font_nr=" << rhs.m_cur_font_nr << " 0x" << std::hex << rhs.m_cur_font_nr << std::dec << "\n";
+    os << "m_display_text_xpel=" << rhs.m_display_text_xpel << " 0x" << std::hex << rhs.m_display_text_xpel << std::dec << "\n";
+    os << "m_display_text_ypel=" << rhs.m_display_text_ypel << " 0x" << std::hex << rhs.m_display_text_ypel << std::dec << "\n";
+    os << "m_seg_fonts_style_data=" << rhs.m_seg_fonts_style_data << " 0x" << std::hex << rhs.m_seg_fonts_style_data << std::dec << "\n";
+    os << "m_seg_fonts_border_style_data=" << rhs.m_seg_fonts_border_style_data << " 0x" << std::hex << rhs.m_seg_fonts_border_style_data << std::dec << "\n";
+    os << "m_Unk_E824=(\n";
+    for (unsigned i = 0; i < 0xE860 - 0xE824; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E824[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E824[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_EMS_lbx_descriptor=" << rhs.m_EMS_lbx_descriptor << "\n";
+    os << "m_Unk_E86C=(\n";
+    for (unsigned i = 0; i < 0xE8A2 - 0xE86C; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E86C[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E86C[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_clickable_area_nr=" << rhs.m_clickable_area_nr << " 0x" << std::hex << rhs.m_clickable_area_nr << std::dec << "\n";
+    os << "m_Unk_E8A4=(\n";
+    for (unsigned i = 0; i < 0xE8AC - 0xE8A4; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E8A4[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E8A4[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_addr_ClickableArea=" << rhs.m_addr_ClickableArea << "\n";
+    os << "m_Unk_E8B0=(\n";
+    for (unsigned i = 0; i < 0xEA54 - 0xE8B0; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_E8B0[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_E8B0[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_PARALIGN09=(\n";
@@ -6360,9 +6413,45 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     os << ")\n";
     os << "m_Copyright2_and_Version=" << formatCharArray(rhs.m_Copyright2_and_Version, 41) << "\n";
     os << "m_Unk_38C3=(\n";
-    for (unsigned i = 0; i < 0x6900 - 0x38C3; ++i)
+    for (unsigned i = 0; i < 0x3CB8 - 0x38C3; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_38C3[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_38C3[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_BIOS_clock_snapshot=" << rhs.m_BIOS_clock_snapshot << " 0x" << std::hex << rhs.m_BIOS_clock_snapshot << std::dec << "\n";
+    os << "m_Unk_3CBC=(\n";
+    for (unsigned i = 0; i < 0x40E4 - 0x3CBC; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_3CBC[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_3CBC[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_EMS_data_reference_point=" << rhs.m_EMS_data_reference_point << " 0x" << std::hex << rhs.m_EMS_data_reference_point << std::dec << "\n";
+    os << "m_Unk_40E6=(\n";
+    for (unsigned i = 0; i < 0x431E - 0x40E6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_40E6[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_40E6[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_RNG_seed_lo=" << rhs.m_RNG_seed_lo << " 0x" << std::hex << rhs.m_RNG_seed_lo << std::dec << "\n";
+    os << "m_RNG_seed_hi=" << rhs.m_RNG_seed_hi << " 0x" << std::hex << rhs.m_RNG_seed_hi << std::dec << "\n";
+    os << "m_Unk_4322=(\n";
+    for (unsigned i = 0; i < 0x434E - 0x4322; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_4322[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4322[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_DEBUG_Off=" << rhs.m_DEBUG_Off << " 0x" << std::hex << rhs.m_DEBUG_Off << std::dec << "\n";
+    os << "m_Unk_4350=(\n";
+    for (unsigned i = 0; i < 0x4D44 - 0x4350; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_4350[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4350[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Want_input_GUESS=" << rhs.m_Want_input_GUESS << " 0x" << std::hex << rhs.m_Want_input_GUESS << std::dec << "\n";
+    os << "m_Unk_4D46=(\n";
+    for (unsigned i = 0; i < 0x6900 - 0x4D46; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_4D46[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4D46[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Wizards=(\n";
@@ -6442,9 +6531,16 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     os << ")\n";
     os << "m_Total_Picks_Left=" << rhs.m_Total_Picks_Left << " 0x" << std::hex << rhs.m_Total_Picks_Left << std::dec << "\n";
     os << "m_Unk_8E96=(\n";
-    for (unsigned i = 0; i < 0xAA4A - 0x8E96; ++i)
+    for (unsigned i = 0; i < 0xA8A2 - 0x8E96; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_8E96[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_8E96[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_addr_ClickableArea=" << rhs.m_addr_ClickableArea << "\n";
+    os << "m_Unk_A8A6=(\n";
+    for (unsigned i = 0; i < 0xAA4A - 0xA8A6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_A8A6[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_A8A6[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Unk_AA4A=(\n";

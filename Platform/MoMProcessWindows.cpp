@@ -44,6 +44,76 @@ void MoMProcess::closeProcess() throw()
         CloseHandle(m_hProcess);
         m_hProcess = NULL;
     }
+    if (NULL != m_hCreatedProcess)
+    {
+        terminateProcess();
+    }
+}
+
+bool MoMProcess::createProcess(const char* applicationName, const char* commandLine, const char* currentDirectory)
+{
+    close();
+
+    char* pszCommandLine = NULL;
+    std::string strCommandLine(commandLine);
+    if (commandLine != NULL)
+    {
+        strCommandLine.resize(strlen(commandLine) + 1, '\0');
+        pszCommandLine = &strCommandLine[0];
+        strcpy(pszCommandLine, commandLine);
+    }
+
+    STARTUPINFOA startupInfo = { sizeof(STARTUPINFOA) };
+    PROCESS_INFORMATION processInformation = { 0 };
+
+    std::cout << "CreateProcessA(app='" << applicationName << "', cmdline='" << pszCommandLine << "', dir='" << currentDirectory << "')" << std::endl;
+    bool ok = (FALSE != CreateProcessA(applicationName, pszCommandLine,
+                                       NULL, NULL, FALSE, 0, NULL,
+                                       currentDirectory, &startupInfo, &processInformation));
+    if (!ok)
+    {
+        printError(GetLastError(), "CreateProcessA()");
+    }
+    else
+    {
+        std::cout << "Process created: ProcessId=" << (unsigned)processInformation.dwProcessId
+                  << " hProcess=0x" << std::hex << (unsigned)processInformation.hProcess << std::dec << std::endl;
+        CloseHandle(processInformation.hThread);
+        m_hCreatedProcess = processInformation.hProcess;
+    }
+
+    if (ok)
+    {
+        const int max_tries = 10;
+        ok = false;
+        for (int i = 0; !ok && i < max_tries; ++i)
+        {
+            Sleep(100);
+            ok = tryProcessId(processInformation.dwProcessId);
+            if (ok)
+            {
+                std::cout << "Found MoM after " << i << " tries" << std::endl;
+            }
+        }
+    }
+
+    return ok;
+}
+
+bool MoMProcess::terminateProcess()
+{
+    std::cout << "Terminating process" << std::endl;
+    bool ok = (FALSE != TerminateProcess(m_hCreatedProcess, 2));
+    if (!ok)
+    {
+        printError(GetLastError(), "TerminateProcess()");
+    }
+    else
+    {
+        std::cout << "Process terminated" << std::endl;
+        m_hCreatedProcess = NULL;
+    }
+    return ok;
 }
 
 bool MoMProcess::findProcessAndData()
@@ -78,6 +148,13 @@ bool MoMProcess::tryWindowTitle(const std::string& windowTitle)
     DWORD dwProcessId = 0;
     GetWindowThreadProcessId(hwnd, &dwProcessId);
 
+    bool ok = tryProcessId(dwProcessId);
+
+    return ok;
+}
+
+bool MoMProcess::tryProcessId(size_t dwProcessId)
+{
     m_hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, FALSE, dwProcessId);
     if (NULL == m_hProcess)
     {

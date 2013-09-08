@@ -1245,6 +1245,18 @@ QMoMTreeItemModelBase* constructTreeItem(Difficulty_Table* rhs, const QString& c
     return ptree;
 }
 
+QMoMTreeItemModelBase* constructTreeItem(EMS_descriptor* rhs, const QString& context)
+{
+    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<EMS_descriptor>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    ptree->appendChild("m_name", new QMoMTreeItemModel<char[9]>(rhs->m_name));
+    ptree->appendChild("m_Unk_09", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_09));
+    ptree->appendChild("m_Unk_0A", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_0A));
+    return ptree;
+}
+
 QMoMTreeItemModelBase* constructTreeItem(EXE_Header* rhs, const QString& context)
 {
     QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<EXE_Header>(rhs, context);
@@ -2533,18 +2545,6 @@ QMoMTreeItemModelBase* constructTreeItem(Lair_Inhabitant* rhs, const QString& co
     return ptree;
 }
 
-QMoMTreeItemModelBase* constructTreeItem(Lbx_EMS_info* rhs, const QString& context)
-{
-    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<Lbx_EMS_info>(rhs, context);
-    if (0 == rhs)
-        return ptree;
-
-    ptree->appendChild("m_buffer", new QMoMTreeItemModel<char[8]>(rhs->m_buffer));
-    ptree->appendChild("m_Unk_08", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_08));
-    ptree->appendChild("m_Unk_0A", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_0A));
-    return ptree;
-}
-
 QMoMTreeItemModelBase* constructTreeItem(List_Hero_stats* rhs, const QString& context)
 {
     QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<List_Hero_stats>(rhs, context);
@@ -3195,16 +3195,29 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     }
     ptree->appendChild("m_BIOS_clock_snapshot", new QMoMTreeItemModel<uint32_t>(&rhs->m_BIOS_clock_snapshot));
     QMoMTreeItemModelBase* ptreem_Unk_71E4 = ptree;
-    if (0x7846 - 0x71E4 > 3)
+    if (0x760C - 0x71E4 > 3)
     {
         ptreem_Unk_71E4 = new QMoMTreeItemModelBase("m_Unk_71E4");
         ptree->appendTree(ptreem_Unk_71E4, "");
     }
-    for (unsigned i = 0; i < 0x7846 - 0x71E4; ++i)
+    for (unsigned i = 0; i < 0x760C - 0x71E4; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_71E4[" << i << "]";
           ptreem_Unk_71E4->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_71E4[i]));
+    }
+    ptree->appendChild("m_EMS_data_reference_point", new QMoMTreeItemModel<uint16_t>(&rhs->m_EMS_data_reference_point));
+    QMoMTreeItemModelBase* ptreem_Unk_760E = ptree;
+    if (0x7846 - 0x760E > 3)
+    {
+        ptreem_Unk_760E = new QMoMTreeItemModelBase("m_Unk_760E");
+        ptree->appendTree(ptreem_Unk_760E, "");
+    }
+    for (unsigned i = 0; i < 0x7846 - 0x760E; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_760E[" << i << "]";
+          ptreem_Unk_760E->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_760E[i]));
     }
     ptree->appendChild("m_RNG_seed_lo", new QMoMTreeItemModel<uint16_t>(&rhs->m_RNG_seed_lo));
     ptree->appendChild("m_RNG_seed_hi", new QMoMTreeItemModel<uint16_t>(&rhs->m_RNG_seed_hi));
@@ -4477,29 +4490,105 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
           oss << "m_Unk_E5CA[" << i << "]";
           ptreem_Unk_E5CA->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E5CA[i]));
     }
-    QMoMTreeItemModelBase* ptreem_lbx_filenames_x_0C = ptree;
-    if (0x10 > 3)
+    QMoMTreeItemModelBase* ptreem_EMS_lbx_descriptors_0C = ptree;
+    if (40 > 3)
     {
-        ptreem_lbx_filenames_x_0C = new QMoMTreeItemModelBase("m_lbx_filenames_x_0C");
-        ptree->appendTree(ptreem_lbx_filenames_x_0C, "");
+        ptreem_EMS_lbx_descriptors_0C = new QMoMTreeItemModelBase("m_EMS_lbx_descriptors_0C");
+        ptree->appendTree(ptreem_EMS_lbx_descriptors_0C, "");
     }
-    for (unsigned i = 0; i < 0x10; ++i)
+    for (unsigned i = 0; i < 40; ++i)
     {
           std::ostringstream oss;
-          oss << "m_lbx_filenames_x_0C[" << i << "]";
-          ptreem_lbx_filenames_x_0C->appendTree(constructTreeItem(&rhs->m_lbx_filenames_x_0C[i], oss.str().c_str()), "");
+          oss << "m_EMS_lbx_descriptors_0C[" << i << "]";
+          ptreem_EMS_lbx_descriptors_0C->appendTree(constructTreeItem(&rhs->m_EMS_lbx_descriptors_0C[i], oss.str().c_str()), "");
     }
-    QMoMTreeItemModelBase* ptreem_Unk_E6BC = ptree;
-    if (0xEA54 - 0xE6BC > 3)
+    ptree->appendChild("m_required_EMS_memory", new QMoMTreeItemModel<uint16_t>(&rhs->m_required_EMS_memory));
+    QMoMTreeItemModelBase* ptreem_Unk_E7DE = ptree;
+    if (0xE800 - 0xE7DE > 3)
     {
-        ptreem_Unk_E6BC = new QMoMTreeItemModelBase("m_Unk_E6BC");
-        ptree->appendTree(ptreem_Unk_E6BC, "");
+        ptreem_Unk_E7DE = new QMoMTreeItemModelBase("m_Unk_E7DE");
+        ptree->appendTree(ptreem_Unk_E7DE, "");
     }
-    for (unsigned i = 0; i < 0xEA54 - 0xE6BC; ++i)
+    for (unsigned i = 0; i < 0xE800 - 0xE7DE; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_E6BC[" << i << "]";
-          ptreem_Unk_E6BC->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E6BC[i]));
+          oss << "m_Unk_E7DE[" << i << "]";
+          ptreem_Unk_E7DE->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E7DE[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_arr16_font_palette = ptree;
+    if (16 > 3)
+    {
+        ptreem_arr16_font_palette = new QMoMTreeItemModelBase("m_arr16_font_palette");
+        ptree->appendTree(ptreem_arr16_font_palette, "");
+    }
+    for (unsigned i = 0; i < 16; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_arr16_font_palette[" << i << "]";
+          ptreem_arr16_font_palette->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_arr16_font_palette[i]));
+    }
+    ptree->appendChild("m_byte_00h_from_fonts_style_data", new QMoMTreeItemModel<uint8_t>(&rhs->m_byte_00h_from_fonts_style_data));
+    ptree->appendChild("m_byte_14h_from_fonts_style_data", new QMoMTreeItemModel<uint8_t>(&rhs->m_byte_14h_from_fonts_style_data));
+    ptree->appendChild("m_byte_24h_from_fonts_style_data", new QMoMTreeItemModel<uint8_t>(&rhs->m_byte_24h_from_fonts_style_data));
+    ptree->appendChild("m_byte_34h_from_fonts_style_data", new QMoMTreeItemModel<uint8_t>(&rhs->m_byte_34h_from_fonts_style_data));
+    ptree->appendChild("m_Unk_E814", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_E814));
+    ptree->appendChild("m_Unk_E816", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_E816));
+    ptree->appendChild("m_font_palette_section_index", new QMoMTreeItemModel<int16_t>(&rhs->m_font_palette_section_index));
+    ptree->appendChild("m_cur_font_nr", new QMoMTreeItemModel<int16_t>(&rhs->m_cur_font_nr));
+    ptree->appendChild("m_display_text_xpel", new QMoMTreeItemModel<int16_t>(&rhs->m_display_text_xpel));
+    ptree->appendChild("m_display_text_ypel", new QMoMTreeItemModel<int16_t>(&rhs->m_display_text_ypel));
+    ptree->appendChild("m_seg_fonts_style_data", new QMoMTreeItemModel<uint16_t>(&rhs->m_seg_fonts_style_data));
+    ptree->appendChild("m_seg_fonts_border_style_data", new QMoMTreeItemModel<uint16_t>(&rhs->m_seg_fonts_border_style_data));
+    QMoMTreeItemModelBase* ptreem_Unk_E824 = ptree;
+    if (0xE860 - 0xE824 > 3)
+    {
+        ptreem_Unk_E824 = new QMoMTreeItemModelBase("m_Unk_E824");
+        ptree->appendTree(ptreem_Unk_E824, "");
+    }
+    for (unsigned i = 0; i < 0xE860 - 0xE824; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_E824[" << i << "]";
+          ptreem_Unk_E824->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E824[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->m_EMS_lbx_descriptor, "m_EMS_lbx_descriptor"), "");
+    QMoMTreeItemModelBase* ptreem_Unk_E86C = ptree;
+    if (0xE8A2 - 0xE86C > 3)
+    {
+        ptreem_Unk_E86C = new QMoMTreeItemModelBase("m_Unk_E86C");
+        ptree->appendTree(ptreem_Unk_E86C, "");
+    }
+    for (unsigned i = 0; i < 0xE8A2 - 0xE86C; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_E86C[" << i << "]";
+          ptreem_Unk_E86C->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E86C[i]));
+    }
+    ptree->appendChild("m_clickable_area_nr", new QMoMTreeItemModel<int16_t>(&rhs->m_clickable_area_nr));
+    QMoMTreeItemModelBase* ptreem_Unk_E8A4 = ptree;
+    if (0xE8AC - 0xE8A4 > 3)
+    {
+        ptreem_Unk_E8A4 = new QMoMTreeItemModelBase("m_Unk_E8A4");
+        ptree->appendTree(ptreem_Unk_E8A4, "");
+    }
+    for (unsigned i = 0; i < 0xE8AC - 0xE8A4; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_E8A4[" << i << "]";
+          ptreem_Unk_E8A4->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E8A4[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_ClickableArea, "m_addr_ClickableArea"), "");
+    QMoMTreeItemModelBase* ptreem_Unk_E8B0 = ptree;
+    if (0xEA54 - 0xE8B0 > 3)
+    {
+        ptreem_Unk_E8B0 = new QMoMTreeItemModelBase("m_Unk_E8B0");
+        ptree->appendTree(ptreem_Unk_E8B0, "");
+    }
+    for (unsigned i = 0; i < 0xEA54 - 0xE8B0; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_E8B0[" << i << "]";
+          ptreem_Unk_E8B0->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_E8B0[i]));
     }
     QMoMTreeItemModelBase* ptreem_PARALIGN09 = ptree;
     if (0x0C > 3)
@@ -4838,16 +4927,82 @@ QMoMTreeItemModelBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString
     }
     ptree->appendChild("m_Copyright2_and_Version", new QMoMTreeItemModel<char[41]>(rhs->m_Copyright2_and_Version));
     QMoMTreeItemModelBase* ptreem_Unk_38C3 = ptree;
-    if (0x6900 - 0x38C3 > 3)
+    if (0x3CB8 - 0x38C3 > 3)
     {
         ptreem_Unk_38C3 = new QMoMTreeItemModelBase("m_Unk_38C3");
         ptree->appendTree(ptreem_Unk_38C3, "");
     }
-    for (unsigned i = 0; i < 0x6900 - 0x38C3; ++i)
+    for (unsigned i = 0; i < 0x3CB8 - 0x38C3; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_38C3[" << i << "]";
           ptreem_Unk_38C3->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_38C3[i]));
+    }
+    ptree->appendChild("m_BIOS_clock_snapshot", new QMoMTreeItemModel<uint32_t>(&rhs->m_BIOS_clock_snapshot));
+    QMoMTreeItemModelBase* ptreem_Unk_3CBC = ptree;
+    if (0x40E4 - 0x3CBC > 3)
+    {
+        ptreem_Unk_3CBC = new QMoMTreeItemModelBase("m_Unk_3CBC");
+        ptree->appendTree(ptreem_Unk_3CBC, "");
+    }
+    for (unsigned i = 0; i < 0x40E4 - 0x3CBC; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_3CBC[" << i << "]";
+          ptreem_Unk_3CBC->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_3CBC[i]));
+    }
+    ptree->appendChild("m_EMS_data_reference_point", new QMoMTreeItemModel<uint16_t>(&rhs->m_EMS_data_reference_point));
+    QMoMTreeItemModelBase* ptreem_Unk_40E6 = ptree;
+    if (0x431E - 0x40E6 > 3)
+    {
+        ptreem_Unk_40E6 = new QMoMTreeItemModelBase("m_Unk_40E6");
+        ptree->appendTree(ptreem_Unk_40E6, "");
+    }
+    for (unsigned i = 0; i < 0x431E - 0x40E6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_40E6[" << i << "]";
+          ptreem_Unk_40E6->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_40E6[i]));
+    }
+    ptree->appendChild("m_RNG_seed_lo", new QMoMTreeItemModel<uint16_t>(&rhs->m_RNG_seed_lo));
+    ptree->appendChild("m_RNG_seed_hi", new QMoMTreeItemModel<uint16_t>(&rhs->m_RNG_seed_hi));
+    QMoMTreeItemModelBase* ptreem_Unk_4322 = ptree;
+    if (0x434E - 0x4322 > 3)
+    {
+        ptreem_Unk_4322 = new QMoMTreeItemModelBase("m_Unk_4322");
+        ptree->appendTree(ptreem_Unk_4322, "");
+    }
+    for (unsigned i = 0; i < 0x434E - 0x4322; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_4322[" << i << "]";
+          ptreem_Unk_4322->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4322[i]));
+    }
+    ptree->appendChild("m_DEBUG_Off", new QMoMTreeItemModel<uint16_t>(&rhs->m_DEBUG_Off));
+    QMoMTreeItemModelBase* ptreem_Unk_4350 = ptree;
+    if (0x4D44 - 0x4350 > 3)
+    {
+        ptreem_Unk_4350 = new QMoMTreeItemModelBase("m_Unk_4350");
+        ptree->appendTree(ptreem_Unk_4350, "");
+    }
+    for (unsigned i = 0; i < 0x4D44 - 0x4350; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_4350[" << i << "]";
+          ptreem_Unk_4350->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4350[i]));
+    }
+    ptree->appendChild("m_Want_input_GUESS", new QMoMTreeItemModel<int16_t>(&rhs->m_Want_input_GUESS));
+    QMoMTreeItemModelBase* ptreem_Unk_4D46 = ptree;
+    if (0x6900 - 0x4D46 > 3)
+    {
+        ptreem_Unk_4D46 = new QMoMTreeItemModelBase("m_Unk_4D46");
+        ptree->appendTree(ptreem_Unk_4D46, "");
+    }
+    for (unsigned i = 0; i < 0x6900 - 0x4D46; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_4D46[" << i << "]";
+          ptreem_Unk_4D46->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4D46[i]));
     }
     QMoMTreeItemModelBase* ptreem_Wizards = ptree;
     if (6 > 3)
@@ -4992,16 +5147,29 @@ QMoMTreeItemModelBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString
     }
     ptree->appendChild("m_Total_Picks_Left", new QMoMTreeItemModel<uint16_t>(&rhs->m_Total_Picks_Left));
     QMoMTreeItemModelBase* ptreem_Unk_8E96 = ptree;
-    if (0xAA4A - 0x8E96 > 3)
+    if (0xA8A2 - 0x8E96 > 3)
     {
         ptreem_Unk_8E96 = new QMoMTreeItemModelBase("m_Unk_8E96");
         ptree->appendTree(ptreem_Unk_8E96, "");
     }
-    for (unsigned i = 0; i < 0xAA4A - 0x8E96; ++i)
+    for (unsigned i = 0; i < 0xA8A2 - 0x8E96; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_8E96[" << i << "]";
           ptreem_Unk_8E96->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_8E96[i]));
+    }
+    ptree->appendTree(constructTreeItem(&rhs->m_addr_ClickableArea, "m_addr_ClickableArea"), "");
+    QMoMTreeItemModelBase* ptreem_Unk_A8A6 = ptree;
+    if (0xAA4A - 0xA8A6 > 3)
+    {
+        ptreem_Unk_A8A6 = new QMoMTreeItemModelBase("m_Unk_A8A6");
+        ptree->appendTree(ptreem_Unk_A8A6, "");
+    }
+    for (unsigned i = 0; i < 0xAA4A - 0xA8A6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_A8A6[" << i << "]";
+          ptreem_Unk_A8A6->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_A8A6[i]));
     }
     QMoMTreeItemModelBase* ptreem_Unk_AA4A = ptree;
     if (0xFE68 - 0xAA4A > 3)

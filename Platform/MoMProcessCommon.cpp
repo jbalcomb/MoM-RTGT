@@ -17,6 +17,7 @@ namespace MoM
 {
 
 MoMProcess::MoMProcess(void) :
+    m_hCreatedProcess(NULL),
     m_hProcess(NULL),
     m_lpBaseAddress(0),
     m_dwBaseAddressSize(0),

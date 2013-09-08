@@ -23,10 +23,27 @@ DialogWizard::DialogWizard(QWidget *parent) :
 
     // Display first form
     slot_selectGameOptions();
+
+    // Start MoM process
+    qDebug() << "Start MoM process";
+//    bool ok = momProcess.createProcess(
+//                "C:\\Program Files (x86)\\DOSBox-0.74\\DOSBox.exe",
+//                "-conf C:\\games\\MAGIC\\dosbox.conf MAGIC.EXE -noconsole",
+//                "C:\\games\\MAGIC-work");
+    bool ok = momProcess.createProcess(
+                "C:\\Program Files (x86)\\DOSBox-0.74\\DOSBox.exe",
+                "\"C:\\Program Files (x86)\\DOSBox-0.74\\DOSBox.exe\""
+                    " -conf C:\\games\\MAGIC-work\\MC_dosbox.conf"      // Execute dosbox.conf
+                    " -noconsole",                                      // No console (in Windows)
+                "C:\\games\\MAGIC-work");
+    qDebug() << "createProcess() -> " << ok;
 }
 
 DialogWizard::~DialogWizard()
 {
+    bool ok = momProcess.terminateProcess();
+    qDebug() << "terminateProcess() -> " << ok;
+
     delete ui;
 }
 

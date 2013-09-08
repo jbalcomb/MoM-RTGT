@@ -25,6 +25,7 @@
 
 #include "unitmodel.h"
 
+using namespace MoM;
 using MoM::QMoMResources;
 
 QString toQStr(const QModelIndex& index)
@@ -617,8 +618,8 @@ void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int
     ptree->child(row, 2)->setData(QString("SAVEn.GAM only"), Qt::EditRole);
     ++row;
 
-    MoM::MoMDataSegment* dataSegment = game->getDataSegment();
-    MoM::MoMMagicDataSegment* magicDataSegment = game->getMagicDataSegment();
+    MoMDataSegment* dataSegment = game->getDataSegment();
+    MoMMagicDataSegment* magicDataSegment = game->getMagicDataSegment();
 
     if (row >= ptree->rowCount())
     {
@@ -645,6 +646,9 @@ void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int
         {
             ptree->child(row, 0)->appendChild(QString("Copyright1/Version"), new QMoMTreeItemModel<char[41]>(magicDataSegment->m_Copyright1_and_Version));
             ptree->child(row, 0)->appendChild(QString("Copyright2/Version"), new QMoMTreeItemModel<char[41]>(magicDataSegment->m_Copyright2_and_Version));
+            ptree->child(row, 0)->appendChild(QString(" RNG_Seed"), new QMoMTreeItemModel<uint32_t>((uint32_t*)&magicDataSegment->m_RNG_seed_lo));
+            ptree->child(row, 0)->appendChild(QString(" DEBUG Off"), new QMoMTreeItemModel<uint16_t>(&magicDataSegment->m_DEBUG_Off));
+            ptree->child(row, 0)->appendChild(QString(" BIOS Clock snapshot"), new QMoMTreeItemModel<uint32_t>(&magicDataSegment->m_BIOS_clock_snapshot));
         }
     }
     ptree->child(row, 0)->setData(QString("MEM:Game Data"), Qt::EditRole);
@@ -2034,11 +2038,14 @@ void UnitModel::threadUpdateModelData()
 
             int subrow = 0;
             QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
-            MoM::MoMMagicDataSegment* pMagicDataSegment = game->getMagicDataSegment();
+            MoMMagicDataSegment* pMagicDataSegment = game->getMagicDataSegment();
 
             if (0 == psubtree->rowCount())
             {
-				for (int i = 0; i < 10; ++i)
+                psubtree->appendChild("Want input GUESS", new QMoMTreeItemModel<int16_t>(&pMagicDataSegment->m_Want_input_GUESS));
+                subrow++;
+
+                for (int i = 0; i < 10; ++i)
 				{
                     psubtree->appendChild(QString("Nr spells %0 books").arg(i+2), new QMoMTreeItemModel<int16_t>(&pMagicDataSegment->m_Nr_spell_choices[i]));
 					subrow++;
