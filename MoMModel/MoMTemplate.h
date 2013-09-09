@@ -5835,11 +5835,15 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
     int16_t         m_Want_input_GUESS;             // ds:4D44
 
-    uint8_t         m_Unk_4D46[0x6900 - 0x4D46];    // ds:4D46
+    uint8_t         m_Unk_4D46[0x52EA - 0x4D46];    // ds:4D46
+
+    int16_t         m_Button_New_game_ID;           // ds:52EA
+
+    uint8_t         m_Unk_52EC[0x6900 - 0x52EC];    // ds:52EC
 
     Wizard          m_Wizards[6];                   // ds:6900
 
-    eSpell16        m_Spells_selected_of_Realm[150]; // ds:85B0
+    eSpell16        m_Spells_selected_of_Realm[150];// ds:85B0
 
     uint8_t         m_Unk_86DC[0x87C4 - 0x86DC];    // ds:86DC
 
@@ -5865,12 +5869,14 @@ typedef struct PACKED_STRUCT // MoMMagicDataSegment
 
     uint16_t        m_Spells_Known_Realm_Indexed[15];    // ds:8DE6
 
-    uint8_t         m_Unk_8E04[0x8E48 - 0x8E04];    // ds:8E04
+    uint8_t         m_Unk_8E04[0x8E0C - 0x8E04];    // ds:8E04
 
-    ePortrait       m_Select_Wizard_Shown;          // ds:8E48
+    int16_t         m_Button_IDs[30];               // ds:8E0C
+    ePortrait       m_Wizard_portrait_shown;        // ds:8E48
 
-    uint8_t         m_Unk_8E49[0x8E94 - 0x8E49];    // ds:8E49
+    uint8_t         m_Unk_8E49[0x8E92 - 0x8E49];    // ds:8E49
 
+    int16_t         m_Button_OK_ID;                 // ds:8E92
     uint16_t        m_Total_Picks_Left;             // ds:8E94
 
     uint8_t         m_Unk_8E96[0xA8A2 - 0x8E96];    // ds:8E96

@@ -5121,30 +5121,43 @@ QMoMTreeItemModelBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString
           ptreem_Spells_Known_Realm_Indexed->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint16_t>(&rhs->m_Spells_Known_Realm_Indexed[i]));
     }
     QMoMTreeItemModelBase* ptreem_Unk_8E04 = ptree;
-    if (0x8E48 - 0x8E04 > 3)
+    if (0x8E0C - 0x8E04 > 3)
     {
         ptreem_Unk_8E04 = new QMoMTreeItemModelBase("m_Unk_8E04");
         ptree->appendTree(ptreem_Unk_8E04, "");
     }
-    for (unsigned i = 0; i < 0x8E48 - 0x8E04; ++i)
+    for (unsigned i = 0; i < 0x8E0C - 0x8E04; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_8E04[" << i << "]";
           ptreem_Unk_8E04->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_8E04[i]));
     }
-    ptree->appendChild("m_Select_Wizard_Shown", new QMoMTreeItemModel<ePortrait>(&rhs->m_Select_Wizard_Shown));
+    QMoMTreeItemModelBase* ptreem_Button_IDs = ptree;
+    if (30 > 3)
+    {
+        ptreem_Button_IDs = new QMoMTreeItemModelBase("m_Button_IDs");
+        ptree->appendTree(ptreem_Button_IDs, "");
+    }
+    for (unsigned i = 0; i < 30; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Button_IDs[" << i << "]";
+          ptreem_Button_IDs->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Button_IDs[i]));
+    }
+    ptree->appendChild("m_Wizard_portrait_shown", new QMoMTreeItemModel<ePortrait>(&rhs->m_Wizard_portrait_shown));
     QMoMTreeItemModelBase* ptreem_Unk_8E49 = ptree;
-    if (0x8E94 - 0x8E49 > 3)
+    if (0x8E92 - 0x8E49 > 3)
     {
         ptreem_Unk_8E49 = new QMoMTreeItemModelBase("m_Unk_8E49");
         ptree->appendTree(ptreem_Unk_8E49, "");
     }
-    for (unsigned i = 0; i < 0x8E94 - 0x8E49; ++i)
+    for (unsigned i = 0; i < 0x8E92 - 0x8E49; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_8E49[" << i << "]";
           ptreem_Unk_8E49->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_8E49[i]));
     }
+    ptree->appendChild("m_Button_OK_ID", new QMoMTreeItemModel<int16_t>(&rhs->m_Button_OK_ID));
     ptree->appendChild("m_Total_Picks_Left", new QMoMTreeItemModel<uint16_t>(&rhs->m_Total_Picks_Left));
     QMoMTreeItemModelBase* ptreem_Unk_8E96 = ptree;
     if (0xA8A2 - 0x8E96 > 3)

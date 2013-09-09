@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <QMoMSharedPointers.h>
+
 namespace Ui {
 class FormGameOptions;
 }
@@ -12,7 +14,7 @@ class FormGameOptions : public QWidget
     Q_OBJECT
     
 public:
-    explicit FormGameOptions(QWidget *parent = 0);
+    explicit FormGameOptions(QWidget *parent, QMoMGamePtr& game);
     ~FormGameOptions();
     
 private slots:
@@ -26,6 +28,7 @@ signals:
 
 private:
     Ui::FormGameOptions *ui;
+    QMoMGamePtr m_game;
 };
 
 #endif // FORMGAMEOPTIONS_H

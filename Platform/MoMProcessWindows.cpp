@@ -46,7 +46,7 @@ void MoMProcess::closeProcess() throw()
     }
     if (NULL != m_hCreatedProcess)
     {
-        terminateProcess();
+        terminateCreatedProcess();
     }
 }
 
@@ -100,7 +100,7 @@ bool MoMProcess::createProcess(const char* applicationName, const char* commandL
     return ok;
 }
 
-bool MoMProcess::terminateProcess()
+bool MoMProcess::terminateCreatedProcess()
 {
     std::cout << "Terminating process" << std::endl;
     bool ok = (FALSE != TerminateProcess(m_hCreatedProcess, 2));

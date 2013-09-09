@@ -47,7 +47,7 @@ public:
     void close() throw();
 
     bool createProcess(const char* applicationName, const char* commandLine, const char* currentDirectory);
-    bool terminateProcess();
+    bool terminateCreatedProcess();
     bool findProcessAndData();
 
     const uint8_t* getBaseAddress() const

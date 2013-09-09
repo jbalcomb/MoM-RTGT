@@ -6517,18 +6517,25 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     }
     os << ")\n";
     os << "m_Unk_8E04=(\n";
-    for (unsigned i = 0; i < 0x8E48 - 0x8E04; ++i)
+    for (unsigned i = 0; i < 0x8E0C - 0x8E04; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_8E04[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_8E04[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Select_Wizard_Shown=" << rhs.m_Select_Wizard_Shown << "\n";
+    os << "m_Button_IDs=(\n";
+    for (unsigned i = 0; i < 30; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Button_IDs[i] << " 0x" << std::hex << rhs.m_Button_IDs[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Wizard_portrait_shown=" << rhs.m_Wizard_portrait_shown << "\n";
     os << "m_Unk_8E49=(\n";
-    for (unsigned i = 0; i < 0x8E94 - 0x8E49; ++i)
+    for (unsigned i = 0; i < 0x8E92 - 0x8E49; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_8E49[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_8E49[i] << std::dec << ",\n";
     }
     os << ")\n";
+    os << "m_Button_OK_ID=" << rhs.m_Button_OK_ID << " 0x" << std::hex << rhs.m_Button_OK_ID << std::dec << "\n";
     os << "m_Total_Picks_Left=" << rhs.m_Total_Picks_Left << " 0x" << std::hex << rhs.m_Total_Picks_Left << std::dec << "\n";
     os << "m_Unk_8E96=(\n";
     for (unsigned i = 0; i < 0xA8A2 - 0x8E96; ++i)

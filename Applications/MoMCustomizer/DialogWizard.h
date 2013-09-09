@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include <MoMProcess.h>
+#include <QMoMSharedPointers.h>
 
 namespace Ui {
 class DialogWizard;
@@ -38,7 +38,7 @@ signals:
 private:
     Ui::DialogWizard *ui;
     QWidget* m_form;
-    MoM::MoMProcess momProcess;
+    QMoMGamePtr m_game;
 };
 
 #endif // DIALOGWIZARD_H
