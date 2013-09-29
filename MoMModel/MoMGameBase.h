@@ -129,6 +129,22 @@ public:
         return &items[itemNr];
     }
 
+    Battle_Unit* getLevelBonusHero(int level)
+    {
+        uint8_t* data = getLevelBonusesHero();
+        if ((0 == data) || !inRange(level, gMAX_LEVELS_HERO))
+            return 0;
+        return (Battle_Unit*)&data[level * 0x16];
+    }
+
+    Battle_Unit* getLevelBonusUnit(int level)
+    {
+        uint8_t* data = getLevelBonusesUnit();
+        if ((0 == data) || !inRange(level, gMAX_LEVELS_UNIT))
+            return 0;
+        return (Battle_Unit*)&data[level * 0x16];
+    }
+
     Tower_Node_Lair* getLair(int lairNr)
     {
         Tower_Node_Lair* lairs = getLairs();
@@ -523,6 +539,14 @@ protected:
     }
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
+    virtual uint8_t* getLevelBonusesHero()
+    {
+        return 0;
+    }
+    virtual uint8_t* getLevelBonusesUnit()
+    {
+        return 0;
+    }
     virtual Node_Attr* getNodeAttributes() = 0;
 public:
     // Needs to be public so we can add it to a treeview

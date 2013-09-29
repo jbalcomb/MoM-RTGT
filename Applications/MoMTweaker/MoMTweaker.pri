@@ -74,7 +74,8 @@ HEADERS += \
     ../../giflib-5.0.4/lib/gif_unistd.h \
     ../../giflib-5.0.4/lib/gif_lib_private.h \
     ../../giflib-5.0.4/lib/gif_hash.h \
-    ../../giflib-5.0.4/lib/gif_lib.h
+    ../../giflib-5.0.4/lib/gif_lib.h \
+    ../../MoMControl/MoMLevelBonuses.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -129,7 +130,8 @@ SOURCES += \
     ../../giflib-5.0.4/lib/gif_font.cpp \
     ../../giflib-5.0.4/lib/gif_err.cpp \
     ../../giflib-5.0.4/lib/egif_lib.cpp \
-    ../../giflib-5.0.4/lib/dgif_lib.cpp
+    ../../giflib-5.0.4/lib/dgif_lib.cpp \
+    ../../MoMControl/MoMLevelBonuses.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \

@@ -1387,7 +1387,7 @@ void UnitModel::threadUpdateModelData()
                 ptree->appendTree(psubtree, "");
             }
 
-            MoM::MoMDataSegment* dataSegment = 0;
+            MoMDataSegment* dataSegment = 0;
             if (0 != game)
             {
                 dataSegment = game->getDataSegment();

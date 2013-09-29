@@ -5156,7 +5156,7 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     }
     os << ")\n";
     os << "m_XP_Level_Table=(\n";
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_HERO; ++i)
     {
         os << "[" << i << "] " << rhs.m_XP_Level_Table[i] << " 0x" << std::hex << rhs.m_XP_Level_Table[i] << std::dec << ",\n";
     }
@@ -6449,9 +6449,16 @@ std::ostream& operator<<(std::ostream& os, const MoMMagicDataSegment& rhs)
     os << ")\n";
     os << "m_Want_input_GUESS=" << rhs.m_Want_input_GUESS << " 0x" << std::hex << rhs.m_Want_input_GUESS << std::dec << "\n";
     os << "m_Unk_4D46=(\n";
-    for (unsigned i = 0; i < 0x6900 - 0x4D46; ++i)
+    for (unsigned i = 0; i < 0x52EA - 0x4D46; ++i)
     {
         os << "[" << i << "] " << (unsigned)rhs.m_Unk_4D46[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4D46[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Button_New_game_ID=" << rhs.m_Button_New_game_ID << " 0x" << std::hex << rhs.m_Button_New_game_ID << std::dec << "\n";
+    os << "m_Unk_52EC=(\n";
+    for (unsigned i = 0; i < 0x6900 - 0x52EC; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_52EC[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_52EC[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Wizards=(\n";

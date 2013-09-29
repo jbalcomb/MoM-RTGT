@@ -11,13 +11,13 @@
 
 enum eShowNumber
 {
-    SHOWNUMBER_normal,
-    SHOWNUMBER_alwaysPlus,
-    SHOWNUMBER_positivePlus,
-    SHOWNUMBER_noZero,
-    SHOWNUMBER_plusAndNoZero,
-    SHOWNUMBER_hex,
-    SHOWNUMBER_halfMove
+    SHOWNUMBER_normal,          // -1    0    1
+    SHOWNUMBER_alwaysPlus,      // -1   +0   +1
+    SHOWNUMBER_positivePlus,    // -1    0   +1
+    SHOWNUMBER_noZero,          // -1         1
+    SHOWNUMBER_plusAndNoZero,   // -1        +1
+    SHOWNUMBER_hex,             // FF   00   01
+    SHOWNUMBER_halfMove         // -0.5 0.0 0.5
 };
 
 enum eShowEnum

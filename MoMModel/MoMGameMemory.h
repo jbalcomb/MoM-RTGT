@@ -103,6 +103,8 @@ private:
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr);
     virtual Item* getItems();
     virtual Tower_Node_Lair* getLairs();
+    virtual uint8_t* getLevelBonusesHero();
+    virtual uint8_t* getLevelBonusesUnit();
     virtual Node_Attr* getNodeAttributes();
     virtual uint16_t* getNumber_of_Battle_Units();
     virtual uint16_t* getNumber_of_Cities();

@@ -18,6 +18,7 @@
 #include "MoMController.h"
 #include "MoMExeWizards.h"
 #include "MoMGenerated.h"
+#include "MoMLevelBonuses.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
 #include "mainwindow.h"
@@ -537,6 +538,91 @@ void DialogTables::slot_addRow_to_ItemsInGame(int row)
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Number_Of_Charges, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eItemPower>(
                                  m_game, &data->m_Bitmask_Powers.bits, (MoM::eItemPower)0, MoM::eItemPower_MAX));
+}
+
+void DialogTables::update_LevelBonus()
+{
+    int ndata = 0;
+    if (!m_game.isNull())
+    {
+        MoMLevelBonuses momLevelBonuses(m_game.data());
+        if (!momLevelBonuses.isCodeInstalled())
+        {
+            if (QMessageBox::Yes != QMessageBox::question(this,
+                tr("Install level bonus code"),
+                tr("Level bonus code is not installed yet into WIZARDS.EXE.\nInstall it now?"),
+                (QMessageBox::Yes | QMessageBox::No)) )
+            {
+                return;
+            }
+            if (!momLevelBonuses.installCode())
+            {
+                (void)QMessageBox::warning(this,
+                     tr("Install level bonus code"),
+                     tr("Failed to install level bonus code"));
+                return;
+            }
+            else
+            {
+                (void)QMessageBox::information(this,
+                     tr("Install level bonus code"),
+                     tr("Successfully installed level bonus code"));
+            }
+        }
+
+        // 6 unit levels + 9 hero levels
+        ndata = 6 + 9;
+    }
+
+    QStringList labels;
+    labels << "Nr";
+    //  Me Ra    Sh Th Df Re Mv                 CFg       Hp Sc Tr Fg Cs Ga
+    labels << "Level" << "Me" << "Ra" << "Shots" << "ToHit" << "Df" << "Re" << "Move"
+           << "CurFig" << "Hp" << "Scout" << "Transport" << "MaxFig" << "Constr" << "Pois/Gaze";
+
+    buildTable(labels, ndata, SLOT(slot_addRow_to_LevelBonus(int)));
+}
+
+void DialogTables::slot_addRow_to_LevelBonus(int row)
+{
+    int level = 0;
+    Battle_Unit* data = 0;
+    QString name;
+    if (row < 6)
+    {
+        // Unit level
+        level = row;
+        data = m_game->getLevelBonusUnit(level);
+        name = "Unit";
+    }
+    else
+    {
+        // Hero level
+        level = row - 6;
+        data = m_game->getLevelBonusHero(level);
+        name = "Hero";
+    }
+    if (0 == data)
+        return;
+
+    int col = 0;
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
+
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0%1").arg(name).arg(1 + level)));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Melee, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged_Shots, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_To_Hit, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Defense, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Resistance, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_MoveHalves, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Current_figures, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Hitpoints_per_Figure, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Scouting, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Transport_Capacity_GUESS, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Max_figures, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Construction, 2, SHOWNUMBER_plusAndNoZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Gaze_Modifier, 2, SHOWNUMBER_plusAndNoZero));
 }
 
 void DialogTables::update_RaceData()
@@ -1142,6 +1228,10 @@ void DialogTables::on_comboBox_Table_currentIndexChanged(QString newIndex)
     else if ("Items in game" == newIndex)
     {
         update_ItemsInGame();
+    }
+    else if ("Level Bonus" == newIndex)
+    {
+        update_LevelBonus();
     }
     else if ("Race Data" == newIndex)
     {

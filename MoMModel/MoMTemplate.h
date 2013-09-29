@@ -3309,25 +3309,27 @@ enum eYesNo8 ENUMSIZE8
 // CONSTANTS
 //
 
-static const unsigned gMAX_ARTIFACTS_IN_GAME = 250;
-static const unsigned gMAX_BATTLE_COLS = 21;
-static const unsigned gMAX_BATTLE_ROWS = 22;
-static const unsigned gMAX_BATTLE_UNITS = 18;
-static const unsigned gMAX_CITIES = 100;
-static const unsigned gMAX_FIGURES_IN_UNIT = 8;
-static const unsigned gMAX_HERO_TYPES = 35;
-static const unsigned gMAX_HIRED_HEROES = 6;
-static const unsigned gMAX_ITEMSLOTS = 3;
-static const unsigned gMAX_ITEMS_IN_GAME = 128;
-static const unsigned gMAX_ITEMS_VALID = 138;
-static const unsigned gMAX_MAP_COLS = 60;
-static const unsigned gMAX_MAP_ROWS = 40;
-static const unsigned gMAX_NODES = 30;
-static const unsigned gMAX_NODES_LAIRS_TOWERS = 102;
-static const unsigned gMAX_RACES = 14;
-static const unsigned gMAX_UNITS = 1009;
-static const unsigned gMAX_VALID_WIZARDS = 5;
-static const unsigned gMAX_WIZARD_RECORDS = 6;
+const unsigned gMAX_ARTIFACTS_IN_GAME = 250;
+const unsigned gMAX_BATTLE_COLS = 21;
+const unsigned gMAX_BATTLE_ROWS = 22;
+const unsigned gMAX_BATTLE_UNITS = 18;
+const unsigned gMAX_CITIES = 100;
+const unsigned gMAX_FIGURES_IN_UNIT = 8;
+const unsigned gMAX_HERO_TYPES = 35;
+const unsigned gMAX_HIRED_HEROES = 6;
+const unsigned gMAX_ITEMSLOTS = 3;
+const unsigned gMAX_ITEMS_IN_GAME = 128;
+const unsigned gMAX_ITEMS_VALID = 138;
+const unsigned gMAX_LEVELS_HERO = 9;
+const unsigned gMAX_LEVELS_UNIT = 6;
+const unsigned gMAX_MAP_COLS = 60;
+const unsigned gMAX_MAP_ROWS = 40;
+const unsigned gMAX_NODES = 30;
+const unsigned gMAX_NODES_LAIRS_TOWERS = 102;
+const unsigned gMAX_RACES = 14;
+const unsigned gMAX_UNITS = 1009;
+const unsigned gMAX_VALID_WIZARDS = 5;
+const unsigned gMAX_WIZARD_RECORDS = 6;
 
 //
 // STRUCTS / UNIONS
@@ -5208,7 +5210,7 @@ typedef struct // MoMDataSegment
     Unit_Type_Data          m_Normal_Units[4 + 115];
     Unit_Type_Data          m_Summoned_Units[44];
 
-    uint16_t    m_XP_Level_Table[9];                            // ds:1D74 / EXE:2B214
+    uint16_t    m_XP_Level_Table[gMAX_LEVELS_HERO];             // ds:1D74 / EXE:2B214
 
     Race_Data   m_Race_Data[14];                                // ds:1D86 / EXE:2B226
 

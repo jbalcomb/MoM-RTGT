@@ -43,6 +43,7 @@ private:
     void update_ItemData();
     void update_ItemPowers();
     void update_ItemsInGame();
+    void update_LevelBonus();
     void update_RaceData();
     void update_SpellData();
     void update_UnitTypes();
@@ -61,6 +62,7 @@ private slots:
     void slot_addRow_to_ItemData(int row);
     void slot_addRow_to_ItemPowers(int row);
     void slot_addRow_to_ItemsInGame(int row);
+    void slot_addRow_to_LevelBonus(int row);
     void slot_addRow_to_RaceData(int row);
     void slot_addRow_to_SpellData(int row);
     void slot_addRow_to_UnitTypes(int row);

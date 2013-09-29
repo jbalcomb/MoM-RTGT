@@ -2848,12 +2848,12 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
           ptreem_Summoned_Units->appendTree(constructTreeItem(&rhs->m_Summoned_Units[i], oss.str().c_str()), "");
     }
     QMoMTreeItemModelBase* ptreem_XP_Level_Table = ptree;
-    if (9 > 3)
+    if (gMAX_LEVELS_HERO > 3)
     {
         ptreem_XP_Level_Table = new QMoMTreeItemModelBase("m_XP_Level_Table");
         ptree->appendTree(ptreem_XP_Level_Table, "");
     }
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_HERO; ++i)
     {
           std::ostringstream oss;
           oss << "m_XP_Level_Table[" << i << "]";
@@ -4993,16 +4993,29 @@ QMoMTreeItemModelBase* constructTreeItem(MoMMagicDataSegment* rhs, const QString
     }
     ptree->appendChild("m_Want_input_GUESS", new QMoMTreeItemModel<int16_t>(&rhs->m_Want_input_GUESS));
     QMoMTreeItemModelBase* ptreem_Unk_4D46 = ptree;
-    if (0x6900 - 0x4D46 > 3)
+    if (0x52EA - 0x4D46 > 3)
     {
         ptreem_Unk_4D46 = new QMoMTreeItemModelBase("m_Unk_4D46");
         ptree->appendTree(ptreem_Unk_4D46, "");
     }
-    for (unsigned i = 0; i < 0x6900 - 0x4D46; ++i)
+    for (unsigned i = 0; i < 0x52EA - 0x4D46; ++i)
     {
           std::ostringstream oss;
           oss << "m_Unk_4D46[" << i << "]";
           ptreem_Unk_4D46->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4D46[i]));
+    }
+    ptree->appendChild("m_Button_New_game_ID", new QMoMTreeItemModel<int16_t>(&rhs->m_Button_New_game_ID));
+    QMoMTreeItemModelBase* ptreem_Unk_52EC = ptree;
+    if (0x6900 - 0x52EC > 3)
+    {
+        ptreem_Unk_52EC = new QMoMTreeItemModelBase("m_Unk_52EC");
+        ptree->appendTree(ptreem_Unk_52EC, "");
+    }
+    for (unsigned i = 0; i < 0x6900 - 0x52EC; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_52EC[" << i << "]";
+          ptreem_Unk_52EC->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_52EC[i]));
     }
     QMoMTreeItemModelBase* ptreem_Wizards = ptree;
     if (6 > 3)
