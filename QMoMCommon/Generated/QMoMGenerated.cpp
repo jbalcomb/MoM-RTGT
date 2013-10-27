@@ -2160,19 +2160,19 @@ QMoMTreeItemModelBase* constructTreeItem(ItemDataLbx* rhs, const QString& contex
         return ptree;
 
     ptree->appendTree(constructTreeItem(&rhs->m_Item, "m_Item"), "");
-    QMoMTreeItemModelBase* ptreem_Index_in_spellbook_GUESS = ptree;
+    QMoMTreeItemModelBase* ptreem_Required_Spellbooks = ptree;
     if (5 > 3)
     {
-        ptreem_Index_in_spellbook_GUESS = new QMoMTreeItemModelBase("m_Index_in_spellbook_GUESS");
-        ptree->appendTree(ptreem_Index_in_spellbook_GUESS, "");
+        ptreem_Required_Spellbooks = new QMoMTreeItemModelBase("m_Required_Spellbooks");
+        ptree->appendTree(ptreem_Required_Spellbooks, "");
     }
     for (unsigned i = 0; i < 5; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Index_in_spellbook_GUESS[" << i << "]";
-          ptreem_Index_in_spellbook_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Index_in_spellbook_GUESS[i]));
+          oss << "m_Required_Spellbooks[" << i << "]";
+          ptreem_Required_Spellbooks->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Required_Spellbooks[i]));
     }
-    ptree->appendChild("m_Unk_37", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_37));
+    ptree->appendChild("m_Special_Item", new QMoMTreeItemModel<uint8_t>(&rhs->m_Special_Item));
     return ptree;
 }
 

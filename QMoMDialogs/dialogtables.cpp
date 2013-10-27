@@ -390,14 +390,14 @@ void DialogTables::update_ItemData()
     labels << "ItemName" << "Icon" << "Slot" << "Item Type" << "Cost";
     labels << "Att" << "ToHit" << "Def" << "Move" << "Resist" << "Mana" << "Save";
     labels << "Spell" << "NrCharges" << "Powers";
-    labels << "Nature" << "Sorcery" << "Chaos" << "Life" << "Death" << "Unk37" << "InGame";
+    labels << "Nature" << "Sorcery" << "Chaos" << "Life" << "Death" << "Special" << "InGame";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_ItemData(int)));
 }
 
 void DialogTables::slot_addRow_to_ItemData(int row)
 {
-    MoM::ItemDataLbx* dataLbx = m_game->getItemDataLbx(row);
+    ItemDataLbx* dataLbx = m_game->getItemDataLbx(row);
     if (0 == dataLbx)
         return;
     MoM::Item* data = &dataLbx->m_Item;
@@ -422,12 +422,12 @@ void DialogTables::slot_addRow_to_ItemData(int row)
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eItemPower>(
                                  m_game, &data->m_Bitmask_Powers.bits, (MoM::eItemPower)0, MoM::eItemPower_MAX));
 
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[0], 3, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[1], 3, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[2], 3, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[3], 3, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Index_in_spellbook_GUESS[4], 3, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Unk_37, 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[0], 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[1], 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[2], 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[3], 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[4], 3, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Special_Item, 1, SHOWNUMBER_noZero));
 
     uint8_t* artifactsInGame = m_game->getArtifacts_in_game();
     if (0 != artifactsInGame)

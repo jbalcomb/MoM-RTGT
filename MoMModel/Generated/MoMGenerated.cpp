@@ -4750,13 +4750,13 @@ std::ostream& operator<<(std::ostream& os, const ItemDataLbx& rhs)
 {
     os << "{\n";
     os << "m_Item=" << rhs.m_Item << "\n";
-    os << "m_Index_in_spellbook_GUESS=(\n";
+    os << "m_Required_Spellbooks=(\n";
     for (unsigned i = 0; i < 5; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Index_in_spellbook_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.m_Index_in_spellbook_GUESS[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Required_Spellbooks[i] << " 0x" << std::hex << (unsigned)rhs.m_Required_Spellbooks[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_37=" << (unsigned)rhs.m_Unk_37 << " 0x" << std::hex << (unsigned)rhs.m_Unk_37 << std::dec << "\n";
+    os << "m_Special_Item=" << (unsigned)rhs.m_Special_Item << " 0x" << std::hex << (unsigned)rhs.m_Special_Item << std::dec << "\n";
     os << "}";
     return os;
 }

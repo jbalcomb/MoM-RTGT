@@ -3770,8 +3770,8 @@ typedef struct PACKED_STRUCT // Item
 typedef struct PACKED_STRUCT // ItemDataLbx
 {
     Item        m_Item;                             // 00   Movement is in full moves instead of half moves
-    uint8_t     m_Index_in_spellbook_GUESS[5];      // 32   Index in spell book???
-    uint8_t     m_Unk_37;                           // 37
+    uint8_t     m_Required_Spellbooks[5];           // 32   Compared with spellbooks in Wizards structure
+    uint8_t     m_Special_Item;                     // 37   0=not special, 1=special
                                                     // SIZE 38
 } ItemDataLbx;
 
