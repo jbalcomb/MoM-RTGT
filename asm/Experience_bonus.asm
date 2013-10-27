@@ -122,13 +122,13 @@ process_level:
                 mov     si, bx
                 
                 cld
-                xor     cx, cx                  ; for (int i = 0; i < BONUS_RECORD_SIZE; ++i)
+                xor     dx, dx                  ; for (int i = 0; i < BONUS_RECORD_SIZE; ++i)
 for_ability:
                 mov     bl, es:[di]                     
                 cmp     bl, 0                   ;     if (battleUnit[i] > 0
                 ja      positive_ability
                 jb      negative_ability
-                cmp     cx, 4                   ;         || i == TO_HIT)
+                cmp     dx, 4                   ;         || i == TO_HIT)
                 je      positive_ability
                 jmp     fi_ability
 
@@ -140,7 +140,8 @@ positive_ability:
                 
 negative_ability:                               ;     else if (battleUnit[i] < 0)   // Gaze modifier (versus Poison)
                 lodsb                           ;         battleUnit[i] -= bonus[i];
-                sub     al, bl
+                neg     al
+                add     al, bl
                 stosb
                 jmp     fi_ability
                 
@@ -151,8 +152,8 @@ negative_ability:                               ;     else if (battleUnit[i] < 0
 ;;                jmp     fi_ability
 
 fi_ability:
-                inc     cx
-                cmp     cx, BONUS_RECORD_SIZE
+                inc     dx
+                cmp     dx, BONUS_RECORD_SIZE
                 jl      for_ability
 
 endfor_ability:
