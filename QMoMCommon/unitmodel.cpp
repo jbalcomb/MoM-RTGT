@@ -21,7 +21,6 @@
 #include <QMoMUtility.h>
 
 #include "QMoMResources.h"
-#include "QMoMTreeCustomExtensions.h"
 
 #include "unitmodel.h"
 
@@ -640,6 +639,7 @@ void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int
             ptree->child(row, 0)->appendChild(QString("XPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_XPos_Item));
             ptree->child(row, 0)->appendChild(QString("YPos Item"), new QMoMTreeItemModel<int16_t>(&dataSegment->m_YPos_Item));
             ptree->child(row, 0)->appendChild(QString("Plane Item"), new QMoMTreeItemModel<MoM::ePlane16>(&dataSegment->m_Plane_Item));
+            ptree->child(row, 0)->appendChild(QString("Nr_city_queue"), new QMoMTreeItemModel<int8_t>(&dataSegment->m_nr_city_queue));
         }
 
         if ((0 != magicDataSegment) && game->getGameData_WizardsExe())
@@ -699,6 +699,32 @@ void update_Game_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePtr& game, int
         {
             MoM::eTax_Rate taxRate = (MoM::eTax_Rate)subrow;
             psubtree->appendChild(prettyQStr(taxRate), new QMoMTreeItemModel<uint16_t> ((uint16_t*)&dataSegment->m_Tax_Unrest_Table[taxRate]));
+        }
+    }
+    ++row;
+
+    if (row >= ptree->rowCount())
+    {
+        QMoMTreeItemModelBase* psubtree = new QMoMTreeItemModelBase("City Queue");
+        ptree->appendTree(psubtree, "");
+    }
+    ptree->child(row, 0)->setData(QString("City Completion Queue"), Qt::EditRole);
+    ptree->child(row, 1)->setData(QString("City Nr (-1=skip)"), Qt::EditRole);
+    if (0 == dataSegment)
+    {
+        ptree->child(row, 2)->setData(QString("Completed"), Qt::EditRole);
+    }
+    else
+    {
+        ptree->child(row, 2)->setData(QString("Completed (%0 entries)").arg(dataSegment->m_nr_city_queue), Qt::EditRole);
+    }
+    for (int subrow = 0; (0 != dataSegment) && (subrow < ARRAYSIZE(dataSegment->m_arr20_city_queue)); ++subrow)
+    {
+        QMoMTreeItemModelBase* psubtree = ptree->child(row, 0);
+        if (subrow >= psubtree->rowCount())
+        {
+            psubtree->appendChild(QString("[%0]").arg(subrow), new QMoMTreeItemModel<int8_t> (&dataSegment->m_arr20_city_queue[subrow].m_CityNr));
+            psubtree->setChild(subrow, 2, new QMoMTreeItemModel<MoM::eProducing>(&dataSegment->m_arr20_city_queue[subrow].m_Producing));
         }
     }
     ++row;

@@ -1041,6 +1041,18 @@ QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context)
     return ptree;
 }
 
+QMoMTreeItemModelBase* constructTreeItem(CityQueueElement* rhs, const QString& context)
+{
+    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<CityQueueElement>(rhs, context);
+    if (0 == rhs)
+        return ptree;
+
+    ptree->appendChild("m_CityNr", new QMoMTreeItemModel<int8_t>(&rhs->m_CityNr));
+    ptree->appendChild("m_Unused_01", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unused_01));
+    ptree->appendChild("m_Producing", new QMoMTreeItemModel<eProducing>(&rhs->m_Producing));
+    return ptree;
+}
+
 QMoMTreeItemModelBase* constructTreeItem(City_Enchantments* rhs, const QString& context)
 {
     QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<City_Enchantments>(rhs, context);
@@ -3996,54 +4008,58 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     ptree->appendChild("word_40434", new QMoMTreeItemModel<uint16_t>(&rhs->word_40434));
     ptree->appendChild("word_40436", new QMoMTreeItemModel<uint16_t>(&rhs->word_40436));
     ptree->appendTree(constructTreeItem(&rhs->m_addr_events, "m_addr_events"), "");
-    ptree->appendChild("w_uts_in_stack_ovrland_GUESS", new QMoMTreeItemModel<uint16_t>(&rhs->w_uts_in_stack_ovrland_GUESS));
-    QMoMTreeItemModelBase* ptreew_Stack_active_GUESS = ptree;
-    if (36 > 3)
+    ptree->appendChild("m_nr_units_in_overland_stack", new QMoMTreeItemModel<int16_t>(&rhs->m_nr_units_in_overland_stack));
+    QMoMTreeItemModelBase* ptreem_units_in_overland_stack = ptree;
+    if (9 > 3)
     {
-        ptreew_Stack_active_GUESS = new QMoMTreeItemModelBase("w_Stack_active_GUESS");
-        ptree->appendTree(ptreew_Stack_active_GUESS, "");
+        ptreem_units_in_overland_stack = new QMoMTreeItemModelBase("m_units_in_overland_stack");
+        ptree->appendTree(ptreem_units_in_overland_stack, "");
     }
-    for (unsigned i = 0; i < 36; ++i)
+    for (unsigned i = 0; i < 9; ++i)
     {
           std::ostringstream oss;
-          oss << "w_Stack_active_GUESS[" << i << "]";
-          ptreew_Stack_active_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->w_Stack_active_GUESS[i]));
+          oss << "m_units_in_overland_stack[" << i << "]";
+          ptreem_units_in_overland_stack->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint32_t>(&rhs->m_units_in_overland_stack[i]));
     }
-    QMoMTreeItemModelBase* ptreebyte_40462 = ptree;
-    if (281 > 3)
+    ptree->appendChild("m_nr_message_cityNames", new QMoMTreeItemModel<int8_t>(&rhs->m_nr_message_cityNames));
+    QMoMTreeItemModelBase* ptreem_arr20_message_cityNames = ptree;
+    if (20 * 14 > 3)
     {
-        ptreebyte_40462 = new QMoMTreeItemModelBase("byte_40462");
-        ptree->appendTree(ptreebyte_40462, "");
+        ptreem_arr20_message_cityNames = new QMoMTreeItemModelBase("m_arr20_message_cityNames");
+        ptree->appendTree(ptreem_arr20_message_cityNames, "");
     }
-    for (unsigned i = 0; i < 281; ++i)
-    {
-          std::ostringstream oss;
-          oss << "byte_40462[" << i << "]";
-          ptreebyte_40462->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->byte_40462[i]));
-    }
-    QMoMTreeItemModelBase* ptreebyte_4057B = ptree;
-    if (21 > 3)
-    {
-        ptreebyte_4057B = new QMoMTreeItemModelBase("byte_4057B");
-        ptree->appendTree(ptreebyte_4057B, "");
-    }
-    for (unsigned i = 0; i < 21; ++i)
+    for (unsigned i = 0; i < 20 * 14; ++i)
     {
           std::ostringstream oss;
-          oss << "byte_4057B[" << i << "]";
-          ptreebyte_4057B->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->byte_4057B[i]));
+          oss << "m_arr20_message_cityNames[" << i << "]";
+          ptreem_arr20_message_cityNames->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_arr20_message_cityNames[i]));
     }
-    QMoMTreeItemModelBase* ptreeb_mess_number = ptree;
-    if (82 > 3)
+    ptree->appendChild("m_nr_message_cityNrs", new QMoMTreeItemModel<int8_t>(&rhs->m_nr_message_cityNrs));
+    QMoMTreeItemModelBase* ptreem_arr20_message_cityNrs = ptree;
+    if (20 > 3)
     {
-        ptreeb_mess_number = new QMoMTreeItemModelBase("b_mess_number");
-        ptree->appendTree(ptreeb_mess_number, "");
+        ptreem_arr20_message_cityNrs = new QMoMTreeItemModelBase("m_arr20_message_cityNrs");
+        ptree->appendTree(ptreem_arr20_message_cityNrs, "");
     }
-    for (unsigned i = 0; i < 82; ++i)
+    for (unsigned i = 0; i < 20; ++i)
     {
           std::ostringstream oss;
-          oss << "b_mess_number[" << i << "]";
-          ptreeb_mess_number->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->b_mess_number[i]));
+          oss << "m_arr20_message_cityNrs[" << i << "]";
+          ptreem_arr20_message_cityNrs->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_arr20_message_cityNrs[i]));
+    }
+    ptree->appendChild("m_nr_city_queue", new QMoMTreeItemModel<int8_t>(&rhs->m_nr_city_queue));
+    ptree->appendChild("m_Unused_9AF1", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unused_9AF1));
+    QMoMTreeItemModelBase* ptreem_arr20_city_queue = ptree;
+    if (20 > 3)
+    {
+        ptreem_arr20_city_queue = new QMoMTreeItemModelBase("m_arr20_city_queue");
+        ptree->appendTree(ptreem_arr20_city_queue, "");
+    }
+    for (unsigned i = 0; i < 20; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_arr20_city_queue[" << i << "]";
+          ptreem_arr20_city_queue->appendTree(constructTreeItem(&rhs->m_arr20_city_queue[i], oss.str().c_str()), "");
     }
     QMoMTreeItemModelBase* ptreebyte_405E2 = ptree;
     if (82 > 3)

@@ -11,6 +11,7 @@
 #include <string>
 
 #include "MoMGenerated.h"
+#include "MoMUnit.h"
 #include "MoMUtility.h"
 
 #include "MoMController.h"
@@ -39,6 +40,43 @@ int gXPforLevel[] =
 
 #define producingGarrison(city) \
     ((city).m_Producing >= PRODUCING_BUILDING_MAX)
+
+//bool MoMController::addCityToGameQueue(int cityNr)
+//{
+//    MoMDataSegment* dataSegment = m_game->getDataSegment();
+//    if (0 == dataSegment)
+//        return false;
+//    if (dataSegment->m_nr_city_queue <= 0)
+//        return false;   // Queue is not active now. It has no point to fiddle with it now.
+
+//    bool found = false;
+//    for (int queueNr = 0; (queueNr < dataSegment->m_nr_city_queue) && (queueNr < ARRAYSIZE(dataSegment->m_arr20_city_queue)); ++queueNr)
+//    {
+//        CityQueueElement* queueElt = dataSegment->m_arr20_city_queue[queueNr];
+//        if (cityNr == queueElt->m_CityNr)
+//        {
+//            found = true;
+//            break;      // Already in queue
+//        }
+//        if (producingGarrison(*city) && 2 == unitsInCity.size())
+//        if (cityNr == queueElt->m_CityNr)
+//        {
+//            int8_t newCityNr = -1;
+//            removed = m_game->commitData(&queueElt->m_CityNr, &newCityNr, sizeof(queueElt->m_CityNr));
+//            break;
+//        }
+//    }
+
+//    return removed;
+//    if (producingGarrison(*city) && unitsInCity.size()
+//    {
+//        // Do nothing - we're producing a Garrison
+//        //std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
+//        //    << city->m_Producing << " keeps producing a garrison" << std::endl;
+//    }
+//    else if (0 == unitsInCity.size() && !producingGarrison(*city) && findCheapestUnitToProduce(*city, produce))
+
+//}
 
 bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 {
@@ -124,19 +162,11 @@ bool MoMController::applyBuildingQueue(int cityNr)
 	}
 
     eProducing producingBefore = city->m_Producing;
-	eProducing produce = PRODUCING_None;
+    eProducing producingAfter = city->m_Producing;
+    eProducing produce = PRODUCING_None;
 
-    std::vector<int> unitsInCity;
-//    MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane, false);
     MoMLocation location(*city, MoMLocation::MAP_overland);
-    (void)findUnitsAtLocation(location, unitsInCity);
-
-    // TODO: Remove this spell enchantment ;)
-//    if (OWNER_None == city->m_City_Enchantments.Gaias_Blessing)
-//    {
-//        std::cout << "Cast Gaias Blessing on " << city->m_City_Name << std::endl;
-//        city->m_City_Enchantments.Gaias_Blessing = OWNER_YOU;
-//    }
+    int garrisonSize = countGarrison(location);
 
     // Only change if we producing 'Housing' or 'Trade Goods'
     // This is a good trigger because when something is built
@@ -153,7 +183,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[Farmers Market]
 
     // FURTHER RULES
-    //[Housing] till Pop 8
+    //[Housing] till Pop 4
     //[Shrine]
     //[Sawmill]
     //[Foresters Guild]
@@ -164,6 +194,13 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[University]
     //[Bank]
     //[Miners Guild]
+
+    // SPECIAL TARGETS
+    //[Animists Guild]  (requires Temple, Stables)
+    //[Parthenon]
+    //[Cathedral]
+    //[Merchants Guild] (requires Bank, Ship Wrights Guild, Shipyard)
+    //[Wizards Tower]]
 
     if (CITYSIZE_Outpost == city->m_Size)
     {
@@ -177,11 +214,10 @@ bool MoMController::applyBuildingQueue(int cityNr)
         //std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
         //    << city->m_Producing << " keeps producing a garrison" << std::endl;
     }
-    else if (0 == unitsInCity.size() && !producingGarrison(*city) && findCheapestUnitToProduce(*city, produce))
+    else if (0 == garrisonSize && !producingGarrison(*city) && findCheapestUnitToProduce(*city, produce) && (countUnits(location) < 9))
     {
         // Switch from any task to Spearmen if there is none
-        // TODO: pick the cheapest unit that may be built (if any: Dwarves!)
-        city->m_Producing = produce;
+        producingAfter = produce;
     }
     else if (PRODUCING_Housing != city->m_Producing
           && PRODUCING_Trade_Goods != city->m_Producing)
@@ -190,70 +226,70 @@ bool MoMController::applyBuildingQueue(int cityNr)
     }
     else if (!buildingPresent(*city, Builders_Hall))
     {
-        city->m_Producing = PRODUCING_Builders_Hall;
+        producingAfter = PRODUCING_Builders_Hall;
     }
     else if (!buildingPresent(*city, Granary))
     {
-        city->m_Producing = PRODUCING_Granary;
+        producingAfter = PRODUCING_Granary;
     }
     else if (!buildingPresent(*city, Smithy))
     {
-        city->m_Producing = PRODUCING_Smithy;
+        producingAfter = PRODUCING_Smithy;
     }
     else if (!buildingPresent(*city, Marketplace))
     {
-        city->m_Producing = PRODUCING_Marketplace;
+        producingAfter = PRODUCING_Marketplace;
     }
     else if (!buildingPresent(*city, Farmers_Market))
     {
-        city->m_Producing = PRODUCING_Farmers_Market;
+        producingAfter = PRODUCING_Farmers_Market;
     }
-    else if (city->m_Population < 8)
+    else if (city->m_Population < 4)
     {
-        city->m_Producing = PRODUCING_Housing;
+        producingAfter = PRODUCING_Housing;
     }
 
     else if (!buildingPresent(*city, Shrine))
     {
-        city->m_Producing = PRODUCING_Shrine;
+        producingAfter = PRODUCING_Shrine;
     }
     else if (!buildingPresent(*city, Sawmill) && isBuildingAllowed(*city, BUILDING_Sawmill))
     {
         // TODO: forbidden building (no forest)?
-        city->m_Producing = PRODUCING_Sawmill;
+        producingAfter = PRODUCING_Sawmill;
     }
     else if (!buildingPresent(*city, Foresters_Guild) && isBuildingAllowed(*city, BUILDING_Foresters_Guild))
     {
-        city->m_Producing = PRODUCING_Foresters_Guild;
+        producingAfter = PRODUCING_Foresters_Guild;
     }
     else if (!buildingPresent(*city, Library) && isBuildingAllowed(*city, BUILDING_Library))
     {
-        city->m_Producing = PRODUCING_Library;
+        producingAfter = PRODUCING_Library;
     }
     else if (!buildingPresent(*city, Sages_Guild) && isBuildingAllowed(*city, BUILDING_Sages_Guild))
     {
-        city->m_Producing = PRODUCING_Sages_Guild;
+        producingAfter = PRODUCING_Sages_Guild;
     }
     else if (!buildingPresent(*city, Temple) && isBuildingAllowed(*city, BUILDING_Temple))
     {
-        city->m_Producing = PRODUCING_Temple;
+        producingAfter = PRODUCING_Temple;
     }
     else if (!buildingPresent(*city, Alchemist_Guild) && isBuildingAllowed(*city, BUILDING_Alchemist_Guild))
     {
-        city->m_Producing = PRODUCING_Alchemist_Guild;
+        producingAfter = PRODUCING_Alchemist_Guild;
     }
     else if (!buildingPresent(*city, University) && isBuildingAllowed(*city, BUILDING_University))
     {
-        city->m_Producing = PRODUCING_University;
+        producingAfter = PRODUCING_University;
     }
     else if (!buildingPresent(*city, Bank) && isBuildingAllowed(*city, BUILDING_Bank))
     {
-        city->m_Producing = PRODUCING_Bank;
+        producingAfter = PRODUCING_Bank;
     }
     else if (!buildingPresent(*city, Miners_Guild) && isBuildingAllowed(*city, BUILDING_Miners_Guild))
     {
         // TODO: forbidden building (no Hills or Mountains)?
-        city->m_Producing = PRODUCING_Miners_Guild;
+        producingAfter = PRODUCING_Miners_Guild;
     }
     else
     {
@@ -262,12 +298,23 @@ bool MoMController::applyBuildingQueue(int cityNr)
         //    << " (" << city->m_Producing << ") has built all specified buildings" << std::endl;
     }
 
-    if (producingBefore != city->m_Producing)
+    if (producingBefore == producingAfter)
     {
-        std::cout << "Changed production of '" << city->m_City_Name << "' [" << cityNr << "] "
-            << producingBefore << "\n\tto " << city->m_Producing << std::endl;
+        return false;   // No change
     }
 
+    if (!m_game->commitData(&city->m_Producing, &producingAfter, sizeof(city->m_Producing)))
+    {
+        std::cout << "Failed to chang production of '" << city->m_City_Name << "' [" << cityNr << "] "
+                  << producingBefore << "\n\tto " << producingAfter << std::endl;
+        return false;   // Failed to change
+    }
+
+    // Remove city from game queue to pop up the city screen, if we managed the production
+    removeCityFromGameQueue(cityNr);
+
+    std::cout << "Changed production of '" << city->m_City_Name << "' [" << cityNr << "] "
+              << producingBefore << "\n\tto " << producingAfter << std::endl;
     return true;
 }
 
@@ -279,7 +326,7 @@ bool MoMController::applyBuildingQueue(ePlayer playerNr)
         return false;
     MoMGameBase& game = *m_game;
 
-    bool ok = true;
+    bool changed = false;
     for (int cityNr = 0; cityNr < game.getNrCities(); ++cityNr)
     {
         const City* city = game.getCity(cityNr);
@@ -288,10 +335,42 @@ bool MoMController::applyBuildingQueue(ePlayer playerNr)
 
         if (city->m_Owner == playerNr)
         {
-            ok |= applyBuildingQueue(cityNr);
+            changed |= applyBuildingQueue(cityNr);
         }
     }
-    return ok;
+    return changed;
+}
+
+int MoMController::countGarrison(const MoMLocation &location)
+{
+    std::vector<int> units;
+    if (!findUnitsAtLocation(location, units))
+        return 0;
+    // Count regular units, including catapults, excluding ships, settlers, heroes
+    int count = 0;
+    for (size_t i = 0; i < units.size(); ++i)
+    {
+        Unit* unit = m_game->getUnit(units[i]);
+        MoMUnit momUnit(m_game);
+        momUnit.changeUnit(unit);
+        if (!momUnit.isNormal())
+            continue;
+        if (momUnit.isShip())
+            continue;
+        if (momUnit.isSettler())
+            continue;
+        count++;
+    }
+
+    return count;
+}
+
+int MoMController::countUnits(const MoMLocation &location)
+{
+    std::vector<int> units;
+    if (!findUnitsAtLocation(location, units))
+        return 0;
+    return units.size();
 }
 
 bool MoMController::createUnit(int& unitNr)
@@ -334,16 +413,16 @@ bool MoMController::findCheapestUnitToProduce(const City& city, eProducing& prod
 {
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
-
     bool found = false;
 	for (eUnit_Type unitTypeNr = UNITTYPE_FIRST; !found && (toUInt(unitTypeNr) < eUnit_Type_MAX); inc(unitTypeNr))
 	{
-		Unit_Type_Data* unitData = game.getUnitTypeData(unitTypeNr);
-		if (0 == unitData)
-			break;
-
-		if ((city.m_Race == unitData->m_Race_Code) && (unitData->m_Building1Required_or_PortraitLbxIndex == BUILDING_None))
+        MoMUnit momUnit(m_game);
+        momUnit.changeUnit(unitTypeNr);
+        if (momUnit.isShip())
+            continue;   // Disregard ships
+        if (momUnit.isSettler())
+            continue;   // Disregard settlers
+        if (momUnit.isBuildable(city))
 		{
 			produce = static_cast<eProducing>(toUInt(unitTypeNr) - toUInt(UNITTYPE_Trireme) + toUInt(PRODUCING_Trireme));
 			found = true;
@@ -352,7 +431,7 @@ bool MoMController::findCheapestUnitToProduce(const City& city, eProducing& prod
     return found;
 }
 
-City *MoMController::findCityAtLocation(const MoMLocation &location)
+City* MoMController::findCityAtLocation(const MoMLocation &location)
 {
     City* value = 0;
 
@@ -457,6 +536,9 @@ bool MoMController::isBuildingAllowed(const City& city, eBuilding building)
 	{
 		allowed = false;
 	}
+
+    // TODO: Check forests for Sawmill
+    // TODO: Check hills/mountains/volcanoes(?) for Miners Guild
 
 	return allowed;
 }
@@ -598,6 +680,25 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
     heroStats->m_Level_Status = HEROLEVELSTATUS_Active_in_Wizards_army;
 
     return true;
+}
+
+bool MoMController::removeCityFromGameQueue(int cityNr)
+{
+    MoMDataSegment* dataSegment = m_game->getDataSegment();
+    if (0 == dataSegment)
+        return false;
+    bool removed = false;
+    for (int queueNr = 0; (queueNr < dataSegment->m_nr_city_queue) && (queueNr < ARRAYSIZE(dataSegment->m_arr20_city_queue)); ++queueNr)
+    {
+        CityQueueElement* queueElt = &dataSegment->m_arr20_city_queue[queueNr];
+        if (cityNr == queueElt->m_CityNr)
+        {
+            int8_t newCityNr = -1;
+            removed = m_game->commitData(&queueElt->m_CityNr, &newCityNr, sizeof(queueElt->m_CityNr));
+            break;
+        }
+    }
+    return removed;
 }
 
 bool MoMController::repopLairs(bool maxOut)

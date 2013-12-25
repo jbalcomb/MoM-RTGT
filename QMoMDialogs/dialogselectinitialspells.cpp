@@ -5,8 +5,8 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include "dialogselectinitialspells.h"
-#include "ui_dialogselectinitialspells.h"
+#include "DialogSelectInitialSpells.h"
+#include "ui_DialogSelectInitialSpells.h"
 
 #include <algorithm>    // random_shuffle()
 #include <stdlib.h>     // rand(), srand()
@@ -14,7 +14,7 @@
 
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "QMoMSettings.h"
 
 

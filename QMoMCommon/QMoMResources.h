@@ -79,6 +79,7 @@ public:
     const QMoMImagePtr getImage(MoM::eCityWall wall, bool broken = false) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
+    const QMoMImagePtr getImage(MoM::eProducing producing) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
     const QMoMImagePtr getImage(MoM::eRanged_Type rangedType, int heading = 3) const;

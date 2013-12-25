@@ -29,8 +29,10 @@ public:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton* button);
-	void slot_gameChanged(const QMoMGamePtr& game);
+    void on_tableWidget_Cities_customContextMenuRequested(const QPoint &pos);
+    void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
+    void slot_ItemAction();
 
 private:
     void update();

@@ -13,7 +13,7 @@
 #include <math.h>
 
 #include "dialogaddunit.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "QMoMResources.h"
 #include "QMoMUtility.h"
 

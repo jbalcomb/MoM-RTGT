@@ -19,7 +19,7 @@ INCLUDEPATH += \
     ../../giflib-5.0.4/lib
 
 HEADERS += \
-    ../../Applications/MoMTweaker/mainwindow.h \
+    ../../Applications/MoMTweaker/MainWindow.h \
     ../../MoMControl/MoMCatnip.h \
     ../../MoMControl/MoMController.h \
     ../../MoMControl/MoMHookManager.h \
@@ -47,20 +47,9 @@ HEADERS += \
     ../../QMoMCommon/QMoMResources.h \
     ../../QMoMCommon/QMoMSettings.h \
     ../../QMoMCommon/QMoMSharedPointers.h \
-    ../../QMoMCommon/QMoMTreeCustomExtensions.h \
     ../../QMoMCommon/QMoMUnitTile.h \
     ../../QMoMCommon/QMoMUtility.h \
-    ../../QMoMCommon/unitmodel.h \
     ../../QMoMCommon/Generated/QMoMGenerated.h \
-    ../../QMoMDialogs/dialogaddunit.h \
-    ../../QMoMDialogs/dialogbuildingqueues.h \
-    ../../QMoMDialogs/dialogcalculatoraddress.h \
-    ../../QMoMDialogs/dialogexternalai.h \
-    ../../QMoMDialogs/dialoglbxeditor.h \
-    ../../QMoMDialogs/dialogmap.h \
-    ../../QMoMDialogs/dialogselectinitialspells.h \
-    ../../QMoMDialogs/dialogtables.h \
-    ../../QMoMDialogs/dialogtools.h \
     ../../Utility/MoMUtility.h \
     ../../Utility/TeeRedirecter.h \
     ../../QMoMCommon/QMoMTableItem.h \
@@ -75,7 +64,17 @@ HEADERS += \
     ../../giflib-5.0.4/lib/gif_lib_private.h \
     ../../giflib-5.0.4/lib/gif_hash.h \
     ../../giflib-5.0.4/lib/gif_lib.h \
-    ../../MoMControl/MoMLevelBonuses.h
+    ../../MoMControl/MoMLevelBonuses.h \
+    ../../QMoMCommon/UnitModel.h \
+    ../../QMoMDialogs/DialogAddUnit.h \
+    ../../QMoMDialogs/DialogBuildingQueues.h \
+    ../../QMoMDialogs/DialogCalculatorAddress.h \
+    ../../QMoMDialogs/DialogExternalAI.h \
+    ../../QMoMDialogs/DialogLbxEditor.h \
+    ../../QMoMDialogs/DialogMap.h \
+    ../../QMoMDialogs/DialogSelectInitialSpells.h \
+    ../../QMoMDialogs/DialogTables.h \
+    ../../QMoMDialogs/DialogTools.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -108,21 +107,10 @@ SOURCES += \
     ../../QMoMCommon/QMoMResources.cpp \
     ../../QMoMCommon/QMoMSettings.cpp \
     ../../QMoMCommon/QMoMTableItem.cpp \
-    ../../QMoMCommon/QMoMTreeCustomExtensions.cpp \
     ../../QMoMCommon/QMoMTreeItemModel.cpp \
     ../../QMoMCommon/QMoMTreeItemWidget.cpp \
     ../../QMoMCommon/QMoMUnitTile.cpp \
     ../../QMoMCommon/QMoMUtility.cpp \
-    ../../QMoMCommon/unitmodel.cpp \
-    ../../QMoMDialogs/dialogaddunit.cpp \
-    ../../QMoMDialogs/dialogbuildingqueues.cpp \
-    ../../QMoMDialogs/dialogcalculatoraddress.cpp \
-    ../../QMoMDialogs/dialogexternalai.cpp \
-    ../../QMoMDialogs/dialoglbxeditor.cpp \
-    ../../QMoMDialogs/dialogmap.cpp \
-    ../../QMoMDialogs/dialogselectinitialspells.cpp \
-    ../../QMoMDialogs/dialogtables.cpp \
-    ../../QMoMDialogs/dialogtools.cpp \
     ../../Utility/MoMUtility.cpp \
     ../../giflib-5.0.4/lib/quantize.cpp \
     ../../giflib-5.0.4/lib/gifalloc.cpp \
@@ -131,18 +119,28 @@ SOURCES += \
     ../../giflib-5.0.4/lib/gif_err.cpp \
     ../../giflib-5.0.4/lib/egif_lib.cpp \
     ../../giflib-5.0.4/lib/dgif_lib.cpp \
-    ../../MoMControl/MoMLevelBonuses.cpp
+    ../../MoMControl/MoMLevelBonuses.cpp \
+    ../../QMoMDialogs/DialogAddUnit.cpp \
+    ../../QMoMDialogs/DialogBuildingQueues.cpp \
+    ../../QMoMDialogs/DialogCalculatorAddress.cpp \
+    ../../QMoMDialogs/DialogExternalAI.cpp \
+    ../../QMoMDialogs/DialogLbxEditor.cpp \
+    ../../QMoMDialogs/DialogMap.cpp \
+    ../../QMoMDialogs/DialogSelectInitialSpells.cpp \
+    ../../QMoMDialogs/DialogTables.cpp \
+    ../../QMoMDialogs/DialogTools.cpp \
+    ../../QMoMCommon/UnitModel.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \
-    ../../QMoMDialogs/dialogaddunit.ui \
-    ../../QMoMDialogs/dialogbuildingqueues.ui \
-    ../../QMoMDialogs/dialogcalculatoraddress.ui \
-    ../../QMoMDialogs/dialogexternalai.ui \
-    ../../QMoMDialogs/dialoglbxeditor.ui \
-    ../../QMoMDialogs/dialogmap.ui \
-    ../../QMoMDialogs/dialogselectinitialspells.ui \
-    ../../QMoMDialogs/dialogtables.ui \
-    ../../QMoMDialogs/dialogtools.ui
+    ../../QMoMDialogs/DialogAddUnit.ui \
+    ../../QMoMDialogs/DialogBuildingQueues.ui \
+    ../../QMoMDialogs/DialogCalculatorAddress.ui \
+    ../../QMoMDialogs/DialogExternalAI.ui \
+    ../../QMoMDialogs/DialogLbxEditor.ui \
+    ../../QMoMDialogs/DialogMap.ui \
+    ../../QMoMDialogs/DialogSelectInitialSpells.ui \
+    ../../QMoMDialogs/DialogTables.ui \
+    ../../QMoMDialogs/DialogTools.ui
 
 RESOURCES += ../../Resources/InteractiveGameTweaker.qrc

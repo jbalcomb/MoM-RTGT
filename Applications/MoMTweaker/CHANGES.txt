@@ -4,6 +4,11 @@ Author: Klaas van Aarsen
 
 CHANGES IN 0.2.8 (2013--)
 -----------------------------
+* Extended Building Queue so no pop-up is shown for a city that was managed.
+
+* Updated ItemData table with spell book requirement and special status.
+
+* Added experimental level bonus table with modified code in wizards.exe
 
 * Export animations to .gif files (Tools/LBX editor)
 

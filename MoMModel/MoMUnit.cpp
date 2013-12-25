@@ -1110,6 +1110,36 @@ bool MoMUnit::hasMutation(eUnitMutation unitMutation) const
     return value;
 }
 
+bool MoMUnit::isBuildable(const City &city) const
+{
+    if ((m_unitType->m_Race_Code != city.m_Race) && (m_unitType->m_Race_Code != RACE_Generic_ship_or_catapult))
+    {
+        return false;   // Wrong race and not generic
+    }
+    if (m_unitType->m_Building1Required_or_PortraitLbxIndex == BUILDING_None)
+    {
+        // Building requirements satisfied
+    }
+    else if ((toUInt(m_unitType->m_Building1Required_or_PortraitLbxIndex) < eBuilding_array_MAX)
+             && (city.m_Building_Status.a[m_unitType->m_Building1Required_or_PortraitLbxIndex] != BUILDINGSTATUS_Built)
+             && (city.m_Building_Status.a[m_unitType->m_Building1Required_or_PortraitLbxIndex] != BUILDINGSTATUS_Replaced))
+    {
+        return false;   // First required building not present
+    }
+    else if (m_unitType->m_Building2_or_HeroType == BUILDING_None)
+    {
+        // Building requirements satisfied
+    }
+    else if ((toUInt(m_unitType->m_Building2_or_HeroType) < eBuilding_array_MAX)
+             && (city.m_Building_Status.a[m_unitType->m_Building2_or_HeroType] != BUILDINGSTATUS_Built)
+             && (city.m_Building_Status.a[m_unitType->m_Building2_or_HeroType] != BUILDINGSTATUS_Replaced))
+    {
+        return false;   // Second required building not present
+    }
+
+    return true;
+}
+
 bool MoMUnit::isCaster() const
 {
     return (getCastingSkillBase() > 0);
@@ -1240,6 +1270,16 @@ bool MoMUnit::isNormal() const
 {
     return ((toUInt(getUnitTypeNr()) >= gMAX_HERO_TYPES)
             && (getUnitTypeNr() < UNITTYPE_Arcane_Magic_Spirit));
+}
+
+bool MoMUnit::isSettler() const
+{
+    return hasUnitAbility(UNITABILITY_Create_Outpost);
+}
+
+bool MoMUnit::isShip() const
+{
+    return hasUnitAbility(UNITABILITY_Sailing);
 }
 
 bool MoMUnit::isSummoned() const

@@ -30,6 +30,8 @@ public:
     bool applyBuildingQueue(int cityNr);
     bool applyBuildingQueue(ePlayer playerNr);
 
+    int  countGarrison(const MoMLocation& location);
+    int  countUnits(const MoMLocation& location);
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);
     City* findCityAtLocation(const MoMLocation& location);
     Node_Attr* findNodeAttrAtLocation(const MoMLocation& location);
@@ -40,9 +42,13 @@ public:
 
     bool polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr);
 
+    bool removeCityFromGameQueue(int cityNr);
+
     bool repopLairs(bool maxOut = false);
 
 private:
+//    bool addCitiesToGameQueue();
+
     bool createUnit(int& unitNr);
 
     MoMGameBase* m_game;

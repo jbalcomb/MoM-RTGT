@@ -21,6 +21,7 @@ QMoMTreeItemModelBase* constructTreeItem(BorlandStubJmpEntry* rhs, const QString
 QMoMTreeItemModelBase* constructTreeItem(Building_Data* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Building_Status* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(CityQueueElement* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(City_Enchantments* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Combat_Enchantment* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Difficulty_Table* rhs, const QString& context);

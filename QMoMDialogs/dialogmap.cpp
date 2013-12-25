@@ -14,11 +14,11 @@
 #include <fstream>
 #include <vector>
 
-#include "dialogmap.h"
-#include "ui_dialogmap.h"
+#include "DialogMap.h"
+#include "ui_DialogMap.h"
 
 #include "dialogcalculatoraddress.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "MoMCombat.h"
 #include "MoMController.h"
 #include "MoMGenerated.h"

@@ -7,15 +7,15 @@
 
 #include <stdio.h>  // sscanf
 
+#include "MainWindow.h"
 #include <MoMExeMagic.h>
 #include <MoMExeWizards.h>
 #include <MoMProcess.h>
 #include <MoMUtility.h>
-#include "mainwindow.h"
 #include <QMoMSettings.h>
 
-#include "dialogcalculatoraddress.h"
-#include "ui_dialogcalculatoraddress.h"
+#include "DialogCalculatorAddress.h"
+#include "ui_DialogCalculatorAddress.h"
 
 
 

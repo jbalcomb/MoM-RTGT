@@ -99,6 +99,7 @@ std::ostream& operator<<(std::ostream& os, const BorlandStubJmpEntry& rhs);
 std::ostream& operator<<(std::ostream& os, const Building_Data& rhs);
 std::ostream& operator<<(std::ostream& os, const Building_Status& rhs);
 std::ostream& operator<<(std::ostream& os, const City& rhs);
+std::ostream& operator<<(std::ostream& os, const CityQueueElement& rhs);
 std::ostream& operator<<(std::ostream& os, const City_Enchantments& rhs);
 std::ostream& operator<<(std::ostream& os, const Combat_Enchantment& rhs);
 std::ostream& operator<<(std::ostream& os, const Difficulty_Table& rhs);

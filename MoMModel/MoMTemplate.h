@@ -396,24 +396,26 @@ enum eDifficulty140m ENUMSIZE16
 
 enum eEvent
 {
-    EVENT_Meteor              = 0,
-    EVENT_Gift_from_the_Gods  = 1,
-    EVENT_Disjunction         = 2,
-    EVENT_Diplomatic_Marriage  = 3,
-    EVENT_Earthquake          = 4,
-    EVENT_Pirates             = 5,
-    EVENT_Plague              = 6,
-    EVENT_Rebellion           = 7,
-    EVENT_Donation            = 8,
-    EVENT_Depletion           = 9,
-    EVENT_Mine_found          = 10,
-    EVENT_Population_Boom     = 11,
-    EVENT_Good_Moon           = 12,
-    EVENT_Bad_Moon            = 13,
-    EVENT_Conjunction_Sorcery  = 14,
-    EVENT_Conjunction_Nature  = 15,
-    EVENT_Conjunction_Chaos   = 16,
-    EVENT_Mana_Short          = 17,
+    EVENT_None                = 0,
+
+    EVENT_Meteor              = 1,
+    EVENT_Gift_from_the_Gods  = 2,
+    EVENT_Disjunction         = 3,
+    EVENT_Diplomatic_Marriage = 4,
+    EVENT_Earthquake          = 5,
+    EVENT_Pirates             = 6,
+    EVENT_Plague              = 7,
+    EVENT_Rebellion           = 8,
+    EVENT_Donation            = 9,
+    EVENT_Depletion           = 10,
+    EVENT_Mine_found          = 11,
+    EVENT_Population_Boom     = 12,
+    EVENT_Good_Moon           = 13,
+    EVENT_Bad_Moon            = 14,
+    EVENT_Conjunction_Chaos   = 15,
+    EVENT_Conjunction_Nature  = 16,
+    EVENT_Conjunction_Sorcery = 17,
+    EVENT_Mana_Short          = 18,
 
     eEvent_MAX
 };
@@ -3465,6 +3467,14 @@ typedef struct PACKED_STRUCT // City_Enchantments
                                     // SIZE 18
 } City_Enchantments;
 
+typedef struct PACKED_STRUCT // CityQueueElement
+{
+    int8_t      m_CityNr;           // -1=Not applicable (anymore)
+    uint8_t     m_Unused_01;
+    eProducing  m_Producing;        // Negative?
+                                    // SIZE 4
+} CityQueueElement;
+
 struct ClickableArea
 {
     uint16_t                 left;                                    //   0 -1 0x10000400
@@ -3518,7 +3528,7 @@ typedef union // unionCombat_Enchantment
 typedef struct PACKED_STRUCT // Events_Status
 {
     uint16_t    m_Turn_Event_triggered_GUESS ;         // 00
-    uint16_t    m_Meteor_active      ;                 // 02
+    uint16_t    m_Meteor_active      ;                 // 02    0=Not active, 1=Triggered, 2=Active, 3=Ending?
     uint16_t    m_Meteor_playerNr    ;                 // 04
     uint16_t    m_Meteor_cityNr      ;                 // 06
     uint16_t    m_Gift_of_the_Gods_active ;            // 08
@@ -5580,16 +5590,20 @@ typedef struct // MoMDataSegment
     EXE_Reloc   word_40428  ; // 9988
     uint16_t    word_4042C  ; // 998C
     uint16_t    w_constant_GUESS    ; // 998E
-    eGameState  m_Game_flow ; // 9990
+    eGameState  m_Game_flow ;                                   // 9990
     uint16_t    word_40432  ; // 9992
     uint16_t    word_40434  ; // 9994
     uint16_t    word_40436  ; // 9996
-    EXE_Reloc   m_addr_events ; // 9998
-    uint16_t    w_uts_in_stack_ovrland_GUESS    ; // 999C
-    uint8_t w_Stack_active_GUESS[36]    ; // 999E
-    uint8_t byte_40462[281] ; // 99C2
-    uint8_t byte_4057B[21]  ; // 9ADB
-    uint8_t b_mess_number[82]   ; // 9AF0
+    EXE_Reloc   m_addr_events ;                                 // 9998
+    int16_t     m_nr_units_in_overland_stack;                   // 999C
+    uint32_t    m_units_in_overland_stack[9];                   // 999E
+    int8_t      m_nr_message_cityNames;                         // 99C2
+    uint8_t     m_arr20_message_cityNames[20 * 14];             // 99C3
+    int8_t      m_nr_message_cityNrs;                           // 9ADB
+    int8_t      m_arr20_message_cityNrs[20];                    // 99DC
+    int8_t      m_nr_city_queue;                                // 9AF0
+    uint8_t     m_Unused_9AF1;                                  // 9AF1
+    CityQueueElement    m_arr20_city_queue[20];                 // 9AF2
     uint8_t byte_405E2[82]  ; // 9B42
     uint8_t byte_40634[82]  ; // 9B94
     uint8_t byte_40686[82]  ; // 9BE6

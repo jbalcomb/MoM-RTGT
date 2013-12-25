@@ -10,8 +10,8 @@
 #include <QRegExp>
 #include <QSettings>
 #include <QTimer>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 // Standard C++ Library
 #include <sstream>
@@ -35,12 +35,12 @@
 #include <math.h>
 
 // Local
-#include "dialogaddunit.h"
-#include "dialogcalculatoraddress.h"
-#include "dialoglbxeditor.h"
-#include "dialogmap.h"
-#include "dialogtables.h"
-#include "dialogtools.h"
+#include "DialogAddUnit.h"
+#include "DialogCalculatorAddress.h"
+#include "DialogLbxEditor.h"
+#include "DialogMap.h"
+#include "DialogTables.h"
+#include "DialogTools.h"
 
 
 MainWindow* MainWindow::m_instance = 0;
@@ -129,7 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView_MoM->update();
 
     // Start the timers
-    m_timerReread->start(10000);
+    m_timerReread->start(5000);
     m_timerUpdateIcons->start(100);
 }
 
@@ -205,33 +205,17 @@ void MainWindow::applyBuildQueues()
     }
 
     bool ok = refreshMemory();
-
     if (ok)
     {
         MoM::MoMController momController(m_game.data());
-        ok = momController.applyBuildingQueue(MoM::PLAYER_YOU);
-        if (!ok)
+        bool changed = momController.applyBuildingQueue(MoM::PLAYER_YOU);
+        if (changed)
         {
-            (void)QMessageBox::warning(this,
-                tr("Apply Building Queues"),
-				tr("Failed to apply the Building Queues: %0").arg(momController.errorString().c_str()));
+            statusBar()->showMessage(tr("Building Queues applied involving a change"));
+            emit signal_gameUpdated();
         }
     }
 
-    if (ok)
-    {
-        ok = commitMemory();
-    }
-
-    if (!ok)
-    {
-        statusBar()->showMessage(tr("Failed to apply Building Queues"));
-    }
-    else
-    {
-        statusBar()->showMessage(tr("Building Queues applied"));
-		emit signal_gameUpdated();
-    }
 }
 
 bool MainWindow::commitMemory()

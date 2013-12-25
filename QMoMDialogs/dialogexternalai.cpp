@@ -1,9 +1,9 @@
 #include "MoMTemplate.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "QMoMSettings.h"
 
-#include "dialogexternalai.h"
-#include "ui_dialogexternalai.h"
+#include "DialogExternalAI.h"
+#include "ui_DialogExternalAI.h"
 
 DialogExternalAI::DialogExternalAI(QWidget *parent) :
     QDialog(parent),

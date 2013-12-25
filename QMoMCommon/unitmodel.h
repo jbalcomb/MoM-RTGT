@@ -40,7 +40,7 @@ public:
 //    void update();
     void updateFirstUnresolvedIcon()
     {
-        int nrToResolve = 100;
+        int nrToResolve = 500;
         traverseTree(m_rootItem.data(), nrToResolve);
     }
 

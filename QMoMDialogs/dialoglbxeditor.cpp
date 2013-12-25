@@ -1,5 +1,5 @@
-#include "dialoglbxeditor.h"
-#include "ui_dialoglbxeditor.h"
+#include "DialogLbxEditor.h"
+#include "ui_DialogLbxEditor.h"
 
 #include <QDebug>
 #include <QGraphicsItem>

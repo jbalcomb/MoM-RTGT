@@ -5,14 +5,19 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include "dialogbuildingqueues.h"
-#include "ui_dialogbuildingqueues.h"
+#include "DialogBuildingQueues.h"
+#include "ui_DialogBuildingQueues.h"
+
+#include <QMenu>
 
 #include <MoMController.h>
 #include <MoMGenerated.h>
+#include <QMoMTableItem.h>
 #include <QMoMSettings.h>
 
-#include "mainwindow.h"
+#include "MainWindow.h"
+
+using namespace MoM;
 
 DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     QDialog(parent),
@@ -30,11 +35,11 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 	ui->tableWidget_QueueDefinition->clear();
     ui->tableWidget_QueueDefinition->setRowCount(18);
 
-    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Spearmen"));
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Garrison"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("Garrison < 1 and not producing(Garrison)"));
     row++;
-    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Spearmen"));
-    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("Pop >= 5 and Garrison < 2 and not producing(Garrison)"));
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Garrison"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("producing(Garrison)"));
     row++;
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Builder's Hall"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
@@ -58,7 +63,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Housing"));
-    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("Pop < 8"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("Pop < 4"));
     row++;
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Shrine"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
@@ -91,6 +96,13 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
 
+    QStringList labels;
+    labels << "Nr"
+           << "Name" << "Race" << "Pop" << "Farmers" << "Food" << "Prod" << "Completion" << "Producing"
+           << "Time" << "Garrison";
+    ui->tableWidget_Cities->setColumnCount(labels.size());
+    ui->tableWidget_Cities->setHorizontalHeaderLabels(labels);
+
     QMoMSettings::readSettingsWindow(this);
 
     QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
@@ -119,35 +131,64 @@ void DialogBuildingQueues::update()
 
     MoM::MoMController momController(m_game.data());
 
+    ui->tableWidget_Cities->setSortingEnabled(false);
+
     int row = 0;
     for (int cityNr = 0; (cityNr < nrCities) && (cityNr < (int)MoM::gMAX_CITIES); ++cityNr)
     {
-        MoM::City* city = m_game->getCity(cityNr);
+        City* city = m_game->getCity(cityNr);
         if (0 == city)
             break;
         if (MoM::PLAYER_YOU != city->m_Owner)
             continue;
-		QString buildingCost = QString("%0").arg(m_game->getCostToProduce(city->m_Producing));
 
-        std::vector<int> unitsInCity;
-        MoM::MoMLocation location(city->m_XPos, city->m_YPos, city->m_Plane);
-        (void)momController.findUnitsAtLocation(location, unitsInCity);
-        int garrisonSize = unitsInCity.size();
+        int buildingCost = m_game->getCostToProduce(city->m_Producing);
+        // TODO: Count coal and iron for unit cost reduction (other factors?)
+        int timeCompletion = 999;
+        if (city->m_Hammers > 0)
+        {
+           timeCompletion = (buildingCost - city->m_HammersAccumulated + city->m_Hammers - 1) / city->m_Hammers;
+        }
+        int garrisonSize = momController.countGarrison(MoMLocation(*city));
+        int foodSurplus = city->m_Food_Produced - city->m_Population;
+        QString foodSurplusStr = QString("%0").arg(foodSurplus);
+        if (foodSurplus >= 0)
+        {
+            foodSurplusStr = "+" + foodSurplusStr;
+        }
 
         if (row >= ui->tableWidget_Cities->rowCount())
         {
             ui->tableWidget_Cities->insertRow(row);
         }
-        ui->tableWidget_Cities->setItem(row, 0, new QTableWidgetItem(city->m_City_Name));
-        ui->tableWidget_Cities->setItem(row, 1, new QTableWidgetItem(prettyQStr(city->m_Race)));
-        ui->tableWidget_Cities->setItem(row, 2, new QTableWidgetItem(QString("%0").arg(int(city->m_Population))));
-		ui->tableWidget_Cities->setItem(row, 3, new QTableWidgetItem(QString("%0 / %1").arg((int)city->m_HammersAccumulated).arg(buildingCost)));
-        ui->tableWidget_Cities->setItem(row, 4, new QTableWidgetItem(prettyQStr(city->m_Producing)));
-        ui->tableWidget_Cities->setItem(row, 5, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
+        int col = 0;
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(cityNr, 2)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(city->m_City_Name));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(city->m_Race),
+                                            prettyQStr(city->m_Race)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg((int)(city->m_Population), 2)));
+        ui->tableWidget_Cities->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &city->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 40), 2),
+                                            foodSurplusStr));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
+                                            QString("%0").arg((int)(city->m_Hammers), 3)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0 /%1").arg((int)city->m_HammersAccumulated, 4).arg(buildingCost, 4)));
+        ui->tableWidget_Cities->setItem(row, col++, new EnumTableItem<eProducing>(m_game, &city->m_Producing, eProducing_MAX, SHOWENUM_normal));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
+
+        for (int col = 0; col < ui->tableWidget_Cities->columnCount(); ++col)
+        {
+            ui->tableWidget_Cities->item(row, col)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        }
 
         row++;
     }
     ui->tableWidget_Cities->setRowCount(row);
+    ui->tableWidget_Cities->resizeRowsToContents();
     ui->tableWidget_Cities->setSortingEnabled(true);
 }
 
@@ -164,6 +205,32 @@ void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
     }
 }
 
+void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(const QPoint &pos)
+{
+    qDebug() << "on_tableWidget_Cities_customContextMenuRequested" << pos;
+    QTableWidgetItem* pItem = ui->tableWidget_Cities->currentItem();
+
+    QMenu contextMenu;
+//    contextMenu.addAction("Copy", this, SLOT(slot_Copy()), QKeySequence("Ctrl+C"));
+
+    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
+        if (!actions.empty())
+        {
+            contextMenu.addSeparator();
+            contextMenu.addActions(actions);
+        }
+        foreach(QAction* action, actions)
+        {
+            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemAction()));
+        }
+    }
+
+    contextMenu.exec(mapToGlobal(pos));
+}
+
 void DialogBuildingQueues::slot_gameChanged(const QMoMGamePtr& game)
 {
 	m_game = game;
@@ -174,3 +241,14 @@ void DialogBuildingQueues::slot_gameUpdated()
 {
 	update();
 }
+
+void DialogBuildingQueues::slot_ItemAction()
+{
+    QTableWidgetItem* pItem = ui->tableWidget_Cities->currentItem();
+    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        pMoMItem->slotAction();
+    }
+}
+

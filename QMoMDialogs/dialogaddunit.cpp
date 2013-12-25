@@ -8,8 +8,8 @@
 #include <qgraphicsitem.h>
 #include <qgraphicsscene.h>
 
-#include "dialogaddunit.h"
-#include "ui_dialogaddunit.h"
+#include "DialogAddUnit.h"
+#include "ui_DialogAddUnit.h"
 
 #include <MoMGenerated.h>
 #include <MoMUnit.h>
@@ -19,7 +19,7 @@
 #include "QMoMSettings.h"
 #include "QMoMSharedPointers.h"
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 namespace MoM
 {

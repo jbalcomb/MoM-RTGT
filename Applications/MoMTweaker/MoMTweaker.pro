@@ -18,7 +18,6 @@ VERSION = 8
 TARGET = MoMTweaker
 
 QT += core gui
-QT += xml
 
 include(MoMTweaker.pri)
 

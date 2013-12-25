@@ -446,9 +446,9 @@ std::ostream& operator<<(std::ostream& os, const eEvent& rhs)
     case EVENT_Population_Boom: os << "EVENT_Population_Boom"; break;
     case EVENT_Good_Moon: os << "EVENT_Good_Moon"; break;
     case EVENT_Bad_Moon: os << "EVENT_Bad_Moon"; break;
-    case EVENT_Conjunction_Sorcery: os << "EVENT_Conjunction_Sorcery"; break;
-    case EVENT_Conjunction_Nature: os << "EVENT_Conjunction_Nature"; break;
     case EVENT_Conjunction_Chaos: os << "EVENT_Conjunction_Chaos"; break;
+    case EVENT_Conjunction_Nature: os << "EVENT_Conjunction_Nature"; break;
+    case EVENT_Conjunction_Sorcery: os << "EVENT_Conjunction_Sorcery"; break;
     case EVENT_Mana_Short: os << "EVENT_Mana_Short"; break;
     case eEvent_MAX: os << "eEvent_MAX"; break;
     default: os << "<Unknown eEvent>"; break;
@@ -4067,6 +4067,16 @@ std::ostream& operator<<(std::ostream& os, const City& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const CityQueueElement& rhs)
+{
+    os << "{\n";
+    os << "m_CityNr=" << (int)rhs.m_CityNr << " 0x" << std::hex << (int)rhs.m_CityNr << std::dec << "\n";
+    os << "m_Unused_01=" << (unsigned)rhs.m_Unused_01 << " 0x" << std::hex << (unsigned)rhs.m_Unused_01 << std::dec << "\n";
+    os << "m_Producing=" << rhs.m_Producing << "\n";
+    os << "}";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const City_Enchantments& rhs)
 {
     os << "{\n";
@@ -5866,29 +5876,33 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "word_40434=" << rhs.word_40434 << " 0x" << std::hex << rhs.word_40434 << std::dec << "\n";
     os << "word_40436=" << rhs.word_40436 << " 0x" << std::hex << rhs.word_40436 << std::dec << "\n";
     os << "m_addr_events=" << rhs.m_addr_events << "\n";
-    os << "w_uts_in_stack_ovrland_GUESS=" << rhs.w_uts_in_stack_ovrland_GUESS << " 0x" << std::hex << rhs.w_uts_in_stack_ovrland_GUESS << std::dec << "\n";
-    os << "w_Stack_active_GUESS=(\n";
-    for (unsigned i = 0; i < 36; ++i)
+    os << "m_nr_units_in_overland_stack=" << rhs.m_nr_units_in_overland_stack << " 0x" << std::hex << rhs.m_nr_units_in_overland_stack << std::dec << "\n";
+    os << "m_units_in_overland_stack=(\n";
+    for (unsigned i = 0; i < 9; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.w_Stack_active_GUESS[i] << " 0x" << std::hex << (unsigned)rhs.w_Stack_active_GUESS[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_units_in_overland_stack[i] << " 0x" << std::hex << rhs.m_units_in_overland_stack[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "byte_40462=(\n";
-    for (unsigned i = 0; i < 281; ++i)
+    os << "m_nr_message_cityNames=" << (int)rhs.m_nr_message_cityNames << " 0x" << std::hex << (int)rhs.m_nr_message_cityNames << std::dec << "\n";
+    os << "m_arr20_message_cityNames=(\n";
+    for (unsigned i = 0; i < 20 * 14; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.byte_40462[i] << " 0x" << std::hex << (unsigned)rhs.byte_40462[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_arr20_message_cityNames[i] << " 0x" << std::hex << (unsigned)rhs.m_arr20_message_cityNames[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "byte_4057B=(\n";
-    for (unsigned i = 0; i < 21; ++i)
+    os << "m_nr_message_cityNrs=" << (int)rhs.m_nr_message_cityNrs << " 0x" << std::hex << (int)rhs.m_nr_message_cityNrs << std::dec << "\n";
+    os << "m_arr20_message_cityNrs=(\n";
+    for (unsigned i = 0; i < 20; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.byte_4057B[i] << " 0x" << std::hex << (unsigned)rhs.byte_4057B[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_arr20_message_cityNrs[i] << " 0x" << std::hex << (int)rhs.m_arr20_message_cityNrs[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "b_mess_number=(\n";
-    for (unsigned i = 0; i < 82; ++i)
+    os << "m_nr_city_queue=" << (int)rhs.m_nr_city_queue << " 0x" << std::hex << (int)rhs.m_nr_city_queue << std::dec << "\n";
+    os << "m_Unused_9AF1=" << (unsigned)rhs.m_Unused_9AF1 << " 0x" << std::hex << (unsigned)rhs.m_Unused_9AF1 << std::dec << "\n";
+    os << "m_arr20_city_queue=(\n";
+    for (unsigned i = 0; i < 20; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.b_mess_number[i] << " 0x" << std::hex << (unsigned)rhs.b_mess_number[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_arr20_city_queue[i] << ",\n";
     }
     os << ")\n";
     os << "byte_405E2=(\n";

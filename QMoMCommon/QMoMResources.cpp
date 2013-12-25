@@ -768,6 +768,22 @@ const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair) con
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(MoM::eProducing producing) const
+{
+    QMoMImagePtr image;
+    if (toUInt(producing) < PRODUCING_BUILDING_MAX)
+    {
+        eBuilding building = (eBuilding)producing;
+        image = getImage(building);
+    }
+    else
+    {
+        eUnit_Type unitType = (eUnit_Type)(toUInt(producing) - 100);
+        image = getImage(unitType);
+    }
+    return image;
+}
+
 const QMoMImagePtr QMoMResources::getImage(eRace race) const
 {
     QMoMImagePtr image(new QImage(QString(":/race/%0.gif").arg(prettyQStr(race))));

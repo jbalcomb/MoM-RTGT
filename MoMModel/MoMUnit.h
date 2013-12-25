@@ -135,6 +135,7 @@ public:
     bool hasMutation(eUnitMutation unitMutation) const;
 
     // Tests
+    bool isBuildable(const City& city) const;
     bool isCaster() const;
     bool isColor(eRealm_Type color) const;
     bool isFlying() const;
@@ -144,6 +145,8 @@ public:
     bool isInvisible() const;
     bool isInvulnerable() const;
     bool isNormal() const;
+    bool isSettler() const;
+    bool isShip() const;
     bool isSummoned() const;
 
     // Commit data

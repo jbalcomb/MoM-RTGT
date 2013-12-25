@@ -12,8 +12,8 @@
 
 #include <string>
 
-#include "dialogtables.h"
-#include "ui_dialogtables.h"
+#include "DialogTables.h"
+#include "ui_DialogTables.h"
 
 #include "MoMController.h"
 #include "MoMExeWizards.h"
@@ -21,7 +21,7 @@
 #include "MoMLevelBonuses.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "QMoMSettings.h"
 #include "QMoMTableItem.h"
 
@@ -193,16 +193,14 @@ void DialogTables::slot_addRow_to_Cities(int row)
     if (0 == data)
         return;
     int buildingCost = m_game->getCostToProduce(data->m_Producing);
+    // TODO: Count coal and iron for unit cost reduction (other factors?)
     int timeCompletion = 999;
     if (data->m_Hammers > 0)
     {
-       timeCompletion = (buildingCost - data->m_HammersAccumulated) / data->m_Hammers + 1;
+       timeCompletion = (buildingCost - data->m_HammersAccumulated + data->m_Hammers - 1) / data->m_Hammers;
     }
 
-    std::vector<int> unitsInCity;
-    MoM::MoMLocation location(data->m_XPos, data->m_YPos, data->m_Plane);
-    MoM::MoMController(m_game.data()).findUnitsAtLocation(location, unitsInCity);
-    int garrisonSize = unitsInCity.size();
+    int garrisonSize = MoM::MoMController(m_game.data()).countGarrison(MoMLocation(*data));
 
     int col = 0;
     ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));

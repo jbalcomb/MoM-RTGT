@@ -25,14 +25,14 @@
 #include <QMoMSettings.h>
 
 // Local
-#include "dialogbuildingqueues.h"
-#include "dialogexternalai.h"
-#include "dialogselectinitialspells.h"
-#include "mainwindow.h"
+#include "DialogBuildingQueues.h"
+#include "DialogExternalAI.h"
+#include "DialogSelectInitialSpells.h"
+#include "MainWindow.h"
 
 // Module header
-#include "dialogtools.h"
-#include "ui_dialogtools.h"
+#include "DialogTools.h"
+#include "ui_DialogTools.h"
 
 DialogTools::DialogTools(QWidget *parent) :
     QDialog(parent),
