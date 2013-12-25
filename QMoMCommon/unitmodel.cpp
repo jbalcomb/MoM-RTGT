@@ -1035,37 +1035,6 @@ void UnitModel::update_Unit_Types(QMoMTreeItemModelBase* ptree, const QMoMGamePt
                 ptree->child(row, 0)->appendChild(QString("*PtrName"), new QMoMTreeItemModel<const char*>(ptrName));
             }
 
-//            std::string gameDir = game->getGameDirectory();
-//            if (!gameDir.empty() && (unitType >= MoM::gMAX_HERO_TYPES))
-//            {
-//                std::string unitLbx;
-//                size_t lbxIndex = unitType;
-//                if (lbxIndex < 120)
-//                {
-//                    unitLbx = "UNITS1";
-//                }
-//                else
-//                {
-//                    unitLbx = "UNITS2";
-//                    lbxIndex -= 120;
-//                }
-//                unitLbx = gameDir + "/" + unitLbx + ".LBX";
-//                MoM::MoMLbxBase lbxFile;
-//                if (lbxFile.load(unitLbx))
-//                {
-//                    uint8_t* data = lbxFile.getRecord(lbxIndex);
-//
-////                    std::cout << "Convert " << unitType << " from " << unitLbx << "[" << lbxIndex << "]" << std::endl;
-//                    QImage image = MoM::convertLbxToImage(data, m_colorTable);
-//                    image = image.scaled(image.size() * 2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-//
-//                    QIcon icon(QPixmap::fromImage(image));
-//                    ptree->child(row, 0)->appendChild(QString("UnitIcon"), new TreeItemBase(QString(), icon));
-//
-//                    ptree->child(row, 0)->setData(icon, Qt::EditRole);
-//                }
-//            }
-
             ptree->child(row, 0)->setLazyIcon(unitType);
 
         }

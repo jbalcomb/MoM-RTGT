@@ -35,10 +35,6 @@ public:
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);
     City* findCityAtLocation(const MoMLocation& location);
     Node_Attr* findNodeAttrAtLocation(const MoMLocation& location);
-    bool findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units);
-
-    bool isBuildingAllowed(const City& city, eBuilding building);
-    bool isBuildingPresent(const City& city, eBuilding building);
 
     bool polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr);
 

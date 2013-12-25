@@ -74,7 +74,8 @@ HEADERS += \
     ../../QMoMDialogs/DialogMap.h \
     ../../QMoMDialogs/DialogSelectInitialSpells.h \
     ../../QMoMDialogs/DialogTables.h \
-    ../../QMoMDialogs/DialogTools.h
+    ../../QMoMDialogs/DialogTools.h \
+    ../../MoMModel/MoMCity.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -129,7 +130,8 @@ SOURCES += \
     ../../QMoMDialogs/DialogSelectInitialSpells.cpp \
     ../../QMoMDialogs/DialogTables.cpp \
     ../../QMoMDialogs/DialogTools.cpp \
-    ../../QMoMCommon/UnitModel.cpp
+    ../../QMoMCommon/UnitModel.cpp \
+    ../../MoMModel/MoMCity.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \

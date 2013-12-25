@@ -38,6 +38,7 @@ private:
     void update();
 
 	QMoMGamePtr m_game;
+    bool m_contextMenuOpen;
 
     Ui::DialogBuildingQueues *ui;
 };

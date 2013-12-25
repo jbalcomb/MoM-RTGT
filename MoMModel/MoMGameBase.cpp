@@ -32,29 +32,23 @@ MoMGameBase::~MoMGameBase()
 {
 }
 
-// TODO: Centralize getGameDirectory() here.
-
-int MoMGameBase::getCostToProduce(eProducing producing)
+void MoMGameBase::findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units)
 {
-	int buildingCost = -1;
-	if (producing < MoM::PRODUCING_BUILDING_MAX)
-	{
-		MoM::Building_Data* buildingData = getBuildingData((eBuilding)producing);
-		if (0 != buildingData)
-		{
-			buildingCost = buildingData->m_Building_cost;
-		}
-	}
-	else 
-	{
-		MoM::eUnit_Type unitTypeNr = (MoM::eUnit_Type)((int)producing - (int)MoM::PRODUCING_Trireme + (int)MoM::UNITTYPE_Trireme);
-		MoM::Unit_Type_Data* unitData = getUnitTypeData(unitTypeNr);
-		if (0 != unitData)
-		{
-			buildingCost = unitData->m_Cost;
-		}
-	}
-	return buildingCost;
+    units.clear();
+
+    for (int unitNr = 0; unitNr < getNrUnits(); ++unitNr)
+    {
+        const Unit* unit = getUnit(unitNr);
+        if (0 == unit)
+            break;
+
+        if (location.m_XPos == unit->m_XPos
+            && location.m_YPos == unit->m_YPos
+            && location.m_Plane == unit->m_Plane)
+        {
+            units.push_back(unitNr);
+        }
+    }
 }
 
 void MoMGameBase::getHeroSlotTypes(eHero_TypeCode heroTypeCode, eSlot_Type16 heroSlotTypes[3])

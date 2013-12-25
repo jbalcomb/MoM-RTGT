@@ -53,6 +53,8 @@ public:
     //! The data at ptr is only updated if the commit was successful
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size) = 0;
 
+    void findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units);
+
     Battle_Unit* getBattleUnit(int battleUnitNr)
     {
         Battle_Unit* battleUnits = getBattle_Units();
@@ -76,8 +78,6 @@ public:
             return 0;
         return &cities[cityNr];
     }
-
-	int getCostToProduce(eProducing producing);
 
     virtual std::string getGameDirectory() const = 0;
 

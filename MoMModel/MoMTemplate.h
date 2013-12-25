@@ -3330,6 +3330,7 @@ const unsigned gMAX_NODES = 30;
 const unsigned gMAX_NODES_LAIRS_TOWERS = 102;
 const unsigned gMAX_RACES = 14;
 const unsigned gMAX_UNITS = 1009;
+const unsigned gMAX_UNITS_IN_LOCATION = 9;
 const unsigned gMAX_VALID_WIZARDS = 5;
 const unsigned gMAX_WIZARD_RECORDS = 6;
 
@@ -5254,8 +5255,8 @@ typedef struct // MoMDataSegment
     UnitView_SpellData      m_UnitEnchantment_data[32];         // ds:3C9E
     UnitView_SpellData      m_CombatEnchantment_data[15];       // ds:3DDE
     UnitView_SpellData      m_ItemPower_data[21];               // ds:3E74
-    DS_Offset               m_Offsets_UnitLevelNames[6];        // ds:3F46
-    DS_Offset               m_Offsets_HeroLevelNames[9];        // ds:3F52
+    DS_Offset               m_Offsets_UnitLevelNames[gMAX_LEVELS_UNIT]; // ds:3F46
+    DS_Offset               m_Offsets_HeroLevelNames[gMAX_LEVELS_HERO]; // ds:3F52
     UnitView_ItemText       m_ItemPower_text[32];               // ds:3F64
 
     char        m_NameBuffer_4064[0x5bd8 - 0x4064];             // ds:4064
@@ -5596,7 +5597,7 @@ typedef struct // MoMDataSegment
     uint16_t    word_40436  ; // 9996
     EXE_Reloc   m_addr_events ;                                 // 9998
     int16_t     m_nr_units_in_overland_stack;                   // 999C
-    uint32_t    m_units_in_overland_stack[9];                   // 999E
+    uint32_t    m_units_in_overland_stack[gMAX_UNITS_IN_LOCATION];  // 999E
     int8_t      m_nr_message_cityNames;                         // 99C2
     uint8_t     m_arr20_message_cityNames[20 * 14];             // 99C3
     int8_t      m_nr_message_cityNrs;                           // 9ADB

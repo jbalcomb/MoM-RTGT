@@ -45,6 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
+				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtXml&quot;;&quot;$(QTDIR)\include&quot;;.\..\..\Platform;.\..\..\MoMControl;.\..\..\MoMModel;.\..\..\MoMModel\Generated;.\..\..\Utility;.\..\..\QMoMCommon;.\..\..\QMoMCommon\Generated;.\..\..\QMoMDialogs;.\..\..\Applications\MoMTweaker;&quot;.\..\..\giflib-5.0.4\lib&quot;;&quot;$(QTDIR)\include\ActiveQt&quot;;.\Generated\Release;.\Generated;&quot;.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot;;.\GeneratedFiles"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,QT_DLL,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB,QT_HAVE_MMX,QT_HAVE_3DNOW,QT_HAVE_SSE,QT_HAVE_MMXEXT,QT_HAVE_SSE2,QT_THREAD_SUPPORT"
 				GeneratePreprocessedFile="0"
@@ -280,6 +281,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\MoMModel\MoMCity.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\MoMControl\MoMCombat.cpp"
 				>
 			</File>
@@ -397,10 +402,6 @@
 			</File>
 			<File
 				RelativePath="..\..\QMoMCommon\QMoMTableItem.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\QMoMCommon\QMoMTreeCustomExtensions.cpp"
 				>
 			</File>
 			<File
@@ -879,10 +880,6 @@
 			</File>
 			<File
 				RelativePath="..\..\QMoMCommon\QMoMSharedPointers.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\QMoMCommon\QMoMTreeCustomExtensions.h"
 				>
 			</File>
 			<File

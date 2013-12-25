@@ -193,7 +193,7 @@ std::vector<int> MoMTerrain::getUnits()
     std::vector<int> units;
     if (0 != m_game)
     {
-        (void)MoMController(m_game).findUnitsAtLocation(m_location, units);
+        m_game->findUnitsAtLocation(m_location, units);
     }
     return units;
 }

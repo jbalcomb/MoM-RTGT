@@ -36,8 +36,8 @@ struct MoMGamePointers
     char*       m_Offsets_CityEnchantmentNames[eCityEnchantments_MAX];   // ds:1EE4
     char*       m_Offsets_PersonalityNames[ePersonality_MAX];   // ds:1FBC
     char*       m_Offsets_ObjectiveNames[eObjective_MAX];       // ds:1FD4
-    char*       m_Offsets_UnitLevelNames[6];          // ds:3F46
-    char*       m_Offsets_HeroLevelNames[9];          // ds:3F52
+    char*       m_Offsets_UnitLevelNames[gMAX_LEVELS_UNIT];          // ds:3F46
+    char*       m_Offsets_HeroLevelNames[gMAX_LEVELS_HERO];          // ds:3F52
 
     UnknownBuf*             m_EMS_data_reference_point; // 760C
     Spell_Data*             m_addr_Spell_Data ; // 912C

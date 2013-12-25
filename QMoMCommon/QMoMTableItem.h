@@ -199,25 +199,46 @@ inline QString TextTableItem::toString() const
 /////////////////////////////////////////
 
 template<typename Enum>
-class EnumTableItem : public QMoMTableItemBase
+class EnumTableItemBase : public QMoMTableItemBase
 {
 public:
-    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum = SHOWENUM_normal, unsigned bitmask = 0);
-    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum = SHOWENUM_normal);
+    EnumTableItemBase(const QMoMGamePtr& game, Enum* e, eShowEnum showEnum = SHOWENUM_normal, unsigned bitmask = 0);
 
     virtual void setData(int role, const QVariant &value);
-    virtual QList<QAction*> requestActions(QObject* parent);
+    virtual QList<QAction*> requestActions(QObject* parent) = 0;
     virtual void slotAction();
     virtual QString toString() const;
 
-private:
+protected:
     void addAction(Enum e);
+
+    eShowEnum getShowEnum() const
+    {
+        return m_showEnum;
+    }
+
+    Enum getValue() const
+    {
+        return *m_ptr;
+    }
+
+    QList<QAction*> getActions()
+    {
+        assert(0 != m_actionGroup);
+        return m_actionGroup->actions();
+    }
+
+    void createActionGroup(QObject* parent)
+    {
+        // Ownership is transfered to the parent, who will delete it.
+        m_actionGroup = new QActionGroup(parent);
+    }
+
+private:
 
     // Configuration
     Enum* m_ptr;
     unsigned m_bitmask;
-    Enum m_min;
-    Enum m_max;
     eShowEnum m_showEnum;
 
     // Status
@@ -228,12 +249,10 @@ private:
 };
 
 template<typename Enum>
-EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum, unsigned bitmask) :
+EnumTableItemBase<Enum>::EnumTableItemBase(const QMoMGamePtr& game, Enum* e, eShowEnum showEnum, unsigned bitmask) :
     QMoMTableItemBase(game),
     m_ptr(e),
     m_bitmask(bitmask),
-    m_min(),
-    m_max(max),
     m_showEnum(showEnum),
     m_actionGroup()
 {
@@ -241,20 +260,7 @@ EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, e
 }
 
 template<typename Enum>
-EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum) :
-    QMoMTableItemBase(game),
-    m_ptr(e),
-    m_bitmask(),
-    m_min(min),
-    m_max(max),
-    m_showEnum(showEnum),
-    m_actionGroup()
-{
-    QTableWidgetItem::setData(Qt::EditRole, toString());
-}
-
-template<typename Enum>
-void EnumTableItem<Enum>::setData(int role, const QVariant &value)
+void EnumTableItemBase<Enum>::setData(int role, const QVariant &value)
 {
     switch (role)
     {
@@ -277,7 +283,7 @@ void EnumTableItem<Enum>::setData(int role, const QVariant &value)
 }
 
 template<typename Enum>
-void EnumTableItem<Enum>::addAction(Enum e)
+void EnumTableItemBase<Enum>::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
@@ -304,33 +310,14 @@ void EnumTableItem<Enum>::addAction(Enum e)
 }
 
 template<typename Enum>
-QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
-{
-    m_actionGroup = new QActionGroup(parent);
-
-    if (((m_showEnum == SHOWENUM_minusOne) || (m_showEnum == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
-    {
-        addAction((Enum)-1);
-    }
-
-    for (int16_t index = (int16_t)m_min; index < (int16_t)m_max; ++index)
-    {
-        Enum e = (Enum)index;
-        addAction(e);
-    }
-
-    return m_actionGroup->actions();
-}
-
-template<typename Enum>
-void EnumTableItem<Enum>::slotAction()
+void EnumTableItemBase<Enum>::slotAction()
 {
     QAction* action = m_actionGroup->checkedAction();
     setData(Qt::EditRole, action->data());
 }
 
 template<typename Enum>
-QString EnumTableItem<Enum>::toString() const
+QString EnumTableItemBase<Enum>::toString() const
 {
     unsigned unsignedValue = static_cast<unsigned>(*m_ptr);
     if (0 != m_bitmask)
@@ -351,6 +338,100 @@ QString EnumTableItem<Enum>::toString() const
         str = "-";
     }
     return str;
+}
+
+/////////////////////////////////////////
+
+template<typename Enum>
+class EnumTableItem : public EnumTableItemBase<Enum>
+{
+public:
+    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum = SHOWENUM_normal, unsigned bitmask = 0);
+    EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum = SHOWENUM_normal);
+
+    virtual QList<QAction*> requestActions(QObject* parent);
+
+private:
+    // Configuration
+    Enum m_min;
+    Enum m_max;
+
+    // Status
+};
+
+template<typename Enum>
+EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, eShowEnum showEnum, unsigned bitmask) :
+    EnumTableItemBase<Enum>(game, e, showEnum, bitmask),
+    m_min(),
+    m_max(max)
+{
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Enum>
+EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, Enum max, eShowEnum showEnum) :
+    EnumTableItemBase<Enum>(game, e, showEnum, 0),
+    m_min(min),
+    m_max(max)
+{
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Enum>
+QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
+{
+    createActionGroup(parent);
+
+    if (((getShowEnum() == SHOWENUM_minusOne) || (getShowEnum() == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
+    {
+        addAction((Enum)-1);
+    }
+
+    for (int16_t index = (int16_t)m_min; index < (int16_t)m_max; ++index)
+    {
+        Enum e = (Enum)index;
+        addAction(e);
+    }
+
+    return getActions();
+}
+
+/////////////////////////////////////////
+
+template<typename Enum>
+class EnumTableItemList : public EnumTableItemBase<Enum>
+{
+public:
+    EnumTableItemList(const QMoMGamePtr& game, Enum* e, const QList<Enum>& listEnums);
+
+    virtual QList<QAction*> requestActions(QObject* parent);
+
+private:
+    // Configuration
+    QList<Enum> m_listEnums;
+
+    // Status
+};
+
+template<typename Enum>
+EnumTableItemList<Enum>::EnumTableItemList(const QMoMGamePtr& game, Enum* e, const QList<Enum>& listEnums) :
+    EnumTableItemBase<Enum>(game, e, SHOWENUM_normal, 0),
+    m_listEnums(listEnums)
+{
+    QTableWidgetItem::setData(Qt::EditRole, toString());
+}
+
+template<typename Enum>
+QList<QAction*> EnumTableItemList<Enum>::requestActions(QObject* parent)
+{
+    createActionGroup(parent);
+
+    foreach (Enum e, m_listEnums)
+    {
+        addAction(e);
+    }
+
+    return getActions();
 }
 
 /////////////////////////////////////////

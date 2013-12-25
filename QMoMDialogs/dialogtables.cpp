@@ -15,6 +15,7 @@
 #include "DialogTables.h"
 #include "ui_DialogTables.h"
 
+#include "MoMCity.h"
 #include "MoMController.h"
 #include "MoMExeWizards.h"
 #include "MoMGenerated.h"
@@ -192,14 +193,10 @@ void DialogTables::slot_addRow_to_Cities(int row)
     City* data = m_game->getCity(cityNr);
     if (0 == data)
         return;
-    int buildingCost = m_game->getCostToProduce(data->m_Producing);
-    // TODO: Count coal and iron for unit cost reduction (other factors?)
-    int timeCompletion = 999;
-    if (data->m_Hammers > 0)
-    {
-       timeCompletion = (buildingCost - data->m_HammersAccumulated + data->m_Hammers - 1) / data->m_Hammers;
-    }
+    MoMCity momCity(m_game.data(), data);
 
+    int buildingCost = momCity.getCostToProduce(data->m_Producing);
+    int timeCompletion = momCity.getTimeToComplete(data->m_Producing);
     int garrisonSize = MoM::MoMController(m_game.data()).countGarrison(MoMLocation(*data));
 
     int col = 0;
@@ -569,7 +566,7 @@ void DialogTables::update_LevelBonus()
         }
 
         // 6 unit levels + 9 hero levels
-        ndata = 6 + 9;
+        ndata = gMAX_LEVELS_UNIT + gMAX_LEVELS_HERO;
     }
 
     QStringList labels;

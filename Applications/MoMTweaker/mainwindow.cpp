@@ -28,12 +28,6 @@
 #include <QMoMResources.h>
 #include <QMoMSettings.h>
 
-// TODO: Remove again
-#include <QPainter>
-#include <QMoMGifHandler.h>
-#include <QMoMUnitTile.h>
-#include <math.h>
-
 // Local
 #include "DialogAddUnit.h"
 #include "DialogCalculatorAddress.h"

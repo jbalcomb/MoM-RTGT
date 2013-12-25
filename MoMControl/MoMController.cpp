@@ -10,6 +10,7 @@
 #include <string.h>
 #include <string>
 
+#include "MoMCity.h"
 #include "MoMGenerated.h"
 #include "MoMUnit.h"
 #include "MoMUtility.h"
@@ -32,14 +33,10 @@ int gXPforLevel[] =
     1000    // 9	Demi-God		
 };
 
-#define buildingPresent(city, building) \
-	isBuildingPresent((city), BUILDING_##building)
-
-#define producing(city, building) \
-    (PRODUCING_##building == (city).m_Producing)
-
-#define producingGarrison(city) \
-    ((city).m_Producing >= PRODUCING_BUILDING_MAX)
+static bool producingGarrison(const City* city)
+{
+    return (city->m_Producing >= PRODUCING_BUILDING_MAX);
+}
 
 //bool MoMController::addCityToGameQueue(int cityNr)
 //{
@@ -160,6 +157,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
 		m_errorString = "Cannot get the data for to city  '" + toStr(cityNr) + "'";
         return false;
 	}
+    MoMCity momCity(m_game, city);
 
     eProducing producingBefore = city->m_Producing;
     eProducing producingAfter = city->m_Producing;
@@ -195,7 +193,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[Bank]
     //[Miners Guild]
 
-    // SPECIAL TARGETS
+    // TODO: SPECIAL TARGETS
     //[Animists Guild]  (requires Temple, Stables)
     //[Parthenon]
     //[Cathedral]
@@ -208,13 +206,13 @@ bool MoMController::applyBuildingQueue(int cityNr)
         std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
             << city->m_Producing << " is still an outpost" << std::endl;
     }
-    else if (producingGarrison(*city))
+    else if (producingGarrison(city))
     {
         // Do nothing - we're producing a Garrison
         //std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
         //    << city->m_Producing << " keeps producing a garrison" << std::endl;
     }
-    else if (0 == garrisonSize && !producingGarrison(*city) && findCheapestUnitToProduce(*city, produce) && (countUnits(location) < 9))
+    else if (0 == garrisonSize && !producingGarrison(city) && findCheapestUnitToProduce(*city, produce) && momCity.canProduce(produce))
     {
         // Switch from any task to Spearmen if there is none
         producingAfter = produce;
@@ -224,23 +222,23 @@ bool MoMController::applyBuildingQueue(int cityNr)
     {
         // Do nothing - someone specified something to build
     }
-    else if (!buildingPresent(*city, Builders_Hall))
+    else if (!momCity.isBuildingPresent(BUILDING_Builders_Hall))
     {
         producingAfter = PRODUCING_Builders_Hall;
     }
-    else if (!buildingPresent(*city, Granary))
+    else if (!momCity.isBuildingPresent(BUILDING_Granary))
     {
         producingAfter = PRODUCING_Granary;
     }
-    else if (!buildingPresent(*city, Smithy))
+    else if (!momCity.isBuildingPresent(BUILDING_Smithy))
     {
         producingAfter = PRODUCING_Smithy;
     }
-    else if (!buildingPresent(*city, Marketplace))
+    else if (!momCity.isBuildingPresent(BUILDING_Marketplace))
     {
         producingAfter = PRODUCING_Marketplace;
     }
-    else if (!buildingPresent(*city, Farmers_Market))
+    else if (!momCity.isBuildingPresent(BUILDING_Farmers_Market))
     {
         producingAfter = PRODUCING_Farmers_Market;
     }
@@ -249,44 +247,44 @@ bool MoMController::applyBuildingQueue(int cityNr)
         producingAfter = PRODUCING_Housing;
     }
 
-    else if (!buildingPresent(*city, Shrine))
+    else if (!momCity.isBuildingPresent(BUILDING_Shrine))
     {
         producingAfter = PRODUCING_Shrine;
     }
-    else if (!buildingPresent(*city, Sawmill) && isBuildingAllowed(*city, BUILDING_Sawmill))
+    else if (!momCity.isBuildingPresent(BUILDING_Sawmill) && momCity.canProduce(BUILDING_Sawmill))
     {
         // TODO: forbidden building (no forest)?
         producingAfter = PRODUCING_Sawmill;
     }
-    else if (!buildingPresent(*city, Foresters_Guild) && isBuildingAllowed(*city, BUILDING_Foresters_Guild))
+    else if (!momCity.isBuildingPresent(BUILDING_Foresters_Guild) && momCity.canProduce(BUILDING_Foresters_Guild))
     {
         producingAfter = PRODUCING_Foresters_Guild;
     }
-    else if (!buildingPresent(*city, Library) && isBuildingAllowed(*city, BUILDING_Library))
+    else if (!momCity.isBuildingPresent(BUILDING_Library) && momCity.canProduce(BUILDING_Library))
     {
         producingAfter = PRODUCING_Library;
     }
-    else if (!buildingPresent(*city, Sages_Guild) && isBuildingAllowed(*city, BUILDING_Sages_Guild))
+    else if (!momCity.isBuildingPresent(BUILDING_Sages_Guild) && momCity.canProduce(BUILDING_Sages_Guild))
     {
         producingAfter = PRODUCING_Sages_Guild;
     }
-    else if (!buildingPresent(*city, Temple) && isBuildingAllowed(*city, BUILDING_Temple))
+    else if (!momCity.isBuildingPresent(BUILDING_Temple) && momCity.canProduce(BUILDING_Temple))
     {
         producingAfter = PRODUCING_Temple;
     }
-    else if (!buildingPresent(*city, Alchemist_Guild) && isBuildingAllowed(*city, BUILDING_Alchemist_Guild))
+    else if (!momCity.isBuildingPresent(BUILDING_Alchemist_Guild) && momCity.canProduce(BUILDING_Alchemist_Guild))
     {
         producingAfter = PRODUCING_Alchemist_Guild;
     }
-    else if (!buildingPresent(*city, University) && isBuildingAllowed(*city, BUILDING_University))
+    else if (!momCity.isBuildingPresent(BUILDING_University) && momCity.canProduce(BUILDING_University))
     {
         producingAfter = PRODUCING_University;
     }
-    else if (!buildingPresent(*city, Bank) && isBuildingAllowed(*city, BUILDING_Bank))
+    else if (!momCity.isBuildingPresent(BUILDING_Bank) && momCity.canProduce(BUILDING_Bank))
     {
         producingAfter = PRODUCING_Bank;
     }
-    else if (!buildingPresent(*city, Miners_Guild) && isBuildingAllowed(*city, BUILDING_Miners_Guild))
+    else if (!momCity.isBuildingPresent(BUILDING_Miners_Guild) && momCity.canProduce(BUILDING_Miners_Guild))
     {
         // TODO: forbidden building (no Hills or Mountains)?
         producingAfter = PRODUCING_Miners_Guild;
@@ -344,8 +342,8 @@ bool MoMController::applyBuildingQueue(ePlayer playerNr)
 int MoMController::countGarrison(const MoMLocation &location)
 {
     std::vector<int> units;
-    if (!findUnitsAtLocation(location, units))
-        return 0;
+    m_game->findUnitsAtLocation(location, units);
+
     // Count regular units, including catapults, excluding ships, settlers, heroes
     int count = 0;
     for (size_t i = 0; i < units.size(); ++i)
@@ -368,8 +366,7 @@ int MoMController::countGarrison(const MoMLocation &location)
 int MoMController::countUnits(const MoMLocation &location)
 {
     std::vector<int> units;
-    if (!findUnitsAtLocation(location, units))
-        return 0;
+    m_game->findUnitsAtLocation(location, units);
     return units.size();
 }
 
@@ -473,82 +470,6 @@ Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
         }
     }
     return value;
-}
-
-bool MoMController::findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units)
-{
-    units.clear();
-
-    if (0 == m_game)
-        return false;
-    MoMGameBase& game = *m_game;
-
-    for (int unitNr = 0; unitNr < game.getNrUnits(); ++unitNr)
-    {
-        const Unit* unit = game.getUnit(unitNr);
-        if (0 == unit)
-            break;
-
-        if (location.m_XPos == unit->m_XPos
-            && location.m_YPos == unit->m_YPos
-            && location.m_Plane == unit->m_Plane)
-        {
-            units.push_back(unitNr);
-        }
-    }
-
-    return true;
-}
-
-bool MoMController::isBuildingAllowed(const City& city, eBuilding building)
-{    
-    if (0 == m_game)
-        return false;
-    MoMGameBase& game = *m_game;
-
-    Race_Data* raceData = game.getRaceData(city.m_Race);
-	if (0 == raceData)
-		return false;
-	Building_Data* buildingData = game.getBuildingData(building);
-	if (0 == buildingData)
-		return false;
-
-	bool allowed = true;
-
-	// Check prohibited buildings
-	for (unsigned i = 0; allowed 
-		&& (i < raceData->m_Number_of_prohibited_buildings) 
-		&& (i < ARRAYSIZE(raceData->m_Prohibited_buildings)); 
-		++i)
-	{
-		if (building == raceData->m_Prohibited_buildings[i])
-		{
-			allowed = false;
-		}
-	}
-
-	// Check prerequisites
-	if (!isBuildingPresent(city, buildingData->m_Prerequisite1))
-	{
-		allowed = false;
-	}
-	if (!isBuildingPresent(city, buildingData->m_Prerequisite2))
-	{
-		allowed = false;
-	}
-
-    // TODO: Check forests for Sawmill
-    // TODO: Check hills/mountains/volcanoes(?) for Miners Guild
-
-	return allowed;
-}
-
-bool MoMController::isBuildingPresent(const City& city, eBuilding building)
-{
-	if (toUInt(building) >= eBuilding_array_MAX)
-		return false;
-	return (BUILDINGSTATUS_Built == city.m_Building_Status.a[building])
-			|| (BUILDINGSTATUS_Replaced == city.m_Building_Status.a[building]);
 }
 
 bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr)
