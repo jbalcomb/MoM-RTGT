@@ -130,6 +130,7 @@ static void dump(const uint8_t* ptr, unsigned n)
             }
             std::cout << std::hex << std::setw(2) << std::setfill('0') << (unsigned)*ptr++;
         }
+        std::cout << std::dec;
     }
 }
 
@@ -138,7 +139,7 @@ static void dumpnl(const uint8_t* ptr, unsigned n)
     if (gVerbose)
     {
         dump(ptr, n);
-        std::cout << std::dec << std::endl;
+        std::cout << std::endl;
     }
 }
 

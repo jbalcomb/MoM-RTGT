@@ -15,11 +15,18 @@ public:
     bool canProduce(eBuilding building) const;
     bool canProduce(eProducing produce) const;
     bool canProduce(eUnit_Type unitTypeNr) const;
+    int  getCostToBuy(eProducing producing) const;
     int  getCostToProduce(eProducing producing) const;
     int  getTimeToComplete(eProducing producing) const;
+    bool hasForestRequirement() const;
+    bool hasHillRequirement() const;
+    bool hasWaterRequirement() const;
     bool isBuildingPresent(eBuilding building) const;
 
 private:
+    template<typename Functor>
+    bool enumerateTerrain(Functor& functor) const;
+
     MoMGameBase* m_game;
     const City* m_city;
 };

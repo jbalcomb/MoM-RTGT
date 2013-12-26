@@ -207,7 +207,7 @@ bool MoMProcess::tryProcessId(size_t dwProcessId)
         {
             if (m_verbose)
             {
-                std::cout << std::hex << "Possible region for MoM or for the local directory" << std::endl;
+                std::cout << "Possible region for MoM or for the local directory" << std::endl;
             }
         }
         else
@@ -269,7 +269,7 @@ void MoMProcess::printError(int errorNumber, const std::string& msg)
     } while( ( p >= sysMsg ) && ( ( *p == '.' ) || ( *p < 33 ) ) );
 
     // Display the message
-    std::cout << "WARN: " << msg << " failed with error 0x" << std::hex << eNum << " (" << sysMsg << ")" << std::hex << std::endl;
+    std::cout << "WARN: " << msg << " failed with error 0x" << std::hex << eNum << " (" << sysMsg << ")" << std::dec << std::endl;
 }
 
 bool MoMProcess::readProcessData(void* hProcess, const uint8_t* lpBaseAddress, size_t size, uint8_t* data)

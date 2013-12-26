@@ -105,18 +105,18 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     return value;
 }
 
-MoMTerrain::MoMTerrain(MoMGameBase* game) :
+MoMTerrain::MoMTerrain(MoMGameBase* game, const MoMLocation& loc) :
     m_game(game),
-    m_location()
+    m_location(loc)
 {
 }
 
-void MoMTerrain::setLocation(const MoMLocation &loc)
+void MoMTerrain::setLocation(const MoMLocation& loc)
 {
     m_location = loc;
 }
 
-Battle_Unit *MoMTerrain::getBattleUnit()
+Battle_Unit *MoMTerrain::getBattleUnit() const
 {
     if (m_location.m_Map != MoMLocation::MAP_battle)
         return 0;
@@ -150,7 +150,38 @@ Battle_Unit *MoMTerrain::getBattleUnit()
     return value;
 }
 
-City *MoMTerrain::getCity()
+eTerrainBonusDeposit MoMTerrain::getBonus() const
+{
+    eTerrainBonusDeposit value = (eTerrainBonusDeposit)-1;
+    if (0 == m_game)
+        return value;
+    eTerrainBonusDeposit* ptr = m_game->getTerrainBonus(m_location);
+    if (0 != ptr)
+    {
+        value = *ptr;
+    }
+    return value;
+}
+
+eTerrainCategory MoMTerrain::getCategory() const
+{
+    return getTerrainCategory(getType());
+}
+
+Terrain_Changes MoMTerrain::getChanges() const
+{
+    Terrain_Changes value = Terrain_Changes();
+    if (0 == m_game)
+        return value;
+    Terrain_Changes* ptr = m_game->getTerrainChange(m_location);
+    if (0 != ptr)
+    {
+        value = *ptr;
+    }
+    return value;
+}
+
+City *MoMTerrain::getCity() const
 {
     City* value = 0;
     for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
@@ -169,7 +200,20 @@ City *MoMTerrain::getCity()
     return value;
 }
 
-Tower_Node_Lair *MoMTerrain::getLair()
+uint8_t MoMTerrain::getExplored() const
+{
+    uint8_t value = 0;
+    if (0 == m_game)
+        return value;
+    uint8_t* ptr = m_game->getTerrainExplored(m_location);
+    if (0 != ptr)
+    {
+        value = *ptr;
+    }
+    return value;
+}
+
+Tower_Node_Lair *MoMTerrain::getLair() const
 {
     Tower_Node_Lair* value = 0;
     for (int lairNr = 0; toUInt(lairNr) < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
@@ -188,7 +232,20 @@ Tower_Node_Lair *MoMTerrain::getLair()
     return value;
 }
 
-std::vector<int> MoMTerrain::getUnits()
+eTerrainType MoMTerrain::getType() const
+{
+    eTerrainType value = (eTerrainType)-1;
+    if (0 == m_game)
+        return value;
+    eTerrainType* ptr = m_game->getTerrainType(m_location);
+    if (0 != ptr)
+    {
+        value = *ptr;
+    }
+    return value;
+}
+
+std::vector<int> MoMTerrain::getUnits() const
 {
     std::vector<int> units;
     if (0 != m_game)

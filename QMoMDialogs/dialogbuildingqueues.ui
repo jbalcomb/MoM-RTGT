@@ -257,15 +257,12 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Queue</string>
+           <string>Summary</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="listWidget_Queues">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
+         <widget class="QTableWidget" name="tableWidget_Summary">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -287,24 +284,39 @@
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
-          <item>
+          <row>
            <property name="text">
-            <string>Growth</string>
+            <string>Total Gold</string>
            </property>
-          </item>
-          <item>
+          </row>
+          <row>
            <property name="text">
-            <string>Economy</string>
+            <string>Gold/turn</string>
            </property>
-          </item>
-          <item>
+          </row>
+          <row>
            <property name="text">
             <string>Food</string>
            </property>
-          </item>
-          <item>
+          </row>
+          <column>
            <property name="text">
-            <string>Military</string>
+            <string>Value</string>
+           </property>
+          </column>
+          <item row="0" column="0">
+           <property name="text">
+            <string>1089</string>
+           </property>
+          </item>
+          <item row="1" column="0">
+           <property name="text">
+            <string>61</string>
+           </property>
+          </item>
+          <item row="2" column="0">
+           <property name="text">
+            <string>1</string>
            </property>
           </item>
          </widget>

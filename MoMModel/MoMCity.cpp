@@ -1,6 +1,7 @@
 #include "MoMCity.h"
 
 #include "MoMGameBase.h"
+#include "MoMTerrain.h"
 
 namespace MoM {
 
@@ -45,9 +46,6 @@ bool MoMCity::canProduce(eBuilding building) const
     {
         allowed = false;
     }
-
-    // TODO: Check forests for Sawmill
-    // TODO: Check hills/mountains/volcanoes(?) for Miners Guild
 
     return allowed;
 }
@@ -105,6 +103,53 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
     return true;
 }
 
+template<typename Functor>
+bool MoMCity::enumerateTerrain(Functor& functor) const
+{
+    for (int dy = -2; dy <= 2; ++dy)
+    {
+        for (int dx = -2; dx <= 2; ++dx)
+        {
+            if (Abs(dx) + Abs(dy) >= 4)
+                continue;
+            MoMLocation location(
+                        (m_city->m_XPos + dx + gMAX_MAP_COLS) % gMAX_MAP_COLS,
+                        (m_city->m_YPos + dy + gMAX_MAP_ROWS) % gMAX_MAP_ROWS,
+                        m_city->m_Plane,
+                        MoMLocation::MAP_overland);
+            MoMTerrain terrain(m_game, location);
+            if (functor(terrain))
+                return true;
+        }
+    }
+    return false;
+}
+
+int MoMCity::getCostToBuy(eProducing producing) const
+{
+    int buildingCost = getCostToProduce(producing);
+    int producedNextTurn = m_city->m_HammersAccumulated + m_city->m_Hammers;
+    int productionRemaining = buildingCost - m_city->m_HammersAccumulated;
+    int buyCost;
+    if (m_city->m_HammersAccumulated <= 0)
+    {
+        buyCost = 4 * productionRemaining;
+    }
+    else if (m_city->m_HammersAccumulated < buildingCost / 3)
+    {
+        buyCost = 3 * productionRemaining;
+    }
+    else if (producedNextTurn < buildingCost)
+    {
+        buyCost = 2 * productionRemaining;
+    }
+    else
+    {
+        buyCost = 0;    // Cannot buy - completed next turn
+    }
+    return buyCost;
+}
+
 int MoMCity::getCostToProduce(eProducing producing) const
 {
     int buildingCost = -1;
@@ -140,12 +185,79 @@ int MoMCity::getTimeToComplete(eProducing producing) const
     return timeCompletion;
 }
 
+bool MoMCity::hasForestRequirement() const
+{
+    class CheckCleanForest
+    {
+    public:
+        bool operator()(const MoMTerrain& terrain)
+        {
+            return ((terrain.getCategory() == TERRAINCATEGORY_Forest)
+                    && (!terrain.getChanges().corruption));
+        }
+    };
+
+    return enumerateTerrain(CheckCleanForest());
+}
+
+bool MoMCity::hasHillRequirement() const
+{
+    class CheckCleanHill
+    {
+    public:
+        bool operator()(const MoMTerrain& terrain)
+        {
+            if (terrain.getChanges().corruption)
+                return false;
+            return ((terrain.getCategory() == TERRAINCATEGORY_Hills)
+                    || (terrain.getCategory() == TERRAINCATEGORY_Mountain)
+                    || (terrain.getCategory() == TERRAINCATEGORY_Volcano));
+        }
+    };
+
+    return enumerateTerrain(CheckCleanHill());
+}
+
+bool MoMCity::hasWaterRequirement() const
+{
+    class CheckCleanWater
+    {
+    public:
+        bool operator()(const MoMTerrain& terrain)
+        {
+            if (terrain.getChanges().corruption)
+                return false;
+            return ((terrain.getCategory() == TERRAINCATEGORY_Ocean)
+                    || (terrain.getCategory() == TERRAINCATEGORY_Shore));
+        }
+    };
+
+    return enumerateTerrain(CheckCleanWater());
+}
+
 bool MoMCity::isBuildingPresent(eBuilding building) const
 {
-    if (toUInt(building) >= eBuilding_array_MAX)
+    if (building == BUILDING_Forest)
+    {
+        return hasForestRequirement();
+    }
+    else if (building == BUILDING_Hill)
+    {
+        return hasHillRequirement();
+    }
+    else if (building == BUILDING_Water)
+    {
+        return hasWaterRequirement();
+    }
+    else if (toUInt(building) < eBuilding_array_MAX)
+    {
+        return (BUILDINGSTATUS_Built == m_city->m_Building_Status.a[building])
+                || (BUILDINGSTATUS_Replaced == m_city->m_Building_Status.a[building]);
+    }
+    else
+    {
         return false;
-    return (BUILDINGSTATUS_Built == m_city->m_Building_Status.a[building])
-            || (BUILDINGSTATUS_Replaced == m_city->m_Building_Status.a[building]);
+    }
 }
 
 }

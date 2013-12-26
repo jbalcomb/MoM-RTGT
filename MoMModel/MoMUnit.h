@@ -18,6 +18,8 @@
 namespace MoM
 {
 
+class MoMGameBase;
+
 /// \brief Defines a class for accessing MoM units
 class MoMUnit
 {
@@ -52,7 +54,36 @@ public:
     };
 
     MoMUnit();
-    explicit MoMUnit(class MoMGameBase* game);
+    explicit MoMUnit(MoMGameBase* game);
+    template<typename T>
+    MoMUnit(MoMGameBase* game, T* t) :
+        m_game(game),
+        m_battleUnit(),
+        m_heroStats(),
+        m_heroStatsInitializer(),
+        m_hiredHero(),
+        m_unit(),
+        m_unitType(),
+        m_bonuses(),
+        m_dnSpells(),
+        m_penalties(),
+        m_upAbilities(),
+        m_upItems(),
+        m_upLevel(),
+        m_upSpells(),
+        m_upWeaponType()
+    {
+        changeUnit(t);
+    }
+
+//    MoMUnit(MoMGameBase* game, Battle_Unit* battleUnit);
+//    MoMUnit(MoMGameBase* game, eUnit_Type unitTypeNr);
+//    MoMUnit(MoMGameBase* game, Hero_stats* heroStats);
+//    MoMUnit(MoMGameBase* game, Hero_Stats_Initializer* heroStatsInitializer);
+//    MoMUnit(MoMGameBase* game, Hired_Hero* hiredHero);
+//    MoMUnit(MoMGameBase* game, Unit_Type_Data* unitType);
+//    MoMUnit(MoMGameBase* game, Unit* unit);
+
     virtual ~MoMUnit();
     MoMUnit(const MoMUnit& rhs);
     MoMUnit& operator=(const MoMUnit& rhs);
@@ -139,6 +170,7 @@ public:
     bool isCaster() const;
     bool isColor(eRealm_Type color) const;
     bool isFlying() const;
+    bool isGeneric() const;
     bool isHasted() const;
     bool isHero() const;
     bool isImmune(eUnitAbility immunity) const;

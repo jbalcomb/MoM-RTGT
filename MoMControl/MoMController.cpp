@@ -196,8 +196,8 @@ bool MoMController::applyBuildingQueue(int cityNr)
     // TODO: SPECIAL TARGETS
     //[Animists Guild]  (requires Temple, Stables)
     //[Parthenon]
-    //[Cathedral]
     //[Merchants Guild] (requires Bank, Ship Wrights Guild, Shipyard)
+    //[Cathedral]
     //[Wizards Tower]]
 
     if (CITYSIZE_Outpost == city->m_Size)
@@ -286,7 +286,6 @@ bool MoMController::applyBuildingQueue(int cityNr)
     }
     else if (!momCity.isBuildingPresent(BUILDING_Miners_Guild) && momCity.canProduce(BUILDING_Miners_Guild))
     {
-        // TODO: forbidden building (no Hills or Mountains)?
         producingAfter = PRODUCING_Miners_Guild;
     }
     else
@@ -312,7 +311,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
     removeCityFromGameQueue(cityNr);
 
     std::cout << "Changed production of '" << city->m_City_Name << "' [" << cityNr << "] "
-              << producingBefore << "\n\tto " << producingAfter << std::endl;
+              << producingBefore << " to " << producingAfter << std::endl;
     return true;
 }
 

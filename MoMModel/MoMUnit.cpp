@@ -693,7 +693,7 @@ int MoMUnit::getHeroAbility(eHeroAbility heroAbility) const
     case HEROABILITY_Lucky:            { break; }
     case HEROABILITY_Might:            { bonus = level; break; }
     case HEROABILITY_Might_X:          { bonus = static_cast<int>(level * 3 / 2); break; }
-    case HEROABILITY_Noble:            { break; }
+    case HEROABILITY_Noble:            { bonus = 10; break; }
     case HEROABILITY_Prayermaster:     { bonus = level; break; }
     case HEROABILITY_Prayermaster_X:   { bonus = static_cast<int>(level * 3 / 2); break; }
     case HEROABILITY_Sage:             { bonus = 3 * level; break; }
@@ -1192,6 +1192,12 @@ bool MoMUnit::isFlying() const
         isWebbed |= (m_battleUnit->m_web_strength != 0);
     }
     return (hasFlying && !isWebbed);
+}
+
+bool MoMUnit::isGeneric() const
+{
+    return (getUnitTypeNr() >= UNITTYPE_Trireme)
+            && (getUnitTypeNr() <= UNITTYPE_Warship);
 }
 
 bool MoMUnit::isHasted() const

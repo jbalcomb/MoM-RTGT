@@ -770,10 +770,8 @@ void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &
                 .arg(prettyQStr(locFrom.m_Plane)).arg(locFrom.m_XPos).arg(locFrom.m_YPos)
                 .arg(locTo.m_XPos).arg(locTo.m_YPos);
 
-    MoM::MoMTerrain terrainFrom(m_game.data());
-    MoM::MoMTerrain terrainTo(m_game.data());
-    terrainFrom.setLocation(locFrom);
-    terrainTo.setLocation(locTo);
+    MoM::MoMTerrain terrainFrom(m_game.data(), locFrom);
+    MoM::MoMTerrain terrainTo(m_game.data(), locTo);
 
     // TODO: Figure out the action:
     //       1. Move (sub) stack of selected units
@@ -875,8 +873,7 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
 
     ui->treeWidget_Tile->clear();
 
-    MoM::MoMTerrain momTerrain(m_game.data());
-    momTerrain.setLocation(loc);
+    MoM::MoMTerrain momTerrain(m_game.data(), loc);
 
     addTerrainSubtree(ui->treeWidget_Tile, momTerrain);
     addLairSubtree(ui->treeWidget_Tile, momTerrain);

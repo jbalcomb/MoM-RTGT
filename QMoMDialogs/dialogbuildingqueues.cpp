@@ -33,6 +33,11 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setColumnWidth(0, 140);
     ui->tableWidget_QueueDefinition->setColumnWidth(1, 420);
 
+    QStringList labelsQueue;
+    labelsQueue << "Build" << "Conditions";
+    ui->tableWidget_QueueDefinition->setColumnCount(labelsQueue.size());
+    ui->tableWidget_QueueDefinition->setHorizontalHeaderLabels(labelsQueue);
+
     int row = 0;
 	ui->tableWidget_QueueDefinition->clear();
     ui->tableWidget_QueueDefinition->setRowCount(18);
@@ -98,12 +103,15 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
 
-    QStringList labels;
-    labels << "Nr"
+    ui->tableWidget_QueueDefinition->resizeRowsToContents();
+
+    QStringList labelsCities;
+    labelsCities << "Nr"
            << "Name" << "Race" << "Pop" << "Farmers" << "Food" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison";
-    ui->tableWidget_Cities->setColumnCount(labels.size());
-    ui->tableWidget_Cities->setHorizontalHeaderLabels(labels);
+           << "Time" << "Garrison" << "CostBuy";
+    ui->tableWidget_Cities->setColumnCount(labelsCities.size());
+    ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
+    ui->tableWidget_Cities->sortByColumn(0, Qt::AscendingOrder);
 
     QMoMSettings::readSettingsWindow(this);
 
@@ -154,6 +162,7 @@ void DialogBuildingQueues::update()
         {
             foodSurplusStr = "+" + foodSurplusStr;
         }
+        int costToBuy = momCity.getCostToBuy(city->m_Producing);
 
         if (row >= ui->tableWidget_Cities->rowCount())
         {
@@ -185,6 +194,7 @@ void DialogBuildingQueues::update()
         ui->tableWidget_Cities->setItem(row, col++, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listProducing));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(costToBuy)));
 
         for (int col = 0; col < ui->tableWidget_Cities->columnCount(); ++col)
         {
@@ -193,9 +203,60 @@ void DialogBuildingQueues::update()
 
         row++;
     }
+
     ui->tableWidget_Cities->setRowCount(row);
+    for (int row = 0; row < ui->tableWidget_Cities->rowCount(); ++row)
+    {
+        ui->tableWidget_Cities->setVerticalHeaderItem(row, new QTableWidgetItem(""));
+    }
     ui->tableWidget_Cities->resizeRowsToContents();
     ui->tableWidget_Cities->setSortingEnabled(true);
+
+
+    int totalGoldSurplus = 0;
+    int totalFoodSurplus = 0;
+    for (int cityNr = 0; cityNr < nrCities; ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (MoM::PLAYER_YOU != city->m_Owner)
+            continue;
+        totalGoldSurplus += city->m_Coins - city->m_Maintenance;
+        totalFoodSurplus += city->m_Food_Produced - city->m_Population;
+    }
+    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    {
+        Unit* unit = m_game->getUnit(unitNr);
+        if (0 == unit)
+            break;
+        if (MoM::PLAYER_YOU != unit->m_Owner)
+            continue;
+        MoMUnit momUnit(m_game.data(), unit);
+        if (momUnit.isNormal() && !momUnit.isGeneric())
+        {
+            totalFoodSurplus--;
+        }
+        if (momUnit.isHero() || momUnit.isNormal())
+        {
+            totalGoldSurplus -= momUnit.getUnitTypeData().m_Upkeep;
+        }
+        if (momUnit.hasHeroAbility(HEROABILITY_Noble))
+        {
+            totalGoldSurplus += momUnit.getHeroAbility(HEROABILITY_Noble);
+        }
+    }
+
+    Wizard* wizard = m_game->getWizard(PLAYER_YOU);
+
+
+    row = 0;
+    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Total gold");
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(wizard->m_Gold_Coins));
+    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Gold/turn");
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalGoldSurplus));
+    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Food/turn");
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalFoodSurplus));
 }
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
