@@ -18,6 +18,7 @@ public:
     int  getCostToBuy(eProducing producing) const;
     int  getCostToProduce(eProducing producing) const;
     int  getTimeToComplete(eProducing producing) const;
+    int  getUnitReductionPercentage() const;
     bool hasForestRequirement() const;
     bool hasHillRequirement() const;
     bool hasWaterRequirement() const;

@@ -157,13 +157,18 @@ int MoMCity::getCostToProduce(eProducing producing) const
         {
             buildingCost = unitData->m_Cost;
         }
+        int reductionPercentage = getUnitReductionPercentage();
+        buildingCost = buildingCost * (100 - reductionPercentage) / 100;
+        if (buildingCost < 0)
+        {
+            buildingCost = 0;
+        }
     }
     return buildingCost;
 }
 
 int MoMCity::getTimeToComplete(eProducing producing) const
 {
-    // TODO: Count coal and iron for unit cost reduction (other factors?)
     int timeCompletion = 999;
     if (m_city->m_Hammers > 0)
     {
@@ -171,6 +176,28 @@ int MoMCity::getTimeToComplete(eProducing producing) const
         timeCompletion = (buildingCost - m_city->m_HammersAccumulated + m_city->m_Hammers - 1) / m_city->m_Hammers;
     }
     return timeCompletion;
+}
+
+int MoMCity::getUnitReductionPercentage() const
+{
+    class CountUnitReduction
+    {
+    public:
+        CountUnitReduction() : reduction(0) {}
+        bool operator()(const MoMTerrain& terrain)
+        {
+            if (terrain.getBonus() == DEPOSIT_Iron_Ore)
+                reduction += 5;
+            else if (terrain.getBonus() == DEPOSIT_Coal)
+                reduction += 10;
+            return false;
+        }
+        int reduction;
+    };
+
+    CountUnitReduction count;
+    enumerateTerrain(count);
+    return count.reduction;
 }
 
 bool MoMCity::hasForestRequirement() const
