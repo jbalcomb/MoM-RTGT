@@ -194,11 +194,14 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[Miners Guild]
 
     // TODO: SPECIAL TARGETS
-    //[Animists Guild]  (requires Temple, Stables)
+    //[Animists Guild]  (requires Temple, Stable)
+    //[Stable] if Animists Guild allowed
     //[Parthenon]
-    //[Merchants Guild] (requires Bank, Ship Wrights Guild, Shipyard)
+    //[Merchants Guild] (requires Bank, Shipwright Guild, Ship Yard)
+    //[Shipwright Guild] if Merchants Guild allowed
+    //[Ship Yard Guild] if Merchants Guild allowed
     //[Cathedral]
-    //[Wizards Tower]]
+    //[Wizards Guild]
 
     if (CITYSIZE_Outpost == city->m_Size)
     {
@@ -253,7 +256,6 @@ bool MoMController::applyBuildingQueue(int cityNr)
     }
     else if (!momCity.isBuildingPresent(BUILDING_Sawmill) && momCity.canProduce(BUILDING_Sawmill))
     {
-        // TODO: forbidden building (no forest)?
         producingAfter = PRODUCING_Sawmill;
     }
     else if (!momCity.isBuildingPresent(BUILDING_Foresters_Guild) && momCity.canProduce(BUILDING_Foresters_Guild))
@@ -287,6 +289,40 @@ bool MoMController::applyBuildingQueue(int cityNr)
     else if (!momCity.isBuildingPresent(BUILDING_Miners_Guild) && momCity.canProduce(BUILDING_Miners_Guild))
     {
         producingAfter = PRODUCING_Miners_Guild;
+    }
+    else if (!momCity.isBuildingPresent(BUILDING_Animists_Guild) && momCity.canProduce(BUILDING_Animists_Guild))
+    {
+        producingAfter = PRODUCING_Animists_Guild;
+    }
+    else if (momCity.isBuildingAllowed(BUILDING_Animists_Guild) && !momCity.isBuildingPresent(BUILDING_Stable) && momCity.canProduce(BUILDING_Stable))
+    {
+        producingAfter = PRODUCING_Stable;
+    }
+    else if (!momCity.isBuildingPresent(BUILDING_Parthenon) && momCity.canProduce(BUILDING_Parthenon))
+    {
+        producingAfter = PRODUCING_Parthenon;
+    }
+    else if (!momCity.isBuildingPresent(BUILDING_Merchants_Guild) && momCity.canProduce(BUILDING_Merchants_Guild))
+    {
+        producingAfter = PRODUCING_Merchants_Guild;
+    }
+    else if (momCity.isBuildingAllowed(BUILDING_Merchants_Guild) && !momCity.isBuildingPresent(BUILDING_Shipwright_Guild)
+             && momCity.canProduce(BUILDING_Shipwright_Guild))
+    {
+        producingAfter = PRODUCING_Shipwright_Guild;
+    }
+    else if (momCity.isBuildingAllowed(BUILDING_Merchants_Guild) && !momCity.isBuildingPresent(BUILDING_Ship_Yard)
+             && momCity.canProduce(BUILDING_Ship_Yard))
+    {
+        producingAfter = PRODUCING_Ship_Yard;
+    }
+    else if (!momCity.isBuildingPresent(BUILDING_Cathedral) && momCity.canProduce(BUILDING_Cathedral))
+    {
+        producingAfter = PRODUCING_Cathedral;
+    }
+    else if (!momCity.isBuildingPresent(BUILDING_Wizards_Guild) && momCity.canProduce(BUILDING_Wizards_Guild))
+    {
+        producingAfter = PRODUCING_Wizards_Guild;
     }
     else
     {

@@ -21,6 +21,7 @@ public:
     bool hasForestRequirement() const;
     bool hasHillRequirement() const;
     bool hasWaterRequirement() const;
+    bool isBuildingAllowed(eBuilding building) const;
     bool isBuildingPresent(eBuilding building) const;
 
 private:

@@ -40,7 +40,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
     int row = 0;
 	ui->tableWidget_QueueDefinition->clear();
-    ui->tableWidget_QueueDefinition->setRowCount(18);
+    ui->tableWidget_QueueDefinition->setRowCount(26);
 
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Garrison"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("Garrison < 1 and not producing(Garrison)"));
@@ -102,7 +102,32 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Miners Guild"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Stable"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("if allowed(Animists Guild)"));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Animists Guild"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Parthenon"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Shipwright Guild"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("if allowed(Merchants Guild)"));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Ship Yard"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem("if allowed(Merchants Guild)"));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Merchants Guild"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Cathedral"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
+    row++;
+    ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Wizards Guild"));
+    ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
+    row++;
 
+    ui->tableWidget_QueueDefinition->setRowCount(row);
     ui->tableWidget_QueueDefinition->resizeRowsToContents();
 
     QStringList labelsCities;
@@ -134,10 +159,12 @@ void DialogBuildingQueues::update()
     if (0 == controller)
         return;
 	int nrCities = 0;
+    int nrUnits = 0;
     if (0 != m_game)
 	{
         nrCities = m_game->getNrCities();
-	}
+        nrUnits = m_game->getNrUnits();
+    }
 
     MoM::MoMController momController(m_game.data());
 
@@ -225,7 +252,7 @@ void DialogBuildingQueues::update()
         totalGoldSurplus += city->m_Coins - city->m_Maintenance;
         totalFoodSurplus += city->m_Food_Produced - city->m_Population;
     }
-    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    for (int unitNr = 0; unitNr < nrUnits; ++unitNr)
     {
         Unit* unit = m_game->getUnit(unitNr);
         if (0 == unit)
@@ -247,12 +274,15 @@ void DialogBuildingQueues::update()
         }
     }
 
-    Wizard* wizard = m_game->getWizard(PLAYER_YOU);
-
+    int totalGold = 0;
+    if ((0 != m_game) && (0 != m_game->getWizard(PLAYER_YOU)))
+    {
+        totalGold = m_game->getWizard(PLAYER_YOU)->m_Gold_Coins;
+    }
 
     row = 0;
     ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Total gold");
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(wizard->m_Gold_Coins));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalGold));
     ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Gold/turn");
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalGoldSurplus));
     ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Food/turn");

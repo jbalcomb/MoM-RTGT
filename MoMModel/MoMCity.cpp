@@ -20,19 +20,7 @@ bool MoMCity::canProduce(eBuilding building) const
     bool allowed = true;
 
     // Check prohibited buildings
-    Race_Data* raceData = m_game->getRaceData(m_city->m_Race);
-    if (0 == raceData)
-        return false;
-    for (unsigned i = 0; allowed
-        && (i < raceData->m_Number_of_prohibited_buildings)
-        && (i < ARRAYSIZE(raceData->m_Prohibited_buildings));
-        ++i)
-    {
-        if (building == raceData->m_Prohibited_buildings[i])
-        {
-            allowed = false;
-        }
-    }
+    allowed = isBuildingAllowed(building);
 
     // Check prerequisites
     Building_Data* buildingData = m_game->getBuildingData(building);
@@ -233,6 +221,26 @@ bool MoMCity::hasWaterRequirement() const
     };
 
     return enumerateTerrain(CheckCleanWater());
+}
+
+bool MoMCity::isBuildingAllowed(eBuilding building) const
+{
+    // Check prohibited buildings
+    Race_Data* raceData = m_game->getRaceData(m_city->m_Race);
+    if (0 == raceData)
+        return false;
+    bool allowed = true;
+    for (unsigned i = 0; allowed
+        && (i < raceData->m_Number_of_prohibited_buildings)
+        && (i < ARRAYSIZE(raceData->m_Prohibited_buildings));
+        ++i)
+    {
+        if (building == raceData->m_Prohibited_buildings[i])
+        {
+            allowed = false;
+        }
+    }
+    return allowed;
 }
 
 bool MoMCity::isBuildingPresent(eBuilding building) const
