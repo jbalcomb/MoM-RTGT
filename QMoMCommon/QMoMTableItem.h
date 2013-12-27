@@ -36,6 +36,7 @@ public:
     virtual void slotAction();
     virtual QString toString() const;
 
+    static QString formatNumber(int number, eShowNumber showNumber, int width = 0);
 protected:
     QMoMGamePtr m_game;
 };
@@ -51,6 +52,7 @@ public:
     NumberTableItem(const QMoMGamePtr& game, Number* t, int width, eShowNumber showNumber = SHOWNUMBER_normal);
     virtual void setData(int role, const QVariant &value);
     virtual QString toString() const;
+
 private:
     Number* m_ptr;
     int m_width;
@@ -94,59 +96,7 @@ void NumberTableItem<Number>::setData(int role, const QVariant &value)
 template<typename Number>
 QString NumberTableItem<Number>::toString() const
 {
-    QString result = QString("%0").arg((int)*m_ptr);
-    switch (m_showNumber)
-    {
-    case SHOWNUMBER_normal:
-        // Nothing further to do
-        break;
-    case SHOWNUMBER_alwaysPlus:
-        if (*m_ptr >= 0)
-        {
-            result = "+" + result;
-        }
-        break;
-    case SHOWNUMBER_positivePlus:
-        if (*m_ptr > 0)
-        {
-            result = "+" + result;
-        }
-        break;
-    case SHOWNUMBER_noZero:
-        if (*m_ptr == 0)
-        {
-            result = "";
-        }
-        break;
-    case SHOWNUMBER_plusAndNoZero:
-        if (*m_ptr == 0)
-        {
-            result = "";
-        }
-        else if (*m_ptr > 0)
-        {
-            result = "+" + result;
-        }
-        break;
-    case SHOWNUMBER_hex:
-        result = QString("0x%0").arg((unsigned)*m_ptr, m_width, 16, QChar('0'));
-        break;
-    case SHOWNUMBER_halfMove:
-        if (*m_ptr == 0)
-        {
-            result = "";
-        }
-        else
-        {
-            result = QString("%0").arg((double)*m_ptr / 2, m_width, 'f', 1);
-        }
-        break;
-    default:
-        assert(0 && "Unknown value if eShowNumber");
-    }
-
-    result = QString("%0").arg(result, m_width);
-    return result;
+    return formatNumber((int)*m_ptr, m_showNumber, m_width);
 }
 
 ///////////////////////////////////////////

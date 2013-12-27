@@ -567,6 +567,11 @@ public:
     {
         return 0;
     }
+public:
+    virtual uint16_t* getTaxUnrestTable()
+    {
+        return 0;
+    }
 protected:
     virtual eTerrainBonusDeposit* getTerrain_Bonuses()
     {

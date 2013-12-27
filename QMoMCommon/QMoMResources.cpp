@@ -894,7 +894,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainChange terrainChange, in
 //    case TERRAINCHANGE_Volcano_owner:   index = 77; break;
     case TERRAINCHANGE_Road:            index = 45 + roadDirection; break;  // 45-53
     case TERRAINCHANGE_Enchanted_Road:  index = 54 + roadDirection; break;  // 54-62
-    case TERRAINCHANGE_Corruption:      index = 76; break;
+    case TERRAINCHANGE_Corruption:      index = 77; break;
     default:                    break;
     }
     if (inVectorRange(m_mapBackImages, index))

@@ -167,6 +167,14 @@ protected:
         return (Spell_Data*)(data + 4);
     }
 
+    virtual uint16_t* getTaxUnrestTable()
+    {
+        MoMDataSegment* pMoMDataSegment = getDataSegment();
+        if (0 == pMoMDataSegment)
+            return 0;
+        return pMoMDataSegment->m_Tax_Unrest_Table;
+    }
+
     virtual eTerrainBonusDeposit* getTerrain_Bonuses()
     {
         if (0 == m_SaveGame.get())

@@ -55,34 +55,14 @@ public:
 
     MoMUnit();
     explicit MoMUnit(MoMGameBase* game);
-    template<typename T>
-    MoMUnit(MoMGameBase* game, T* t) :
-        m_game(game),
-        m_battleUnit(),
-        m_heroStats(),
-        m_heroStatsInitializer(),
-        m_hiredHero(),
-        m_unit(),
-        m_unitType(),
-        m_bonuses(),
-        m_dnSpells(),
-        m_penalties(),
-        m_upAbilities(),
-        m_upItems(),
-        m_upLevel(),
-        m_upSpells(),
-        m_upWeaponType()
-    {
-        changeUnit(t);
-    }
-
-//    MoMUnit(MoMGameBase* game, Battle_Unit* battleUnit);
-//    MoMUnit(MoMGameBase* game, eUnit_Type unitTypeNr);
-//    MoMUnit(MoMGameBase* game, Hero_stats* heroStats);
-//    MoMUnit(MoMGameBase* game, Hero_Stats_Initializer* heroStatsInitializer);
-//    MoMUnit(MoMGameBase* game, Hired_Hero* hiredHero);
-//    MoMUnit(MoMGameBase* game, Unit_Type_Data* unitType);
-//    MoMUnit(MoMGameBase* game, Unit* unit);
+    MoMUnit(MoMGameBase* game, Battle_Unit* battleUnit);
+    MoMUnit(MoMGameBase* game, eUnit_Type unitTypeNr);
+    MoMUnit(MoMGameBase* game, Hero_stats* heroStats);
+    MoMUnit(MoMGameBase* game, Hero_Stats_Initializer* heroStatsInitializer);
+    MoMUnit(MoMGameBase* game, Hired_Hero* hiredHero);
+    MoMUnit(MoMGameBase* game, Unit_Type_Data* unitType);
+    MoMUnit(MoMGameBase* game, Unit* unit);
+    void zeroFields();
 
     virtual ~MoMUnit();
     MoMUnit(const MoMUnit& rhs);
@@ -99,50 +79,52 @@ public:
     void changeUnit(Unit* unit);
     void setGame(MoMGameBase* game);
 
-    Battle_Unit getBattleUnit() const;
-    Hero_stats getHeroStats() const;
-    Hero_Stats_Initializer getHeroStatsInitializer() const;
-    Hired_Hero getHiredHero() const;
-    Unit getUnitInGame() const;
-    Unit_Type_Data getUnitTypeData() const;
+    int             calcGoldUpkeep() const;
 
-    BaseAttributes getActualAttributes() const;
-    BaseAttributes getBaseAttributes() const;
-    BaseAttributes getBonusAttributes() const;
-    int getCastingSkillBase() const;
-    int getCastingSkillTotal() const;
-    int getConstructionSkill() const;
-    int getCost() const;
-    int getCurFigures() const;
-    int getDamage() const;
-    std::string getDisplayName() const;
-	int getGazeModifier() const;
-    int getHeroAbility(eHeroAbility heroAbility) const;
-    std::string getHeroName() const;
-    ListSpells getHeroSpells() const;
-    eHero_TypeCode getHeroTypeCode() const;
+    Battle_Unit     getBattleUnit() const;
+    Hero_stats      getHeroStats() const;
+    Hero_Stats_Initializer getHeroStatsInitializer() const;
+    Hired_Hero      getHiredHero() const;
+    Unit            getUnitInGame() const;
+    Unit_Type_Data  getUnitTypeData() const;
+
+    BaseAttributes  getActualAttributes() const;
+    BaseAttributes  getBaseAttributes() const;
+    BaseAttributes  getBonusAttributes() const;
+    int             getCastingSkillBase() const;
+    int             getCastingSkillTotal() const;
+    int             getConstructionSkill() const;
+    int             getCost() const;
+    int             getCurFigures() const;
+    int             getDamage() const;
+    std::string     getDisplayName() const;
+    int             getGazeModifier() const;
+    int             getHeroAbility(eHeroAbility heroAbility) const;
+    std::string     getHeroName() const;
+    ListSpells      getHeroSpells() const;
+    eHero_TypeCode  getHeroTypeCode() const;
 //    MapSpecials getItemEffects() const;
-    Item* getSlotItem(int itemSlotNr) const;
-    eSlot_Type16 getSlotType(int itemSlotNr) const;
-    int getLevel() const;
-    std::string getLevelName() const;
-    int getMaxFigures() const;
-    double getMoves() const;
-    ePlayer getOwner() const;
-    BaseAttributes getPenaltyAttributes() const;
-    eRace getRace() const;
-    std::string getRaceName() const;
-    int getMaxRangedShots() const;
-    eRanged_Type getRangedType() const;
-    ListBuildings getRequiredBuildings() const;
-    int getScouting() const;
-    int getTransportCapacity() const;
-    int getUnitAbility(eUnitAbility unitAbility) const;
-    std::string getUnitName() const;
-    eUnit_Type getUnitTypeNr() const;
-    int getUpkeep() const;
-    eWeaponType getWeaponType() const;
-    int getXP() const;
+    Item*           getSlotItem(int itemSlotNr) const;
+    eSlot_Type16    getSlotType(int itemSlotNr) const;
+    int             getLevel() const;
+    std::string     getLevelName() const;
+    int             getMaxFigures() const;
+    double          getMoves() const;
+    ePlayer         getOwner() const;
+    BaseAttributes  getPenaltyAttributes() const;
+    eRace           getRace() const;
+    std::string     getRaceName() const;
+    int             getMaxRangedShots() const;
+    eRanged_Type    getRangedType() const;
+    ListBuildings   getRequiredBuildings() const;
+    int             getScouting() const;
+    int             getTransportCapacity() const;
+    int             getUnitAbility(eUnitAbility unitAbility) const;
+    std::string     getUnitName() const;
+    eUnit_Type      getUnitTypeNr() const;
+    int             getUpkeep() const;
+    eWeaponType     getWeaponType() const;
+    int             getXP() const;
 
     // Ranged and other special attacks
     bool hasFireBreath() const;

@@ -2686,10 +2686,13 @@ enum eTerrainCategory
     TERRAINCATEGORY_Tundra = 6,
     TERRAINCATEGORY_Shore = 7,
     TERRAINCATEGORY_RiverMouth = 8,
-    TERRAINCATEGORY_Hills = 10,
-    TERRAINCATEGORY_Plains = 11,
-    TERRAINCATEGORY_River = 12,
-    TERRAINCATEGORY_Volcano = 13,
+    TERRAINCATEGORY_Hills = 9,
+    TERRAINCATEGORY_Plains = 10,
+    TERRAINCATEGORY_River = 11,
+    TERRAINCATEGORY_Volcano = 12,
+    TERRAINCATEGORY_SorceryNode = 13,
+    TERRAINCATEGORY_NatureNode = 14,
+    TERRAINCATEGORY_ChaosNode = 15,
 
     eTerrainCategory_MAX
 };
@@ -2739,13 +2742,13 @@ enum eTerrainType ENUMSIZE16
     forest2 = 0x00B7,
     forest3 = 0x00B8,
     river1_first = 0x00B9,              //  river mouth if adjacent to shore
-    river1_last = 0x00C4,
-    shore2_first = 0x00C5,              //  4 river joined large lake
-    shore2_last = 0x00C8,
-    shore3_first = 0x00C9,              //  32 river outlet to ocean
-    shore3_last = 0x00E8,
-    river2_first = 0x00E9,              //  river mouth if adjacent to shore
-    river2_last = 0x0102,
+//    river1_last = 0x00C4,
+//    shore2_first = 0x00C5,              //  4 river joined large lake
+//    shore2_last = 0x00C8,
+//    shore3_first = 0x00C9,              //  32 river outlet to ocean
+//    shore3_last = 0x00E8,
+//    river2_first = 0x00E9,              //  river mouth if adjacent to shore
+    river1_last = 0x0102,
     mountain2_first = 0x0103,           //  various joining configurations
     mountain2_last = 0x0112,
     hills2_first = 0x0113,              //  various joining configurations
@@ -2753,7 +2756,11 @@ enum eTerrainType ENUMSIZE16
     desert5_first = 0x0124,             //  various joining configurations
     desert5_last = 0x01C3,
     shore4_first = 0x01C4,              //  various joining configurations, including some river outlets
-    shore4_last = 0x0258,
+    shore4_last = 0x01D3,
+    river2_first = 0x01D4,
+    river2_last = 0x01D8,
+    shore5_first = 0x01D9,
+    shore5_last = 0x0258,
     ocean2 = 0x0259,
     ocean3 = 0x0260,
     tundra4_first = 0x0261,             //  various joining configurations
@@ -4446,7 +4453,7 @@ typedef struct PACKED_STRUCT // City
     ePlane          m_Plane;                    // 11 (0 or 1)
     ePlayer         m_Owner;                    // 12 (0-4)
     eCity_Size      m_Size;                     // 13 (0-5; see below)
-    uint8_t         m_Population;               // 14 (in thousands) (0-25)
+    int8_t          m_Population;               // 14 (in thousands) (0-25)
     int8_t          m_Number_of_farmers_allocated;  // 15 (should be <= population)
     eYesNo8         m_Building_sold;            // 16
     uint8_t         m_Unk_17;                   // 17
@@ -4797,7 +4804,7 @@ typedef struct PACKED_STRUCT // Difficulty_Table
     int16_t         m_City_Mana_multiplier;         // 08
     int16_t         m_City_Research_multiplier;     // 0A
     int16_t         m_City_Food_multiplier;         // 0C
-    int16_t         m_City_Maintenance_multiplier;  // 0E
+    int16_t         m_Maintenance_multiplier;       // 0E
                                                     // SIZE 10
 } Difficulty_Table;
 

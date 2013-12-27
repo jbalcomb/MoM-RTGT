@@ -5,8 +5,50 @@
 namespace MoM
 {
 
+int MoMTerrain::sDoubleFoodBonus[eTerrainCategory_MAX] =
+{
+    0,  // TERRAINCATEGORY_Ocean = 0,
+    3,  // TERRAINCATEGORY_Grasslands = 1,
+    1,  // TERRAINCATEGORY_Forest = 2,
+    0,  // TERRAINCATEGORY_Mountain = 3,
+    0,  // TERRAINCATEGORY_Desert = 4,
+    0,  // TERRAINCATEGORY_Swamp = 5,
+    0,  // TERRAINCATEGORY_Tundra = 6,
+    1,  // TERRAINCATEGORY_Shore = 7,
+    4,  // TERRAINCATEGORY_RiverMouth = 8,
+    1,  // TERRAINCATEGORY_Hills = 9,
+    1,  // TERRAINCATEGORY_Plains = 10,
+    4,  // TERRAINCATEGORY_River = 11,
+    0,  // TERRAINCATEGORY_Volcano = 12,
+    4,  // TERRAINCATEGORY_SorceryNode = 13,
+    5,  // TERRAINCATEGORY_NatureNode = 14,
+    0,  // TERRAINCATEGORY_ChaosNode = 15,
+};
+
+int MoMTerrain::sDoubleHammerBonus[eTerrainCategory_MAX] =
+{
+    0,  // TERRAINCATEGORY_Ocean = 0,
+    0,  // TERRAINCATEGORY_Grasslands = 1,
+    3,  // TERRAINCATEGORY_Forest = 2,
+    5,  // TERRAINCATEGORY_Mountain = 3,
+    3,  // TERRAINCATEGORY_Desert = 4,      // TODO: Different types of Desert???
+    0,  // TERRAINCATEGORY_Swamp = 5,
+    0,  // TERRAINCATEGORY_Tundra = 6,
+    0,  // TERRAINCATEGORY_Shore = 7,
+    0,  // TERRAINCATEGORY_RiverMouth = 8,
+    3,  // TERRAINCATEGORY_Hills = 9,
+    0,  // TERRAINCATEGORY_Plains = 10,
+    0,  // TERRAINCATEGORY_River = 11,
+    0,  // TERRAINCATEGORY_Volcano = 12,
+    0,  // TERRAINCATEGORY_SorceryNode = 13,
+    0,  // TERRAINCATEGORY_NatureNode = 14,
+    5,  // TERRAINCATEGORY_ChaosNode = 15,
+};
+
 eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
 {
+    // TODO: River mouth = river adjacent to shore???
+
     eTerrainCategory value = (eTerrainCategory)-1;
     switch (terrainType)
     {
@@ -43,11 +85,11 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
 
     case volcano:       value = TERRAINCATEGORY_Volcano; break;
 
-    case grasslands_w_sorcery_node: value = TERRAINCATEGORY_Grasslands; break;
+    case grasslands_w_sorcery_node: value = TERRAINCATEGORY_SorceryNode; break;
 
-    case forest_w_nature_node: value = TERRAINCATEGORY_Forest; break;
+    case forest_w_nature_node:      value = TERRAINCATEGORY_NatureNode; break;
 
-    case volcano_w_chaos_node: value = TERRAINCATEGORY_Volcano; break;
+    case volcano_w_chaos_node:      value = TERRAINCATEGORY_ChaosNode; break;
 
     default:            // Handled later
                         break;
@@ -65,18 +107,6 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     {
         value = TERRAINCATEGORY_River;
     }
-    else if ((terrainType >= shore2_first) && (terrainType <= shore2_last))
-    {
-        value = TERRAINCATEGORY_Shore;
-    }
-    else if ((terrainType >= shore3_first) && (terrainType <= shore3_last))
-    {
-        value = TERRAINCATEGORY_Shore;
-    }
-    else if ((terrainType >= river2_first) && (terrainType <= river2_last))
-    {
-        value = TERRAINCATEGORY_River;
-    }
     else if ((terrainType >= mountain2_first) && (terrainType <= mountain2_last))
     {
         value = TERRAINCATEGORY_Mountain;
@@ -90,6 +120,14 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
         value = TERRAINCATEGORY_Desert;
     }
     else if ((terrainType >= shore4_first) && (terrainType <= shore4_last))
+    {
+        value = TERRAINCATEGORY_Shore;
+    }
+    else if ((terrainType >= river2_first) && (terrainType <= river2_last))
+    {
+        value = TERRAINCATEGORY_River;
+    }
+    else if ((terrainType >= shore5_first) && (terrainType <= shore5_last))
     {
         value = TERRAINCATEGORY_Shore;
     }
@@ -213,6 +251,29 @@ uint8_t MoMTerrain::getExplored() const
     return value;
 }
 
+int MoMTerrain::getBasicFoodBonus() const
+{
+    if (getChanges().corruption)
+        return 0;
+    eTerrainCategory category = getCategory();
+    int value = 0;
+    if (toUInt(category) < eTerrainCategory_MAX)
+    {
+        // TODO: Check if sorcery node and nature node give bonus without breaking it
+        // TODO: Check if lair/tower give bonus
+        value = sDoubleFoodBonus[category];
+    }
+
+    value *= 2;     // Effectively 4 times the actual value
+
+    if (isSharedBetweenCities())
+    {
+        value /= 2;
+    }
+
+    return value;
+}
+
 Tower_Node_Lair *MoMTerrain::getLair() const
 {
     Tower_Node_Lair* value = 0;
@@ -229,6 +290,37 @@ Tower_Node_Lair *MoMTerrain::getLair() const
             break;
         }
     }
+    return value;
+}
+
+int MoMTerrain::getProductionPercentage(bool gaiasBlessing) const
+{
+    if (getChanges().corruption)
+        return 0;
+
+    // TODO: Terrain AE-B0,124-1C3 (desert) give 1 1/2 hammers???
+    //       While A5 (desert) and B3 (volcano) do NOT give hammers???
+    eTerrainCategory category = getCategory();
+    int value = 0;
+    if (toUInt(category) < eTerrainCategory_MAX)
+    {
+        // TODO: Check if sorcery node and nature node give bonus without breaking it
+        // TODO: Check if lair/tower give bonus
+        value = sDoubleHammerBonus[category];
+        if ((category == TERRAINCATEGORY_Forest) || (category == TERRAINCATEGORY_NatureNode))
+        {
+            if (gaiasBlessing)
+            {
+                value *= 2;
+            }
+        }
+    }
+
+    if (isSharedBetweenCities())
+    {
+        value /= 2;
+    }
+
     return value;
 }
 
@@ -254,5 +346,29 @@ std::vector<int> MoMTerrain::getUnits() const
     }
     return units;
 }
+
+bool MoMTerrain::isSharedBetweenCities() const
+{
+    int count = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        const City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if ((city->m_Plane == m_location.m_Plane)
+                && (Abs(city->m_XPos - m_location.m_XPos) + Abs(city->m_YPos - m_location.m_YPos) <= 3)
+                && (Max(Abs(city->m_XPos - m_location.m_XPos), Abs(city->m_YPos - m_location.m_YPos)) <= 2)
+                )
+        {
+            count++;
+            if (count >= 2)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 }

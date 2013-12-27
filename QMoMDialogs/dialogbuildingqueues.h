@@ -12,6 +12,7 @@
 
 #include <QAbstractButton>
 #include <QDialog>
+#include <QModelIndex>
 
 #include <QMoMSharedPointers.h>
 
@@ -29,16 +30,21 @@ public:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton* button);
+    void on_tableWidget_Cities_cellChanged(int row, int column);
+    void on_tableWidget_Cities_clicked(const QModelIndex &index);
     void on_tableWidget_Cities_customContextMenuRequested(const QPoint &pos);
     void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
     void slot_ItemAction();
+
 
 private:
     void update();
 
 	QMoMGamePtr m_game;
     bool m_contextMenuOpen;
+    int m_columnFarmers;
+    int m_columnBuy;    
 
     Ui::DialogBuildingQueues *ui;
 };

@@ -11,6 +11,312 @@ MoMCity::MoMCity(MoMGameBase *game, const City *city) :
 {
 }
 
+int MoMCity::calcBasicFood() const
+{
+    class CountBasicFood
+    {
+    public:
+        CountBasicFood() : food(0) {}
+        bool operator()(const MoMTerrain& terrain)
+        {
+            food += terrain.getBasicFoodBonus();
+            return false;
+        }
+        int food;
+    };
+
+    CountBasicFood count;
+    enumerateTerrain(count);
+
+    int basicFood = count.food;
+    if (OWNER_None != m_city->m_City_Enchantments.Gaias_Blessing)
+    {
+        basicFood = basicFood * 3 / 2;
+    }
+
+    basicFood /= 4;
+
+    return basicFood;
+}
+
+int MoMCity::calcProductionBonusPercentage() const
+{
+    class CountProductionPercentage
+    {
+    public:
+        CountProductionPercentage(bool gaiasBlessing) : m_gaiasBlessing(gaiasBlessing), productionPercentage(0) {}
+        bool operator()(const MoMTerrain& terrain)
+        {
+            productionPercentage += terrain.getProductionPercentage(m_gaiasBlessing);
+            return false;
+        }
+        bool m_gaiasBlessing;
+        int productionPercentage;
+    };
+
+    CountProductionPercentage count(OWNER_None != m_city->m_City_Enchantments.Gaias_Blessing);
+    enumerateTerrain(count);
+
+    return count.productionPercentage;
+}
+
+int MoMCity::calcFoodProduced() const
+{
+    if (m_city->m_Population <= 0)
+        return 0;
+
+    int basicFood = calcBasicFood();
+    int nrFarmers = Min(m_city->m_Number_of_farmers_allocated, m_city->m_Population);
+    int food = 0;
+
+    if ((m_city->m_Race == RACE_Halfling) || isBuildingPresent(BUILDING_Animists_Guild))
+    {
+        food = 3 * nrFarmers;
+    }
+    else
+    {
+        food = 2 * nrFarmers;
+    }
+
+    if (isBuildingPresent(BUILDING_Foresters_Guild))
+    {
+        food += 2;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments._Famine_)
+    {
+        food /= 2;
+    }
+    if (food > basicFood)
+    {
+        food = basicFood + (food - basicFood) / 2;
+    }
+    if (isBuildingPresent(BUILDING_Granary))
+    {
+        food += 2;
+    }
+    if (isBuildingPresent(BUILDING_Farmers_Market))
+    {
+        food += 3;
+    }
+    food += getWildGameBonus();
+
+    return food;
+}
+
+int MoMCity::calcHammersProduced() const
+{
+    if (m_city->m_Population <= 0)
+        return 0;
+
+    int nrFarmers = Min(m_city->m_Number_of_farmers_allocated, m_city->m_Population);
+    int nrWorkers = calcNrWorkers();
+    int doubledHammersPerWorker = 4;
+    if ((m_city->m_Race == RACE_Dwarven) || (m_city->m_Race == RACE_Klackon))
+    {
+        doubledHammersPerWorker = 6;
+    }
+    int hammers = (nrWorkers * doubledHammersPerWorker + nrFarmers + 1) / 2;
+
+    int prodPercentage = 100;
+    prodPercentage += calcProductionBonusPercentage();
+    if (isBuildingPresent(BUILDING_Foresters_Guild))
+    {
+        prodPercentage += 25;
+    }
+    if (isBuildingPresent(BUILDING_Sawmill))
+    {
+        prodPercentage += 25;
+    }
+    if (isBuildingPresent(BUILDING_Miners_Guild))
+    {
+        prodPercentage += 50;
+    }
+    if (isBuildingPresent(BUILDING_Mechanicians_Guild))
+    {
+        prodPercentage += 50;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments.Inspirations)
+    {
+        prodPercentage += 100;
+    }
+
+    hammers = hammers * prodPercentage / 100;
+
+    if (OWNER_None != m_city->m_City_Enchantments._Cursed_Lands_)
+    {
+        hammers /= 2;
+    }
+
+    return hammers;
+}
+
+int MoMCity::calcCurrentMaxPop() const
+{
+    int maxPop = calcBasicFood();
+
+    if (isBuildingPresent(BUILDING_Granary))
+    {
+        maxPop += 2;
+    }
+    if (isBuildingPresent(BUILDING_Farmers_Market))
+    {
+        maxPop += 3;
+    }
+    maxPop += getWildGameBonus();
+
+    return maxPop;
+}
+
+int MoMCity::calcTopMaxPop() const
+{
+    int maxPop = calcBasicFood();
+    maxPop += 2;    // Granary
+    maxPop += 3;    // Farmers Market
+    maxPop += getWildGameBonus();
+
+    return maxPop;
+}
+
+int MoMCity::calcNrRebels() const
+{
+    Wizard* wizard = m_game->getWizard(m_city->m_Owner);
+    if (0 == wizard)
+        return 0;
+
+    const uint16_t* taxUnrestTable = m_game->getTaxUnrestTable();
+    int unrestPercentage = taxUnrestTable[wizard->m_Tax_Rate];
+
+    eRace homeRace = wizard->m_Home_Race;
+    const int8_t* racialUnrestTable = m_game->getUnrest_Table(homeRace);
+    unrestPercentage += 10 * racialUnrestTable[m_city->m_Race];
+
+    if (OWNER_None != m_city->m_City_Enchantments._Famine_)
+    {
+        unrestPercentage += 25;
+    }
+
+    int nrRebels = m_city->m_Population * unrestPercentage / 100;
+
+    int pacifyingEffects = 0;
+
+    if ((OWNER_None == m_city->m_City_Enchantments._Evil_Presence_)
+            || (wizard->m_Number_of_Spellbooks_Death > 0))
+    {
+        int religiousEffects = 0;
+
+        if (isBuildingPresent(BUILDING_Shrine))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Temple))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Parthenon))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Cathedral))
+        {
+            religiousEffects++;
+        }
+        if (wizard->m_Skills.s.Infernal_Power || wizard->m_Skills.s.Divine_Power)
+        {
+            religiousEffects += religiousEffects / 2;
+        }
+
+        pacifyingEffects += religiousEffects;
+    }
+
+    if (isBuildingPresent(BUILDING_Oracle))
+    {
+        pacifyingEffects += 2;
+    }
+    if (isBuildingPresent(BUILDING_Animists_Guild))
+    {
+        pacifyingEffects += 1;
+    }
+
+    for (int playerNr = 0; playerNr < m_game->getNrWizards(); ++playerNr)
+    {
+        if (playerNr == m_city->m_Owner)
+            continue;
+        Wizard* opponent = m_game->getWizard(playerNr);
+        if (opponent->m_Global_Enchantments.Great_Wasting)
+        {
+            pacifyingEffects -= 1;
+        }
+        if (opponent->m_Global_Enchantments.Armageddon)
+        {
+            pacifyingEffects -= 2;
+        }
+    }
+
+    if (OWNER_None != m_city->m_City_Enchantments.Dark_Rituals)
+    {
+        pacifyingEffects -= 1;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments._Pestilence_)
+    {
+        pacifyingEffects -= 2;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments._Cursed_Lands_)
+    {
+        pacifyingEffects -= 1;
+    }
+    if (wizard->m_Global_Enchantments.Just_Cause)
+    {
+        pacifyingEffects += 1;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments.Gaias_Blessing)
+    {
+        pacifyingEffects += 2;
+    }
+
+    if (pacifyingEffects < nrRebels)
+    {
+        int unitEffects = 0;
+        for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+        {
+            const Unit* unit = m_game->getUnit(unitNr);
+            if (0 == unit)
+                break;
+            if (unit->m_Owner != m_city->m_Owner)
+                continue;
+            if (MoMLocation(*unit) != MoMLocation(*m_city))
+                continue;
+            if (unit->m_Unit_Type < UNITTYPE_Arcane_Magic_Spirit)
+            {
+                unitEffects += 1;
+            }
+        }
+        pacifyingEffects += unitEffects / 2;
+    }
+
+    nrRebels = Max(0, nrRebels - pacifyingEffects);
+
+    if (OWNER_None != m_city->m_City_Enchantments.Stream_of_Life)
+    {
+        nrRebels = 0;
+    }
+
+    nrRebels = Min(nrRebels, (int)m_city->m_Population);
+
+    return nrRebels;
+}
+
+int MoMCity::calcNrWorkers() const
+{
+    if (m_city->m_Population <= 0)
+        return 0;
+
+    int nrFarmers = Min(m_city->m_Number_of_farmers_allocated, m_city->m_Population);
+    int nrRebels  = calcNrRebels();
+    int nrWorkers = m_city->m_Population - nrFarmers - nrRebels;
+
+    return nrWorkers;
+}
+
 bool MoMCity::canProduce(eBuilding building) const
 {
     // Cannot build what is already there
@@ -91,6 +397,11 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
     return true;
 }
 
+const City *MoMCity::getCity() const
+{
+    return m_city;
+}
+
 template<typename Functor>
 bool MoMCity::enumerateTerrain(Functor& functor) const
 {
@@ -115,6 +426,11 @@ bool MoMCity::enumerateTerrain(Functor& functor) const
 
 int MoMCity::getCostToBuy(eProducing producing) const
 {
+    if (PRODUCING_None == producing)
+    {
+        producing = m_city->m_Producing;
+    }
+
     int buildingCost = getCostToProduce(producing);
     int producedNextTurn = m_city->m_HammersAccumulated + m_city->m_Hammers;
     int productionRemaining = buildingCost - m_city->m_HammersAccumulated;
@@ -140,6 +456,11 @@ int MoMCity::getCostToBuy(eProducing producing) const
 
 int MoMCity::getCostToProduce(eProducing producing) const
 {
+    if (PRODUCING_None == producing)
+    {
+        producing = m_city->m_Producing;
+    }
+
     int buildingCost = -1;
     if (producing < MoM::PRODUCING_BUILDING_MAX)
     {
@@ -157,6 +478,7 @@ int MoMCity::getCostToProduce(eProducing producing) const
         {
             buildingCost = unitData->m_Cost;
         }
+
         int reductionPercentage = getUnitReductionPercentage();
         buildingCost = buildingCost * (100 - reductionPercentage) / 100;
         if (buildingCost < 0)
@@ -169,6 +491,11 @@ int MoMCity::getCostToProduce(eProducing producing) const
 
 int MoMCity::getTimeToComplete(eProducing producing) const
 {
+    if (PRODUCING_None == producing)
+    {
+        producing = m_city->m_Producing;
+    }
+
     int timeCompletion = 999;
     if (m_city->m_Hammers > 0)
     {
@@ -180,16 +507,25 @@ int MoMCity::getTimeToComplete(eProducing producing) const
 
 int MoMCity::getUnitReductionPercentage() const
 {
+    // TODO: Count for half (?) if on terrain shared with another city
+    // TODO: Refactor to MoMTerrain::getUnitReduction()
     class CountUnitReduction
     {
     public:
         CountUnitReduction() : reduction(0) {}
         bool operator()(const MoMTerrain& terrain)
         {
-            if (terrain.getBonus() == DEPOSIT_Iron_Ore)
+            if (terrain.getChanges().corruption)
+            {
+            }
+            else if (terrain.getBonus() == DEPOSIT_Iron_Ore)
+            {
                 reduction += 5;
+            }
             else if (terrain.getBonus() == DEPOSIT_Coal)
+            {
                 reduction += 10;
+            }
             return false;
         }
         int reduction;
@@ -198,6 +534,37 @@ int MoMCity::getUnitReductionPercentage() const
     CountUnitReduction count;
     enumerateTerrain(count);
     return count.reduction;
+}
+
+int MoMCity::getWildGameBonus() const
+{
+    class CountWildGame
+    {
+    public:
+        CountWildGame() : food(0) {}
+        bool operator()(const MoMTerrain& terrain)
+        {
+            if (terrain.getChanges().corruption)
+                return false;
+            if (terrain.getBonus() == DEPOSIT_Wild_Game)
+            {
+                if (terrain.isSharedBetweenCities())
+                {
+                    food++;
+                }
+                else
+                {
+                    food += 2;
+                }
+            }
+            return false;
+        }
+        int food;
+    };
+
+    CountWildGame count;
+    enumerateTerrain(count);
+    return count.food;
 }
 
 bool MoMCity::hasForestRequirement() const

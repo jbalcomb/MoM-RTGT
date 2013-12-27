@@ -621,6 +621,14 @@ Spells_Cast_in_Battle* MoMGameMemory::getSpells_Cast_in_Battle()
     return derefHeapPointer<Spells_Cast_in_Battle>(pMoMDataSegment->m_addr_Spells_Cast_in_Battle, 1);
 }
 
+uint16_t* MoMGameMemory::getTaxUnrestTable()
+{
+    if (0 == m_process.get())
+        return 0;
+    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
+    return validateStaticPointer(pMoMDataSegment->m_Tax_Unrest_Table, eTax_Rate_MAX);
+}
+
 eTerrainBonusDeposit* MoMGameMemory::getTerrain_Bonuses()
 {
     if (0 == m_process.get())

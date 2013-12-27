@@ -152,7 +152,7 @@ bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& 
                 if (indexExeFilepath < data.size())
                 {
                     m_exeFilepath = (const char*)&data[indexExeFilepath];
-                    std::cout << "Found '" << localDirectory << "' again afterward at offset 0x" << std::hex << indexExeFilepath << std::endl;
+                    std::cout << "Found '" << localDirectory << "' again afterward at offset 0x" << std::hex << indexExeFilepath << std::dec << std::endl;
                     std::cout << "Resulting exe path is '" << m_exeFilepath << "'" << std::endl;
                 }
             }

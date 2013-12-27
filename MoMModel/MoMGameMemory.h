@@ -112,6 +112,7 @@ private:
     virtual uint16_t* getNumber_of_Wizards();
     virtual Spell_Data* getSpellData();
     virtual Spells_Cast_in_Battle* getSpells_Cast_in_Battle();
+    virtual uint16_t* getTaxUnrestTable();
 
     virtual eTerrainBonusDeposit* getTerrain_Bonuses();
     virtual Terrain_Changes* getTerrain_Changes();

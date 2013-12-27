@@ -205,7 +205,7 @@ void DialogTables::slot_addRow_to_Cities(int row)
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::ePlayer>(m_game, &data->m_Owner, MoM::ePlayer_MAX, SHOWENUM_normal));
     ui->tableWidget->setItem(row, col++, new TextTableItem(m_game, data->m_City_Name, sizeof(data->m_City_Name)));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eRace>(m_game, &data->m_Race, MoM::eRace_MAX, SHOWENUM_normal));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Population, 2, SHOWNUMBER_normal));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Population, 2, SHOWNUMBER_normal));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Coins, 2, SHOWNUMBER_normal));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Maintenance, 2, SHOWNUMBER_normal));

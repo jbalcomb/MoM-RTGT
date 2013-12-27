@@ -181,7 +181,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[Farmers Market]
 
     // FURTHER RULES
-    //[Housing] till Pop 4
+    //[Housing]             till Pop 4
     //[Shrine]
     //[Sawmill]
     //[Foresters Guild]
@@ -192,14 +192,12 @@ bool MoMController::applyBuildingQueue(int cityNr)
     //[University]
     //[Bank]
     //[Miners Guild]
-
-    // TODO: SPECIAL TARGETS
-    //[Animists Guild]  (requires Temple, Stable)
-    //[Stable] if Animists Guild allowed
+    //[Stable]              if Animists Guild allowed
+    //[Animists Guild]
     //[Parthenon]
-    //[Merchants Guild] (requires Bank, Shipwright Guild, Ship Yard)
-    //[Shipwright Guild] if Merchants Guild allowed
-    //[Ship Yard Guild] if Merchants Guild allowed
+    //[Shipwright Guild]    if Merchants Guild allowed
+    //[Ship Yard Guild]     if Merchants Guild allowed
+    //[Merchants Guild]
     //[Cathedral]
     //[Wizards Guild]
 
@@ -372,6 +370,182 @@ bool MoMController::applyBuildingQueue(ePlayer playerNr)
         }
     }
     return changed;
+}
+
+bool MoMController::buyProduction(City *city)
+{
+    m_errorString.clear();
+    if (0 == m_game)
+        return false;
+    MoMCity momCity(m_game, city);
+    int costToBuy = momCity.getCostToBuy(city->m_Producing);
+    Wizard* wizard = m_game->getWizard(PLAYER_YOU);
+    if (0 == wizard)
+        return false;
+    if (costToBuy <= 0)
+    {
+        m_errorString = "Cannot buy. Production will already be complete.";
+        std::cout << m_errorString << std::endl;
+        return false;
+    }
+    if (wizard->m_Gold_Coins < costToBuy)
+    {
+        m_errorString = "Not enough gold to buy production";
+        std::cout << m_errorString << std::endl;
+        return false;
+    }
+
+    int16_t newGold = wizard->m_Gold_Coins - costToBuy;
+    int16_t newHammersAccumulated = momCity.getCostToProduce(city->m_Producing);
+    if (!m_game->commitData(&wizard->m_Gold_Coins, &newGold, sizeof(wizard->m_Gold_Coins)))
+    {
+        m_errorString = "Failed to commit gold coin changes";
+        std::cout << m_errorString << std::endl;
+        return false;
+    }
+    if (!m_game->commitData(&city->m_HammersAccumulated, &newHammersAccumulated, sizeof(city->m_HammersAccumulated)))
+    {
+        m_errorString = "Failed to commit accumulated hammer changes";
+        std::cout << m_errorString << std::endl;
+        return false;
+    }
+
+    std::cout << "Bought " << city->m_Producing << " for " << costToBuy << " gold" << std::endl;
+    return true;
+}
+
+int MoMController::calcFoodProduced(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    int foodProduced = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        if (city->m_Population < city->m_Food_Produced)
+        {
+            foodProduced += city->m_Food_Produced - city->m_Population;
+        }
+    }
+    return foodProduced;
+}
+
+int MoMController::calcFoodUpkeep(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    int foodUpkeep = 0;
+    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    {
+        Unit* unit = m_game->getUnit(unitNr);
+        if (0 == unit)
+            break;
+        if (playerNr != unit->m_Owner)
+            continue;
+        MoMUnit momUnit(m_game, unit);
+        if (momUnit.isNormal() && !unit->m_Weapon_Mutation.s.Undead)
+        {
+            foodUpkeep++;
+        }
+    }
+    return foodUpkeep;
+}
+
+int MoMController::calcGoldIncome(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    int goldProduced = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        goldProduced += city->m_Coins - city->m_Maintenance;
+    }
+
+    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
+    {
+        Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
+        MoMUnit momUnit(m_game, hiredHero);
+        if (momUnit.hasHeroAbility(HEROABILITY_Noble))
+        {
+            goldProduced += momUnit.getHeroAbility(HEROABILITY_Noble);
+        }
+    }
+
+    int foodSurplus = calcFoodProduced(playerNr) - calcFoodUpkeep(playerNr);
+    goldProduced += foodSurplus / 2;
+
+    return goldProduced;
+}
+
+int MoMController::calcGoldUpkeep(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    int goldUpkeep = 0;
+    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    {
+        Unit* unit = m_game->getUnit(unitNr);
+        if (0 == unit)
+            break;
+        if (playerNr != unit->m_Owner)
+            continue;
+        MoMUnit momUnit(m_game, unit);
+        goldUpkeep += momUnit.calcGoldUpkeep();
+    }
+
+    goldUpkeep -= calcTotalFame(playerNr);
+
+    if (goldUpkeep < 0)
+    {
+        goldUpkeep = 0;
+    }
+
+    // TODO: Difficulty multiplier (which one???)
+
+    return goldUpkeep;
+}
+
+int MoMController::calcTotalFame(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+
+    int fame = 0;
+    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
+    {
+        Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
+        MoMUnit momUnit(m_game, hiredHero);
+        if (momUnit.hasHeroAbility(HEROABILITY_Legendary))
+        {
+            fame += momUnit.getHeroAbility(HEROABILITY_Legendary);
+        }
+        if (momUnit.hasHeroAbility(HEROABILITY_Legendary_X))
+        {
+            fame += momUnit.getHeroAbility(HEROABILITY_Legendary_X);
+        }
+    }
+
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 != wizard)
+    {
+        if (wizard->m_Global_Enchantments.Just_Cause)
+        {
+            fame += 10;
+        }
+
+        fame += wizard->m_Fame;
+    }
+
+    return fame;
 }
 
 int MoMController::countGarrison(const MoMLocation &location)

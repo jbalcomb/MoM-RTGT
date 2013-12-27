@@ -30,6 +30,12 @@ public:
     bool applyBuildingQueue(int cityNr);
     bool applyBuildingQueue(ePlayer playerNr);
 
+    bool buyProduction(City* city);
+    int  calcFoodProduced(ePlayer playerNr) const;
+    int  calcFoodUpkeep(ePlayer playerNr) const;
+    int  calcGoldIncome(ePlayer playerNr) const;
+    int  calcGoldUpkeep(ePlayer playerNr) const;
+    int  calcTotalFame(ePlayer playerNr) const;
     int  countGarrison(const MoMLocation& location);
     int  countUnits(const MoMLocation& location);
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);

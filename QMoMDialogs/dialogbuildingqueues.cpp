@@ -24,6 +24,8 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     QDialog(parent),
     m_game(),
     m_contextMenuOpen(false),
+    m_columnFarmers(-1),
+    m_columnBuy(-1),
     ui(new Ui::DialogBuildingQueues)
 {
     ui->setupUi(this);
@@ -132,11 +134,21 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
     QStringList labelsCities;
     labelsCities << "Nr"
-           << "Name" << "Race" << "Pop" << "Farmers" << "Food" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison" << "CostBuy";
+           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
+           << "Time" << "Garrison" << "Buy";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
     ui->tableWidget_Cities->sortByColumn(0, Qt::AscendingOrder);
+
+    QStringList labelsSummary;
+    labelsSummary << "Total gold" << "Gold produced" << "Gold upkeep" << "Gold/turn" << "Food produced" << "Food upkeep" << "Food/turn";
+    ui->tableWidget_Summary->setRowCount(labelsSummary.size());
+    ui->tableWidget_Summary->setVerticalHeaderLabels(labelsSummary);
+    for (int row = 0; row < ui->tableWidget_Summary->rowCount(); ++row)
+    {
+        ui->tableWidget_Summary->setItem(row, 0, new QMoMTableItemBase(m_game, ""));
+    }
+    ui->tableWidget_Summary->resizeRowsToContents();
 
     QMoMSettings::readSettingsWindow(this);
 
@@ -180,15 +192,16 @@ void DialogBuildingQueues::update()
             continue;
         MoMCity momCity(m_game.data(), city);
 
+        int curMaxPop = momCity.calcCurrentMaxPop();
+        int topMaxPop = momCity.calcTopMaxPop();
+        QString population = QString("%0/%1").arg((int)(city->m_Population), 2).arg(curMaxPop);
+        if (topMaxPop > curMaxPop)
+        {
+            population += QString("(%0)").arg(topMaxPop);
+        }
         int buildingCost = momCity.getCostToProduce(city->m_Producing);
         int timeCompletion = momCity.getTimeToComplete(city->m_Producing);
         int garrisonSize = momController.countGarrison(MoMLocation(*city));
-        int foodSurplus = city->m_Food_Produced - city->m_Population;
-        QString foodSurplusStr = QString("%0").arg(foodSurplus);
-        if (foodSurplus >= 0)
-        {
-            foodSurplusStr = "+" + foodSurplusStr;
-        }
         int costToBuy = momCity.getCostToBuy(city->m_Producing);
 
         if (row >= ui->tableWidget_Cities->rowCount())
@@ -201,11 +214,27 @@ void DialogBuildingQueues::update()
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             *QMoMResources::instance().getIcon(city->m_Race),
                                             prettyQStr(city->m_Race)));
-        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg((int)(city->m_Population), 2)));
-        ui->tableWidget_Cities->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &city->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(population));
+        m_columnFarmers = col;
+        ui->tableWidget_Cities->setItem(row, col, new NumberTableItem<int8_t>(m_game, &city->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
+        ui->tableWidget_Cities->item(row, col)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 59 + toUInt(city->m_Race)), 2));
+        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrWorkers(), 2)));
+        ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 45 + toUInt(city->m_Race)), 2));
+        ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrRebels(), 2)));
+        ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 74 + toUInt(city->m_Race)), 2));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 40), 2),
-                                            foodSurplusStr));
+                                            QMoMTableItemBase::formatNumber(momCity.calcFoodProduced() - city->m_Population, SHOWNUMBER_alwaysPlus, 2)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 40), 2),
+                                            QMoMTableItemBase::formatNumber(city->m_Food_Produced - city->m_Population, SHOWNUMBER_alwaysPlus, 2)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+                                            QMoMTableItemBase::formatNumber(city->m_Coins - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 2)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
+                                            QString("%0").arg(momCity.calcHammersProduced(), 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
                                             QString("%0").arg((int)(city->m_Hammers), 3)));
@@ -218,10 +247,14 @@ void DialogBuildingQueues::update()
                 listProducing << produce;
             }
         }
-        ui->tableWidget_Cities->setItem(row, col++, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listProducing));
+        ui->tableWidget_Cities->setItem(row, col, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listProducing));
+        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
-        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(costToBuy)));
+        m_columnBuy = col;
+        ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+                                                                       QString("%0").arg(costToBuy, 4)));
+        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
 
         for (int col = 0; col < ui->tableWidget_Cities->columnCount(); ++col)
         {
@@ -240,40 +273,10 @@ void DialogBuildingQueues::update()
     ui->tableWidget_Cities->setSortingEnabled(true);
 
 
-    int totalGoldSurplus = 0;
-    int totalFoodSurplus = 0;
-    for (int cityNr = 0; cityNr < nrCities; ++cityNr)
-    {
-        City* city = m_game->getCity(cityNr);
-        if (0 == city)
-            break;
-        if (MoM::PLAYER_YOU != city->m_Owner)
-            continue;
-        totalGoldSurplus += city->m_Coins - city->m_Maintenance;
-        totalFoodSurplus += city->m_Food_Produced - city->m_Population;
-    }
-    for (int unitNr = 0; unitNr < nrUnits; ++unitNr)
-    {
-        Unit* unit = m_game->getUnit(unitNr);
-        if (0 == unit)
-            break;
-        if (MoM::PLAYER_YOU != unit->m_Owner)
-            continue;
-        MoMUnit momUnit(m_game.data(), unit);
-        if (momUnit.isNormal() && !momUnit.isGeneric())
-        {
-            totalFoodSurplus--;
-        }
-        if (momUnit.isHero() || momUnit.isNormal())
-        {
-            totalGoldSurplus -= momUnit.getUnitTypeData().m_Upkeep;
-        }
-        if (momUnit.hasHeroAbility(HEROABILITY_Noble))
-        {
-            totalGoldSurplus += momUnit.getHeroAbility(HEROABILITY_Noble);
-        }
-    }
-
+    int goldIncome      = momController.calcGoldIncome(PLAYER_YOU);
+    int goldUpkeep      = momController.calcGoldUpkeep(PLAYER_YOU);
+    int foodProduced    = momController.calcFoodProduced(PLAYER_YOU);
+    int foodUpkeep      = momController.calcFoodUpkeep(PLAYER_YOU);
     int totalGold = 0;
     if ((0 != m_game) && (0 != m_game->getWizard(PLAYER_YOU)))
     {
@@ -281,12 +284,13 @@ void DialogBuildingQueues::update()
     }
 
     row = 0;
-    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Total gold");
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalGold));
-    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Gold/turn");
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalGoldSurplus));
-    ui->tableWidget_Summary->verticalHeaderItem(row)->setText("Food/turn");
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(totalFoodSurplus));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(goldIncome));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(-goldUpkeep));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QMoMTableItemBase::formatNumber(goldIncome - goldUpkeep, SHOWNUMBER_alwaysPlus));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(foodProduced));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(-foodUpkeep));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QMoMTableItemBase::formatNumber(foodProduced - foodUpkeep, SHOWNUMBER_alwaysPlus));
 }
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
@@ -299,6 +303,61 @@ void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
     {
         controller->applyBuildQueues();
         update();
+    }
+}
+
+void DialogBuildingQueues::on_tableWidget_Cities_cellChanged(int row, int column)
+{
+    if (0 == m_game)
+        return;
+    if (column == m_columnFarmers)
+    {
+        int cityNr = ui->tableWidget_Cities->item(row, 0)->text().toInt();
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            return;
+        MoMCity momCity(m_game.data(), city);
+        int8_t foodProduced = momCity.calcFoodProduced();
+        int8_t hammersProduced = momCity.calcHammersProduced();
+        if (foodProduced != city->m_Food_Produced)
+        {
+            qDebug() << QString("Updating food produced in city '%0' from %1 to %2").arg(city->m_City_Name).arg((int)city->m_Food_Produced).arg((int)foodProduced);
+            if (!m_game->commitData(&city->m_Food_Produced, &foodProduced, sizeof(city->m_Food_Produced)))
+            {
+                qDebug() << "Failed to commit food change";
+            }
+        }
+        if (hammersProduced != city->m_Hammers)
+        {
+            qDebug() << QString("Updating hammers produced in city '%0' from %1 to %2").arg(city->m_City_Name).arg((int)city->m_Hammers).arg((int)hammersProduced);
+            if (!m_game->commitData(&city->m_Hammers, &hammersProduced, sizeof(city->m_Hammers)))
+            {
+                qDebug() << "Failed to commit production change";
+            }
+        }
+    }
+}
+
+void DialogBuildingQueues::on_tableWidget_Cities_clicked(const QModelIndex &index)
+{
+    if (0 == m_game)
+        return;
+    if (index.column() == m_columnBuy)
+    {
+        int cityNr = ui->tableWidget_Cities->item(index.row(), 0)->text().toInt();
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            return;
+        MoMCity momCity = MoMCity(m_game.data(), city);
+        int ret = QMessageBox::question(this, "Buy production",
+                                        QString("Do you wish to spend %0 gold by purchasing a %1?")
+                                        .arg(momCity.getCostToBuy())
+                                        .arg(prettyQStr(city->m_Producing)),
+                                        "Buy", "Cancel", "", 0, 1);
+        if (ret == 0)
+        {
+            (void)MoMController(m_game.data()).buyProduction(city);
+        }
     }
 }
 

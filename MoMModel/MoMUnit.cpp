@@ -18,43 +18,82 @@
 namespace MoM
 {
 
-MoMUnit::MoMUnit() :
-    m_game(),
-    m_battleUnit(),
-    m_heroStats(),
-    m_heroStatsInitializer(),
-    m_hiredHero(),
-    m_unit(),
-    m_unitType(),
-	m_bonuses(),
-    m_dnSpells(),
-    m_penalties(),
-    m_upAbilities(),
-    m_upItems(),
-    m_upLevel(),
-    m_upSpells(),
-    m_upWeaponType()
+MoMUnit::MoMUnit()
 {
+    zeroFields();
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game) :
-    m_game(),
-    m_battleUnit(),
-    m_heroStats(),
-    m_heroStatsInitializer(),
-    m_hiredHero(),
-    m_unit(),
-    m_unitType(),
-    m_bonuses(),
-    m_dnSpells(),
-    m_penalties(),
-    m_upAbilities(),
-    m_upItems(),
-    m_upLevel(),
-    m_upSpells(),
-    m_upWeaponType()
+MoMUnit::MoMUnit(MoMGameBase *game)
 {
-    setGame(game);
+    zeroFields();
+    m_game = game;
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Battle_Unit *battleUnit)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(battleUnit);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, eUnit_Type unitTypeNr)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(unitTypeNr);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Hero_stats *heroStats)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(heroStats);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Hero_Stats_Initializer *heroStatsInitializer)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(heroStatsInitializer);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Hired_Hero *hiredHero)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(hiredHero);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Unit_Type_Data *unitType)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(unitType);
+}
+
+MoMUnit::MoMUnit(MoMGameBase *game, Unit *unit)
+{
+    zeroFields();
+    m_game = game;
+    changeUnit(unit);
+}
+
+void MoMUnit::zeroFields()
+{
+    m_battleUnit = 0;
+    m_heroStats = 0;
+    m_heroStatsInitializer = 0;
+    m_hiredHero = 0;
+    m_unitType = 0;
+    m_unit = 0;
+    m_bonuses = BaseAttributes();
+    m_dnSpells = BaseAttributes();
+    m_penalties = BaseAttributes();
+    m_upAbilities = BaseAttributes();
+    m_upItems = BaseAttributes();
+    m_upLevel = BaseAttributes();
+    m_upSpells = BaseAttributes();
+    m_upWeaponType = BaseAttributes();
 }
 
 MoMUnit::~MoMUnit()
@@ -104,20 +143,7 @@ void MoMUnit::copyMemberData(const MoMUnit& rhs)
 
 void MoMUnit::close()
 {
-    m_battleUnit = 0;
-    m_heroStats = 0;
-    m_heroStatsInitializer = 0;
-    m_hiredHero = 0;
-    m_unitType = 0;
-    m_unit = 0;
-	m_bonuses = BaseAttributes();
-    m_dnSpells = BaseAttributes();
-    m_penalties = BaseAttributes();
-    m_upAbilities = BaseAttributes();
-    m_upItems = BaseAttributes();
-    m_upLevel = BaseAttributes();
-    m_upSpells = BaseAttributes();
-    m_upWeaponType = BaseAttributes();
+    zeroFields();
 }
 
 void MoMUnit::changeUnit(Battle_Unit *battleUnit)
@@ -332,6 +358,28 @@ Unit_Type_Data MoMUnit::getUnitTypeData() const
 // OTHER
 //
 
+int MoMUnit::calcGoldUpkeep() const
+{
+    if (getUnitInGame().m_Weapon_Mutation.s.Undead)
+    {
+        return 0;
+    }
+
+    int goldUpkeep = 0;
+    if (isNormal())
+    {
+        goldUpkeep = getUnitTypeData().m_Upkeep;
+    }
+    else if (isHero() && !hasHeroAbility(HEROABILITY_Noble))
+    {
+        goldUpkeep -= getUnitTypeData().m_Upkeep;
+    }
+
+    // TODO: Computer players get a reduction depending on difficulty
+
+    return goldUpkeep;
+}
+
 MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
 {
     BaseAttributes base = getBaseAttributes();
@@ -402,7 +450,7 @@ int MoMUnit::getGazeModifier() const
     {
         value = m_unitType->m_Gaze_Modifier;
     }
-	return value;
+    return value;
 }
 
 std::string MoMUnit::getHeroName() const

@@ -1,10 +1,13 @@
 #ifndef MOMTERRAIN_H
 #define MOMTERRAIN_H
 
+#include "MoMLocation.h"
 #include "MoMTemplate.h"
 
 namespace MoM
 {
+
+class MoMGameBase;
 
 class MoMTerrain
 {
@@ -25,13 +28,25 @@ public:
     Terrain_Changes         getChanges() const;
     City*                   getCity() const;
     uint8_t                 getExplored() const;
+    /// Returns 4 times the documented food bonus.
+    /// Excludes the effect of Wild Game.
+    /// Accounts for sharing terrain with another city.
+    int                     getBasicFoodBonus() const;
+    /// Returns the hammer bonus percentage.
+    /// Accounts for sharing terrain with another city.
+    /// \param gaiasBlessing Doubles hammer bonus of forests and nature nodes
+    int                     getProductionPercentage(bool gaiasBlessing) const;
     Tower_Node_Lair*        getLair() const;
     eTerrainType            getType() const;
     std::vector<int>        getUnits() const;
+    bool                    isSharedBetweenCities() const;
 
     static eTerrainCategory getTerrainCategory(eTerrainType terrainType);
 
 private:
+    static int sDoubleFoodBonus[eTerrainCategory_MAX];
+    static int sDoubleHammerBonus[eTerrainCategory_MAX];
+
     MoMGameBase* m_game;
     MoMLocation m_location;
 };

@@ -1006,7 +1006,7 @@ QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context)
     ptree->appendChild("m_Plane", new QMoMTreeItemModel<ePlane>(&rhs->m_Plane));
     ptree->appendChild("m_Owner", new QMoMTreeItemModel<ePlayer>(&rhs->m_Owner));
     ptree->appendChild("m_Size", new QMoMTreeItemModel<eCity_Size>(&rhs->m_Size));
-    ptree->appendChild("m_Population", new QMoMTreeItemModel<uint8_t>(&rhs->m_Population));
+    ptree->appendChild("m_Population", new QMoMTreeItemModel<int8_t>(&rhs->m_Population));
     ptree->appendChild("m_Number_of_farmers_allocated", new QMoMTreeItemModel<int8_t>(&rhs->m_Number_of_farmers_allocated));
     ptree->appendChild("m_Building_sold", new QMoMTreeItemModel<eYesNo8>(&rhs->m_Building_sold));
     ptree->appendChild("m_Unk_17", new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_17));
@@ -1253,7 +1253,7 @@ QMoMTreeItemModelBase* constructTreeItem(Difficulty_Table* rhs, const QString& c
     ptree->appendChild("m_City_Mana_multiplier", new QMoMTreeItemModel<int16_t>(&rhs->m_City_Mana_multiplier));
     ptree->appendChild("m_City_Research_multiplier", new QMoMTreeItemModel<int16_t>(&rhs->m_City_Research_multiplier));
     ptree->appendChild("m_City_Food_multiplier", new QMoMTreeItemModel<int16_t>(&rhs->m_City_Food_multiplier));
-    ptree->appendChild("m_City_Maintenance_multiplier", new QMoMTreeItemModel<int16_t>(&rhs->m_City_Maintenance_multiplier));
+    ptree->appendChild("m_Maintenance_multiplier", new QMoMTreeItemModel<int16_t>(&rhs->m_Maintenance_multiplier));
     return ptree;
 }
 
@@ -3105,24 +3105,24 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
           ptreem_ItemPower_data->appendTree(constructTreeItem(&rhs->m_ItemPower_data[i], oss.str().c_str()), "");
     }
     QMoMTreeItemModelBase* ptreem_Offsets_UnitLevelNames = ptree;
-    if (6 > 3)
+    if (gMAX_LEVELS_UNIT > 3)
     {
         ptreem_Offsets_UnitLevelNames = new QMoMTreeItemModelBase("m_Offsets_UnitLevelNames");
         ptree->appendTree(ptreem_Offsets_UnitLevelNames, "");
     }
-    for (unsigned i = 0; i < 6; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_UNIT; ++i)
     {
           std::ostringstream oss;
           oss << "m_Offsets_UnitLevelNames[" << i << "]";
           ptreem_Offsets_UnitLevelNames->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint16_t>(&rhs->m_Offsets_UnitLevelNames[i]));
     }
     QMoMTreeItemModelBase* ptreem_Offsets_HeroLevelNames = ptree;
-    if (9 > 3)
+    if (gMAX_LEVELS_HERO > 3)
     {
         ptreem_Offsets_HeroLevelNames = new QMoMTreeItemModelBase("m_Offsets_HeroLevelNames");
         ptree->appendTree(ptreem_Offsets_HeroLevelNames, "");
     }
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_HERO; ++i)
     {
           std::ostringstream oss;
           oss << "m_Offsets_HeroLevelNames[" << i << "]";
@@ -4010,12 +4010,12 @@ QMoMTreeItemModelBase* constructTreeItem(MoMDataSegment* rhs, const QString& con
     ptree->appendTree(constructTreeItem(&rhs->m_addr_events, "m_addr_events"), "");
     ptree->appendChild("m_nr_units_in_overland_stack", new QMoMTreeItemModel<int16_t>(&rhs->m_nr_units_in_overland_stack));
     QMoMTreeItemModelBase* ptreem_units_in_overland_stack = ptree;
-    if (9 > 3)
+    if (gMAX_UNITS_IN_LOCATION > 3)
     {
         ptreem_units_in_overland_stack = new QMoMTreeItemModelBase("m_units_in_overland_stack");
         ptree->appendTree(ptreem_units_in_overland_stack, "");
     }
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_UNITS_IN_LOCATION; ++i)
     {
           std::ostringstream oss;
           oss << "m_units_in_overland_stack[" << i << "]";

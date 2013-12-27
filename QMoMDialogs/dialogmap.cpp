@@ -172,7 +172,7 @@ void DialogMap::addCitySubtree(QTreeWidget *treeWidget, MoMTerrain &momTerrain)
 //        ptree->appendChild("m_City_Name", new QMoMTreeItem<char[14]>(rhs->m_City_Name));
         qtreeItem->addChild(new EnumTreeItem<eRace>(m_game, "Race", &city->m_Race, eRace_MAX));
         qtreeItem->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &city->m_Owner, ePlayer_MAX));
-        qtreeItem->addChild(new NumberTreeItem<uint8_t>(m_game, "Population", &city->m_Population));
+        qtreeItem->addChild(new NumberTreeItem<int8_t>(m_game, "Population", &city->m_Population));
         qtreeItem->addChild(new EnumTreeItem<eCity_Size>(m_game, "Size", &city->m_Size, eCity_Size_MAX));
 
 //        ptree->appendChild("m_Number_of_farmers_allocated", new QMoMTreeItem<uint8_t>(&rhs->m_Number_of_farmers_allocated));

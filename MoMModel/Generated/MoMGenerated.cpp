@@ -432,6 +432,7 @@ std::ostream& operator<<(std::ostream& os, const eEvent& rhs)
 {
     switch (rhs)
     {
+    case EVENT_None: os << "EVENT_None"; break;
     case EVENT_Meteor: os << "EVENT_Meteor"; break;
     case EVENT_Gift_from_the_Gods: os << "EVENT_Gift_from_the_Gods"; break;
     case EVENT_Disjunction: os << "EVENT_Disjunction"; break;
@@ -2885,6 +2886,9 @@ std::ostream& operator<<(std::ostream& os, const eTerrainCategory& rhs)
     case TERRAINCATEGORY_Plains: os << "TERRAINCATEGORY_Plains"; break;
     case TERRAINCATEGORY_River: os << "TERRAINCATEGORY_River"; break;
     case TERRAINCATEGORY_Volcano: os << "TERRAINCATEGORY_Volcano"; break;
+    case TERRAINCATEGORY_SorceryNode: os << "TERRAINCATEGORY_SorceryNode"; break;
+    case TERRAINCATEGORY_NatureNode: os << "TERRAINCATEGORY_NatureNode"; break;
+    case TERRAINCATEGORY_ChaosNode: os << "TERRAINCATEGORY_ChaosNode"; break;
     case eTerrainCategory_MAX: os << "eTerrainCategory_MAX"; break;
     default: os << "<Unknown eTerrainCategory>"; break;
     }
@@ -2944,12 +2948,6 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case forest3: os << "forest3"; break;
     case river1_first: os << "river1_first"; break;
     case river1_last: os << "river1_last"; break;
-    case shore2_first: os << "shore2_first"; break;
-    case shore2_last: os << "shore2_last"; break;
-    case shore3_first: os << "shore3_first"; break;
-    case shore3_last: os << "shore3_last"; break;
-    case river2_first: os << "river2_first"; break;
-    case river2_last: os << "river2_last"; break;
     case mountain2_first: os << "mountain2_first"; break;
     case mountain2_last: os << "mountain2_last"; break;
     case hills2_first: os << "hills2_first"; break;
@@ -2958,6 +2956,10 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case desert5_last: os << "desert5_last"; break;
     case shore4_first: os << "shore4_first"; break;
     case shore4_last: os << "shore4_last"; break;
+    case river2_first: os << "river2_first"; break;
+    case river2_last: os << "river2_last"; break;
+    case shore5_first: os << "shore5_first"; break;
+    case shore5_last: os << "shore5_last"; break;
     case ocean2: os << "ocean2"; break;
     case ocean3: os << "ocean3"; break;
     case tundra4_first: os << "tundra4_first"; break;
@@ -4037,7 +4039,7 @@ std::ostream& operator<<(std::ostream& os, const City& rhs)
     os << "m_Plane=" << rhs.m_Plane << "\n";
     os << "m_Owner=" << rhs.m_Owner << "\n";
     os << "m_Size=" << rhs.m_Size << "\n";
-    os << "m_Population=" << (unsigned)rhs.m_Population << " 0x" << std::hex << (unsigned)rhs.m_Population << std::dec << "\n";
+    os << "m_Population=" << (int)rhs.m_Population << " 0x" << std::hex << (int)rhs.m_Population << std::dec << "\n";
     os << "m_Number_of_farmers_allocated=" << (int)rhs.m_Number_of_farmers_allocated << " 0x" << std::hex << (int)rhs.m_Number_of_farmers_allocated << std::dec << "\n";
     os << "m_Building_sold=" << rhs.m_Building_sold << "\n";
     os << "m_Unk_17=" << (unsigned)rhs.m_Unk_17 << " 0x" << std::hex << (unsigned)rhs.m_Unk_17 << std::dec << "\n";
@@ -4190,7 +4192,7 @@ std::ostream& operator<<(std::ostream& os, const Difficulty_Table& rhs)
     os << "m_City_Mana_multiplier=" << rhs.m_City_Mana_multiplier << " 0x" << std::hex << rhs.m_City_Mana_multiplier << std::dec << "\n";
     os << "m_City_Research_multiplier=" << rhs.m_City_Research_multiplier << " 0x" << std::hex << rhs.m_City_Research_multiplier << std::dec << "\n";
     os << "m_City_Food_multiplier=" << rhs.m_City_Food_multiplier << " 0x" << std::hex << rhs.m_City_Food_multiplier << std::dec << "\n";
-    os << "m_City_Maintenance_multiplier=" << rhs.m_City_Maintenance_multiplier << " 0x" << std::hex << rhs.m_City_Maintenance_multiplier << std::dec << "\n";
+    os << "m_Maintenance_multiplier=" << rhs.m_Maintenance_multiplier << " 0x" << std::hex << rhs.m_Maintenance_multiplier << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -5291,13 +5293,13 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     }
     os << ")\n";
     os << "m_Offsets_UnitLevelNames=(\n";
-    for (unsigned i = 0; i < 6; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_UNIT; ++i)
     {
         os << "[" << i << "] " << rhs.m_Offsets_UnitLevelNames[i] << " 0x" << std::hex << rhs.m_Offsets_UnitLevelNames[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Offsets_HeroLevelNames=(\n";
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_LEVELS_HERO; ++i)
     {
         os << "[" << i << "] " << rhs.m_Offsets_HeroLevelNames[i] << " 0x" << std::hex << rhs.m_Offsets_HeroLevelNames[i] << std::dec << ",\n";
     }
@@ -5878,7 +5880,7 @@ std::ostream& operator<<(std::ostream& os, const MoMDataSegment& rhs)
     os << "m_addr_events=" << rhs.m_addr_events << "\n";
     os << "m_nr_units_in_overland_stack=" << rhs.m_nr_units_in_overland_stack << " 0x" << std::hex << rhs.m_nr_units_in_overland_stack << std::dec << "\n";
     os << "m_units_in_overland_stack=(\n";
-    for (unsigned i = 0; i < 9; ++i)
+    for (unsigned i = 0; i < gMAX_UNITS_IN_LOCATION; ++i)
     {
         os << "[" << i << "] " << rhs.m_units_in_overland_stack[i] << " 0x" << std::hex << rhs.m_units_in_overland_stack[i] << std::dec << ",\n";
     }
