@@ -7,19 +7,19 @@
 
 #include <qgraphicsitem.h>
 #include <qgraphicsscene.h>
+#include <QMessageBox>
 
 #include "DialogAddUnit.h"
 #include "ui_DialogAddUnit.h"
 
-#include <MoMGenerated.h>
-#include <MoMUnit.h>
-#include <MoMUtility.h>
+#include "MoMController.h"
+#include "MoMGenerated.h"
+#include "MoMUnit.h"
+#include "MoMUtility.h"
 #include "QMoMAnimationTile.h"
 #include "QMoMResources.h"
 #include "QMoMSettings.h"
 #include "QMoMSharedPointers.h"
-
-#include "MainWindow.h"
 
 namespace MoM
 {
@@ -56,11 +56,6 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     m_pictureHeight = pixmapPicture.height() * 4 / 3;
 
     ui->graphicsView_Unit->setScene(m_sceneUnit);
-
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-	slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 DialogAddUnit::~DialogAddUnit()
@@ -612,14 +607,24 @@ void DialogAddUnit::on_comboBox_Unit_currentIndexChanged(int index)
 	update();
 }
 
-void MoM::DialogAddUnit::on_pushButton_Summon_clicked()
+void DialogAddUnit::on_pushButton_Summon_clicked()
 {
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 == controller)
-        return;
-
     MoM::eUnit_Type unitType = static_cast<MoM::eUnit_Type>(ui->comboBox_Unit->currentIndex() - 1);
-    controller->addUnit(unitType);
+
+    MoMController momController(m_game.data());
+    bool ok = momController.addUnit(MoM::PLAYER_YOU, unitType);
+    if (!ok)
+    {
+        (void)QMessageBox::warning(this,
+            tr("Summon"),
+            tr("Failed to summon %0: %1").arg(prettyQStr(unitType)).arg(momController.errorString().c_str()));
+    }
+    else
+    {
+        (void)QMessageBox::information(this,
+            tr("Summon"),
+            tr("Summoned %0 to your summoning circle").arg(prettyQStr(unitType)));
+    }
 }
 
 void DialogAddUnit::slot_gameChanged(const QMoMGamePtr& game)

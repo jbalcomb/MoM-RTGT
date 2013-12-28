@@ -243,11 +243,6 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
         }
     }
 
-    if (ok)
-    {
-        ok = controller->commitMemory();
-    }
-
     if (!ok)
     {
         statusBar()->showMessage(tr("Failed to repop Lairs"));

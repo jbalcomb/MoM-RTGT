@@ -22,8 +22,6 @@ public:
 
     bool openGame(std::auto_ptr<MoMProcess>& momProcess);
 
-    bool commitChanges();
-
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
 

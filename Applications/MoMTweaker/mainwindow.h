@@ -35,9 +35,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void addUnit(MoM::eUnit_Type unitType);
     void applyBuildQueues();
-    bool commitMemory();
     bool refreshMemory();
     void update();
 

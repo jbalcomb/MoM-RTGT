@@ -81,7 +81,6 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
     if ((unsigned)unitType >= eUnit_Type_MAX)
     {
@@ -90,7 +89,7 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
         return false;
     }
 
-    Wizard* wizard = game.getWizard(playerNr);
+    Wizard* wizard = m_game->getWizard(playerNr);
     if (0 == wizard)
 	{
 		m_errorString = "Wizard data of player '" + toStr(playerNr) + "' is not accessible";
@@ -103,7 +102,7 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
     int unitNr = -1;
     bool ok = createUnit(unitNr);
 
-    Unit* unit = game.getUnit(unitNr);
+    Unit* unit = m_game->getUnit(unitNr);
     if (0 == unit)
 	{
 		m_errorString = "Failed to create a unit for unitNr '" + toStr(unitNr) + "'";
@@ -113,7 +112,7 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 	// Initialize the unit to be on the board
 	if (ok) 
 	{
-		assert(unitNr == game.getNrUnits());
+        assert(unitNr == m_game->getNrUnits());
 
 		unit->m_Unit_Type = unitType;
 		// TODO: Check if there is space
@@ -137,7 +136,7 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 	// Put the unit in the game
     if (ok)
     {
-        game.setNrUnits(unitNr + 1);
+        ok = m_game->setNrUnits(unitNr + 1);
     }
 
     return ok;
@@ -198,9 +197,8 @@ bool MoMController::applyBuildingQueue(int cityNr)
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
-    City* city = game.getCity(cityNr);
+    City* city = m_game->getCity(cityNr);
     if (0 == city)
 	{
 		m_errorString = "Cannot get the data for to city  '" + toStr(cityNr) + "'";
@@ -404,12 +402,11 @@ bool MoMController::applyBuildingQueue(ePlayer playerNr)
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
     bool changed = false;
-    for (int cityNr = 0; cityNr < game.getNrCities(); ++cityNr)
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
     {
-        const City* city = game.getCity(cityNr);
+        const City* city = m_game->getCity(cityNr);
         if (0 == city)
             break;
 
@@ -634,19 +631,18 @@ bool MoMController::createUnit(int& unitNr)
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
-    if (game.getNrUnits() < 0
-        || game.getNrUnits() >= (int)gMAX_UNITS)
+    if (m_game->getNrUnits() < 0
+        || m_game->getNrUnits() >= (int)gMAX_UNITS)
     {
         std::cout << "Cannot create a unit because NrUnits is out-of-range" << std::endl;
-		m_errorString = "Cannot create a unit because NrUnits '" + toStr(game.getNrUnits()) + "' is out-of-range";
+        m_errorString = "Cannot create a unit because NrUnits '" + toStr(m_game->getNrUnits()) + "' is out-of-range";
         return false;
     }
 
-    unitNr = game.getNrUnits();
+    unitNr = m_game->getNrUnits();
 
-    Unit* unit = game.getUnit(unitNr);
+    Unit* unit = m_game->getUnit(unitNr);
     if (0 == unit)
 	{
 		m_errorString = "Cannot retrieve data for unit '" + toStr(unitNr) + "'";
@@ -692,11 +688,10 @@ City* MoMController::findCityAtLocation(const MoMLocation &location)
 
     if (0 == m_game)
         return value;
-    MoMGameBase& game = *m_game;
 
-    for (int i = 0; i < game.getNrCities(); ++i)
+    for (int i = 0; i < m_game->getNrCities(); ++i)
     {
-        City* city = game.getCity(i);
+        City* city = m_game->getCity(i);
         if (0 == city)
             break;
         if (location == MoMLocation(*city, MoMLocation::MAP_overland))
@@ -714,11 +709,10 @@ Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
 
     if (0 == m_game)
         return value;
-    MoMGameBase& game = *m_game;
 
     for (size_t i = 0; i < gMAX_NODES; ++i)
     {
-        Node_Attr* nodeAttr = game.getNodeAttr(i);
+        Node_Attr* nodeAttr = m_game->getNodeAttr(i);
         if (0 == nodeAttr)
             break;
         if (location == MoMLocation(*nodeAttr, MoMLocation::MAP_overland))
@@ -736,7 +730,6 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
     // EXTRA INPUT:
 	// TODO: Retrieve heroName from game
@@ -751,16 +744,16 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
     assert((unsigned)heroNr < gMAX_HERO_TYPES);
     assert((unsigned)heroSlotNr < gMAX_HIRED_HEROES);
 
-	Unit_Type_Data* unitTypeData = game.getUnitTypeData(heroNr);
+    const Unit_Type_Data* unitTypeData = m_game->getUnitTypeData(heroNr);
     if (0 == unitTypeData)
         return false;
-    Hero_stats* heroStats = game.getHeroStats(playerNr, heroNr);
+    Hero_stats* heroStats = m_game->getHeroStats(playerNr, heroNr);
     if (0 == heroStats)
         return false;
-    Unit* unit = game.getUnit(unitNr);
+    Unit* unit = m_game->getUnit(unitNr);
     if (0 == unit)
         return false;
-    Wizard* wizard = game.getWizard(playerNr);
+    Wizard* wizard = m_game->getWizard(playerNr);
     if (0 == wizard)
         return false;
 
@@ -771,7 +764,7 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
 	//		 2. Bury the old hero
 
 	// Retrieve the slot types
-    game.getHeroSlotTypes(unitTypeData->m_Building2_or_HeroType, heroSlotTypes);
+    m_game->getHeroSlotTypes(unitTypeData->m_Building2_or_HeroType, heroSlotTypes);
 
     // Check if hero slot is free or search for first free slot
     if (-1 != wizard->m_Heroes_hired_by_wizard[heroSlotNr].m_Unit_Nr)
@@ -858,6 +851,16 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
     // Make hero active in your army
     heroStats->m_Level_Status = HEROLEVELSTATUS_Active_in_Wizards_army;
 
+    // Commit
+    if (!m_game->commitData(unit, unit, sizeof(*unit))
+        || !m_game->commitData(&hiredHero, &hiredHero, sizeof(hiredHero))
+        || !m_game->commitData(&heroStats->m_Level_Status, &heroStats->m_Level_Status, sizeof(heroStats->m_Level_Status)))
+    {
+        m_errorString = "Failed to commit to game";
+        std::cout << m_errorString << std::endl;
+        return false;
+    }
+
     return true;
 }
 
@@ -886,11 +889,10 @@ bool MoMController::repopLairs(bool maxOut)
 
     if (0 == m_game)
         return false;
-    MoMGameBase& game = *m_game;
 
     for (unsigned lairNr = 0; lairNr < gMAX_NODES_LAIRS_TOWERS; ++lairNr)
     {
-        Tower_Node_Lair* lair = game.getLair(lairNr);
+        Tower_Node_Lair* lair = m_game->getLair(lairNr);
         if (0 == lair)
             break;
 
@@ -925,7 +927,9 @@ bool MoMController::repopLairs(bool maxOut)
         lair->m_Status = LAIRSTATUS_intact;
     }
 
-    return true;
+    bool ok = m_game->commitData(m_game->getLair(0), m_game->getLair(0), gMAX_NODES_LAIRS_TOWERS * sizeof(Tower_Node_Lair));
+
+    return ok;
 }
 
 }

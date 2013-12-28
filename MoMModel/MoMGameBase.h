@@ -189,11 +189,12 @@ public:
             return 0;
         return *getNumber_of_Battle_Units();
     }
-    void setNrBattleUnits(int value)
+    bool setNrBattleUnits(int value)
     {
         if (0 == getNumber_of_Battle_Units())
-            return;
-        *getNumber_of_Battle_Units() = value;
+            return false;
+        uint16_t newValue = (uint16_t)value;
+        return commitData(getNumber_of_Battle_Units(), &newValue, sizeof(*getNumber_of_Battle_Units()));
     }
     int getNrCities()
     {
@@ -201,11 +202,12 @@ public:
             return 0;
         return *getNumber_of_Cities();
     }
-    void setNrCities(int value)
+    bool setNrCities(int value)
     {
         if (0 == getNumber_of_Cities())
-            return;
-        *getNumber_of_Cities() = value;
+            return false;
+        uint16_t newValue = (uint16_t)value;
+        return commitData(getNumber_of_Cities(), &newValue, sizeof(*getNumber_of_Cities()));
     }
     int getNrItemDataLbx();
     int getNrItemPowLbx();
@@ -245,11 +247,12 @@ public:
             return 0;
         return *getNumber_of_Units();
     }
-    void setNrUnits(int value)
+    bool setNrUnits(int value)
     {
         if (0 == getNumber_of_Units())
-            return;
-        *getNumber_of_Units() = value;
+            return false;
+        uint16_t newValue = (uint16_t)value;
+        return commitData(getNumber_of_Units(), &newValue, sizeof(*getNumber_of_Units()));
     }
     int getNrWizards()
     {
@@ -257,11 +260,12 @@ public:
             return 0;
         return *getNumber_of_Wizards();
     }
-    void setNrWizards(int value)
+    bool setNrWizards(int value)
     {
         if (0 == getNumber_of_Wizards())
-            return;
-        *getNumber_of_Wizards() = value;
+            return false;
+        uint16_t newValue = (uint16_t)value;
+        return commitData(getNumber_of_Wizards(), &newValue, sizeof(*getNumber_of_Wizards()));
     }
 
     ePlayer getPlayerNr(const Hero_stats* heroStats)

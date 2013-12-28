@@ -148,46 +148,6 @@ QTreeWidgetItem* MainWindow::addTreeFeature(QTreeWidgetItem* parent,
     return qtreeFeature;
 }
 
-void MainWindow::addUnit(MoM::eUnit_Type unitType)
-{
-    if (m_game.isNull())
-    {
-        (void)QMessageBox::warning(this,
-            tr("Summon"),
-            tr("There is no game to operate on"));
-        return;
-    }
-
-    bool ok = refreshMemory();
-
-    if (ok)
-    {
-        MoM::MoMController momController(m_game.data());
-        ok = momController.addUnit(MoM::PLAYER_YOU, unitType);
-        if (!ok)
-        {
-            (void)QMessageBox::warning(this,
-                tr("Summon"),
-				tr("Failed to summon %0: %1").arg(prettyQStr(unitType)).arg(momController.errorString().c_str()));
-        }
-    }
-
-    if (ok)
-    {
-        ok = commitMemory();
-    }
-
-    if (!ok)
-    {
-        statusBar()->showMessage(tr("Failed to summon"));
-    }
-    else
-    {
-        statusBar()->showMessage(tr("Summon complete"));
-		emit signal_gameUpdated();
-    }
-}
-
 void MainWindow::applyBuildQueues()
 {
     if (m_game.isNull())
@@ -210,23 +170,6 @@ void MainWindow::applyBuildQueues()
         }
     }
 
-}
-
-bool MainWindow::commitMemory()
-{
-    bool ok = true;
-    QMoMGameMemoryPtr memGame = m_game.dynamicCast<MoM::MoMGameMemory>();
-    if (0 != memGame)
-    {
-        ok = memGame->commitChanges();
-        if (!ok)
-        {
-            (void)QMessageBox::warning(this, 
-                tr("Commit memory"),
-                tr("Failed to commit the data to process memory"));
-        }
-     }
-    return ok;
 }
 
 bool MainWindow::refreshMemory()
@@ -463,11 +406,15 @@ void MainWindow::on_pushButton_AddUnit_clicked()
 {
     MoM::DialogAddUnit* dialog = new MoM::DialogAddUnit(this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
+    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Connect the item model UnitModel to the dialog
     QObject::connect(&m_UnitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), dialog, SLOT(slot_unitChanged(QMoMUnitPtr)));
 
-    dialog->show();
+    dialog->slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 void MainWindow::on_pushButton_Calculator_clicked()

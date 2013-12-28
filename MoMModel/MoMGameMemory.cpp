@@ -123,32 +123,6 @@ void MoMGameMemory::closeGame() throw()
     }
 }
 
-bool MoMGameMemory::commitChanges()
-{
-    if (0 == m_process.get())
-        return false;
-
-    MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
-    if (0 == pMoMDataSegment)
-        return false;
-
-    // TODO: Not everything is written, but in the current usage only contents of Lairs (Repop Lairs) or Cities (Build queues) are needed
-    bool ok = true;
-    if (ok) ok = m_process->writeData(this->getCities(), gMAX_CITIES * sizeof(City));
-    if (ok) ok = m_process->writeData(this->getNumber_of_Cities(), sizeof(uint16_t));
-    if (ok) ok = m_process->writeData(this->getUnit_Types(), eUnit_Type_MAX * sizeof(MoM::Unit_Type_Data));
-    if (ok) ok = m_process->writeData(this->getLairs(), gMAX_NODES_LAIRS_TOWERS * sizeof(Tower_Node_Lair));
-    for (ePlayer playerNr = (ePlayer)0; (unsigned)playerNr < gMAX_VALID_WIZARDS; inc(playerNr))
-    {
-        if (ok) ok = m_process->writeData(this->getList_Hero_stats(playerNr), sizeof(List_Hero_stats));
-    }
-    if (ok) ok = m_process->writeData(this->getUnits(), gMAX_UNITS * sizeof(Unit));
-    if (ok) ok = m_process->writeData(this->getNumber_of_Units(), sizeof(uint16_t));
-    if (ok) ok = m_process->writeData(this->getWizards(), gMAX_VALID_WIZARDS * sizeof(Wizard));
-
-    return ok;
-}
-
 bool MoMGameMemory::commitData(void* ptr, const void* pNewValue, size_t size)
 {
     bool ok = true;
