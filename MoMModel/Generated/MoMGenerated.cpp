@@ -2889,6 +2889,7 @@ std::ostream& operator<<(std::ostream& os, const eTerrainCategory& rhs)
     case TERRAINCATEGORY_SorceryNode: os << "TERRAINCATEGORY_SorceryNode"; break;
     case TERRAINCATEGORY_NatureNode: os << "TERRAINCATEGORY_NatureNode"; break;
     case TERRAINCATEGORY_ChaosNode: os << "TERRAINCATEGORY_ChaosNode"; break;
+    case TERRAINCATEGORY_Lake: os << "TERRAINCATEGORY_Lake"; break;
     case eTerrainCategory_MAX: os << "eTerrainCategory_MAX"; break;
     default: os << "<Unknown eTerrainCategory>"; break;
     }
@@ -2946,8 +2947,12 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case tundra3: os << "tundra3"; break;
     case forest2: os << "forest2"; break;
     case forest3: os << "forest3"; break;
-    case river1_first: os << "river1_first"; break;
-    case river1_last: os << "river1_last"; break;
+    case river1a_first: os << "river1a_first"; break;
+    case river1a_last: os << "river1a_last"; break;
+    case lake1_first: os << "lake1_first"; break;
+    case lake1_last: os << "lake1_last"; break;
+    case river2a_first: os << "river2a_first"; break;
+    case river2a_last: os << "river2a_last"; break;
     case mountain2_first: os << "mountain2_first"; break;
     case mountain2_last: os << "mountain2_last"; break;
     case hills2_first: os << "hills2_first"; break;
@@ -2956,12 +2961,11 @@ std::ostream& operator<<(std::ostream& os, const eTerrainType& rhs)
     case desert5_last: os << "desert5_last"; break;
     case shore4_first: os << "shore4_first"; break;
     case shore4_last: os << "shore4_last"; break;
-    case river2_first: os << "river2_first"; break;
-    case river2_last: os << "river2_last"; break;
+    case river3_first: os << "river3_first"; break;
+    case river3_last: os << "river3_last"; break;
     case shore5_first: os << "shore5_first"; break;
     case shore5_last: os << "shore5_last"; break;
     case ocean2: os << "ocean2"; break;
-    case ocean3: os << "ocean3"; break;
     case tundra4_first: os << "tundra4_first"; break;
     case tundra4_last: os << "tundra4_last"; break;
     case eTerrainType_MAX: os << "eTerrainType_MAX"; break;
@@ -4058,11 +4062,10 @@ std::ostream& operator<<(std::ostream& os, const City& rhs)
     os << "m_Mana_cr=" << (int)rhs.m_Mana_cr << " 0x" << std::hex << (int)rhs.m_Mana_cr << std::dec << "\n";
     os << "m_Research=" << (int)rhs.m_Research << " 0x" << std::hex << (int)rhs.m_Research << std::dec << "\n";
     os << "m_Food_Produced=" << (int)rhs.m_Food_Produced << " 0x" << std::hex << (int)rhs.m_Food_Produced << std::dec << "\n";
-    os << "m_Road_Connection_GUESS=" << (int)rhs.m_Road_Connection_GUESS << " 0x" << std::hex << (int)rhs.m_Road_Connection_GUESS << std::dec << "\n";
-    os << "m_Unk_66=(\n";
-    for (unsigned i = 0; i < 12; ++i)
+    os << "m_bitsetConnectedCities=(\n";
+    for (unsigned i = 0; i < 13; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Unk_66[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_66[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_bitsetConnectedCities[i] << " 0x" << std::hex << (unsigned)rhs.m_bitsetConnectedCities[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "}";

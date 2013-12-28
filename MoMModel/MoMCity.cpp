@@ -39,6 +39,29 @@ int MoMCity::calcBasicFood() const
     return basicFood;
 }
 
+int MoMCity::calcGoldBonus() const
+{
+    class CountGoldBonus
+    {
+    public:
+        CountGoldBonus(bool minersGuild, bool dwarven)
+            : m_minersGuild(minersGuild), m_dwarven(dwarven), goldBonus(0) {}
+        bool operator()(const MoMTerrain& terrain)
+        {
+            goldBonus += terrain.getGoldBonus(m_minersGuild, m_dwarven);
+            return false;
+        }
+        bool m_minersGuild;
+        bool m_dwarven;
+        int goldBonus;
+    };
+
+    CountGoldBonus count(isBuildingPresent(BUILDING_Miners_Guild), (m_city->m_Race == RACE_Dwarven));
+    enumerateTerrain(count);
+
+    return count.goldBonus;
+}
+
 int MoMCity::calcProductionBonusPercentage() const
 {
     class CountProductionPercentage
@@ -103,6 +126,69 @@ int MoMCity::calcFoodProduced() const
     return food;
 }
 
+int MoMCity::calcGoldProduced() const
+{
+    if (m_city->m_Population <= 0)
+        return 0;
+
+    int goldPercentage = 0;
+
+    goldPercentage += calcTradeBonus();
+    goldPercentage += calcRoadBonus();
+
+    if (m_city->m_Race == RACE_Nomad)
+    {
+        goldPercentage += 50;
+    }
+
+    if (m_city->m_Population * 3 < goldPercentage)
+    {
+        goldPercentage = m_city->m_Population * 3;
+    }
+
+    if (isBuildingPresent(BUILDING_Merchants_Guild))
+    {
+        goldPercentage += 100;
+    }
+    if (isBuildingPresent(BUILDING_Bank))
+    {
+        goldPercentage += 50;
+    }
+    if (isBuildingPresent(BUILDING_Marketplace))
+    {
+        goldPercentage += 50;
+    }
+    if (OWNER_None != m_city->m_City_Enchantments.Prosperity)
+    {
+        goldPercentage += 100;
+    }
+
+    int productiveCitizens = m_city->m_Population - calcNrRebels();
+    int goldIncome = productiveCitizens;
+    if (m_city->m_Owner != PLAYER_NEUTRAL)
+    {
+        Wizard* wizard = m_game->getWizard(m_city->m_Owner);
+        goldIncome = productiveCitizens * (int)wizard->m_Tax_Rate / 2;
+    }
+    if (m_city->m_Race == RACE_Dwarven)
+    {
+        goldIncome *= 2;
+    }
+
+    goldIncome += calcGoldBonus();
+
+    goldIncome = goldIncome * (100 + goldPercentage) / 100;
+
+    if (m_city->m_Producing == PRODUCING_Trade_Goods)
+    {
+        goldIncome += m_city->m_Hammers / 2;
+    }
+
+    goldIncome = Min(255, goldIncome);
+
+    return goldIncome;
+}
+
 int MoMCity::calcHammersProduced() const
 {
     if (m_city->m_Population <= 0)
@@ -150,7 +236,7 @@ int MoMCity::calcHammersProduced() const
     return hammers;
 }
 
-int MoMCity::calcCurrentMaxPop() const
+int MoMCity::calcMaxPopCurrent() const
 {
     int maxPop = calcBasicFood();
 
@@ -167,7 +253,7 @@ int MoMCity::calcCurrentMaxPop() const
     return maxPop;
 }
 
-int MoMCity::calcTopMaxPop() const
+int MoMCity::calcMaxPopTop() const
 {
     int maxPop = calcBasicFood();
     maxPop += 2;    // Granary
@@ -317,6 +403,83 @@ int MoMCity::calcNrWorkers() const
     return nrWorkers;
 }
 
+int MoMCity::calcRoadBonus() const
+{
+    // TODO: Protect array bounds
+    int roadBonus = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        if (cityNr == getCityNr())
+            continue;
+        unsigned bitmask = (1U << (cityNr % 8));
+        if (0 == (m_city->m_bitsetConnectedCities[cityNr / 8] & bitmask))
+            continue;
+        const City* connectedCity = m_game->getCity(cityNr);
+        if (connectedCity->m_Race == m_city->m_Race)
+        {
+            roadBonus += connectedCity->m_Population / 2;
+        }
+        else
+        {
+            roadBonus += connectedCity->m_Population;
+        }
+    }
+
+    roadBonus = Min(m_city->m_Population * 3, roadBonus);
+
+    return roadBonus;
+}
+
+int MoMCity::calcTradeBonus() const
+{
+    bool onRiver = false;
+    bool atSea = false;
+    for (int dy = -1; dy <= 1; ++dy)
+    {
+        for (int dx = -1; dx <= 1; ++dx)
+        {
+            MoMLocation location(
+                        (m_city->m_XPos + dx + gMAX_MAP_COLS) % gMAX_MAP_COLS,
+                        (m_city->m_YPos + dy + gMAX_MAP_ROWS) % gMAX_MAP_ROWS,
+                        m_city->m_Plane,
+                        MoMLocation::MAP_overland);
+            MoMTerrain terrain(m_game, location);
+            if ((dx == 0) && (dy == 0))
+            {
+                onRiver = terrain.isRiver();
+            }
+            else
+            {
+                atSea |= terrain.isSea();
+            }
+        }
+    }
+
+    int tradeBonus = 0;
+    if (onRiver)
+    {
+        if (atSea)
+        {
+            // City on river mouth
+            tradeBonus = 30;
+        }
+        else
+        {
+            // City on river
+            tradeBonus = 20;
+        }
+    }
+    else
+    {
+        if (atSea)
+        {
+            // City at sea
+            tradeBonus = 10;
+        }
+    }
+    return tradeBonus;
+}
+
 bool MoMCity::canProduce(eBuilding building) const
 {
     // Cannot build what is already there
@@ -400,6 +563,11 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
 const City *MoMCity::getCity() const
 {
     return m_city;
+}
+
+int MoMCity::getCityNr() const
+{
+    return (int)(m_city - m_game->getCity(0));
 }
 
 template<typename Functor>
@@ -507,7 +675,6 @@ int MoMCity::getTimeToComplete(eProducing producing) const
 
 int MoMCity::getUnitReductionPercentage() const
 {
-    // TODO: Count for half (?) if on terrain shared with another city
     // TODO: Refactor to MoMTerrain::getUnitReduction()
     class CountUnitReduction
     {
@@ -516,15 +683,20 @@ int MoMCity::getUnitReductionPercentage() const
         bool operator()(const MoMTerrain& terrain)
         {
             if (terrain.getChanges().corruption)
-            {
-            }
-            else if (terrain.getBonus() == DEPOSIT_Iron_Ore)
+                return false;
+
+            if (terrain.getBonus() == DEPOSIT_Iron_Ore)
             {
                 reduction += 5;
             }
             else if (terrain.getBonus() == DEPOSIT_Coal)
             {
                 reduction += 10;
+            }
+
+            if (terrain.isSharedBetweenCities())
+            {
+                reduction /= 2;
             }
             return false;
         }

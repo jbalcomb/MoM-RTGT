@@ -134,7 +134,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
     QStringList labelsCities;
     labelsCities << "Nr"
-           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
+           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Calc" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
            << "Time" << "Garrison" << "Buy";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
@@ -192,8 +192,8 @@ void DialogBuildingQueues::update()
             continue;
         MoMCity momCity(m_game.data(), city);
 
-        int curMaxPop = momCity.calcCurrentMaxPop();
-        int topMaxPop = momCity.calcTopMaxPop();
+        int curMaxPop = momCity.calcMaxPopCurrent();
+        int topMaxPop = momCity.calcMaxPopTop();
         QString population = QString("%0/%1").arg((int)(city->m_Population), 2).arg(curMaxPop);
         if (topMaxPop > curMaxPop)
         {
@@ -231,7 +231,10 @@ void DialogBuildingQueues::update()
                                             QMoMTableItemBase::formatNumber(city->m_Food_Produced - city->m_Population, SHOWNUMBER_alwaysPlus, 2)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
-                                            QMoMTableItemBase::formatNumber(city->m_Coins - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 2)));
+                                            QMoMTableItemBase::formatNumber(momCity.calcGoldProduced() - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+                                            QMoMTableItemBase::formatNumber(city->m_Coins - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
                                             QString("%0").arg(momCity.calcHammersProduced(), 3)));
@@ -321,7 +324,8 @@ void DialogBuildingQueues::on_tableWidget_Cities_cellChanged(int row, int column
         int8_t hammersProduced = momCity.calcHammersProduced();
         if (foodProduced != city->m_Food_Produced)
         {
-            qDebug() << QString("Updating food produced in city '%0' from %1 to %2").arg(city->m_City_Name).arg((int)city->m_Food_Produced).arg((int)foodProduced);
+            qDebug() << QString("Updating food produced in city '%0' from %1 to %2")
+                        .arg(city->m_City_Name).arg((int)city->m_Food_Produced).arg((int)foodProduced);
             if (!m_game->commitData(&city->m_Food_Produced, &foodProduced, sizeof(city->m_Food_Produced)))
             {
                 qDebug() << "Failed to commit food change";
@@ -329,7 +333,8 @@ void DialogBuildingQueues::on_tableWidget_Cities_cellChanged(int row, int column
         }
         if (hammersProduced != city->m_Hammers)
         {
-            qDebug() << QString("Updating hammers produced in city '%0' from %1 to %2").arg(city->m_City_Name).arg((int)city->m_Hammers).arg((int)hammersProduced);
+            qDebug() << QString("Updating hammers produced in city '%0' from %1 to %2")
+                        .arg(city->m_City_Name).arg((int)city->m_Hammers).arg((int)hammersProduced);
             if (!m_game->commitData(&city->m_Hammers, &hammersProduced, sizeof(city->m_Hammers)))
             {
                 qDebug() << "Failed to commit production change";

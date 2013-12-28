@@ -1025,18 +1025,17 @@ QMoMTreeItemModelBase* constructTreeItem(City* rhs, const QString& context)
     ptree->appendChild("m_Mana_cr", new QMoMTreeItemModel<int8_t>(&rhs->m_Mana_cr));
     ptree->appendChild("m_Research", new QMoMTreeItemModel<int8_t>(&rhs->m_Research));
     ptree->appendChild("m_Food_Produced", new QMoMTreeItemModel<int8_t>(&rhs->m_Food_Produced));
-    ptree->appendChild("m_Road_Connection_GUESS", new QMoMTreeItemModel<int8_t>(&rhs->m_Road_Connection_GUESS));
-    QMoMTreeItemModelBase* ptreem_Unk_66 = ptree;
-    if (12 > 3)
+    QMoMTreeItemModelBase* ptreem_bitsetConnectedCities = ptree;
+    if (13 > 3)
     {
-        ptreem_Unk_66 = new QMoMTreeItemModelBase("m_Unk_66");
-        ptree->appendTree(ptreem_Unk_66, "");
+        ptreem_bitsetConnectedCities = new QMoMTreeItemModelBase("m_bitsetConnectedCities");
+        ptree->appendTree(ptreem_bitsetConnectedCities, "");
     }
-    for (unsigned i = 0; i < 12; ++i)
+    for (unsigned i = 0; i < 13; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_66[" << i << "]";
-          ptreem_Unk_66->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_66[i]));
+          oss << "m_bitsetConnectedCities[" << i << "]";
+          ptreem_bitsetConnectedCities->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_bitsetConnectedCities[i]));
     }
     return ptree;
 }

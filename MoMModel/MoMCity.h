@@ -14,17 +14,22 @@ public:
     MoMCity(MoMGameBase* game, const City* city);
 
     int  calcBasicFood() const;
+    int  calcGoldBonus() const;
     int  calcProductionBonusPercentage() const;
     int  calcFoodProduced() const;
+    int  calcGoldProduced() const;
     int  calcHammersProduced() const;
-    int  calcCurrentMaxPop() const;
-    int  calcTopMaxPop() const;
+    int  calcMaxPopCurrent() const;
+    int  calcMaxPopTop() const;
     int  calcNrRebels() const;
     int  calcNrWorkers() const;
+    int  calcRoadBonus() const;
+    int  calcTradeBonus() const;
     bool canProduce(eBuilding building) const;
     bool canProduce(eProducing produce) const;
     bool canProduce(eUnit_Type unitTypeNr) const;
     const City* getCity() const;
+    int  getCityNr() const;
     int  getCostToBuy(eProducing producing = PRODUCING_None) const;
     int  getCostToProduce(eProducing producing = PRODUCING_None) const;
     int  getTimeToComplete(eProducing producing = PRODUCING_None) const;

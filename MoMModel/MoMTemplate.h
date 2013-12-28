@@ -2693,6 +2693,7 @@ enum eTerrainCategory
     TERRAINCATEGORY_SorceryNode = 13,
     TERRAINCATEGORY_NatureNode = 14,
     TERRAINCATEGORY_ChaosNode = 15,
+    TERRAINCATEGORY_Lake = 16,
 
     eTerrainCategory_MAX
 };
@@ -2741,29 +2742,26 @@ enum eTerrainType ENUMSIZE16
     tundra3 = 0x00B6,
     forest2 = 0x00B7,
     forest3 = 0x00B8,
-    river1_first = 0x00B9,              //  river mouth if adjacent to shore
-//    river1_last = 0x00C4,
-//    shore2_first = 0x00C5,              //  4 river joined large lake
-//    shore2_last = 0x00C8,
-//    shore3_first = 0x00C9,              //  32 river outlet to ocean
-//    shore3_last = 0x00E8,
-//    river2_first = 0x00E9,              //  river mouth if adjacent to shore
-    river1_last = 0x0102,
-    mountain2_first = 0x0103,           //  various joining configurations
+    river1a_first = 0x00B9,             //  12 river
+    river1a_last = 0x00C4,
+    lake1_first = 0x00C5,               //  36 lake
+    lake1_last = 0x00E8,
+    river2a_first = 0x00E9,             //  26 river
+    river2a_last = 0x0102,
+    mountain2_first = 0x0103,
     mountain2_last = 0x0112,
-    hills2_first = 0x0113,              //  various joining configurations
+    hills2_first = 0x0113,
     hills2_last = 0x0123,
-    desert5_first = 0x0124,             //  various joining configurations
+    desert5_first = 0x0124,
     desert5_last = 0x01C3,
-    shore4_first = 0x01C4,              //  various joining configurations, including some river outlets
+    shore4_first = 0x01C4,
     shore4_last = 0x01D3,
-    river2_first = 0x01D4,
-    river2_last = 0x01D8,
+    river3_first = 0x01D4,
+    river3_last = 0x01D8,
     shore5_first = 0x01D9,
     shore5_last = 0x0258,
     ocean2 = 0x0259,
-    ocean3 = 0x0260,
-    tundra4_first = 0x0261,             //  various joining configurations
+    tundra4_first = 0x025A,
     tundra4_last = 0x02F9,
 
     eTerrainType_MAX,
@@ -4472,8 +4470,7 @@ typedef struct PACKED_STRUCT // City
     int8_t          m_Mana_cr;                  // 62
     int8_t          m_Research;                 // 63
     int8_t          m_Food_Produced;            // 64
-    int8_t          m_Road_Connection_GUESS;    // 65
-    uint8_t         m_Unk_66[12];               // 66-71
+    uint8_t         m_bitsetConnectedCities[13];// 65
                                                 // SIZE 72
 } City; // <read=read_City>;
 

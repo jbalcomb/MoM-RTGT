@@ -23,6 +23,7 @@ int MoMTerrain::sDoubleFoodBonus[eTerrainCategory_MAX] =
     4,  // TERRAINCATEGORY_SorceryNode = 13,
     5,  // TERRAINCATEGORY_NatureNode = 14,
     0,  // TERRAINCATEGORY_ChaosNode = 15,
+    4,  // TERRAINCATEGORY_Lake = 16,
 };
 
 int MoMTerrain::sDoubleHammerBonus[eTerrainCategory_MAX] =
@@ -43,6 +44,7 @@ int MoMTerrain::sDoubleHammerBonus[eTerrainCategory_MAX] =
     0,  // TERRAINCATEGORY_SorceryNode = 13,
     0,  // TERRAINCATEGORY_NatureNode = 14,
     5,  // TERRAINCATEGORY_ChaosNode = 15,
+    0,  // TERRAINCATEGORY_Lake = 16,
 };
 
 eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
@@ -53,8 +55,7 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     switch (terrainType)
     {
     case ocean1:
-    case ocean2:
-    case ocean3:        value = TERRAINCATEGORY_Ocean; break;
+    case ocean2:        value = TERRAINCATEGORY_Ocean; break;
 
     case grasslands0:
     case grasslands1:
@@ -103,7 +104,15 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     {
         value = TERRAINCATEGORY_Shore;
     }
-    else if ((terrainType >= river1_first) && (terrainType <= river1_last))
+    else if ((terrainType >= river1a_first) && (terrainType <= river1a_last))
+    {
+        value = TERRAINCATEGORY_River;
+    }
+    else if ((terrainType >= lake1_first) && (terrainType <= lake1_last))
+    {
+        value = TERRAINCATEGORY_Lake;
+    }
+    else if ((terrainType >= river2a_first) && (terrainType <= river2a_last))
     {
         value = TERRAINCATEGORY_River;
     }
@@ -123,7 +132,7 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     {
         value = TERRAINCATEGORY_Shore;
     }
-    else if ((terrainType >= river2_first) && (terrainType <= river2_last))
+    else if ((terrainType >= river3_first) && (terrainType <= river3_last))
     {
         value = TERRAINCATEGORY_River;
     }
@@ -274,6 +283,38 @@ int MoMTerrain::getBasicFoodBonus() const
     return value;
 }
 
+int MoMTerrain::getGoldBonus(bool minersGuild, bool dwarven) const
+{
+    if (getChanges().corruption)
+        return 0;
+
+    eTerrainBonusDeposit bonus = getBonus();
+    int value = 0;
+    switch (bonus & 0x0F)
+    {
+    case DEPOSIT_Silver_Ore:    value = 2; break;
+    case DEPOSIT_Gold_Ore:      value = 3; break;
+    case DEPOSIT_Gems:          value = 5; break;
+    default:                    ;
+    }
+
+    if (dwarven)
+    {
+        value *= 2;
+    }
+    if (minersGuild)
+    {
+        value = value * 3 / 2;
+    }
+
+    if (isSharedBetweenCities())
+    {
+        value /= 2;
+    }
+
+    return value;
+}
+
 Tower_Node_Lair *MoMTerrain::getLair() const
 {
     Tower_Node_Lair* value = 0;
@@ -345,6 +386,18 @@ std::vector<int> MoMTerrain::getUnits() const
         m_game->findUnitsAtLocation(m_location, units);
     }
     return units;
+}
+
+bool MoMTerrain::isRiver() const
+{
+    eTerrainCategory category = getCategory();
+    return (category == TERRAINCATEGORY_River) || (category == TERRAINCATEGORY_RiverMouth);
+}
+
+bool MoMTerrain::isSea() const
+{
+    eTerrainCategory category = getCategory();
+    return (category == TERRAINCATEGORY_Ocean) || (category == TERRAINCATEGORY_Shore) || (category == TERRAINCATEGORY_Lake);
 }
 
 bool MoMTerrain::isSharedBetweenCities() const

@@ -28,17 +28,24 @@ public:
     Terrain_Changes         getChanges() const;
     City*                   getCity() const;
     uint8_t                 getExplored() const;
+
     /// Returns 4 times the documented food bonus.
     /// Excludes the effect of Wild Game.
     /// Accounts for sharing terrain with another city.
     int                     getBasicFoodBonus() const;
+
+    int                     getGoldBonus(bool minersGuild, bool dwarven) const;
+
     /// Returns the hammer bonus percentage.
     /// Accounts for sharing terrain with another city.
     /// \param gaiasBlessing Doubles hammer bonus of forests and nature nodes
     int                     getProductionPercentage(bool gaiasBlessing) const;
+
     Tower_Node_Lair*        getLair() const;
     eTerrainType            getType() const;
     std::vector<int>        getUnits() const;
+    bool                    isRiver() const;
+    bool                    isSea() const;
     bool                    isSharedBetweenCities() const;
 
     static eTerrainCategory getTerrainCategory(eTerrainType terrainType);
