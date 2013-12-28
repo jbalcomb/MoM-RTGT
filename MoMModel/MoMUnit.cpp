@@ -18,63 +18,55 @@
 namespace MoM
 {
 
-MoMUnit::MoMUnit()
+MoMUnit::MoMUnit() : m_game()
 {
     zeroFields();
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game)
+MoMUnit::MoMUnit(MoMGameBase *game) : m_game(game)
 {
     zeroFields();
-    m_game = game;
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Battle_Unit *battleUnit)
+MoMUnit::MoMUnit(MoMGameBase *game, Battle_Unit *battleUnit) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(battleUnit);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, eUnit_Type unitTypeNr)
+MoMUnit::MoMUnit(MoMGameBase *game, eUnit_Type unitTypeNr) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(unitTypeNr);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Hero_stats *heroStats)
+MoMUnit::MoMUnit(MoMGameBase *game, Hero_stats *heroStats) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(heroStats);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Hero_Stats_Initializer *heroStatsInitializer)
+MoMUnit::MoMUnit(MoMGameBase *game, Hero_Stats_Initializer *heroStatsInitializer) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(heroStatsInitializer);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Hired_Hero *hiredHero)
+MoMUnit::MoMUnit(MoMGameBase *game, Hired_Hero *hiredHero) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(hiredHero);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Unit_Type_Data *unitType)
+MoMUnit::MoMUnit(MoMGameBase *game, Unit_Type_Data *unitType) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(unitType);
 }
 
-MoMUnit::MoMUnit(MoMGameBase *game, Unit *unit)
+MoMUnit::MoMUnit(MoMGameBase *game, Unit *unit) : m_game(game)
 {
     zeroFields();
-    m_game = game;
     changeUnit(unit);
 }
 
