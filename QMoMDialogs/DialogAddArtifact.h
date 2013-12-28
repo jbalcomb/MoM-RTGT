@@ -3,6 +3,9 @@
 
 #include <QDialog>
 
+class QGraphicsScene;
+class QGraphicsSimpleTextItem;
+
 namespace Ui {
 class DialogAddArtifact;
 }
@@ -24,8 +27,14 @@ public slots:
 private slots:
     void on_pushButton_AddArtifact_clicked();
 
+    void on_comboBox_Artifacts_currentIndexChanged(int index);
+
 private:
+    QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, const QString& helpText);
+
     QMoMGamePtr m_game;
+    QFont m_font;
+    QGraphicsScene* m_scene;
 
     Ui::DialogAddArtifact *ui;
 };

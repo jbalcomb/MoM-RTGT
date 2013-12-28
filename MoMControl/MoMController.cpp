@@ -144,10 +144,27 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 
 bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
 {
-    // TODO: Check bounds
+    m_errorString.clear();
+    if (0 == m_game)
+        return false;
 
     // Retrieve item data (or fail)
     ItemDataLbx* prefabItemData = m_game->getItemDataLbx(prefabNr);
+    if (0 == prefabItemData)
+    {
+        m_errorString = "no such item available";
+        return false;
+    }
+
+    // Check if already in game
+    uint8_t* artifactsInGame = m_game->getArtifacts_in_game();
+    if (0 == artifactsInGame)
+        return false;
+    if (artifactsInGame[prefabNr])
+    {
+        m_errorString = "item has already been seen in the game";
+        return false;
+    }
 
     // Find free item slot for its attributes (or fail)
     int16_t freeItemNr = -1;
@@ -155,11 +172,16 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     for (int itemNr = 0; (0 == freeItem) && (itemNr < gMAX_ITEMS_IN_GAME); ++itemNr)
     {
         Item* item = m_game->getItem(itemNr);
-        if ((0 != item->m_Cost) && (-1 != item->m_Cost))
+        if ((0 == item->m_Cost) || (-1 == item->m_Cost))
         {
             freeItemNr = itemNr;
             freeItem = item;
         }
+    }
+    if (0 == freeItem)
+    {
+        m_errorString = "maximum items in the games reached";
+        return false;
     }
 
     // Find free item slot in fortress (or fail)
@@ -172,21 +194,25 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
             fortressSlotNr = slotNr;
         }
     }
-
-    // Check if already in game
-    uint8_t* artifactsInGame = m_game->getArtifacts_in_game();
+    if (-1 == fortressSlotNr)
+    {
+        m_errorString = "no free space in your fortress";
+        return false;
+    }
 
     // NiceToHave - check if book requirements satisfied
 
     // Mark the item as ingame (or fail if already in game)
-    uint8_t newInGame = true;
-    m_game->commitData(&artifactsInGame[prefabNr], &newInGame, sizeof(artifactsInGame[prefabNr]));
-
     // Copy the item's attributes
-    m_game->commitData(freeItem, &prefabItemData->m_Item, sizeof(*freeItem));
-
     // Link item to item slot in fortress
-    m_game->commitData(&wizard->m_Items_in_Slots[fortressSlotNr], &freeItemNr, sizeof(wizard->m_Items_in_Slots[fortressSlotNr]));
+    uint8_t newInGame = true;
+    if (!m_game->commitData(&artifactsInGame[prefabNr], &newInGame, sizeof(artifactsInGame[prefabNr]))
+            || !m_game->commitData(freeItem, &prefabItemData->m_Item, sizeof(*freeItem))
+            || !m_game->commitData(&wizard->m_Items_in_Slots[fortressSlotNr], &freeItemNr, sizeof(wizard->m_Items_in_Slots[fortressSlotNr])))
+    {
+        m_errorString = "failed to commit the changes to the game";
+        return false;
+    }
 
     return true;
 }
@@ -194,14 +220,13 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
 bool MoMController::applyBuildingQueue(int cityNr)
 {
 	m_errorString.clear();
-
     if (0 == m_game)
         return false;
 
     City* city = m_game->getCity(cityNr);
     if (0 == city)
 	{
-		m_errorString = "Cannot get the data for to city  '" + toStr(cityNr) + "'";
+        m_errorString = "cannot get the data for to city  '" + toStr(cityNr) + "'";
         return false;
 	}
     MoMCity momCity(m_game, city);
