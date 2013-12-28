@@ -36,6 +36,8 @@ private slots:
 
     void on_pushButton_ExternalAI_clicked();
 
+    void on_pushButton_ConjureArtifact_clicked();
+
 private:
 	QMoMGamePtr getGame();
 	QStatusBar* statusBar();

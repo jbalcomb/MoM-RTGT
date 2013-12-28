@@ -154,7 +154,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     Item* freeItem = 0;
     for (int itemNr = 0; (0 == freeItem) && (itemNr < gMAX_ITEMS_IN_GAME); ++itemNr)
     {
-        Item* item = m_game->getItem(freeItemNr);
+        Item* item = m_game->getItem(itemNr);
         if ((0 != item->m_Cost) && (-1 != item->m_Cost))
         {
             freeItemNr = itemNr;

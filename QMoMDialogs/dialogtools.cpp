@@ -25,6 +25,7 @@
 #include <QMoMSettings.h>
 
 // Local
+#include "DialogAddArtifact.h"
 #include "DialogBuildingQueues.h"
 #include "DialogExternalAI.h"
 #include "DialogSelectInitialSpells.h"
@@ -399,4 +400,15 @@ void DialogTools::on_pushButton_ExternalAI_clicked()
     DialogExternalAI* dialog = new DialogExternalAI(MainWindow::getInstance());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
+}
+
+void DialogTools::on_pushButton_ConjureArtifact_clicked()
+{
+    DialogAddArtifact* dialog = new DialogAddArtifact(MainWindow::getInstance());
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->show();
+
+    connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), dialog, SLOT(slot_gameChanged(QMoMGamePtr)));
+    connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), dialog, SLOT(slot_gameUpdated()));
+    dialog->slot_gameChanged(MainWindow::getInstance()->getGame());
 }
