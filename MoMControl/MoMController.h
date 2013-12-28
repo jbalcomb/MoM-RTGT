@@ -26,6 +26,7 @@ public:
 	}
 
     bool addUnit(ePlayer playerNr, eUnit_Type unitType);
+    bool addArtifact(ePlayer playerNr, int prefabNr);
 
     bool applyBuildingQueue(int cityNr);
     bool applyBuildingQueue(ePlayer playerNr);

@@ -143,6 +143,55 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
     return ok;
 }
 
+bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
+{
+    // TODO: Check bounds
+
+    // Retrieve item data (or fail)
+    ItemDataLbx* prefabItemData = m_game->getItemDataLbx(prefabNr);
+
+    // Find free item slot for its attributes (or fail)
+    int16_t freeItemNr = -1;
+    Item* freeItem = 0;
+    for (int itemNr = 0; (0 == freeItem) && (itemNr < gMAX_ITEMS_IN_GAME); ++itemNr)
+    {
+        Item* item = m_game->getItem(freeItemNr);
+        if ((0 != item->m_Cost) && (-1 != item->m_Cost))
+        {
+            freeItemNr = itemNr;
+            freeItem = item;
+        }
+    }
+
+    // Find free item slot in fortress (or fail)
+    Wizard* wizard = m_game->getWizard(playerNr);
+    int fortressSlotNr = -1;
+    for (int slotNr = 0; (-1 == fortressSlotNr) && (slotNr < ARRAYSIZE(wizard->m_Items_in_Slots)); ++slotNr)
+    {
+        if (-1 == wizard->m_Items_in_Slots[slotNr])
+        {
+            fortressSlotNr = slotNr;
+        }
+    }
+
+    // Check if already in game
+    uint8_t* artifactsInGame = m_game->getArtifacts_in_game();
+
+    // NiceToHave - check if book requirements satisfied
+
+    // Mark the item as ingame (or fail if already in game)
+    uint8_t newInGame = true;
+    m_game->commitData(&artifactsInGame[prefabNr], &newInGame, sizeof(artifactsInGame[prefabNr]));
+
+    // Copy the item's attributes
+    m_game->commitData(freeItem, &prefabItemData->m_Item, sizeof(*freeItem));
+
+    // Link item to item slot in fortress
+    m_game->commitData(&wizard->m_Items_in_Slots[fortressSlotNr], &freeItemNr, sizeof(wizard->m_Items_in_Slots[fortressSlotNr]));
+
+    return true;
+}
+
 bool MoMController::applyBuildingQueue(int cityNr)
 {
 	m_errorString.clear();
@@ -509,7 +558,7 @@ int MoMController::calcGoldUpkeep(ePlayer playerNr) const
         goldUpkeep = 0;
     }
 
-    // TODO: Difficulty multiplier (which one???)
+    // TODO: Difficulty multiplier
 
     return goldUpkeep;
 }
