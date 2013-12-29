@@ -1391,7 +1391,7 @@ enum eItemPower
     ITEMPOWER_Water_Walking,
     ITEMPOWER_Resist_Elements,
     ITEMPOWER_Elemental_Armour,
-    ITEMPOWER_Doom_equals_Chaos,
+    ITEMPOWER_Chaos,
     ITEMPOWER_Stoning,
     ITEMPOWER_Endurance,
     ITEMPOWER_Haste,

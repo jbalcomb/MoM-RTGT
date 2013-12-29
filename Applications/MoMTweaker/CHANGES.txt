@@ -4,15 +4,24 @@ Author: Klaas van Aarsen
 
 CHANGES IN 0.2.8 (2013--)
 -----------------------------
-* Extended Building Queue so no pop-up is shown for a city that was managed.
+* New Conjure Artifact Dialog (under Tools) that allows you to conjure
+  any of the prefab items.
 
-* Updated ItemData table with spell book requirement and special status.
+* Improved Building Queue Dialog and its optional automatic application.
+  - No pop-up at next-turn are shown for a city that was managed.
+  - The dialog shows more columns and information.
+  - You can manage a city completely from the dialog (change farmers/
+    workers, change production, buy production).
+  - The (fixed) building queue has been improved.
 
-* Added experimental level bonus table with modified code in wizards.exe
+* Updated the prefav ItemData table with spell book requirement and 
+  special status.
 
-* Export animations to .gif files (Tools/LBX editor)
+* Added experimental level bonus table with modified code in wizards.exe.
 
-* Display and export fonts (Tools/LBX editor)
+* Export animations to .gif files in LBX editor.
+
+* Display and export fonts in LBX editor.
 
 * Improve detection of the actual location of the MoM directory.
   In particular if the mounted directory is not the MoM directory.

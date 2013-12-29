@@ -69,34 +69,34 @@ static Special<eHeroAbility> gTableHeroSpecials[eHeroAbility_MAX] =
 
 static Special<eItemPower> gTableItemSpecials[eItemPower_MAX] =
 {
-    { ITEMPOWER_Vampiric, eHelpIndex_NONE, "", -1 },
+    { ITEMPOWER_Vampiric, eHelpIndex_NONE, "SPECIAL.LBX", 31 },
     { ITEMPOWER_Guardian_Wind, HELP_ITEMISC_GUARDIAN_WIND, "ITEMISC.LBX", 35 },
-    { ITEMPOWER_Lightning, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Lightning, eHelpIndex_NONE, "SPECIAL.LBX", 28 },
     { ITEMPOWER_Cloak_Of_Fear, HELP_ITEMISC_CLOAK_OF_FEAR, "ITEMISC.LBX", 15 },
-    { ITEMPOWER_Destruction, HELP_SPECIAL2_DESTRUCTION, "ITEMISC.LBX", -1 },
-    { ITEMPOWER_Wraith_Form, HELP_SPECIAL_WRAITH_FORM, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Destruction, HELP_SPECIAL2_DESTRUCTION, "SPECIAL2.LBX", 5 },
+    { ITEMPOWER_Wraith_Form, HELP_SPECIAL_WRAITH_FORM, "SPECIAL.LBX", 68 },
     { ITEMPOWER_Regeneration, HELP_ITEMISC_REGENERATE, "ITEMISC.LBX", 1 },
     { ITEMPOWER_Pathfinding, HELP_ITEMISC_PATH_FINDING, "ITEMISC.LBX", 4 },
 
     { ITEMPOWER_Water_Walking, HELP_ITEMISC_WATER_WALKING, "ITEMISC.LBX", 5 },
     { ITEMPOWER_Resist_Elements, HELP_ITEMISC_RESIST_ELEMENTS, "ITEMISC.LBX", 13 },
     { ITEMPOWER_Elemental_Armour, HELP_ITEMISC_ELEMENTAL_ARMOR, "ITEMISC.LBX", 14 },
-    { ITEMPOWER_Doom_equals_Chaos, HELP_SPECIAL2_CHAOS, "ITEMISC.LBX", -1 },
-    { ITEMPOWER_Stoning, HELP_SPECIAL_STONING_TOUCH, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Chaos, HELP_SPECIAL2_CHAOS, "SPECIAL2.LBX", 29 },
+    { ITEMPOWER_Stoning, HELP_SPECIAL_STONING_TOUCH, "SPECIAL.LBX", 27 },
     { ITEMPOWER_Endurance, HELP_ITEMISC_ENDURANCE, "ITEMISC.LBX", 10 },
     { ITEMPOWER_Haste, HELP_ITEMISC_HASTE, "ITEMISC.LBX", 2 },
     { ITEMPOWER_Invisibility, HELP_ITEMISC_INVISIBILITY, "ITEMISC.LBX", 8 },
 
-    { ITEMPOWER_Death, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Death, eHelpIndex_NONE, "SPECIAL2.LBX", 30 },
     { ITEMPOWER_Flight, HELP_ITEMISC_FLIGHT, "ITEMISC.LBX", 16 },
     { ITEMPOWER_Resist_Magic, HELP_ITEMISC_RESIST_MAGIC, "ITEMISC.LBX", 17 },
     { ITEMPOWER_Magic_Immunity, HELP_ITEMISC_MAGIC_IMMUNITY, "ITEMISC.LBX", 0 },
-    { ITEMPOWER_Flaming, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
-    { ITEMPOWER_Holy_Avenger, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Flaming, eHelpIndex_NONE, "SPECIAL.LBX", 83 },
+    { ITEMPOWER_Holy_Avenger, eHelpIndex_NONE, "ITEMISC.LBX", 33 },
     { ITEMPOWER_True_Sight, HELP_ITEMISC_TRUE_SIGHT, "ITEMISC.LBX", 3 },
-    { ITEMPOWER_Phantasmal, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Phantasmal, eHelpIndex_NONE, "SPECIAL.LBX", 35 },
 
-    { ITEMPOWER_Power_Drain, eHelpIndex_NONE, "ITEMISC.LBX", -1 },
+    { ITEMPOWER_Power_Drain, eHelpIndex_NONE, "SPECIAL2.LBX", 31 },
     { ITEMPOWER_Bless, HELP_ITEMISC_BLESS, "ITEMISC.LBX", 6 },
     { ITEMPOWER_Lion_Heart, HELP_ITEMISC_LION_HEART, "ITEMISC.LBX", 7 },
     { ITEMPOWER_Giant_Strength, HELP_ITEMISC_GIANT_STRENGTH, "ITEMISC.LBX", 34 },
@@ -104,6 +104,86 @@ static Special<eItemPower> gTableItemSpecials[eItemPower_MAX] =
     { ITEMPOWER_Merging, HELP_ITEMISC_MERGING_2, "ITEMISC.LBX", 18 },
     { ITEMPOWER_Righteousness, HELP_ITEMISC_RIGHTEOUSNESS, "ITEMISC.LBX", 11 },
     { ITEMPOWER_Invulnerability, HELP_ITEMISC_INVULNERABILITY, "ITEMISC.LBX", 12 },
+};
+
+static Special<eSpell> gTableAdditionalSpells[] =
+{
+    { SPELL_True_Light, (eHelpIndex)600, "COMPIX.LBX", 5 },
+    { SPELL_Darkness, (eHelpIndex)601, "COMPIX.LBX", 6 },
+    { SPELL_Warp_Reality, (eHelpIndex)602, "COMPIX.LBX", 7 },
+    { SPELL_Black_Prayer, (eHelpIndex)603, "COMPIX.LBX", 8 },
+    { SPELL_Wrack, (eHelpIndex)604, "COMPIX.LBX", 9 },
+    { SPELL_Metal_Fires, (eHelpIndex)605, "COMPIX.LBX", 10 },
+    { SPELL_Prayer, (eHelpIndex)606, "COMPIX.LBX", 11 },
+    { SPELL_High_Prayer, (eHelpIndex)607, "COMPIX.LBX", 12 },
+    { SPELL_Terror, (eHelpIndex)608, "COMPIX.LBX", 13 },
+    { SPELL_Call_Lightning, (eHelpIndex)609, "COMPIX.LBX", 14 },
+    { SPELL_Counter_Magic, (eHelpIndex)610, "COMPIX.LBX", 15 },
+    { SPELL_Mass_Invisibility, (eHelpIndex)611, "COMPIX.LBX", 41 },
+//    { SPELL_DISPELS NON-SORCERY, (eHelpIndex)612, "COMPIX.LBX", 54 },
+//    { SPELL_DISPELS NON-CHAOS, 613, "COMPIX.LBX", 47 },
+//    { SPELL_DISPELS NON-NATURE, 614, "COMPIX.LBX", 52 },
+//    { SPELL_SORCERY NODE AURA, 615, "COMPIX.LBX", 55 },
+//    { SPELL_CHAOS NODE AURA, 616, "COMPIX.LBX", 48 },
+//    { SPELL_NATURE NODE AURA, 617, "COMPIX.LBX", 53 },
+    { SPELL_Cloud_Of_Shadow, (eHelpIndex)618, "COMPIX.LBX", 50 },
+//    { SPELL_HOLY LIGHT, 619, "COMPIX.LBX", 44 },
+    { SPELL_Chaos_Surge, (eHelpIndex)620, "COMPIX.LBX", 46 },
+    { SPELL_Eternal_Night, (eHelpIndex)621, "COMPIX.LBX", 49 },
+    { SPELL_Crusade, (eHelpIndex)622, "COMPIX.LBX", 42 },
+    { SPELL_Holy_Arms, (eHelpIndex)623, "COMPIX.LBX", 43 },
+    { SPELL_Charm_of_Life, (eHelpIndex)624, "COMPIX.LBX", 45 },
+    { SPELL_Zombie_Mastery, (eHelpIndex)625, "COMPIX.LBX",51 },
+
+    { SPELL_Entangle, (eHelpIndex)632, "COMPIX.LBX", 60 },
+
+    { SPELL_Immolation, (eHelpIndex)449, "SPECIAL2.LBX", 6 },
+    { SPELL_Guardian_Wind, (eHelpIndex)450, "SPECIAL2.LBX", 7 },
+    { SPELL_Berserk, (eHelpIndex)451, "SPECIAL2.LBX	", 7 },
+    { SPELL_Cloak_of_Fear, (eHelpIndex)452, "SPECIAL.LBX", 97 },
+    { SPELL_Black_Channels, (eHelpIndex)453, "SPECIAL.LBX", 67 },
+    { SPELL_Wraith_Form, (eHelpIndex)454, "SPECIAL.LBX", 68 },
+    { SPELL_Regeneration, (eHelpIndex)455, "SPECIAL.LBX", 69 },
+    { SPELL_Path_Finding, (eHelpIndex)456, "SPECIAL.LBX", 70 },
+    { SPELL_Water_Walking, (eHelpIndex)457, "SPECIAL.LBX", 71 },
+    { SPELL_Elemental_Armor, (eHelpIndex)458, "SPECIAL.LBX", 73 },
+    { SPELL_Resist_Elements, (eHelpIndex)459, "SPECIAL.LBX", 72 },
+    { SPELL_Stone_Skin, (eHelpIndex)460, "SPECIAL.LBX", 74 },
+    { SPELL_Iron_Skin, (eHelpIndex)461, "SPECIAL.LBX", 75 },
+    { SPELL_Endurance, (eHelpIndex)462, "SPECIAL.LBX", 76 },
+    { SPELL_Spell_Lock, (eHelpIndex)463, "L2.LBX", 8 },
+    { SPELL_Invisibility, (eHelpIndex)464, "SPECIAL.LBX", 78 },
+    { SPELL_Wind_Walking, (eHelpIndex)465, "SPECIAL.LBX", 79 },
+    { SPELL_Flight, (eHelpIndex)466, "SPECIAL.LBX", 80 },
+    { SPELL_Resist_Magic, (eHelpIndex)467, "SPECIAL.LBX", 81 },
+    { SPELL_Magic_Immunity, (eHelpIndex)468, "SPECIAL.LBX", 82 },
+    { SPELL_Flame_Blade, (eHelpIndex)469, "SPECIAL.LBX", 83 },
+    { SPELL_Eldritch_Weapon, (eHelpIndex)470, "SPECIAL.LBX", 84 },
+    { SPELL_True_Sight, (eHelpIndex)471, "SPECIAL.LBX", 85 },
+    { SPELL_Holy_Weapon, (eHelpIndex)472, "SPECIAL.LBX", 86 },
+    { SPELL_Heroism, (eHelpIndex)473, "SPECIAL.LBX", 87 },
+    { SPELL_Bless, (eHelpIndex)474, "SPECIAL.LBX", 88 },
+    { SPELL_Lionheart, (eHelpIndex)475, "SPECIAL.LBX", 89 },
+    { SPELL_Giant_Strength, (eHelpIndex)476, "SPECIAL.LBX", 65 },
+    { SPELL_Planar_Travel, (eHelpIndex)477, "SPECIAL.LBX", 91 },
+    { SPELL_Holy_Armor, (eHelpIndex)478, "SPECIAL.LBX", 92 },
+    { SPELL_Righteousness, (eHelpIndex)479, "SPECIAL.LBX", 93 },
+    { SPELL_Invulnerability, (eHelpIndex)480, "SPECIAL.LBX", 94 },
+    { SPELL_Vertigo, (eHelpIndex)481, "SPECIAL.LBX", 101 },
+    { SPELL_Confusion, (eHelpIndex)482, "SPECIAL2.LBX", 0 },
+//    { SPELL_WHIRLWIND, 483, "SPECIAL2.LBX", 1 },
+    { SPELL_Mind_Storm, (eHelpIndex)484, "SPECIAL2.LBX", 2 },
+    { SPELL_Shatter, (eHelpIndex)485, "SPECIAL.LBX", 95 },
+    { SPELL_Weakness, (eHelpIndex)486, "SPECIAL.LBX", 96 },
+    { SPELL_Black_Sleep, (eHelpIndex)487, "SPECIAL2.LBX", 3 },
+//    { SPELL_Warp_Creature, 488, "SPECIAL2.LBX", 11 },
+//    { SPELL_Warp_Creature, 489, "SPECIAL2.LBX", 12 },
+//    { SPELL_Warp_Creature, 490, "SPECIAL2.LBX", 13 },
+    { SPELL_Mana_Leak, (eHelpIndex)491, "SPECIAL2.LBX", 10 },
+    { SPELL_Haste, (eHelpIndex)492, "SPECIAL.LBX", 77 },
+    { SPELL_Web, (eHelpIndex)493, "SPECIAL.LBX", 99 },
+    { SPELL_Creature_Binding, (eHelpIndex)494, "SPECIAL.LBX", 100 },
+    { SPELL_Possession, (eHelpIndex)495, "SPECIAL.LBX", 98 },
 };
 
 // lbxIndex is not the actual index, but must still be multiplied by 8
@@ -758,6 +838,31 @@ const QMoMImagePtr  QMoMResources::getImage(MoM::eItem_Icon itemIcon) const
     return image;
 }
 
+const QMoMImagePtr QMoMResources::getImage(MoM::eItemPower itemPower) const
+{
+    QMoMImagePtr image;
+    int lbxIndex = -1;
+    std::string lbxFile;
+    if (toUInt(itemPower) < ARRAYSIZE(gTableItemSpecials))
+    {
+        lbxIndex = gTableItemSpecials[itemPower].lbxIndex;
+        lbxFile = gTableItemSpecials[itemPower].lbxFile;
+    }
+    if ((lbxFile == std::string("ITEMISC.LBX")) && inVectorRange(m_itemiscImages, lbxIndex))
+    {
+        image = m_itemiscImages[lbxIndex];
+    }
+    else if ((lbxFile == std::string("SPECIAL.LBX")) && inVectorRange(m_specialImages, lbxIndex))
+    {
+        image = m_specialImages[lbxIndex];
+    }
+    else if ((lbxFile == std::string("SPECIAL2.LBX")) && inVectorRange(m_specialImages, 120 + lbxIndex))
+    {
+        image = m_specialImages[120 + lbxIndex];
+    }
+    return image;
+}
+
 const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair) const
 {
     QMoMImagePtr image;
@@ -1114,12 +1219,16 @@ void QMoMResources::createSpellImages()
     if (m_game.isNull())
         return;
     std::string cityscapLbxFile = m_game->getGameDirectory() + "/" + "CITYSCAP.LBX";
+    std::string compixLbxFile = m_game->getGameDirectory() + "/" + "COMPIX.LBX";
     std::string monsterLbxFile = m_game->getGameDirectory() + "/" + "MONSTER.LBX";
     std::string specfxLbxFile = m_game->getGameDirectory() + "/" + "SPECFX.LBX";
     MoM::MoMLbxBase cityscapLbx;
+    MoM::MoMLbxBase compixLbx;
     MoM::MoMLbxBase monsterLbx;
     MoM::MoMLbxBase specfxLbx;
     if (!cityscapLbx.load(cityscapLbxFile))
+        return;
+    if (!compixLbx.load(compixLbxFile))
         return;
     if (!monsterLbx.load(monsterLbxFile))
         return;
@@ -1246,84 +1355,37 @@ void QMoMResources::createSpellImages()
     spell = MoM::SPELL_Awareness;
     m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), specfxLbx.getRecordSize(56), m_colorTable, toStr(spell));
 
-
-    //600	LIGHT	COMPIX.LBX	5
-    //601	DARKNESS	COMPIX.LBX	6
-    //602	WARP REALITY	COMPIX.LBX	7
-    //603	BLACK PRAYER	COMPIX.LBX	8
-    //604	WRACK	COMPIX.LBX	9
-    //605	METAL FIRES	COMPIX.LBX	10
-    //606	PRAYER	COMPIX.LBX	11
-    //607	HIGH PRAYER	COMPIX.LBX	12
-    //608	TERROR	COMPIX.LBX	13
-    //609	CALL LIGHTNING	COMPIX.LBX	14
-    //610	COUNTER MAGIC	COMPIX.LBX	15
-    //611	MASS INVISIBILITY	COMPIX.LBX	41
-    //612	DISPELS NON-SORCERY	COMPIX.LBX	54
-    //613	DISPELS NON-CHAOS	COMPIX.LBX	47
-    //614	DISPELS NON-NATURE	COMPIX.LBX	52
-    //615	SORCERY NODE AURA	COMPIX.LBX	55
-    //616	CHAOS NODE AURA	COMPIX.LBX	48
-    //617	NATURE NODE AURA	COMPIX.LBX	53
-    //618	CLOUD OF DARKNESS	COMPIX.LBX	50
-    //619	HOLY LIGHT	COMPIX.LBX	44
-    //620	CHAOS SURGE	COMPIX.LBX	46
-    //621	ETERNAL NIGHT	COMPIX.LBX	49
-    //622	CRUSADE	COMPIX.LBX	42
-    //623	HOLY ARMS	COMPIX.LBX	43
-    //624	CHARM OF LIFE	COMPIX.LBX	45
-    //625	ZOMBIE MASTERY	COMPIX.LBX	51
-
-    //632	ENTANGLE	COMPIX.LBX	60
-
-
-    //449	IMMOLATION	SPECIAL2.LBX	6
-    //450	GUARDIAN WIND	SPECIAL2.LBX	7
-    //451	BERSERK	SPECIAL2.LBX	17
-    //452	CLOAK OF FEAR	SPECIAL.LBX	97
-    //453	BLACK CHANNELS	SPECIAL.LBX	67
-    //454	WRAITH FORM	SPECIAL.LBX	68
-    //455	REGENERATE	SPECIAL.LBX	69
-    //456	PATHFINDING	SPECIAL.LBX	70
-    //457	WATER WALKING	SPECIAL.LBX	71
-    //458	ELEMENTAL ARMOR	SPECIAL.LBX	73
-    //459	RESIST ELEMENTS	SPECIAL.LBX	72
-    //460	STONE SKIN	SPECIAL.LBX	74
-    //461	IRON SKIN	SPECIAL.LBX	75
-    //462	ENDURANCE	SPECIAL.LBX	76
-    //463	SPELL LOCK	SPECIAL2.LBX	8
-    //464	INVISIBILITY	SPECIAL.LBX	78
-    //465	WIND WALKING	SPECIAL.LBX	79
-    //466	FLIGHT	SPECIAL.LBX	80
-    //467	RESIST MAGIC	SPECIAL.LBX	81
-    //468	MAGIC IMMUNITY	SPECIAL.LBX	82
-    //469	FLAME BLADE	SPECIAL.LBX	83
-    //470	ELDRITCH WEAPON	SPECIAL.LBX	84
-    //471	TRUE SIGHT	SPECIAL.LBX	85
-    //472	HOLY WEAPON	SPECIAL.LBX	86
-    //473	HEROISM	SPECIAL.LBX	87
-    //474	BLESS	SPECIAL.LBX	88
-    //475	LION HEART	SPECIAL.LBX	89
-    //476	GIANT STRENGTH	SPECIAL.LBX	65
-    //477	PLANAR TRAVEL	SPECIAL.LBX	91
-    //478	HOLY ARMOR	SPECIAL.LBX	92
-    //479	RIGHTEOUSNESS	SPECIAL.LBX	93
-    //480	INVULNERABILITY	SPECIAL.LBX	94
-    //481	VERTIGO	SPECIAL.LBX	101
-    //482	CONFUSION	SPECIAL2.LBX	0
-    //483	WHIRLWIND	SPECIAL2.LBX	1
-    //484	MIND STORM	SPECIAL2.LBX	2
-    //485	SHATTER	SPECIAL.LBX	95
-    //486	WEAKNESS	SPECIAL.LBX	96
-    //487	BLACK SLEEP	SPECIAL2.LBX	3
-    //488	WARP CREATURE	SPECIAL2.LBX	11
-    //489	WARP CREATURE	SPECIAL2.LBX	12
-    //490	WARP CREATURE	SPECIAL2.LBX	13
-    //491	MANA LEAK	SPECIAL2.LBX	10
-    //492	HASTE	SPECIAL.LBX	77
-    //493	WEB	SPECIAL.LBX	99
-    //494	CREATURE BINDING	SPECIAL.LBX	100
-    //495	POSSESSION	SPECIAL.LBX	98
+    for (int entryNr = 0; entryNr < ARRAYSIZE(gTableAdditionalSpells); ++entryNr)
+    {
+        eSpell spell = gTableAdditionalSpells[entryNr].ability;
+        if (0 != m_spellImages[spell])
+        {
+            qDebug() << "Spell image for " << prettyQStr(spell) << " already present. Skipping";
+            continue;
+        }
+        std::string lbxFile = gTableAdditionalSpells[entryNr].lbxFile;
+        int lbxIndex = gTableAdditionalSpells[entryNr].lbxIndex;
+        if (lbxFile == std::string("COMPIX.LBX"))
+        {
+            m_spellImages[spell] = convertLbxToImage(compixLbx.getRecord(lbxIndex),
+                                                     compixLbx.getRecordSize(lbxIndex),
+                                                     m_colorTable, toStr(spell));
+        }
+        else if (lbxFile == std::string("SPECIAL.LBX"))
+        {
+            if (inVectorRange(m_specialImages, lbxIndex))
+            {
+                m_spellImages[spell] = m_specialImages[lbxIndex];
+            }
+        }
+        else if (lbxFile == std::string("SPECIAL2.LBX"))
+        {
+            if (inVectorRange(m_specialImages, 120 + lbxIndex))
+            {
+                m_spellImages[spell] = m_specialImages[120 + lbxIndex];
+            }
+        }
+    }
 }
 
 void QMoMResources::createTerrainImages()

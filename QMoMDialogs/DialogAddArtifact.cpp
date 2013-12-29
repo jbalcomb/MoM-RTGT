@@ -106,7 +106,6 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
         return;
 
     int xLeft = 16;
-    int xText = xLeft + 20;
     int y = 16;
 
     // Show name
@@ -114,8 +113,10 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
     QGraphicsPixmapItem* graphicsItem = m_scene->addPixmap(pixmapItem);
     graphicsItem->setPos(xLeft, y);
 
+    int dxText = graphicsItem->boundingRect().width() * 5 / 4;
+    int xText = xLeft + dxText;
+
     QGraphicsSimpleTextItem* textItem = addText(QPointF(), QString("%0").arg(itemData->m_Item_Name), "");
-    xText = xLeft + graphicsItem->boundingRect().width() * 5 / 4;
     y += (graphicsItem->boundingRect().height() - textItem->boundingRect().height()) / 2;
     textItem->setPos(xText, y);
 
@@ -151,12 +152,12 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
     }
     if (0 != itemData->m_Bonuses.Spell_Points)
     {
-        addText(QPointF(xText, y), QString("+%0 Mana").arg(itemData->m_Bonuses.Spell_Points), "");
+        addText(QPointF(xText, y), QString("+%0 Spell Skill").arg(itemData->m_Bonuses.Spell_Points), "");
         y += dy;
     }
     if (0 != itemData->m_Bonuses.Spell_Save)
     {
-        addText(QPointF(xText, y), QString("-%0 Save").arg(itemData->m_Bonuses.Spell_Save), "");
+        addText(QPointF(xText, y), QString("-%0 Spell Save").arg(itemData->m_Bonuses.Spell_Save), "");
         y += dy;
     }
 
@@ -166,7 +167,7 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
         QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemData->m_Spell_Number_Charged, 1);
         QGraphicsPixmapItem* graphicsItem = m_scene->addPixmap(pixmapItem);
         graphicsItem->setToolTip(QMoMResources::instance().getHelpText(itemData->m_Spell_Number_Charged).c_str());
-        graphicsItem->setPos(xLeft, y);
+        graphicsItem->setPos(xLeft + (dxText - graphicsItem->boundingRect().width()) / 2, y + (dy - graphicsItem->boundingRect().height()) / 2);
 
         addText(QPointF(xText, y), QString("%0 x %1").arg(prettyQStr(itemData->m_Spell_Number_Charged)).arg(itemData->m_Number_Of_Charges), "");
 
@@ -182,7 +183,7 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
             QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemPower, 1);
             QGraphicsPixmapItem* graphicsItem = m_scene->addPixmap(pixmapItem);
             graphicsItem->setToolTip(QMoMResources::instance().getHelpText(itemPower).c_str());
-            graphicsItem->setPos(xLeft, y);
+            graphicsItem->setPos(xLeft + (dxText - graphicsItem->boundingRect().width()) / 2, y + (dy - graphicsItem->boundingRect().height()) / 2);
 
             addText(QPointF(xText, y), QString("%0").arg(prettyQStr(itemPower)), QMoMResources::instance().getHelpText(itemPower).c_str());
             y += dy;

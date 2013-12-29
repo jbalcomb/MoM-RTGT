@@ -78,6 +78,7 @@ public:
     const QMoMImagePtr getImage(MoM::eCity_Size citySize, MoM::eBannerColor banner = MoM::BANNER_Green) const;
     const QMoMImagePtr getImage(MoM::eCityWall wall, bool broken = false) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
+    const QMoMImagePtr getImage(MoM::eItemPower itemPower) const;
     const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
     const QMoMImagePtr getImage(MoM::eProducing producing) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;

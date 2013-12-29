@@ -1465,7 +1465,7 @@ std::ostream& operator<<(std::ostream& os, const eItemPower& rhs)
     case ITEMPOWER_Water_Walking: os << "ITEMPOWER_Water_Walking"; break;
     case ITEMPOWER_Resist_Elements: os << "ITEMPOWER_Resist_Elements"; break;
     case ITEMPOWER_Elemental_Armour: os << "ITEMPOWER_Elemental_Armour"; break;
-    case ITEMPOWER_Doom_equals_Chaos: os << "ITEMPOWER_Doom_equals_Chaos"; break;
+    case ITEMPOWER_Chaos: os << "ITEMPOWER_Chaos"; break;
     case ITEMPOWER_Stoning: os << "ITEMPOWER_Stoning"; break;
     case ITEMPOWER_Endurance: os << "ITEMPOWER_Endurance"; break;
     case ITEMPOWER_Haste: os << "ITEMPOWER_Haste"; break;
