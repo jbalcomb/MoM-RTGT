@@ -570,10 +570,16 @@ void DialogTables::update_LevelBonus()
     }
 
     QStringList labels;
-    labels << "Nr";
+    // labels << "Nr";
     //  Me Ra    Sh Th Df Re Mv                 CFg       Hp Sc Tr Fg Cs Ga
-    labels << "Level" << "Me" << "Ra" << "Shots" << "ToHit" << "Df" << "Re" << "Move"
-           << "CurFig" << "Hp" << "Scout" << "Transport" << "MaxFig" << "Constr" << "Pois/Gaze";
+    labels << "Level" << "Me" << "Ra" << "Shots" << "ToHit" << "Df" << "Re";
+    // DOES NOT WORK:
+    // - Move has no effect overland nor in battle
+    // - Hp has no effect overland nor in battle
+    // - CurFig/MaxFig works times 3
+    // - Holy Bonus (Gaze) works times 3
+    // - Poison does not work
+    //labels << "Move" << "CurFig" << "Hp" << "MaxFig" << "Pois/Gaze";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_LevelBonus(int)));
 }
@@ -601,23 +607,24 @@ void DialogTables::slot_addRow_to_LevelBonus(int row)
         return;
 
     int col = 0;
-    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
+//    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(row, 3)));
 
-    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0%1").arg(name).arg(1 + level)));
+    ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0 %1").arg(name).arg(1 + level)));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Melee, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged_Shots, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_To_Hit, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Defense, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Resistance, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_MoveHalves, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Current_figures, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Hitpoints_per_Figure, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Scouting, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Transport_Capacity_GUESS, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Max_figures, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Construction, 2, SHOWNUMBER_plusAndNoZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Gaze_Modifier, 2, SHOWNUMBER_plusAndNoZero));
+    // SEE LABELS
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_MoveHalves, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Current_figures, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Hitpoints_per_Figure, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Scouting, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Transport_Capacity_GUESS, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Max_figures, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Construction, 2, SHOWNUMBER_plusAndNoZero));
+//    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Gaze_Modifier, 2, SHOWNUMBER_plusAndNoZero));
 }
 
 void DialogTables::update_RaceData()

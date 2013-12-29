@@ -162,7 +162,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Conjure artifact</string>
+       <string>Conjure Artifact</string>
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">

@@ -164,7 +164,7 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
     // Show spells
     if (0 != itemData->m_Spell_Number_Charged)
     {
-        QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemData->m_Spell_Number_Charged, 1);
+        QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemData->m_Spell_Number_Charged, 1.5);
         QGraphicsPixmapItem* graphicsItem = m_scene->addPixmap(pixmapItem);
         graphicsItem->setToolTip(QMoMResources::instance().getHelpText(itemData->m_Spell_Number_Charged).c_str());
         graphicsItem->setPos(xLeft + (dxText - graphicsItem->boundingRect().width()) / 2, y + (dy - graphicsItem->boundingRect().height()) / 2);
@@ -180,7 +180,7 @@ void DialogAddArtifact::on_comboBox_Artifacts_currentIndexChanged(int index)
         uint32_t bitmask = (1 << (unsigned)itemPower);
         if (0 != (itemData->m_Bitmask_Powers.bits & bitmask))
         {
-            QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemPower, 1);
+            QPixmap pixmapItem = MoM::QMoMResources::instance().getPixmap(itemPower, 1.5);
             QGraphicsPixmapItem* graphicsItem = m_scene->addPixmap(pixmapItem);
             graphicsItem->setToolTip(QMoMResources::instance().getHelpText(itemPower).c_str());
             graphicsItem->setPos(xLeft + (dxText - graphicsItem->boundingRect().width()) / 2, y + (dy - graphicsItem->boundingRect().height()) / 2);

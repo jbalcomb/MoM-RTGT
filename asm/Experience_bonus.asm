@@ -102,7 +102,7 @@ after_tables:
                 jg      short hero_identified   ; if (regular unit)
 
                 mov     bx, OFFSET unit_table   ;     bonus = unit_table;
-                jmp     process_level
+                jmp     short process_level
                 
 hero_identified:                                ; else
                 mov     bx, OFFSET hero_table   ;     bonus = hero_table;
@@ -122,38 +122,42 @@ process_level:
                 mov     si, bx
                 
                 cld
-                xor     dx, dx                  ; for (int i = 0; i < BONUS_RECORD_SIZE; ++i)
+                xor     cx, cx                  ; for (int i = 0; i < BONUS_RECORD_SIZE; ++i)
 for_ability:
                 mov     bl, es:[di]                     
                 cmp     bl, 0                   ;     if (battleUnit[i] > 0
                 ja      positive_ability
                 jb      negative_ability
-                cmp     dx, 4                   ;         || i == TO_HIT)
+                cmp     cx, 4                   ;         || i == TO_HIT)
                 je      positive_ability
-                jmp     fi_ability
+                jmp     short skip_ability
 
 positive_ability:
                 lodsb                           ;         battleUnit[i] += bonus[i];
                 add     al, bl
                 stosb
-                jmp     fi_ability
+                jmp     short fi_ability
                 
 negative_ability:                               ;     else if (battleUnit[i] < 0)   // Gaze modifier (versus Poison)
                 lodsb                           ;         battleUnit[i] -= bonus[i];
                 neg     al
                 add     al, bl
                 stosb
-                jmp     fi_ability
+                jmp     short fi_ability
                 
 ;;flag_ability:
 ;;                lodsw                           ;         battleUnit[i] |= bonus[i];
 ;;                or      ax, bx
 ;;                stosw
-;;                jmp     fi_ability
+;;                jmp     short fi_ability
+
+skip_ability:
+                inc     si
+                inc     di
 
 fi_ability:
-                inc     dx
-                cmp     dx, BONUS_RECORD_SIZE
+                inc     cx
+                cmp     cx, BONUS_RECORD_SIZE
                 jl      for_ability
 
 endfor_ability:
