@@ -2,7 +2,7 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.8 (2013--)
+CHANGES IN 0.2.8 (2013-12-30)
 -----------------------------
 * New Conjure Artifact Dialog (under Tools) that allows you to conjure
   any of the prefab items.
@@ -14,17 +14,19 @@ CHANGES IN 0.2.8 (2013--)
     workers, change production, buy production).
   - The (fixed) building queue has been improved.
 
-* Updated the prefav ItemData table with spell book requirement and 
-  special status.
+* Added level bonus table with modified code in wizards.exe.
+  - Allows to set the bonus for any level for any field.
+  - Additionally allows a bonus for the number of shots.
 
-* Added experimental level bonus table with modified code in wizards.exe.
-
-* Export animations to .gif files in LBX editor.
+* Export animations to animated .gif files in LBX editor.
 
 * Display and export fonts in LBX editor.
 
 * Improve detection of the actual location of the MoM directory.
   In particular if the mounted directory is not the MoM directory.
+
+* Updated the prefav ItemData table with spell book requirement and 
+  special status.
 
 
 
