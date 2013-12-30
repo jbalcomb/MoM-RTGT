@@ -13,6 +13,9 @@ MoMCity::MoMCity(MoMGameBase *game, const City *city) :
 
 int MoMCity::calcBasicFood() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     class CountBasicFood
     {
     public:
@@ -41,6 +44,9 @@ int MoMCity::calcBasicFood() const
 
 int MoMCity::calcGoldBonus() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     class CountGoldBonus
     {
     public:
@@ -64,6 +70,9 @@ int MoMCity::calcGoldBonus() const
 
 int MoMCity::calcProductionBonusPercentage() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     class CountProductionPercentage
     {
     public:
@@ -85,6 +94,9 @@ int MoMCity::calcProductionBonusPercentage() const
 
 int MoMCity::calcFoodProduced() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (m_city->m_Population <= 0)
         return 0;
 
@@ -128,6 +140,9 @@ int MoMCity::calcFoodProduced() const
 
 int MoMCity::calcGoldProduced() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (m_city->m_Population <= 0)
         return 0;
 
@@ -191,6 +206,9 @@ int MoMCity::calcGoldProduced() const
 
 int MoMCity::calcHammersProduced() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (m_city->m_Population <= 0)
         return 0;
 
@@ -238,6 +256,9 @@ int MoMCity::calcHammersProduced() const
 
 int MoMCity::calcMaxPopCurrent() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     int maxPop = calcBasicFood();
 
     if (isBuildingPresent(BUILDING_Granary))
@@ -255,6 +276,9 @@ int MoMCity::calcMaxPopCurrent() const
 
 int MoMCity::calcMaxPopTop() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     int maxPop = calcBasicFood();
     maxPop += 2;    // Granary
     maxPop += 3;    // Farmers Market
@@ -265,54 +289,47 @@ int MoMCity::calcMaxPopTop() const
 
 int MoMCity::calcNrRebels() const
 {
-    Wizard* wizard = m_game->getWizard(m_city->m_Owner);
-    if (0 == wizard)
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    int nrRebels = 0;
+    if (OWNER_None == m_city->m_City_Enchantments.Stream_of_Life)
+    {
+        int unrestPercentage = calcUnrestPercentage();
+        nrRebels = m_city->m_Population * unrestPercentage / 100;
+        int pacifyingEffects = calcPacifyingReligiousEffects();
+        pacifyingEffects += calcPacifyingNonReligiousEffects();
+        pacifyingEffects += calcPacifyingUnitEffects();
+        nrRebels = Range(nrRebels - pacifyingEffects, 0, (int)m_city->m_Population);
+    }
+    return nrRebels;
+}
+
+int MoMCity::calcNrWorkers() const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    if (m_city->m_Population <= 0)
         return 0;
 
-    const uint16_t* taxUnrestTable = m_game->getTaxUnrestTable();
-    int unrestPercentage = taxUnrestTable[wizard->m_Tax_Rate];
+    int nrFarmers = Min(m_city->m_Number_of_farmers_allocated, m_city->m_Population);
+    int nrRebels  = calcNrRebels();
+    int nrWorkers = m_city->m_Population - nrFarmers - nrRebels;
 
-    eRace homeRace = wizard->m_Home_Race;
-    const int8_t* racialUnrestTable = m_game->getUnrest_Table(homeRace);
-    unrestPercentage += 10 * racialUnrestTable[m_city->m_Race];
+    return nrWorkers;
+}
 
-    if (OWNER_None != m_city->m_City_Enchantments._Famine_)
-    {
-        unrestPercentage += 25;
-    }
+int MoMCity::calcPacifyingNonReligiousEffects() const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
 
-    int nrRebels = m_city->m_Population * unrestPercentage / 100;
+    Wizard* wizard = m_game->getWizard(m_city->m_Owner);
+    if (0 == wizard)
+        return -1;
 
     int pacifyingEffects = 0;
-
-    if ((OWNER_None == m_city->m_City_Enchantments._Evil_Presence_)
-            || (wizard->m_Number_of_Spellbooks_Death > 0))
-    {
-        int religiousEffects = 0;
-
-        if (isBuildingPresent(BUILDING_Shrine))
-        {
-            religiousEffects++;
-        }
-        if (isBuildingPresent(BUILDING_Temple))
-        {
-            religiousEffects++;
-        }
-        if (isBuildingPresent(BUILDING_Parthenon))
-        {
-            religiousEffects++;
-        }
-        if (isBuildingPresent(BUILDING_Cathedral))
-        {
-            religiousEffects++;
-        }
-        if (wizard->m_Skills.s.Infernal_Power || wizard->m_Skills.s.Divine_Power)
-        {
-            religiousEffects += religiousEffects / 2;
-        }
-
-        pacifyingEffects += religiousEffects;
-    }
 
     if (isBuildingPresent(BUILDING_Oracle))
     {
@@ -359,55 +376,77 @@ int MoMCity::calcNrRebels() const
         pacifyingEffects += 2;
     }
 
-    if (pacifyingEffects < nrRebels)
-    {
-        int unitEffects = 0;
-        for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
-        {
-            const Unit* unit = m_game->getUnit(unitNr);
-            if (0 == unit)
-                break;
-            if (unit->m_Owner != m_city->m_Owner)
-                continue;
-            if (MoMLocation(*unit) != MoMLocation(*m_city))
-                continue;
-            if (unit->m_Unit_Type < UNITTYPE_Arcane_Magic_Spirit)
-            {
-                unitEffects += 1;
-            }
-        }
-        pacifyingEffects += unitEffects / 2;
-    }
-
-    nrRebels = Max(0, nrRebels - pacifyingEffects);
-
-    if (OWNER_None != m_city->m_City_Enchantments.Stream_of_Life)
-    {
-        nrRebels = 0;
-    }
-
-    nrRebels = Min(nrRebels, (int)m_city->m_Population);
-
-    return nrRebels;
+    return pacifyingEffects;
 }
 
-int MoMCity::calcNrWorkers() const
+int MoMCity::calcPacifyingReligiousEffects() const
 {
-    if (m_city->m_Population <= 0)
-        return 0;
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
 
-    int nrFarmers = Min(m_city->m_Number_of_farmers_allocated, m_city->m_Population);
-    int nrRebels  = calcNrRebels();
-    int nrWorkers = m_city->m_Population - nrFarmers - nrRebels;
+    Wizard* wizard = m_game->getWizard(m_city->m_Owner);
+    if (0 == wizard)
+        return -1;
 
-    return nrWorkers;
+    int religiousEffects = 0;
+    if ((OWNER_None == m_city->m_City_Enchantments._Evil_Presence_)
+            || (wizard->m_Number_of_Spellbooks_Death > 0))
+    {
+        if (isBuildingPresent(BUILDING_Shrine))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Temple))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Parthenon))
+        {
+            religiousEffects++;
+        }
+        if (isBuildingPresent(BUILDING_Cathedral))
+        {
+            religiousEffects++;
+        }
+        if (wizard->m_Skills.s.Infernal_Power || wizard->m_Skills.s.Divine_Power)
+        {
+            religiousEffects += religiousEffects / 2;
+        }
+    }
+    return religiousEffects;
+}
+
+int MoMCity::calcPacifyingUnitEffects() const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    int unitEffects = 0;
+    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    {
+        const Unit* unit = m_game->getUnit(unitNr);
+        if (0 == unit)
+            break;
+        if (unit->m_Owner != m_city->m_Owner)
+            continue;
+        if (MoMLocation(*unit) != MoMLocation(*m_city))
+            continue;
+        if (unit->m_Unit_Type < UNITTYPE_Arcane_Magic_Spirit)
+        {
+            unitEffects += 1;
+        }
+    }
+    unitEffects /= 2;
+    return unitEffects;
 }
 
 int MoMCity::calcRoadBonus() const
 {
-    // TODO: Protect array bounds
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     int roadBonus = 0;
-    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (cityNr < gMAX_CITIES); ++cityNr)
     {
         if (cityNr == getCityNr())
             continue;
@@ -432,6 +471,9 @@ int MoMCity::calcRoadBonus() const
 
 int MoMCity::calcTradeBonus() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     bool onRiver = false;
     bool atSea = false;
     for (int dy = -1; dy <= 1; ++dy)
@@ -480,8 +522,39 @@ int MoMCity::calcTradeBonus() const
     return tradeBonus;
 }
 
+int MoMCity::calcUnrestPercentage() const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    Wizard* wizard = m_game->getWizard(m_city->m_Owner);
+    if (0 == wizard)
+        return -1;
+
+    const uint16_t* taxUnrestTable = m_game->getTaxUnrestTable();
+    if (0 == taxUnrestTable)
+        return -1;
+    int unrestPercentage = taxUnrestTable[wizard->m_Tax_Rate];
+
+    eRace homeRace = wizard->m_Home_Race;
+    const int8_t* racialUnrestTable = m_game->getUnrest_Table(homeRace);
+    if (0 == racialUnrestTable)
+        return -1;
+    unrestPercentage += 10 * racialUnrestTable[m_city->m_Race];
+
+    if (OWNER_None != m_city->m_City_Enchantments._Famine_)
+    {
+        unrestPercentage += 25;
+    }
+
+    return unrestPercentage;
+}
+
 bool MoMCity::canProduce(eBuilding building) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     // Cannot build what is already there
     if (isBuildingPresent(building))
         return false;
@@ -509,6 +582,9 @@ bool MoMCity::canProduce(eBuilding building) const
 
 bool MoMCity::canProduce(eProducing produce) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     bool allowed = canProduce(static_cast<eBuilding>(produce));
     if (!allowed)
     {
@@ -519,6 +595,9 @@ bool MoMCity::canProduce(eProducing produce) const
 
 bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     Unit_Type_Data* unitType = m_game->getUnitTypeData(unitTypeNr);
     if (0 == unitType)
         return false;
@@ -567,12 +646,18 @@ const City *MoMCity::getCity() const
 
 int MoMCity::getCityNr() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     return (int)(m_city - m_game->getCity(0));
 }
 
 template<typename Functor>
 bool MoMCity::enumerateTerrain(Functor& functor) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     for (int dy = -2; dy <= 2; ++dy)
     {
         for (int dx = -2; dx <= 2; ++dx)
@@ -594,6 +679,9 @@ bool MoMCity::enumerateTerrain(Functor& functor) const
 
 int MoMCity::getCostToBuy(eProducing producing) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (PRODUCING_None == producing)
     {
         producing = m_city->m_Producing;
@@ -624,6 +712,9 @@ int MoMCity::getCostToBuy(eProducing producing) const
 
 int MoMCity::getCostToProduce(eProducing producing) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (PRODUCING_None == producing)
     {
         producing = m_city->m_Producing;
@@ -659,6 +750,9 @@ int MoMCity::getCostToProduce(eProducing producing) const
 
 int MoMCity::getTimeToComplete(eProducing producing) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     if (PRODUCING_None == producing)
     {
         producing = m_city->m_Producing;
@@ -675,6 +769,9 @@ int MoMCity::getTimeToComplete(eProducing producing) const
 
 int MoMCity::getUnitReductionPercentage() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     // TODO: Refactor to MoMTerrain::getUnitReduction()
     class CountUnitReduction
     {
@@ -710,6 +807,9 @@ int MoMCity::getUnitReductionPercentage() const
 
 int MoMCity::getWildGameBonus() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
     class CountWildGame
     {
     public:
@@ -741,6 +841,9 @@ int MoMCity::getWildGameBonus() const
 
 bool MoMCity::hasForestRequirement() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     class CheckCleanForest
     {
     public:
@@ -756,6 +859,9 @@ bool MoMCity::hasForestRequirement() const
 
 bool MoMCity::hasHillRequirement() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     class CheckCleanHill
     {
     public:
@@ -774,6 +880,9 @@ bool MoMCity::hasHillRequirement() const
 
 bool MoMCity::hasWaterRequirement() const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     class CheckCleanWater
     {
     public:
@@ -791,6 +900,9 @@ bool MoMCity::hasWaterRequirement() const
 
 bool MoMCity::isBuildingAllowed(eBuilding building) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     // Check prohibited buildings
     Race_Data* raceData = m_game->getRaceData(m_city->m_Race);
     if (0 == raceData)
@@ -811,6 +923,9 @@ bool MoMCity::isBuildingAllowed(eBuilding building) const
 
 bool MoMCity::isBuildingPresent(eBuilding building) const
 {
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
     if (building == BUILDING_Forest)
     {
         return hasForestRequirement();

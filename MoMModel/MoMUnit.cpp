@@ -146,7 +146,10 @@ void MoMUnit::changeUnit(Battle_Unit *battleUnit)
 
     if (0 != m_game)
     {
-        m_unit = m_game->getUnit(battleUnit->m_unitNr);
+        if (0 != battleUnit)
+        {
+            m_unit = m_game->getUnit(battleUnit->m_unitNr);
+        }
 
         if (0 != m_unit)
         {
@@ -186,7 +189,10 @@ void MoMUnit::changeUnit(Hired_Hero *hiredHero)
     {
         ePlayer playerNr = m_game->getPlayerNr(m_hiredHero);
 
-        m_unit = m_game->getUnit(hiredHero->m_Unit_Nr);
+        if (0 != hiredHero)
+        {
+            m_unit = m_game->getUnit(hiredHero->m_Unit_Nr);
+        }
         if (0 != m_unit)
         {
             m_unitType = m_game->getUnitTypeData(m_unit->m_Unit_Type);
@@ -263,14 +269,17 @@ void MoMUnit::changeUnit(Unit_Type_Data* unitType)
 
 void MoMUnit::changeUnit(Unit* unit)
 {
-    assert(0 != unit);
     close();
 
     m_unit = unit;
 
     if (0 != m_game)
     {
-        MoM::eUnit_Type unitTypeNr = unit->m_Unit_Type;
+        MoM::eUnit_Type unitTypeNr = (eUnit_Type)-1;
+        if (0 != m_unit)
+        {
+            unitTypeNr = m_unit->m_Unit_Type;
+        }
 
 //        m_battleUnit = m_game->getBattle_Units();
         m_heroStats = m_game->getHeroStats(MoM::PLAYER_YOU, unitTypeNr);

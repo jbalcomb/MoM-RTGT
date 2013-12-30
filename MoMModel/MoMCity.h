@@ -23,8 +23,12 @@ public:
     int  calcMaxPopTop() const;
     int  calcNrRebels() const;
     int  calcNrWorkers() const;
+    int  calcPacifyingNonReligiousEffects() const;
+    int  calcPacifyingReligiousEffects() const;
+    int  calcPacifyingUnitEffects() const;
     int  calcRoadBonus() const;
     int  calcTradeBonus() const;
+    int  calcUnrestPercentage() const;
     bool canProduce(eBuilding building) const;
     bool canProduce(eProducing produce) const;
     bool canProduce(eUnit_Type unitTypeNr) const;

@@ -8,7 +8,7 @@ CHANGES IN 0.2.8 (2013-12-30)
   any of the prefab items.
 
 * Improved Building Queue Dialog and its optional automatic application.
-  - No pop-up at next-turn are shown for a city that was managed.
+  - No pop-up at next-turn is shown for a city that was managed.
   - The dialog shows more columns and information.
   - You can manage a city completely from the dialog (change farmers/
     workers, change production, buy production).
