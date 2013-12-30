@@ -1355,7 +1355,7 @@ void QMoMResources::createSpellImages()
     spell = MoM::SPELL_Awareness;
     m_spellImages[spell] = MoM::convertLbxToImage(specfxLbx.getRecord(56), specfxLbx.getRecordSize(56), m_colorTable, toStr(spell));
 
-    for (int entryNr = 0; entryNr < ARRAYSIZE(gTableAdditionalSpells); ++entryNr)
+    for (int entryNr = 0; toUInt(entryNr) < ARRAYSIZE(gTableAdditionalSpells); ++entryNr)
     {
         eSpell spell = gTableAdditionalSpells[entryNr].ability;
         if (0 != m_spellImages[spell])

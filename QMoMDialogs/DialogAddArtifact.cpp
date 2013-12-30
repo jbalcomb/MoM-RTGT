@@ -43,7 +43,7 @@ void DialogAddArtifact::slot_gameChanged(const QMoMGamePtr &game)
     ui->comboBox_Artifacts->clear();
     if (0 == m_game)
         return;
-    for (int artifactNr = 0; artifactNr < gMAX_ARTIFACTS_IN_GAME; ++artifactNr)
+    for (int artifactNr = 0; toUInt(artifactNr) < gMAX_ARTIFACTS_IN_GAME; ++artifactNr)
     {
         ui->comboBox_Artifacts->addItem("");
     }
@@ -52,7 +52,7 @@ void DialogAddArtifact::slot_gameChanged(const QMoMGamePtr &game)
 
 void DialogAddArtifact::slot_gameUpdated()
 {
-    for (int artifactNr = 0; artifactNr < gMAX_ARTIFACTS_IN_GAME; ++artifactNr)
+    for (int artifactNr = 0; toUInt(artifactNr) < gMAX_ARTIFACTS_IN_GAME; ++artifactNr)
     {
         ItemDataLbx* artifact = m_game->getItemDataLbx(artifactNr);
         if (0 == artifact)

@@ -1175,7 +1175,7 @@ bool MoMUnit::isBuildable(const City &city) const
     {
         return false;   // First required building not present
     }
-    else if (m_unitType->m_Building2_or_HeroType == BUILDING_None)
+    else if (static_cast<eBuilding>(m_unitType->m_Building2_or_HeroType) == BUILDING_None)
     {
         // Building requirements satisfied
     }

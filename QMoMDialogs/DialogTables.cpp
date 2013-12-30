@@ -505,7 +505,7 @@ void DialogTables::slot_addRow_to_ItemsInGame(int row)
 
     // Find next item
     MoM::Item* data = 0;
-    for (++itemNr; itemNr < MoM::gMAX_ITEMS_VALID; ++itemNr)
+    for (++itemNr; toUInt(itemNr) < MoM::gMAX_ITEMS_VALID; ++itemNr)
     {
         data = m_game->getItem(itemNr);
         if ((0 != data) && (data->m_Cost > 0))

@@ -315,7 +315,7 @@ EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum max, e
     m_min(),
     m_max(max)
 {
-    QTableWidgetItem::setData(Qt::EditRole, toString());
+    QTableWidgetItem::setData(Qt::EditRole, this->toString());
 }
 
 template<typename Enum>
@@ -324,15 +324,15 @@ EnumTableItem<Enum>::EnumTableItem(const QMoMGamePtr& game, Enum* e, Enum min, E
     m_min(min),
     m_max(max)
 {
-    QTableWidgetItem::setData(Qt::EditRole, toString());
+    QTableWidgetItem::setData(Qt::EditRole, this->toString());
 }
 
 template<typename Enum>
 QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
 {
-    createActionGroup(parent);
+    this->createActionGroup(parent);
 
-    if (((getShowEnum() == SHOWENUM_minusOne) || (getShowEnum() == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
+    if (((this->getShowEnum() == SHOWENUM_minusOne) || (this->getShowEnum() == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
     {
         addAction((Enum)-1);
     }
@@ -343,7 +343,7 @@ QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
         addAction(e);
     }
 
-    return getActions();
+    return this->getActions();
 }
 
 /////////////////////////////////////////
@@ -368,20 +368,20 @@ EnumTableItemList<Enum>::EnumTableItemList(const QMoMGamePtr& game, Enum* e, con
     EnumTableItemBase<Enum>(game, e, SHOWENUM_normal, 0),
     m_listEnums(listEnums)
 {
-    QTableWidgetItem::setData(Qt::EditRole, toString());
+    QTableWidgetItem::setData(Qt::EditRole, this->toString());
 }
 
 template<typename Enum>
 QList<QAction*> EnumTableItemList<Enum>::requestActions(QObject* parent)
 {
-    createActionGroup(parent);
+    this->createActionGroup(parent);
 
     foreach (Enum e, m_listEnums)
     {
         addAction(e);
     }
 
-    return getActions();
+    return this->getActions();
 }
 
 /////////////////////////////////////////

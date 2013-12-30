@@ -171,11 +171,9 @@ void DialogBuildingQueues::update()
     if (0 == controller)
         return;
 	int nrCities = 0;
-    int nrUnits = 0;
     if (0 != m_game)
 	{
         nrCities = m_game->getNrCities();
-        nrUnits = m_game->getNrUnits();
     }
 
     MoM::MoMController momController(m_game.data());

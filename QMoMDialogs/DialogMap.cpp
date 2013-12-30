@@ -17,7 +17,7 @@
 #include "DialogMap.h"
 #include "ui_DialogMap.h"
 
-#include "dialogcalculatoraddress.h"
+#include "DialogCalculatorAddress.h"
 #include "MainWindow.h"
 #include "MoMCombat.h"
 #include "MoMController.h"

@@ -169,7 +169,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     // Find free item slot for its attributes (or fail)
     int16_t freeItemNr = -1;
     Item* freeItem = 0;
-    for (int itemNr = 0; (0 == freeItem) && (itemNr < gMAX_ITEMS_IN_GAME); ++itemNr)
+    for (int itemNr = 0; (0 == freeItem) && (toUInt(itemNr) < gMAX_ITEMS_IN_GAME); ++itemNr)
     {
         Item* item = m_game->getItem(itemNr);
         if ((0 == item->m_Cost) || (-1 == item->m_Cost))
@@ -187,7 +187,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     // Find free item slot in fortress (or fail)
     Wizard* wizard = m_game->getWizard(playerNr);
     int fortressSlotNr = -1;
-    for (int slotNr = 0; (-1 == fortressSlotNr) && (slotNr < ARRAYSIZE(wizard->m_Items_in_Slots)); ++slotNr)
+    for (int slotNr = 0; (-1 == fortressSlotNr) && (toUInt(slotNr) < ARRAYSIZE(wizard->m_Items_in_Slots)); ++slotNr)
     {
         if (-1 == wizard->m_Items_in_Slots[slotNr])
         {
@@ -541,7 +541,7 @@ int MoMController::calcGoldIncome(ePlayer playerNr) const
         goldProduced += city->m_Coins - city->m_Maintenance;
     }
 
-    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
+    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
     {
         Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
         MoMUnit momUnit(m_game, hiredHero);
@@ -591,7 +591,7 @@ int MoMController::calcTotalFame(ePlayer playerNr) const
         return 0;
 
     int fame = 0;
-    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
+    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
     {
         Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
         MoMUnit momUnit(m_game, hiredHero);
@@ -895,7 +895,7 @@ bool MoMController::removeCityFromGameQueue(int cityNr)
     if (0 == dataSegment)
         return false;
     bool removed = false;
-    for (int queueNr = 0; (queueNr < dataSegment->m_nr_city_queue) && (queueNr < ARRAYSIZE(dataSegment->m_arr20_city_queue)); ++queueNr)
+    for (int queueNr = 0; (queueNr < dataSegment->m_nr_city_queue) && (toUInt(queueNr) < ARRAYSIZE(dataSegment->m_arr20_city_queue)); ++queueNr)
     {
         CityQueueElement* queueElt = &dataSegment->m_arr20_city_queue[queueNr];
         if (cityNr == queueElt->m_CityNr)

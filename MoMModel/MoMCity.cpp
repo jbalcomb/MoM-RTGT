@@ -11,22 +11,22 @@ MoMCity::MoMCity(MoMGameBase *game, const City *city) :
 {
 }
 
+class CountBasicFood
+{
+public:
+    CountBasicFood() : food(0) {}
+    bool operator()(const MoMTerrain& terrain)
+    {
+        food += terrain.getBasicFoodBonus();
+        return false;
+    }
+    int food;
+};
+
 int MoMCity::calcBasicFood() const
 {
     if ((0 == m_game) || (0 == m_city))
         return -1;
-
-    class CountBasicFood
-    {
-    public:
-        CountBasicFood() : food(0) {}
-        bool operator()(const MoMTerrain& terrain)
-        {
-            food += terrain.getBasicFoodBonus();
-            return false;
-        }
-        int food;
-    };
 
     CountBasicFood count;
     enumerateTerrain(count);
@@ -42,25 +42,25 @@ int MoMCity::calcBasicFood() const
     return basicFood;
 }
 
+class CountGoldBonus
+{
+public:
+    CountGoldBonus(bool minersGuild, bool dwarven)
+        : m_minersGuild(minersGuild), m_dwarven(dwarven), goldBonus(0) {}
+    bool operator()(const MoMTerrain& terrain)
+    {
+        goldBonus += terrain.getGoldBonus(m_minersGuild, m_dwarven);
+        return false;
+    }
+    bool m_minersGuild;
+    bool m_dwarven;
+    int goldBonus;
+};
+
 int MoMCity::calcGoldBonus() const
 {
     if ((0 == m_game) || (0 == m_city))
         return -1;
-
-    class CountGoldBonus
-    {
-    public:
-        CountGoldBonus(bool minersGuild, bool dwarven)
-            : m_minersGuild(minersGuild), m_dwarven(dwarven), goldBonus(0) {}
-        bool operator()(const MoMTerrain& terrain)
-        {
-            goldBonus += terrain.getGoldBonus(m_minersGuild, m_dwarven);
-            return false;
-        }
-        bool m_minersGuild;
-        bool m_dwarven;
-        int goldBonus;
-    };
 
     CountGoldBonus count(isBuildingPresent(BUILDING_Miners_Guild), (m_city->m_Race == RACE_Dwarven));
     enumerateTerrain(count);
@@ -68,23 +68,23 @@ int MoMCity::calcGoldBonus() const
     return count.goldBonus;
 }
 
+class CountProductionPercentage
+{
+public:
+    CountProductionPercentage(bool gaiasBlessing) : m_gaiasBlessing(gaiasBlessing), productionPercentage(0) {}
+    bool operator()(const MoMTerrain& terrain)
+    {
+        productionPercentage += terrain.getProductionPercentage(m_gaiasBlessing);
+        return false;
+    }
+    bool m_gaiasBlessing;
+    int productionPercentage;
+};
+
 int MoMCity::calcProductionBonusPercentage() const
 {
     if ((0 == m_game) || (0 == m_city))
         return -1;
-
-    class CountProductionPercentage
-    {
-    public:
-        CountProductionPercentage(bool gaiasBlessing) : m_gaiasBlessing(gaiasBlessing), productionPercentage(0) {}
-        bool operator()(const MoMTerrain& terrain)
-        {
-            productionPercentage += terrain.getProductionPercentage(m_gaiasBlessing);
-            return false;
-        }
-        bool m_gaiasBlessing;
-        int productionPercentage;
-    };
 
     CountProductionPercentage count(OWNER_None != m_city->m_City_Enchantments.Gaias_Blessing);
     enumerateTerrain(count);
@@ -446,7 +446,7 @@ int MoMCity::calcRoadBonus() const
         return -1;
 
     int roadBonus = 0;
-    for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (cityNr < gMAX_CITIES); ++cityNr)
+    for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (toUInt(cityNr) < gMAX_CITIES); ++cityNr)
     {
         if (cityNr == getCityNr())
             continue;
@@ -619,7 +619,7 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
     {
         return false;   // First required building not present
     }
-    else if (unitType->m_Building2_or_HeroType == BUILDING_None)
+    else if (static_cast<eBuilding>(unitType->m_Building2_or_HeroType) == BUILDING_None)
     {
         // Building requirements satisfied
     }
@@ -767,135 +767,138 @@ int MoMCity::getTimeToComplete(eProducing producing) const
     return timeCompletion;
 }
 
+// TODO: Refactor to MoMTerrain::getUnitReduction()
+class CountUnitReduction
+{
+public:
+    CountUnitReduction() : reduction(0) {}
+    bool operator()(const MoMTerrain& terrain)
+    {
+        if (terrain.getChanges().corruption)
+            return false;
+
+        if (terrain.getBonus() == DEPOSIT_Iron_Ore)
+        {
+            reduction += 5;
+        }
+        else if (terrain.getBonus() == DEPOSIT_Coal)
+        {
+            reduction += 10;
+        }
+
+        if (terrain.isSharedBetweenCities())
+        {
+            reduction /= 2;
+        }
+        return false;
+    }
+    int reduction;
+};
+
 int MoMCity::getUnitReductionPercentage() const
 {
     if ((0 == m_game) || (0 == m_city))
         return -1;
-
-    // TODO: Refactor to MoMTerrain::getUnitReduction()
-    class CountUnitReduction
-    {
-    public:
-        CountUnitReduction() : reduction(0) {}
-        bool operator()(const MoMTerrain& terrain)
-        {
-            if (terrain.getChanges().corruption)
-                return false;
-
-            if (terrain.getBonus() == DEPOSIT_Iron_Ore)
-            {
-                reduction += 5;
-            }
-            else if (terrain.getBonus() == DEPOSIT_Coal)
-            {
-                reduction += 10;
-            }
-
-            if (terrain.isSharedBetweenCities())
-            {
-                reduction /= 2;
-            }
-            return false;
-        }
-        int reduction;
-    };
 
     CountUnitReduction count;
     enumerateTerrain(count);
     return count.reduction;
 }
 
+class CountWildGame
+{
+public:
+    CountWildGame() : food(0) {}
+    bool operator()(const MoMTerrain& terrain)
+    {
+        if (terrain.getChanges().corruption)
+            return false;
+        if (terrain.getBonus() == DEPOSIT_Wild_Game)
+        {
+            if (terrain.isSharedBetweenCities())
+            {
+                food++;
+            }
+            else
+            {
+                food += 2;
+            }
+        }
+        return false;
+    }
+    int food;
+};
+
 int MoMCity::getWildGameBonus() const
 {
     if ((0 == m_game) || (0 == m_city))
         return -1;
-
-    class CountWildGame
-    {
-    public:
-        CountWildGame() : food(0) {}
-        bool operator()(const MoMTerrain& terrain)
-        {
-            if (terrain.getChanges().corruption)
-                return false;
-            if (terrain.getBonus() == DEPOSIT_Wild_Game)
-            {
-                if (terrain.isSharedBetweenCities())
-                {
-                    food++;
-                }
-                else
-                {
-                    food += 2;
-                }
-            }
-            return false;
-        }
-        int food;
-    };
 
     CountWildGame count;
     enumerateTerrain(count);
     return count.food;
 }
 
+class CheckCleanForest
+{
+public:
+    bool operator()(const MoMTerrain& terrain)
+    {
+        return ((terrain.getCategory() == TERRAINCATEGORY_Forest)
+                && (!terrain.getChanges().corruption));
+    }
+};
+
 bool MoMCity::hasForestRequirement() const
 {
     if ((0 == m_game) || (0 == m_city))
         return false;
 
-    class CheckCleanForest
-    {
-    public:
-        bool operator()(const MoMTerrain& terrain)
-        {
-            return ((terrain.getCategory() == TERRAINCATEGORY_Forest)
-                    && (!terrain.getChanges().corruption));
-        }
-    };
-
-    return enumerateTerrain(CheckCleanForest());
+    CheckCleanForest check;
+    return enumerateTerrain(check);
 }
+
+class CheckCleanHill
+{
+public:
+    bool operator()(const MoMTerrain& terrain)
+    {
+        if (terrain.getChanges().corruption)
+            return false;
+        return ((terrain.getCategory() == TERRAINCATEGORY_Hills)
+                || (terrain.getCategory() == TERRAINCATEGORY_Mountain)
+                || (terrain.getCategory() == TERRAINCATEGORY_Volcano));
+    }
+};
 
 bool MoMCity::hasHillRequirement() const
 {
     if ((0 == m_game) || (0 == m_city))
         return false;
 
-    class CheckCleanHill
-    {
-    public:
-        bool operator()(const MoMTerrain& terrain)
-        {
-            if (terrain.getChanges().corruption)
-                return false;
-            return ((terrain.getCategory() == TERRAINCATEGORY_Hills)
-                    || (terrain.getCategory() == TERRAINCATEGORY_Mountain)
-                    || (terrain.getCategory() == TERRAINCATEGORY_Volcano));
-        }
-    };
-
-    return enumerateTerrain(CheckCleanHill());
+    CheckCleanHill check;
+    return enumerateTerrain(check);
 }
+
+class CheckCleanWater
+{
+public:
+    bool operator()(const MoMTerrain& terrain)
+    {
+        if (terrain.getChanges().corruption)
+            return false;
+        return ((terrain.getCategory() == TERRAINCATEGORY_Ocean)
+                || (terrain.getCategory() == TERRAINCATEGORY_Shore));
+    }
+};
 
 bool MoMCity::hasWaterRequirement() const
 {
     if ((0 == m_game) || (0 == m_city))
         return false;
 
-    class CheckCleanWater
-    {
-    public:
-        bool operator()(const MoMTerrain& terrain)
-        {
-            if (terrain.getChanges().corruption)
-                return false;
-            return ((terrain.getCategory() == TERRAINCATEGORY_Ocean)
-                    || (terrain.getCategory() == TERRAINCATEGORY_Shore));
-        }
-    };
-
-    return enumerateTerrain(CheckCleanWater());
+    CheckCleanWater check;
+    return enumerateTerrain(check);
 }
 
 bool MoMCity::isBuildingAllowed(eBuilding building) const
