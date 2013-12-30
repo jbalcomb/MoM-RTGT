@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_updating(false)
 {
     ui->setupUi(this);
-
     srand(time(NULL));
 
     m_timer = new QTimer();

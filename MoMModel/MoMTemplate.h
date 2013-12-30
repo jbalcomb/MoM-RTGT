@@ -37,16 +37,19 @@
 #pragma warning( once : 4480 )  // nonstandard extension used: specifying underlying type for enum
 #define ENUMSIZE8       : uint8_t
 #define ENUMSIZE16      : uint16_t
+#define PACKED_ENUM
 #endif
 
 #ifdef __GNUC__     // Compiler Linux g++ (use g++ -fshort-enums)
 #define ENUMSIZE8
 #define ENUMSIZE16
+#define PACKED_ENUM __attribute__((packed))
 #endif
 
 #ifdef SWIG         // Swig wrapper generator
 #define ENUMSIZE8
 #define ENUMSIZE16
+#define PACKED_ENUM
 #endif
 
 namespace MoM {
@@ -66,7 +69,7 @@ enum eBannerColor ENUMSIZE16
 
     eBannerColor_MAX,
     eBannerColor__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eBattleEnchantment
 {
@@ -101,7 +104,7 @@ enum eBattleUnitActive ENUMSIZE8
 
     eBattleUnitActive_MAX,
     eBattleUnitActive_SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eBattleUnitTactic ENUMSIZE16
 {
@@ -127,7 +130,7 @@ enum eBattleUnitTactic ENUMSIZE16
 
     eBattleUnitTactic_MAX,
     eBattleUnitTactic_SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eBattleCondition ENUMSIZE16
 {
@@ -140,7 +143,7 @@ enum eBattleCondition ENUMSIZE16
 
     eBattleCondition_MAX,
     eBattleCondition__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eBuilding ENUMSIZE16
 {
@@ -193,7 +196,7 @@ enum eBuilding ENUMSIZE16
 
     eBuilding_extra_MAX,                    // 201
     eBuilding__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eBuilding8 ENUMSIZE8
 {
@@ -245,7 +248,7 @@ enum eBuilding8 ENUMSIZE8
     BUILDING8_Hill = 200,                   // 200 prerequisite for miner's guild
 
     eBuilding8_extra_MAX                    // 201
-};
+} PACKED_ENUM;
 
 enum eBuildingCategory ENUMSIZE16
 {
@@ -260,7 +263,7 @@ enum eBuildingCategory ENUMSIZE16
 
     eBuildingCategory_MAX,
     eBuildingCategory__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eBuildingStatus ENUMSIZE8
 {
@@ -271,7 +274,7 @@ enum eBuildingStatus ENUMSIZE8
 
     eBuildingStatus_MAX,
     eBuildingStatus__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eCentralStructure ENUMSIZE16
 {
@@ -291,7 +294,7 @@ enum eCentralStructure ENUMSIZE16
 
     eCentralStructure_MAX,
     eCentralStructure__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eCityEnchantments
 {
@@ -335,7 +338,7 @@ enum eCity_Size ENUMSIZE8
     CITYSIZE_Capital = 5,
 
     eCity_Size_MAX
-};
+} PACKED_ENUM;
 
 enum eCityWall
 {
@@ -381,7 +384,7 @@ enum eDifficulty ENUMSIZE16
 
     eDifficulty_MAX = 5,
     eDifficulty__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eDifficulty140m ENUMSIZE16
 {
@@ -392,7 +395,7 @@ enum eDifficulty140m ENUMSIZE16
     DIFFICULTY140M_Impossible = 4,
 
     eDifficulty140m_MAX = 5
-};
+} PACKED_ENUM;
 
 enum eEvent
 {
@@ -439,7 +442,7 @@ enum eGameState ENUMSIZE16
     STATE_Info = 14,
     STATE_Diplomacy = 15,
     STATE_Computers_turn_GUESS = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eGlobalEnchantment
 {
@@ -476,7 +479,7 @@ enum eGrand_Vizier ENUMSIZE16
     GRANDVIZIER_Off = 0,
     GRANDVIZIER_On = 1,
     eGrand_Vizier__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eHelpIndex
 {
@@ -1355,7 +1358,9 @@ enum eHero_Level_Status ENUMSIZE16
     HEROLEVELSTATUS_Dead_Level_8 = 0xFFF8,
     HEROLEVELSTATUS_Dead_Level_9 = 0xFFF7,
     HEROLEVELSTATUS_Active_in_Wizards_army = 0xFFEC,
-};
+
+    eHero_Level_Status__SIZE__ = 0xFFFF
+} PACKED_ENUM;
 
 enum eHero_TypeCode ENUMSIZE8
 {
@@ -1365,7 +1370,7 @@ enum eHero_TypeCode ENUMSIZE8
     HEROTYPE_Wizard = 3,
 
     eHero_TypeCode_MAX
-};
+} PACKED_ENUM;
 
 enum eHousing ENUMSIZE16
 {
@@ -1375,7 +1380,7 @@ enum eHousing ENUMSIZE16
 
     eHousing_MAX,
     eHousing__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eItemPower
 {
@@ -1433,7 +1438,7 @@ enum eItemPowerType ENUMSIZE8
 
     eItemPowerType_MAX,
     eItemPowerType__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eItem_Icon ENUMSIZE16
 {
@@ -1456,7 +1461,7 @@ enum eItem_Icon ENUMSIZE16
 
     eItem_Icon_MAX,
     eItem_Icon__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 
 enum eItem_Type ENUMSIZE8
@@ -1474,7 +1479,7 @@ enum eItem_Type ENUMSIZE8
 
     eItem_Type_MAX,
     eItem_Type__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eLand_Size ENUMSIZE16
 {
@@ -1484,7 +1489,7 @@ enum eLand_Size ENUMSIZE16
 
     eLand_Size_MAX,
     eLand_Size__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eLand_Size140m ENUMSIZE16
 {
@@ -1495,7 +1500,7 @@ enum eLand_Size140m ENUMSIZE16
 
     eLand_Size140m_MAX,
     eLand_Size140m__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eLevel ENUMSIZE8
 {
@@ -1510,7 +1515,7 @@ enum eLevel ENUMSIZE8
     LEVEL_Level_9 = 8,
 
     eLevel_MAX
-};
+} PACKED_ENUM;
 
 enum eMagic_Powerful ENUMSIZE16
 {
@@ -1520,7 +1525,7 @@ enum eMagic_Powerful ENUMSIZE16
 
     eMagic_Powerful_MAX,
     eMagic_Powerful_Size__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eMagic_Powerful140m ENUMSIZE16
 {
@@ -1532,7 +1537,7 @@ enum eMagic_Powerful140m ENUMSIZE16
 
     eMagic_Powerful140m_MAX,
     eMagic_Powerful140m_Size__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eMovement
 {
@@ -1552,7 +1557,7 @@ enum eTower_Node_Lair_Status ENUMSIZE8
     LAIRSTATUS_intact = 1,
 
     eTower_Node_Lair_Status_MAX
-}; 
+} PACKED_ENUM;
 
 enum eTower_Node_Lair_Type ENUMSIZE8
 {
@@ -1570,7 +1575,7 @@ enum eTower_Node_Lair_Type ENUMSIZE8
     LAIRTYPE_Fallen_temple = 10,    // life book if a book is awarded
 
     eTower_Node_Lair_Type_MAX
-};
+} PACKED_ENUM;
 
 enum eNode_Type ENUMSIZE8
 {
@@ -1579,7 +1584,7 @@ enum eNode_Type ENUMSIZE8
     NODETYPE_Chaos = 2,
 
     eNode_Type_MAX
-};
+} PACKED_ENUM;
 
 enum eObjective ENUMSIZE16
 {
@@ -1591,7 +1596,7 @@ enum eObjective ENUMSIZE16
 
     eObjective_MAX,
     eObjective__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 // Owners are optional, as opposing to a player
 enum eOwner ENUMSIZE8
@@ -1606,7 +1611,7 @@ enum eOwner ENUMSIZE8
 
     eOwner_MAX,
     eOwner__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum ePersonality ENUMSIZE16
 {
@@ -1619,7 +1624,7 @@ enum ePersonality ENUMSIZE16
 
     ePersonality_MAX,
     ePersonality__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 // A player is always given, as opposing to an owner,
 enum ePlayer ENUMSIZE8
@@ -1634,7 +1639,7 @@ enum ePlayer ENUMSIZE8
 
     ePlayer_MAX,
     ePlayer__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum ePlane ENUMSIZE8
 {
@@ -1646,7 +1651,7 @@ enum ePlane ENUMSIZE8
 
     ePlane_MAX,
     ePlane__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum ePlane16 ENUMSIZE16
 {
@@ -1655,7 +1660,7 @@ enum ePlane16 ENUMSIZE16
 
     ePlane16_MAX,
     ePlane16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum ePortrait ENUMSIZE8
 {
@@ -1677,7 +1682,7 @@ enum ePortrait ENUMSIZE8
 
     ePortrait_MAX,
     ePortrait_SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eProducing ENUMSIZE16
 {
@@ -1860,7 +1865,7 @@ enum eProducing ENUMSIZE16
     
     eProducing_MAX,
     eProducing__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 
 enum eRace ENUMSIZE8
@@ -1891,7 +1896,7 @@ enum eRace ENUMSIZE8
 
     eRace_MAX,
     eRace__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eRandomPickType ENUMSIZE16 {
     RANDOMPICK_Random_Ftr,
@@ -1899,8 +1904,8 @@ enum eRandomPickType ENUMSIZE16 {
     RANDOMPICK_Random_Any,
 
     eRandomPickType_MAX,
-    eRandomPickType__SIZE__ = 0xFFFF,
-};
+    eRandomPickType__SIZE__ = 0xFFFF
+} PACKED_ENUM;
 
 enum eRanged_Type ENUMSIZE8 {
     RANGED_None = 0xFF,
@@ -1933,7 +1938,7 @@ enum eRanged_Type ENUMSIZE8 {
     RANGED_Death_Gaze = 105,                // (Death)  Night stalker (resistance modifier in byte 17)
 
     eRanged_Type_MAX
-};
+} PACKED_ENUM;
 
 enum eRarity
 {
@@ -1956,7 +1961,7 @@ enum eRealm_Type ENUMSIZE8
     REALM_Arcane = 5,
 
     eRealm_Type_MAX
-};
+} PACKED_ENUM;
 
 enum eReward_Specials ENUMSIZE8
 {
@@ -1968,7 +1973,7 @@ enum eReward_Specials ENUMSIZE8
     REWARD_1_Spellbook_or_Skill = 5,    //5 = 1 Spellbook or Skill (74% - 26%)
     REWARD_2_Spellbooks_or_Skills = 6,   //6 = 2 Spellbooks or Skills (74% - 26%)
     eReward_Specials_MAX
-};
+} PACKED_ENUM;
 
 enum eSkill ENUMSIZE8
 {
@@ -1992,7 +1997,7 @@ enum eSkill ENUMSIZE8
     SKILL_Artificer,
     eSkill_MAX,
     eSkill__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eSkill16 ENUMSIZE16
 {
@@ -2016,7 +2021,7 @@ enum eSkill16 ENUMSIZE16
     SKILL16_Charismatic,
     SKILL16_Artificer,
     eSkill16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eSlot_Type8 ENUMSIZE8
 {
@@ -2029,7 +2034,7 @@ enum eSlot_Type8 ENUMSIZE8
 
     eSlot_Type8_MAX,
     eSlot_Type8__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eSlot_Type16 ENUMSIZE16
 {
@@ -2042,7 +2047,7 @@ enum eSlot_Type16 ENUMSIZE16
 
     eSlot_Type16_MAX,
     eSlot_Type16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eSpellCategory ENUMSIZE8
 {
@@ -2102,7 +2107,7 @@ enum eSpellCategory ENUMSIZE8
     SPELLCATEGORY_Banish = 0x17,
 
     eSpellCategory_MAX
-};
+} PACKED_ENUM;
 
 
 enum eSpellKnown ENUMSIZE8
@@ -2112,7 +2117,7 @@ enum eSpellKnown ENUMSIZE8
     SPELLKNOWN_currently_known = 2,
     SPELLKNOWN_researchable = 3,
     eSpellKnown_MAX
-};
+} PACKED_ENUM;
 
 enum eSpellKnown16 ENUMSIZE16 
 {
@@ -2121,7 +2126,7 @@ enum eSpellKnown16 ENUMSIZE16
     SPELLKNOWN16_currently_known = 2,
     SPELLKNOWN16_researchable = 3,
     eSpellKnown16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eSpell_Type ENUMSIZE8
 {
@@ -2132,7 +2137,7 @@ enum eSpell_Type ENUMSIZE8
     SPELLTYPE_Unit_Spells = 4,
     SPELLTYPE_Combat_Spells = 5,
     eSpell_Type_MAX
-};
+} PACKED_ENUM;
 
 enum eSpell ENUMSIZE8
 {
@@ -2380,7 +2385,7 @@ enum eSpell ENUMSIZE8
     SPELL_Spell_Of_Return  = 214,
 
     eSpell_MAX
-};
+} PACKED_ENUM;
 
 enum eSpell16 ENUMSIZE16
 {
@@ -2629,7 +2634,7 @@ enum eSpell16 ENUMSIZE16
 
     eSpell16_MAX,
     eSpell16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eTax_Rate ENUMSIZE16
 {
@@ -2642,7 +2647,7 @@ enum eTax_Rate ENUMSIZE16
     TAX_30_gold_75_unrest = 6,
     eTax_Rate_MAX,
     eTax_Rate__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eTerrainBattle ENUMSIZE16
 {
@@ -2653,7 +2658,7 @@ enum eTerrainBattle ENUMSIZE16
 
     eTerrainBattle_MAX,
     eTerrainBattle__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eTerrainBonusDeposit ENUMSIZE8
 {
@@ -2673,7 +2678,7 @@ enum eTerrainBonusDeposit ENUMSIZE8
     DEPOSIT_Nightshade = 0x80,          // (50 strength dispel)
 
     eTerrainBonusDeposit_MAX
-};
+} PACKED_ENUM;
 
 enum eTerrainCategory
 {
@@ -2766,7 +2771,7 @@ enum eTerrainType ENUMSIZE16
 
     eTerrainType_MAX,
     eTerrainType__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eUnitAbility
 {
@@ -2917,7 +2922,7 @@ enum eUnit_Active ENUMSIZE8
 
     eUnit_Active_MAX,
     eUnit_Active_SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eUnit_Status8 ENUMSIZE8
 {
@@ -2945,7 +2950,7 @@ enum eUnit_Status8 ENUMSIZE8
 
     eUnit_Status8_MAX,
     UNITSTATUS8_eUnit_Status_SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 enum eUnit_Type ENUMSIZE8
 {
@@ -3178,7 +3183,7 @@ enum eUnit_Type ENUMSIZE8
     UNITTYPE_Blue_Nagas,
 
     eUnit_Type_MAX                // 198 0xC6
-};
+} PACKED_ENUM;
 
 /*
 enum eUpkeep_Enchantment
@@ -3282,7 +3287,7 @@ enum eWar_Status ENUMSIZE8
     WARSTATUS_War = 3,
 
     eWar_Status_MAX
-};
+} PACKED_ENUM;
 
 enum eWeaponType ENUMSIZE8
 {
@@ -3292,7 +3297,7 @@ enum eWeaponType ENUMSIZE8
     WEAPON_adamantium = 3,
 
     eWeaponType_MAX
-};
+} PACKED_ENUM;
 
 enum eYesNo16 ENUMSIZE16
 {
@@ -3301,7 +3306,7 @@ enum eYesNo16 ENUMSIZE16
 
     eYesNo16_MAX,
     eYesNo16__SIZE__ = 0xFFFF
-};
+} PACKED_ENUM;
 
 enum eYesNo8 ENUMSIZE8
 {
@@ -3310,7 +3315,7 @@ enum eYesNo8 ENUMSIZE8
 
     eYesNo8_MAX,
     eYesNo8__SIZE__ = 0xFF
-};
+} PACKED_ENUM;
 
 //
 // CONSTANTS
@@ -3343,7 +3348,7 @@ const unsigned gMAX_WIZARD_RECORDS = 6;
 // STRUCTS / UNIONS
 //
 
-typedef struct PACKED_STRUCT // Skills
+struct Skills
 {
     eYesNo8             Alchemy;                // 00 (0 or 1)
     eYesNo8             Warlord;
@@ -3364,7 +3369,7 @@ typedef struct PACKED_STRUCT // Skills
     eYesNo8             Charismatic;
     eYesNo8             Artificer;              // 11
                                 // SIZE 12
-} Skills;
+} PACKED_STRUCT; // Skills;
 
 typedef union // unionSkills
 {

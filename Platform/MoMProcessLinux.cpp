@@ -85,6 +85,18 @@ void MoMProcess::closeProcess() throw()
     }
 }
 
+bool MoMProcess::createProcess(const char* applicationName, const char* commandLine, const char* currentDirectory)
+{
+    std::cout << "MoMProcess::createProcess() not implemented yet" << std::endl;
+    return false;
+}
+
+bool MoMProcess::terminateCreatedProcess()
+{
+    std::cout << "MoMProcess::terminateCreatedProcess() not implemented yet" << std::endl;
+    return false;
+}
+
 bool MoMProcess::findProcessAndData()
 {
     const std::string title = "dosbox";
