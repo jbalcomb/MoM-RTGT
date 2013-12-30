@@ -451,6 +451,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 
         (void)createColorTable();
 
+        createLbxImages("BACKGRND", m_backgrndImages);
         createBuildingAnimations();
         createCitySizeImages();
         createLbxImages("CMBTCITY", m_cmbtcityImages);
@@ -898,6 +899,37 @@ const QMoMImagePtr QMoMResources::getImage(eRace race) const
 const QMoMImagePtr QMoMResources::getImage(MoM::eRandomPickType randomPickType) const
 {
     QMoMImagePtr image(new QImage(QString(":/abilities/%0.gif").arg(prettyQStr(randomPickType))));
+    return image;
+}
+
+const QMoMImagePtr QMoMResources::getImage(eResource resource) const
+{
+    int lbxIndex = -1;
+    switch (resource)
+    {
+    case RESOURCE_Food:         lbxIndex = 40; break;
+    case RESOURCE_Production:   lbxIndex = 41; break;
+    case RESOURCE_Gold:         lbxIndex = 42; break;
+    case RESOURCE_Power:        lbxIndex = 43; break;
+    case RESOURCE_Mana:         lbxIndex = 43; break;
+    case RESOURCE_Research:     lbxIndex = 44; break;
+    case RESOURCE_Gray_Food:    lbxIndex = 94; break;
+    case RESOURCE_Gray_Gold:    lbxIndex = 73; break;
+    case RESOURCE_10_Food:      lbxIndex = 88; break;
+    case RESOURCE_10_Production:lbxIndex = 89; break;
+    case RESOURCE_10_Gold:      lbxIndex = 90; break;
+    case RESOURCE_10_Power:     lbxIndex = 91; break;
+    case RESOURCE_10_Mana:      lbxIndex = 92; break;
+    case RESOURCE_10_Research:  lbxIndex = 93; break;
+    case RESOURCE_10_Gray_Food: lbxIndex = 95; break;
+    case RESOURCE_10_Gray_Gold: lbxIndex = 93; break;
+    default:                    ;
+    }
+    QMoMImagePtr image;
+    if (inVectorRange(m_backgrndImages, lbxIndex))
+    {
+        image = m_backgrndImages[lbxIndex];
+    }
     return image;
 }
 

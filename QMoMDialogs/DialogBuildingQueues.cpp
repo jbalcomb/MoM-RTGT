@@ -134,20 +134,32 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
 
     QStringList labelsCities;
     labelsCities << "Nr"
-           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Calc" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison" << "Buy";
+           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Conn" << "Calc" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
+           << "Time" << "Garrison" << "Buy" << "Factor";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
+    ui->tableWidget_Cities->setIconSize(QSize(24, 14));
     ui->tableWidget_Cities->sortByColumn(0, Qt::AscendingOrder);
 
     QStringList labelsSummary;
-    labelsSummary << "Total gold" << "Gold produced" << "Gold upkeep" << "Gold/turn" << "Food produced" << "Food upkeep" << "Food/turn";
+    labelsSummary << "Total gold" << "Gold produced" << "Gold upkeep" << "Gold/turn" << "Food produced" << "Food upkeep" << "Food/turn" << "Production";
     ui->tableWidget_Summary->setRowCount(labelsSummary.size());
     ui->tableWidget_Summary->setVerticalHeaderLabels(labelsSummary);
     for (int row = 0; row < ui->tableWidget_Summary->rowCount(); ++row)
     {
         ui->tableWidget_Summary->setItem(row, 0, new QMoMTableItemBase(m_game, ""));
     }
+    row = 0;
+    ui->tableWidget_Summary->setIconSize(QSize(24, 14));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Gold, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gray_Gold, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gray_Food, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Production, 2));
+    assert(ui->tableWidget_Summary->rowCount() == row);
     ui->tableWidget_Summary->resizeRowsToContents();
 
     QMoMSettings::readSettingsWindow(this);
@@ -222,22 +234,23 @@ void DialogBuildingQueues::update()
         ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrRebels(), 2)));
         ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 74 + toUInt(city->m_Race)), 2));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 40), 2),
-                                            QMoMTableItemBase::formatNumber(momCity.calcFoodProduced() - city->m_Population, SHOWNUMBER_alwaysPlus, 2)));
+                                            getResourceIcon(RESOURCE_Food, momCity.calcFoodProduced() - city->m_Population),
+                                            QMoMTableItemBase::formatNumber(momCity.calcFoodProduced() - city->m_Population, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 40), 2),
-                                            QMoMTableItemBase::formatNumber(city->m_Food_Produced - city->m_Population, SHOWNUMBER_alwaysPlus, 2)));
+                                            getResourceIcon(RESOURCE_Food, city->m_Food_Produced - city->m_Population),
+                                            QMoMTableItemBase::formatNumber(city->m_Food_Produced - city->m_Population, SHOWNUMBER_alwaysPlus, 3)));
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(momCity.countConnectedCities(), 2)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+                                            getResourceIcon(RESOURCE_Gold, momCity.calcGoldProduced() - city->m_Maintenance),
                                             QMoMTableItemBase::formatNumber(momCity.calcGoldProduced() - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+                                            getResourceIcon(RESOURCE_Gold, city->m_Coins - city->m_Maintenance),
                                             QMoMTableItemBase::formatNumber(city->m_Coins - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
+                                            getResourceIcon(RESOURCE_Production, momCity.calcHammersProduced()),
                                             QString("%0").arg(momCity.calcHammersProduced(), 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            *QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 41), 2),
+                                            getResourceIcon(RESOURCE_Production, city->m_Hammers),
                                             QString("%0").arg((int)(city->m_Hammers), 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0 /%1").arg((int)city->m_HammersAccumulated, 4).arg(buildingCost, 4)));
         QList<eProducing> listProducing;
@@ -253,9 +266,12 @@ void DialogBuildingQueues::update()
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
         m_columnBuy = col;
-        ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 42), 2),
+        ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2),
                                                                        QString("%0").arg(costToBuy, 4)));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("x %0").arg(momCity.getBuyFactor())));
+
+        assert(ui->tableWidget_Cities->columnCount() == col);
 
         for (int col = 0; col < ui->tableWidget_Cities->columnCount(); ++col)
         {
@@ -292,6 +308,7 @@ void DialogBuildingQueues::update()
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(foodProduced));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(-foodUpkeep));
     ui->tableWidget_Summary->item(row++, 0)->setText(QMoMTableItemBase::formatNumber(foodProduced - foodUpkeep, SHOWNUMBER_alwaysPlus));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0").arg(momController.calcTotalProduction(PLAYER_YOU)));
 }
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
@@ -366,7 +383,6 @@ void DialogBuildingQueues::on_tableWidget_Cities_clicked(const QModelIndex &inde
 
 void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(const QPoint &pos)
 {
-    qDebug() << "on_tableWidget_Cities_customContextMenuRequested" << pos;
     m_contextMenuOpen = true;
 
     QTableWidgetItem* pItem = ui->tableWidget_Cities->currentItem();
@@ -420,4 +436,19 @@ void DialogBuildingQueues::slot_ItemAction()
     {
         pMoMItem->slotAction();
     }
+}
+
+QIcon DialogBuildingQueues::getResourceIcon(eResource resource, int value) const
+{
+    switch (resource)
+    {
+    case RESOURCE_Food:         resource = (value <= -10 ? RESOURCE_10_Gray_Food : value < 0 ? RESOURCE_Gray_Food : value < 10 ? RESOURCE_Food : RESOURCE_10_Food); break;
+    case RESOURCE_Production:   resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Gold:         resource = (value <= -10 ? RESOURCE_10_Gray_Gold : value < 0 ? RESOURCE_Gray_Gold : value < 10 ? RESOURCE_Gold : RESOURCE_10_Gold); break;
+    case RESOURCE_Power:        resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Mana:         resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Research:     resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    default:                    ;
+    }
+    return *QMoMResources::instance().getIcon(resource, 2);
 }

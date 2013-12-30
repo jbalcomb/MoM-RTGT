@@ -10,6 +10,8 @@
 #ifndef MOMGAMEBASE_H
 #define MOMGAMEBASE_H
 
+#include <memory>
+
 #include "MoMLocation.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"

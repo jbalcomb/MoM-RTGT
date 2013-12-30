@@ -51,6 +51,118 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
 {
     // TODO: River mouth = river adjacent to shore???
 
+    // From code for easy reference ;)
+    eTerrainCategory value = eTerrainCategory_MAX;
+    if (terrainType >= 0x25A)
+    {
+        value = TERRAINCATEGORY_Tundra;
+    }
+    else if (terrainType >= 0x259)
+    {
+        value = TERRAINCATEGORY_Ocean;
+    }
+    else if (terrainType > 0x1D8)
+    {
+        value = TERRAINCATEGORY_Shore;
+    }
+    else if (terrainType > 0x1D3)
+    {
+        value = TERRAINCATEGORY_River;
+    }
+    else if (terrainType > 0x1C3)
+    {
+        value = TERRAINCATEGORY_Shore;
+    }
+    else if (terrainType > 0x123)
+    {
+        value = TERRAINCATEGORY_Desert;
+    }
+    else if (terrainType > 0x112)
+    {
+        value = TERRAINCATEGORY_Hills;
+    }
+    else if (terrainType > 0x102)
+    {
+        value = TERRAINCATEGORY_Mountain;
+    }
+    else if (terrainType > 0xE8)
+    {
+        value = TERRAINCATEGORY_River;
+    }
+    else if (terrainType > 0xC4)
+    {
+        value = TERRAINCATEGORY_Lake;
+    }
+    else if (terrainType > 0xB8)
+    {
+        value = TERRAINCATEGORY_River;
+    }
+    else if (terrainType < 0xA2)
+    {
+        if (terrainType == 0x01)
+        {
+            value = TERRAINCATEGORY_Grasslands;
+        }
+        else
+        {
+            value = TERRAINCATEGORY_Shore;
+        }
+    }
+    else
+    {
+        switch (terrainType)
+        {
+        case 0xA2: // 162
+        case 0xAC: // 172
+        case 0xAD: // 173
+        case 0xB4: // 180
+            value = TERRAINCATEGORY_Grasslands; break;
+
+        case 0xA3: // 163
+        case 0xB7: // 183
+        case 0xB8: // 184
+            value = TERRAINCATEGORY_Forest; break;
+
+        case 0xA4: // 164
+            value = TERRAINCATEGORY_Mountain; break;
+
+        case 0xA5: // 165
+            value = TERRAINCATEGORY_Desert; break;
+        case 0xAE: // 174
+        case 0xAF: // 175
+        case 0xB0: // 176
+            value = TERRAINCATEGORY_Desert; break;
+
+        case 0xA6: // 166
+        case 0xB1: // 177
+        case 0xB2: // 178
+            value = TERRAINCATEGORY_Swamp; break;
+
+        case 0xA7: // 167
+        case 0xB5: // 181
+        case 0xB6: // 182
+            value = TERRAINCATEGORY_Tundra; break;
+
+        case 0xA8: // 168
+            value = TERRAINCATEGORY_SorceryNode; break;
+
+        case 0xA9: // 169
+            value = TERRAINCATEGORY_NatureNode; break;
+
+        case 0xAA: // 170
+            value = TERRAINCATEGORY_ChaosNode; break;
+
+        case 0xAB: // 171
+            value = TERRAINCATEGORY_Hills; break;
+
+        case 0xB3: // 179
+            value = TERRAINCATEGORY_Volcano; break;
+
+        default:
+            assert(false && "Bad eTerrainCategory");
+        }
+    }
+    /*
     eTerrainCategory value = (eTerrainCategory)-1;
     switch (terrainType)
     {
@@ -148,7 +260,7 @@ eTerrainCategory MoMTerrain::getTerrainCategory(eTerrainType terrainType)
     {
         // Not found
     }
-
+*/
     return value;
 }
 

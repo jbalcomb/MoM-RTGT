@@ -639,6 +639,54 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
     return true;
 }
 
+int MoMCity::countConnectedCities() const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    int connectedCities = 0;
+    for (int cityNr = 0; (cityNr < m_game->getNrCities()) && (toUInt(cityNr) < gMAX_CITIES); ++cityNr)
+    {
+        unsigned bitmask = (1U << (cityNr % 8));
+        if (0 == (m_city->m_bitsetConnectedCities[cityNr / 8] & bitmask))
+            continue;
+        connectedCities++;
+    }
+    return connectedCities;
+}
+
+int MoMCity::getBuyFactor(eProducing producing) const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return -1;
+
+    if (PRODUCING_None == producing)
+    {
+        producing = m_city->m_Producing;
+    }
+
+    int buildingCost = getCostToProduce(producing);
+    int producedNextTurn = m_city->m_HammersAccumulated + m_city->m_Hammers;
+    int buyFactor;
+    if (m_city->m_HammersAccumulated <= 0)
+    {
+        buyFactor = 4;
+    }
+    else if (producedNextTurn >= buildingCost)
+    {
+        buyFactor = 0;    // Cannot buy - completed next turn
+    }
+    else if (m_city->m_HammersAccumulated < buildingCost / 3)
+    {
+        buyFactor = 3;
+    }
+    else
+    {
+        buyFactor = 2;
+    }
+    return buyFactor;
+}
+
 const City *MoMCity::getCity() const
 {
     return m_city;
@@ -688,25 +736,9 @@ int MoMCity::getCostToBuy(eProducing producing) const
     }
 
     int buildingCost = getCostToProduce(producing);
-    int producedNextTurn = m_city->m_HammersAccumulated + m_city->m_Hammers;
     int productionRemaining = buildingCost - m_city->m_HammersAccumulated;
-    int buyCost;
-    if (m_city->m_HammersAccumulated <= 0)
-    {
-        buyCost = 4 * productionRemaining;
-    }
-    else if (m_city->m_HammersAccumulated < buildingCost / 3)
-    {
-        buyCost = 3 * productionRemaining;
-    }
-    else if (producedNextTurn < buildingCost)
-    {
-        buyCost = 2 * productionRemaining;
-    }
-    else
-    {
-        buyCost = 0;    // Cannot buy - completed next turn
-    }
+    int buyFactor = getBuyFactor();
+    int buyCost = buyFactor * productionRemaining;
     return buyCost;
 }
 

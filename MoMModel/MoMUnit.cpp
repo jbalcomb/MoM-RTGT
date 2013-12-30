@@ -373,7 +373,7 @@ int MoMUnit::calcGoldUpkeep() const
     }
     else if (isHero() && !hasHeroAbility(HEROABILITY_Noble))
     {
-        goldUpkeep -= getUnitTypeData().m_Upkeep;
+        goldUpkeep = getUnitTypeData().m_Upkeep;
     }
 
     // TODO: Computer players get a reduction depending on difficulty

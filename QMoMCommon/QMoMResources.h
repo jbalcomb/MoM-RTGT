@@ -83,6 +83,7 @@ public:
     const QMoMImagePtr getImage(MoM::eProducing producing) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
+    const QMoMImagePtr getImage(MoM::eResource resource) const;
     const QMoMImagePtr getImage(MoM::eRanged_Type rangedType, int heading = 3) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type8 slotType) const;
     const QMoMImagePtr getImage(MoM::eSlot_Type16 slotType) const;
@@ -173,6 +174,7 @@ private:
     QMoMLbxPtr m_helpLbx;
 
     QMoMPalette m_colorTable;
+    QVector<QMoMImagePtr> m_backgrndImages;
     QVector<QMoMAnimation> m_buildingAnimations;
     QVector<QMoMImagePtr> m_citySizeImages;
     QVector<QMoMAnimation> m_citywallAnimations;

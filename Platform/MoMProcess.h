@@ -10,6 +10,8 @@
 #ifndef MOMPROCESS_H
 #define MOMPROCESS_H
 
+#include <vector>
+
 #include "MoMCommon.h"
 
 namespace MoM {

@@ -32,6 +32,8 @@ public:
     bool canProduce(eBuilding building) const;
     bool canProduce(eProducing produce) const;
     bool canProduce(eUnit_Type unitTypeNr) const;
+    int  countConnectedCities() const;
+    int  getBuyFactor(eProducing producing = PRODUCING_None) const;
     const City* getCity() const;
     int  getCityNr() const;
     int  getCostToBuy(eProducing producing = PRODUCING_None) const;

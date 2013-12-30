@@ -76,7 +76,9 @@ HEADERS += \
     ../../QMoMDialogs/DialogTables.h \
     ../../QMoMDialogs/DialogTools.h \
     ../../MoMModel/MoMCity.h \
-    ../../QMoMDialogs/DialogAddArtifact.h
+    ../../QMoMDialogs/DialogAddArtifact.h \
+    ../../QMoMDialogs/DialogSelectRaces.h \
+    ../../QMoMCommon/QMoMDialogBase.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -133,7 +135,9 @@ SOURCES += \
     ../../QMoMDialogs/DialogTools.cpp \
     ../../QMoMCommon/UnitModel.cpp \
     ../../MoMModel/MoMCity.cpp \
-    ../../QMoMDialogs/DialogAddArtifact.cpp
+    ../../QMoMDialogs/DialogAddArtifact.cpp \
+    ../../QMoMDialogs/DialogSelectRaces.cpp \
+    ../../QMoMCommon/QMoMDialogBase.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \
@@ -146,6 +150,7 @@ FORMS += \
     ../../QMoMDialogs/DialogSelectInitialSpells.ui \
     ../../QMoMDialogs/DialogTables.ui \
     ../../QMoMDialogs/DialogTools.ui \
-    ../../QMoMDialogs/DialogAddArtifact.ui
+    ../../QMoMDialogs/DialogAddArtifact.ui \
+    ../../QMoMDialogs/DialogSelectRaces.ui
 
 RESOURCES += ../../Resources/InteractiveGameTweaker.qrc

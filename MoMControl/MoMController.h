@@ -24,19 +24,23 @@ public:
 	{
 		return m_errorString;
 	}
+    void setErrorString(const std::string& str);
 
     bool addUnit(ePlayer playerNr, eUnit_Type unitType);
+
     bool addArtifact(ePlayer playerNr, int prefabNr);
 
     bool applyBuildingQueue(int cityNr);
     bool applyBuildingQueue(ePlayer playerNr);
 
     bool buyProduction(City* city);
+
     int  calcFoodProduced(ePlayer playerNr) const;
     int  calcFoodUpkeep(ePlayer playerNr) const;
     int  calcGoldIncome(ePlayer playerNr) const;
     int  calcGoldUpkeep(ePlayer playerNr) const;
     int  calcTotalFame(ePlayer playerNr) const;
+    int  calcTotalProduction(ePlayer playerNr) const;
     int  countGarrison(const MoMLocation& location);
     int  countUnits(const MoMLocation& location);
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);
@@ -44,6 +48,8 @@ public:
     Node_Attr* findNodeAttrAtLocation(const MoMLocation& location);
 
     bool polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr);
+
+    bool replaceDominantRace(ePlane plane, eRace newRace);
 
     bool removeCityFromGameQueue(int cityNr);
 

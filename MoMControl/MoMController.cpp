@@ -38,6 +38,12 @@ static bool producingGarrison(const City* city)
     return (city->m_Producing >= PRODUCING_BUILDING_MAX);
 }
 
+void MoMController::setErrorString(const std::string &str)
+{
+    m_errorString = str;
+    std::cout << m_errorString << std::endl;
+}
+
 //bool MoMController::addCityToGameQueue(int cityNr)
 //{
 //    MoMDataSegment* dataSegment = m_game->getDataSegment();
@@ -84,15 +90,14 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
 
     if ((unsigned)unitType >= eUnit_Type_MAX)
     {
-        std::cout << "Cannot add unit " << unitType << " because it is out-of-range" << std::endl;
-		m_errorString = "UnitType '" + toStr(unitType) + "' is out-of-range";
+        setErrorString("cannot add unit of type '" + toStr(unitType) + "' because it is out-of-range");
         return false;
     }
 
     Wizard* wizard = m_game->getWizard(playerNr);
     if (0 == wizard)
 	{
-		m_errorString = "Wizard data of player '" + toStr(playerNr) + "' is not accessible";
+        setErrorString("wizard data of player '" + toStr(playerNr) + "' is not accessible");
         return false;
 	}
 
@@ -105,7 +110,7 @@ bool MoMController::addUnit(ePlayer playerNr, eUnit_Type unitType)
     Unit* unit = m_game->getUnit(unitNr);
     if (0 == unit)
 	{
-		m_errorString = "Failed to create a unit for unitNr '" + toStr(unitNr) + "'";
+        setErrorString("Failed to create a unit for unitNr '" + toStr(unitNr) + "'");
         ok = false;
 	}
 
@@ -152,7 +157,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     ItemDataLbx* prefabItemData = m_game->getItemDataLbx(prefabNr);
     if (0 == prefabItemData)
     {
-        m_errorString = "no such item available";
+        setErrorString("no such item available");
         return false;
     }
 
@@ -162,7 +167,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
         return false;
     if (artifactsInGame[prefabNr])
     {
-        m_errorString = "item has already been seen in the game";
+        setErrorString("item has already been seen in the game");
         return false;
     }
 
@@ -180,7 +185,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     }
     if (0 == freeItem)
     {
-        m_errorString = "maximum items in the games reached";
+        setErrorString("maximum items in the games reached");
         return false;
     }
 
@@ -196,7 +201,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
     }
     if (-1 == fortressSlotNr)
     {
-        m_errorString = "no free space in your fortress";
+        setErrorString("no free space in your fortress");
         return false;
     }
 
@@ -210,7 +215,7 @@ bool MoMController::addArtifact(ePlayer playerNr, int prefabNr)
             || !m_game->commitData(freeItem, &prefabItemData->m_Item, sizeof(*freeItem))
             || !m_game->commitData(&wizard->m_Items_in_Slots[fortressSlotNr], &freeItemNr, sizeof(wizard->m_Items_in_Slots[fortressSlotNr])))
     {
-        m_errorString = "failed to commit the changes to the game";
+        setErrorString("failed to commit the changes to the game");
         return false;
     }
 
@@ -226,7 +231,7 @@ bool MoMController::applyBuildingQueue(int cityNr)
     City* city = m_game->getCity(cityNr);
     if (0 == city)
 	{
-        m_errorString = "cannot get the data for to city  '" + toStr(cityNr) + "'";
+        setErrorString("cannot get the data for to city  '" + toStr(cityNr) + "'");
         return false;
 	}
     MoMCity momCity(m_game, city);
@@ -276,8 +281,8 @@ bool MoMController::applyBuildingQueue(int cityNr)
     if (CITYSIZE_Outpost == city->m_Size)
     {
         // Do nothing - we're an outpost
-        std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
-            << city->m_Producing << " is still an outpost" << std::endl;
+//        std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
+//            << city->m_Producing << " is still an outpost" << std::endl;
     }
     else if (producingGarrison(city))
     {
@@ -408,8 +413,8 @@ bool MoMController::applyBuildingQueue(int cityNr)
 
     if (!m_game->commitData(&city->m_Producing, &producingAfter, sizeof(city->m_Producing)))
     {
-        std::cout << "Failed to chang production of '" << city->m_City_Name << "' [" << cityNr << "] "
-                  << producingBefore << "\n\tto " << producingAfter << std::endl;
+        setErrorString("Failed to commit change in production of '" + toStr(city->m_City_Name) + "' [" + toStr(cityNr) + "] "
+                       + toStr(producingBefore) + "\tto " + toStr(producingAfter));
         return false;   // Failed to change
     }
 
@@ -455,14 +460,12 @@ bool MoMController::buyProduction(City *city)
         return false;
     if (costToBuy <= 0)
     {
-        m_errorString = "Cannot buy. Production will already be complete.";
-        std::cout << m_errorString << std::endl;
+        setErrorString("Cannot buy. Production will already be complete.");
         return false;
     }
     if (wizard->m_Gold_Coins < costToBuy)
     {
-        m_errorString = "Not enough gold to buy production";
-        std::cout << m_errorString << std::endl;
+        setErrorString("Not enough gold to buy production");
         return false;
     }
 
@@ -470,14 +473,12 @@ bool MoMController::buyProduction(City *city)
     int16_t newHammersAccumulated = momCity.getCostToProduce(city->m_Producing);
     if (!m_game->commitData(&wizard->m_Gold_Coins, &newGold, sizeof(wizard->m_Gold_Coins)))
     {
-        m_errorString = "Failed to commit gold coin changes";
-        std::cout << m_errorString << std::endl;
+        setErrorString("Failed to commit gold coin changes");
         return false;
     }
     if (!m_game->commitData(&city->m_HammersAccumulated, &newHammersAccumulated, sizeof(city->m_HammersAccumulated)))
     {
-        m_errorString = "Failed to commit accumulated hammer changes";
-        std::cout << m_errorString << std::endl;
+        setErrorString("Failed to commit accumulated hammer changes");
         return false;
     }
 
@@ -619,6 +620,21 @@ int MoMController::calcTotalFame(ePlayer playerNr) const
     return fame;
 }
 
+int MoMController::calcTotalProduction(ePlayer playerNr) const
+{
+    int production = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        production += city->m_Hammers;
+    }
+    return production;
+}
+
 int MoMController::countGarrison(const MoMLocation &location)
 {
     std::vector<int> units;
@@ -660,8 +676,7 @@ bool MoMController::createUnit(int& unitNr)
     if (m_game->getNrUnits() < 0
         || m_game->getNrUnits() >= (int)gMAX_UNITS)
     {
-        std::cout << "Cannot create a unit because NrUnits is out-of-range" << std::endl;
-        m_errorString = "Cannot create a unit because NrUnits '" + toStr(m_game->getNrUnits()) + "' is out-of-range";
+        setErrorString("Cannot create a unit because NrUnits '" + toStr(m_game->getNrUnits()) + "' is out-of-range");
         return false;
     }
 
@@ -670,7 +685,7 @@ bool MoMController::createUnit(int& unitNr)
     Unit* unit = m_game->getUnit(unitNr);
     if (0 == unit)
 	{
-		m_errorString = "Cannot retrieve data for unit '" + toStr(unitNr) + "'";
+        setErrorString("Cannot retrieve data for unit '" + toStr(unitNr) + "'");
         return false;
 	}
 
@@ -804,8 +819,7 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
         }
         if (-1 != wizard->m_Heroes_hired_by_wizard[heroSlotNr].m_Unit_Nr)
         {
-            std::cout << "Player " << playerNr << " cannot add hero " << heroNr << " because he has no free slot" << std::endl;
-			m_errorString = "Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because he has no free slot";
+            setErrorString("Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because he has no free slot");
             return false;
         }
     }
@@ -815,8 +829,7 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
     // Check if hero is already in your army
     if (HEROLEVELSTATUS_Active_in_Wizards_army == heroStats->m_Level_Status)
     {
-        std::cout << "Player " << playerNr << " cannot add hero " << heroNr << " because that hero is already active in his army" << std::endl;
-		m_errorString = "Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because that hero is already active in his army";
+        setErrorString("Player " + toStr(playerNr) + " cannot add hero " + toStr(heroNr) + " because that hero is already active in his army");
         return false;
     }
 
@@ -881,12 +894,70 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
         || !m_game->commitData(&hiredHero, &hiredHero, sizeof(hiredHero))
         || !m_game->commitData(&heroStats->m_Level_Status, &heroStats->m_Level_Status, sizeof(heroStats->m_Level_Status)))
     {
-        m_errorString = "Failed to commit to game";
-        std::cout << m_errorString << std::endl;
+        setErrorString("Failed to commit to game");
         return false;
     }
 
     return true;
+}
+
+bool MoMController::replaceDominantRace(ePlane plane, eRace newRace)
+{
+    m_errorString.clear();
+    if (0 == m_game)
+        return false;
+
+    std::vector<unsigned> histo(eRace_MAX);
+    eRace dominantRace = eRace_MAX;
+    unsigned dominantCount = 0;
+
+    // Count races in cities and find dominant race
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        const City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (city->m_Plane != plane)
+            continue;
+        if (toUInt(city->m_Race) < eRace_MAX)
+        {
+            histo[city->m_Race]++;
+            if (histo[city->m_Race] > dominantCount)
+            {
+                dominantRace = city->m_Race;
+                dominantCount = histo[city->m_Race];
+            }
+        }
+    }
+
+    bool ok = true;
+    if (dominantRace == eRace_MAX)
+    {
+        setErrorString("No dominant race found");
+        ok = false;
+    }
+
+    // Change race
+    for (int cityNr = 0; ok && (cityNr < m_game->getNrCities()); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (city->m_Plane != plane)
+            continue;
+        if (city->m_Race != dominantRace)
+            continue;
+        if (!m_game->commitData(&city->m_Race, &newRace, sizeof(city->m_Race)))
+        {
+            setErrorString("Failed to commit. Aborting");
+            ok = false;
+        }
+    }
+
+    // TODO: Change garrison
+    // TODO: Change housing
+
+    return ok;
 }
 
 bool MoMController::removeCityFromGameQueue(int cityNr)

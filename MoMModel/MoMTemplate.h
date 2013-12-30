@@ -1963,6 +1963,30 @@ enum eRealm_Type ENUMSIZE8
     eRealm_Type_MAX
 } PACKED_ENUM;
 
+enum eResource
+{
+    RESOURCE_None,
+
+    RESOURCE_Food,
+    RESOURCE_Production,
+    RESOURCE_Gold,
+    RESOURCE_Power,
+    RESOURCE_Mana,
+    RESOURCE_Research,
+    RESOURCE_Gray_Food,
+    RESOURCE_Gray_Gold,
+    RESOURCE_10_Food,
+    RESOURCE_10_Production,
+    RESOURCE_10_Gold,
+    RESOURCE_10_Power,
+    RESOURCE_10_Mana,
+    RESOURCE_10_Research,
+    RESOURCE_10_Gray_Food,
+    RESOURCE_10_Gray_Gold,
+
+    eResource_AMX
+};
+
 enum eReward_Specials ENUMSIZE8
 {
     REWARD_No_specials = 0,

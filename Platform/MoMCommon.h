@@ -14,11 +14,8 @@
 
 #include <assert.h>
 #include <iostream>
-#include <map>
-#include <memory>       // std::auto_ptr
 #include <sstream>
 #include <string.h>
-#include <vector>
 
 
 // Specify integer types with specific sizes

@@ -38,6 +38,8 @@ private slots:
 
     void on_pushButton_ConjureArtifact_clicked();
 
+    void on_pushButton_SelectRaces_clicked();
+
 private:
 	QMoMGamePtr getGame();
 	QStatusBar* statusBar();

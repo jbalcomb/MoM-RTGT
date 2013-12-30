@@ -20,6 +20,10 @@ namespace Ui {
     class DialogBuildingQueues;
 }
 
+namespace MoM {
+    enum eResource;
+}
+
 class DialogBuildingQueues : public QDialog
 {
     Q_OBJECT
@@ -39,6 +43,7 @@ private slots:
 
 
 private:
+    QIcon getResourceIcon(MoM::eResource resource, int value) const;
     void update();
 
 	QMoMGamePtr m_game;
