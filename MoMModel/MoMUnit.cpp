@@ -381,6 +381,43 @@ int MoMUnit::calcGoldUpkeep() const
     return goldUpkeep;
 }
 
+int MoMUnit::calcManaUpkeep() const
+{
+    int manaUpkeep = 0;
+    if (isSummoned() || (getUnitTypeNr() == UNITTYPE_Chosen))
+    {
+        manaUpkeep = getUnitTypeData().m_Upkeep;
+    }
+
+    if (getUnitInGame().m_Weapon_Mutation.s.Undead)
+    {
+        manaUpkeep *= 2;
+    }
+
+    int enchantmentsUpkeep = 0;
+    MoM::Upkeep_Enchantments* upkeepEnchantments = 0;
+    if (m_game)
+    {
+        if (0 != m_game->getDataSegment())
+        {
+            upkeepEnchantments = &m_game->getDataSegment()->m_Upkeep_Enchantments;
+        }
+    }
+    MOM_FOREACH(eUnitEnchantment, unitEnchantment, eUnitEnchantment_MAX)
+    {
+        if ((0 != upkeepEnchantments) && hasUnitEnchantment(unitEnchantment))
+        {
+            enchantmentsUpkeep += (&upkeepEnchantments->Immolation)[unitEnchantment];
+        }
+    }
+
+    manaUpkeep += enchantmentsUpkeep;
+
+    // TODO: Computer players get a reduction depending on difficulty
+
+    return manaUpkeep;
+}
+
 MoMUnit::BaseAttributes MoMUnit::getActualAttributes() const
 {
     BaseAttributes base = getBaseAttributes();

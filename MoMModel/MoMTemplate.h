@@ -1953,12 +1953,12 @@ enum eRealm_Type ENUMSIZE8
 {
     REALM_None = 0xFF,
 
-    REALM_Nature = 0,
-    REALM_Sorcery = 1,
-    REALM_Chaos = 2,
-    REALM_Life = 3,
-    REALM_Death = 4,
-    REALM_Arcane = 5,
+        REALM_Nature = 0,
+        REALM_Sorcery = 1,
+        REALM_Chaos = 2,
+        REALM_Life = 3,
+        REALM_Death = 4,
+        REALM_Arcane = 5,
 
     eRealm_Type_MAX
 } PACKED_ENUM;
@@ -3372,7 +3372,7 @@ const unsigned gMAX_WIZARD_RECORDS = 6;
 // STRUCTS / UNIONS
 //
 
-struct Skills
+typedef struct PACKED_STRUCT // Skills 
 {
     eYesNo8             Alchemy;                // 00 (0 or 1)
     eYesNo8             Warlord;
@@ -3393,7 +3393,7 @@ struct Skills
     eYesNo8             Charismatic;
     eYesNo8             Artificer;              // 11
                                 // SIZE 12
-} PACKED_STRUCT; // Skills;
+} Skills;
 
 typedef union // unionSkills
 {
@@ -4404,7 +4404,7 @@ typedef struct PACKED_STRUCT // Wizard
     uint16_t        m_ResearchCost_SpellofMastery_GUESS;// 022
     uint16_t        m_Fame;                             // 024
     uint16_t        m_Power_Base;                       // 026
-    uint16_t        m_Unk_028;                          // 028  // Seems to related to prod/mana terrain bonus types
+    uint16_t        m_Nr_controlled_volcanoes;          // 028
     uint8_t         m_Research_Percentage;              // 02A
     uint8_t         m_Mana_Percentage;                  // 02B
     uint8_t         m_Skill_Percentage;                 // 02C

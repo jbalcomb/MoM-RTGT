@@ -81,6 +81,7 @@ public:
     void setGame(MoMGameBase* game);
 
     int             calcGoldUpkeep() const;
+    int             calcManaUpkeep() const;
 
     Battle_Unit     getBattleUnit() const;
     Hero_stats      getHeroStats() const;

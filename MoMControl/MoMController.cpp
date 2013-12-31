@@ -486,6 +486,40 @@ bool MoMController::buyProduction(City *city)
     return true;
 }
 
+int MoMController::calcFame(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+
+    int fame = 0;
+    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
+    {
+        Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
+        MoMUnit momUnit(m_game, hiredHero);
+        if (momUnit.hasHeroAbility(HEROABILITY_Legendary))
+        {
+            fame += momUnit.getHeroAbility(HEROABILITY_Legendary);
+        }
+        if (momUnit.hasHeroAbility(HEROABILITY_Legendary_X))
+        {
+            fame += momUnit.getHeroAbility(HEROABILITY_Legendary_X);
+        }
+    }
+
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 != wizard)
+    {
+        if (wizard->m_Global_Enchantments.Just_Cause)
+        {
+            fame += 10;
+        }
+
+        fame += wizard->m_Fame;
+    }
+
+    return fame;
+}
+
 int MoMController::calcFoodProduced(ePlayer playerNr) const
 {
     if (0 == m_game)
@@ -574,7 +608,7 @@ int MoMController::calcGoldUpkeep(ePlayer playerNr) const
         goldUpkeep += momUnit.calcGoldUpkeep();
     }
 
-    goldUpkeep -= calcTotalFame(playerNr);
+    goldUpkeep -= calcFame(playerNr);
 
     if (goldUpkeep < 0)
     {
@@ -586,41 +620,121 @@ int MoMController::calcGoldUpkeep(ePlayer playerNr) const
     return goldUpkeep;
 }
 
-int MoMController::calcTotalFame(ePlayer playerNr) const
+int MoMController::calcManaUpkeep(ePlayer playerNr) const
 {
     if (0 == m_game)
         return 0;
+    int manaUpkeep = 0;
+    for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
+    {
+        Unit* unit = m_game->getUnit(unitNr);
+        if (0 == unit)
+            break;
+        if (playerNr != unit->m_Owner)
+            continue;
+        MoMUnit momUnit(m_game, unit);
+        manaUpkeep += momUnit.calcManaUpkeep();
+    }
 
-    int fame = 0;
-    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
+    // TODO: Global enchantments
+    //       City enchantments
+    //       Unit enchantments
+
+    // TODO: Difficulty multiplier
+
+    return manaUpkeep;
+}
+
+int MoMController::calcPower(ePlayer playerNr) const
+{
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+
+    // Buildings, citizens, global spells, events
+    int power = 0;
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        power += city->m_Mana_cr;
+    }
+
+    // Fortress
+    power += wizard->m_Number_of_Spellbooks_Chaos + wizard->m_Number_of_Spellbooks_Death
+            + wizard->m_Number_of_Spellbooks_Life + wizard->m_Number_of_Spellbooks_Nature
+            + wizard->m_Number_of_Spellbooks_Sorcery;
+
+    // Myrran
+    if (wizard->m_Skills.s.Myrran)
+    {
+        power += 5;
+    }
+
+    // TODO: Nodes
+
+    return power;
+}
+
+void MoMController::calcPowerDivision(ePlayer playerNr, int &mana, int &skill, int &research) const
+{
+    mana     = 0;
+    skill    = 0;
+    research = 0;
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return;
+    int power   = wizard->m_Power_Base;
+    mana        = (power * wizard->m_Mana_Percentage + 50) / 100;
+    skill       = (power * wizard->m_Skill_Percentage + 50) / 100;
+    research    = power - mana - skill;
+    if (wizard->m_Research_Percentage <= 0)
+    {
+        if (wizard->m_Skill_Percentage == 0)
+        {
+            mana += research;
+        }
+        else
+        {
+            skill += research;
+        }
+        research = 0;
+    }
+
+    if (wizard->m_Skills.s.Mana_Focusing)
+    {
+        mana += mana / 4;
+    }
+
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        research += city->m_Research;
+    }
+
+    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
     {
         Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
         MoMUnit momUnit(m_game, hiredHero);
-        if (momUnit.hasHeroAbility(HEROABILITY_Legendary))
+        if (momUnit.hasHeroAbility(HEROABILITY_Sage))
         {
-            fame += momUnit.getHeroAbility(HEROABILITY_Legendary);
+            research += momUnit.getHeroAbility(HEROABILITY_Sage);
         }
-        if (momUnit.hasHeroAbility(HEROABILITY_Legendary_X))
+        if (momUnit.hasHeroAbility(HEROABILITY_Sage_X))
         {
-            fame += momUnit.getHeroAbility(HEROABILITY_Legendary_X);
+            research += momUnit.getHeroAbility(HEROABILITY_Sage_X);
         }
     }
-
-    Wizard* wizard = m_game->getWizard(playerNr);
-    if (0 != wizard)
-    {
-        if (wizard->m_Global_Enchantments.Just_Cause)
-        {
-            fame += 10;
-        }
-
-        fame += wizard->m_Fame;
-    }
-
-    return fame;
 }
 
-int MoMController::calcTotalProduction(ePlayer playerNr) const
+int MoMController::calcProduction(ePlayer playerNr) const
 {
     int production = 0;
     for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
@@ -633,6 +747,88 @@ int MoMController::calcTotalProduction(ePlayer playerNr) const
         production += city->m_Hammers;
     }
     return production;
+}
+
+int MoMController::calcResearch(ePlayer playerNr) const
+{
+    int mana, skill, research;
+    calcPowerDivision(playerNr, mana, skill, research);
+    return research;
+}
+
+int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
+{
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+
+    Spell_Data* spellData = m_game->getSpellData(wizard->m_Researching_Spell);
+    eRealm_Type realmResearching = spellData->m_Magic_Realm;
+    int researchBonusPercentage = 0;
+    if (wizard->m_Skills.s.Sage_Master)
+    {
+        researchBonusPercentage += 25;
+    }
+    if (wizard->m_Skills.s.Conjurer && (spellData->m_Spell_Category == SPELLCATEGORY_Normal_summon))
+    {
+        researchBonusPercentage += 25;
+    }
+
+    switch (realmResearching)
+    {
+    case REALM_Nature:
+        if (wizard->m_Skills.s.Nature_Master)
+        {
+            researchBonusPercentage += 15;
+        }
+        if (wizard->m_Number_of_Spellbooks_Nature > 7)
+        {
+            researchBonusPercentage += (wizard->m_Number_of_Spellbooks_Nature - 7) * 10;
+        }
+        break;
+    case REALM_Sorcery:
+        if (wizard->m_Skills.s.Sorcery_Master)
+        {
+            researchBonusPercentage += 15;
+        }
+        if (wizard->m_Number_of_Spellbooks_Sorcery > 7)
+        {
+            researchBonusPercentage += (wizard->m_Number_of_Spellbooks_Sorcery - 7) * 10;
+        }
+        break;
+    case REALM_Chaos:
+        if (wizard->m_Skills.s.Chaos_Master)
+        {
+            researchBonusPercentage += 15;
+        }
+        if (wizard->m_Number_of_Spellbooks_Chaos > 7)
+        {
+            researchBonusPercentage += (wizard->m_Number_of_Spellbooks_Chaos - 7) * 10;
+        }
+        break;
+    case REALM_Life:
+        if (wizard->m_Number_of_Spellbooks_Life > 7)
+        {
+            researchBonusPercentage += (wizard->m_Number_of_Spellbooks_Life - 7) * 10;
+        }
+        break;
+    case REALM_Death:
+        if (wizard->m_Number_of_Spellbooks_Death > 7)
+        {
+            researchBonusPercentage += (wizard->m_Number_of_Spellbooks_Death - 7) * 10;
+        }
+        break;
+    case REALM_Arcane:
+        if (wizard->m_Skills.s.Runemaster)
+        {
+            researchBonusPercentage += 25;
+        }
+        break;
+    default:
+        ;
+    }
+
+    return researchBonusPercentage;
 }
 
 int MoMController::countGarrison(const MoMLocation &location)

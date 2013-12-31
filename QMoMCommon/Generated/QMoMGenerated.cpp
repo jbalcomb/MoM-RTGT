@@ -7177,7 +7177,7 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context)
     ptree->appendChild("m_ResearchCost_SpellofMastery_GUESS", new QMoMTreeItemModel<uint16_t>(&rhs->m_ResearchCost_SpellofMastery_GUESS));
     ptree->appendChild("m_Fame", new QMoMTreeItemModel<uint16_t>(&rhs->m_Fame));
     ptree->appendChild("m_Power_Base", new QMoMTreeItemModel<uint16_t>(&rhs->m_Power_Base));
-    ptree->appendChild("m_Unk_028", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_028));
+    ptree->appendChild("m_Nr_controlled_volcanoes", new QMoMTreeItemModel<uint16_t>(&rhs->m_Nr_controlled_volcanoes));
     ptree->appendChild("m_Research_Percentage", new QMoMTreeItemModel<uint8_t>(&rhs->m_Research_Percentage));
     ptree->appendChild("m_Mana_Percentage", new QMoMTreeItemModel<uint8_t>(&rhs->m_Mana_Percentage));
     ptree->appendChild("m_Skill_Percentage", new QMoMTreeItemModel<uint8_t>(&rhs->m_Skill_Percentage));

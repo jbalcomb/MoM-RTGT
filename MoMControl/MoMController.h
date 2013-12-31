@@ -35,12 +35,17 @@ public:
 
     bool buyProduction(City* city);
 
+    int  calcFame(ePlayer playerNr) const;
     int  calcFoodProduced(ePlayer playerNr) const;
     int  calcFoodUpkeep(ePlayer playerNr) const;
     int  calcGoldIncome(ePlayer playerNr) const;
     int  calcGoldUpkeep(ePlayer playerNr) const;
-    int  calcTotalFame(ePlayer playerNr) const;
-    int  calcTotalProduction(ePlayer playerNr) const;
+    int  calcManaUpkeep(ePlayer playerNr) const;
+    int  calcPower(ePlayer playerNr) const;
+    void calcPowerDivision(ePlayer playerNr, int& manaPoints, int& skillPoints, int& researchPoints) const;
+    int  calcProduction(ePlayer playerNr) const;
+    int  calcResearch(ePlayer playerNr) const;
+    int  calcResearchBonusPercentage(ePlayer playerNr) const;
     int  countGarrison(const MoMLocation& location);
     int  countUnits(const MoMLocation& location);
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);

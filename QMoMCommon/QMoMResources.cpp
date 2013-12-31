@@ -919,8 +919,8 @@ const QMoMImagePtr QMoMResources::getImage(eResource resource) const
     case RESOURCE_10_Production:lbxIndex = 89; break;
     case RESOURCE_10_Gold:      lbxIndex = 90; break;
     case RESOURCE_10_Power:     lbxIndex = 91; break;
-    case RESOURCE_10_Mana:      lbxIndex = 92; break;
-    case RESOURCE_10_Research:  lbxIndex = 93; break;
+    case RESOURCE_10_Mana:      lbxIndex = 91; break;
+    case RESOURCE_10_Research:  lbxIndex = 92; break;
     case RESOURCE_10_Gray_Food: lbxIndex = 95; break;
     case RESOURCE_10_Gray_Gold: lbxIndex = 93; break;
     default:                    ;

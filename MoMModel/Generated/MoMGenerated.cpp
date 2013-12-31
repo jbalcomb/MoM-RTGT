@@ -2171,6 +2171,34 @@ std::ostream& operator<<(std::ostream& os, const eRealm_Type& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eResource& rhs)
+{
+    switch (rhs)
+    {
+    case RESOURCE_None: os << "RESOURCE_None"; break;
+    case RESOURCE_Food: os << "RESOURCE_Food"; break;
+    case RESOURCE_Production: os << "RESOURCE_Production"; break;
+    case RESOURCE_Gold: os << "RESOURCE_Gold"; break;
+    case RESOURCE_Power: os << "RESOURCE_Power"; break;
+    case RESOURCE_Mana: os << "RESOURCE_Mana"; break;
+    case RESOURCE_Research: os << "RESOURCE_Research"; break;
+    case RESOURCE_Gray_Food: os << "RESOURCE_Gray_Food"; break;
+    case RESOURCE_Gray_Gold: os << "RESOURCE_Gray_Gold"; break;
+    case RESOURCE_10_Food: os << "RESOURCE_10_Food"; break;
+    case RESOURCE_10_Production: os << "RESOURCE_10_Production"; break;
+    case RESOURCE_10_Gold: os << "RESOURCE_10_Gold"; break;
+    case RESOURCE_10_Power: os << "RESOURCE_10_Power"; break;
+    case RESOURCE_10_Mana: os << "RESOURCE_10_Mana"; break;
+    case RESOURCE_10_Research: os << "RESOURCE_10_Research"; break;
+    case RESOURCE_10_Gray_Food: os << "RESOURCE_10_Gray_Food"; break;
+    case RESOURCE_10_Gray_Gold: os << "RESOURCE_10_Gray_Gold"; break;
+    case eResource_AMX: os << "eResource_AMX"; break;
+    default: os << "<Unknown eResource>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eReward_Specials& rhs)
 {
     switch (rhs)
@@ -7846,7 +7874,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_ResearchCost_SpellofMastery_GUESS=" << rhs.m_ResearchCost_SpellofMastery_GUESS << " 0x" << std::hex << rhs.m_ResearchCost_SpellofMastery_GUESS << std::dec << "\n";
     os << "m_Fame=" << rhs.m_Fame << " 0x" << std::hex << rhs.m_Fame << std::dec << "\n";
     os << "m_Power_Base=" << rhs.m_Power_Base << " 0x" << std::hex << rhs.m_Power_Base << std::dec << "\n";
-    os << "m_Unk_028=" << rhs.m_Unk_028 << " 0x" << std::hex << rhs.m_Unk_028 << std::dec << "\n";
+    os << "m_Nr_controlled_volcanoes=" << rhs.m_Nr_controlled_volcanoes << " 0x" << std::hex << rhs.m_Nr_controlled_volcanoes << std::dec << "\n";
     os << "m_Research_Percentage=" << (unsigned)rhs.m_Research_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Research_Percentage << std::dec << "\n";
     os << "m_Mana_Percentage=" << (unsigned)rhs.m_Mana_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Mana_Percentage << std::dec << "\n";
     os << "m_Skill_Percentage=" << (unsigned)rhs.m_Skill_Percentage << " 0x" << std::hex << (unsigned)rhs.m_Skill_Percentage << std::dec << "\n";

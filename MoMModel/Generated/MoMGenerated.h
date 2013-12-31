@@ -56,6 +56,7 @@ std::ostream& operator<<(std::ostream& os, const eRandomPickType& rhs);
 std::ostream& operator<<(std::ostream& os, const eRanged_Type& rhs);
 std::ostream& operator<<(std::ostream& os, const eRarity& rhs);
 std::ostream& operator<<(std::ostream& os, const eRealm_Type& rhs);
+std::ostream& operator<<(std::ostream& os, const eResource& rhs);
 std::ostream& operator<<(std::ostream& os, const eReward_Specials& rhs);
 std::ostream& operator<<(std::ostream& os, const eSkill& rhs);
 std::ostream& operator<<(std::ostream& os, const eSkill16& rhs);

@@ -47,7 +47,7 @@ private:
     void update();
 
 	QMoMGamePtr m_game;
-    bool m_contextMenuOpen;
+    bool m_updating;
     int m_columnFarmers;
     int m_columnBuy;    
 
