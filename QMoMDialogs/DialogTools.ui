@@ -6,16 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>208</width>
-    <height>449</height>
+    <width>221</width>
+    <height>438</height>
    </rect>
-  </property>
-  <property name="font">
-   <font>
-    <family>URW Chancery L</family>
-    <pointsize>12</pointsize>
-    <italic>true</italic>
-   </font>
   </property>
   <property name="windowTitle">
    <string>Tools</string>
@@ -41,8 +34,8 @@
     <rect>
      <x>9</x>
      <y>9</y>
-     <width>187</width>
-     <height>392</height>
+     <width>202</width>
+     <height>393</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -59,12 +52,6 @@
         <width>200</width>
         <height>16777215</height>
        </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
       </property>
       <property name="text">
        <string>Repop lairs</string>
@@ -95,12 +82,6 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
       <property name="text">
        <string>Max out</string>
       </property>
@@ -120,14 +101,8 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
       <property name="text">
-       <string>Apply Build Queues</string>
+       <string>Manage Cities</string>
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
@@ -154,12 +129,6 @@
         <width>200</width>
         <height>16777215</height>
        </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
       </property>
       <property name="text">
        <string>Conjure Artifact</string>
@@ -190,12 +159,6 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
       <property name="text">
        <string>Select Races</string>
       </property>
@@ -224,12 +187,6 @@
         <width>200</width>
         <height>16777215</height>
        </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
       </property>
       <property name="text">
        <string>External AI (exp)</string>
@@ -260,12 +217,6 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
       <property name="text">
        <string>Select init spells (exp)</string>
       </property>
@@ -295,12 +246,6 @@
         <height>16777215</height>
        </size>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
-      </property>
       <property name="text">
        <string>Catnip mod (exp)</string>
       </property>
@@ -329,12 +274,6 @@
         <width>200</width>
         <height>16777215</height>
        </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-        <italic>true</italic>
-       </font>
       </property>
       <property name="text">
        <string>Lucern mod (exp)</string>

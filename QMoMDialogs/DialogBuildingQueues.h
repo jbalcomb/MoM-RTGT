@@ -39,10 +39,13 @@ private slots:
     void on_tableWidget_Cities_customContextMenuRequested(const QPoint &pos);
     void slot_gameChanged(const QMoMGamePtr& game);
 	void slot_gameUpdated();
-    void slot_ItemAction();
+    void slot_ItemActionCities();
+    void slot_ItemActionSummary();
+
+    void on_tableWidget_Summary_customContextMenuRequested(const QPoint &pos);
 
 private:
-    QIcon getResourceIcon(MoM::eResource resource, int value) const;
+    static QIcon getResourceIcon(MoM::eResource resource, int value);
     void update();
 
     bool m_updating;

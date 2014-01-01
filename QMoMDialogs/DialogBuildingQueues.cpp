@@ -42,7 +42,6 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setHorizontalHeaderLabels(labelsQueue);
 
     int row = 0;
-	ui->tableWidget_QueueDefinition->clear();
     ui->tableWidget_QueueDefinition->setRowCount(26);
 
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Garrison"));
@@ -129,8 +128,6 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_QueueDefinition->setItem(row, 0, new QTableWidgetItem("Wizards Guild"));
     ui->tableWidget_QueueDefinition->setItem(row, 1, new QTableWidgetItem(""));
     row++;
-
-    ui->tableWidget_QueueDefinition->setRowCount(row);
     ui->tableWidget_QueueDefinition->resizeRowsToContents();
 
     QStringList labelsCities;
@@ -142,6 +139,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_Cities->setIconSize(QSize(24, 14));
     ui->tableWidget_Cities->sortByColumn(0, Qt::AscendingOrder);
 
+    ui->tableWidget_Summary->setColumnCount(2);
     QStringList labelsSummary;
     labelsSummary << "Treasury" << "Magic Reserve" << "Casting Skill" << "Gold/turn" << "Food/turn" << "Prod/turn" << "Power division" << "Mana/turn" << "Research";
     ui->tableWidget_Summary->setRowCount(labelsSummary.size());
@@ -171,6 +169,21 @@ DialogBuildingQueues::~DialogBuildingQueues()
 {
     preFinalize();
     delete ui;
+}
+
+QIcon DialogBuildingQueues::getResourceIcon(eResource resource, int value)
+{
+    switch (resource)
+    {
+    case RESOURCE_Food:         resource = (value <= -10 ? RESOURCE_10_Gray_Food : value < 0 ? RESOURCE_Gray_Food : value < 10 ? RESOURCE_Food : RESOURCE_10_Food); break;
+    case RESOURCE_Production:   resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Gold:         resource = (value <= -10 ? RESOURCE_10_Gray_Gold : value < 0 ? RESOURCE_Gray_Gold : value < 10 ? RESOURCE_Gold : RESOURCE_10_Gold); break;
+    case RESOURCE_Power:        resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Mana:         resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    case RESOURCE_Research:     resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
+    default:                    ;
+    }
+    return *QMoMResources::instance().getIcon(resource, 2);
 }
 
 void DialogBuildingQueues::update()
@@ -283,52 +296,45 @@ void DialogBuildingQueues::update()
     ui->tableWidget_Cities->setSortingEnabled(true);
 
 
-    int goldIncome      = momController.calcGoldIncome(PLAYER_YOU);
-    int goldUpkeep      = momController.calcGoldUpkeep(PLAYER_YOU);
-    int foodProduced    = momController.calcFoodProduced(PLAYER_YOU);
-    int foodUpkeep      = momController.calcFoodUpkeep(PLAYER_YOU);
-    int production      = momController.calcProduction(PLAYER_YOU);
-    int powerBase       = 0;
-    int manaUpkeep      = momController.calcManaUpkeep(PLAYER_YOU);
-    int totalGold       = 0;
-    int totalMana       = 0;
-    int nominalSkill    = 0;
-    int skillLeft       = 0;
-    int skillBeforeInc  = 0;
-    int skillPool       = 0;
-    int researchLeft    = 0;
-    int researchTurns   = 0;
-    int mana            = 0;
-    int research        = 0;
-    int skill           = 0;
-    momController.calcManaSkillResearch(PLAYER_YOU, mana, skill, research);
-    if ((0 != m_game) && (0 != m_game->getWizard(PLAYER_YOU)))
+    Wizard* wizard  = m_game->getWizard(PLAYER_YOU);
+    if (0 != wizard)
     {
-        Wizard* wizard  = m_game->getWizard(PLAYER_YOU);
-        totalGold       = wizard->m_Gold_Coins;
-        totalMana       = wizard->m_Mana_Crystals;
-        powerBase       = wizard->m_Power_Base;
-        researchLeft    = wizard->m_Researching_Left;
-        nominalSkill    = wizard->m_Nominal_Casting_Skill_available_this_turn;
-        skillLeft       = wizard->m_Unused_Casting_Skill_available_this_turn;
-        skillBeforeInc  = Sqr(nominalSkill) + nominalSkill + 1 - wizard->m_Wizard_Casting_Skill;
-        skillPool       = wizard->m_Wizard_Casting_Skill;
-    }
-    if (research > 0)
-    {
-        researchTurns       = (researchLeft + research - 1) / research;
-    }
+        int goldIncome      = momController.calcGoldIncome(PLAYER_YOU);
+        int goldUpkeep      = momController.calcGoldUpkeep(PLAYER_YOU);
+        int foodProduced    = momController.calcFoodProduced(PLAYER_YOU);
+        int foodUpkeep      = momController.calcFoodUpkeep(PLAYER_YOU);
+        int production      = momController.calcProduction(PLAYER_YOU);
+        int manaUpkeep      = momController.calcManaUpkeep(PLAYER_YOU);
+        int researchTurns   = 0;
+        int mana            = 0;
+        int research        = 0;
+        int skill           = 0;
+        momController.calcManaSkillResearch(PLAYER_YOU, mana, skill, research);
+        int totalGold       = wizard->m_Gold_Coins;
+        int totalMana       = wizard->m_Mana_Crystals;
+        int powerBase       = wizard->m_Power_Base;
+        int researchLeft    = wizard->m_Researching_Left;
+        int nominalSkill    = wizard->m_Nominal_Casting_Skill_available_this_turn;
+        int skillLeft       = wizard->m_Unused_Casting_Skill_available_this_turn;
+        int skillBeforeInc  = Sqr(nominalSkill) + nominalSkill + 1 - wizard->m_Wizard_Casting_Skill;
+        int skillPool       = wizard->m_Wizard_Casting_Skill;
+        if (research > 0)
+        {
+            researchTurns       = (researchLeft + research - 1) / research;
+        }
 
-    row = 0;
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 GP").arg(totalGold, 5));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP").arg(totalMana, 5));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 pool %2 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillPool).arg(skillBeforeInc));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 GP").arg(goldIncome, 4).arg(goldUpkeep, 1).arg(goldIncome - goldUpkeep, 1));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP + %1 RP + %2 SP = %3").arg(mana, 1).arg(research, 1).arg(skill, 1).arg(mana + research + skill));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP PowerBase %3").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1).arg(powerBase));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
+        row = 0;
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 GP").arg(totalGold, 5));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP").arg(totalMana, 5));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 pool %2 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillPool).arg(skillBeforeInc));
+        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 - %1 = %2 GP").arg(goldIncome, 4).arg(goldUpkeep, 1).arg(goldIncome - goldUpkeep, 1));
+        ui->tableWidget_Summary->setItem(row++, 1, new EnumTableItem<eTax_Rate>(m_game, &wizard->m_Tax_Rate, eTax_Rate_MAX, SHOWENUM_normal));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP + %1 RP + %2 SP = %3").arg(mana, 1).arg(research, 1).arg(skill, 1).arg(mana + research + skill));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP PowerBase %3").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1).arg(powerBase));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
+    }
 }
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)
@@ -386,10 +392,10 @@ void DialogBuildingQueues::on_tableWidget_Cities_cellChanged(int row, int column
     }
 
     // Force update game to see all updated values
-    //if (m_game->readData())
-    //{
-    //    slot_gameUpdated();
-    //}
+    if (m_game->readData())
+    {
+        slot_gameUpdated();
+    }
 }
 
 void DialogBuildingQueues::on_tableWidget_Cities_clicked(const QModelIndex &index)
@@ -441,7 +447,7 @@ void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(cons
         }
         foreach(QAction* action, actions)
         {
-            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemAction()));
+            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemActionCities()));
         }
     }
 
@@ -461,15 +467,15 @@ void DialogBuildingQueues::slot_gameChanged(const QMoMGamePtr& game)
 
 void DialogBuildingQueues::slot_gameUpdated()
 {
-    update();
-}
-
-void DialogBuildingQueues::slot_ItemAction()
-{
     if (m_updating)
         return;
     MoM::UpdateLock lock(m_updating);
 
+    update();
+}
+
+void DialogBuildingQueues::slot_ItemActionCities()
+{
     QTableWidgetItem* pItem = ui->tableWidget_Cities->currentItem();
     QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
     if (0 != pMoMItem)
@@ -478,17 +484,39 @@ void DialogBuildingQueues::slot_ItemAction()
     }
 }
 
-QIcon DialogBuildingQueues::getResourceIcon(eResource resource, int value) const
+void DialogBuildingQueues::slot_ItemActionSummary()
 {
-    switch (resource)
+    QTableWidgetItem* pItem = ui->tableWidget_Summary->currentItem();
+    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
+    if (0 != pMoMItem)
     {
-    case RESOURCE_Food:         resource = (value <= -10 ? RESOURCE_10_Gray_Food : value < 0 ? RESOURCE_Gray_Food : value < 10 ? RESOURCE_Food : RESOURCE_10_Food); break;
-    case RESOURCE_Production:   resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
-    case RESOURCE_Gold:         resource = (value <= -10 ? RESOURCE_10_Gray_Gold : value < 0 ? RESOURCE_Gray_Gold : value < 10 ? RESOURCE_Gold : RESOURCE_10_Gold); break;
-    case RESOURCE_Power:        resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
-    case RESOURCE_Mana:         resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
-    case RESOURCE_Research:     resource = (value < 10 ? RESOURCE_Production : RESOURCE_10_Production); break;
-    default:                    ;
+        pMoMItem->slotAction();
     }
-    return *QMoMResources::instance().getIcon(resource, 2);
+}
+
+void DialogBuildingQueues::on_tableWidget_Summary_customContextMenuRequested(const QPoint &pos)
+{
+    if (m_updating)
+        return;
+    MoM::UpdateLock lock(m_updating);
+
+    QTableWidgetItem* pItem = ui->tableWidget_Summary->currentItem();
+
+    QMenu contextMenu;
+    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
+        if (!actions.empty())
+        {
+            contextMenu.addSeparator();
+            contextMenu.addActions(actions);
+        }
+        foreach(QAction* action, actions)
+        {
+            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemActionSummary()));
+        }
+    }
+
+    contextMenu.exec(ui->tableWidget_Summary->viewport()->mapToGlobal(pos));
 }

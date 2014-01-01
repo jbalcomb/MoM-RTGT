@@ -53,7 +53,7 @@ void DialogTools::slot_gameUpdated()
 
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
-    DialogBuildingQueues* dialog = new DialogBuildingQueues();
+    DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
     dialog->show();
 }
 
