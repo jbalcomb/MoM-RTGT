@@ -14,7 +14,7 @@
 #include <QDialog>
 #include <QModelIndex>
 
-#include <QMoMSharedPointers.h>
+#include "QMoMDialogBase.h"
 
 namespace Ui {
     class DialogBuildingQueues;
@@ -24,7 +24,7 @@ namespace MoM {
     enum eResource;
 }
 
-class DialogBuildingQueues : public QDialog
+class DialogBuildingQueues : public QMoMDialogBase
 {
     Q_OBJECT
 
@@ -41,12 +41,10 @@ private slots:
 	void slot_gameUpdated();
     void slot_ItemAction();
 
-
 private:
     QIcon getResourceIcon(MoM::eResource resource, int value) const;
     void update();
 
-	QMoMGamePtr m_game;
     bool m_updating;
     int m_columnFarmers;
     int m_columnBuy;    

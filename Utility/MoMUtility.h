@@ -94,8 +94,14 @@ std::string replaceUnderscoresBySpaces(const std::string& str);
 
 std::string replaceStrInStr(const std::string& str, const std::string& findStr, const std::string& replaceStr);
 
+template< typename T >
+inline T Sqr(const T& x)
+{
+    return x * x;
+}
+
 template< typename E >
-inline E succ(const E& e)
+inline E Succ(const E& e)
 {
     unsigned u = (unsigned)e;
     u++;

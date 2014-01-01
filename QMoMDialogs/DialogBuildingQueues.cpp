@@ -10,19 +10,20 @@
 
 #include <QMenu>
 
-#include <MoMCity.h>
-#include <MoMController.h>
-#include <MoMGenerated.h>
-#include <QMoMTableItem.h>
-#include <QMoMSettings.h>
+#include <math.h>
 
 #include "MainWindow.h"
+#include "MoMCity.h"
+#include "MoMController.h"
+#include "MoMUtility.h"
+#include "MoMGenerated.h"
+#include "QMoMTableItem.h"
+
 
 using namespace MoM;
 
 DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
-    QDialog(parent),
-    m_game(),
+    QMoMDialogBase(parent),
     m_updating(false),
     m_columnFarmers(-1),
     m_columnBuy(-1),
@@ -142,7 +143,7 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_Cities->sortByColumn(0, Qt::AscendingOrder);
 
     QStringList labelsSummary;
-    labelsSummary << "Total Gold" << "Total Mana" << "Total Research" << "Gold/turn" << "Food/turn" << "Prod/turn" << "Power/turn" << "Power division" << "Research/turn";
+    labelsSummary << "Treasury" << "Magic Reserve" << "Casting Skill" << "Gold/turn" << "Food/turn" << "Prod/turn" << "Power division" << "Mana/turn" << "Research";
     ui->tableWidget_Summary->setRowCount(labelsSummary.size());
     ui->tableWidget_Summary->setVerticalHeaderLabels(labelsSummary);
     for (int row = 0; row < ui->tableWidget_Summary->rowCount(); ++row)
@@ -153,28 +154,22 @@ DialogBuildingQueues::DialogBuildingQueues(QWidget *parent) :
     ui->tableWidget_Summary->setIconSize(QSize(24, 14));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Gold, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Mana, 2));
-    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Research, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Production, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
-    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Mana, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Research, 2));
     assert(ui->tableWidget_Summary->rowCount() == row);
     ui->tableWidget_Summary->resizeRowsToContents();
 
-    QMoMSettings::readSettingsWindow(this);
-
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-	QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-	slot_gameChanged(MainWindow::getInstance()->getGame());
+    postInitialize();
 }
 
 DialogBuildingQueues::~DialogBuildingQueues()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
+    preFinalize();
     delete ui;
 }
 
@@ -293,23 +288,31 @@ void DialogBuildingQueues::update()
     int foodProduced    = momController.calcFoodProduced(PLAYER_YOU);
     int foodUpkeep      = momController.calcFoodUpkeep(PLAYER_YOU);
     int production      = momController.calcProduction(PLAYER_YOU);
-    int powerProduced   = 0;
+    int powerBase       = 0;
     int manaUpkeep      = momController.calcManaUpkeep(PLAYER_YOU);
     int totalGold       = 0;
     int totalMana       = 0;
+    int nominalSkill    = 0;
+    int skillLeft       = 0;
+    int skillBeforeInc  = 0;
+    int skillPool       = 0;
     int researchLeft    = 0;
     int researchTurns   = 0;
     int mana            = 0;
     int research        = 0;
     int skill           = 0;
-    momController.calcPowerDivision(PLAYER_YOU, mana, skill, research);
+    momController.calcManaSkillResearch(PLAYER_YOU, mana, skill, research);
     if ((0 != m_game) && (0 != m_game->getWizard(PLAYER_YOU)))
     {
         Wizard* wizard  = m_game->getWizard(PLAYER_YOU);
         totalGold       = wizard->m_Gold_Coins;
         totalMana       = wizard->m_Mana_Crystals;
-        powerProduced   = wizard->m_Power_Base;
+        powerBase       = wizard->m_Power_Base;
         researchLeft    = wizard->m_Researching_Left;
+        nominalSkill    = wizard->m_Nominal_Casting_Skill_available_this_turn;
+        skillLeft       = wizard->m_Unused_Casting_Skill_available_this_turn;
+        skillBeforeInc  = Sqr(nominalSkill) + nominalSkill + 1 - wizard->m_Wizard_Casting_Skill;
+        skillPool       = wizard->m_Wizard_Casting_Skill;
     }
     if (research > 0)
     {
@@ -319,13 +322,13 @@ void DialogBuildingQueues::update()
     row = 0;
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 GP").arg(totalGold, 5));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP").arg(totalMana, 5));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 pool %2 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillPool).arg(skillBeforeInc));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 GP").arg(goldIncome, 4).arg(goldUpkeep, 1).arg(goldIncome - goldUpkeep, 1));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP").arg(powerProduced, 4).arg(manaUpkeep, 1).arg(powerProduced - manaUpkeep, 1));
     ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP + %1 RP + %2 SP = %3").arg(mana, 1).arg(research, 1).arg(skill, 1).arg(mana + research + skill));
-    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP").arg(research));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP PowerBase %3").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1).arg(powerBase));
+    ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
 }
 
 void DialogBuildingQueues::on_buttonBox_clicked(QAbstractButton* button)

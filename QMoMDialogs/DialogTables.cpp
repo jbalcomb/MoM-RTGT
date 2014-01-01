@@ -305,7 +305,7 @@ void DialogTables::slot_addRow_to_HeroData(int row)
         // Status
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eHero_Level_Status>(
                                      m_game, &data->m_Level_Status,
-                                     MoM::HEROLEVELSTATUS_Active_in_Wizards_army, MoM::succ(MoM::HEROLEVELSTATUS_Level_9),
+                                     MoM::HEROLEVELSTATUS_Active_in_Wizards_army, MoM::Succ(MoM::HEROLEVELSTATUS_Level_9),
                                      SHOWENUM_normal));
         // XP
         col++;
@@ -1029,7 +1029,7 @@ void DialogTables::slot_addRow_to_UnitTypes(int row)
 
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint8_t, MoM::eUnitAbility>(
                               m_game, &data->m_Movement_Flags.bits,
-                              MoM::UNITABILITY_Cavalry, MoM::succ(MoM::UNITABILITY_Merging)));
+                              MoM::UNITABILITY_Cavalry, MoM::Succ(MoM::UNITABILITY_Merging)));
 
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint8_t, MoM::eUnitAbility>(
                               m_game, &data->m_Immunity_Flags.bits,
@@ -1037,7 +1037,7 @@ void DialogTables::slot_addRow_to_UnitTypes(int row)
 
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint16_t, MoM::eUnitAbility>(
                               m_game, &data->m_Attribute_Flags.bits,
-                              MoM::UNITABILITY_Weapon_Immunity, MoM::succ(MoM::UNITABILITY_Holy_Bonus)));
+                              MoM::UNITABILITY_Weapon_Immunity, MoM::Succ(MoM::UNITABILITY_Holy_Bonus)));
 
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint16_t, MoM::eUnitAbility>(
                               m_game, &data->m_Ability_Flags.bits,

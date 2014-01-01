@@ -620,6 +620,25 @@ int MoMController::calcGoldUpkeep(ePlayer playerNr) const
     return goldUpkeep;
 }
 
+void MoMController::calcManaSkillResearch(ePlayer playerNr, int &mana, int &skill, int &research) const
+{
+    mana     = 0;
+    skill    = 0;
+    research = 0;
+
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return;
+
+    if (wizard->m_Spell_being_cast == SPELL_Spell_Of_Return)
+        return;
+
+    calcPowerBaseDivision(playerNr, mana, skill, research);
+
+    int researchBonusPercentage = calcResearchBonusPercentage(playerNr);
+    research += research * researchBonusPercentage / 100;
+}
+
 int MoMController::calcManaUpkeep(ePlayer playerNr) const
 {
     if (0 == m_game)
@@ -679,7 +698,7 @@ int MoMController::calcPower(ePlayer playerNr) const
     return power;
 }
 
-void MoMController::calcPowerDivision(ePlayer playerNr, int &mana, int &skill, int &research) const
+void MoMController::calcPowerBaseDivision(ePlayer playerNr, int &mana, int &skill, int &research) const
 {
     mana     = 0;
     skill    = 0;
@@ -751,8 +770,19 @@ int MoMController::calcProduction(ePlayer playerNr) const
 
 int MoMController::calcResearch(ePlayer playerNr) const
 {
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+
+    if (wizard->m_Spell_being_cast == SPELL_Spell_Of_Return)
+        return 0;
+
     int mana, skill, research;
-    calcPowerDivision(playerNr, mana, skill, research);
+    calcPowerBaseDivision(playerNr, mana, skill, research);
+
+    int researchBonusPercentage = calcResearchBonusPercentage(playerNr);
+    research += research * researchBonusPercentage / 100;
+
     return research;
 }
 

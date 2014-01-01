@@ -40,9 +40,10 @@ public:
     int  calcFoodUpkeep(ePlayer playerNr) const;
     int  calcGoldIncome(ePlayer playerNr) const;
     int  calcGoldUpkeep(ePlayer playerNr) const;
+    void calcManaSkillResearch(ePlayer playerNr, int& mana, int& skill, int& research) const;
     int  calcManaUpkeep(ePlayer playerNr) const;
     int  calcPower(ePlayer playerNr) const;
-    void calcPowerDivision(ePlayer playerNr, int& manaPoints, int& skillPoints, int& researchPoints) const;
+    void calcPowerBaseDivision(ePlayer playerNr, int& mana, int& skill, int& research) const;
     int  calcProduction(ePlayer playerNr) const;
     int  calcResearch(ePlayer playerNr) const;
     int  calcResearchBonusPercentage(ePlayer playerNr) const;
