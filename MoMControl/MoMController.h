@@ -51,11 +51,12 @@ public:
     int  countUnits(const MoMLocation& location);
     bool findCheapestUnitToProduce(const City& city, eProducing& produce);
     City* findCityAtLocation(const MoMLocation& location);
+    eRace findDominantRace(ePlane plane) const;
     Node_Attr* findNodeAttrAtLocation(const MoMLocation& location);
 
     bool polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type heroNr);
 
-    bool replaceDominantRace(ePlane plane, eRace newRace);
+    bool replaceRace(eRace fromRace, eRace toRace, ePlane plane);
 
     bool removeCityFromGameQueue(int cityNr);
 

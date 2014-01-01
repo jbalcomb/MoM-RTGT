@@ -20,7 +20,7 @@ public slots:
     virtual void slot_gameUpdated();
 
 private slots:
-    void on_pushButton_ReplaceDominantRace_clicked();
+    void on_pushButton_ReplaceRace_clicked();
 
 private:
     Ui::DialogSelectRaces *ui;

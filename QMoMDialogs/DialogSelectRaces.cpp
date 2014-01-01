@@ -25,13 +25,14 @@ DialogSelectRaces::~DialogSelectRaces()
     delete ui;
 }
 
-void DialogSelectRaces::on_pushButton_ReplaceDominantRace_clicked()
+void DialogSelectRaces::on_pushButton_ReplaceRace_clicked()
 {
-    eRace  race  = (eRace)ui->comboBox_Race->currentIndex();
-    ePlane plane = (ePlane)ui->comboBox_Plane->currentIndex();
+    eRace  fromRace = (eRace)ui->comboBox_ReplaceFromRace->currentIndex();
+    eRace  toRace   = (eRace)ui->comboBox_ReplaceByRace->currentIndex();
+    ePlane plane    = (ePlane)ui->comboBox_Plane->currentIndex();
 
     MoMController momController(m_game.data());
-    if (!momController.replaceDominantRace(plane, race))
+    if (!momController.replaceRace(fromRace, toRace, plane))
     {
         (void)QMessageBox::warning(this,
                                    tr("Select Races"),
@@ -41,22 +42,27 @@ void DialogSelectRaces::on_pushButton_ReplaceDominantRace_clicked()
     {
         (void)QMessageBox::information(this,
                                        tr("Select Races"),
-                                       tr("Replaced race"));
+                                       tr("Replaced race %0 by %1 on %2").arg(prettyQStr(fromRace)).arg(prettyQStr(toRace)).arg(prettyQStr(plane)));
     }
 }
 
 void DialogSelectRaces::slot_gameChanged(const QMoMGamePtr &game)
 {
     m_game = game;
-    ui->comboBox_Race->clear();
+    ui->comboBox_ReplaceFromRace->clear();
     MOM_FOREACH(eRace, race, eRace_MAX)
     {
-        ui->comboBox_Race->addItem(*QMoMResources::instance().getIcon(race, 2), prettyQStr(race));
+        ui->comboBox_ReplaceFromRace->addItem(*QMoMResources::instance().getIcon(race, 2), prettyQStr(race));
+    }
+    ui->comboBox_ReplaceByRace->clear();
+    MOM_FOREACH(eRace, race, eRace_MAX)
+    {
+        ui->comboBox_ReplaceByRace->addItem(*QMoMResources::instance().getIcon(race, 2), prettyQStr(race));
     }
     ui->comboBox_Plane->clear();
     MOM_FOREACH(ePlane, plane, ePlane_MAX)
     {
-        ui->comboBox_Plane->addItem(*QMoMResources::instance().getIcon(plane, 2), prettyQStr(plane));
+        ui->comboBox_Plane->addItem(prettyQStr(plane));
     }
 }
 

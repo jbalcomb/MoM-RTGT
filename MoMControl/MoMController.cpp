@@ -969,6 +969,37 @@ City* MoMController::findCityAtLocation(const MoMLocation &location)
     return value;
 }
 
+eRace MoMController::findDominantRace(ePlane plane) const
+{
+    if (0 == m_game)
+        return eRace_MAX;
+
+    eRace dominantRace = eRace_MAX;
+    std::vector<unsigned> histo(eRace_MAX);
+    unsigned dominantCount = 0;
+
+    // Count races in cities and find dominant race
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        const City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (city->m_Plane != plane)
+            continue;
+        if (toUInt(city->m_Race) < eRace_MAX)
+        {
+            histo[city->m_Race]++;
+            if (histo[city->m_Race] > dominantCount)
+            {
+                dominantRace = city->m_Race;
+                dominantCount = histo[city->m_Race];
+            }
+        }
+    }
+
+    return dominantRace;
+}
+
 Node_Attr* MoMController::findNodeAttrAtLocation(const MoMLocation& location)
 {
     Node_Attr* value = 0;
@@ -1127,43 +1158,44 @@ bool MoMController::polymorphToHero(ePlayer playerNr, int unitNr, eUnit_Type her
     return true;
 }
 
-bool MoMController::replaceDominantRace(ePlane plane, eRace newRace)
+bool MoMController::replaceRace(eRace fromRace, eRace toRace, ePlane plane)
 {
     m_errorString.clear();
     if (0 == m_game)
         return false;
+    if ((toUInt(fromRace) >= eRace_MAX) || (toUInt(toRace) >= eRace_MAX) || (toUInt(plane) >= ePlane_MAX))
+        return false;
 
-    std::vector<unsigned> histo(eRace_MAX);
-    eRace dominantRace = eRace_MAX;
-    unsigned dominantCount = 0;
-
-    // Count races in cities and find dominant race
-    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    eUnit_Type firstUnitOfRace[(int)RACE_Troll + 2] =
     {
-        const City* city = m_game->getCity(cityNr);
-        if (0 == city)
-            break;
-        if (city->m_Plane != plane)
-            continue;
-        if (toUInt(city->m_Race) < eRace_MAX)
-        {
-            histo[city->m_Race]++;
-            if (histo[city->m_Race] > dominantCount)
-            {
-                dominantRace = city->m_Race;
-                dominantCount = histo[city->m_Race];
-            }
-        }
-    }
+        UNITTYPE_Barbarian_Spearmen,    //RACE_Barbarian = 0,
+        UNITTYPE_Beastmen_Spearmen,     //RACE_Beastmen = 1,
+        UNITTYPE_Dark_Elf_Spearmen,     //RACE_Dark_Elf = 2,
+        UNITTYPE_Draconian_Spearmen,    //RACE_Draconian = 3,
+        UNITTYPE_Dwarven_Swordsmen,     //RACE_Dwarven = 4,
+        UNITTYPE_Gnoll_Spearmen,        //RACE_Gnoll = 5,
+        UNITTYPE_Halfling_Spearmen,     //RACE_Halfling = 6,
+        UNITTYPE_High_Elf_Spearmen,     //RACE_High_Elf = 7,
+        UNITTYPE_High_Men_Spearmen,     //RACE_High_Men = 8,
+        UNITTYPE_Klackon_Spearmen,      //RACE_Klackon = 9,
+        UNITTYPE_Lizardman_Spearmen,    //RACE_Lizardman = 10,
+        UNITTYPE_Nomad_Spearmen,        //RACE_Nomad = 11,
+        UNITTYPE_Orc_Spearmen,          //RACE_Orc = 12,
+        UNITTYPE_Troll_Spearmen,        //RACE_Troll = 13,
+        UNITTYPE_Arcane_Magic_Spirit    //14
 
-    bool ok = true;
-    if (dominantRace == eRace_MAX)
-    {
-        setErrorString("No dominant race found");
-        ok = false;
-    }
+        // NOTE: Races below do not have the same order as unit types
+//        UNITTYPE_Trireme,               //RACE_Generic_ship_or_catapult = 0x0E,
+//        UNITTYPE_Arcane_Magic_Spirit,   //RACE_Arcane = 0x0F,
+//        UNITTYPE_Green_War_Bears,       //RACE_Nature = 0x10,
+//        UNITTYPE_Blue_Floating_Island,  //RACE_Sorcery = 0x11,
+//        UNITTYPE_Red_Hell_Hounds,       //RACE_Chaos = 0x12,
+//        UNITTYPE_White_Unicorns,        //RACE_Life = 0x13,
+//        UNITTYPE_Black_Skeletons,       //RACE_Death = 0x14,
+    };
 
     // Change race
+    bool ok = true;
     for (int cityNr = 0; ok && (cityNr < m_game->getNrCities()); ++cityNr)
     {
         City* city = m_game->getCity(cityNr);
@@ -1171,17 +1203,54 @@ bool MoMController::replaceDominantRace(ePlane plane, eRace newRace)
             break;
         if (city->m_Plane != plane)
             continue;
-        if (city->m_Race != dominantRace)
+        if (city->m_Race != fromRace)
             continue;
-        if (!m_game->commitData(&city->m_Race, &newRace, sizeof(city->m_Race)))
+
+        // Change race
+        if (!m_game->commitData(&city->m_Race, &toRace, sizeof(city->m_Race)))
         {
-            setErrorString("Failed to commit. Aborting");
+            setErrorString("Failed to commit race. Aborting");
             ok = false;
         }
-    }
 
-    // TODO: Change garrison
-    // TODO: Change housing
+        // Change garrison
+        std::vector<int> units;
+        m_game->findUnitsAtLocation(MoMLocation(*city), units);
+        for (unsigned stackNr = 0; ok && (stackNr < units.size()); ++stackNr)
+        {
+            Unit* unit = m_game->getUnit(units[stackNr]);
+            if (0 == unit)
+            {
+                setErrorString("Failed to retrieve unit. Aborting");
+                ok = false;
+                break;
+            }
+            MoMUnit momUnit(m_game, unit);
+            if (momUnit.getRace() == fromRace)
+            {
+                // Replace to equivalent unit of the toRace
+                eUnit_Type firstFrom = firstUnitOfRace[fromRace];
+                eUnit_Type firstAfterFrom = firstUnitOfRace[Succ(fromRace)];
+                eUnit_Type firstTo = firstUnitOfRace[toRace];
+                eUnit_Type firstAfterTo = firstUnitOfRace[Succ(toRace)];
+
+                eUnit_Type toType = firstTo;
+                if ((unit->m_Unit_Type >= firstFrom) && (unit->m_Unit_Type < firstAfterFrom))
+                {
+                   eUnit_Type toType  = (eUnit_Type)((int)firstTo + (int)momUnit.getUnitTypeNr() - (int)firstFrom);
+                   if (toType >= firstAfterTo)
+                   {
+                        toType = (eUnit_Type)((int)firstAfterTo - 1);
+                   }
+                }
+                if (!m_game->commitData(&unit->m_Unit_Type, &toType, sizeof(unit->m_Unit_Type)))
+                {
+                    setErrorString("Failed to commit unit type. Aborting");
+                    ok = false;
+                }
+            }
+        }
+    }
 
     return ok;
 }
