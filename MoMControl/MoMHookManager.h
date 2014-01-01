@@ -1,6 +1,8 @@
 #ifndef MOMHOOKMANAGER_H
 #define MOMHOOKMANAGER_H
 
+#include <string>
+
 namespace MoM {
 
 class MoMGameBase;

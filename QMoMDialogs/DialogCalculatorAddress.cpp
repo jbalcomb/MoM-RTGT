@@ -5,38 +5,29 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include <stdio.h>  // sscanf
-
-#include "MainWindow.h"
-#include <MoMExeMagic.h>
-#include <MoMExeWizards.h>
-#include <MoMProcess.h>
-#include <MoMUtility.h>
-#include <QMoMSettings.h>
-
 #include "DialogCalculatorAddress.h"
 #include "ui_DialogCalculatorAddress.h"
 
+#include <stdio.h>  // sscanf
 
+#include "MainWindow.h"
+#include "MoMExeMagic.h"
+#include "MoMExeWizards.h"
+#include "MoMProcess.h"
+#include "MoMUtility.h"
 
 DialogCalculatorAddress::DialogCalculatorAddress(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     ui(new Ui::DialogCalculatorAddress),
     m_updating(false)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettingsWindow(this);
-
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-    slot_gameChanged(MainWindow::getInstance()->getGame());
+    postInitialize();
 }
 
 DialogCalculatorAddress::~DialogCalculatorAddress()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
+    preFinalize();
     delete ui;
 }
 

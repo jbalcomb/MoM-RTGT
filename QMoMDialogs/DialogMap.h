@@ -14,12 +14,14 @@
 #include <QList>
 #include <QMap>
 
-#include <MoMLocation.h>
-#include <MoMTemplate.h>
-#include <QMoMSharedPointers.h>
+#include "MoMLocation.h"
+#include "MoMTemplate.h"
+#include "QMoMDialogBase.h"
 
 class QGraphicsItem;
 class QGraphicsScene;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace Ui {
     class DialogOverlandMap;
@@ -28,7 +30,7 @@ namespace Ui {
 namespace MoM
 {
 
-class DialogMap : public QDialog
+class DialogMap : public QMoMDialogBase
 {
     Q_OBJECT
 
@@ -37,17 +39,15 @@ public:
     ~DialogMap();
 
 private:
-    void addBattleUnitSubtree(class QTreeWidget* treeWidget, Battle_Unit* battleUnit);
-    void addCitySubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addLairSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addTerrainSubtree(class QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addUnitSubtree(class QTreeWidgetItem* treeWidgetItem, Unit* unit);
+    void addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit);
+    void addCitySubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
+    void addLairSubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
+    void addTerrainSubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
+    void addUnitSubtree(QTreeWidgetItem* treeWidgetItem, Unit* unit);
 
     void updateGraying();
 
 private:
-    QMoMGamePtr m_game;
-
     class QMoMMapScene* m_sceneArcanus;
     class QMoMMapScene* m_sceneMyrror;
     class QMoMMapScene* m_sceneBattle;

@@ -7,32 +7,24 @@
 #include "MoMController.h"
 #include "MoMGenerated.h"
 #include "QMoMResources.h"
-#include "QMoMSettings.h"
 #include "QMoMTableItem.h"
 #include "QMoMUtility.h"
 
 using namespace MoM;
 
 DialogAddArtifact::DialogAddArtifact(QWidget *parent) :
-    QDialog(parent),
-    m_game(),
-    m_font(),
+    QMoMDialogBase(parent),
     m_scene(new QGraphicsScene),
     ui(new Ui::DialogAddArtifact)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettingsWindow(this);
-
-    setFont(MoM::QMoMResources::g_Font);
-    m_font = MoM::QMoMResources::g_Font;
-    m_font.setPointSize(16);
-
     ui->graphicsView->setScene(m_scene);
+    postInitialize();
 }
 
 DialogAddArtifact::~DialogAddArtifact()
 {
-    QMoMSettings::writeSettingsWindow(this);
+    preFinalize();
     delete ui;
     delete m_scene;
 }

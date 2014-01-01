@@ -247,7 +247,6 @@ void MainWindow::on_pushButton_Connect_clicked()
 void MainWindow::on_pushButton_LbxEditor_clicked()
 {
     DialogLbxEditor* dialog = new DialogLbxEditor(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
@@ -405,44 +404,35 @@ void MainWindow::slot_timerUpdateIcons()
 void MainWindow::on_pushButton_AddUnit_clicked()
 {
     MoM::DialogAddUnit* dialog = new MoM::DialogAddUnit(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
-
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Connect the item model UnitModel to the dialog
     QObject::connect(&m_UnitModel, SIGNAL(signal_unitChanged(QMoMUnitPtr)), dialog, SLOT(slot_unitChanged(QMoMUnitPtr)));
-
-    dialog->slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 void MainWindow::on_pushButton_Calculator_clicked()
 {
     DialogCalculatorAddress* dialog = new DialogCalculatorAddress(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    QObject::connect(&m_UnitModel, SIGNAL(signal_addressChanged(const void*)), dialog, SLOT(slot_addressChanged(const void*)));
     dialog->show();
+
+    QObject::connect(&m_UnitModel, SIGNAL(signal_addressChanged(const void*)), dialog, SLOT(slot_addressChanged(const void*)));
 }
 
 void MainWindow::on_pushButton_ShowTables_clicked()
 {
     DialogTables* dialog = new DialogTables(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void MainWindow::on_pushButton_Map_clicked()
 {
     MoM::DialogMap* dialog = new MoM::DialogMap(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void MainWindow::on_pushButton_Tools_clicked()
 {
     DialogTools* dialog = new DialogTools(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 

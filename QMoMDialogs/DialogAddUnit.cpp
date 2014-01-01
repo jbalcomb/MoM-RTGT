@@ -5,12 +5,12 @@
 // Created:     2012-03-12
 // ---------------------------------------------------------------------------
 
+#include "DialogAddUnit.h"
+#include "ui_DialogAddUnit.h"
+
 #include <qgraphicsitem.h>
 #include <qgraphicsscene.h>
 #include <QMessageBox>
-
-#include "DialogAddUnit.h"
-#include "ui_DialogAddUnit.h"
 
 #include "MoMController.h"
 #include "MoMGenerated.h"
@@ -25,8 +25,7 @@ namespace MoM
 {
 
 DialogAddUnit::DialogAddUnit(QWidget *parent) :
-    QDialog(parent),
-	m_game(),
+    QMoMDialogBase(parent),
     m_unit(new MoM::MoMUnit),
     m_updating(false),
     m_labelWidth(),
@@ -36,14 +35,10 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     ui(new Ui::DialogAddUnit)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettingsWindow(this);
 
-    setFont(MoM::QMoMResources::g_Font);
-    m_font = MoM::QMoMResources::g_Font;
-    m_font.setPointSize(16);
-    setAttribute(Qt::WA_DeleteOnClose);
+    postInitialize();
 
-    // Initalize graphics view
+    // Initalize graphics view AFTER restoring the size of the graphicsView in postInitialize()
     QRectF rectf = ui->graphicsView_Unit->rect();
     m_sceneUnit->setSceneRect(0, 0, rectf.width()-8, rectf.height());
     ui->graphicsView_Unit->setSceneRect(-8, 0, rectf.width(), rectf.height());
@@ -60,8 +55,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
 
 DialogAddUnit::~DialogAddUnit()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
+    preFinalize();
     delete ui;
     delete m_sceneUnit;
 }

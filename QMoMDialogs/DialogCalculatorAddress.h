@@ -10,9 +10,7 @@
 #ifndef DIALOGCALCULATORADDRESS_H
 #define DIALOGCALCULATORADDRESS_H
 
-#include <QDialog>
-
-#include <QMoMSharedPointers.h>
+#include "QMoMDialogBase.h"
 
 namespace MoM {
     class MoMExeBase;
@@ -22,7 +20,7 @@ namespace Ui {
     class DialogCalculatorAddress;
 }
 
-class DialogCalculatorAddress : public QDialog
+class DialogCalculatorAddress : public QMoMDialogBase
 {
     Q_OBJECT
 
@@ -52,7 +50,6 @@ private:
 
 private:
     // CONFIG
-    QMoMGamePtr m_game;
 
     // STATUS
     Ui::DialogCalculatorAddress *ui;

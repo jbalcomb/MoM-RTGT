@@ -10,13 +10,10 @@
 #ifndef DIALOGADDUNIT_H
 #define DIALOGADDUNIT_H
 
-#include <QDialog>
-#include <QSharedPointer>
-
-#include <MoMTemplate.h>
-#include <QMoMResources.h>
-#include <QMoMSharedPointers.h>
-#include <QMoMUtility.h>
+#include "MoMTemplate.h"
+#include "QMoMResources.h"
+#include "QMoMDialogBase.h"
+#include "QMoMUtility.h"
 
 class QAbstractButton;
 class QGraphicsItem;
@@ -35,7 +32,7 @@ namespace MoM {
 
 namespace MoM {
 
-class DialogAddUnit : public QDialog
+class DialogAddUnit : public QMoMDialogBase
 {
     Q_OBJECT
     
@@ -83,12 +80,10 @@ private:
 	void update();
 
 	// CONFIG
-    QMoMGamePtr m_game;
     QSharedPointer<MoM::MoMUnit> m_unit;
 
 	// STATUS
     bool m_updating;
-    QFont m_font;
     int m_labelWidth;
     int m_lineHeight;
     int m_pictureHeight;

@@ -1,16 +1,14 @@
 #ifndef DIALOGEXTERNALAI_H
 #define DIALOGEXTERNALAI_H
 
-#include <QDialog>
-
 #include "MoMHookManager.h"
-#include "QMoMSharedPointers.h"
+#include "QMoMDialogBase.h"
 
 namespace Ui {
 class DialogExternalAI;
 }
 
-class DialogExternalAI : public QDialog
+class DialogExternalAI : public QMoMDialogBase
 {
     Q_OBJECT
     
@@ -30,7 +28,6 @@ private slots:
 private:
     Ui::DialogExternalAI *ui;
 
-    QMoMGamePtr m_game;
     MoM::MoMHookManager* hookManager;
 };
 

@@ -5,17 +5,18 @@
 // Created:     2012-03-12
 // ---------------------------------------------------------------------------
 
+#include "DialogMap.h"
+#include "ui_DialogMap.h"
+
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QTimer>
+#include <QTreeWidget>
 #include <QTreeWidgetItem>
 
 #include <cmath>
 #include <fstream>
 #include <vector>
-
-#include "DialogMap.h"
-#include "ui_DialogMap.h"
 
 #include "DialogCalculatorAddress.h"
 #include "MainWindow.h"
@@ -37,7 +38,7 @@ namespace MoM
 {
 
 DialogMap::DialogMap(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     m_sceneArcanus(new QMoMMapScene(MoM::PLANE_Arcanum, false)),
     m_sceneMyrror(new QMoMMapScene(MoM::PLANE_Myrror, false)),
     m_sceneBattle(new QMoMMapScene(MoM::ePlane_MAX, true)),
@@ -46,7 +47,7 @@ DialogMap::DialogMap(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QMoMSettings::readSettingsWindow(this);
+    postInitialize();
 
     setWindowFlags(Qt::Window);
 
@@ -59,10 +60,6 @@ DialogMap::DialogMap(QWidget *parent) :
 //    {
 //        ui->comboBox_Plane->setCurrentIndex(1);
 //    }
-
-    // Update view when game is changed or updated
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
 
     // Update view when checkbox is clicked
     QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
@@ -90,16 +87,13 @@ DialogMap::DialogMap(QWidget *parent) :
     // Connect timers
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
 
-    // Force initialization
-    slot_gameChanged(MainWindow::getInstance()->getGame());
-
     // Start timer
     m_timer->start(250);
 }
 
 DialogMap::~DialogMap()
 {
-    QMoMSettings::writeSettingsWindow(this);
+    preFinalize();
 
     delete ui;
     delete m_sceneMyrror;

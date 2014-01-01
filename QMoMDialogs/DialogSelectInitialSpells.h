@@ -14,13 +14,13 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include <QMoMSharedPointers.h>
+#include "QMoMDialogBase.h"
 
 namespace Ui {
     class DialogSelectInitialSpells;
 }
 
-class DialogSelectInitialSpells : public QDialog
+class DialogSelectInitialSpells : public QMoMDialogBase
 {
     Q_OBJECT
 
@@ -28,15 +28,9 @@ public:
     explicit DialogSelectInitialSpells(QWidget *parent = 0);
     ~DialogSelectInitialSpells();
 
-private:
-    bool apply();
-    QMoMGamePtr getGame();
-    void update();
-
-    Ui::DialogSelectInitialSpells *ui;
-
-    int m_Realm_Type;
-    class InitialSpells* m_InitialSpells;
+public slots:
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
 
 private slots:
     void on_listWidget_VeryRare_clicked(QModelIndex index);
@@ -53,6 +47,15 @@ private slots:
     void on_listWidget_Rare_itemClicked(QListWidgetItem* item);
     void on_listWidget_Uncommon_itemClicked(QListWidgetItem* item);
     void on_listWidget_Common_itemClicked(QListWidgetItem* item);
+
+private:
+    bool apply();
+    void update();
+
+    Ui::DialogSelectInitialSpells *ui;
+
+    int m_Realm_Type;
+    class InitialSpells* m_InitialSpells;
 };
 
 #endif // DIALOGSELECTINITIALSPELLS_H

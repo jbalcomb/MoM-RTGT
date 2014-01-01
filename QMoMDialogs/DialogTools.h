@@ -10,16 +10,15 @@
 #ifndef DIALOGTOOLS_H
 #define DIALOGTOOLS_H
 
-#include <QDialog>
 #include <QStatusBar>
 
-#include <QMoMSharedPointers.h>
+#include "QMoMDialogBase.h"
 
 namespace Ui {
 class DialogTools;
 }
 
-class DialogTools : public QDialog
+class DialogTools : public QMoMDialogBase
 {
     Q_OBJECT
     
@@ -27,6 +26,10 @@ public:
     explicit DialogTools(QWidget *parent = 0);
     ~DialogTools();
    
+public slots:
+    void slot_gameChanged(const QMoMGamePtr& game);
+    void slot_gameUpdated();
+
 private slots:
     void on_pushButton_ApplyBuildQueues_clicked();
     void on_pushButton_CatnipMod_clicked();
@@ -41,7 +44,6 @@ private slots:
     void on_pushButton_SelectRaces_clicked();
 
 private:
-	QMoMGamePtr getGame();
 	QStatusBar* statusBar();
 
     Ui::DialogTools *ui;

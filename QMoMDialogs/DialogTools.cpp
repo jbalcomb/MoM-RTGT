@@ -5,77 +5,61 @@
 // Created:     2012-03-12
 // ---------------------------------------------------------------------------
 
-// OS specific
+#include "DialogTools.h"
+#include "ui_DialogTools.h"
 
-// Standard C++ Library
+#include "MainWindow.h"
+#include "MoMCatnip.h"
+#include "MoMController.h"
+#include "MoMGameCustom.h"
+#include "MoMGenerated.h"
+#include "MoMLbxBase.h"
+#include "MoMGameMemory.h"
+#include "MoMProcess.h"
+#include "MoMGameSave.h"
+#include "MoMUtility.h"
+#include "QMoMAnimation.h"
+#include "QMoMLbx.h"
+#include "QMoMResources.h"
 
-// Library
-#include <MoMCatnip.h>
-#include <MoMController.h>
-#include <MoMGameCustom.h>
-#include <MoMGenerated.h>
-#include <MoMLbxBase.h>
-#include <MoMGameMemory.h>
-#include <MoMProcess.h>
-#include <MoMGameSave.h>
-#include <MoMUtility.h>
-#include <QMoMAnimation.h>
-#include <QMoMLbx.h>
-#include <QMoMResources.h>
-#include <QMoMSettings.h>
-
-// Local
 #include "DialogAddArtifact.h"
 #include "DialogBuildingQueues.h"
 #include "DialogExternalAI.h"
 #include "DialogSelectInitialSpells.h"
 #include "DialogSelectRaces.h"
-#include "MainWindow.h"
-
-// Module header
-#include "DialogTools.h"
-#include "ui_DialogTools.h"
 
 DialogTools::DialogTools(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     ui(new Ui::DialogTools)
 {
     ui->setupUi(this);
-    setFont(MoM::QMoMResources::g_Font);
-
-    QMoMSettings::readSettingsWindow(this);
+    postInitialize();
 }
 
 DialogTools::~DialogTools()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
+    preFinalize();
     delete ui;
 }
 
-QMoMGamePtr DialogTools::getGame()
+void DialogTools::slot_gameChanged(const QMoMGamePtr &game)
 {
-	QMoMGamePtr game;
-	MainWindow* controller = MainWindow::getInstance();
-    if (0 != controller)
-	{
-	    game = controller->getGame();
-	}
-    return game;
+    m_game = game;
+}
+
+void DialogTools::slot_gameUpdated()
+{
 }
 
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
-    DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    DialogBuildingQueues* dialog = new DialogBuildingQueues();
     dialog->show();
 }
 
 void DialogTools::on_pushButton_CatnipMod_clicked()
 {
-    MainWindow* controller = MainWindow::getInstance();
-    QMoMGamePtr game = getGame();
-    if (game.isNull())
+    if (m_game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Catnip mod"),
@@ -195,7 +179,7 @@ void DialogTools::on_pushButton_CatnipMod_clicked()
 
     MoM::MoMCatnip catnip;
 
-    bool ok = catnip.apply(game.data());
+    bool ok = catnip.apply(m_game.data());
     if (!ok)
     {
         statusBar()->showMessage(tr("Failed to apply Catnip mod"));
@@ -215,15 +199,11 @@ void DialogTools::on_pushButton_CatnipMod_clicked()
                 "3. Magicians, priests, and shamen have been renamed and have different abilities\n"
             ));
     }
-
-    controller->update();
 }
 
 void DialogTools::on_pushButton_RepopLairs_clicked()
 {
-    MainWindow* controller = MainWindow::getInstance();
-	QMoMGamePtr game = getGame();
-    if (game.isNull())
+    if (m_game.isNull())
     {
         (void)QMessageBox::warning(this, 
             tr("Repop Lairs"),
@@ -231,11 +211,11 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
         return;
     }
 
-    bool ok = controller->refreshMemory();
+    bool ok = m_game->readData();
 
     if (ok)
     {
-        MoM::MoMController momController(game.data());
+        MoM::MoMController momController(m_game.data());
         ok = momController.repopLairs(ui->checkBox_RepopMaxOut->isChecked());
         if (!ok)
         {
@@ -259,9 +239,7 @@ void DialogTools::on_pushButton_RepopLairs_clicked()
 
 void DialogTools::on_pushButton_LucernMod_clicked()
 {
-    MainWindow* controller = MainWindow::getInstance();
-	QMoMGamePtr game = getGame();
-    if (game.isNull())
+    if (m_game.isNull())
     {
         (void)QMessageBox::warning(this,
             tr("Lucern mod"),
@@ -271,7 +249,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
 
     // Load FONTS.LBX (TODO: needs centralization)
     MoM::QMoMPalette colorTable(256);
-    std::string fontsLbxFile = game->getGameDirectory() + "/" + "FONTS.LBX";
+    std::string fontsLbxFile = m_game->getGameDirectory() + "/" + "FONTS.LBX";
     MoM::MoMLbxBase fontsLbx;
     bool ok = fontsLbx.load(fontsLbxFile);
     if (ok)
@@ -303,7 +281,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Load UNITS2.LBX
-    std::string units2LbxFile = game->getGameDirectory() + "/" + "UNITS2.LBX";
+    std::string units2LbxFile = m_game->getGameDirectory() + "/" + "UNITS2.LBX";
     MoM::MoMLbxBase units2Lbx;
     if (ok)
     {
@@ -311,7 +289,7 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     }
 
     // Load FIGURES9.LBX
-    std::string figuresLbxFile = game->getGameDirectory() + "/" + "FIGURES9.LBX";
+    std::string figuresLbxFile = m_game->getGameDirectory() + "/" + "FIGURES9.LBX";
     MoM::MoMLbxBase figuresLbx;
     if (ok)
     {
@@ -379,14 +357,11 @@ void DialogTools::on_pushButton_LucernMod_clicked()
     {
         statusBar()->showMessage(tr("Lucern mod applied"));
     }
-
-    controller->update();
 }
 
 void DialogTools::on_pushButton_SelectInitialSpells_clicked()
 {
     DialogSelectInitialSpells* dialog = new DialogSelectInitialSpells(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
@@ -399,19 +374,13 @@ QStatusBar* DialogTools::statusBar()
 void DialogTools::on_pushButton_ExternalAI_clicked()
 {
     DialogExternalAI* dialog = new DialogExternalAI(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
 }
 
 void DialogTools::on_pushButton_ConjureArtifact_clicked()
 {
     DialogAddArtifact* dialog = new DialogAddArtifact(MainWindow::getInstance());
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->show();
-
-    connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), dialog, SLOT(slot_gameChanged(QMoMGamePtr)));
-    connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), dialog, SLOT(slot_gameUpdated()));
-    dialog->slot_gameChanged(MainWindow::getInstance()->getGame());
 }
 
 void DialogTools::on_pushButton_SelectRaces_clicked()

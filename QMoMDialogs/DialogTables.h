@@ -13,13 +13,13 @@
 #include <QDialog>
 #include <QModelIndex>
 
-#include "QMoMSharedPointers.h"
+#include "QMoMDialogBase.h"
 
 namespace Ui {
     class DialogTables;
 }
 
-class DialogTables : public QDialog
+class DialogTables : public QMoMDialogBase
 {
     Q_OBJECT
 
@@ -79,8 +79,6 @@ signals:
     void signal_addRow(int row);
 
 private:
-    QMoMGamePtr m_game;
-
     Ui::DialogTables *ui;
 };
 

@@ -5,15 +5,15 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
+#include "DialogTables.h"
+#include "ui_DialogTables.h"
+
 #include <QClipboard>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QProgressDialog>
 
 #include <string>
-
-#include "DialogTables.h"
-#include "ui_DialogTables.h"
 
 #include "MoMCity.h"
 #include "MoMController.h"
@@ -29,26 +29,19 @@
 using namespace MoM;
 
 DialogTables::DialogTables(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     ui(new Ui::DialogTables)
 {
     ui->setupUi(this);
 
     setWindowFlags(Qt::Window);
 
-    // Update view when game is changed or updated
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-    slot_gameChanged(MainWindow::getInstance()->getGame());
-
-    QMoMSettings::readSettingsWindow(this);
+    postInitialize();
 }
 
 DialogTables::~DialogTables()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
+    preFinalize();
     delete ui;
 }
 

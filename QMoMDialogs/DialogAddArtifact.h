@@ -10,9 +10,9 @@ namespace Ui {
 class DialogAddArtifact;
 }
 
-#include "QMoMSharedPointers.h"
+#include "QMoMDialogBase.h"
 
-class DialogAddArtifact : public QDialog
+class DialogAddArtifact : public QMoMDialogBase
 {
     Q_OBJECT
     
@@ -32,8 +32,6 @@ private slots:
 private:
     QGraphicsSimpleTextItem* addText(const QPointF& pos, const QString& text, const QString& helpText);
 
-    QMoMGamePtr m_game;
-    QFont m_font;
     QGraphicsScene* m_scene;
 
     Ui::DialogAddArtifact *ui;

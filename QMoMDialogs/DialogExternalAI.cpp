@@ -1,29 +1,20 @@
-#include "MoMTemplate.h"
-#include "MainWindow.h"
-#include "QMoMSettings.h"
-
 #include "DialogExternalAI.h"
 #include "ui_DialogExternalAI.h"
 
+#include "MoMTemplate.h"
+
 DialogExternalAI::DialogExternalAI(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     ui(new Ui::DialogExternalAI),
-    m_game(),
     hookManager(0)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettingsWindow(this);
-
-    // Update view when game is changed or updated
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameChanged(QMoMGamePtr)), this, SLOT(slot_gameChanged(QMoMGamePtr)));
-    QObject::connect(MainWindow::getInstance(), SIGNAL(signal_gameUpdated()), this, SLOT(slot_gameUpdated()));
-
-    slot_gameChanged(MainWindow::getInstance()->getGame());
+    postInitialize();
 }
 
 DialogExternalAI::~DialogExternalAI()
 {
-    QMoMSettings::writeSettingsWindow(this);
+    preFinalize();
 
     delete hookManager;
 
@@ -122,7 +113,7 @@ void DialogExternalAI::on_pushButton_ReleaseHook_clicked()
 
     if (ok)
     {
-        MainWindow::getInstance()->on_pushButton_Reread_clicked();
+        ok = m_game->readData();
     }
 
     if (ok)

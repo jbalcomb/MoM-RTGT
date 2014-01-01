@@ -15,7 +15,6 @@
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "MainWindow.h"
-#include "QMoMSettings.h"
 
 
 //        starting guaranteed  totals   discount   total # spells
@@ -159,23 +158,37 @@ void InitialSpells::randomize()
 
 
 DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
-    QDialog(parent),
+    QMoMDialogBase(parent),
     ui(new Ui::DialogSelectInitialSpells),
     m_Realm_Type(MoM::REALM_Life),
     m_InitialSpells(0)
 {
     ui->setupUi(this);
-    QMoMSettings::readSettingsWindow(this);
 
     srand(time(NULL));
 
     m_InitialSpells = new InitialSpells;
 
+    postInitialize();
+}
+
+DialogSelectInitialSpells::~DialogSelectInitialSpells()
+{
+    postInitialize();
+
+    delete m_InitialSpells;
+
+    delete ui;
+}
+
+void DialogSelectInitialSpells::slot_gameChanged(const QMoMGamePtr &game)
+{
+    m_game = game;
+
     MoM::eSpellKnown* known = 0;
-    QMoMGamePtr game = getGame();
-    if (!game.isNull())
+    if (!m_game.isNull())
     {
-        MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
+        MoM::Wizard* wizard = m_game->getWizard(MoM::PLAYER_YOU);
         if (0 != wizard)
         {
             known = &wizard->m_Spells_Known.No_spell;     // First spell
@@ -196,28 +209,18 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
             }
         }
     }
-
-    update();
-
-    // TODO: Make signal-slot connections to gameChanged and gameUpdated (similar to the other dialogs)
 }
 
-DialogSelectInitialSpells::~DialogSelectInitialSpells()
+void DialogSelectInitialSpells::slot_gameUpdated()
 {
-    QMoMSettings::writeSettingsWindow(this);
-
-    delete m_InitialSpells;
-
-    delete ui;
 }
 
 bool DialogSelectInitialSpells::apply()
 {
     MoM::eSpellKnown* known = 0;
-    QMoMGamePtr game = getGame();
-    if (game.isNull())
+    if (m_game.isNull())
         return false;
-    MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
+    MoM::Wizard* wizard = m_game->getWizard(MoM::PLAYER_YOU);
     if (0 == wizard)
         return false;
     known = &wizard->m_Spells_Known.No_spell;     // First spell
@@ -267,7 +270,7 @@ bool DialogSelectInitialSpells::apply()
     }
 
     // Commit
-    if (!game->commitData(&wizard->m_Spells_Known, known, sizeof(wizard->m_Spells_Known)))
+    if (!m_game->commitData(&wizard->m_Spells_Known, known, sizeof(wizard->m_Spells_Known)))
     {
         std::cout << "Failed to commit data" << std::endl;
     }
@@ -275,24 +278,12 @@ bool DialogSelectInitialSpells::apply()
     return true;
 }
 
-QMoMGamePtr DialogSelectInitialSpells::getGame()
-{
-	QMoMGamePtr game;
-    MainWindow* controller = MainWindow::getInstance();
-    if (0 != controller)
-	{
-		game = controller->getGame();
-	}
-    return game;
-}
-
 void DialogSelectInitialSpells::update()
 {
     int16_t* nrSpellbooks = 0;
-    QMoMGamePtr game = getGame();
-    if (!game.isNull())
+    if (!m_game.isNull())
     {
-        MoM::Wizard* wizard = game->getWizard(MoM::PLAYER_YOU);
+        MoM::Wizard* wizard = m_game->getWizard(MoM::PLAYER_YOU);
         if (0 != wizard)
         {
             nrSpellbooks = &wizard->m_Number_of_Spellbooks_Nature;
