@@ -1323,4 +1323,35 @@ bool MoMController::repopLairs(bool maxOut)
     return ok;
 }
 
+bool MoMController::updateTaxAndPowerDivision(ePlayer playerNr)
+{
+    m_errorString.clear();
+    if (0 == m_game)
+        return false;
+
+    bool ok = true;
+    for (int cityNr = 0; ok && (cityNr < m_game->getNrCities()); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (city->m_Owner != playerNr)
+            continue;
+        MoMCity momCity(m_game, city);
+
+        int8_t goldProduced = momCity.calcGoldProduced();
+        int8_t hammersProduced = momCity.calcHammersProduced();
+        if (!m_game->commitData(&city->m_Coins, &goldProduced, sizeof(city->m_Coins))
+                || !m_game->commitData(&city->m_Hammers, &hammersProduced, sizeof(city->m_Hammers)))
+        {
+            setErrorString("Failed to commit tax changes to city");
+            ok = false;
+        }
+    }
+
+    // TODO: PowerDivision
+
+    return ok;
+}
+
 }

@@ -394,7 +394,7 @@ void DialogBuildingQueues::on_tableWidget_Cities_cellChanged(int row, int column
     // Force update game to see all updated values
     if (m_game->readData())
     {
-        slot_gameUpdated();
+        update();
     }
 }
 
@@ -434,8 +434,6 @@ void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(cons
     QTableWidgetItem* pItem = ui->tableWidget_Cities->currentItem();
 
     QMenu contextMenu;
-//    contextMenu.addAction("Copy", this, SLOT(slot_Copy()), QKeySequence("Ctrl+C"));
-
     QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
     if (0 != pMoMItem)
     {
@@ -452,6 +450,33 @@ void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(cons
     }
 
     contextMenu.exec(ui->tableWidget_Cities->viewport()->mapToGlobal(pos));
+}
+
+void DialogBuildingQueues::on_tableWidget_Summary_customContextMenuRequested(const QPoint &pos)
+{
+    if (m_updating)
+        return;
+    MoM::UpdateLock lock(m_updating);
+
+    QTableWidgetItem* pItem = ui->tableWidget_Summary->currentItem();
+
+    QMenu contextMenu;
+    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
+    if (0 != pMoMItem)
+    {
+        QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
+        if (!actions.empty())
+        {
+            contextMenu.addSeparator();
+            contextMenu.addActions(actions);
+        }
+        foreach(QAction* action, actions)
+        {
+            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemActionSummary()));
+        }
+    }
+
+    contextMenu.exec(ui->tableWidget_Summary->viewport()->mapToGlobal(pos));
 }
 
 void DialogBuildingQueues::slot_gameChanged(const QMoMGamePtr& game)
@@ -491,32 +516,13 @@ void DialogBuildingQueues::slot_ItemActionSummary()
     if (0 != pMoMItem)
     {
         pMoMItem->slotAction();
-    }
-}
 
-void DialogBuildingQueues::on_tableWidget_Summary_customContextMenuRequested(const QPoint &pos)
-{
-    if (m_updating)
-        return;
-    MoM::UpdateLock lock(m_updating);
+        MoMController momController(m_game.data());
+        momController.updateTaxAndPowerDivision(PLAYER_YOU);
 
-    QTableWidgetItem* pItem = ui->tableWidget_Summary->currentItem();
-
-    QMenu contextMenu;
-    QMoMTableItemBase* pMoMItem = dynamic_cast<QMoMTableItemBase*>(pItem);
-    if (0 != pMoMItem)
-    {
-        QList<QAction*> actions = pMoMItem->requestActions(&contextMenu);
-        if (!actions.empty())
+        if (m_game->readData())
         {
-            contextMenu.addSeparator();
-            contextMenu.addActions(actions);
-        }
-        foreach(QAction* action, actions)
-        {
-            connect(action, SIGNAL(triggered()), this, SLOT(slot_ItemActionSummary()));
+            update();
         }
     }
-
-    contextMenu.exec(ui->tableWidget_Summary->viewport()->mapToGlobal(pos));
 }

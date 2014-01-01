@@ -62,6 +62,8 @@ public:
 
     bool repopLairs(bool maxOut = false);
 
+    bool updateTaxAndPowerDivision(ePlayer playerNr);
+
 private:
 //    bool addCitiesToGameQueue();
 
