@@ -25,6 +25,7 @@
 #include "DialogAddArtifact.h"
 #include "DialogBuildingQueues.h"
 #include "DialogExternalAI.h"
+#include "DialogManageCities.h"
 #include "DialogSelectInitialSpells.h"
 #include "DialogSelectRaces.h"
 
@@ -53,8 +54,11 @@ void DialogTools::slot_gameUpdated()
 
 void DialogTools::on_pushButton_ApplyBuildQueues_clicked()
 {
-    DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
-    dialog->show();
+//    DialogBuildingQueues* dialog = new DialogBuildingQueues(MainWindow::getInstance());
+//    dialog->show();
+
+    DialogManageCities* window = new DialogManageCities(MainWindow::getInstance());
+    window->show();
 }
 
 void DialogTools::on_pushButton_CatnipMod_clicked()

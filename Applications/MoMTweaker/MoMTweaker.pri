@@ -67,7 +67,6 @@ HEADERS += \
     ../../MoMControl/MoMLevelBonuses.h \
     ../../QMoMCommon/UnitModel.h \
     ../../QMoMDialogs/DialogAddUnit.h \
-    ../../QMoMDialogs/DialogBuildingQueues.h \
     ../../QMoMDialogs/DialogCalculatorAddress.h \
     ../../QMoMDialogs/DialogExternalAI.h \
     ../../QMoMDialogs/DialogLbxEditor.h \
@@ -78,7 +77,8 @@ HEADERS += \
     ../../MoMModel/MoMCity.h \
     ../../QMoMDialogs/DialogAddArtifact.h \
     ../../QMoMDialogs/DialogSelectRaces.h \
-    ../../QMoMCommon/QMoMDialogBase.h
+    ../../QMoMCommon/QMoMDialogBase.h \
+    ../../QMoMDialogs/DialogManageCities.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -125,7 +125,6 @@ SOURCES += \
     ../../giflib-5.0.4/lib/dgif_lib.cpp \
     ../../MoMControl/MoMLevelBonuses.cpp \
     ../../QMoMDialogs/DialogAddUnit.cpp \
-    ../../QMoMDialogs/DialogBuildingQueues.cpp \
     ../../QMoMDialogs/DialogCalculatorAddress.cpp \
     ../../QMoMDialogs/DialogExternalAI.cpp \
     ../../QMoMDialogs/DialogLbxEditor.cpp \
@@ -137,12 +136,12 @@ SOURCES += \
     ../../MoMModel/MoMCity.cpp \
     ../../QMoMDialogs/DialogAddArtifact.cpp \
     ../../QMoMDialogs/DialogSelectRaces.cpp \
-    ../../QMoMCommon/QMoMDialogBase.cpp
+    ../../QMoMCommon/QMoMDialogBase.cpp \
+    ../../QMoMDialogs/DialogManageCities.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \
     ../../QMoMDialogs/DialogAddUnit.ui \
-    ../../QMoMDialogs/DialogBuildingQueues.ui \
     ../../QMoMDialogs/DialogCalculatorAddress.ui \
     ../../QMoMDialogs/DialogExternalAI.ui \
     ../../QMoMDialogs/DialogLbxEditor.ui \
@@ -151,6 +150,7 @@ FORMS += \
     ../../QMoMDialogs/DialogTables.ui \
     ../../QMoMDialogs/DialogTools.ui \
     ../../QMoMDialogs/DialogAddArtifact.ui \
-    ../../QMoMDialogs/DialogSelectRaces.ui
+    ../../QMoMDialogs/DialogSelectRaces.ui \
+    ../../QMoMDialogs/DialogManageCities.ui
 
 RESOURCES += ../../Resources/InteractiveGameTweaker.qrc
