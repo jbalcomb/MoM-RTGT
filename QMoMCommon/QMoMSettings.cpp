@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QFileDialog>
+#include <QMainWindow>
 #include <QSettings>
 #include <QSlider>
 #include <QSplitter>
@@ -81,6 +82,7 @@ void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
     QCheckBox* checkbox = dynamic_cast<QCheckBox*>(object);
     QComboBox* combobox = dynamic_cast<QComboBox*>(object);
     QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
+    QMainWindow* mainWindow = dynamic_cast<QMainWindow*>(object);
     QSlider* slider = dynamic_cast<QSlider*>(object);
     QSplitter* splitter = dynamic_cast<QSplitter*>(object);
     QTableWidget* tablewidget = dynamic_cast<QTableWidget*>(object);
@@ -127,6 +129,12 @@ void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
         }
     }
 
+    if (0 != mainWindow)
+    {
+        mainWindow->restoreGeometry(settings.value("geometry").toByteArray());
+        mainWindow->restoreState(settings.value("windowState").toByteArray());
+    }
+
     bool recurse = ((0 == filedialog) && (0 == tablewidget) && (0 == treewidget));
     if (recurse)
     {
@@ -156,6 +164,12 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
         settings.setValue(filedialog->objectName(), filedialog->directory().absolutePath());
         // Do not recurse
         return;
+    }
+    QMainWindow* mainWindow = dynamic_cast<QMainWindow*>(object);
+    if (0 != mainWindow)
+    {
+        settings.setValue("geometry", mainWindow->saveGeometry());
+        settings.setValue("windowState", mainWindow->saveState());
     }
     QSlider* slider = dynamic_cast<QSlider*>(object);
     if (0 != slider)

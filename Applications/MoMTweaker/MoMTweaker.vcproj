@@ -220,10 +220,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\QMoMDialogs\DialogBuildingQueues.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\QMoMDialogs\DialogCalculatorAddress.cpp"
 				>
 			</File>
@@ -233,6 +229,10 @@
 			</File>
 			<File
 				RelativePath="..\..\QMoMDialogs\DialogLbxEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\QMoMDialogs\DialogManageCities.cpp"
 				>
 			</File>
 			<File
@@ -498,32 +498,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\QMoMDialogs\DialogBuildingQueues.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing DialogBuildingQueues.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Debug&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing DialogBuildingQueues.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Release&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\QMoMDialogs\DialogCalculatorAddress.h"
 				>
 				<FileConfiguration
@@ -595,6 +569,32 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing DialogLbxEditor.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Release&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\QMoMDialogs\DialogManageCities.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing DialogManageCities.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Debug&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing DialogManageCities.h..."
 						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Release&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
@@ -1022,7 +1022,7 @@
 						Description="Moc&apos;ing UnitModel.h..."
 						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Debug&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\Generated\Release\moc_unitmodel.cpp&quot;"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1033,7 +1033,7 @@
 						Description="Moc&apos;ing UnitModel.h..."
 						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Release&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\Generated\Release\moc_unitmodel.cpp&quot;"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1052,10 +1052,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Generated\Release\moc_DialogBuildingQueues.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Generated\Release\moc_DialogCalculatorAddress.cpp"
 				>
 			</File>
@@ -1065,6 +1061,10 @@
 			</File>
 			<File
 				RelativePath=".\Generated\Release\moc_DialogLbxEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Generated\Release\moc_DialogManageCities.cpp"
 				>
 			</File>
 			<File
@@ -1104,15 +1104,8 @@
 				>
 			</File>
 			<File
-				RelativePath="Generated\Release\moc_UnitModel.cpp"
+				RelativePath=".\Generated\Release\moc_UnitModel.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\GeneratedFiles\qrc_InteractiveGameTweaker.cpp"
@@ -1143,10 +1136,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogbuildingqueues.h"
-				>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\ui_dialogcalculatoraddress.h"
 				>
 			</File>
@@ -1156,6 +1145,10 @@
 			</File>
 			<File
 				RelativePath=".\GeneratedFiles\ui_dialoglbxeditor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\ui_DialogManageCities.h"
 				>
 			</File>
 			<File
@@ -1224,9 +1217,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogaddunit.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogaddunit.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1235,35 +1228,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogaddunit.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogaddunit.h&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\QMoMDialogs\DialogBuildingQueues.ui"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogbuildingqueues.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogbuildingqueues.h&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogbuildingqueues.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogbuildingqueues.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1276,9 +1243,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogcalculatoraddress.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogcalculatoraddress.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1287,9 +1254,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogcalculatoraddress.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogcalculatoraddress.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1302,9 +1269,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogexternalai.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogexternalai.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1313,9 +1280,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogexternalai.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogexternalai.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1328,9 +1295,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialoglbxeditor.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialoglbxeditor.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1339,9 +1306,35 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialoglbxeditor.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialoglbxeditor.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\QMoMDialogs\DialogManageCities.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1354,9 +1347,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogmap.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogmap.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1365,9 +1358,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogmap.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogmap.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1380,9 +1373,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogselectinitialspells.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogselectinitialspells.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1391,9 +1384,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogselectinitialspells.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogselectinitialspells.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1432,9 +1425,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogtables.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogtables.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1443,9 +1436,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogtables.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogtables.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1458,9 +1451,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogtools.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogtools.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1469,9 +1462,9 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Uic&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_dialogtools.h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
-						Outputs="&quot;.\GeneratedFiles\ui_dialogtools.h&quot;"
+						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
 					/>
 				</FileConfiguration>
 			</File>

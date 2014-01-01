@@ -23,7 +23,6 @@
 #include "QMoMResources.h"
 
 #include "DialogAddArtifact.h"
-#include "DialogBuildingQueues.h"
 #include "DialogExternalAI.h"
 #include "DialogManageCities.h"
 #include "DialogSelectInitialSpells.h"

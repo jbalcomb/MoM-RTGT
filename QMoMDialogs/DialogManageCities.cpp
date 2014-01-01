@@ -143,7 +143,7 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
 
     QStringList labelsCities;
     labelsCities << "Nr"
-           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Calc" << "Food" << "Conn" << "Calc" << "Gold" << "Calc" << "Prod" << "Completion" << "Producing"
+           << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Food" << "Conn" << "Gold" << "Prod" << "Completion" << "Producing"
            << "Time" << "Garrison" << "Buy" << "Factor";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
@@ -152,7 +152,8 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
 
     ui->tableWidget_Summary->setColumnCount(2);
     QStringList labelsSummary;
-    labelsSummary << "Treasury" << "Magic Reserve" << "Casting Skill" << "Gold/turn" << "Food/turn" << "Prod/turn" << "Power division" << "Mana/turn" << "Research";
+    labelsSummary << "Treasury" << "Magic Reserve" << "Casting Skill" << "Gold/turn" << "Prod/turn" << "Food/turn"
+                  << "Power Base" << "Mana/turn" << "Skill to pool" << "Research/turn" << "Researching";
     ui->tableWidget_Summary->setRowCount(labelsSummary.size());
     ui->tableWidget_Summary->setVerticalHeaderLabels(labelsSummary);
     for (int row = 0; row < ui->tableWidget_Summary->rowCount(); ++row)
@@ -165,10 +166,12 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Mana, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2));
-    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Production, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Mana, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Research, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Research, 2));
     assert(ui->tableWidget_Summary->rowCount() == row);
     ui->tableWidget_Summary->resizeRowsToContents();
@@ -261,22 +264,22 @@ void DialogManageCities::update()
         ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 45 + toUInt(city->m_Race)), 2));
         ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrRebels(), 2)));
         ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 74 + toUInt(city->m_Race)), 2));
-        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            getResourceIcon(RESOURCE_Food, momCity.calcFoodProduced() - city->m_Population),
-                                            QMoMTableItemBase::formatNumber(momCity.calcFoodProduced() - city->m_Population, SHOWNUMBER_alwaysPlus, 3)));
+//        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+//                                            getResourceIcon(RESOURCE_Food, momCity.calcFoodProduced() - city->m_Population),
+//                                            QMoMTableItemBase::formatNumber(momCity.calcFoodProduced() - city->m_Population, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             getResourceIcon(RESOURCE_Food, city->m_Food_Produced - city->m_Population),
                                             QMoMTableItemBase::formatNumber(city->m_Food_Produced - city->m_Population, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(momCity.countConnectedCities(), 2)));
-        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            getResourceIcon(RESOURCE_Gold, momCity.calcGoldProduced() - city->m_Maintenance),
-                                            QMoMTableItemBase::formatNumber(momCity.calcGoldProduced() - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
+//        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+//                                            getResourceIcon(RESOURCE_Gold, momCity.calcGoldProduced() - city->m_Maintenance),
+//                                            QMoMTableItemBase::formatNumber(momCity.calcGoldProduced() - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             getResourceIcon(RESOURCE_Gold, city->m_Coins - city->m_Maintenance),
                                             QMoMTableItemBase::formatNumber(city->m_Coins - city->m_Maintenance, SHOWNUMBER_alwaysPlus, 3)));
-        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
-                                            getResourceIcon(RESOURCE_Production, momCity.calcHammersProduced()),
-                                            QString("%0").arg(momCity.calcHammersProduced(), 3)));
+//        ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
+//                                            getResourceIcon(RESOURCE_Production, momCity.calcHammersProduced()),
+//                                            QString("%0").arg(momCity.calcHammersProduced(), 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(
                                             getResourceIcon(RESOURCE_Production, city->m_Hammers),
                                             QString("%0").arg((int)(city->m_Hammers), 3)));
@@ -317,10 +320,10 @@ void DialogManageCities::update()
     ui->tableWidget_Cities->resizeRowsToContents();
     ui->tableWidget_Cities->setSortingEnabled(true);
 
-
-    Wizard* wizard  = m_game->getWizard(PLAYER_YOU);
-    if (0 != wizard)
+    
+    if ((0 != m_game) && (0 != m_game->getWizard(PLAYER_YOU)))
     {
+        Wizard* wizard  = m_game->getWizard(PLAYER_YOU);
         int goldIncome      = momController.calcGoldIncome(PLAYER_YOU);
         int goldUpkeep      = momController.calcGoldUpkeep(PLAYER_YOU);
         int foodProduced    = momController.calcFoodProduced(PLAYER_YOU);
@@ -351,10 +354,12 @@ void DialogManageCities::update()
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 pool %2 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillPool).arg(skillBeforeInc));
         ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 - %1 = %2 GP").arg(goldIncome, 4).arg(goldUpkeep, 1).arg(goldIncome - goldUpkeep, 1));
         ui->tableWidget_Summary->setItem(row++, 1, new EnumTableItem<eTax_Rate>(m_game, &wizard->m_Tax_Rate, eTax_Rate_MAX, SHOWENUM_normal));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP + %1 RP + %2 SP = %3").arg(mana, 1).arg(research, 1).arg(skill, 1).arg(mana + research + skill));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP PowerBase %3").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1).arg(powerBase));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Power").arg(powerBase));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 SP to pool").arg(skill, 4));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP").arg(research, 4));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
     }
 }

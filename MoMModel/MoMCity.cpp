@@ -668,13 +668,13 @@ int MoMCity::getBuyFactor(eProducing producing) const
     int buildingCost = getCostToProduce(producing);
     int producedNextTurn = m_city->m_HammersAccumulated + m_city->m_Hammers;
     int buyFactor;
-    if (m_city->m_HammersAccumulated <= 0)
-    {
-        buyFactor = 4;
-    }
-    else if (producedNextTurn >= buildingCost)
+    if (producedNextTurn >= buildingCost)
     {
         buyFactor = 0;    // Cannot buy - completed next turn
+    }
+    else if (m_city->m_HammersAccumulated <= 0)
+    {
+        buyFactor = 4;
     }
     else if (m_city->m_HammersAccumulated < buildingCost / 3)
     {
