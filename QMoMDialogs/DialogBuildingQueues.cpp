@@ -451,7 +451,7 @@ void DialogBuildingQueues::on_tableWidget_Cities_customContextMenuRequested(cons
         }
     }
 
-    contextMenu.exec(mapToGlobal(pos));
+    contextMenu.exec(ui->tableWidget_Cities->viewport()->mapToGlobal(pos));
 }
 
 void DialogBuildingQueues::slot_gameChanged(const QMoMGamePtr& game)

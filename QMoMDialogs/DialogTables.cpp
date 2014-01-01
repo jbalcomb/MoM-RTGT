@@ -1285,7 +1285,7 @@ void DialogTables::on_tableWidget_customContextMenuRequested(const QPoint &pos)
         }
     }
 
-    contextMenu.exec(mapToGlobal(pos));
+    contextMenu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
 }
 
 void DialogTables::slot_Copy()
