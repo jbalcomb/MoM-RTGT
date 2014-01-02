@@ -164,7 +164,7 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
     ui->tableWidget_Summary->setIconSize(QSize(24, 14));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Gold, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Mana, 2));
-    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Power, 2));
+    ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_10_Power, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Production, 2));
     ui->tableWidget_Summary->item(row++, 0)->setIcon(*QMoMResources::instance().getIcon(RESOURCE_Food, 2));
@@ -342,7 +342,6 @@ void DialogManageCities::update()
         int nominalSkill    = wizard->m_Nominal_Casting_Skill_available_this_turn;
         int skillLeft       = wizard->m_Unused_Casting_Skill_available_this_turn;
         int skillBeforeInc  = Sqr(nominalSkill) + nominalSkill + 1 - wizard->m_Wizard_Casting_Skill;
-        int skillPool       = wizard->m_Wizard_Casting_Skill;
         if (research > 0)
         {
             researchTurns       = (researchLeft + research - 1) / research;
@@ -351,15 +350,18 @@ void DialogManageCities::update()
         row = 0;
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 GP").arg(totalGold, 5));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP").arg(totalMana, 5));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 pool %2 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillPool).arg(skillBeforeInc));
-        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 - %1 = %2 GP").arg(goldIncome, 4).arg(goldUpkeep, 1).arg(goldIncome - goldUpkeep, 1));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0/%1 (%3 before inc)").arg(skillLeft).arg(nominalSkill).arg(skillBeforeInc));
+        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 GP").arg(goldIncome - goldUpkeep, 5));
         ui->tableWidget_Summary->setItem(row++, 1, new EnumTableItem<eTax_Rate>(m_game, &wizard->m_Tax_Rate, eTax_Rate_MAX, SHOWENUM_normal));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 Food").arg(foodProduced, 4).arg(foodUpkeep, 1).arg(foodProduced - foodUpkeep, 1));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Power").arg(powerBase));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 - %1 = %2 MP").arg(mana, 4).arg(manaUpkeep, 1).arg(mana - manaUpkeep, 1));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 SP to pool").arg(skill, 4));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP").arg(research, 4));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Food").arg(foodProduced - foodUpkeep, 4));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Power").arg(powerBase, 4));
+        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 MP").arg(mana - manaUpkeep, 5));
+        ui->tableWidget_Summary->setItem(row++, 1, new NumberTableItem<uint8_t>(m_game, &wizard->m_Mana_Percentage, 3, SHOWNUMBER_normal));
+        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 SP to pool").arg(skill, 3));
+        ui->tableWidget_Summary->setItem(row++, 1, new NumberTableItem<uint8_t>(m_game, &wizard->m_Skill_Percentage, 3, SHOWNUMBER_normal));
+        ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 RP").arg(research, 4));
+        ui->tableWidget_Summary->setItem(row++, 1, new NumberTableItem<uint8_t>(m_game, &wizard->m_Research_Percentage, 3, SHOWNUMBER_normal));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 RP left (%1 turns)").arg(researchLeft, 5).arg(researchTurns));
     }
 }
