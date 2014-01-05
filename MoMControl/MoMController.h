@@ -35,6 +35,8 @@ public:
 
     bool buyProduction(City* city);
 
+    int  calcCastingSkillBase(ePlayer playerNr) const;
+    int  calcCastingSkillTotal(ePlayer playerNr) const;
     int  calcFame(ePlayer playerNr) const;
     int  calcFoodProduced(ePlayer playerNr) const;
     int  calcFoodUpkeep(ePlayer playerNr) const;

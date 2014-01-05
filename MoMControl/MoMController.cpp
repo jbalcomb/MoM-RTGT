@@ -486,6 +486,47 @@ bool MoMController::buyProduction(City *city)
     return true;
 }
 
+int MoMController::calcCastingSkillBase(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+    int castingSkill = wizard->m_Nominal_Casting_Skill_available_this_turn;
+    if (wizard->m_Skills.s.Archmage)
+    {
+        castingSkill += 10;
+    }
+    return castingSkill;
+}
+
+int MoMController::calcCastingSkillTotal(ePlayer playerNr) const
+{
+    if (0 == m_game)
+        return 0;
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+
+    int castingSkill = calcCastingSkillBase(playerNr);
+
+    int castingSkillBonus = 0;
+    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
+    {
+        MoMUnit hiredHero(m_game, &wizard->m_Heroes_hired_by_wizard[heroSlotNr]);
+        Unit unit = hiredHero.getUnitInGame();
+        Fortress* fortresses = m_game->getFortresses();
+        if (MoMLocation(unit) == MoMLocation(fortresses[playerNr]))
+        {
+            castingSkillBonus += hiredHero.getCastingSkillTotal() / 2;
+        }
+    }
+    castingSkill += castingSkillBonus;
+
+    return castingSkill;
+}
+
 int MoMController::calcFame(ePlayer playerNr) const
 {
     if (0 == m_game)
@@ -630,7 +671,7 @@ void MoMController::calcManaSkillResearch(ePlayer playerNr, int &mana, int &skil
     if (0 == wizard)
         return;
 
-    if (wizard->m_Spell_being_cast == SPELL_Spell_Of_Return)
+    if (wizard->m_Spell_being_cast == SPELL16_Spell_Of_Return)
         return;
 
     calcPowerBaseDivision(playerNr, mana, skill, research);
@@ -643,6 +684,17 @@ int MoMController::calcManaUpkeep(ePlayer playerNr) const
 {
     if (0 == m_game)
         return 0;
+    Wizard* wizard = m_game->getWizard(playerNr);
+    if (0 == wizard)
+        return 0;
+    MoM::Upkeep_Enchantments* upkeepEnchantments = 0;
+    if (0 != m_game->getDataSegment())
+    {
+        upkeepEnchantments = &m_game->getDataSegment()->m_Upkeep_Enchantments;
+    }
+    if (0 == upkeepEnchantments)
+        return 0;
+
     int manaUpkeep = 0;
     for (int unitNr = 0; unitNr < m_game->getNrUnits(); ++unitNr)
     {
@@ -652,12 +704,37 @@ int MoMController::calcManaUpkeep(ePlayer playerNr) const
         if (playerNr != unit->m_Owner)
             continue;
         MoMUnit momUnit(m_game, unit);
-        manaUpkeep += momUnit.calcManaUpkeep();
+        manaUpkeep += momUnit.calcManaUpkeep(); // Includes unit enchantments
     }
 
-    // TODO: Global enchantments
-    //       City enchantments
-    //       Unit enchantments
+
+    // Global enchantments
+    MOM_FOREACH(eGlobalEnchantment, enchantment, eGlobalEnchantment_MAX)
+    {
+        uint8_t* activeEnchantments = &wizard->m_Global_Enchantments.Eternal_Night;
+        if (activeEnchantments[enchantment])
+        {
+            manaUpkeep += (&upkeepEnchantments->Eternal_Night)[enchantment];
+        }
+    }
+
+    // City enchantments
+    for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
+    {
+        City* city = m_game->getCity(cityNr);
+        if (0 == city)
+            break;
+        if (playerNr != city->m_Owner)
+            continue;
+        MOM_FOREACH(eCityEnchantments, enchantment, eCityEnchantments_MAX)
+        {
+            eOwner* activeEnchantments = &city->m_City_Enchantments.Wall_of_Fire;
+            if (OWNER_None != activeEnchantments[enchantment])
+            {
+                manaUpkeep += (&upkeepEnchantments->Wall_of_Fire)[enchantment];
+            }
+        }
+    }
 
     // TODO: Difficulty multiplier
 
@@ -728,6 +805,12 @@ void MoMController::calcPowerBaseDivision(ePlayer playerNr, int &mana, int &skil
         mana += mana / 4;
     }
 
+    // TODO: Cannot properly find the code that adds 50% skill for archmage???
+    if (wizard->m_Skills.s.Archmage)
+    {
+        skill += skill / 2;
+    }
+
     for (int cityNr = 0; cityNr < m_game->getNrCities(); ++cityNr)
     {
         City* city = m_game->getCity(cityNr);
@@ -738,7 +821,7 @@ void MoMController::calcPowerBaseDivision(ePlayer playerNr, int &mana, int &skil
         research += city->m_Research;
     }
 
-    for (int heroSlotNr = 0; heroSlotNr < gMAX_HIRED_HEROES; ++heroSlotNr)
+    for (int heroSlotNr = 0; toUInt(heroSlotNr) < gMAX_HIRED_HEROES; ++heroSlotNr)
     {
         Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, heroSlotNr);
         MoMUnit momUnit(m_game, hiredHero);
@@ -774,7 +857,7 @@ int MoMController::calcResearch(ePlayer playerNr) const
     if (0 == wizard)
         return 0;
 
-    if (wizard->m_Spell_being_cast == SPELL_Spell_Of_Return)
+    if (wizard->m_Spell_being_cast == SPELL16_Spell_Of_Return)
         return 0;
 
     int mana, skill, research;
