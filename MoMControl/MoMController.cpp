@@ -494,10 +494,6 @@ int MoMController::calcCastingSkillBase(ePlayer playerNr) const
     if (0 == wizard)
         return 0;
     int castingSkill = wizard->m_Nominal_Casting_Skill_available_this_turn;
-    if (wizard->m_Skills.s.Archmage)
-    {
-        castingSkill += 10;
-    }
     return castingSkill;
 }
 
@@ -805,7 +801,7 @@ void MoMController::calcPowerBaseDivision(ePlayer playerNr, int &mana, int &skil
         mana += mana / 4;
     }
 
-    // TODO: Cannot properly find the code that adds 50% skill for archmage???
+    // NOTE: v1.31 does not show the added 50% skill for archmage, although Insecticide does
     if (wizard->m_Skills.s.Archmage)
     {
         skill += skill / 2;

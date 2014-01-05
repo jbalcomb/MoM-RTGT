@@ -235,7 +235,7 @@ void DialogManageCities::update()
 
         int curMaxPop = momCity.calcMaxPopCurrent();
         int topMaxPop = momCity.calcMaxPopTop();
-        QString population = QString("%0/%1").arg((int)(city->m_Population), 2).arg(curMaxPop);
+        QString population = QString("%0 / %1").arg((int)(city->m_Population), 2).arg(curMaxPop);
         if (topMaxPop > curMaxPop)
         {
             population += QString("(%0)").arg(topMaxPop);
@@ -342,9 +342,8 @@ void DialogManageCities::update()
         int castingSkillBase = momController.calcCastingSkillBase(PLAYER_YOU);
         int castingSkillTotal = momController.calcCastingSkillTotal(PLAYER_YOU);
         int skillLeft       = wizard->m_Unused_Casting_Skill_available_this_turn;
-        int skillBeforeInc  = Sqr(wizard->m_Nominal_Casting_Skill_available_this_turn)
-                              + wizard->m_Nominal_Casting_Skill_available_this_turn + 1
-                              - wizard->m_Wizard_Casting_Skill;
+        int skillFromPool   = Round(sqrt(wizard->m_Wizard_Casting_Skill));
+        int skillBeforeInc  = Sqr(skillFromPool) + skillFromPool + 1 - wizard->m_Wizard_Casting_Skill;
         if (research > 0)
         {
             researchTurns       = (researchLeft + research - 1) / research;
@@ -353,8 +352,9 @@ void DialogManageCities::update()
         row = 0;
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 GP").arg(totalGold, 5));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 MP").arg(totalMana, 5));
-        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 / %1(%2) %3 before inc")
-                                                         .arg(skillLeft).arg(castingSkillBase).arg(castingSkillTotal).arg(skillBeforeInc));
+        ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 / %1(%2) %3 %4 before inc")
+                                                         .arg(skillLeft).arg(castingSkillBase).arg(castingSkillTotal)
+                                                         .arg(sqrt(wizard->m_Wizard_Casting_Skill), 0, 'g', 2).arg(skillBeforeInc));
         ui->tableWidget_Summary->item(row, 0)->setText(QString("%0 GP").arg(goldIncome - goldUpkeep, 5));
         ui->tableWidget_Summary->setItem(row++, 1, new EnumTableItem<eTax_Rate>(m_game, &wizard->m_Tax_Rate, eTax_Rate_MAX, SHOWENUM_normal));
         ui->tableWidget_Summary->item(row++, 0)->setText(QString("%0 Hammers").arg(production));
