@@ -591,13 +591,25 @@ void DialogMap::slot_gameUpdated()
         Node_Attr* nodeAttr = m_game->getNodeAttr(nodeNr);
         if (0 == nodeAttr)
             break;
-        eBannerColor bannerColor = BANNER_Blue;
+        eBannerColor bannerColor = BANNER_Brown;
+        QMoMAnimation animation;
         Wizard* wizard = m_game->getWizard(nodeAttr->m_Owner);
         if (0 != wizard)
         {
             bannerColor = wizard->m_BannerColor;
+            animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
         }
-        QMoMAnimation animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
+        else
+        {
+            switch (nodeAttr->m_Node_Type)
+            {
+            case NODETYPE_Sorcery:  bannerColor = BANNER_Blue; break;
+            case NODETYPE_Nature:   bannerColor = BANNER_Green; break;
+            case NODETYPE_Chaos:    bannerColor = BANNER_Red; break;
+            }
+            animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
+            animation.resize(1);
+        }
         for (int auraNr = 0; auraNr < nodeAttr->m_Power_Node; ++auraNr)
         {
             QMoMAnimationTile* auraTile = new QMoMAnimationTile(animation);
