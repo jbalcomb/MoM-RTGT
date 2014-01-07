@@ -66,7 +66,7 @@ private slots:
     void slot_tileChanged(const MoM::MoMLocation& loc);
     void slot_tileDragged(const MoM::MoMLocation& locFrom, const MoM::MoMLocation& locTo);
     void slot_tileSelected(const MoM::MoMLocation& loc);
-    void slot_timerActiveUnit();
+    void slot_timerAnimations();
     void on_pushButton_SaveBookmark_clicked();
     void on_pushButton_RestoreBookmark_clicked();
 };

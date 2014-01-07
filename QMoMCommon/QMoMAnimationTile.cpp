@@ -2,12 +2,15 @@
 
 #include <QPainter>
 
+#include <stdlib.h>
+
 QMoMAnimationTile::QMoMAnimationTile(const QMoMAnimation& animation) :
     QObject(),
     QGraphicsItem(),
     m_animation(animation),
     m_frameNr(0)
 {
+    m_frameNr = rand() % m_animation.count();
     startTimer(200);    // millisecond timer
 }
 

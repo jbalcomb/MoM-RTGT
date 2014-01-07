@@ -27,6 +27,7 @@
 #include "MoMTemplate.h"
 #include "MoMTerrain.h"
 #include "MoMUtility.h"
+#include "QMoMAnimationTile.h"
 #include "QMoMMapScene.h"
 #include "QMoMMapTile.h"
 #include "QMoMResources.h"
@@ -85,7 +86,7 @@ DialogMap::DialogMap(QWidget *parent) :
     QObject::connect(m_sceneBattle, SIGNAL(signal_tileDragged(MoM::MoMLocation,MoM::MoMLocation)), this, SLOT(slot_tileDragged(MoM::MoMLocation,MoM::MoMLocation)));
 
     // Connect timers
-    QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerActiveUnit()));
+    QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerAnimations()));
 
     // Start timer
     m_timer->start(250);
@@ -585,6 +586,27 @@ void DialogMap::slot_gameUpdated()
         }
     }
 
+    for (int nodeNr = 0; toUInt(nodeNr) < gMAX_NODES; ++nodeNr)
+    {
+        Node_Attr* nodeAttr = m_game->getNodeAttr(nodeNr);
+        if (0 == nodeAttr)
+            break;
+        eBannerColor bannerColor = BANNER_Blue;
+        Wizard* wizard = m_game->getWizard(nodeAttr->m_Owner);
+        if (0 != wizard)
+        {
+            bannerColor = wizard->m_BannerColor;
+        }
+        QMoMAnimation animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
+        for (int auraNr = 0; auraNr < nodeAttr->m_Power_Node; ++auraNr)
+        {
+            QMoMAnimationTile* auraTile = new QMoMAnimationTile(animation);
+            scene[nodeAttr->m_Plane]->addItemAtLocation(auraTile,
+                                                        MoMLocation(nodeAttr->m_XPos_Mana[auraNr], nodeAttr->m_YPos_Mana[auraNr], nodeAttr->m_Plane, MoMLocation::MAP_overland));
+            auraTile->setToolTip(prettyQStr(nodeAttr->m_Node_Type));
+        }
+    }
+
     Battlefield* battlefield = m_game->getBattlefield();
     MoM::Battle_Unit* battleUnits = m_game->getBattleUnit(0);
     if ((0 != battlefield) && (0 != battleUnits))
@@ -903,7 +925,7 @@ void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
     updateGraying();
 }
 
-void DialogMap::slot_timerActiveUnit()
+void DialogMap::slot_timerAnimations()
 {
     if (m_game.isNull() || (0 == m_game->getGameData_WizardsExe()))
         return;
@@ -911,6 +933,7 @@ void DialogMap::slot_timerActiveUnit()
     MoM::Unit* unit = m_game->getUnit(unitNrActive);
     if (0 == unit)
         return;
+
     // TODO
 //    QGraphicsItem* qItem = lookup(unit);
 //    if (0 != qItem)
@@ -921,7 +944,7 @@ void DialogMap::slot_timerActiveUnit()
 
 }
 
-
+// TODO: Move to dedicated .cpp and .h file
 class MoMBookmark
 {
 public:
