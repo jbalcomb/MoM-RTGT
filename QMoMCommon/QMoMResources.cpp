@@ -459,8 +459,9 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         createFigureAnimations();
         createLbxImages("ITEMISC", m_itemiscImages);
         createLbxImages("ITEMS", m_itemsImages);
-        createLairImages();
         createLbxImages("MAPBACK", m_mapBackImages);
+        // Lair images use MAPBACK images
+        createLairImages();
 
         createLbxImages("SPECIAL", m_specialImages);
         QVector<QMoMImagePtr> special2Images;
@@ -864,12 +865,22 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eItemPower itemPower) const
     return image;
 }
 
-const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair) const
+const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair, bool overland) const
 {
     QMoMImagePtr image;
-    if (inVectorRange(m_lairImages, lair))
+    if (overland)
     {
-        image = m_lairImages[lair];
+        if (inVectorRange(m_lairImagesOverland, lair))
+        {
+            image = m_lairImagesOverland[lair];
+        }
+    }
+    else
+    {
+        if (inVectorRange(m_lairImagesBig, lair))
+        {
+            image = m_lairImagesBig[lair];
+        }
     }
     return image;
 }
@@ -1201,16 +1212,38 @@ void QMoMResources::createFigureAnimations()
 
 void QMoMResources::createLairImages()
 {
+    int mapBackIndices[eTower_Node_Lair_Type_MAX] =
+    {
+        //TODO: 70 for owned tower
+        69, // LAIRTYPE_Tower = 0,             // random color if a book is awarded
+        -1, // LAIRTYPE_Chaos_node = 1,
+        -1, // LAIRTYPE_Nature_node = 2,
+        -1, // LAIRTYPE_Sorcery_node = 3,
+        71, // LAIRTYPE_Mysterious_cave = 4,   // random color if a book is awarded
+        74, // LAIRTYPE_Dungeon = 5,           // death book if a book is awarded
+        72, // LAIRTYPE_Ancient_temple = 6,    // life book if a book is awarded
+        73, // LAIRTYPE_Abandoned_keep = 7,    // death book if a book is awarded
+        71, // LAIRTYPE_Monster_lair = 8,      // random color if a book is awarded
+        74, // LAIRTYPE_Ruins = 9,             // death book if a book is awarded
+        75, // LAIRTYPE_Fallen_temple = 10,    // life book if a book is awarded
+    };
+
     if (m_game.isNull())
         return;
     std::string lairsLbxFile = m_game->getGameDirectory() + "/" + "RELOAD.LBX";
     MoM::MoMLbxBase lairsLbx;
     if (!lairsLbx.load(lairsLbxFile))
         return;
-    m_lairImages.resize(MoM::eTower_Node_Lair_Type_MAX);
+    m_lairImagesBig.resize(MoM::eTower_Node_Lair_Type_MAX);
+    m_lairImagesOverland.resize(MoM::eTower_Node_Lair_Type_MAX);
     for (size_t i = 0; i < MoM::eTower_Node_Lair_Type_MAX; ++i)
     {
-        m_lairImages[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), lairsLbx.getRecordSize(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
+        m_lairImagesBig[i] = MoM::convertLbxToImage(lairsLbx.getRecord(9 + i), lairsLbx.getRecordSize(9 + i), m_colorTable, toStr((MoM::eTower_Node_Lair_Type)i));
+        int index = mapBackIndices[i];
+        if (inVectorRange(m_mapBackImages, index))
+        {
+            m_lairImagesOverland[i] = m_mapBackImages[index];
+        }
     }
 }
 

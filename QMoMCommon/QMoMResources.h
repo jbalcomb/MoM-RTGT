@@ -79,7 +79,7 @@ public:
     const QMoMImagePtr getImage(MoM::eCityWall wall, bool broken = false) const;
     const QMoMImagePtr getImage(MoM::eItem_Icon itemIcon) const;
     const QMoMImagePtr getImage(MoM::eItemPower itemPower) const;
-    const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair) const;
+    const QMoMImagePtr getImage(MoM::eTower_Node_Lair_Type lair, bool overland = false) const;
     const QMoMImagePtr getImage(MoM::eProducing producing) const;
     const QMoMImagePtr getImage(MoM::eRace race) const;
     const QMoMImagePtr getImage(MoM::eRandomPickType randomPickType) const;
@@ -182,7 +182,8 @@ private:
     QVector<QMoMAnimation> m_figureAnimations;
     QVector<QMoMImagePtr> m_itemiscImages;
     QVector<QMoMImagePtr> m_itemsImages;
-    QVector<QMoMImagePtr> m_lairImages;
+    QVector<QMoMImagePtr> m_lairImagesBig;
+    QVector<QMoMImagePtr> m_lairImagesOverland;
     QVector<QMoMImagePtr> m_mapBackImages;
     QVector<QMoMImagePtr> m_specialImages;
     QVector<QMoMImagePtr> m_spellImages;

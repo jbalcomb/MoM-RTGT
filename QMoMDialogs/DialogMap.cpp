@@ -549,7 +549,7 @@ void DialogMap::slot_gameUpdated()
             MoM::Tower_Node_Lair* lair = m_game->getLair(lairNr);
             if (0 == lair)
                 continue;
-            QPixmap pixmapLair = MoM::QMoMResources::instance().getPixmap(lair->m_Type, 1);
+            QPixmap pixmapLair = MoM::QMoMResources::instance().getPixmap(lair->m_Type, 1, true);
             if (MoM::inRange(lair->m_Type, MoM::eTower_Node_Lair_Type_MAX)
                     && MoM::inRange(lair->m_Plane, MoM::ePlane_MAX)
                     && !pixmapLair.isNull())
