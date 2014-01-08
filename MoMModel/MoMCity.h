@@ -44,8 +44,10 @@ public:
     bool hasForestRequirement() const;
     bool hasHillRequirement() const;
     bool hasWaterRequirement() const;
+    bool isProductionAllowed(eProducing producing) const;
     bool isBuildingAllowed(eBuilding building) const;
     bool isBuildingPresent(eBuilding building) const;
+    bool isUnitAllowed(eUnit_Type unitTypeNr) const;
 
 private:
     template<typename Functor>

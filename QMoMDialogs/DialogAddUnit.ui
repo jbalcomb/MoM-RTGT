@@ -10,13 +10,6 @@
     <height>664</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <family>URW Chancery L</family>
-    <pointsize>12</pointsize>
-    <italic>true</italic>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Summon unit</string>
   </property>

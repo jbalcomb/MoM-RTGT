@@ -2886,7 +2886,7 @@ std::ostream& operator<<(std::ostream& os, const eTerrainBonusDeposit& rhs)
     case DEPOSIT_Adamantium_Ore: os << "DEPOSIT_Adamantium_Ore"; break;
     case DEPOSIT_Quork: os << "DEPOSIT_Quork"; break;
     case DEPOSIT_Crysx: os << "DEPOSIT_Crysx"; break;
-    case DEPOSIT_Unk_10: os << "DEPOSIT_Unk_10"; break;
+    case DEPOSIT_Hunters_Lodge: os << "DEPOSIT_Hunters_Lodge"; break;
     case DEPOSIT_Unk_20: os << "DEPOSIT_Unk_20"; break;
     case DEPOSIT_Wild_Game: os << "DEPOSIT_Wild_Game"; break;
     case DEPOSIT_Nightshade: os << "DEPOSIT_Nightshade"; break;

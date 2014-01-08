@@ -2696,7 +2696,7 @@ enum eTerrainBonusDeposit ENUMSIZE8
     DEPOSIT_Adamantium_Ore = 0x07,      // (+2 mana)
     DEPOSIT_Quork = 0x08,               // (+3 mana)
     DEPOSIT_Crysx = 0x09,               // (+5 mana)
-    DEPOSIT_Unk_10 = 0x10,
+    DEPOSIT_Hunters_Lodge = 0x10,       // Apparently unused
     DEPOSIT_Unk_20 = 0x20,
     DEPOSIT_Wild_Game = 0x40,           // (+2 food)
     DEPOSIT_Nightshade = 0x80,          // (50 strength dispel)

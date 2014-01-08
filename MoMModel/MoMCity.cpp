@@ -933,6 +933,12 @@ bool MoMCity::hasWaterRequirement() const
     return enumerateTerrain(check);
 }
 
+bool MoMCity::isProductionAllowed(eProducing producing) const
+{
+    return ((inRange(producing, PRODUCING_None, PRODUCING_BUILDING_MAX) && isBuildingAllowed(static_cast<eBuilding>(producing)))
+            || (inRange(producing, PRODUCING_Trireme, eProducing_MAX) && isUnitAllowed(static_cast<eUnit_Type>(toUInt(producing) - 100))));
+}
+
 bool MoMCity::isBuildingAllowed(eBuilding building) const
 {
     if ((0 == m_game) || (0 == m_city))
@@ -982,6 +988,44 @@ bool MoMCity::isBuildingPresent(eBuilding building) const
     {
         return false;
     }
+}
+
+bool MoMCity::isUnitAllowed(eUnit_Type unitTypeNr) const
+{
+    if ((0 == m_game) || (0 == m_city))
+        return false;
+
+    Unit_Type_Data* unitType = m_game->getUnitTypeData(unitTypeNr);
+    if (0 == unitType)
+        return false;
+
+    // Check race
+    if ((unitType->m_Race_Code != m_city->m_Race) && (unitType->m_Race_Code != RACE_Generic_ship_or_catapult))
+    {
+        return false;   // Wrong race and not generic
+    }
+
+    // Check building requirements
+    if (unitType->m_Building1Required_or_PortraitLbxIndex == BUILDING_None)
+    {
+        // Building requirements satisfied
+    }
+    else if ((toUInt(unitType->m_Building1Required_or_PortraitLbxIndex) < eBuilding_array_MAX)
+             && !isBuildingAllowed(static_cast<eBuilding>(unitType->m_Building1Required_or_PortraitLbxIndex)))
+    {
+        return false;   // First required building not allowed
+    }
+    else if (static_cast<eBuilding>(unitType->m_Building2_or_HeroType) == BUILDING_None)
+    {
+        // Building requirements satisfied
+    }
+    else if ((toUInt(unitType->m_Building2_or_HeroType) < eBuilding_array_MAX)
+             && !isBuildingAllowed(static_cast<eBuilding>(unitType->m_Building2_or_HeroType)))
+    {
+        return false;   // Second required building not present
+    }
+
+    return true;
 }
 
 }

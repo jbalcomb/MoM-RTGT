@@ -144,7 +144,7 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
     QStringList labelsCities;
     labelsCities << "Nr"
            << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Food" << "Conn" << "Gold" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison" << "Buy" << "Factor";
+           << "Time" << "Garrison" << "Buy" << "Factor" << "Target";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
     ui->tableWidget_Cities->setIconSize(QSize(24, 14));
@@ -284,15 +284,15 @@ void DialogManageCities::update()
                                             getResourceIcon(RESOURCE_Production, city->m_Hammers),
                                             QString("%0").arg((int)(city->m_Hammers), 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0 /%1").arg((int)city->m_HammersAccumulated, 4).arg(buildingCost, 4)));
-        QList<eProducing> listProducing;
+        QList<eProducing> listCanProduce;
         MOM_FOREACH(eProducing, produce, eProducing_MAX)
         {
             if (momCity.canProduce(produce))
             {
-                listProducing << produce;
+                listCanProduce << produce;
             }
         }
-        ui->tableWidget_Cities->setItem(row, col, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listProducing));
+        ui->tableWidget_Cities->setItem(row, col, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listCanProduce));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
@@ -301,6 +301,16 @@ void DialogManageCities::update()
                                                                        QString("%0").arg(costToBuy, 4)));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("x %0").arg(momCity.getBuyFactor())));
+        QList<eProducing> listTargets;
+        MOM_FOREACH(eProducing, produce, eProducing_MAX)
+        {
+            if (momCity.isProductionAllowed(produce) && !momCity.isBuildingPresent(static_cast<eBuilding>(produce)))
+            {
+                listTargets << produce;
+            }
+        }
+        ui->tableWidget_Cities->setItem(row, col, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listTargets));
+        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
 
         assert(ui->tableWidget_Cities->columnCount() == col);
 
