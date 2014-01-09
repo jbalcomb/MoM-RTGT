@@ -18,8 +18,11 @@
 namespace MoM
 {
 
-class QMoMMapTile : public QGraphicsItem
+class QMoMMapTile : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
+
 public:
     explicit QMoMMapTile(const MoM::MoMLocation& location);
     virtual ~QMoMMapTile();
@@ -89,6 +92,8 @@ protected:
     }
 
 private:
+    void timerEvent(QTimerEvent*);
+
     MoM::MoMLocation m_location;
     MoM::eTerrainBattle* m_terrainBattle;
     MoM::eTerrainBonusDeposit* m_terrainBonus;
@@ -96,6 +101,7 @@ private:
     uint8_t* m_terrainExplored;
     MoM::eTerrainType* m_terrainType;
     int m_frameNr;
+    int m_idTimer;
 };
 
 }

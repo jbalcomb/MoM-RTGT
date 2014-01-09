@@ -5,7 +5,9 @@
 // Created:     2011-09-30
 // ---------------------------------------------------------------------------
 
-#include <qpainter.h>
+#include <QPainter>
+
+#include <stdlib.h>
 
 #include "MoMGenerated.h"
 #include "QMoMResources.h"
@@ -19,6 +21,7 @@ namespace MoM
 const int gRoadDirectionOffset[9] = { 0, -60, -59, +1, +61, +60, +59, -1, -61 };
 
 QMoMMapTile::QMoMMapTile(const MoM::MoMLocation& location) :
+    QObject(),
     QGraphicsItem(),
     m_location(location),
     m_terrainBattle(0),
@@ -26,7 +29,8 @@ QMoMMapTile::QMoMMapTile(const MoM::MoMLocation& location) :
     m_terrainChange(0),
     m_terrainExplored(0),
     m_terrainType(0),
-    m_frameNr(0)
+    m_frameNr(0),
+    m_idTimer(-1)
 {
     setAcceptHoverEvents(true);
     m_frameNr = rand();
@@ -50,6 +54,8 @@ QRectF QMoMMapTile::boundingRect() const
 
 void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
+    bool animated = false;
+
     if (0 != m_terrainType)
     {
         int iTerrainType = (int) *m_terrainType;
@@ -67,6 +73,17 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
                 painter->drawImage(boundingRect(), *animation[m_frameNr]);
             }
 		}
+        animated = (animation.size() >= 2);
+    }
+
+    if (!animated && (m_idTimer != -1))
+    {
+        killTimer(m_idTimer);
+        m_idTimer = -1;
+    }
+    else if (animated && (m_idTimer == -1))
+    {
+        m_idTimer = startTimer(200);
     }
 
     if (0 != m_terrainBattle)
@@ -111,6 +128,7 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
 
     if (0 != m_terrainChange)
     {
+        // TODO
         //if (m_terrainChange->Volcano_producing_for_Owner)
         //{
         //    const QMoMImagePtr image = QMoMResources::instance().getImage(TERRAINCHANGE_Volcano_owner);
@@ -172,6 +190,12 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
             // Nothing to do
         }
     }
+}
+
+void QMoMMapTile::timerEvent(QTimerEvent *)
+{
+    m_frameNr = (m_frameNr + 1) % 4;
+    update();
 }
 
 }

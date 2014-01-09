@@ -952,6 +952,28 @@
 			<File
 				RelativePath="..\..\QMoMCommon\QMoMMapTile.h"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing QMoMMapTile.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Debug&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing QMoMMapTile.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -D_WINDOWS -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -D_CRT_SECURE_NO_WARNINGS -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -DNDEBUG  &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\..\..\Applications\MoMTweaker&quot; &quot;-I.\..\..\MoMControl&quot; &quot;-I.\..\..\MoMModel&quot; &quot;-I.\..\..\MoMModel\Generated&quot; &quot;-I.\..\..\Platform&quot; &quot;-I.\..\..\QMoMCommon&quot; &quot;-I.\..\..\QMoMCommon\Generated&quot; &quot;-I.\..\..\QMoMDialogs&quot; &quot;-I.\..\..\Utility&quot; &quot;-I.\..\..\giflib-5.0.4\lib&quot; &quot;-I$(QTDIR)\include\ActiveQt&quot; &quot;-I.\Generated\Release&quot; &quot;-I.\Generated&quot; &quot;-I.\..\..\..\..\Qt\4.8.0\mkspecs\win32-msvc2008&quot; &quot;-I.\GeneratedFiles&quot; &quot;$(InputPath)&quot; -o &quot;.\Generated\Release\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\Generated\Release\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\QMoMCommon\QMoMResources.h"
@@ -1100,6 +1122,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Generated\Release\moc_QMoMMapTile.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Generated\Release\moc_QMoMUnitTile.cpp"
 				>
 			</File>
@@ -1132,19 +1158,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogaddunit.h"
+				RelativePath=".\GeneratedFiles\ui_DialogAddUnit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogcalculatoraddress.h"
+				RelativePath=".\GeneratedFiles\ui_DialogCalculatorAddress.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogexternalai.h"
+				RelativePath=".\GeneratedFiles\ui_DialogExternalAI.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialoglbxeditor.h"
+				RelativePath=".\GeneratedFiles\ui_DialogLbxEditor.h"
 				>
 			</File>
 			<File
@@ -1152,11 +1178,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogmap.h"
+				RelativePath=".\GeneratedFiles\ui_DialogMap.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogselectinitialspells.h"
+				RelativePath=".\GeneratedFiles\ui_DialogSelectInitialSpells.h"
 				>
 			</File>
 			<File
@@ -1164,11 +1190,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogtables.h"
+				RelativePath=".\GeneratedFiles\ui_DialogTables.h"
 				>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\ui_dialogtools.h"
+				RelativePath=".\GeneratedFiles\ui_DialogTools.h"
 				>
 			</File>
 			<File
