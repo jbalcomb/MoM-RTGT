@@ -518,6 +518,16 @@ const QMoMAnimation QMoMResources::getAnimation(MoM::eRanged_Type rangedType, in
     return animation;
 }
 
+const QMoMAnimation QMoMResources::getAnimation(eTerrainType terrain) const
+{
+    QMoMAnimation animation;
+    if (inVectorRange(m_terrainAnimations, terrain))
+    {
+        animation = m_terrainAnimations[terrain];
+    }
+    return animation;
+}
+
 const QMoMAnimation QMoMResources::getAnimation(MoM::eUnit_Type unitType, int heading, MoM::eBannerColor bannerColor) const
 {
     QMoMAnimation animation;
@@ -1055,9 +1065,11 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainChange terrainChange, in
 const QMoMImagePtr QMoMResources::getImage(MoM::eTerrainType terrain) const
 {
     QMoMImagePtr image;
-    if (inVectorRange(m_terrainTypeImages, terrain))
+    if (inVectorRange(m_terrainAnimations, terrain)
+            && (m_terrainAnimations[terrain].size() > 0)
+            && (0 != m_terrainAnimations[terrain][0]))
     {
-        image = m_terrainTypeImages[terrain];
+            image = m_terrainAnimations[terrain][0];
     }
     return image;
 }
@@ -1463,87 +1475,52 @@ void QMoMResources::createTerrainImages()
         return;
     // TODO: Why does the bitmap data in TERRAIN.LBX start 192 bytes later
     uint8_t* data = terrainLbx.getRecord(0) + 192;
-    m_terrainTypeImages.resize(2 * MoM::eTerrainType_MAX);
+    uint8_t* ptrLbx1 = terrainLbx.getRecord(1);
+    m_terrainAnimations.resize(2 * MoM::eTerrainType_MAX);
+    qDebug() << "terrainNr" << "i" << "loByte" << "hiByte" << "terrainPicIndex" << "offset" << "realOffset";
     for (size_t terrainNr = 0; terrainNr < (int)MoM::eTerrainType_MAX; ++terrainNr)
     {
         // TODO: How do I know that the bitmap data in TERRAIN.LBX has actually
         //       fixed-size subrecords of 0x0180 bytes each?
         // TODO: How do I know that these records contain uncompressed data?
 
-        size_t i = 0;
-
         // Arcanum
-        if (terrainNr < 18)
+        uint16_t loByte = ptrLbx1[2 * terrainNr];
+        uint16_t hiByte = ptrLbx1[2 * terrainNr + 1];
+        size_t sizeImage = 0x180;
+        int nrImages = 1;
+        if (0 != (loByte & 0x80))
         {
-            i = terrainNr;
+            nrImages = 4;  // Animation of 4 frames
         }
-        else if (terrainNr < 19)
+        loByte &= 0x7F;
+        unsigned terrainPicIndex = hiByte;
+        unsigned offset = 0x4000 * loByte + sizeImage * hiByte - 2 * sizeImage;
+
+        m_terrainAnimations[terrainNr].resize(nrImages);
+        for (int imageNr = 0; imageNr < nrImages; ++imageNr)
         {
-            i = 18 + (terrainNr - 18) * 4;
-        }
-        else if (terrainNr < 31)
-        {
-            i = 22 + (terrainNr - 19);
-        }
-        else if (terrainNr < 50)
-        {
-            i = 34 + (terrainNr - 31) * 4;
-        }
-        else if (terrainNr < 54)
-        {
-            i = 110 + (terrainNr - 50);
-        }
-        else if (terrainNr < 55)
-        {
-            i = 114 + (terrainNr - 54) * 4;
-        }
-        else if (terrainNr < 146)
-        {
-            i = 118 + (terrainNr - 55);
-        }
-        else if (terrainNr < 162)
-        {
-            i = 209 + (terrainNr - 146) * 4;
-        }
-        else if (terrainNr < 0xA8)
-        {
-            i = 273 + (terrainNr - 0xA2);
-        }
-        else if (terrainNr < 0xAB)
-        {
-            i = 279 + (terrainNr - 0xA8) * 4;
-        }
-        else if (terrainNr < 0xB3)
-        {
-            i = 291 + (terrainNr - 0xAB);
-        }
-        else if (terrainNr < 0xB4)
-        {
-            i = 299 + (terrainNr - 0xB3) * 4;
-        }
-        else if (terrainNr < 601)
-        {
-            i = 303 + (terrainNr - 0xB4);
-        }
-        else if (terrainNr < 602)
-        {
-            i = 724 + (terrainNr - 601) * 4;
-        }
-        else
-        {
-            i = 728 + (terrainNr - 602);
+            m_terrainAnimations[terrainNr][imageNr] = MoM::convertLbxToImage(data + offset + imageNr * sizeImage, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(terrainPicIndex));
         }
 
-        m_terrainTypeImages[terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(i));
+        // Myrror
+        loByte = ptrLbx1[2 * (762 + terrainNr)];
+        hiByte = ptrLbx1[2 * (762 + terrainNr) + 1];
+        sizeImage = 0x180;
+        nrImages = 1;
+        if (0 != (loByte & 0x80))
+        {
+            nrImages = 4;  // Animation of 4 frames
+        }
+        loByte &= 0x7F;
+        terrainPicIndex = hiByte;
+        offset = 0x4000 * loByte + sizeImage * hiByte - 2 * sizeImage;
 
-        i += 888;   // Myrror
-        if (i > 906) i -= 3; // No animation
-        if (i > 919) i -= 3;
-        if (i > 920) i -= 3;
-        if (i > 921) i -= 3;
-        if (i > 990) i -= 3;
-
-        m_terrainTypeImages[MoM::eTerrainType_MAX + terrainNr] = MoM::convertLbxToImage(data + i * 0x0180, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(i));
+        m_terrainAnimations[MoM::eTerrainType_MAX + terrainNr].resize(nrImages);
+        for (int imageNr = 0; imageNr < nrImages; ++imageNr)
+        {
+            m_terrainAnimations[MoM::eTerrainType_MAX + terrainNr][imageNr] = MoM::convertLbxToImage(data + offset + imageNr * sizeImage, terrainLbx.getRecordSize(0), m_colorTable, toStr(terrainNr) + "-" + toStr(terrainPicIndex));
+        }
     }
 }
 

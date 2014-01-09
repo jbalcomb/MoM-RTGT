@@ -95,6 +95,7 @@ private:
     MoM::Terrain_Changes* m_terrainChange;
     uint8_t* m_terrainExplored;
     MoM::eTerrainType* m_terrainType;
+    int m_frameNr;
 };
 
 }

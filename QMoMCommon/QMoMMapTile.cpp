@@ -25,9 +25,11 @@ QMoMMapTile::QMoMMapTile(const MoM::MoMLocation& location) :
     m_terrainBonus(0),
     m_terrainChange(0),
     m_terrainExplored(0),
-    m_terrainType(0)
+    m_terrainType(0),
+    m_frameNr(0)
 {
     setAcceptHoverEvents(true);
+    m_frameNr = rand();
 }
 
 QMoMMapTile::~QMoMMapTile()
@@ -56,10 +58,14 @@ void QMoMMapTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
             iTerrainType += MoM::eTerrainType_MAX;
         }
 		MoM::eTerrainType terrainType = static_cast<MoM::eTerrainType>(iTerrainType);
-		const QMoMImagePtr image = QMoMResources::instance().getImage(terrainType);
-		if (0 != image)
+        const QMoMAnimation animation = QMoMResources::instance().getAnimation(terrainType);
+        if (animation.size() > 0)
 		{
-			painter->drawImage(boundingRect(), *image);
+            m_frameNr = m_frameNr % animation.size();
+            if (0 != animation[m_frameNr])
+            {
+                painter->drawImage(boundingRect(), *animation[m_frameNr]);
+            }
 		}
     }
 

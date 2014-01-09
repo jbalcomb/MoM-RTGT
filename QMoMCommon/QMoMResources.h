@@ -42,6 +42,7 @@ public:
     const QMoMAnimation getAnimation(const LBXRecordID& lbxRecordID) const;
     const QMoMAnimation getAnimation(MoM::eBuilding building) const;
     const QMoMAnimation getAnimation(MoM::eRanged_Type rangedType, int heading = 3) const;
+    const QMoMAnimation getAnimation(MoM::eTerrainType terrain) const;
     const QMoMAnimation getAnimation(MoM::eUnit_Type unitType, int heading = -1, MoM::eBannerColor bannerColor = MoM::BANNER_Green) const;
 
     const QMoMPalette& getColorTable()
@@ -188,7 +189,7 @@ private:
     QVector<QMoMImagePtr> m_specialImages;
     QVector<QMoMImagePtr> m_spellImages;
     QVector<QMoMImagePtr> m_terrainBattleImages;
-    QVector<QMoMImagePtr> m_terrainTypeImages;
+    QVector<QMoMAnimation> m_terrainAnimations;
     QVector<QMoMImagePtr> m_unitImages;
 };
 
