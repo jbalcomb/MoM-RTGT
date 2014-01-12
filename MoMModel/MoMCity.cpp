@@ -935,13 +935,18 @@ bool MoMCity::hasWaterRequirement() const
 
 bool MoMCity::isProductionAllowed(eProducing producing) const
 {
-    return ((inRange(producing, PRODUCING_None, PRODUCING_BUILDING_MAX) && isBuildingAllowed(static_cast<eBuilding>(producing)))
+    return ((inRange(producing, PRODUCING_Trade_Goods, PRODUCING_BUILDING_MAX) && isBuildingAllowed(static_cast<eBuilding>(producing)))
             || (inRange(producing, PRODUCING_Trireme, eProducing_MAX) && isUnitAllowed(static_cast<eUnit_Type>(toUInt(producing) - 100))));
 }
 
 bool MoMCity::isBuildingAllowed(eBuilding building) const
 {
     if ((0 == m_game) || (0 == m_city))
+        return false;
+
+    if (toUInt(building) < BUILDING_Barracks)
+        return true;
+    if (building >= eBuilding_array_MAX)
         return false;
 
     // Check prohibited buildings
@@ -959,6 +964,20 @@ bool MoMCity::isBuildingAllowed(eBuilding building) const
             allowed = false;
         }
     }
+
+    // Check if prerequisite buildings are allowed
+    Building_Data* buildingData = m_game->getBuildingData(building);
+    if (0 == buildingData)
+        return false;
+    if (!isBuildingPresent(buildingData->m_Prerequisite1) && !isBuildingAllowed(buildingData->m_Prerequisite1))
+    {
+        allowed = false;
+    }
+    else if (!isBuildingPresent(buildingData->m_Prerequisite2) && !isBuildingAllowed(buildingData->m_Prerequisite2))
+    {
+        allowed = false;
+    }
+
     return allowed;
 }
 
@@ -994,6 +1013,9 @@ bool MoMCity::isUnitAllowed(eUnit_Type unitTypeNr) const
 {
     if ((0 == m_game) || (0 == m_city))
         return false;
+
+    if (unitTypeNr < UNITTYPE_FIRST)
+        return false;   // Cannot build heroes
 
     Unit_Type_Data* unitType = m_game->getUnitTypeData(unitTypeNr);
     if (0 == unitType)
