@@ -30,9 +30,6 @@ public:
 
     bool addArtifact(ePlayer playerNr, int prefabNr);
 
-    bool applyBuildingQueue(int cityNr);
-    bool applyBuildingQueue(ePlayer playerNr);
-
     bool buyProduction(City* city);
 
     int  calcCastingSkillBase(ePlayer playerNr) const;
@@ -51,7 +48,6 @@ public:
     int  calcResearchBonusPercentage(ePlayer playerNr) const;
     int  countGarrison(const MoMLocation& location);
     int  countUnits(const MoMLocation& location);
-    bool findCheapestUnitToProduce(const City& city, eProducing& produce);
     City* findCityAtLocation(const MoMLocation& location);
     eRace findDominantRace(ePlane plane) const;
     Node_Attr* findNodeAttrAtLocation(const MoMLocation& location);

@@ -39,7 +39,7 @@ protected:
         return m_SaveGame->m_Artifacts_in_Game;
     }
 
-    virtual Building_Data* getBuildingData()
+    virtual Building_Data* getBuildingData() const
     {
         if (0 == m_BuilddatLbx.get())
             return 0;

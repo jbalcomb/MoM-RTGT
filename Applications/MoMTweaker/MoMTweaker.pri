@@ -78,7 +78,8 @@ HEADERS += \
     ../../QMoMDialogs/DialogAddArtifact.h \
     ../../QMoMDialogs/DialogSelectRaces.h \
     ../../QMoMCommon/QMoMDialogBase.h \
-    ../../QMoMDialogs/DialogManageCities.h
+    ../../QMoMDialogs/DialogManageCities.h \
+    ../../MoMControl/MoMManageCities.h
 
 SOURCES += \
     ../../Applications/MoMTweaker/mainwindow.cpp \
@@ -137,7 +138,8 @@ SOURCES += \
     ../../QMoMDialogs/DialogAddArtifact.cpp \
     ../../QMoMDialogs/DialogSelectRaces.cpp \
     ../../QMoMCommon/QMoMDialogBase.cpp \
-    ../../QMoMDialogs/DialogManageCities.cpp
+    ../../QMoMDialogs/DialogManageCities.cpp \
+    ../../MoMControl/MoMManageCities.cpp
 
 FORMS += \
     ../../Applications/MoMTweaker/mainwindow.ui \

@@ -38,6 +38,7 @@ public:
     int  getCityNr() const;
     int  getCostToBuy(eProducing producing = PRODUCING_None) const;
     int  getCostToProduce(eProducing producing = PRODUCING_None) const;
+    MoMGameBase* getGame() const { return m_game; }
     int  getTimeToComplete(eProducing producing = PRODUCING_None) const;
     int  getUnitReductionPercentage() const;
     int  getWildGameBonus() const;

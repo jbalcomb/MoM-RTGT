@@ -15,9 +15,9 @@
 #include <QMessageBox>
 #include <QTreeWidget>
 
-#include <MoMGameBase.h>
-
-#include "unitmodel.h"
+#include "MoMGameBase.h"
+#include "MoMManageCities.h"
+#include "UnitModel.h"
 
 namespace Ui {
     class MainWindow;
@@ -49,6 +49,11 @@ public:
         return m_game;
     }
 
+    QSharedPointer<MoM::MoMManageCities> getManageCities()
+    {
+        return m_manageCities;
+    }
+
 private:
     QTreeWidgetItem* addTreeFeature(QTreeWidgetItem* parent, 
         const QString& feature, const QIcon& featureIcon, 
@@ -69,6 +74,7 @@ private:
     QFileDialog m_filedialogSaveGame;
 
     QMoMGamePtr m_game;
+    QSharedPointer<MoM::MoMManageCities> m_manageCities;
 
 public slots:
     void on_checkBox_UpdateTree_clicked();

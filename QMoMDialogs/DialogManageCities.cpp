@@ -15,6 +15,7 @@
 #include "MainWindow.h"
 #include "MoMCity.h"
 #include "MoMController.h"
+#include "MoMManageCities.h"
 #include "MoMUtility.h"
 #include "MoMGenerated.h"
 #include "QMoMSettings.h"
@@ -23,40 +24,13 @@
 using namespace MoM;
 
 /////////////////////////////////////////
-/*
-enum eAdditionalCityTargets
-{
-    CITYTARGET_Player = 200,
-    CITYTARGET_FIRST_ADDITIONAL_TARGET = 200,
-    CITYTARGET_Growth = 201,
-    CITYTARGET_Economy = 202,
-    CITYTARGET_Power = 203,
-    CITYTARGET_Research = 204,
 
-    eAdditionalCityTargets_MAX
-};
-
-std::ostream& operator<<(std::ostream& os, eAdditionalCityTargets target)
-{
-    std::string str = "<UNDEF>";
-    switch (target)
-    {
-    case CITYTARGET_Player:     str = "Player"; break;
-    case CITYTARGET_Growth:     str = "Growth"; break;
-    case CITYTARGET_Economy:    str = "Economy"; break;
-    case CITYTARGET_Power:      str = "Power"; break;
-    case CITYTARGET_Research:   str = "Research"; break;
-    }
-    os << str;
-    return os;
-}
-
+//! Item tracking the MoMCityState that can be inserted in a table.
 class CityTargetTableItem : public QMoMTableItemBase
 {
 public:
-    CityTargetTableItem(const QMoMGamePtr& game, City* city);
+    CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState);
 
-    virtual void setData(int role, const QVariant &value);
     virtual QList<QAction*> requestActions(QObject* parent);
     virtual void slotAction();
     virtual QString toString() const;
@@ -79,40 +53,21 @@ protected:
 
 private:
     // Configuration
-    City* m_city;
+    MoMManageCities::MoMCityState* m_cityState;
 
     // Status
-    eProducing m_producingTarget;
 
     // Keep track of the action group
     // m_actionGroup is deleted by its parent (the context menu)
     QActionGroup* m_actionGroup;
 };
 
-CityTargetTableItem::CityTargetTableItem(const QMoMGamePtr& game, City* city) :
+CityTargetTableItem::CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState) :
     QMoMTableItemBase(game),
-    m_city(city),
-    m_producingTarget(city->m_Producing),
+    m_cityState(cityState),
     m_actionGroup()
 {
     QTableWidgetItem::setData(Qt::EditRole, toString());
-}
-
-void CityTargetTableItem::setData(int role, const QVariant &value)
-{
-    switch (role)
-    {
-    case Qt::EditRole:
-        {
-            unsigned unsignedValue = value.toUInt();
-            m_producingTarget = (eProducing)unsignedValue;
-            QTableWidgetItem::setData(role, toString());
-        }
-        break;
-    default:
-        QTableWidgetItem::setData(role, value);
-        break;
-    }
 }
 
 template<typename Enum>
@@ -128,8 +83,8 @@ void CityTargetTableItem::addAction(Enum e)
         action->setIcon(*iconPtr);
     }
     action->setCheckable(true);
-    action->setData(QVariant((int)e));
-    if (text() == prettyQStr(e))
+    action->setData(QVariant((unsigned)e));
+    if (m_cityState->getTarget() == (MoMManageCities::MoMCityState::eTarget)e)
     {
         action->setChecked(true);
     }
@@ -139,7 +94,7 @@ QList<QAction*> CityTargetTableItem::requestActions(QObject* parent)
 {
     this->createActionGroup(parent);
 
-    MoMCity momCity(m_game.data(), m_city);
+    const MoMCity& momCity = m_cityState->getMoMCity();
     MOM_FOREACH(eProducing, produce, eProducing_MAX)
     {
         if ((toUInt(produce) < eBuilding_array_MAX) && momCity.isBuildingPresent((eBuilding)produce))
@@ -161,25 +116,25 @@ QList<QAction*> CityTargetTableItem::requestActions(QObject* parent)
 void CityTargetTableItem::slotAction()
 {
     QAction* action = m_actionGroup->checkedAction();
-    setData(Qt::EditRole, action->data());
+    m_cityState->setTarget((MoMManageCities::MoMCityState::eTarget)action->data().toUInt());
+    setData(Qt::EditRole, toString());
 }
 
 QString CityTargetTableItem::toString() const
 {
     QString str;
-    if (m_producingTarget < eProducing_MAX)
+    MoMManageCities::MoMCityState::eTarget target = m_cityState->getTarget();
+    if (target < eProducing_MAX)
     {
-        str = prettyQStr(m_producingTarget);
+        str = prettyQStr((eProducing)target);
     }
     else
     {
-        eAdditionalCityTargets target = (eAdditionalCityTargets)m_producingTarget;
-        str = prettyQStr(target);
+        str = prettyQStr((eAdditionalCityTargets)target);
     }
-
     return str;
 }
-*/
+
 /////////////////////////////////////////
 
 DialogManageCities::DialogManageCities(QWidget *parent) :
@@ -304,7 +259,7 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
     QStringList labelsCities;
     labelsCities << "Nr"
            << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Food" << "Conn" << "Gold" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison" << "Buy" << "Factor";
+           << "Time" << "Garrison" << "Buy" << "Factor" << "Target";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
     ui->tableWidget_Cities->setIconSize(QSize(24, 14));
@@ -461,8 +416,8 @@ void DialogManageCities::update()
                                                                        QString("%0").arg(costToBuy, 4)));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("x %0").arg(momCity.getBuyFactor())));
-//        ui->tableWidget_Cities->setItem(row, col, new CityTargetTableItem(m_game, city));
-//        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->setItem(row, col, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr)));
+        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
 
         assert(ui->tableWidget_Cities->columnCount() == col);
 
@@ -682,6 +637,7 @@ void DialogManageCities::slot_gameChanged(const QMoMGamePtr& game)
     MoM::UpdateLock lock(m_updating);
 
     m_game = game;
+
     update();
 }
 

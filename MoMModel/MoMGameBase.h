@@ -65,7 +65,7 @@ public:
         return &battleUnits[battleUnitNr];
     }
 
-    Building_Data* getBuildingData(eBuilding building)
+    Building_Data* getBuildingData(eBuilding building) const
     {
         Building_Data* buildingData = getBuildingData();
         if ((0 == buildingData) || !inRange(building, eBuilding_array_MAX))
@@ -493,7 +493,7 @@ protected:
     {
         return 0;
     }
-    virtual Building_Data* getBuildingData()
+    virtual Building_Data* getBuildingData() const
     {
         return 0;
     }

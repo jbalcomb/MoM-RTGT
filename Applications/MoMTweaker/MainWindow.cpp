@@ -17,16 +17,17 @@
 #include <sstream>
 
 // Library
-#include <MoMController.h>
-#include <MoMGameCustom.h>
-#include <MoMGenerated.h>
-#include <MoMLbxBase.h>
-#include <MoMGameMemory.h>
-#include <MoMProcess.h>
-#include <MoMGameSave.h>
-#include <MoMUtility.h>
-#include <QMoMResources.h>
-#include <QMoMSettings.h>
+#include "MoMController.h"
+#include "MoMGameCustom.h"
+#include "MoMGenerated.h"
+#include "MoMLbxBase.h"
+#include "MoMGameMemory.h"
+#include "MoMManageCities.h"
+#include "MoMProcess.h"
+#include "MoMGameSave.h"
+#include "MoMUtility.h"
+#include "QMoMResources.h"
+#include "QMoMSettings.h"
 
 // Local
 #include "DialogAddUnit.h"
@@ -47,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_UnitModel(this),
     m_filedialogLoadGame(this),
     m_filedialogSaveGame(this),
-    m_game()
+    m_game(),
+    m_manageCities()
 {
     ui->setupUi(this);
 
@@ -161,8 +163,9 @@ void MainWindow::applyBuildQueues()
     bool ok = refreshMemory();
     if (ok)
     {
-        MoM::MoMController momController(m_game.data());
-        bool changed = momController.applyBuildingQueue(MoM::PLAYER_YOU);
+//        MoM::MoMController momController(m_game.data());
+//        bool changed = momController.applyBuildingQueue(MoM::PLAYER_YOU);
+        bool changed = m_manageCities->apply();
         if (changed)
         {
             statusBar()->showMessage(tr("Building Queues applied involving a change"));
@@ -460,6 +463,7 @@ void MainWindow::on_checkBox_UpdateTree_clicked()
 void MainWindow::slot_gameChanged(const QMoMGamePtr& game)
 {
     m_game = game;
+    m_manageCities = QSharedPointer<MoM::MoMManageCities>(new MoM::MoMManageCities(m_game.data()));
 
 	// TODO: Resources should be loaded centrally...
 	// Load resources

@@ -383,7 +383,7 @@ MoMDataSegment* MoMGameMemory::getDataSegment()
     return validateStaticPointer(pMoMDataSegment, 1);
 }
 
-Building_Data* MoMGameMemory::getBuildingData()
+Building_Data* MoMGameMemory::getBuildingData() const
 {
     if (0 == m_process.get())
         return 0;

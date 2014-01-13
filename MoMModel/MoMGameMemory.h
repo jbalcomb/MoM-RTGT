@@ -52,7 +52,7 @@ protected:
 
 private:
     template< typename T >
-    T* derefHeapPointer(const EXE_Reloc& pointer, size_t nr_elements)
+    T* derefHeapPointer(const EXE_Reloc& pointer, size_t nr_elements) const
     {
         assert(0 != m_process.get());
         if ((EXE_Reloc*)0 == validateStaticPointer((EXE_Reloc*)&pointer, 1))
@@ -69,7 +69,7 @@ private:
     }
 
     template< typename T >
-    T* validateStaticPointer(T* ptr, size_t nr_elements)
+    T* validateStaticPointer(T* ptr, size_t nr_elements) const
     {
         assert(0 != m_process.get());
         MoMDataSegment* pMoMDataSegment = (MoMDataSegment*)m_process->getDatasegmentData();
@@ -90,7 +90,7 @@ private:
     virtual Battlefield* getBattlefield();
     virtual Battle_Unit* getBattleUnitViewed();
     virtual Battle_Unit* getBattle_Units();
-    virtual Building_Data* getBuildingData();
+    virtual Building_Data* getBuildingData() const;
     virtual Hero_Choice* getChosen_Hero_Names();
     virtual City* getCities();
     virtual Events_Status* getEvents_Status();
