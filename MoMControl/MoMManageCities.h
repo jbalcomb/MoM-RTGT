@@ -47,30 +47,34 @@ public:
             CITYSTATE_UnitCompleted,
             CITYSTATE_UnexpectedBuilding,
             CITYSTATE_UnexpectedUnit,
+            CITYSTATE_EverythingBuilt,
             eCityState_MAX
         };
 
         explicit MoMCityState(MoMCity& momCity);
 
+        //! \return Whether production was changed
         bool apply();
         const MoMCity& getMoMCity() const { return m_momCity; }
+        eCityState getState() const { return m_cityState; }
         eTarget getTarget() const { return m_producingTarget; }
         void setTarget(eProducing target);
     private:
-        bool applyBuildingQueue();
+        eProducing calcProductionGrowth() const;
         eProducing calcProduction() const;
+        //! \return Whether production was changed
         bool commitProduction(eProducing produce);
         //! Creates the list of prerequisite buildings that can be built now.
         //! \pre reqList is initially empty (to allow recursion).
         //! \param building The building that we are targeting.
-        //! \ret Whether we can get to the building.
+        //! \return Whether we can get to the building.
         bool findRequiredBuildings(eProducing produce, std::vector<eProducing>& reqList) const;
         bool findRequiredBuildings(eBuilding building, std::vector<eProducing>& reqList) const;
         bool findRequiredBuildings(eUnit_Type unitTypeNr, std::vector<eProducing>& reqList) const;
-        bool producingBuilding();
-        bool producingGarrison();
+        bool producingBuilding() const;
+        bool producingGarrison() const;
         void updateState();
-        bool findCheapestUnitToProduce(eProducing& produce);
+        bool findCheapestUnitToProduce(eProducing& produce) const;
 
         eTarget m_producingTarget;
         MoMCity m_momCity;
@@ -90,6 +94,8 @@ private:
     MoMGameBase* m_game;
     std::vector<MoMCityState*> m_cityStates;
 };
+
+std::ostream& operator<<(std::ostream& os, MoMManageCities::MoMCityState::eCityState cityState);
 
 }
 

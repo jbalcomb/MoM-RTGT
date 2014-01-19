@@ -29,7 +29,8 @@ using namespace MoM;
 class CityTargetTableItem : public QMoMTableItemBase
 {
 public:
-    CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState);
+    enum eDisplay { DISPLAY_State, DISPLAY_Target };
+    CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState, eDisplay display);
 
     virtual QList<QAction*> requestActions(QObject* parent);
     virtual void slotAction();
@@ -54,6 +55,7 @@ protected:
 private:
     // Configuration
     MoMManageCities::MoMCityState* m_cityState;
+    eDisplay m_display;
 
     // Status
 
@@ -62,9 +64,10 @@ private:
     QActionGroup* m_actionGroup;
 };
 
-CityTargetTableItem::CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState) :
+CityTargetTableItem::CityTargetTableItem(const QMoMGamePtr& game, MoMManageCities::MoMCityState* cityState, eDisplay display) :
     QMoMTableItemBase(game),
     m_cityState(cityState),
+    m_display(display),
     m_actionGroup()
 {
     QTableWidgetItem::setData(Qt::EditRole, toString());
@@ -123,14 +126,21 @@ void CityTargetTableItem::slotAction()
 QString CityTargetTableItem::toString() const
 {
     QString str;
-    MoMManageCities::MoMCityState::eTarget target = m_cityState->getTarget();
-    if (target < eProducing_MAX)
+    if (m_display == DISPLAY_State)
     {
-        str = prettyQStr((eProducing)target);
+        str = prettyQStr(m_cityState->getState());
     }
-    else
+    else if (m_display == DISPLAY_Target)
     {
-        str = prettyQStr((eAdditionalCityTargets)target);
+        MoMManageCities::MoMCityState::eTarget target = m_cityState->getTarget();
+        if (target < eProducing_MAX)
+        {
+            str = prettyQStr((eProducing)target);
+        }
+        else
+        {
+            str = prettyQStr((eAdditionalCityTargets)target);
+        }
     }
     return str;
 }
@@ -259,7 +269,7 @@ DialogManageCities::DialogManageCities(QWidget *parent) :
     QStringList labelsCities;
     labelsCities << "Nr"
            << "Name" << "Race" << "Pop" << "Farmers" << "Workers" << "Rebels" << "Food" << "Conn" << "Gold" << "Prod" << "Completion" << "Producing"
-           << "Time" << "Garrison" << "Buy" << "Factor" << "Target";
+           << "Time" << "Garrison" << "Buy" << "Factor" << "State" << "Target";
     ui->tableWidget_Cities->setColumnCount(labelsCities.size());
     ui->tableWidget_Cities->setHorizontalHeaderLabels(labelsCities);
     ui->tableWidget_Cities->setIconSize(QSize(24, 14));
@@ -416,7 +426,8 @@ void DialogManageCities::update()
                                                                        QString("%0").arg(costToBuy, 4)));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("x %0").arg(momCity.getBuyFactor())));
-        ui->tableWidget_Cities->setItem(row, col, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr)));
+        ui->tableWidget_Cities->setItem(row, col++, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr), CityTargetTableItem::DISPLAY_State));
+        ui->tableWidget_Cities->setItem(row, col, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr), CityTargetTableItem::DISPLAY_Target));
         ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
 
         assert(ui->tableWidget_Cities->columnCount() == col);

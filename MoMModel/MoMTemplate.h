@@ -191,6 +191,7 @@ enum eBuilding ENUMSIZE16
     eBuilding_array_MAX,                    // 36
 
     BUILDING_Forest = 101,                  // 101 prerequisite for sawmill
+    BUILDING_Grass = 104,                   // 104 prerequisite UNUSED
     BUILDING_Water = 110,                   // 110 prerequisite for ship's wright
     BUILDING_Hill = 200,                    // 200 prerequisite for miner's guild
 
@@ -244,6 +245,7 @@ enum eBuilding8 ENUMSIZE8
     eBuilding8_array_MAX,                   // 36,
 
     BUILDING8_Forest = 101,                 // 101 prerequisite for sawmill
+    BUILDING8_Grass = 104,                  // 104 prerequisite UNUSED
     BUILDING8_Water = 110,                  // 110 prerequisite for ship's wright
     BUILDING8_Hill = 200,                   // 200 prerequisite for miner's guild
 

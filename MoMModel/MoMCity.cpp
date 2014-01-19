@@ -876,8 +876,10 @@ class CheckCleanForest
 public:
     bool operator()(const MoMTerrain& terrain)
     {
+        if (terrain.getChanges().corruption)
+            return false;
         return ((terrain.getCategory() == TERRAINCATEGORY_Forest)
-                && (!terrain.getChanges().corruption));
+                || (terrain.getCategory() == TERRAINCATEGORY_NatureNode));
     }
 };
 
@@ -899,7 +901,8 @@ public:
             return false;
         return ((terrain.getCategory() == TERRAINCATEGORY_Hills)
                 || (terrain.getCategory() == TERRAINCATEGORY_Mountain)
-                || (terrain.getCategory() == TERRAINCATEGORY_Volcano));
+                || (terrain.getCategory() == TERRAINCATEGORY_Volcano)
+                || (terrain.getCategory() == TERRAINCATEGORY_ChaosNode));
     }
 };
 

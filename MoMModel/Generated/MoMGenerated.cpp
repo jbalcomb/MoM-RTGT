@@ -180,6 +180,7 @@ std::ostream& operator<<(std::ostream& os, const eBuilding& rhs)
     case BUILDING_City_Walls: os << "BUILDING_City_Walls"; break;
     case eBuilding_array_MAX: os << "eBuilding_array_MAX"; break;
     case BUILDING_Forest: os << "BUILDING_Forest"; break;
+    case BUILDING_Grass: os << "BUILDING_Grass"; break;
     case BUILDING_Water: os << "BUILDING_Water"; break;
     case BUILDING_Hill: os << "BUILDING_Hill"; break;
     case eBuilding_extra_MAX: os << "eBuilding_extra_MAX"; break;
@@ -232,6 +233,7 @@ std::ostream& operator<<(std::ostream& os, const eBuilding8& rhs)
     case BUILDING8_City_Walls: os << "BUILDING8_City_Walls"; break;
     case eBuilding8_array_MAX: os << "eBuilding8_array_MAX"; break;
     case BUILDING8_Forest: os << "BUILDING8_Forest"; break;
+    case BUILDING8_Grass: os << "BUILDING8_Grass"; break;
     case BUILDING8_Water: os << "BUILDING8_Water"; break;
     case BUILDING8_Hill: os << "BUILDING8_Hill"; break;
     case eBuilding8_extra_MAX: os << "eBuilding8_extra_MAX"; break;

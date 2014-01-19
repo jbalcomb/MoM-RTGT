@@ -348,6 +348,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\MoMControl\MoMManageCities.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Platform\MoMProcessCommon.cpp"
 				>
 			</File>

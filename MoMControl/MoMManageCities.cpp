@@ -12,7 +12,7 @@ namespace MoM {
 
 std::ostream& operator<<(std::ostream& os, eAdditionalCityTargets target)
 {
-    std::string str = "<UNDEF>";
+    std::string str = "<UNDEF eAdditionalCityTargets>";
     switch (target)
     {
     case CITYTARGET_Player:     str = "Player"; break;
@@ -20,6 +20,33 @@ std::ostream& operator<<(std::ostream& os, eAdditionalCityTargets target)
     case CITYTARGET_Economy:    str = "Economy"; break;
     case CITYTARGET_Power:      str = "Power"; break;
     case CITYTARGET_Research:   str = "Research"; break;
+    }
+    os << str;
+    return os;
+}
+
+static const char* sStrCityState[MoMManageCities::MoMCityState::eCityState_MAX + 1] =
+{
+    "Unknown",
+    "Disabled",
+    "Outpost",
+    "Conquered",
+    "ExpectedBuilding",
+    "ExpectedUnit",
+    "BuildingCompleted",
+    "UnitCompleted",
+    "UnexpectedBuilding",
+    "UnexpectedUnit",
+    "EverythingBuilt",
+    "eCityState_MAX"
+};
+
+std::ostream& operator<<(std::ostream& os, MoMManageCities::MoMCityState::eCityState cityState)
+{
+    std::string str = "<UNDEF eCityState>";
+    if (toUInt(cityState) < ARRAYSIZE(sStrCityState))
+    {
+        str = sStrCityState[cityState];
     }
     os << str;
     return os;
@@ -39,21 +66,42 @@ bool MoMManageCities::MoMCityState::apply()
 {
     updateState();
 
+    bool changed = false;
     eProducing produce = calcProduction();
+    // Don't change production if it would lose us production
+    if (produce != m_momCity.getCity()->m_Producing)
+    {
+        if (m_momCity.getCity()->m_HammersAccumulated >= m_momCity.getCostToProduce(produce))
+        {
+            produce = PRODUCING_None;
+        }
+    }
 
-    return commitProduction(produce);
-
-//    return applyBuildingQueue();
+    changed = commitProduction(produce);
+    return changed;
 }
 
 void MoMManageCities::MoMCityState::setTarget(eTarget target)
 {
     m_producingTarget = target;
+
+    eProducing produce = calcProduction();
+
+    // Don't change production if it would lose us production
+    if (produce != m_momCity.getCity()->m_Producing)
+    {
+        if (m_momCity.getCity()->m_HammersAccumulated >= m_momCity.getCostToProduce(produce))
+        {
+            produce = PRODUCING_None;
+        }
+    }
+
+    (void)commitProduction(produce);
 }
 
-bool MoMManageCities::MoMCityState::applyBuildingQueue()
+eProducing MoMManageCities::MoMCityState::calcProductionGrowth() const
 {
-    City* city = const_cast<City*>(m_momCity.getCity());
+    const City* city = m_momCity.getCity();
 
     eProducing producingAfter = city->m_Producing;
     eProducing produce = PRODUCING_None;
@@ -102,21 +150,9 @@ bool MoMManageCities::MoMCityState::applyBuildingQueue()
 //        std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
 //            << city->m_Producing << " is still an outpost" << std::endl;
     }
-    else if (producingGarrison())
+    else if ((garrisonSize < 2) && findCheapestUnitToProduce(produce) && m_momCity.canProduce(produce))
     {
-        // Do nothing - we're producing a Garrison
-        //std::cout << "City '" << city->m_City_Name << "' [" << cityNr << "] "
-        //    << city->m_Producing << " keeps producing a garrison" << std::endl;
-    }
-    else if (0 == garrisonSize && !producingGarrison() && findCheapestUnitToProduce(produce) && m_momCity.canProduce(produce))
-    {
-        // Switch from any task to Spearmen if there is none
         producingAfter = produce;
-    }
-    else if (PRODUCING_Housing != city->m_Producing
-          && PRODUCING_Trade_Goods != city->m_Producing)
-    {
-        // Do nothing - someone specified something to build
     }
     else if (!m_momCity.isBuildingPresent(BUILDING_Builders_Hall))
     {
@@ -222,9 +258,10 @@ bool MoMManageCities::MoMCityState::applyBuildingQueue()
         // Do nothing - all specified buildings have been built
         //std::cout << "City " << city->m_City_Name
         //    << " (" << city->m_Producing << ") has built all specified buildings" << std::endl;
+        producingAfter = PRODUCING_Trade_Goods;
     }
 
-    return commitProduction(producingAfter);
+    return producingAfter;
 }
 
 eProducing MoMManageCities::MoMCityState::calcProduction() const
@@ -256,9 +293,13 @@ eProducing MoMManageCities::MoMCityState::calcProduction() const
         }
     }
     // If other strategy
+    else
+    {
         // Select next production item on the list
+        produce = calcProductionGrowth();
+    }
 
-    return PRODUCING_None;
+    return produce;
 }
 
 bool MoMManageCities::MoMCityState::commitProduction(eProducing produce)
@@ -357,13 +398,13 @@ bool MoMManageCities::MoMCityState::findRequiredBuildings(eUnit_Type unitTypeNr,
     return ok;
 }
 
-bool MoMManageCities::MoMCityState::producingBuilding()
+bool MoMManageCities::MoMCityState::producingBuilding() const
 {
     return ((m_momCity.getCity()->m_Producing >= PRODUCING_Barracks)
             && (m_momCity.getCity()->m_Producing < PRODUCING_BUILDING_MAX));
 }
 
-bool MoMManageCities::MoMCityState::producingGarrison()
+bool MoMManageCities::MoMCityState::producingGarrison() const
 {
     return (m_momCity.getCity()->m_Producing >= PRODUCING_BUILDING_MAX);
 }
@@ -373,6 +414,12 @@ void MoMManageCities::MoMCityState::updateState()
     const City* city = m_momCity.getCity();
     eProducing producing = city->m_Producing;
 
+    if (m_producingTarget == PRODUCING_None)
+    {
+        m_producingTarget = (eTarget)CITYTARGET_Growth;
+    }
+
+    eCityState prev = m_cityState;
     if (city->m_Size == CITYSIZE_Outpost)
     {
         m_cityState = CITYSTATE_Outpost;
@@ -382,7 +429,8 @@ void MoMManageCities::MoMCityState::updateState()
         if ((m_cityState == CITYSTATE_Unknown)
                 || (m_cityState == CITYSTATE_Outpost)
                 || (m_cityState == CITYSTATE_ExpectedBuilding)
-                || (m_cityState == CITYSTATE_UnexpectedBuilding))
+                || (m_cityState == CITYSTATE_UnexpectedBuilding)
+                || (m_cityState == CITYSTATE_BuildingCompleted))
         {
             m_cityState = CITYSTATE_BuildingCompleted;
         }
@@ -393,7 +441,13 @@ void MoMManageCities::MoMCityState::updateState()
     }
     else if (producing == PRODUCING_Trade_Goods)
     {
-        if (m_cityState == CITYSTATE_Unknown)
+        eProducing expected = calcProduction();
+        if (expected == PRODUCING_Trade_Goods)
+        {
+            m_cityState = CITYSTATE_EverythingBuilt;
+        }
+        else if ((m_cityState == CITYSTATE_Unknown)
+            || (m_cityState == CITYSTATE_Conquered))
         {
             m_cityState = CITYSTATE_Conquered;
         }
@@ -407,7 +461,9 @@ void MoMManageCities::MoMCityState::updateState()
         eProducing expected = calcProduction();
         if (city->m_HammersAccumulated == 0)
         {
-            if (m_cityState == CITYSTATE_ExpectedUnit)
+            if ((m_cityState == CITYSTATE_Unknown)
+                    || (m_cityState == CITYSTATE_ExpectedUnit)
+                    || (m_cityState == CITYSTATE_UnitCompleted))
             {
                 m_cityState = CITYSTATE_UnitCompleted;
             }
@@ -445,9 +501,19 @@ void MoMManageCities::MoMCityState::updateState()
     {
         m_cityState = CITYSTATE_Disabled;
     }
+
+    if (m_cityState == CITYSTATE_Disabled)
+    {
+        m_producingTarget = (eTarget)CITYTARGET_Player;
+    }
+
+    if (prev != m_cityState)
+    {
+        std::cout << "Change state of " << m_momCity.getCity()->m_City_Name << " from " << prev << " to " << m_cityState << std::endl;
+    }
 }
 
-bool MoMManageCities::MoMCityState::findCheapestUnitToProduce(eProducing &produce)
+bool MoMManageCities::MoMCityState::findCheapestUnitToProduce(eProducing &produce) const
 {
     bool found = false;
     for (eUnit_Type unitTypeNr = UNITTYPE_FIRST; !found && (toUInt(unitTypeNr) < eUnit_Type_MAX); inc(unitTypeNr))
