@@ -45,7 +45,7 @@ public:
     {
         return "Connected setup " + m_filename_MagicExe;
     }
-    virtual MoM::City* getCities()
+    virtual MoM::City* getCities() const
     {
         return 0;
     }

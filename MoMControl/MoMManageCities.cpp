@@ -551,6 +551,14 @@ MoMManageCities::~MoMManageCities()
 
 bool MoMManageCities::apply()
 {
+    // Do not apply build queues if we're in battle
+
+    if (m_game->isBattleInProgress())
+    {
+        std::cout << "Battle in progress. Skipping ManageCities" << std::endl;
+        return false;
+    }
+
     return applyBuildingQueue(PLAYER_YOU);
 }
 

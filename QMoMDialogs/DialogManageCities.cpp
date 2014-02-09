@@ -342,6 +342,10 @@ void DialogManageCities::update()
     if (0 != m_game)
     {
         nrCities = m_game->getNrCities();
+        if (m_game->isBattleInProgress())
+        {
+            nrCities = 0;
+        }
     }
 
     MoM::MoMController momController(m_game.data());

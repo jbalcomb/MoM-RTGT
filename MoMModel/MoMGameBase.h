@@ -73,7 +73,7 @@ public:
         return &buildingData[building];
     }
 
-    City* getCity(int cityNr)
+    City* getCity(int cityNr) const
     {
         City* cities = getCities();
         if ((0 == cities) || !inRange(cityNr, gMAX_CITIES))
@@ -503,7 +503,7 @@ public:
         return 0;
     }
 protected:
-    virtual City* getCities() = 0;
+    virtual City* getCities() const = 0;
 public:
     virtual Events_Status* getEvents_Status()
     {

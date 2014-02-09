@@ -57,6 +57,8 @@ private:
     bool m_updating;
 
 private slots:
+    void on_lineEdit_CurrentFileValue_returnPressed();
+    void on_lineEdit_CurrentMemValue_returnPressed();
     void on_lineEdit_OffsetMem_textChanged(const QString& arg1);
     void on_lineEdit_OffsetIDA_textChanged(const QString& arg1);
     void on_lineEdit_OffsetExe_textChanged(const QString& arg1);
