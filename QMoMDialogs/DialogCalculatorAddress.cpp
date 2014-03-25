@@ -176,6 +176,52 @@ void DialogCalculatorAddress::updateValues(const QWidget *originator)
     }
 }
 
+void DialogCalculatorAddress::on_lineEdit_CurrentFileValue_returnPressed()
+{
+    bool ok = false;
+    int intValue = ui->lineEdit_CurrentFileValue->text().toInt(&ok);
+    if (!ok)
+        return;
+    uint8_t u8Value = static_cast<uint8_t>(intValue);
+
+    size_t exeOffset = 0;
+    exeOffset = ui->lineEdit_OffsetExe->text().toULong(&ok, 16);
+    if (!ok)
+        return;
+
+
+    MoM::MoMExeBase* exeBase = getExeBase();
+    if ((0 != exeBase) && (exeOffset + 1 < exeBase->getExeSize()))
+    {
+        uint8_t* pointer = exeBase->getExeContents() + exeOffset;
+        (void)m_game->commitData(pointer, &u8Value, sizeof(u8Value));
+        updateValues();
+    }
+}
+
+void DialogCalculatorAddress::on_lineEdit_CurrentMemValue_returnPressed()
+{
+    bool ok = false;
+    int intValue = ui->lineEdit_CurrentMemValue->text().toInt(&ok);
+    if (!ok)
+        return;
+    uint8_t u8Value = static_cast<uint8_t>(intValue);
+
+    size_t memOffset = 0;
+    memOffset = ui->lineEdit_OffsetMem->text().toULong(&ok, 16);
+    if (!ok)
+        return;
+
+    MoM::MoMProcess* momProcess = m_game->getMoMProcess();
+    if ((0 != momProcess) && (memOffset >= (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment())
+             && (memOffset +1 < (size_t)momProcess->getBaseAddress() + momProcess->getBaseAddressSize()))
+    {
+        uint8_t* pointer = momProcess->getSeg0Pointer() + (memOffset - (size_t)momProcess->getBaseAddress() - momProcess->getOffsetSegment0());
+        (void)m_game->commitData(pointer, &u8Value, sizeof(u8Value));
+        updateValues();
+    }
+}
+
 void DialogCalculatorAddress::on_lineEdit_OffsetExe_textChanged(const QString&)
 {
     update(ui->lineEdit_OffsetExe);

@@ -367,7 +367,7 @@ Battle_Unit* MoMGameMemory::getBattle_Units()
     return derefHeapPointer<Battle_Unit>(pMoMDataSegment->m_addr_Battle_Unit, MoM::gMAX_BATTLE_UNITS);
 }
 
-City* MoMGameMemory::getCities()
+City* MoMGameMemory::getCities() const
 {
     if (0 == m_process.get())
         return 0;
@@ -539,8 +539,12 @@ bool MoMGameMemory::isBattleInProgress() const
     if (!gameDirectory.empty())
     {
         std::string combatTmpFile = gameDirectory + "/" + "COMBAT.TMP";
-        std::ifstream ifs(combatTmpFile.c_str());
-        battleInProgress = (ifs.is_open());
+        std::ifstream ifs(combatTmpFile.c_str(), std::ios::binary | std::ios::in);
+        City tmpCity = City();
+        if (ifs && ifs.seekg(0x0020, std::ios::beg) && ifs.read(reinterpret_cast<char*>(&tmpCity), sizeof(City)))
+        {
+            battleInProgress = (0 != memcmp(tmpCity.m_City_Name, getCity(0)->m_City_Name, sizeof(tmpCity.m_City_Name)));
+        }
     }
     return battleInProgress;
 }

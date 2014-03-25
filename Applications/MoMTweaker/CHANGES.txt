@@ -1,6 +1,15 @@
 MoMTweaker
 Author: Klaas van Aarsen
 
+CHANGES IN 0.2.9 (2013--)
+-----------------------------
+* Address Calculator allows you to change values now.
+  Currently only 1 byte at a time, which happens when you press Enter.
+  Be careful if you change the .EXE file!
+  
+* Renamed Building Queue dialog to Manage Cities and improved it.
+
+
 
 CHANGES IN 0.2.8 (2013-12-30)
 -----------------------------

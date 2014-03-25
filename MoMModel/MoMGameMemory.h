@@ -92,7 +92,7 @@ private:
     virtual Battle_Unit* getBattle_Units();
     virtual Building_Data* getBuildingData() const;
     virtual Hero_Choice* getChosen_Hero_Names();
-    virtual City* getCities();
+    virtual City* getCities() const;
     virtual Events_Status* getEvents_Status();
     virtual Fortress* getFortresses();
     virtual WizardsExe_Game_Data* getGameData_WizardsExe();

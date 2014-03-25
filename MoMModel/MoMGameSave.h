@@ -54,7 +54,7 @@ protected:
         return m_SaveGame->m_Chosen_Hero_Names;
     }
 
-    virtual City* getCities()
+    virtual City* getCities() const
     {
         if (0 == m_SaveGame.get())
             return 0;
