@@ -17,7 +17,7 @@ message(PLATF: $$PLATF)
 unix:COMPILER = gcc
 win32-g++:COMPILER = mingw
 win32-msvc2008:COMPILER = msvc2008
-win32-msvc2010:COMPILER = msvc2008
+win32-msvc2010:COMPILER = msvc2010
 message(COMPILER: $$COMPILER)
 message(QMAKE_CXX: $$QMAKE_CXX)
 
