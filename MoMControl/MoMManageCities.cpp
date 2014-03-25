@@ -20,6 +20,7 @@ std::ostream& operator<<(std::ostream& os, eAdditionalCityTargets target)
     case CITYTARGET_Economy:    str = "Economy"; break;
     case CITYTARGET_Power:      str = "Power"; break;
     case CITYTARGET_Research:   str = "Research"; break;
+    default:                    ;
     }
     os << str;
     return os;
@@ -54,9 +55,9 @@ std::ostream& operator<<(std::ostream& os, MoMManageCities::MoMCityState::eCityS
 
 /////////////////////////////////////////
 
-MoMManageCities::MoMCityState::MoMCityState(MoMCity& momCity) :
-    m_momCity(momCity),
+MoMManageCities::MoMCityState::MoMCityState(const MoMCity& momCity) :
     m_producingTarget(PRODUCING_None),
+    m_momCity(momCity),
     m_cityState(CITYSTATE_Unknown)
 {
     updateState();

@@ -51,7 +51,7 @@ public:
             eCityState_MAX
         };
 
-        explicit MoMCityState(MoMCity& momCity);
+        explicit MoMCityState(const MoMCity& momCity);
 
         //! \return Whether production was changed
         bool apply();

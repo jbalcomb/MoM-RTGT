@@ -334,13 +334,13 @@ QList<QAction*> EnumTableItem<Enum>::requestActions(QObject* parent)
 
     if (((this->getShowEnum() == SHOWENUM_minusOne) || (this->getShowEnum() == SHOWENUM_minusOneAndnoZero)) && ((int16_t)m_min >= 0))
     {
-        addAction((Enum)-1);
+        this->addAction((Enum)-1);
     }
 
     for (int16_t index = (int16_t)m_min; index < (int16_t)m_max; ++index)
     {
         Enum e = (Enum)index;
-        addAction(e);
+        this->addAction(e);
     }
 
     return this->getActions();
@@ -378,7 +378,7 @@ QList<QAction*> EnumTableItemList<Enum>::requestActions(QObject* parent)
 
     foreach (Enum e, m_listEnums)
     {
-        addAction(e);
+        this->addAction(e);
     }
 
     return this->getActions();
