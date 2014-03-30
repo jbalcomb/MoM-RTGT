@@ -178,8 +178,9 @@ void DialogCalculatorAddress::updateValues(const QWidget *originator)
 
 void DialogCalculatorAddress::on_lineEdit_CurrentFileValue_returnPressed()
 {
-    bool ok = false;
-    int intValue = ui->lineEdit_CurrentFileValue->text().toInt(&ok);
+    int intValue = 0;
+    const char* buf = ui->lineEdit_CurrentFileValue->text().toAscii().data();
+    bool ok = (1 == sscanf(buf, "%d", &intValue));
     if (!ok)
         return;
     uint8_t u8Value = static_cast<uint8_t>(intValue);
@@ -201,8 +202,9 @@ void DialogCalculatorAddress::on_lineEdit_CurrentFileValue_returnPressed()
 
 void DialogCalculatorAddress::on_lineEdit_CurrentMemValue_returnPressed()
 {
-    bool ok = false;
-    int intValue = ui->lineEdit_CurrentMemValue->text().toInt(&ok);
+    int intValue = 0;
+    const char* buf = ui->lineEdit_CurrentMemValue->text().toAscii().data();
+    bool ok = (1 == sscanf(buf, "%d", &intValue));
     if (!ok)
         return;
     uint8_t u8Value = static_cast<uint8_t>(intValue);
