@@ -22,7 +22,7 @@
 
 #include "QMoMResources.h"
 
-#include "unitmodel.h"
+#include "UnitModel.h"
 
 using namespace MoM;
 using MoM::QMoMResources;
