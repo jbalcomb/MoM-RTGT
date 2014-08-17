@@ -179,7 +179,7 @@ void DialogCalculatorAddress::updateValues(const QWidget *originator)
 void DialogCalculatorAddress::on_lineEdit_CurrentFileValue_returnPressed()
 {
     int intValue = 0;
-    const char* buf = ui->lineEdit_CurrentFileValue->text().toAscii().data();
+    const char* buf = ui->lineEdit_CurrentFileValue->text().toUtf8().data();
     bool ok = (1 == sscanf(buf, "%d", &intValue));
     if (!ok)
         return;
@@ -203,7 +203,7 @@ void DialogCalculatorAddress::on_lineEdit_CurrentFileValue_returnPressed()
 void DialogCalculatorAddress::on_lineEdit_CurrentMemValue_returnPressed()
 {
     int intValue = 0;
-    const char* buf = ui->lineEdit_CurrentMemValue->text().toAscii().data();
+    const char* buf = ui->lineEdit_CurrentMemValue->text().toUtf8().data();
     bool ok = (1 == sscanf(buf, "%d", &intValue));
     if (!ok)
         return;
@@ -377,13 +377,13 @@ void DialogCalculatorAddress::convertDOStoMemOffset(const QString& sDOSOffset, s
 
     unsigned segField = 0;
     unsigned offsetField = 0;
-    if (2 == sscanf(sDOSOffset.toAscii().data(), " %x:%x", &segField, &offsetField))
+    if (2 == sscanf(sDOSOffset.toUtf8().data(), " %x:%x", &segField, &offsetField))
     {
         memOffset = (size_t)momProcess->getBaseAddress() + momProcess->getOffsetSegment0() + segField * MoM::gPARAGRAPH_SIZE + offsetField;
     }
-    else if ((1 == sscanf(sDOSOffset.toAscii().data(), " dseg:%x", &offsetField))
-             || (1 == sscanf(sDOSOffset.toAscii().data(), " ds:%x", &offsetField))
-             || (1 == sscanf(sDOSOffset.toAscii().data(), " DS:%x", &offsetField)))
+    else if ((1 == sscanf(sDOSOffset.toUtf8().data(), " dseg:%x", &offsetField))
+             || (1 == sscanf(sDOSOffset.toUtf8().data(), " ds:%x", &offsetField))
+             || (1 == sscanf(sDOSOffset.toUtf8().data(), " DS:%x", &offsetField)))
     {
         memOffset = (size_t)momProcess->getBaseAddress() + momProcess->getOffsetDatasegment() + offsetField;
     }
@@ -465,7 +465,7 @@ void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, s
     unsigned stubField = 0;
     unsigned ovrField = 0;
     unsigned offsetField = 0;
-    if (2 == sscanf(sIDAOffset.toAscii().data(), " seg%u:%x", &segField, &offsetField))
+    if (2 == sscanf(sIDAOffset.toUtf8().data(), " seg%u:%x", &segField, &offsetField))
     {
         size_t segNr = segField;
         uint16_t segOffset = offsetField;
@@ -473,7 +473,7 @@ void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, s
         {
         }
     }
-    else if (2 == sscanf(sIDAOffset.toAscii().data(), " stub%u:%x", &stubField, &offsetField))
+    else if (2 == sscanf(sIDAOffset.toUtf8().data(), " stub%u:%x", &stubField, &offsetField))
     {
         size_t stubNr = stubField;
         uint16_t stubOffset = offsetField;
@@ -481,7 +481,7 @@ void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, s
         {
         }
     }
-    else if (2 == sscanf(sIDAOffset.toAscii().data(), " ovr%u:%x", &ovrField, &offsetField))
+    else if (2 == sscanf(sIDAOffset.toUtf8().data(), " ovr%u:%x", &ovrField, &offsetField))
     {
         size_t ovlNr = ovrField;
         uint16_t ovlOffset = offsetField;
@@ -489,8 +489,8 @@ void DialogCalculatorAddress::convertIDAtoExeOffset(const QString& sIDAOffset, s
         {
         }
     }
-    else if ((1 == sscanf(sIDAOffset.toAscii().data(), " dseg:%x", &offsetField))
-            || (1 == sscanf(sIDAOffset.toAscii().data(), " ds:%x", &offsetField)))
+    else if ((1 == sscanf(sIDAOffset.toUtf8().data(), " dseg:%x", &offsetField))
+            || (1 == sscanf(sIDAOffset.toUtf8().data(), " ds:%x", &offsetField)))
     {
         uint16_t dsegOffset = offsetField;
         if ((0 != exeBase) && exeBase->convertDsegOffset_to_ExeOffset(dsegOffset, exeOffset))

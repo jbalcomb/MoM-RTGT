@@ -1934,15 +1934,15 @@ QMoMTreeItemModelBase* constructTreeItem(Hero_Ability* rhs, const QString& conte
         ptree->appendChild("Noble", new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskNoble));
     else
         ptree->appendChild("Noble", new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskNoble));
-    Hero_Ability masku8;
-    memset(&masku8, '\0', sizeof(masku8));
-    masku8.u8 = 1;
-    if (1 == sizeof(masku8))
-        ptree->appendChild("u8", new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&masku8));
-    else if (2 == sizeof(masku8))
-        ptree->appendChild("u8", new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&masku8));
+    Hero_Ability maskFemale;
+    memset(&maskFemale, '\0', sizeof(maskFemale));
+    maskFemale.Female = 1;
+    if (1 == sizeof(maskFemale))
+        ptree->appendChild("Female", new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&maskFemale));
+    else if (2 == sizeof(maskFemale))
+        ptree->appendChild("Female", new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&maskFemale));
     else
-        ptree->appendChild("u8", new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&masku8));
+        ptree->appendChild("Female", new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&maskFemale));
     Hero_Ability maskAgility;
     memset(&maskAgility, '\0', sizeof(maskAgility));
     maskAgility.Agility = 1;

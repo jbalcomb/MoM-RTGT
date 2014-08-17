@@ -151,7 +151,7 @@ bool QMoMGifHandler::readAnimation(QMoMAnimation& animation)
                 return false;
             }
             ccount = ColorMap->ColorCount;
-            image->setNumColors(ccount);
+            image->setColorCount(ccount);
             for (i = 0; i < ccount; ++i)
             {
                 GifColorType gifColor = ColorMap->Colors[i];
@@ -255,8 +255,8 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
 
     QMoMImagePtr toWrite = animation.front();
 	/// @todo how to specify dithering method
-    qDebug("toWrite %dx%d numColors %d", toWrite->width(), toWrite->height(), toWrite->numColors());
-    if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
+    qDebug("toWrite %dx%d numColors %d", toWrite->width(), toWrite->height(), toWrite->colorCount());
+    if (toWrite->colorCount() == 0 || toWrite->colorCount() > 256)
     {
         qDebug() << "Converting to QImage::Format_Indexed8";
         toWrite = QMoMImagePtr(new QImage(toWrite->convertToFormat(QImage::Format_Indexed8)));
@@ -325,7 +325,7 @@ bool QMoMGifHandler::writeAnimation(const QMoMAnimation& animation)
         {
             toWrite = animation[imageNr];
             /// @todo how to specify dithering method
-            if (toWrite->numColors() == 0 || toWrite->numColors() > 256)
+            if (toWrite->colorCount() == 0 || toWrite->colorCount() > 256)
             {
                 toWrite = QMoMImagePtr(new QImage(toWrite->convertToFormat(QImage::Format_Indexed8)));
             }
@@ -415,10 +415,10 @@ struct ColorMapObject* QMoMGifHandler::createColorMap(const QMoMImagePtr& image)
     QVector<QRgb> colorTable = image->colorTable();
 
     // numColors must be a power of 2
-    int numColors = 1 << GifBitSize(image->numColors());
+    int numColors = 1 << GifBitSize(image->colorCount());
     GifColorType* colorValues = (GifColorType*)malloc(numColors * sizeof(GifColorType));
     int c = 0;
-    for(; c < image->numColors(); ++c)
+    for(; c < image->colorCount(); ++c)
     {
 //qDebug("color %d has %02X%02X%02X", c, qRed(colorTable[c]), qGreen(colorTable[c]), qBlue(colorTable[c]));
         colorValues[c].Red = qRed(colorTable[c]);

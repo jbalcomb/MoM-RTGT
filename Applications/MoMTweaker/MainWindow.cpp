@@ -117,7 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	}
 
     // Signal to start with an empty game
-	emit signal_gameChanged(m_game);
+    emit signal_gameChanged(m_game);
 
 	// Give the tree view a kick to display its contents
     // TODO: This should not be necessary
@@ -267,14 +267,14 @@ void MainWindow::on_pushButton_Load_clicked()
 
     QMoMGameSavePtr saveGame( new MoM::MoMGameSave );
     QMoMGameMemoryPtr memoryGame = m_game.dynamicCast<MoM::MoMGameMemory>();
-    bool ok = saveGame->load(fileName.toAscii());
+    bool ok = saveGame->load(fileName.toUtf8());
     if (ok)
     {
         newGame = saveGame.dynamicCast<MoM::MoMGameBase>();
     }
     else if (memoryGame)
     {
-        ok = memoryGame->load(fileName.toAscii());
+        ok = memoryGame->load(fileName.toUtf8());
         if (ok)
         {
             newGame = memoryGame.dynamicCast<MoM::MoMGameBase>();
@@ -312,7 +312,7 @@ void MainWindow::on_pushButton_Save_clicked()
         }
 
         QString fileName = m_filedialogSaveGame.selectedFiles().first();
-        ok = saveGame->save(fileName.toAscii());
+        ok = saveGame->save(fileName.toUtf8());
         if (!ok)
         {
             (void)QMessageBox::warning(this,
@@ -328,7 +328,7 @@ void MainWindow::on_pushButton_Save_clicked()
         }
 
         QString fileName = m_filedialogSaveGame.selectedFiles().first();
-        ok = memoryGame->save(fileName.toAscii());
+        ok = memoryGame->save(fileName.toUtf8());
         if (!ok)
         {
             (void)QMessageBox::warning(this,

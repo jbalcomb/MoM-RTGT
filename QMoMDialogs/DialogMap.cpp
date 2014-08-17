@@ -1175,7 +1175,7 @@ void MoM::DialogMap::on_pushButton_SaveBookmark_clicked()
 
     QString filename = saveBookMark.selectedFiles().first();
 
-    std::ofstream ofs(filename.toAscii().data(), std::ios_base::binary);
+    std::ofstream ofs(filename.toUtf8().data(), std::ios_base::binary);
     MoMBookmark bookmark(m_game.data());
     if (bookmark.save(ofs))
     {
@@ -1206,7 +1206,7 @@ void MoM::DialogMap::on_pushButton_RestoreBookmark_clicked()
 
     QString filename = restoreBookMark.selectedFiles().first();
 
-    std::ifstream ifs(filename.toAscii().data(), std::ios_base::binary);
+    std::ifstream ifs(filename.toUtf8().data(), std::ios_base::binary);
     MoMBookmark bookmark(m_game.data());
     if (bookmark.restore(ifs))
     {

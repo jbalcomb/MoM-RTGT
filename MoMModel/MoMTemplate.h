@@ -23,7 +23,7 @@
 #define PACKED_STRUCT __attribute__((packed))
 #endif
 
-#ifdef __MINGW_GCC  // Compiler MinGW
+#ifdef __MINGW32__  // Compiler MinGW
 #pragma pack(push, 1)
 #define PACKED_STRUCT __attribute__((packed))
 #endif
@@ -3696,7 +3696,7 @@ typedef struct PACKED_STRUCT // Hero_Ability
     uint8_t     Lucky:1;            // 08
     uint8_t     Charmed:1;          // 10
     uint8_t     Noble:1;            // 20
-    uint8_t     u8:1;               // 40
+    uint8_t     Female:1;           // 40
     uint8_t     Agility:1;          // 80
 } Hero_Ability;
 

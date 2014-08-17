@@ -446,7 +446,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
 {
     if (game.data() != m_game.data())
     {
-        qDebug() << getDateTimeStr() << ">QMoMResources::setGame() begin";
+//        qDebug() << getDateTimeStr() << ">QMoMResources::setGame() begin";
         m_game = game;
 
         (void)createColorTable();
@@ -479,7 +479,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         createLbxImages("CMBGRASS", m_terrainBattleImages);
         createTerrainImages();
 
-        qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
+//        qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
 }
 
@@ -1437,7 +1437,7 @@ void QMoMResources::createSpellImages()
         eSpell spell = gTableAdditionalSpells[entryNr].ability;
         if (0 != m_spellImages[spell])
         {
-            qDebug() << "Spell image for " << prettyQStr(spell) << " already present. Skipping";
+//            qDebug() << "Spell image for " << prettyQStr(spell) << " already present. Skipping";
             continue;
         }
         std::string lbxFile = gTableAdditionalSpells[entryNr].lbxFile;
@@ -1477,7 +1477,7 @@ void QMoMResources::createTerrainImages()
     uint8_t* data = terrainLbx.getRecord(0) + 192;
     uint8_t* ptrLbx1 = terrainLbx.getRecord(1);
     m_terrainAnimations.resize(2 * MoM::eTerrainType_MAX);
-    qDebug() << "terrainNr" << "i" << "loByte" << "hiByte" << "terrainPicIndex" << "offset" << "realOffset";
+//    qDebug() << "terrainNr" << "i" << "loByte" << "hiByte" << "terrainPicIndex" << "offset" << "realOffset";
     for (size_t terrainNr = 0; terrainNr < (int)MoM::eTerrainType_MAX; ++terrainNr)
     {
         // TODO: How do I know that the bitmap data in TERRAIN.LBX has actually

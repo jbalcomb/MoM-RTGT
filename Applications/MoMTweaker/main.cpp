@@ -5,7 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 #include "QMoMSettings.h"
 #include "TeeRedirecter.h"

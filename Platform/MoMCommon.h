@@ -38,7 +38,7 @@ typedef signed int int32_t;
 #define PACKED_STRUCT
 #endif
 
-#ifdef __MINGW_GCC      // Compiler MinGW
+#ifdef __MINGW32__      // Compiler MinGW
 #pragma pack(push, 1)
 #define PACKED_STRUCT __attribute__((packed))
 #endif

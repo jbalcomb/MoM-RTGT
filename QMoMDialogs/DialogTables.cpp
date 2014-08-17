@@ -11,6 +11,7 @@
 #include <QClipboard>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QMimeData>
 #include <QProgressDialog>
 
 #include <string>

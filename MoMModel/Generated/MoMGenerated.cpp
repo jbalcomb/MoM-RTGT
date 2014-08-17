@@ -4648,9 +4648,9 @@ std::ostream& operator<<(std::ostream& os, const Hero_Ability& rhs)
     {
     os << "Noble=" << (unsigned)rhs.Noble << "\n";
     }
-    if (0 != rhs.u8)
+    if (0 != rhs.Female)
     {
-    os << "u8=" << (unsigned)rhs.u8 << "\n";
+    os << "Female=" << (unsigned)rhs.Female << "\n";
     }
     if (0 != rhs.Agility)
     {

@@ -260,7 +260,7 @@ void DialogLbxEditor::exportFont(size_t lbxIndex, const QString& directory)
 
 void DialogLbxEditor::loadLbx(const QString& filename)
 {
-    if (!m_lbx.load(filename.toAscii().data()))
+    if (!m_lbx.load(filename.toUtf8().data()))
     {
         (void)QMessageBox::warning(this,
             tr("Load LBX"),
@@ -377,7 +377,7 @@ void DialogLbxEditor::loadPaletteForFile(const QString &filename)
         lbxIndex = 2;
     }
 
-    std::string fontsLbxFile = std::string(gameDirectory.toAscii()) + "/" + "FONTS.LBX";
+    std::string fontsLbxFile = std::string(gameDirectory.toUtf8()) + "/" + "FONTS.LBX";
     m_colorTable.resize(256);
     MoM::MoMLbxBase fontsLbx;
     if (!fontsLbx.load(fontsLbxFile))
@@ -497,7 +497,7 @@ void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
         {
             // try to load as fli
             MoM::MoMFli fli;
-            if (fli.load(frameFilename.toAscii().data()))
+            if (fli.load(frameFilename.toUtf8().data()))
             {
                 // Set pixels
                 QImage fliImage(fli.getPixels(), fli.getWidth(), fli.getHeight(), QImage::Format_Indexed8);

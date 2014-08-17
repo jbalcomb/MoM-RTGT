@@ -42,3 +42,5 @@ UI_DIR += ./Generated
 RCC_DIR += ./Generated
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
