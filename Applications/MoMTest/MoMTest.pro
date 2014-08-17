@@ -26,7 +26,8 @@ win32-msvc2008:QMAKE_LIBS += user32.lib
 message(QMAKE_LIBS: $$QMAKE_LIBS)
 
 QT       += testlib
-QT       += xml
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = MoMTest
 DESTDIR = $${COMPILER}/bin
