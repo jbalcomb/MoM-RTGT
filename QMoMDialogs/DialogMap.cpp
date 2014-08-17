@@ -295,7 +295,7 @@ void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrai
         Map_Movement* terrainMovement = m_game->getTerrain_Movements();
         int8_t* terrainMovementUnused = m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused);
         Map_Movement* terrainMovementCopy = m_game->getTerrain_Movements_copy();
-        qDebug("TerrMove %p TerrMoveUnused %p TerrMoveCopy %p", terrainMovement, terrainMovementUnused, terrainMovementCopy);
+        //qDebug("TerrMove %p TerrMoveUnused %p TerrMoveCopy %p", terrainMovement, terrainMovementUnused, terrainMovementCopy);
         if (0 == terrainMovementUnused)
         {
             qtreeTerrain->addChild(new QMoMTreeItemWidgetBase(m_game, "Moves", "(Not accessible->no road effect)"));
@@ -411,7 +411,7 @@ void DialogMap::on_comboBox_Plane_currentIndexChanged(int index)
 
 void DialogMap::on_treeWidget_Tile_customContextMenuRequested(const QPoint &pos)
 {
-    qDebug() << "on_treeWidget_Tile_customContextMenuRequested" << pos;
+    //qDebug() << "on_treeWidget_Tile_customContextMenuRequested" << pos;
     QTreeWidgetItem* pItem = ui->treeWidget_Tile->currentItem();
 
     QMenu contextMenu;
@@ -794,9 +794,9 @@ void DialogMap::slot_tileChanged(const MoM::MoMLocation& loc)
 
 void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &locTo)
 {
-    qDebug() << QString("slot_tileDragged(%0:(%1,%2) -> (%3,%4)")
-                .arg(prettyQStr(locFrom.m_Plane)).arg(locFrom.m_XPos).arg(locFrom.m_YPos)
-                .arg(locTo.m_XPos).arg(locTo.m_YPos);
+    //qDebug() << QString("slot_tileDragged(%0:(%1,%2) -> (%3,%4)")
+    //            .arg(prettyQStr(locFrom.m_Plane)).arg(locFrom.m_XPos).arg(locFrom.m_YPos)
+    //            .arg(locTo.m_XPos).arg(locTo.m_YPos);
 
     MoM::MoMTerrain terrainFrom(m_game.data(), locFrom);
     MoM::MoMTerrain terrainTo(m_game.data(), locTo);
@@ -812,8 +812,8 @@ void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &
         std::vector<int> unitsFrom = terrainFrom.getUnits();
         std::vector<int> unitsTo = terrainTo.getUnits();
 
-        qDebug() << QString("%0 units versus %1 units")
-                    .arg(unitsFrom.size()).arg(unitsTo.size());
+        //qDebug() << QString("%0 units versus %1 units")
+        //            .arg(unitsFrom.size()).arg(unitsTo.size());
 
         if ((unitsFrom.size() > 0) && (unitsTo.size() <= 0))
         {
@@ -897,7 +897,7 @@ void DialogMap::slot_tileDragged(const MoMLocation &locFrom, const MoMLocation &
 
 void DialogMap::slot_tileSelected(const MoM::MoMLocation &loc)
 {
-    qDebug() << QString("slot_tileSelected(%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos);
+    //qDebug() << QString("slot_tileSelected(%0:(%1,%2)").arg(prettyQStr(loc.m_Plane)).arg(loc.m_XPos).arg(loc.m_YPos);
 
     ui->treeWidget_Tile->clear();
 

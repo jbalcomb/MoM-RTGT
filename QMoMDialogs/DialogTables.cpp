@@ -1265,7 +1265,7 @@ void DialogTables::on_tableWidget_clicked(QModelIndex)
 
 void DialogTables::on_tableWidget_customContextMenuRequested(const QPoint &pos)
 {
-    qDebug() << "on_tableWidget_customContextMenuRequested" << pos;
+    //qDebug() << "on_tableWidget_customContextMenuRequested" << pos;
     QTableWidgetItem* pItem = ui->tableWidget->currentItem();
 
     QMenu contextMenu;

@@ -100,7 +100,7 @@ void QMoMSettings::recurseRead(QSettings& settings, QObject* object)
         }
         if (0 != filedialog)
         {
-            qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
+            // qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
             filedialog->setDirectory(value.toString());
         }
         if (0 != slider)
@@ -160,7 +160,7 @@ void QMoMSettings::recurseWrite(QSettings& settings, QObject* object)
     QFileDialog* filedialog = dynamic_cast<QFileDialog*>(object);
     if (0 != filedialog)
     {
-        qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
+        // qDebug() << "QFileDialog" << filedialog->directory().absolutePath();
         settings.setValue(filedialog->objectName(), filedialog->directory().absolutePath());
         // Do not recurse
         return;

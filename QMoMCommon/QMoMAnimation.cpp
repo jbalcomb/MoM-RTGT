@@ -70,7 +70,7 @@ void QMoMAnimation::crop()
 bool QMoMAnimation::saveAsGif(const QString& gifFilename)
 {
     QFile fileGif(gifFilename);
-    qDebug() << "Writing to " << fileGif.fileName();
+    //qDebug() << "Writing to " << fileGif.fileName();
     if (!fileGif.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return false;
 

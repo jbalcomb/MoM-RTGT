@@ -136,7 +136,7 @@ void QMoMMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     else
     {
-        qDebug() << "Drag from " << m_dragFrom.m_XPos << m_dragFrom.m_YPos << " to " << loc.m_XPos << loc.m_YPos;
+        //qDebug() << "Drag from " << m_dragFrom.m_XPos << m_dragFrom.m_YPos << " to " << loc.m_XPos << loc.m_YPos;
         emit signal_tileDragged(m_dragFrom, loc);
     }
 }

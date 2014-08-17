@@ -538,20 +538,20 @@ void DialogManageCities::on_tableWidget_Cities_cellChanged(int row, int column)
         int8_t hammersProduced = momCity.calcHammersProduced();
         if (foodProduced != city->m_Food_Produced)
         {
-            qDebug() << QString("Updating food produced in city '%0' from %1 to %2")
-                        .arg(city->m_City_Name).arg((int)city->m_Food_Produced).arg((int)foodProduced);
+            //qDebug() << QString("Updating food produced in city '%0' from %1 to %2")
+            //            .arg(city->m_City_Name).arg((int)city->m_Food_Produced).arg((int)foodProduced);
             if (!m_game->commitData(&city->m_Food_Produced, &foodProduced, sizeof(city->m_Food_Produced)))
             {
-                qDebug() << "Failed to commit food change";
+                //qDebug() << "Failed to commit food change";
             }
         }
         if (hammersProduced != city->m_Hammers)
         {
-            qDebug() << QString("Updating hammers produced in city '%0' from %1 to %2")
-                        .arg(city->m_City_Name).arg((int)city->m_Hammers).arg((int)hammersProduced);
+            //qDebug() << QString("Updating hammers produced in city '%0' from %1 to %2")
+            //            .arg(city->m_City_Name).arg((int)city->m_Hammers).arg((int)hammersProduced);
             if (!m_game->commitData(&city->m_Hammers, &hammersProduced, sizeof(city->m_Hammers)))
             {
-                qDebug() << "Failed to commit production change";
+                //qDebug() << "Failed to commit production change";
             }
         }
     }
