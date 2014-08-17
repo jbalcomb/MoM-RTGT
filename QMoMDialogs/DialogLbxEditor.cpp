@@ -39,14 +39,14 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
 
     m_filedialogLoad->setObjectName("filedialogLoad");
     m_filedialogLoad->setWindowTitle(tr("Open LBX file"));
-    m_filedialogLoad->setNameFilter(tr("LBX files (*.lbx)"));
+    m_filedialogLoad->setNameFilter(tr("LBX files (*.lbx *.LBX)"));
     m_filedialogLoad->setAcceptMode(QFileDialog::AcceptOpen);
     m_filedialogLoad->setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoad->setViewMode(QFileDialog::Detail);
 
     m_filedialogSave->setObjectName("filedialogSave");
     m_filedialogSave->setWindowTitle(tr("Save picture(s)"));
-    m_filedialogSave->setNameFilter(tr("Pictures (*.png *.bmp *.gif *.jpg);;All files (*.*)"));
+    m_filedialogSave->setNameFilter(tr("Pictures (*.png *.bmp *.gif *.jpg *.PNG *.BMP *.GIF *.JPG);;All files (*)"));
     m_filedialogSave->setDefaultSuffix("png");
     m_filedialogSave->setAcceptMode(QFileDialog::AcceptSave);
     m_filedialogSave->setFileMode(QFileDialog::AnyFile);

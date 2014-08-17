@@ -1196,7 +1196,7 @@ void MoM::DialogMap::on_pushButton_RestoreBookmark_clicked()
 
     restoreBookMark.setObjectName("restoreBookMark");
     restoreBookMark.setWindowTitle(tr("Restore battle bookmark"));
-    restoreBookMark.setNameFilter(tr("Battle bookmark files (*.battlebookmark);;All files (*.*)"));
+    restoreBookMark.setNameFilter(tr("Battle bookmark files (*.battlebookmark *.BATTLEBOOKMARK);;All files (*)"));
     restoreBookMark.setAcceptMode(QFileDialog::AcceptOpen);
     restoreBookMark.setFileMode(QFileDialog::ExistingFile);
     restoreBookMark.setViewMode(QFileDialog::Detail);

@@ -63,16 +63,25 @@ MainWindow::MainWindow(QWidget *parent) :
     searchPaths.append(":/wizards");
     QDir::setSearchPaths(QString("images"), searchPaths);
 
+    QStringList filters;
+    filters << "MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx itemdata.lbx itempow.lbx spelldat.lbx terrstat.lbx"
+               " *.INSECTICIDE* *.GAM WIZARDS*.EXE MAGIC*.EXE BUILDDAT.LBX ITEMDATA.LBX ITEMPOW.LBX SPELLDAT.LBX TERRSTAT.LBX)";
+    filters << "SAVE *.GAM files (*.gam *.GAM)";
+    filters << "EXE files (*.exe *.EXE)";
+    filters << "LBX files (*.lbx *.LBX)";
+    filters << "Memory dumps (*.insecticide* *.INSECTICIDE*)";
+    filters << "All files (*)";
+
     m_filedialogLoadGame.setObjectName("filedialogLoadGame");
     m_filedialogLoadGame.setWindowTitle(tr("Open MoM file"));
-    m_filedialogLoadGame.setNameFilter(tr("MoM files (*.insecticide* *.gam wizards*.exe magic*.exe builddat.lbx itemdata.lbx itempow.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
-    m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptOpen);
+    m_filedialogLoadGame.setNameFilters(filters);
+    m_filedialogLoadGame.setAcceptMode(QFileDialog::AcceptOpen);
     m_filedialogLoadGame.setFileMode(QFileDialog::ExistingFile);
     m_filedialogLoadGame.setViewMode(QFileDialog::Detail);
 
     m_filedialogSaveGame.setObjectName("filedialogSaveGame");
     m_filedialogSaveGame.setWindowTitle(tr("Save MoM file"));
-    m_filedialogSaveGame.setNameFilter(tr("MoM files (*.gam wizards*.exe magic*.exe builddat.lbx itemdata.lbx itempow.lbx spelldat.lbx terrstat.lbx);;SAVEn.GAM files (*.gam);;EXE files (wizards*.exe magic*.exe);;LBX files (*.lbx);;Memory dumps(*.insecticide*)"));
+    m_filedialogSaveGame.setNameFilters(filters);
     m_filedialogSaveGame.setAcceptMode(QFileDialog::AcceptSave);
     m_filedialogSaveGame.setFileMode(QFileDialog::AnyFile);
     m_filedialogSaveGame.setViewMode(QFileDialog::Detail);
