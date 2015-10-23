@@ -208,6 +208,8 @@ void MainWindow::update()
         title = m_game->getSources();
     }
 
+    title += " " VERSION;
+
     setWindowTitle(title.c_str());
 
     ui->pushButton_Reread->setEnabled(

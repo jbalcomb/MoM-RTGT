@@ -20,6 +20,8 @@ CHANGES IN 0.2.9 (2015--)
 
 * The table of prefab artifacts now shows the header 'Artifact'
   instead of 'Special'.
+  
+* The caption includes the version of the Tweaker now.
 
 
 

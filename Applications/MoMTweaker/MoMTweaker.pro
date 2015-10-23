@@ -14,6 +14,7 @@ VERSION = 9
 !isEmpty(VERSION){
   VERSION = 0.2.$${VERSION}
 }
+DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 TARGET = MoMTweaker
 
