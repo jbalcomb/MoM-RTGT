@@ -34,6 +34,7 @@ DialogAddUnit::DialogAddUnit(QWidget *parent) :
     m_sceneUnit(new QGraphicsScene),
     ui(new Ui::DialogAddUnit)
 {
+    m_font.setPointSize(14);
     ui->setupUi(this);
 
     postInitialize();
@@ -349,7 +350,7 @@ void DialogAddUnit::displaySectionTop()
     QGraphicsSimpleTextItem* textItem = 0;
     QPointF pos(0, m_pictureHeight);
 
-    pos = QPoint(m_labelWidth, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    pos = QPoint(m_labelWidth, m_pictureHeight - 5 * MoM::QMoMResources::g_FontSmall.pointSize());
     textItem = addText(pos, "Figures");
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
     pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();
@@ -376,7 +377,7 @@ void DialogAddUnit::displaySectionTop()
     }
 
     // Name
-    pos = QPointF(m_labelWidth, 0);
+    pos = QPointF(m_labelWidth, 4);
     QFont fontName(MoM::QMoMResources::g_Font);
     fontName.setPointSize(20);
     if (m_unit->getHeroName().empty())
@@ -394,7 +395,7 @@ void DialogAddUnit::displaySectionTop()
     }
 
     // Figures, moves, upkeep
-    pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 4 * MoM::QMoMResources::g_FontSmall.pointSize());
+    pos = QPoint(m_labelWidth + m_labelWidth / 2, m_pictureHeight - 5 * MoM::QMoMResources::g_FontSmall.pointSize());
     textItem = addText(pos, QString("%0").arg(m_unit->getMaxFigures()));
     textItem->setFont(MoM::QMoMResources::g_FontSmall);
     pos.ry() += MoM::QMoMResources::g_FontSmall.pointSize();

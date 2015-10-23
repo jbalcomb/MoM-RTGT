@@ -402,7 +402,7 @@ static Special<eUnitMutation> gTableUnitMutations[eUnitMutation_MAX] =
 };
 
 
-const QFont QMoMResources::g_FontSmall("Sans Serif", 9, -1, false);
+const QFont QMoMResources::g_FontSmall("Sans Serif", 8, -1, false);
 #ifdef _WIN32
 QFont QMoMResources::g_Font("Monotype Corsiva", 10, -1, false);
 #else

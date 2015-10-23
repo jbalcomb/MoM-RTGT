@@ -15,7 +15,6 @@ QMoMDialogBase::QMoMDialogBase(QWidget *parent) :
 
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;
-    //m_font.setPointSize(16);
 }
 
 QMoMDialogBase::~QMoMDialogBase()

@@ -82,7 +82,7 @@ HEADERS += \
     ../../MoMControl/MoMManageCities.h
 
 SOURCES += \
-    ../../Applications/MoMTweaker/mainwindow.cpp \
+    ../../Applications/MoMTweaker/MainWindow.cpp \
     ../../MoMControl/MoMCatnip.cpp \
     ../../MoMControl/MoMCombat.cpp \
     ../../MoMControl/MoMController.cpp \
@@ -142,7 +142,7 @@ SOURCES += \
     ../../MoMControl/MoMManageCities.cpp
 
 FORMS += \
-    ../../Applications/MoMTweaker/mainwindow.ui \
+    ../../Applications/MoMTweaker/MainWindow.ui \
     ../../QMoMDialogs/DialogAddUnit.ui \
     ../../QMoMDialogs/DialogCalculatorAddress.ui \
     ../../QMoMDialogs/DialogExternalAI.ui \

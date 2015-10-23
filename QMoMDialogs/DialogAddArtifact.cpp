@@ -17,6 +17,7 @@ DialogAddArtifact::DialogAddArtifact(QWidget *parent) :
     m_scene(new QGraphicsScene),
     ui(new Ui::DialogAddArtifact)
 {
+    m_font.setPointSize(12);
     ui->setupUi(this);
     ui->graphicsView->setScene(m_scene);
     postInitialize();

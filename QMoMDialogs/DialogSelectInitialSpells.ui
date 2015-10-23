@@ -10,13 +10,6 @@
     <height>374</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <family>URW Chancery L</family>
-    <pointsize>11</pointsize>
-    <italic>true</italic>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Select Initial Spells</string>
   </property>
@@ -86,12 +79,6 @@ color: rgb(225, 215, 74);</string>
    </item>
    <item row="3" column="3">
     <widget class="QListWidget" name="listWidget_VeryRare">
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -215,12 +202,6 @@ color: rgb(225, 215, 74);</string>
    </item>
    <item row="3" column="0">
     <widget class="QListWidget" name="listWidget_Common">
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -341,12 +322,6 @@ color: rgb(225, 215, 74);</string>
    </item>
    <item row="3" column="1">
     <widget class="QListWidget" name="listWidget_Uncommon">
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -470,12 +445,6 @@ color: rgb(225, 215, 74);</string>
    </item>
    <item row="3" column="2">
     <widget class="QListWidget" name="listWidget_Rare">
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -771,15 +740,6 @@ color: rgb(225, 215, 74);</string>
        </disabled>
       </palette>
      </property>
-     <property name="font">
-      <font>
-       <family>URW Bookman L</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Common:</string>
      </property>
@@ -958,15 +918,6 @@ color: rgb(225, 215, 74);</string>
         </colorrole>
        </disabled>
       </palette>
-     </property>
-     <property name="font">
-      <font>
-       <family>URW Bookman L</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Uncommon:</string>
@@ -1160,13 +1111,6 @@ color: rgb(225, 215, 74);</string>
        </disabled>
       </palette>
      </property>
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <pointsize>12</pointsize>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="text">
       <string>Only random</string>
      </property>
@@ -1345,13 +1289,6 @@ color: rgb(225, 215, 74);</string>
         </colorrole>
        </disabled>
       </palette>
-     </property>
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <pointsize>12</pointsize>
-       <italic>true</italic>
-      </font>
      </property>
      <property name="text">
       <string>Only random</string>
@@ -1532,13 +1469,6 @@ color: rgb(225, 215, 74);</string>
        </disabled>
       </palette>
      </property>
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <pointsize>12</pointsize>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="text">
       <string>Only random</string>
      </property>
@@ -1717,15 +1647,6 @@ color: rgb(225, 215, 74);</string>
         </colorrole>
        </disabled>
       </palette>
-     </property>
-     <property name="font">
-      <font>
-       <family>URW Bookman L</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
      </property>
      <property name="text">
       <string>Rare:</string>
@@ -1906,15 +1827,6 @@ color: rgb(225, 215, 74);</string>
        </disabled>
       </palette>
      </property>
-     <property name="font">
-      <font>
-       <family>URW Bookman L</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="text">
       <string>Very Rare:</string>
      </property>
@@ -2093,13 +2005,6 @@ color: rgb(225, 215, 74);</string>
         </colorrole>
        </disabled>
       </palette>
-     </property>
-     <property name="font">
-      <font>
-       <family>URW Chancery L</family>
-       <pointsize>12</pointsize>
-       <italic>true</italic>
-      </font>
      </property>
      <property name="text">
       <string>Only random</string>

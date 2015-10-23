@@ -92,7 +92,13 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QFormLayout" name="formLayout">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="sizePolicy">
@@ -103,43 +109,31 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>151</width>
-        <height>571</height>
+        <width>172</width>
+        <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>151</width>
-        <height>100000</height>
+        <width>172</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="title">
        <string/>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>1</y>
          <width>168</width>
-         <height>692</height>
+         <height>621</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QPushButton" name="pushButton_Connect">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Connect</string>
           </property>
@@ -157,18 +151,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Reread">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Reread</string>
           </property>
@@ -186,18 +168,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Load">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Load</string>
           </property>
@@ -215,18 +185,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Save">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Save</string>
           </property>
@@ -251,18 +209,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_ShowTables">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Show Tables</string>
           </property>
@@ -280,18 +226,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Map">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Map</string>
           </property>
@@ -309,18 +243,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_AddUnit">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Summon</string>
           </property>
@@ -338,18 +260,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_LbxEditor">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>LBX editor</string>
           </property>
@@ -367,18 +277,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Calculator">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Address calculator</string>
           </property>
@@ -403,18 +301,6 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_Tools">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Tools...</string>
           </property>
@@ -439,18 +325,6 @@
         </item>
         <item>
          <widget class="QCheckBox" name="checkBox_UpdateTree">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Update tree view</string>
           </property>
@@ -461,18 +335,6 @@
         </item>
         <item>
          <widget class="QCheckBox" name="checkBox_UseIcons">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Use icons</string>
           </property>
@@ -483,18 +345,6 @@
         </item>
         <item>
          <widget class="QCheckBox" name="checkBox_ApplyBuildQueues">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="text">
            <string>Apply build queues</string>
           </property>
