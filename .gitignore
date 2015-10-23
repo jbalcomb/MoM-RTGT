@@ -14,6 +14,7 @@ Win32/
 *.Debug
 *.dll
 *.exp
+*.filters
 *.lib
 *.log
 *.ncb
@@ -26,7 +27,8 @@ Win32/
 *.pyd
 *.Release
 *.suo
-*.vcproj.*.user
+*.vcproj.user
+*.vcxproj.user
 .goutputstream-*
 core.*
 
@@ -38,5 +40,6 @@ dosbox.pid
 Applications/MoMCustomizer/Makefile
 Applications/MoMTest/Makefile
 Applications/MoMTweaker/Makefile
+Applications/build-*
 Makefile.Debug
 Makefile.Release
