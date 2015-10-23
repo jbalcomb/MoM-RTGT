@@ -121,7 +121,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>147</width>
+         <width>168</width>
          <height>692</height>
         </rect>
        </property>
@@ -350,12 +350,6 @@
             <height>16777215</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-            <italic>true</italic>
-           </font>
-          </property>
           <property name="text">
            <string>LBX editor</string>
           </property>
@@ -384,12 +378,6 @@
             <width>200</width>
             <height>16777215</height>
            </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-            <italic>true</italic>
-           </font>
           </property>
           <property name="text">
            <string>Address calculator</string>

@@ -402,9 +402,9 @@ static Special<eUnitMutation> gTableUnitMutations[eUnitMutation_MAX] =
 };
 
 
-const QFont QMoMResources::g_FontSmall("Sans Serif", 10, -1, false);
+const QFont QMoMResources::g_FontSmall("Sans Serif", 9, -1, false);
 #ifdef _WIN32
-QFont QMoMResources::g_Font("Monotype Corsiva", 11, -1, false);
+QFont QMoMResources::g_Font("Monotype Corsiva", 10, -1, false);
 #else
 // Note: attribute italic=true is required for URW Chancery L
 QFont QMoMResources::g_Font("URW Chancery L", 12, -1, true);
