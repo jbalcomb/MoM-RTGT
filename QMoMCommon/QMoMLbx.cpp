@@ -151,9 +151,12 @@ bool convertImagesToLbx(const QMoMAnimation& images, std::vector<uint8_t>& dataB
     assert(0 != images[0]);
     const QImage& image0 = *images[0];
 
-    size_t upper_bound = 65536;
+    size_t upper_bound = 200 * 320 * 200;
     if (images.size() * image0.width() * image0.height() > (int)upper_bound / 2)
     {
+        std::cout << "convertImagesToLbx failed: buffer too big size=" << images.size()
+                  << " width=" << image0.width() << " height=" << image0.height()
+                  << " > " << (int)upper_bound / 2 << std::endl;
         return false;
     }
 
