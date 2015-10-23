@@ -1,13 +1,25 @@
 MoMTweaker
 Author: Klaas van Aarsen
 
-CHANGES IN 0.2.9 (2013--)
+CHANGES IN 0.2.9 (2015--)
 -----------------------------
 * Address Calculator allows you to change values now.
   Currently only 1 byte at a time, which happens when you press Enter.
   Be careful if you change the .EXE file!
   
 * Renamed Building Queue dialog to Manage Cities and improved it.
+
+* Level Bonus table can now also be edited if you load wizards.exe.
+
+* All picture sequences can be replaced now, also the bigger ones.
+  The palette may be a bit skewed though.
+  
+* Added some diplomacy information based on Seravy's comments.
+  
+* Repop lairs will only repop if unoccupied (untested).
+
+* The table of prefab artifacts now shows the header 'Artifact'
+  instead of 'Special'.
 
 
 
