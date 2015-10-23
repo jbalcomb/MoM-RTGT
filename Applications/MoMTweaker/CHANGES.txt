@@ -1,8 +1,10 @@
 MoMTweaker
 Author: Klaas van Aarsen
 
-CHANGES IN 0.2.9 (2015--)
+CHANGES IN 0.2.9 (2015-10-23)
 -----------------------------
+* Background images and icons are properly included again.
+
 * Address Calculator allows you to change values now.
   Currently only 1 byte at a time, which happens when you press Enter.
   Be careful if you change the .EXE file!
@@ -13,6 +15,7 @@ CHANGES IN 0.2.9 (2015--)
 
 * All picture sequences can be replaced now, also the bigger ones.
   The palette may be a bit skewed though.
+  Still need to figure out how to re-apply the correct palette.
   
 * Added some diplomacy information based on Seravy's comments.
   
