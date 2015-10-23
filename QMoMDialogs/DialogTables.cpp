@@ -379,7 +379,7 @@ void DialogTables::update_ItemData()
     labels << "ItemName" << "Icon" << "Slot" << "Item Type" << "Cost";
     labels << "Att" << "ToHit" << "Def" << "Move" << "Resist" << "Mana" << "Save";
     labels << "Spell" << "NrCharges" << "Powers";
-    labels << "Nature" << "Sorcery" << "Chaos" << "Life" << "Death" << "Special" << "InGame";
+    labels << "Nature" << "Sorcery" << "Chaos" << "Life" << "Death" << "Artifact" << "InGame";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_ItemData(int)));
 }
