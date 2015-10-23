@@ -165,6 +165,11 @@ DialogSelectInitialSpells::DialogSelectInitialSpells(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->listWidget_Common->setFont(m_font);
+    ui->listWidget_Uncommon->setFont(m_font);
+    ui->listWidget_Rare->setFont(m_font);
+    ui->listWidget_VeryRare->setFont(m_font);
+
     srand(time(NULL));
 
     m_InitialSpells = new InitialSpells;
