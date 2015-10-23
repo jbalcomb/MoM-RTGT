@@ -489,22 +489,6 @@ Tower_Node_Lair* MoMGameMemory::getLairs()
     return derefHeapPointer<Tower_Node_Lair>(pMoMDataSegment->m_addr_Lairs_data, MoM::gMAX_NODES_LAIRS_TOWERS);
 }
 
-uint8_t* MoMGameMemory::getLevelBonusesHero()
-{
-    uint8_t* ovl = MoMGameMemory::getWizardsOverlay(116);
-    if (0 == ovl)
-        return 0;
-    return &ovl[0x1DA2];
-}
-
-uint8_t* MoMGameMemory::getLevelBonusesUnit()
-{
-    uint8_t* ovl = MoMGameMemory::getWizardsOverlay(116);
-    if (0 == ovl)
-        return 0;
-    return &ovl[0x1D1B];
-}
-
 Node_Attr *MoMGameMemory::getNodeAttributes()
 {
     if (0 == m_process.get())

@@ -133,6 +133,22 @@ ItemPowLbx *MoMGameBase::getItemPowLbx(int itemPowNr)
     return value;
 }
 
+uint8_t* MoMGameBase::getLevelBonusesHero()
+{
+    uint8_t* ovl = getWizardsOverlay(116);
+    if (0 == ovl)
+        return 0;
+    return &ovl[0x1DA2];
+}
+
+uint8_t* MoMGameBase::getLevelBonusesUnit()
+{
+    uint8_t* ovl = getWizardsOverlay(116);
+    if (0 == ovl)
+        return 0;
+    return &ovl[0x1D1B];
+}
+
 int MoMGameBase::getNrItemDataLbx()
 {
     if (0 == m_ItemDataLbx.get())

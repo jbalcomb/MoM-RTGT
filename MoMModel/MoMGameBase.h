@@ -545,14 +545,8 @@ protected:
     }
     virtual Item* getItems() = 0;
     virtual Tower_Node_Lair* getLairs() = 0;
-    virtual uint8_t* getLevelBonusesHero()
-    {
-        return 0;
-    }
-    virtual uint8_t* getLevelBonusesUnit()
-    {
-        return 0;
-    }
+    virtual uint8_t* getLevelBonusesHero();
+    virtual uint8_t* getLevelBonusesUnit();
     virtual Node_Attr* getNodeAttributes() = 0;
 public:
     // Needs to be public so we can add it to a treeview
