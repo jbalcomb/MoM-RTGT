@@ -409,7 +409,7 @@ void DialogTables::slot_addRow_to_ItemData(int row)
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpell>(m_game, &data->m_Spell_Number_Charged, MoM::eSpell_MAX, SHOWENUM_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Number_Of_Charges, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new BitmaskTableItem<uint32_t, MoM::eItemPower>(
-                                 m_game, &data->m_Bitmask_Powers.bits, (MoM::eItemPower)0, MoM::eItemPower_MAX));
+                                  m_game, &data->m_Bitmask_Powers.bits, (MoM::eItemPower)0, MoM::eItemPower_MAX));
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[0], 3, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &dataLbx->m_Required_Spellbooks[1], 3, SHOWNUMBER_noZero));
@@ -1352,6 +1352,9 @@ void DialogTables::slot_ItemAction()
 void DialogTables::slot_gameChanged(const QMoMGamePtr &game)
 {
     m_game = game;
+
+    // Retrigger generation of selected table
+    on_comboBox_Table_currentIndexChanged(ui->comboBox_Table->currentText());
 
     slot_gameUpdated();
 }
