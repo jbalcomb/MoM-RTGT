@@ -17,6 +17,7 @@ Win32/
 *.lib
 *.log
 *.ncb
+*.out
 *.o
 *.obj
 *.pdb
