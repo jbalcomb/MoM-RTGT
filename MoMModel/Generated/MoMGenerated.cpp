@@ -2173,6 +2173,24 @@ std::ostream& operator<<(std::ostream& os, const eRealm_Type& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eRealm_Type16& rhs)
+{
+    switch (rhs)
+    {
+    case REALM16_None: os << "REALM16_None"; break;
+    case REALM16_Nature: os << "REALM16_Nature"; break;
+    case REALM16_Sorcery: os << "REALM16_Sorcery"; break;
+    case REALM16_Chaos: os << "REALM16_Chaos"; break;
+    case REALM16_Life: os << "REALM16_Life"; break;
+    case REALM16_Death: os << "REALM16_Death"; break;
+    case REALM16_Arcane: os << "REALM16_Arcane"; break;
+    case eRealm_Type16_MAX: os << "eRealm_Type16_MAX"; break;
+    default: os << "<Unknown eRealm_Type16>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eResource& rhs)
 {
     switch (rhs)
@@ -7951,15 +7969,32 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     }
     os << ")\n";
     os << "m_Global_Enchantments=" << rhs.m_Global_Enchantments << "\n";
-    os << "m_Unk_49A=(\n";
-    for (unsigned i = 0; i < 42; ++i)
+    os << "m_Unk_49A_Power_Distribution=" << rhs.m_Unk_49A_Power_Distribution << " 0x" << std::hex << rhs.m_Unk_49A_Power_Distribution << std::dec << "\n";
+    os << "m_Unk_49C=" << rhs.m_Unk_49C << " 0x" << std::hex << rhs.m_Unk_49C << std::dec << "\n";
+    os << "m_Hostility=(\n";
+    for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (unsigned)rhs.m_Unk_49A[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_49A[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (unsigned)rhs.m_Hostility[i] << " 0x" << std::hex << (unsigned)rhs.m_Hostility[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Books_Color=" << rhs.m_Books_Color << "\n";
-    os << "m_Zero_4C5=" << (unsigned)rhs.m_Zero_4C5 << " 0x" << std::hex << (unsigned)rhs.m_Zero_4C5 << std::dec << "\n";
-    os << "m_Unk_4C6=" << rhs.m_Unk_4C6 << " 0x" << std::hex << rhs.m_Unk_4C6 << std::dec << "\n";
+    os << "m_Unk_4A4=" << rhs.m_Unk_4A4 << " 0x" << std::hex << rhs.m_Unk_4A4 << std::dec << "\n";
+    os << "m_Reevaluate_Agression_Counter=" << rhs.m_Reevaluate_Agression_Counter << " 0x" << std::hex << rhs.m_Reevaluate_Agression_Counter << std::dec << "\n";
+    os << "m_Unk_4A8=" << rhs.m_Unk_4A8 << " 0x" << std::hex << rhs.m_Unk_4A8 << std::dec << "\n";
+    os << "m_Unk_4AA_Research=" << rhs.m_Unk_4AA_Research << " 0x" << std::hex << rhs.m_Unk_4AA_Research << std::dec << "\n";
+    os << "m_Peace_Counter=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Peace_Counter[i] << " 0x" << std::hex << (unsigned)rhs.m_Peace_Counter[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_4B2=(\n";
+    for (unsigned i = 0; i < 18; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_4B2[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4B2[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Primary_Book_Color=" << rhs.m_Primary_Book_Color << "\n";
+    os << "m_Secondary_Book_Color=" << rhs.m_Secondary_Book_Color << "\n";
     os << "}";
     return os;
 }

@@ -1955,14 +1955,28 @@ enum eRealm_Type ENUMSIZE8
 {
     REALM_None = 0xFF,
 
-        REALM_Nature = 0,
-        REALM_Sorcery = 1,
-        REALM_Chaos = 2,
-        REALM_Life = 3,
-        REALM_Death = 4,
-        REALM_Arcane = 5,
+    REALM_Nature = 0,
+    REALM_Sorcery = 1,
+    REALM_Chaos = 2,
+    REALM_Life = 3,
+    REALM_Death = 4,
+    REALM_Arcane = 5,
 
     eRealm_Type_MAX
+} PACKED_ENUM;
+
+enum eRealm_Type16 ENUMSIZE16
+{
+    REALM16_None = 0xFF,
+
+    REALM16_Nature = 0,
+    REALM16_Sorcery = 1,
+    REALM16_Chaos = 2,
+    REALM16_Life = 3,
+    REALM16_Death = 4,
+    REALM16_Arcane = 5,
+
+    eRealm_Type16_MAX
 } PACKED_ENUM;
 
 enum eResource
@@ -4454,10 +4468,17 @@ typedef struct PACKED_STRUCT // Wizard
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
-    uint8_t         m_Unk_49A[42];                      // 49A
-    eRealm_Type     m_Books_Color;                      // 4C4
-    uint8_t         m_Zero_4C5;                         //
-    uint16_t        m_Unk_4C6;                          // 4C6
+    uint16_t        m_Unk_49A_Power_Distribution;     // 49A
+    uint16_t        m_Unk_49C;                          // 49C
+    uint8_t         m_Hostility[6];                     // 49E
+    uint16_t        m_Unk_4A4;                          // 4A4
+    uint16_t        m_Reevaluate_Agression_Counter;     // 4A6
+    uint16_t        m_Unk_4A8;                          // 4A8
+    uint16_t        m_Unk_4AA_Research;                 // 4AA
+    uint8_t         m_Peace_Counter[6];                 // 4AC
+    uint8_t         m_Unk_4B2[18];                      // 4B2
+    eRealm_Type16   m_Primary_Book_Color;               // 4C4
+    eRealm_Type16   m_Secondary_Book_Color;             // 4C6
                                                         // SIZE 4C8
 } Wizard; // <read=read_Wizard>;
 

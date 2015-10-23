@@ -7288,21 +7288,50 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context)
           ptreem_Historian->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Historian[i]));
     }
     ptree->appendTree(constructTreeItem(&rhs->m_Global_Enchantments, "m_Global_Enchantments"), "");
-    QMoMTreeItemModelBase* ptreem_Unk_49A = ptree;
-    if (42 > 3)
+    ptree->appendChild("m_Unk_49A_Power_Distribution", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_49A_Power_Distribution));
+    ptree->appendChild("m_Unk_49C", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_49C));
+    QMoMTreeItemModelBase* ptreem_Hostility = ptree;
+    if (6 > 3)
     {
-        ptreem_Unk_49A = new QMoMTreeItemModelBase("m_Unk_49A");
-        ptree->appendTree(ptreem_Unk_49A, "");
+        ptreem_Hostility = new QMoMTreeItemModelBase("m_Hostility");
+        ptree->appendTree(ptreem_Hostility, "");
     }
-    for (unsigned i = 0; i < 42; ++i)
+    for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_49A[" << i << "]";
-          ptreem_Unk_49A->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_49A[i]));
+          oss << "m_Hostility[" << i << "]";
+          ptreem_Hostility->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Hostility[i]));
     }
-    ptree->appendChild("m_Books_Color", new QMoMTreeItemModel<eRealm_Type>(&rhs->m_Books_Color));
-    ptree->appendChild("m_Zero_4C5", new QMoMTreeItemModel<uint8_t>(&rhs->m_Zero_4C5));
-    ptree->appendChild("m_Unk_4C6", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4C6));
+    ptree->appendChild("m_Unk_4A4", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4A4));
+    ptree->appendChild("m_Reevaluate_Agression_Counter", new QMoMTreeItemModel<uint16_t>(&rhs->m_Reevaluate_Agression_Counter));
+    ptree->appendChild("m_Unk_4A8", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4A8));
+    ptree->appendChild("m_Unk_4AA_Research", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4AA_Research));
+    QMoMTreeItemModelBase* ptreem_Peace_Counter = ptree;
+    if (6 > 3)
+    {
+        ptreem_Peace_Counter = new QMoMTreeItemModelBase("m_Peace_Counter");
+        ptree->appendTree(ptreem_Peace_Counter, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Peace_Counter[" << i << "]";
+          ptreem_Peace_Counter->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Peace_Counter[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Unk_4B2 = ptree;
+    if (18 > 3)
+    {
+        ptreem_Unk_4B2 = new QMoMTreeItemModelBase("m_Unk_4B2");
+        ptree->appendTree(ptreem_Unk_4B2, "");
+    }
+    for (unsigned i = 0; i < 18; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_4B2[" << i << "]";
+          ptreem_Unk_4B2->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4B2[i]));
+    }
+    ptree->appendChild("m_Primary_Book_Color", new QMoMTreeItemModel<eRealm_Type16>(&rhs->m_Primary_Book_Color));
+    ptree->appendChild("m_Secondary_Book_Color", new QMoMTreeItemModel<eRealm_Type16>(&rhs->m_Secondary_Book_Color));
     return ptree;
 }
 
