@@ -1113,6 +1113,17 @@ bool MoMController::repopLairs(bool maxOut)
         if (0 == lair)
             break;
 
+        // Skip lairs that are occupied
+        Node_Attr* nodeAttr = findNodeAttrAtLocation(MoMLocation(*lair));
+        if (lair->m_Status == LAIRSTATUS_intact
+            || lair->m_Inhabitant1.m_Remaining_Nr_of_Inhabitant != 0
+            || lair->m_Inhabitant2.m_Remaining_Nr_of_Inhabitant != 0
+            || countUnits(MoMLocation(*lair)) > 0
+            || (nodeAttr != NULL && nodeAttr->m_Owner != PLAYER_Dismissed_Deceased))
+        {
+            continue;
+        }
+
         if (maxOut)
         {
             if (0 == lair->m_Inhabitant1.m_Initial_Nr_of_Inhabitant || 0 == lair->m_Inhabitant1.m_Inhabitant)
