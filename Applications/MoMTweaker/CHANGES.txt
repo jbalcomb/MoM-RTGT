@@ -1,6 +1,15 @@
 MoMTweaker
 Author: Klaas van Aarsen
 
+
+CHANGES IN 0.3.1 (2018--)
+-----------------------------
+* Recognize Seravy's v1.50+ and v5.00+ and show proper game data fields.
+
+* Added more diplomacy information based on Seravy's comments.
+
+
+
 CHANGES IN 0.2.9 (2015-10-23)
 -----------------------------
 * Background images and icons are properly included again.

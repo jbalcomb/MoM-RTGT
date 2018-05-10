@@ -1109,7 +1109,7 @@ void UnitModel::threadUpdateModelData()
         }
         else
         {
-            parentItem->child(toprow, 2)->setData(tr("MoM Version %0").arg(toQStr(game->getMoMVersion())), Qt::EditRole);
+            parentItem->child(toprow, 2)->setData(tr("MoM Version: %0").arg(toQStr(game->getMoMVersion())), Qt::EditRole);
         }
 
         int row = 0;

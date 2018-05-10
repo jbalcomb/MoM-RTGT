@@ -130,7 +130,7 @@ void DialogTables::update_BuildingData()
     labels << "Nr";
     labels << "BuildingName" << "Prerequisite1" << "Prerequisite2" << "Replaces" << "Regulars" << "Veterans" << "Magic Weapons" << "Upkeep"
            << "Cost" << "Category" << "Animation";
-    labels << "Trade/housing" << "Zero_24" << "Zero_26" << "Religious" << "Research" << "Zero_2E";
+    labels << "Food" << "Zero_24" << "Mana" << "Religious" << "Research" << "Zero_2E";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_BuildingData(int)));
 }
@@ -156,9 +156,9 @@ void DialogTables::slot_addRow_to_BuildingData(int row)
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Building_cost, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuildingCategory>(m_game, &data->m_Building_category, MoM::eBuildingCategory_MAX));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_trade_goods_housing, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Food, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_24, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_26, 2, SHOWNUMBER_noZero));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Mana, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Religious, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Research, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_2E, 2, SHOWNUMBER_noZero));

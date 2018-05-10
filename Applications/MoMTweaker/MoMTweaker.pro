@@ -9,11 +9,7 @@ include(../Common/Common.pri)
 
 TEMPLATE = app
 
-#unix:VERSION = $$system(svn info . | grep 'Changed\ Rev' | cut -b 19-)
-VERSION = 9
-!isEmpty(VERSION){
-  VERSION = 0.2.$${VERSION}
-}
+VERSION = 0.3.1
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 TARGET = MoMTweaker

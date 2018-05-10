@@ -157,13 +157,25 @@ public:
 
     char* getMoMVersion()
     {
+        char* copyrightAndVersion = 0;
         if (0 != getDataSegment())
         {
-            return &getDataSegment()->m_Copyright_and_Version[34];
+            copyrightAndVersion = getDataSegment()->m_Copyright_and_Version;
         }
         else if (0 != this->getMagicDataSegment())
         {
-            return &getMagicDataSegment()->m_Copyright1_and_Version[34];
+            copyrightAndVersion = getMagicDataSegment()->m_Copyright1_and_Version;
+        }
+
+        char* version_v = strstr(copyrightAndVersion, " v");
+        char* version_V = strstr(copyrightAndVersion, " V");
+        if ((0 != version_v) && (strlen(version_v) > 3) && (version_v[3] == '.'))
+        {
+            return (version_v + 1);
+        }
+        else if ((0 != version_V) && (strlen(version_V) > 3) && (version_V[3] == '.'))
+        {
+            return (version_V + 1);
         }
         else
         {

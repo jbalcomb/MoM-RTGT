@@ -430,6 +430,23 @@ std::ostream& operator<<(std::ostream& os, const eDifficulty140m& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eDifficulty150& rhs)
+{
+    switch (rhs)
+    {
+    case DIFFICULTY150_Easy: os << "DIFFICULTY150_Easy"; break;
+    case DIFFICULTY150_Normal: os << "DIFFICULTY150_Normal"; break;
+    case DIFFICULTY150_Advanced: os << "DIFFICULTY150_Advanced"; break;
+    case DIFFICULTY150_Expert: os << "DIFFICULTY150_Expert"; break;
+    case DIFFICULTY150_Master: os << "DIFFICULTY150_Master"; break;
+    case DIFFICULTY150_Lunatic: os << "DIFFICULTY150_Lunatic"; break;
+    case eDifficulty150_MAX: os << "eDifficulty150_MAX"; break;
+    default: os << "<Unknown eDifficulty150>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eEvent& rhs)
 {
     switch (rhs)
@@ -1692,6 +1709,22 @@ std::ostream& operator<<(std::ostream& os, const eLand_Size140m& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eLand_Size150& rhs)
+{
+    switch (rhs)
+    {
+    case LANDSIZE150_Tiny: os << "LANDSIZE150_Tiny"; break;
+    case LANDSIZE150_Small: os << "LANDSIZE150_Small"; break;
+    case LANDSIZE150_Fair: os << "LANDSIZE150_Fair"; break;
+    case LANDSIZE150_Large: os << "LANDSIZE150_Large"; break;
+    case LANDSIZE150_Huge: os << "LANDSIZE150_Huge"; break;
+    case eLand_Size150_MAX: os << "eLand_Size150_MAX"; break;
+    default: os << "<Unknown eLand_Size150>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eLevel& rhs)
 {
     switch (rhs)
@@ -1737,6 +1770,22 @@ std::ostream& operator<<(std::ostream& os, const eMagic_Powerful140m& rhs)
     case MAGICPOWERFUL140M_2_5: os << "MAGICPOWERFUL140M_2_5"; break;
     case eMagic_Powerful140m_MAX: os << "eMagic_Powerful140m_MAX"; break;
     default: os << "<Unknown eMagic_Powerful140m>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eMagic_Powerful150& rhs)
+{
+    switch (rhs)
+    {
+    case MAGICPOWERFUL150_Weak: os << "MAGICPOWERFUL150_Weak"; break;
+    case MAGICPOWERFUL150_Fair: os << "MAGICPOWERFUL150_Fair"; break;
+    case MAGICPOWERFUL150_Good: os << "MAGICPOWERFUL150_Good"; break;
+    case MAGICPOWERFUL150_High: os << "MAGICPOWERFUL150_High"; break;
+    case MAGICPOWERFUL150_Max: os << "MAGICPOWERFUL150_Max"; break;
+    case eMagic_Powerful150_MAX: os << "eMagic_Powerful150_MAX"; break;
+    default: os << "<Unknown eMagic_Powerful150>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -4025,9 +4074,9 @@ std::ostream& operator<<(std::ostream& os, const Building_Data& rhs)
     os << "m_Produces_Veterans=" << rhs.m_Produces_Veterans << "\n";
     os << "m_Produces_Magic_Weapons=" << rhs.m_Produces_Magic_Weapons << "\n";
     os << "m_Upkeep_yield=" << rhs.m_Upkeep_yield << " 0x" << std::hex << rhs.m_Upkeep_yield << std::dec << "\n";
-    os << "m_AI_trade_goods_housing=" << rhs.m_AI_trade_goods_housing << " 0x" << std::hex << rhs.m_AI_trade_goods_housing << std::dec << "\n";
+    os << "m_AI_Food=" << rhs.m_AI_Food << " 0x" << std::hex << rhs.m_AI_Food << std::dec << "\n";
     os << "m_Zero_24=" << rhs.m_Zero_24 << " 0x" << std::hex << rhs.m_Zero_24 << std::dec << "\n";
-    os << "m_Zero_26=" << rhs.m_Zero_26 << " 0x" << std::hex << rhs.m_Zero_26 << std::dec << "\n";
+    os << "m_AI_Mana=" << rhs.m_AI_Mana << " 0x" << std::hex << rhs.m_AI_Mana << std::dec << "\n";
     os << "m_AI_Religious=" << rhs.m_AI_Religious << " 0x" << std::hex << rhs.m_AI_Religious << std::dec << "\n";
     os << "m_AI_Research=" << rhs.m_AI_Research << " 0x" << std::hex << rhs.m_AI_Research << std::dec << "\n";
     os << "m_Building_cost=" << rhs.m_Building_cost << " 0x" << std::hex << rhs.m_Building_cost << std::dec << "\n";
@@ -7943,7 +7992,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << rhs.m_Items_in_Slots[i] << " 0x" << std::hex << rhs.m_Items_in_Slots[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Diplomacy=" << rhs.m_Diplomacy << "\n";
+    os << "m_Diplomacy_1=" << rhs.m_Diplomacy_1 << "\n";
     os << "m_Researching_Left=" << rhs.m_Researching_Left << " 0x" << std::hex << rhs.m_Researching_Left << std::dec << "\n";
     os << "m_Mana_Crystals=" << rhs.m_Mana_Crystals << " 0x" << std::hex << rhs.m_Mana_Crystals << std::dec << "\n";
     os << "m_Wizard_Casting_Skill=" << rhs.m_Wizard_Casting_Skill << " 0x" << std::hex << rhs.m_Wizard_Casting_Skill << std::dec << "\n";
@@ -7961,7 +8010,7 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
     os << "m_Astrologer_Magic_Power=" << rhs.m_Astrologer_Magic_Power << " 0x" << std::hex << rhs.m_Astrologer_Magic_Power << std::dec << "\n";
     os << "m_Astrologer_Spell_Research=" << rhs.m_Astrologer_Spell_Research << " 0x" << std::hex << rhs.m_Astrologer_Spell_Research << std::dec << "\n";
     os << "m_Astrologer_Army_Strength=" << rhs.m_Astrologer_Army_Strength << " 0x" << std::hex << rhs.m_Astrologer_Army_Strength << std::dec << "\n";
-    os << "m_Astrologer_Power_GUESS=" << rhs.m_Astrologer_Power_GUESS << " 0x" << std::hex << rhs.m_Astrologer_Power_GUESS << std::dec << "\n";
+    os << "m_Population_div_10000=" << rhs.m_Population_div_10000 << " 0x" << std::hex << rhs.m_Population_div_10000 << std::dec << "\n";
     os << "m_Historian=(\n";
     for (unsigned i = 0; i < 288; ++i)
     {
@@ -7977,10 +8026,13 @@ std::ostream& operator<<(std::ostream& os, const Wizard& rhs)
         os << "[" << i << "] " << (unsigned)rhs.m_Hostility[i] << " 0x" << std::hex << (unsigned)rhs.m_Hostility[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_4A4=" << rhs.m_Unk_4A4 << " 0x" << std::hex << rhs.m_Unk_4A4 << std::dec << "\n";
-    os << "m_Reevaluate_Agression_Counter=" << rhs.m_Reevaluate_Agression_Counter << " 0x" << std::hex << rhs.m_Reevaluate_Agression_Counter << std::dec << "\n";
-    os << "m_Unk_4A8=" << rhs.m_Unk_4A8 << " 0x" << std::hex << rhs.m_Unk_4A8 << std::dec << "\n";
-    os << "m_Unk_4AA_Research=" << rhs.m_Unk_4AA_Research << " 0x" << std::hex << rhs.m_Unk_4AA_Research << std::dec << "\n";
+    os << "m_Unk_4A4=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Unk_4A4[i] << " 0x" << std::hex << (unsigned)rhs.m_Unk_4A4[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Hostility_Counter=" << rhs.m_Hostility_Counter << " 0x" << std::hex << rhs.m_Hostility_Counter << std::dec << "\n";
     os << "m_Peace_Counter=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
@@ -8008,22 +8060,22 @@ std::ostream& operator<<(std::ostream& os, const Wizard_Diplomacy& rhs)
         os << "[" << i << "] " << (int)rhs.m_Contacted[i] << " 0x" << std::hex << (int)rhs.m_Contacted[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_12E_Relation=(\n";
+    os << "m_Consider_or_offer_Treaties=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Unk_12E_Relation[i] << " 0x" << std::hex << rhs.m_Unk_12E_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Consider_or_offer_Treaties[i] << " 0x" << std::hex << rhs.m_Consider_or_offer_Treaties[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_13A_Relation=(\n";
+    os << "m_Offer_Peace=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Unk_13A_Relation[i] << " 0x" << std::hex << rhs.m_Unk_13A_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Offer_Peace[i] << " 0x" << std::hex << rhs.m_Offer_Peace[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_146_Relation=(\n";
+    os << "m_Trade_Spells=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << rhs.m_Unk_146_Relation[i] << " 0x" << std::hex << rhs.m_Unk_146_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Trade_Spells[i] << " 0x" << std::hex << rhs.m_Trade_Spells[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "m_Current_Wizard_Relations=(\n";
@@ -8038,40 +8090,64 @@ std::ostream& operator<<(std::ostream& os, const Wizard_Diplomacy& rhs)
         os << "[" << i << "] " << rhs.m_War_Status[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_15E=(\n";
-    for (unsigned i = 0; i < 0x24; ++i)
-    {
-        os << "[" << i << "] " << (int)rhs.m_Unk_15E[i] << " 0x" << std::hex << (int)rhs.m_Unk_15E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_Unk_182_Relation=(\n";
+    os << "m_Diplomatic_action_strength_AI=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_Unk_182_Relation[i] << " 0x" << std::hex << (int)rhs.m_Unk_182_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_Diplomatic_action_strength_AI[i] << " 0x" << std::hex << rhs.m_Diplomatic_action_strength_AI[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_188_Relation=(\n";
+    os << "m_Diplomatic_action_AI=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_Unk_188_Relation[i] << " 0x" << std::hex << (int)rhs.m_Unk_188_Relation[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Diplomatic_action_AI[i] << " 0x" << std::hex << (int)rhs.m_Diplomatic_action_AI[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_18E=(\n";
-    for (unsigned i = 0; i < 18; ++i)
-    {
-        os << "[" << i << "] " << (int)rhs.m_Unk_18E[i] << " 0x" << std::hex << (int)rhs.m_Unk_18E[i] << std::dec << ",\n";
-    }
-    os << ")\n";
-    os << "m_Diplomacy_penalty_GUESS=(\n";
+    os << "m_SpellID_in_diplomatic_action=(\n";
     for (unsigned i = 0; i < 6; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_Diplomacy_penalty_GUESS[i] << " 0x" << std::hex << (int)rhs.m_Diplomacy_penalty_GUESS[i] << std::dec << ",\n";
+        os << "[" << i << "] " << rhs.m_SpellID_in_diplomatic_action[i] << " 0x" << std::hex << rhs.m_SpellID_in_diplomatic_action[i] << std::dec << ",\n";
     }
     os << ")\n";
-    os << "m_Unk_1A6=(\n";
+    os << "m_CityID_in_diplomatic_action=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_CityID_in_diplomatic_action[i] << " 0x" << std::hex << (int)rhs.m_CityID_in_diplomatic_action[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_182_A04C=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Unk_182_A04C[i] << " 0x" << std::hex << (int)rhs.m_Unk_182_A04C[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Initial_Contact_made=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Initial_Contact_made[i] << " 0x" << std::hex << (int)rhs.m_Initial_Contact_made[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Last_violated_treaty=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Last_violated_treaty[i] << " 0x" << std::hex << (int)rhs.m_Last_violated_treaty[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_194_A05E=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Unk_194_A05E[i] << " 0x" << std::hex << rhs.m_Unk_194_A05E[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Grudge_over_broken_treaties=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << (int)rhs.m_Grudge_over_broken_treaties[i] << " 0x" << std::hex << (int)rhs.m_Grudge_over_broken_treaties[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unk_1A6_A070=(\n";
     for (unsigned i = 0; i < 0xB4; ++i)
     {
-        os << "[" << i << "] " << (int)rhs.m_Unk_1A6[i] << " 0x" << std::hex << (int)rhs.m_Unk_1A6[i] << std::dec << ",\n";
+        os << "[" << i << "] " << (int)rhs.m_Unk_1A6_A070[i] << " 0x" << std::hex << (int)rhs.m_Unk_1A6_A070[i] << std::dec << ",\n";
     }
     os << ")\n";
     os << "}";

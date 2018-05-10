@@ -399,6 +399,18 @@ enum eDifficulty140m ENUMSIZE16
     eDifficulty140m_MAX = 5
 } PACKED_ENUM;
 
+enum eDifficulty150 ENUMSIZE16
+{
+    DIFFICULTY150_Easy = 0,
+    DIFFICULTY150_Normal = 1,
+    DIFFICULTY150_Advanced = 2,
+    DIFFICULTY150_Expert = 3,
+    DIFFICULTY150_Master = 4,
+    DIFFICULTY150_Lunatic = 5,
+
+    eDifficulty150_MAX = 6
+} PACKED_ENUM;
+
 enum eEvent
 {
     EVENT_None                = 0,
@@ -1504,6 +1516,18 @@ enum eLand_Size140m ENUMSIZE16
     eLand_Size140m__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
+enum eLand_Size150 ENUMSIZE16
+{
+    LANDSIZE150_Tiny,
+    LANDSIZE150_Small,
+    LANDSIZE150_Fair,
+    LANDSIZE150_Large,
+    LANDSIZE150_Huge,
+
+    eLand_Size150_MAX,
+    eLand_Size150__SIZE__ = 0xFFFF
+} PACKED_ENUM;
+
 enum eLevel ENUMSIZE8
 {
     LEVEL_Level_1 = 0,
@@ -1539,6 +1563,18 @@ enum eMagic_Powerful140m ENUMSIZE16
 
     eMagic_Powerful140m_MAX,
     eMagic_Powerful140m_Size__SIZE__ = 0xFFFF
+} PACKED_ENUM;
+
+enum eMagic_Powerful150 ENUMSIZE16
+{
+    MAGICPOWERFUL150_Weak,
+    MAGICPOWERFUL150_Fair,
+    MAGICPOWERFUL150_Good,
+    MAGICPOWERFUL150_High,
+    MAGICPOWERFUL150_Max,
+
+    eMagic_Powerful150_MAX,
+    eMagic_Powerful150_Size__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eMovement
@@ -3427,9 +3463,9 @@ typedef struct PACKED_STRUCT // Building_Data
     eYesNo16            m_Produces_Veterans;    // 1C
     eYesNo16            m_Produces_Magic_Weapons;// 1E
     int16_t             m_Upkeep_yield;         // 20
-    int16_t             m_AI_trade_goods_housing;// 22
+    int16_t             m_AI_Food;              // 22
     int16_t             m_Zero_24;              // 24
-    int16_t             m_Zero_26;              // 26
+    int16_t             m_AI_Mana;              // 26
     int16_t             m_AI_Religious;         // 28
     int16_t             m_AI_Research;          // 2A
     int16_t             m_Building_cost;        // 2C
@@ -4376,9 +4412,9 @@ typedef struct PACKED_STRUCT { // Spells_Known (order in file):
 typedef struct PACKED_STRUCT // Wizard_Diplomacy
 {
     int8_t          m_Contacted[6];                     // 128
-    int16_t         m_Unk_12E_Relation[6];              // 12E
-    int16_t         m_Unk_13A_Relation[6];              // 13A
-    int16_t         m_Unk_146_Relation[6];              // 146
+    int16_t         m_Consider_or_offer_Treaties[6];    // 12E
+    int16_t         m_Offer_Peace[6];                   // 13A
+    int16_t         m_Trade_Spells[6];                  // 146
     int8_t          m_Current_Wizard_Relations[6];      // 152
                                                         //    Notes:
                                                         //    Minimum -100 (if below, game resets to this).
@@ -4400,13 +4436,17 @@ typedef struct PACKED_STRUCT // Wizard_Diplomacy
                                                         //    Harmony   100...119
                                                         //    No Treaty 120...127
     eWar_Status     m_War_Status[6];                    // 158 (0=None, 1=Wizard Pact, 2=Alliance, 3+=War)
-    int8_t          m_Unk_15E[0x24];                    // 15E
-    int8_t          m_Unk_182_Relation[6];              // 182
-    int8_t          m_Unk_188_Relation[6];              // 188
-    int8_t          m_Unk_18E[18];                      // 18E
-    int8_t          m_Diplomacy_penalty_GUESS[6];       // 1A0
-    int8_t          m_Unk_1A6[0xB4];                    // 1A6
-} Wizard_Diplomacy;
+    int16_t         m_Diplomatic_action_strength_AI[6]; // 15E
+    int8_t          m_Diplomatic_action_AI[6];          // 16A
+    int16_t         m_SpellID_in_diplomatic_action[6];  // 170
+    int8_t          m_CityID_in_diplomatic_action[6];   // 17C
+    int8_t          m_Unk_182_A04C[6];                  // 182
+    int8_t          m_Initial_Contact_made[6];          // 188 (0 no contact, 1 contact made but not introduced yet, 2 already introduced)
+    int8_t          m_Last_violated_treaty[6];          // 18E
+    int16_t         m_Unk_194_A05E[6];                  // 194
+    int8_t          m_Grudge_over_broken_treaties[6];   // 1A0 (aka Hidden Relation Modifier)
+    int8_t          m_Unk_1A6_A070[0xB4];               // 1A6
+} Wizard_Diplomacy;                                     // 26A
 
 typedef struct PACKED_STRUCT // Wizard
 {
@@ -4449,7 +4489,7 @@ typedef struct PACKED_STRUCT // Wizard
     Hired_Hero      m_Heroes_hired_by_wizard[gMAX_HIRED_HEROES];    // 076 six slots
     uint16_t        m_Unk_11E;                          // 11E
     int16_t         m_Items_in_Slots[4];                // 120 (See below)
-    Wizard_Diplomacy    m_Diplomacy;                    // 128
+    Wizard_Diplomacy m_Diplomacy_1;                     // 128
     int16_t         m_Researching_Left;                 // 25A
     int16_t         m_Mana_Crystals;                    // 25C
     int32_t         m_Wizard_Casting_Skill;             // 25E <read=read_Wizard_Casting_Skill>;
@@ -4463,18 +4503,16 @@ typedef struct PACKED_STRUCT // Wizard
     int16_t         m_Astrologer_Magic_Power;           // 35A (0-200)
     int16_t         m_Astrologer_Spell_Research;        // 35C (0-200)
     int16_t         m_Astrologer_Army_Strength;         // 35E (0-200)
-    int16_t         m_Astrologer_Power_GUESS;           // 360
+    int16_t         m_Population_div_10000;             // 360
     int8_t          m_Historian[288];                   // 362
                                                         //  Values: 0...0xA0 (0...160) - Sum of Magic Power, Army Strength, and Spell Research
                                                         //  Notes: 0xA0 is barely above the graph
     Global_Enchantments  m_Global_Enchantments;         // 482
-    uint16_t        m_Unk_49A_Power_Distribution;     // 49A
+    uint16_t        m_Unk_49A_Power_Distribution;       // 49A
     uint16_t        m_Unk_49C;                          // 49C
     uint8_t         m_Hostility[6];                     // 49E
-    uint16_t        m_Unk_4A4;                          // 4A4
-    uint16_t        m_Reevaluate_Agression_Counter;     // 4A6
-    uint16_t        m_Unk_4A8;                          // 4A8
-    uint16_t        m_Unk_4AA_Research;                 // 4AA
+    uint8_t         m_Unk_4A4[6];                       // 4A4
+    uint16_t        m_Hostility_Counter;                // 4AA
     uint8_t         m_Peace_Counter[6];                 // 4AC
     uint8_t         m_Unk_4B2[18];                      // 4B2
     eRealm_Type16   m_Primary_Book_Color;               // 4C4

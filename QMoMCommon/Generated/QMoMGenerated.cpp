@@ -936,9 +936,9 @@ QMoMTreeItemModelBase* constructTreeItem(Building_Data* rhs, const QString& cont
     ptree->appendChild("m_Produces_Veterans", new QMoMTreeItemModel<eYesNo16>(&rhs->m_Produces_Veterans));
     ptree->appendChild("m_Produces_Magic_Weapons", new QMoMTreeItemModel<eYesNo16>(&rhs->m_Produces_Magic_Weapons));
     ptree->appendChild("m_Upkeep_yield", new QMoMTreeItemModel<int16_t>(&rhs->m_Upkeep_yield));
-    ptree->appendChild("m_AI_trade_goods_housing", new QMoMTreeItemModel<int16_t>(&rhs->m_AI_trade_goods_housing));
+    ptree->appendChild("m_AI_Food", new QMoMTreeItemModel<int16_t>(&rhs->m_AI_Food));
     ptree->appendChild("m_Zero_24", new QMoMTreeItemModel<int16_t>(&rhs->m_Zero_24));
-    ptree->appendChild("m_Zero_26", new QMoMTreeItemModel<int16_t>(&rhs->m_Zero_26));
+    ptree->appendChild("m_AI_Mana", new QMoMTreeItemModel<int16_t>(&rhs->m_AI_Mana));
     ptree->appendChild("m_AI_Religious", new QMoMTreeItemModel<int16_t>(&rhs->m_AI_Religious));
     ptree->appendChild("m_AI_Research", new QMoMTreeItemModel<int16_t>(&rhs->m_AI_Research));
     ptree->appendChild("m_Building_cost", new QMoMTreeItemModel<int16_t>(&rhs->m_Building_cost));
@@ -1477,7 +1477,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Data_Save* rhs, const QString& con
         return ptree;
 
     ptree->appendChild("m_Number_of_Wizards", new QMoMTreeItemModel<uint16_t>(&rhs->m_Number_of_Wizards));
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItemModel<eLand_Size150>((eLand_Size150*)&rhs->m_Land_Size_setting));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Land_Size_setting", new QMoMTreeItemModel<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size_setting));
     }
@@ -1485,7 +1489,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Data_Save* rhs, const QString& con
     {
         ptree->appendChild("m_Land_Size_setting", new QMoMTreeItemModel<eLand_Size>(&rhs->m_Land_Size_setting));
     }
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful150>((eMagic_Powerful150*)&rhs->m_Magic_Powerful_setting));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful_setting));
     }
@@ -1493,7 +1501,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Data_Save* rhs, const QString& con
     {
         ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
     }
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty150>((eDifficulty150*)&rhs->m_Difficulty));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
     }
@@ -1534,7 +1546,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Settings* rhs, const QString& cont
     ptree->appendChild("m_Expanding_Help", new QMoMTreeItemModel<eYesNo16>(&rhs->m_Expanding_Help));
     ptree->appendChild("m_Unk_024", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_024));
     ptree->appendChild("m_Unk_026", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_026));
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty150>((eDifficulty150*)&rhs->m_Difficulty));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
     }
@@ -1543,7 +1559,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Settings* rhs, const QString& cont
         ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty>(&rhs->m_Difficulty));
     }
     ptree->appendChild("m_Nr_Opponents", new QMoMTreeItemModel<uint16_t>(&rhs->m_Nr_Opponents));
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Land_Size", new QMoMTreeItemModel<eLand_Size150>((eLand_Size150*)&rhs->m_Land_Size));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Land_Size", new QMoMTreeItemModel<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size));
     }
@@ -1551,7 +1571,11 @@ QMoMTreeItemModelBase* constructTreeItem(Game_Settings* rhs, const QString& cont
     {
         ptree->appendChild("m_Land_Size", new QMoMTreeItemModel<eLand_Size>(&rhs->m_Land_Size));
     }
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Magic_Powerful", new QMoMTreeItemModel<eMagic_Powerful150>((eMagic_Powerful150*)&rhs->m_Magic_Powerful));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Magic_Powerful", new QMoMTreeItemModel<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful));
     }
@@ -7250,7 +7274,7 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context)
           oss << "m_Items_in_Slots[" << i << "]";
           ptreem_Items_in_Slots->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Items_in_Slots[i]));
     }
-    ptree->appendTree(constructTreeItem(&rhs->m_Diplomacy, "m_Diplomacy"), "");
+    ptree->appendTree(constructTreeItem(&rhs->m_Diplomacy_1, "m_Diplomacy_1"), "");
     ptree->appendChild("m_Researching_Left", new QMoMTreeItemModel<int16_t>(&rhs->m_Researching_Left));
     ptree->appendChild("m_Mana_Crystals", new QMoMTreeItemModel<int16_t>(&rhs->m_Mana_Crystals));
     ptree->appendChild("m_Wizard_Casting_Skill", new QMoMTreeItemModel<int32_t>(&rhs->m_Wizard_Casting_Skill));
@@ -7274,7 +7298,7 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context)
     ptree->appendChild("m_Astrologer_Magic_Power", new QMoMTreeItemModel<int16_t>(&rhs->m_Astrologer_Magic_Power));
     ptree->appendChild("m_Astrologer_Spell_Research", new QMoMTreeItemModel<int16_t>(&rhs->m_Astrologer_Spell_Research));
     ptree->appendChild("m_Astrologer_Army_Strength", new QMoMTreeItemModel<int16_t>(&rhs->m_Astrologer_Army_Strength));
-    ptree->appendChild("m_Astrologer_Power_GUESS", new QMoMTreeItemModel<int16_t>(&rhs->m_Astrologer_Power_GUESS));
+    ptree->appendChild("m_Population_div_10000", new QMoMTreeItemModel<int16_t>(&rhs->m_Population_div_10000));
     QMoMTreeItemModelBase* ptreem_Historian = ptree;
     if (288 > 3)
     {
@@ -7302,10 +7326,19 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard* rhs, const QString& context)
           oss << "m_Hostility[" << i << "]";
           ptreem_Hostility->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Hostility[i]));
     }
-    ptree->appendChild("m_Unk_4A4", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4A4));
-    ptree->appendChild("m_Reevaluate_Agression_Counter", new QMoMTreeItemModel<uint16_t>(&rhs->m_Reevaluate_Agression_Counter));
-    ptree->appendChild("m_Unk_4A8", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4A8));
-    ptree->appendChild("m_Unk_4AA_Research", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_4AA_Research));
+    QMoMTreeItemModelBase* ptreem_Unk_4A4 = ptree;
+    if (6 > 3)
+    {
+        ptreem_Unk_4A4 = new QMoMTreeItemModelBase("m_Unk_4A4");
+        ptree->appendTree(ptreem_Unk_4A4, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_4A4[" << i << "]";
+          ptreem_Unk_4A4->appendChild(oss.str().c_str(), new QMoMTreeItemModel<uint8_t>(&rhs->m_Unk_4A4[i]));
+    }
+    ptree->appendChild("m_Hostility_Counter", new QMoMTreeItemModel<uint16_t>(&rhs->m_Hostility_Counter));
     QMoMTreeItemModelBase* ptreem_Peace_Counter = ptree;
     if (6 > 3)
     {
@@ -7353,41 +7386,41 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard_Diplomacy* rhs, const QString& c
           oss << "m_Contacted[" << i << "]";
           ptreem_Contacted->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Contacted[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_12E_Relation = ptree;
+    QMoMTreeItemModelBase* ptreem_Consider_or_offer_Treaties = ptree;
     if (6 > 3)
     {
-        ptreem_Unk_12E_Relation = new QMoMTreeItemModelBase("m_Unk_12E_Relation");
-        ptree->appendTree(ptreem_Unk_12E_Relation, "");
+        ptreem_Consider_or_offer_Treaties = new QMoMTreeItemModelBase("m_Consider_or_offer_Treaties");
+        ptree->appendTree(ptreem_Consider_or_offer_Treaties, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_12E_Relation[" << i << "]";
-          ptreem_Unk_12E_Relation->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Unk_12E_Relation[i]));
+          oss << "m_Consider_or_offer_Treaties[" << i << "]";
+          ptreem_Consider_or_offer_Treaties->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Consider_or_offer_Treaties[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_13A_Relation = ptree;
+    QMoMTreeItemModelBase* ptreem_Offer_Peace = ptree;
     if (6 > 3)
     {
-        ptreem_Unk_13A_Relation = new QMoMTreeItemModelBase("m_Unk_13A_Relation");
-        ptree->appendTree(ptreem_Unk_13A_Relation, "");
+        ptreem_Offer_Peace = new QMoMTreeItemModelBase("m_Offer_Peace");
+        ptree->appendTree(ptreem_Offer_Peace, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_13A_Relation[" << i << "]";
-          ptreem_Unk_13A_Relation->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Unk_13A_Relation[i]));
+          oss << "m_Offer_Peace[" << i << "]";
+          ptreem_Offer_Peace->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Offer_Peace[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_146_Relation = ptree;
+    QMoMTreeItemModelBase* ptreem_Trade_Spells = ptree;
     if (6 > 3)
     {
-        ptreem_Unk_146_Relation = new QMoMTreeItemModelBase("m_Unk_146_Relation");
-        ptree->appendTree(ptreem_Unk_146_Relation, "");
+        ptreem_Trade_Spells = new QMoMTreeItemModelBase("m_Trade_Spells");
+        ptree->appendTree(ptreem_Trade_Spells, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_146_Relation[" << i << "]";
-          ptreem_Unk_146_Relation->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Unk_146_Relation[i]));
+          oss << "m_Trade_Spells[" << i << "]";
+          ptreem_Trade_Spells->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Trade_Spells[i]));
     }
     QMoMTreeItemModelBase* ptreem_Current_Wizard_Relations = ptree;
     if (6 > 3)
@@ -7413,77 +7446,125 @@ QMoMTreeItemModelBase* constructTreeItem(Wizard_Diplomacy* rhs, const QString& c
           oss << "m_War_Status[" << i << "]";
           ptreem_War_Status->appendChild(oss.str().c_str(), new QMoMTreeItemModel<eWar_Status>(&rhs->m_War_Status[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_15E = ptree;
-    if (0x24 > 3)
-    {
-        ptreem_Unk_15E = new QMoMTreeItemModelBase("m_Unk_15E");
-        ptree->appendTree(ptreem_Unk_15E, "");
-    }
-    for (unsigned i = 0; i < 0x24; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_Unk_15E[" << i << "]";
-          ptreem_Unk_15E->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_15E[i]));
-    }
-    QMoMTreeItemModelBase* ptreem_Unk_182_Relation = ptree;
+    QMoMTreeItemModelBase* ptreem_Diplomatic_action_strength_AI = ptree;
     if (6 > 3)
     {
-        ptreem_Unk_182_Relation = new QMoMTreeItemModelBase("m_Unk_182_Relation");
-        ptree->appendTree(ptreem_Unk_182_Relation, "");
+        ptreem_Diplomatic_action_strength_AI = new QMoMTreeItemModelBase("m_Diplomatic_action_strength_AI");
+        ptree->appendTree(ptreem_Diplomatic_action_strength_AI, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_182_Relation[" << i << "]";
-          ptreem_Unk_182_Relation->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_182_Relation[i]));
+          oss << "m_Diplomatic_action_strength_AI[" << i << "]";
+          ptreem_Diplomatic_action_strength_AI->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Diplomatic_action_strength_AI[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_188_Relation = ptree;
+    QMoMTreeItemModelBase* ptreem_Diplomatic_action_AI = ptree;
     if (6 > 3)
     {
-        ptreem_Unk_188_Relation = new QMoMTreeItemModelBase("m_Unk_188_Relation");
-        ptree->appendTree(ptreem_Unk_188_Relation, "");
+        ptreem_Diplomatic_action_AI = new QMoMTreeItemModelBase("m_Diplomatic_action_AI");
+        ptree->appendTree(ptreem_Diplomatic_action_AI, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_188_Relation[" << i << "]";
-          ptreem_Unk_188_Relation->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_188_Relation[i]));
+          oss << "m_Diplomatic_action_AI[" << i << "]";
+          ptreem_Diplomatic_action_AI->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Diplomatic_action_AI[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_18E = ptree;
-    if (18 > 3)
-    {
-        ptreem_Unk_18E = new QMoMTreeItemModelBase("m_Unk_18E");
-        ptree->appendTree(ptreem_Unk_18E, "");
-    }
-    for (unsigned i = 0; i < 18; ++i)
-    {
-          std::ostringstream oss;
-          oss << "m_Unk_18E[" << i << "]";
-          ptreem_Unk_18E->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_18E[i]));
-    }
-    QMoMTreeItemModelBase* ptreem_Diplomacy_penalty_GUESS = ptree;
+    QMoMTreeItemModelBase* ptreem_SpellID_in_diplomatic_action = ptree;
     if (6 > 3)
     {
-        ptreem_Diplomacy_penalty_GUESS = new QMoMTreeItemModelBase("m_Diplomacy_penalty_GUESS");
-        ptree->appendTree(ptreem_Diplomacy_penalty_GUESS, "");
+        ptreem_SpellID_in_diplomatic_action = new QMoMTreeItemModelBase("m_SpellID_in_diplomatic_action");
+        ptree->appendTree(ptreem_SpellID_in_diplomatic_action, "");
     }
     for (unsigned i = 0; i < 6; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Diplomacy_penalty_GUESS[" << i << "]";
-          ptreem_Diplomacy_penalty_GUESS->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Diplomacy_penalty_GUESS[i]));
+          oss << "m_SpellID_in_diplomatic_action[" << i << "]";
+          ptreem_SpellID_in_diplomatic_action->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_SpellID_in_diplomatic_action[i]));
     }
-    QMoMTreeItemModelBase* ptreem_Unk_1A6 = ptree;
+    QMoMTreeItemModelBase* ptreem_CityID_in_diplomatic_action = ptree;
+    if (6 > 3)
+    {
+        ptreem_CityID_in_diplomatic_action = new QMoMTreeItemModelBase("m_CityID_in_diplomatic_action");
+        ptree->appendTree(ptreem_CityID_in_diplomatic_action, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_CityID_in_diplomatic_action[" << i << "]";
+          ptreem_CityID_in_diplomatic_action->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_CityID_in_diplomatic_action[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Unk_182_A04C = ptree;
+    if (6 > 3)
+    {
+        ptreem_Unk_182_A04C = new QMoMTreeItemModelBase("m_Unk_182_A04C");
+        ptree->appendTree(ptreem_Unk_182_A04C, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_182_A04C[" << i << "]";
+          ptreem_Unk_182_A04C->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_182_A04C[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Initial_Contact_made = ptree;
+    if (6 > 3)
+    {
+        ptreem_Initial_Contact_made = new QMoMTreeItemModelBase("m_Initial_Contact_made");
+        ptree->appendTree(ptreem_Initial_Contact_made, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Initial_Contact_made[" << i << "]";
+          ptreem_Initial_Contact_made->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Initial_Contact_made[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Last_violated_treaty = ptree;
+    if (6 > 3)
+    {
+        ptreem_Last_violated_treaty = new QMoMTreeItemModelBase("m_Last_violated_treaty");
+        ptree->appendTree(ptreem_Last_violated_treaty, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Last_violated_treaty[" << i << "]";
+          ptreem_Last_violated_treaty->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Last_violated_treaty[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Unk_194_A05E = ptree;
+    if (6 > 3)
+    {
+        ptreem_Unk_194_A05E = new QMoMTreeItemModelBase("m_Unk_194_A05E");
+        ptree->appendTree(ptreem_Unk_194_A05E, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Unk_194_A05E[" << i << "]";
+          ptreem_Unk_194_A05E->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int16_t>(&rhs->m_Unk_194_A05E[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Grudge_over_broken_treaties = ptree;
+    if (6 > 3)
+    {
+        ptreem_Grudge_over_broken_treaties = new QMoMTreeItemModelBase("m_Grudge_over_broken_treaties");
+        ptree->appendTree(ptreem_Grudge_over_broken_treaties, "");
+    }
+    for (unsigned i = 0; i < 6; ++i)
+    {
+          std::ostringstream oss;
+          oss << "m_Grudge_over_broken_treaties[" << i << "]";
+          ptreem_Grudge_over_broken_treaties->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Grudge_over_broken_treaties[i]));
+    }
+    QMoMTreeItemModelBase* ptreem_Unk_1A6_A070 = ptree;
     if (0xB4 > 3)
     {
-        ptreem_Unk_1A6 = new QMoMTreeItemModelBase("m_Unk_1A6");
-        ptree->appendTree(ptreem_Unk_1A6, "");
+        ptreem_Unk_1A6_A070 = new QMoMTreeItemModelBase("m_Unk_1A6_A070");
+        ptree->appendTree(ptreem_Unk_1A6_A070, "");
     }
     for (unsigned i = 0; i < 0xB4; ++i)
     {
           std::ostringstream oss;
-          oss << "m_Unk_1A6[" << i << "]";
-          ptreem_Unk_1A6->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_1A6[i]));
+          oss << "m_Unk_1A6_A070[" << i << "]";
+          ptreem_Unk_1A6_A070->appendChild(oss.str().c_str(), new QMoMTreeItemModel<int8_t>(&rhs->m_Unk_1A6_A070[i]));
     }
     return ptree;
 }
@@ -7514,7 +7595,11 @@ QMoMTreeItemModelBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QStrin
     ptree->appendChild("m_Current_Turn", new QMoMTreeItemModel<uint16_t>(&rhs->m_Current_Turn));
     ptree->appendChild("m_Number_of_Units", new QMoMTreeItemModel<uint16_t>(&rhs->m_Number_of_Units));
     ptree->appendChild("m_Number_of_Cities", new QMoMTreeItemModel<uint16_t>(&rhs->m_Number_of_Cities));
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty150>((eDifficulty150*)&rhs->m_Difficulty));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty140m>((eDifficulty140m*)&rhs->m_Difficulty));
     }
@@ -7522,7 +7607,11 @@ QMoMTreeItemModelBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QStrin
     {
         ptree->appendChild("m_Difficulty", new QMoMTreeItemModel<eDifficulty>(&rhs->m_Difficulty));
     }
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful150>((eMagic_Powerful150*)&rhs->m_Magic_Powerful_setting));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful140m>((eMagic_Powerful140m*)&rhs->m_Magic_Powerful_setting));
     }
@@ -7530,7 +7619,11 @@ QMoMTreeItemModelBase* constructTreeItem(WizardsExe_Game_Data* rhs, const QStrin
     {
         ptree->appendChild("m_Magic_Powerful_setting", new QMoMTreeItemModel<eMagic_Powerful>(&rhs->m_Magic_Powerful_setting));
     }
-    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
+    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))
+    {
+        ptree->appendChild("m_Land_Size_setting", new QMoMTreeItemModel<eLand_Size150>((eLand_Size150*)&rhs->m_Land_Size_setting));
+    }
+    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))
     {
         ptree->appendChild("m_Land_Size_setting", new QMoMTreeItemModel<eLand_Size140m>((eLand_Size140m*)&rhs->m_Land_Size_setting));
     }
