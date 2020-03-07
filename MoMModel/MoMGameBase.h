@@ -167,8 +167,14 @@ public:
             copyrightAndVersion = getMagicDataSegment()->m_Copyright1_and_Version;
         }
 
-        char* version_v = strstr(copyrightAndVersion, " v");
-        char* version_V = strstr(copyrightAndVersion, " V");
+        char* version_v = 0;
+        char* version_V = 0;
+        if (0 != copyrightAndVersion)
+        {
+            version_v = strstr(copyrightAndVersion, " v");
+            version_V = strstr(copyrightAndVersion, " V");
+        }
+
         if ((0 != version_v) && (strlen(version_v) > 3) && (version_v[3] == '.'))
         {
             return (version_v + 1);

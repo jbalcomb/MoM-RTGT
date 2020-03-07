@@ -205,7 +205,7 @@ const uint16_t gFLIC_chunk_type_FLI_COPY = 16;      // uncompressed image
 #ifdef _MSC_VER         // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
-#ifdef __MINGW_GCC  // Compiler MinGW
+#ifdef __MINGW32__  // Compiler MinGW
 #pragma pack(pop)
 #endif
 

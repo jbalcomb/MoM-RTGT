@@ -396,7 +396,8 @@ enum eDifficulty140m ENUMSIZE16
     DIFFICULTY140M_Extreme = 3,
     DIFFICULTY140M_Impossible = 4,
 
-    eDifficulty140m_MAX = 5
+    eDifficulty140m_MAX = 5,
+    eDifficulty140m__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eDifficulty150 ENUMSIZE16
@@ -408,7 +409,8 @@ enum eDifficulty150 ENUMSIZE16
     DIFFICULTY150_Master = 4,
     DIFFICULTY150_Lunatic = 5,
 
-    eDifficulty150_MAX = 6
+    eDifficulty150_MAX = 6,
+    eDifficulty150__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eEvent
@@ -2012,7 +2014,8 @@ enum eRealm_Type16 ENUMSIZE16
     REALM16_Death = 4,
     REALM16_Arcane = 5,
 
-    eRealm_Type16_MAX
+    eRealm_Type16_MAX,
+    eRealm_Type16__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eResource
@@ -4446,7 +4449,7 @@ typedef struct PACKED_STRUCT // Wizard_Diplomacy
     int16_t         m_Unk_194_A05E[6];                  // 194
     int8_t          m_Grudge_over_broken_treaties[6];   // 1A0 (aka Hidden Relation Modifier)
     int8_t          m_Unk_1A6_A070[0xB4];               // 1A6
-} Wizard_Diplomacy;                                     // 26A
+} Wizard_Diplomacy;                                     // 25A
 
 typedef struct PACKED_STRUCT // Wizard
 {
@@ -6088,7 +6091,7 @@ typedef struct PACKED_STRUCT // LBX_PaletteInfo
 #ifdef _MSC_VER     // Compiler MS Visual Studio
 #pragma pack(pop)
 #endif
-#ifdef __MINGW_GCC  // Compiler MinGW
+#ifdef __MINGW32__  // Compiler MinGW
 #pragma pack(pop)
 #endif
 
