@@ -292,9 +292,9 @@ void DialogMap::addTerrainSubtree(QTreeWidget* treeWidget, MoMTerrain& momTerrai
         {
             qtreeTerrain->addChild(new NumberTreeItem<int8_t>(m_game, "LandMassID", m_game->getTerrainLandMassID(loc)));
         }
-        Map_Movement* terrainMovement = m_game->getTerrain_Movements();
+//        Map_Movement* terrainMovement = m_game->getTerrain_Movements();
         int8_t* terrainMovementUnused = m_game->getTerrainMovement(loc, MoM::MOVEMENT_Unused);
-        Map_Movement* terrainMovementCopy = m_game->getTerrain_Movements_copy();
+//        Map_Movement* terrainMovementCopy = m_game->getTerrain_Movements_copy();
         //qDebug("TerrMove %p TerrMoveUnused %p TerrMoveCopy %p", terrainMovement, terrainMovementUnused, terrainMovementCopy);
         if (0 == terrainMovementUnused)
         {
@@ -606,6 +606,7 @@ void DialogMap::slot_gameUpdated()
             case NODETYPE_Sorcery:  bannerColor = BANNER_Blue; break;
             case NODETYPE_Nature:   bannerColor = BANNER_Green; break;
             case NODETYPE_Chaos:    bannerColor = BANNER_Red; break;
+            case eNode_Type_MAX:    break;
             }
             animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
             animation.resize(1);
