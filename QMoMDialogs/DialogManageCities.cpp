@@ -388,7 +388,7 @@ void DialogManageCities::update()
         m_columnFarmers = col;
         ui->tableWidget_Cities->setItem(row, col, new NumberTableItem<int8_t>(m_game, &city->m_Number_of_farmers_allocated, 2, SHOWNUMBER_normal));
         ui->tableWidget_Cities->item(row, col)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 59 + toUInt(city->m_Race)), 2));
-        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->item(row, col++)->setBackground(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrWorkers(), 2)));
         ui->tableWidget_Cities->item(row, col++)->setIcon(*QMoMResources::instance().getIcon(LBXRecordID("BACKGRND", 45 + toUInt(city->m_Race)), 2));
         ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(QString("%0").arg(momCity.calcNrRebels(), 2)));
@@ -422,17 +422,17 @@ void DialogManageCities::update()
             }
         }
         ui->tableWidget_Cities->setItem(row, col, new EnumTableItemList<eProducing>(m_game, &city->m_Producing, listCanProduce));
-        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->item(row, col++)->setBackground(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(timeCompletion, 3)));
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("%0").arg(garrisonSize)));
         m_columnBuy = col;
         ui->tableWidget_Cities->setItem(row, col, new QTableWidgetItem(*QMoMResources::instance().getIcon(RESOURCE_Gold, 2),
                                                                        QString("%0").arg(costToBuy, 4)));
-        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->item(row, col++)->setBackground(Qt::cyan);
         ui->tableWidget_Cities->setItem(row, col++, new QTableWidgetItem(QString("x %0").arg(momCity.getBuyFactor())));
         ui->tableWidget_Cities->setItem(row, col++, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr), CityTargetTableItem::DISPLAY_State));
         ui->tableWidget_Cities->setItem(row, col, new CityTargetTableItem(m_game, MainWindow::getInstance()->getManageCities()->getCityState(cityNr), CityTargetTableItem::DISPLAY_Target));
-        ui->tableWidget_Cities->item(row, col++)->setBackgroundColor(Qt::cyan);
+        ui->tableWidget_Cities->item(row, col++)->setBackground(Qt::cyan);
 
         assert(ui->tableWidget_Cities->columnCount() == col);
 

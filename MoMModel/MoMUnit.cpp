@@ -1318,6 +1318,7 @@ bool MoMUnit::isImmune(eUnitAbility immunity) const
 
     case UNITABILITY_Magic_Immunity:
         value |= hasUnitEnchantment(UNITENCHANTMENT_Magic_Immunity);
+        break;
 
     case UNITABILITY_Illusions_Immunity:
         value |= (hasUnitEnchantment(UNITENCHANTMENT_True_Sight)
@@ -1503,7 +1504,8 @@ void MoMUnit::applyBattleSpells(const Spells_Cast_in_Battle *battleSpells)
 
     if (battleSpells->Black_Prayer[them])
     {
-        if (baseunit.melee) dn.melee += +1; dn.defense += +1; dn.resistance += +2;
+        if (baseunit.melee) dn.melee += +1;
+        dn.defense += +1; dn.resistance += +2;
     }
 
     //if (enemy && enemy.spell_active("Blur") && !has("Illusion Imm"))
@@ -1519,7 +1521,8 @@ void MoMUnit::applyBattleSpells(const Spells_Cast_in_Battle *battleSpells)
 
     if (battleSpells->High_Prayer[us])
     {
-        if (baseunit.melee) up.melee += +2; up.defense += +2; up.resistance += +3; up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1;
+        if (baseunit.melee) up.melee += +2;
+        up.defense += +2; up.resistance += +3; up.toHitMelee += +1; up.toHitRanged += +1; up.toDefend += +1;
     }
     else if (battleSpells->Prayer[us])
     {
@@ -1550,22 +1553,26 @@ void MoMUnit::applyBattleSpells(const Spells_Cast_in_Battle *battleSpells)
     {
         if (isColor(REALM_Life))
         {
-            if (baseunit.melee) up.melee += +1; up.defense += +1; up.resistance += +1;
+            if (baseunit.melee) up.melee += +1;
+            up.defense += +1; up.resistance += +1;
         }
         else if (isColor(REALM_Death))
         {
-            if (baseunit.melee) dn.melee += +1; dn.defense += +1; dn.resistance += +1;
+            if (baseunit.melee) dn.melee += +1;
+            dn.defense += +1; dn.resistance += +1;
         }
     }
     if (battleSpells->True_Light[1])
     {
         if (isColor(REALM_Life))
         {
-            if (baseunit.melee) dn.melee += +1; dn.defense += +1; dn.resistance += +1;
+            if (baseunit.melee) dn.melee += +1;
+            dn.defense += +1; dn.resistance += +1;
         }
         else if (isColor(REALM_Death))
         {
-            if (baseunit.melee) up.melee += +1; up.defense += +1; up.resistance += +1;
+            if (baseunit.melee) up.melee += +1;
+            up.defense += +1; up.resistance += +1;
         }
     }
 

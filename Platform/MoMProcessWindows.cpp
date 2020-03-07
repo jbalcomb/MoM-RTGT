@@ -63,8 +63,9 @@ bool MoMProcess::createProcess(const char* applicationName, const char* commandL
         strcpy(pszCommandLine, commandLine);
     }
 
-    STARTUPINFOA startupInfo = { sizeof(STARTUPINFOA) };
-    PROCESS_INFORMATION processInformation = { 0 };
+    STARTUPINFOA startupInfo = {};
+    startupInfo.cb = sizeof(STARTUPINFOA);
+    PROCESS_INFORMATION processInformation = {};
 
     std::cout << "CreateProcessA(app='" << applicationName << "', cmdline='" << pszCommandLine << "', dir='" << currentDirectory << "')" << std::endl;
     bool ok = (FALSE != CreateProcessA(applicationName, pszCommandLine,

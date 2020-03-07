@@ -308,15 +308,15 @@ private:
     bool saveLbx(const std::string& lbxTitle, MoMLbxBase* lbxBase, const std::string& filename);
 
 private:
-    std::auto_ptr<SaveGame> m_SaveGame;
+    std::unique_ptr<SaveGame> m_SaveGame;
     std::string m_filename_SaveGame;
-    std::auto_ptr<MoMExeMagic> m_MagicExe;
-    std::auto_ptr<MoMExeWizards> m_WizardsExe;
+    std::unique_ptr<MoMExeMagic> m_MagicExe;
+    std::unique_ptr<MoMExeWizards> m_WizardsExe;
     std::string m_filename_MagicExe;
     std::string m_filename_WizardsExe;
-    std::auto_ptr<MoMLbxBase> m_BuilddatLbx;
-    std::auto_ptr<MoMLbxBase> m_SpelldatLbx;
-    std::auto_ptr<MoMLbxBase> m_TerrstatLbx;
+    std::unique_ptr<MoMLbxBase> m_BuilddatLbx;
+    std::unique_ptr<MoMLbxBase> m_SpelldatLbx;
+    std::unique_ptr<MoMLbxBase> m_TerrstatLbx;
     std::string m_GameDirectory;
     ePlayer m_playerNr;
 };

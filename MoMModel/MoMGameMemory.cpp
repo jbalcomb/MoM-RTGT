@@ -686,7 +686,7 @@ int8_t* MoMGameMemory::getUnrest_Table(eRace homeRace)
     return derefHeapPointer<int8_t>(pMoMDataSegment->m_addr_Unrest_Table[homeRace], MoM::gMAX_RACES);
 }
 
-bool MoMGameMemory::openGame(std::auto_ptr<MoMProcess>& momProcess)
+bool MoMGameMemory::openGame(std::unique_ptr<MoMProcess>& momProcess)
 {
     if (0 == momProcess.get())
         return false;
@@ -696,7 +696,7 @@ bool MoMGameMemory::openGame(std::auto_ptr<MoMProcess>& momProcess)
     closeGame();
 
     // Transfer ownership
-    m_process = momProcess;
+    m_process.swap(momProcess);
 
     m_filename_WizardsExe = m_process->getExeFilepath();
     if (m_filename_WizardsExe.empty())

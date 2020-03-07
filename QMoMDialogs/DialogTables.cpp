@@ -653,7 +653,7 @@ void DialogTables::slot_addRow_to_RaceData(int row)
 
     char* ptrName = const_cast<char*>(m_game->getNameByOffset(data->m_PtrName));
     ui->tableWidget->setItem(row, col, new TextTableItem(m_game, ptrName, strlen(ptrName) + 1));
-    ui->tableWidget->item(row, col)->setTextColor(getRealmColor(m_game->getRealmRace(race)));
+    ui->tableWidget->item(row, col)->setForeground(getRealmColor(m_game->getRealmRace(race)));
     ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(race).c_str());
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Number_of_prohibited_buildings, 2));
@@ -737,7 +737,7 @@ void DialogTables::slot_addRow_to_SpellData(int row)
     ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(spellNr, 3)));
 
     ui->tableWidget->setItem(row, col, new TextTableItem(m_game, data->m_SpellName, sizeof(data->m_SpellName)));
-    ui->tableWidget->item(row, col)->setTextColor(color);
+    ui->tableWidget->item(row, col)->setForeground(QBrush(color));
     ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(spell).c_str());
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Spell_desirability, 6));
@@ -982,25 +982,25 @@ void DialogTables::slot_addRow_to_UnitTypes(int row)
     ui->tableWidget->setItem(row, col++, new QMoMTableItemBase(m_game, QString("%0").arg(unitTypeNr, 3)));
 
     ui->tableWidget->setItem(row, col, new EnumTableItem<MoM::eRace>(m_game, &data->m_Race_Code, MoM::eRace_MAX));
-    ui->tableWidget->item(row, col++)->setTextColor(raceColor);
+    ui->tableWidget->item(row, col++)->setForeground(raceColor);
 
     ui->tableWidget->setItem(row, col, new QMoMTableItemBase(m_game, m_game->getNameByOffset(data->m_PtrName)));
-    ui->tableWidget->item(row, col++)->setTextColor(raceColor);
+    ui->tableWidget->item(row, col++)->setForeground(raceColor);
 
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Nr_Figures, 3));
     ui->tableWidget->setItem(row, col, new NumberTableItem<uint8_t>(m_game, &data->m_Melee, 3, SHOWNUMBER_noZero));
-    ui->tableWidget->item(row, col++)->setTextColor(raceColor);
+    ui->tableWidget->item(row, col++)->setForeground(raceColor);
     ui->tableWidget->setItem(row, col, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged, 3, SHOWNUMBER_noZero));
-    ui->tableWidget->item(row, col++)->setTextColor(rangedColor);
+    ui->tableWidget->item(row, col++)->setForeground(rangedColor);
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Defense, 3));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Resistance, 3));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Hitpoints, 3));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_To_Hit, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_MoveHalves, 5, SHOWNUMBER_halfMove));
     ui->tableWidget->setItem(row, col, new EnumTableItem<MoM::eRanged_Type>(m_game, &data->m_Ranged_Type, MoM::eRanged_Type_MAX, SHOWENUM_minusOne));
-    ui->tableWidget->item(row, col++)->setTextColor(rangedColor);
+    ui->tableWidget->item(row, col++)->setForeground(rangedColor);
     ui->tableWidget->setItem(row, col, new NumberTableItem<uint8_t>(m_game, &data->m_Ranged_Shots, 3, SHOWNUMBER_noZero));
-    ui->tableWidget->item(row, col++)->setTextColor(rangedColor);
+    ui->tableWidget->item(row, col++)->setForeground(rangedColor);
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Gaze_Modifier, 3, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Cost, 5));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<uint8_t>(m_game, &data->m_Upkeep, 3));

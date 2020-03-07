@@ -77,7 +77,7 @@ bool MoMGameCustom::commitData(void* ptr, const void* pNewValue, size_t size)
     return ok;
 }
 
-bool MoMGameCustom::openGame(std::auto_ptr<MoMProcess>& momProcess)
+bool MoMGameCustom::openGame(std::unique_ptr<MoMProcess>& momProcess)
 {
     if (0 == momProcess.get())
         return false;
@@ -87,7 +87,7 @@ bool MoMGameCustom::openGame(std::auto_ptr<MoMProcess>& momProcess)
     closeGame();
 
     // Transfer ownership
-    m_process = momProcess;
+    m_process.swap(momProcess);
 
     m_filename_MagicExe = m_process->getExeFilepath();
 

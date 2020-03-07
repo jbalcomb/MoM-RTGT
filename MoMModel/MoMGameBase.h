@@ -696,8 +696,8 @@ protected:
     }
 
 protected:
-    std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
-    std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
+    std::unique_ptr<class MoMLbxBase> m_ItemDataLbx;
+    std::unique_ptr<class MoMLbxBase> m_ItemPowLbx;
 
 private:
     // NOT IMPLEMENTED
