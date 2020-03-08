@@ -14,7 +14,9 @@ CHANGES IN 0.3.1 (2020-03-08)
   file is larger than expected.
   Credit to Ariphaos for providing the CoM save game layout.
 
-* Added more diplomacy information based on Seravy's comments.
+* Show actual spell names in the tree view instead of old hard coded names.
+
+* Added more diplomacy information based on Seravy's comments (couple of years ago).
 
 
 

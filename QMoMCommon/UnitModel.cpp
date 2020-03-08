@@ -906,7 +906,7 @@ void UnitModel::update_Spell_Data(QMoMTreeItemModelBase* ptree, const QMoMGamePt
             ptree->setChild(row, 0, constructTreeItem(spellData, ""));
         }
 
-        ptree->child(spellNr, 0)->setData(prettyQStr(spell), Qt::EditRole);
+        ptree->child(spellNr, 0)->setData(spellData->m_SpellName, Qt::EditRole);
         ptree->child(spellNr, 0)->setLazyIcon(spell);
         QString toolTip = MoM::QMoMResources::instance().getHelpText(spell).c_str();
         ptree->child(row, 0)->setToolTip(toolTip);
