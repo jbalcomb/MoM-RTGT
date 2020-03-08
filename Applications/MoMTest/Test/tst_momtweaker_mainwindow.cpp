@@ -1,8 +1,8 @@
 #include <QtCore/QString>
 #include <QtTest/QtTest>
 
-#include <mainwindow.h>
-#include <ui_mainwindow.h>
+#include <MainWindow.h>
+#include <ui_MainWindow.h>
 
 class Test_MoMTweaker_MainWindow : public QObject
 {

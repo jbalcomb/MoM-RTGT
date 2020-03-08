@@ -30,6 +30,9 @@ QT       += testlib
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = MoMTest
+
+DEFINES += VERSION=\\\"Test\\\"
+
 DESTDIR = $${COMPILER}/bin
 
 CONFIG   += console
