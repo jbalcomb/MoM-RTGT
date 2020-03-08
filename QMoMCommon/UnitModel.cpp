@@ -400,7 +400,7 @@ void UnitModel::update_Buildings(QMoMTreeItemModelBase* ptree, const QMoMGamePtr
         {
             ptree->setChild(row, 0, constructTreeItem(buildingData, ""));
 
-            ptree->child(row, 0)->setData(prettyQStr(building), Qt::EditRole);
+            ptree->child(row, 0)->setData(buildingData->m_BuildingName, Qt::EditRole);
             ptree->child(row, 0)->setLazyIcon(building);
             QString toolTip = MoM::QMoMResources::instance().getHelpText(building).c_str();
             ptree->child(row, 0)->setToolTip(toolTip);

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Overland map</string>
+   <string>Building Tree</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -21,11 +21,11 @@
      </property>
      <widget class="QMapGraphicsView" name="graphicsView">
       <property name="backgroundBrush">
-       <brush brushstyle="DiagCrossPattern">
+       <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>255</red>
-         <green>170</green>
-         <blue>255</blue>
+         <red>240</red>
+         <green>240</green>
+         <blue>240</blue>
         </color>
        </brush>
       </property>

@@ -28,6 +28,7 @@ namespace Ui {
 
 namespace MoM
 {
+class QMoMBuildingScene;
 
 class DialogBuildingTree : public QMoMDialogBase
 {
@@ -39,20 +40,14 @@ public:
 
 private:
     void addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit);
-    void addCitySubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addLairSubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addTerrainSubtree(QTreeWidget* treeWidget, class MoMTerrain& momTerrain);
-    void addUnitSubtree(QTreeWidgetItem* treeWidgetItem, Unit* unit);
 
     void updateGraying();
 
 private:
-    class QMoMMapScene* m_sceneArcanus;
-    class QMoMMapScene* m_sceneMyrror;
-    class QMoMMapScene* m_sceneBattle;
+    std::unique_ptr<QMoMBuildingScene> m_scene;
     QMoMTimerPtr m_timer;
 
-    Ui::DialogBuildTree *ui;
+    std::unique_ptr<Ui::DialogBuildTree> ui;
 
 private slots:
     void on_comboBox_Plane_currentIndexChanged(int index);
