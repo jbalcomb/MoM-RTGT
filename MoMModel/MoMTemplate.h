@@ -2751,7 +2751,7 @@ enum eTerrainBonusDeposit ENUMSIZE8
     DEPOSIT_Adamantium_Ore = 0x07,      // (+2 mana)
     DEPOSIT_Quork = 0x08,               // (+3 mana)
     DEPOSIT_Crysx = 0x09,               // (+5 mana)
-    DEPOSIT_Hunters_Lodge = 0x10,       // Apparently unused
+    DEPOSIT_Orihalcon_Ore = 0x10,       // Unused in vanilla where it was 'Hunters Lodge', recycled in Caster of Magic
     DEPOSIT_Unk_20 = 0x20,
     DEPOSIT_Wild_Game = 0x40,           // (+2 food)
     DEPOSIT_Nightshade = 0x80,          // (50 strength dispel)
@@ -4765,6 +4765,64 @@ typedef struct PACKED_STRUCT // SaveGame
     uint8_t             m_Artifacts_in_Game[gMAX_ARTIFACTS_IN_GAME];   // 00 = not in game, 01 = in game
     Hero_Choice         m_Chosen_Hero_Names[gMAX_HERO_TYPES];
 } SaveGame;
+
+
+typedef struct PACKED_STRUCT // SaveGame_CasterOfMagic
+{
+    unionList_Hero_stats    m_List_Hero_stats[gMAX_WIZARD_RECORDS];
+    Game_Data_Save      m_Game_Data;
+    Wizard              m_Wizards[gMAX_WIZARD_RECORDS];
+
+    // Map section 1
+    MapRow_Terrain      m_Arcanus_Map_Row[40];
+    MapRow_Terrain      m_Myrror_Map_Row[40];
+    uint16_t            m_Arcanus_UNK01[0x60];
+    uint16_t            m_Myrror_UNK01[0x60];
+    MapRow_LandMassID   m_Arcanus_LandMassID_Row[40];
+    MapRow_LandMassID   m_Myrror_LandMassID_Row[40];
+
+    Node_Attr           m_Arcanus_Node_Attr[17];
+    Node_Attr           m_Myrror_Node_Attr[13];
+    Fortress            m_Fortresses[gMAX_WIZARD_RECORDS];
+    Tower_Attr          m_Tower_Attr[6];
+
+    // Tower_Node_Lair m_Tower_Node_Lair[102];          // Only 99! Or can it be 102 max?
+    //                                                  // When a city is reduced to rubble, an old popped lair is recycled
+    Tower_Node_Lair     m_tn_dummy[1];
+    Tower_Node_Lair     m_Arcanus_Towers[9];
+    Tower_Node_Lair     m_Myrror_Towers[9];
+    Tower_Node_Lair     m_Arcanus_Nodes[17];
+    Tower_Node_Lair     m_Myrror_Nodes[13];
+    Tower_Node_Lair     m_Normal_Lairs[26];
+    Tower_Node_Lair     m_Weak_Lairs[27];
+    Tower_Node_Lair     m_ExtraLairs_GUESS[1];
+
+    Item                m_Items[128];
+    Item                m_Item_Trashcan_GUESS[8];
+    Item                m_Item_Found;                   // An item from ITEMDATA.LBX is parked here before inserting it into the game
+    Item                m_Item_Created;                 // An item being created is parked here before inserting it into the game
+    City                m_Cities[gMAX_CITIES];
+    Unit                m_Unit[2000];
+    Unit                m_Units_Trashcan_GUESS[18];
+
+    // Map section 2
+    MapRow_Bonus        m_Arcanus_Bonus_Row[40];
+    MapRow_Bonus        m_Myrror_Bonus_Row[40];
+    MapRow_Exploration  m_Arcanus_Exploration_Row[40];
+    MapRow_Exploration  m_Myrror_Exploration_Row[40];
+    Map_Movement        m_Arcanus_Movement;
+    Map_Movement        m_Myrror_Movement;
+
+    Events_Status       m_Events_Status;
+
+    // Map section 3
+    MapRow_Terrain_Changes  m_Arcanus_Terrain_Changes_Row[40];
+    MapRow_Terrain_Changes  m_Myrror_Terrain_Changes_Row[40];
+
+    eGrand_Vizier       m_Grand_Vizier;
+    uint8_t             m_Artifacts_in_Game[gMAX_ARTIFACTS_IN_GAME];   // 00 = not in game, 01 = in game
+    Hero_Choice         m_Chosen_Hero_Names[gMAX_HERO_TYPES];
+} SaveGame_CasterOfMagic;
 
 //---------------------------------------------
 

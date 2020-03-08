@@ -154,6 +154,7 @@ std::ostream& operator<<(std::ostream& os, const Movement_Flags& rhs);
 std::ostream& operator<<(std::ostream& os, const Node_Attr& rhs);
 std::ostream& operator<<(std::ostream& os, const Race_Data& rhs);
 std::ostream& operator<<(std::ostream& os, const SaveGame& rhs);
+std::ostream& operator<<(std::ostream& os, const SaveGame_CasterOfMagic& rhs);
 std::ostream& operator<<(std::ostream& os, const Skills& rhs);
 std::ostream& operator<<(std::ostream& os, const Spell_Data& rhs);
 std::ostream& operator<<(std::ostream& os, const Spells_Cast_in_Battle& rhs);

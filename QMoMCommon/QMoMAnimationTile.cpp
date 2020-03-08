@@ -10,8 +10,11 @@ QMoMAnimationTile::QMoMAnimationTile(const QMoMAnimation& animation) :
     m_animation(animation),
     m_frameNr(0)
 {
-    m_frameNr = rand() % m_animation.count();
-    startTimer(200);    // millisecond timer
+    if (!m_animation.empty())
+    {
+        m_frameNr = rand() % m_animation.count();
+        startTimer(200);    // millisecond timer
+    }
 }
 
 QRectF QMoMAnimationTile::boundingRect() const
@@ -34,6 +37,7 @@ void QMoMAnimationTile::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void QMoMAnimationTile::timerEvent(QTimerEvent*)
 {
+    assert(m_animation.count() > 0);
     m_frameNr = (m_frameNr + 1) % m_animation.count();
     update();
 }

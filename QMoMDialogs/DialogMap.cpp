@@ -608,7 +608,10 @@ void DialogMap::slot_gameUpdated()
             case NODETYPE_Chaos:    bannerColor = BANNER_Red; break;
             }
             animation = MoM::QMoMResources::instance().getAnimation(LBXRecordID("MAPBACK", 63 + bannerColor));
-            animation.resize(1);
+            if (!animation.empty())
+            {
+                animation.resize(1);
+            }
         }
         for (int auraNr = 0; auraNr < nodeAttr->m_Power_Node; ++auraNr)
         {

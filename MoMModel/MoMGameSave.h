@@ -17,26 +17,35 @@ namespace MoM {
 class MoMGameSave : public MoMGameBase
 {
 public:
-    MoMGameSave();
-    virtual ~MoMGameSave();
+    MoMGameSave() : MoMGameBase() {}
+    virtual ~MoMGameSave() {}
 
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
 
 protected:
-    bool addLair();
-    bool findYourFirstUnit(int& unitNr);
-    bool findOthersFirstUnit(int& unitNr);
-
-    virtual void closeGame() throw();
+    virtual void closeGame() throw() {}
 
     virtual bool commitData(void* ptr, const void* pNewValue, size_t size);
 
+#define RETURN_SAVEGAME_MEMBER(field) \
+    if (m_SaveGame.size() < sizeof(SaveGame)) \
+        return 0; \
+    if (m_SaveGame.size() < sizeof(SaveGame_CasterOfMagic)) \
+        return ((SaveGame*)m_SaveGame.data())->field; \
+    else \
+       return ((SaveGame_CasterOfMagic*)m_SaveGame.data())->field;
+#define RETURN_SAVEGAME_MEMBER_ADDRESS(field) \
+    if (m_SaveGame.size() < sizeof(SaveGame)) \
+        return 0; \
+    if (m_SaveGame.size() < sizeof(SaveGame_CasterOfMagic)) \
+        return &((SaveGame*)m_SaveGame.data())->field; \
+    else \
+       return &((SaveGame_CasterOfMagic*)m_SaveGame.data())->field;
+
     virtual uint8_t* getArtifacts_in_game()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Artifacts_in_Game;
+        RETURN_SAVEGAME_MEMBER(m_Artifacts_in_Game);
     }
 
     virtual Building_Data* getBuildingData() const
@@ -49,53 +58,40 @@ protected:
 
     virtual Hero_Choice* getChosen_Hero_Names()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Chosen_Hero_Names;
+        RETURN_SAVEGAME_MEMBER(m_Chosen_Hero_Names);
     }
 
     virtual City* getCities() const
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Cities;
+        RETURN_SAVEGAME_MEMBER(m_Cities);
     }
 
     virtual Events_Status* getEvents_Status()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Events_Status;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Events_Status);
     }
 
     virtual Fortress* getFortresses()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-		return &m_SaveGame->m_Fortresses[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Fortresses[0]);
     }
 
     virtual std::string getGameDirectory() const;
 
     virtual Game_Data_Save* getGameData_SaveGame()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Game_Data;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Game_Data);
     }
 
     virtual uint16_t* getGameTurn()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Game_Data.m_Current_Turn;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Game_Data.m_Current_Turn);
     }
 
     virtual Hero_stats* getList_Hero_stats(ePlayer playerNr)
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_List_Hero_stats[playerNr].a;
+
+        RETURN_SAVEGAME_MEMBER(m_List_Hero_stats[playerNr].a);
     }
 
     virtual Hero_Stats_Initializer* getList_Hero_Stats_Initializer()
@@ -108,16 +104,41 @@ protected:
 
     virtual Item* getItems()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Items;
+        RETURN_SAVEGAME_MEMBER(m_Items);
     }
 
     virtual Tower_Node_Lair* getLairs()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Arcanus_Towers;
+        RETURN_SAVEGAME_MEMBER(m_Arcanus_Towers);
+    }
+
+    virtual char* getMoMVersion()
+    {
+        auto baseVersion = MoMGameBase::getMoMVersion();
+        if (0 != baseVersion && '\0' != *baseVersion)
+            return baseVersion;
+
+        if (sizeof(SaveGame) == m_size_SaveGame)
+        {
+            static char editableBuf[] = "1.31-1.40n";
+            return editableBuf;
+        }
+        if (sizeof(SaveGame_CasterOfMagic) == m_size_SaveGame)
+        {
+            static char editableBuf[] = "6.0?";
+            return editableBuf;
+        }
+        if (m_size_SaveGame < sizeof(SaveGame_CasterOfMagic))
+        {
+            static char editableBuf[] = "1.50+ (file has in between size)";
+            return editableBuf;
+        }
+        if (m_size_SaveGame > sizeof(SaveGame_CasterOfMagic))
+        {
+            static char editableBuf[] = "6.0 (bigger file)";
+            return editableBuf;
+        }
+        return 0;
     }
 
     virtual const char* getNameByOffset(DS_Offset offset)
@@ -131,30 +152,22 @@ protected:
 
     virtual Node_Attr* getNodeAttributes()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Node_Attr[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Node_Attr[0]);
     }
 
     virtual uint16_t* getNumber_of_Cities()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Game_Data.m_Number_of_Cities;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Game_Data.m_Number_of_Cities);
     }
 
     virtual uint16_t* getNumber_of_Units()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Game_Data.m_Number_of_Units;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Game_Data.m_Number_of_Units);
     }
 
     virtual uint16_t* getNumber_of_Wizards()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Game_Data.m_Number_of_Wizards;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Game_Data.m_Number_of_Wizards);
     }
 
     virtual std::string getSources() const;
@@ -177,46 +190,32 @@ protected:
 
     virtual eTerrainBonusDeposit* getTerrain_Bonuses()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Bonus_Row[0].m_Bonus_Deposit[0]);
     }
     virtual Terrain_Changes* getTerrain_Changes()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Terrain_Changes_Row[0].m_Terrain_Changes[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Terrain_Changes_Row[0].m_Terrain_Changes[0]);
     }
     virtual uint8_t* getTerrain_Explored()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Exploration_Row[0].m_Explored[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Exploration_Row[0].m_Explored[0]);
     }
     virtual int8_t* getTerrain_LandMassID()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_LandMassID_Row[0].m_LandMassID[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_LandMassID_Row[0].m_LandMassID[0]);
     }
     virtual Map_Movement* getTerrain_Movements()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Movement;
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Movement);
     }
     virtual eTerrainType* getTerrain_Types()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return &m_SaveGame->m_Arcanus_Map_Row[0].m_Tile[0];
+        RETURN_SAVEGAME_MEMBER_ADDRESS(m_Arcanus_Map_Row[0].m_Tile[0]);
     }
 
     virtual Unit* getUnits()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Unit;
+        RETURN_SAVEGAME_MEMBER(m_Unit);
     }
 
     virtual Unit_Type_Data* getUnit_Types()
@@ -237,20 +236,13 @@ protected:
 
     virtual Wizard* getWizards()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame->m_Wizards;
+        RETURN_SAVEGAME_MEMBER(m_Wizards);
     }
 
     virtual bool isOpen() const
     {
         // TODO
         return true;
-    }
-
-    void setPlayer(ePlayer playerNr)
-    {
-        m_playerNr = playerNr;
     }
 
 //private:
@@ -282,11 +274,9 @@ protected:
 
     virtual uint8_t* getMagicOverlay(size_t ovlNr);
 
-    virtual SaveGame* getSaveGame()
+    virtual SaveGameRef getSaveGame()
     {
-        if (0 == m_SaveGame.get())
-            return 0;
-        return m_SaveGame.get();
+        return { m_SaveGame.data(), m_SaveGame.size() };
     }
 
     virtual MoMExeWizards* getWizardsExe()
@@ -303,12 +293,16 @@ protected:
 
     virtual uint8_t* getWizardsOverlay(size_t ovlNr);
 
+#undef RETURN_SAVEGAME_MEMBER
+#undef RETURN_SAVEGAME_MEMBER_ADDRESS
+
 private:
     bool loadLbx(const std::string& filename, MoMLbxBase* lbxBase);
     bool saveLbx(const std::string& lbxTitle, MoMLbxBase* lbxBase, const std::string& filename);
 
 private:
-    std::auto_ptr<SaveGame> m_SaveGame;
+    std::vector<uint8_t> m_SaveGame;
+    std::size_t m_size_SaveGame = 0;
     std::string m_filename_SaveGame;
     std::auto_ptr<MoMExeMagic> m_MagicExe;
     std::auto_ptr<MoMExeWizards> m_WizardsExe;
@@ -318,7 +312,6 @@ private:
     std::auto_ptr<MoMLbxBase> m_SpelldatLbx;
     std::auto_ptr<MoMLbxBase> m_TerrstatLbx;
     std::string m_GameDirectory;
-    ePlayer m_playerNr;
 };
 
 }

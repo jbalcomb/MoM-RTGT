@@ -1822,6 +1822,7 @@ void UnitModel::threadUpdateModelData()
             if (0 == ptree->rowCount())
             {
 				// 0
+                // TODO: What is it in CoM v1.50+?
                 if (game->getMoMVersion() >= std::string("v1.40j"))
                 {
                     ptree->appendChild("City Wall Defense", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl122[ 0x0FEB ]));

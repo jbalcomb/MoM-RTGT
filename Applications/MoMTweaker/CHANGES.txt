@@ -2,9 +2,17 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.3.1 (2018--)
+CHANGES IN 0.3.1 (2020--)
 -----------------------------
-* Recognize Seravy's v1.50+ and v5.00+ and show proper game data fields.
+* Project requires at least C++11 to build.
+
+* Recognize Seravy's v1.5+ and v5.0+ and show proper game data fields.
+
+* Load and save Caster of Magic 6.0 save game files.
+  The title bar will show "(MoM)" by default, "(CoM)" for Caster of Magic,
+  "(CoM-)" if the file is smaller than expected, and "(CoM+)" if the
+  file is larger than expected.
+  Credit to Ariphaos for providing the CoM save game layout.
 
 * Added more diplomacy information based on Seravy's comments.
 

@@ -21,6 +21,7 @@ win32-msvc2010:COMPILER = msvc2010
 message(COMPILER: $$COMPILER)
 message(QMAKE_CXX: $$QMAKE_CXX)
 
+# TODO: Ensure that we have at least C++11 on every platform
 unix:QMAKE_CXXFLAGS += -g -fno-strict-aliasing -Wno-unused-parameter -Wno-sign-compare
 win32-g++:QMAKE_CXXFLAGS += -g -fno-strict-aliasing -Wno-unused-parameter  -Wno-sign-compare
 win32-msvc2008:QMAKE_CXXFLAGS +=

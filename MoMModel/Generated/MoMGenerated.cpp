@@ -2955,7 +2955,7 @@ std::ostream& operator<<(std::ostream& os, const eTerrainBonusDeposit& rhs)
     case DEPOSIT_Adamantium_Ore: os << "DEPOSIT_Adamantium_Ore"; break;
     case DEPOSIT_Quork: os << "DEPOSIT_Quork"; break;
     case DEPOSIT_Crysx: os << "DEPOSIT_Crysx"; break;
-    case DEPOSIT_Hunters_Lodge: os << "DEPOSIT_Hunters_Lodge"; break;
+    case DEPOSIT_Orihalcon_Ore: os << "DEPOSIT_Orihalcon_Ore"; break;
     case DEPOSIT_Unk_20: os << "DEPOSIT_Unk_20"; break;
     case DEPOSIT_Wild_Game: os << "DEPOSIT_Wild_Game"; break;
     case DEPOSIT_Nightshade: os << "DEPOSIT_Nightshade"; break;
@@ -6931,6 +6931,218 @@ std::ostream& operator<<(std::ostream& os, const SaveGame& rhs)
     os << ")\n";
     os << "m_Units_Trashcan_GUESS=(\n";
     for (unsigned i = 0; i < 9; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Units_Trashcan_GUESS[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Bonus_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Bonus_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Bonus_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Bonus_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Exploration_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Exploration_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Exploration_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Exploration_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Movement=" << rhs.m_Arcanus_Movement << "\n";
+    os << "m_Myrror_Movement=" << rhs.m_Myrror_Movement << "\n";
+    os << "m_Events_Status=" << rhs.m_Events_Status << "\n";
+    os << "m_Arcanus_Terrain_Changes_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Terrain_Changes_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Terrain_Changes_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Terrain_Changes_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Grand_Vizier=" << rhs.m_Grand_Vizier << "\n";
+    os << "m_Artifacts_in_Game=(\n";
+    for (unsigned i = 0; i < gMAX_ARTIFACTS_IN_GAME; ++i)
+    {
+        os << "[" << i << "] " << (unsigned)rhs.m_Artifacts_in_Game[i] << " 0x" << std::hex << (unsigned)rhs.m_Artifacts_in_Game[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Chosen_Hero_Names=(\n";
+    for (unsigned i = 0; i < gMAX_HERO_TYPES; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Chosen_Hero_Names[i] << ",\n";
+    }
+    os << ")\n";
+    os << "}";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const SaveGame_CasterOfMagic& rhs)
+{
+    os << "{\n";
+    os << "m_List_Hero_stats=(\n";
+    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_List_Hero_stats[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Game_Data=" << rhs.m_Game_Data << "\n";
+    os << "m_Wizards=(\n";
+    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Wizards[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Map_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Map_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Map_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Map_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_UNK01=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_UNK01[i] << " 0x" << std::hex << rhs.m_Arcanus_UNK01[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_UNK01=(\n";
+    for (unsigned i = 0; i < 0x60; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_UNK01[i] << " 0x" << std::hex << rhs.m_Myrror_UNK01[i] << std::dec << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_LandMassID_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_LandMassID_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_LandMassID_Row=(\n";
+    for (unsigned i = 0; i < 40; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_LandMassID_Row[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Node_Attr=(\n";
+    for (unsigned i = 0; i < 17; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Node_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Node_Attr=(\n";
+    for (unsigned i = 0; i < 13; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Node_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Fortresses=(\n";
+    for (unsigned i = 0; i < gMAX_WIZARD_RECORDS; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Fortresses[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Tower_Attr=(\n";
+    for (unsigned i = 0; i < 6; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Tower_Attr[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_tn_dummy=(\n";
+    for (unsigned i = 0; i < 1; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_tn_dummy[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Towers=(\n";
+    for (unsigned i = 0; i < 9; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Towers[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Towers=(\n";
+    for (unsigned i = 0; i < 9; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Towers[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Arcanus_Nodes=(\n";
+    for (unsigned i = 0; i < 17; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Arcanus_Nodes[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Myrror_Nodes=(\n";
+    for (unsigned i = 0; i < 13; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Myrror_Nodes[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Normal_Lairs=(\n";
+    for (unsigned i = 0; i < 26; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Normal_Lairs[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Weak_Lairs=(\n";
+    for (unsigned i = 0; i < 27; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Weak_Lairs[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_ExtraLairs_GUESS=(\n";
+    for (unsigned i = 0; i < 1; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_ExtraLairs_GUESS[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Items=(\n";
+    for (unsigned i = 0; i < 128; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Items[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Item_Trashcan_GUESS=(\n";
+    for (unsigned i = 0; i < 8; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Item_Trashcan_GUESS[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Item_Found=" << rhs.m_Item_Found << "\n";
+    os << "m_Item_Created=" << rhs.m_Item_Created << "\n";
+    os << "m_Cities=(\n";
+    for (unsigned i = 0; i < gMAX_CITIES; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Cities[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Unit=(\n";
+    for (unsigned i = 0; i < 2000; ++i)
+    {
+        os << "[" << i << "] " << rhs.m_Unit[i] << ",\n";
+    }
+    os << ")\n";
+    os << "m_Units_Trashcan_GUESS=(\n";
+    for (unsigned i = 0; i < 18; ++i)
     {
         os << "[" << i << "] " << rhs.m_Units_Trashcan_GUESS[i] << ",\n";
     }

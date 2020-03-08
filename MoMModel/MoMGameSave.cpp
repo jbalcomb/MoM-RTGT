@@ -57,129 +57,12 @@ std::string lowercase_extension(const std::string& filename)
 
 }
 
-
-MoMGameSave::MoMGameSave() :
-	MoMGameBase(),
-    m_SaveGame(),
-    m_filename_SaveGame(),
-    m_MagicExe(),
-    m_WizardsExe(),
-    m_filename_MagicExe(),
-    m_filename_WizardsExe(),
-    m_BuilddatLbx(),
-    m_SpelldatLbx(),
-    m_TerrstatLbx(),
-    m_GameDirectory(),
-    m_playerNr(PLAYER_YOU)
-{
-}
-
-MoMGameSave::~MoMGameSave()
-{
-    closeGame();
-}
-
-bool MoMGameSave::addLair()
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool ok = true;
-    int lairNr = 0;     // Relocate and change Node[0].
-
-    // Note: UNK fields left unchanged
-    Tower_Node_Lair& lair = m_SaveGame->m_Arcanus_Nodes[lairNr];
-
-    lair.m_XPos = m_SaveGame->m_Wizards[m_playerNr].m_X_Coordinate_of_Summoning_Circle + 2;
-    lair.m_YPos = m_SaveGame->m_Wizards[m_playerNr].m_Y_Coordinate_of_Summoning_Circle + 1;
-    lair.m_Plane = m_SaveGame->m_Wizards[m_playerNr].m_Plane_of_Summoning_Circle;
-    lair.m_Status = LAIRSTATUS_intact;
-    lair.m_Type = LAIRTYPE_Sorcery_node;
-    lair.m_Inhabitant1.m_Inhabitant = UNITTYPE_Blue_Air_Elemental;
-    lair.m_Inhabitant1.m_Initial_Nr_of_Inhabitant = 2;
-    lair.m_Inhabitant1.m_Remaining_Nr_of_Inhabitant = 2;
-    lair.m_Inhabitant2.m_Inhabitant = UNITTYPE_Blue_Phantom_Beast;
-    lair.m_Inhabitant2.m_Initial_Nr_of_Inhabitant = 4;
-    lair.m_Inhabitant2.m_Remaining_Nr_of_Inhabitant = 4;
-    lair.m_Flags.bits = 7;
-
-    Node_Attr& nodeAttr = m_SaveGame->m_Arcanus_Node_Attr[lairNr];
-    for (unsigned i = 0; i < ARRAYSIZE(nodeAttr.m_XPos_Mana); ++i)
-    {
-        nodeAttr.m_XPos_Mana[i] += lair.m_XPos - nodeAttr.m_XPos;
-        nodeAttr.m_YPos_Mana[i] += lair.m_YPos - nodeAttr.m_YPos;
-    }
-    nodeAttr.m_XPos = lair.m_XPos;
-    nodeAttr.m_YPos = lair.m_YPos;
-    nodeAttr.m_Plane = lair.m_Plane;
-    nodeAttr.m_Owner = PLAYER_Dismissed_Deceased;
-    nodeAttr.m_Node_Type = NODETYPE_Sorcery;
-
-    if (PLANE_Arcanum == lair.m_Plane)
-    {
-        m_SaveGame->m_Arcanus_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
-    }
-    else if (PLANE_Myrror == lair.m_Plane)
-    {
-        m_SaveGame->m_Myrror_Map_Row[lair.m_YPos].m_Tile[lair.m_XPos] = grasslands_w_sorcery_node;
-    }
-
-    return ok;
-}
-
-void MoMGameSave::closeGame() throw()
-{
-}
-
 bool MoMGameSave::commitData(void* ptr, const void* pNewValue, size_t size)
 {
     setErrorString("");
     // TODO: Check memory pointer + range
     memcpy(ptr, pNewValue, size);
     return true;
-}
-
-bool MoMGameSave::findYourFirstUnit(int& unitNr)
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool found = false;
-    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
-    {
-        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
-
-        if (PLAYER_YOU == unit.m_Owner)
-        {
-            found = true;
-            unitNr = (int)lUnitNr;
-            break;
-        }
-    }
-    return found;
-}
-
-bool MoMGameSave::findOthersFirstUnit(int& unitNr)
-{
-    setErrorString("");
-    if (0 == m_SaveGame.get())
-        return false;
-
-    bool found = false;
-    for (unsigned lUnitNr = 0; lUnitNr < m_SaveGame->m_Game_Data.m_Number_of_Units && lUnitNr < ARRAYSIZE(m_SaveGame->m_Unit); ++lUnitNr)
-    {
-        const Unit& unit = m_SaveGame->m_Unit[lUnitNr];
-
-        if (PLAYER_YOU != unit.m_Owner)
-        {
-            found = true;
-            unitNr = (int)lUnitNr;
-            break;
-        }
-    }
-    return found;
 }
 
 std::string MoMGameSave::getGameDirectory() const
@@ -197,6 +80,22 @@ std::string MoMGameSave::getSources() const
     if (!m_filename_SaveGame.empty())
     {
         sources += " " + m_filename_SaveGame;
+        if (sizeof(SaveGame) == m_size_SaveGame)
+        {
+            sources += " (MoM)";
+        }
+        else if (sizeof(SaveGame_CasterOfMagic) == m_size_SaveGame)
+        {
+            sources += " (CoM)";
+        }
+        else if (m_size_SaveGame < sizeof(SaveGame_CasterOfMagic))
+        {
+            sources += " (CoM-)";
+        }
+        else if (m_size_SaveGame > sizeof(SaveGame_CasterOfMagic))
+        {
+            sources += " (CoM+)";
+        }
     }
     if (!m_filename_MagicExe.empty())
     {
@@ -259,7 +158,7 @@ bool MoMGameSave::load(const char* filename)
     std::string ext = lowercase_extension(filename);
     if (".gam" == ext)
     {
-        std::ifstream ifs(filename, std::ios_base::in | std::ios_base::binary);
+        std::ifstream ifs(filename, std::ios::in | std::ios::binary);
         if (!ifs)
         {
             setErrorString("Could not open file '" + toStr(filename) + "' for reading");
@@ -267,11 +166,43 @@ bool MoMGameSave::load(const char* filename)
             return false;
         }
 
-        m_SaveGame.reset(new SaveGame);
-        memset(m_SaveGame.get(), '\0', sizeof(SaveGame));
-        if (!ifs.read((char*)m_SaveGame.get(), sizeof(SaveGame)))
+        ifs.seekg(0, std::ios::end);
+        m_size_SaveGame = ifs.tellg();
+        ifs.seekg(0, std::ios::beg);
+        std::cout << "Size save file=" << m_size_SaveGame << std::endl;
+        std::cout << "sizeof(SaveGame)=" << sizeof(SaveGame) << std::endl;
+        std::cout << "sizeof(SaveGame_CasterOfMagic)=" << sizeof(SaveGame_CasterOfMagic) << std::endl;
+
+        if (m_size_SaveGame < sizeof(SaveGame))
         {
-            setErrorString("Could not (fully) read file '" + toStr(filename) + "'");
+            setErrorString("Save game is too small in file '" + toStr(filename) + "'. Not loaded");
+            std::cout << errorString() << std::endl;
+            return false;
+        }
+
+        size_t sizeBuffer = m_size_SaveGame;
+        if (m_size_SaveGame > sizeof(SaveGame_CasterOfMagic))
+        {
+            std::cout << "Treating savefile as CasterOfMagic although file is too big" << std::endl;
+        }
+        else if (m_size_SaveGame == sizeof(SaveGame_CasterOfMagic))
+        {
+            std::cout << "Treating savefile as CasterOfMagic" << std::endl;
+        }
+        else if (m_size_SaveGame > sizeof(SaveGame))
+        {
+            std::cout << "Treating savefile as Vanilla although file is too big" << std::endl;
+        }
+        else
+        {
+            std::cout << "Treating savefile as vanilla" << std::endl;
+        }
+
+        m_SaveGame = std::vector<uint8_t>(sizeBuffer, 0);
+        if (!ifs.read((char*)m_SaveGame.data(), m_size_SaveGame))
+        {
+            setErrorString("Could not read " + toStr(m_size_SaveGame) + " bytes from file '"
+                           + toStr(filename) + "'");
             std::cout << errorString() << std::endl;
             return false;
         }
@@ -362,7 +293,7 @@ bool MoMGameSave::save(const char* filename)
     std::string ext = lowercase_extension(filename);
     if (".gam" == ext)
     {
-        if (0 == m_SaveGame.get())
+        if (0 == m_size_SaveGame)
         {
             setErrorString("Cannot save to '" + toStr(filename) + "' because no SAVEn.GAM was loaded");
             std::cout << errorString() << std::endl;
@@ -377,9 +308,10 @@ bool MoMGameSave::save(const char* filename)
             return false;
         }
 
-        if (!ofs.write((const char*)m_SaveGame.get(), sizeof(SaveGame)))
+        if (!ofs.write((const char*)m_SaveGame.data(), m_size_SaveGame))
         {
-            setErrorString("Could not write SAVEn.GAM data (fully) to file '" + toStr(filename) + "'");
+            setErrorString("Could not write " + toStr(m_size_SaveGame) + " bytes of SAVEn.GAM data to file '"
+                           + toStr(filename) + "'");
             std::cout << errorString() << std::endl;
             return false;
         }

@@ -71,6 +71,7 @@ QMoMTreeItemModelBase* constructTreeItem(Movement_Flags* rhs, const QString& con
 QMoMTreeItemModelBase* constructTreeItem(Node_Attr* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Race_Data* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(SaveGame* rhs, const QString& context);
+QMoMTreeItemModelBase* constructTreeItem(SaveGame_CasterOfMagic* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Skills* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Spell_Data* rhs, const QString& context);
 QMoMTreeItemModelBase* constructTreeItem(Spells_Cast_in_Battle* rhs, const QString& context);

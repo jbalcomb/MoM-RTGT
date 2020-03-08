@@ -21,8 +21,10 @@ namespace MoM {
 class MoMGameBase
 {
 public:
-    MoMGameBase();
-    virtual ~MoMGameBase();
+    struct SaveGameRef { uint8_t* pointer = 0; size_t size = 0; };
+
+    MoMGameBase() {}
+    virtual ~MoMGameBase() {}
 
     virtual void closeGame() throw() = 0;
 
@@ -155,7 +157,7 @@ public:
         return &lairs[lairNr];
     }
 
-    char* getMoMVersion()
+    virtual char* getMoMVersion()
     {
         char* copyrightAndVersion = 0;
         if (0 != getDataSegment())
@@ -177,11 +179,11 @@ public:
 
         if ((0 != version_v) && (strlen(version_v) > 3) && (version_v[3] == '.'))
         {
-            return (version_v + 1);
+            return (version_v + 2);
         }
         else if ((0 != version_V) && (strlen(version_V) > 3) && (version_V[3] == '.'))
         {
-            return (version_V + 1);
+            return (version_V + 2);
         }
         else
         {
@@ -664,9 +666,9 @@ public:
 	{
 		return 0;
 	}
-    virtual SaveGame* getSaveGame()
+    virtual SaveGameRef getSaveGame()
     {
-        return 0;
+        return {};
     }
     virtual const uint8_t* getSeg0Pointer()
     {

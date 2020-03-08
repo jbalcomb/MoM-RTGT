@@ -399,11 +399,11 @@ sub generate_Qt_code
             }
             elsif (exists $gEnums{"${type}"} and exists $gEnums{"${type}140m"})
             {
-                print qq#    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.50"))\n#;
+                print qq#    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("1.50"))\n#;
                 print qq#    {\n#;
                 print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}150>((${type}150*)&rhs->${name}));\n#;
                 print qq#    }\n#;
-                print qq#    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("v1.40m"))\n#;
+                print qq#    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("1.40m"))\n#;
                 print qq#    {\n#;
                 print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}140m>((${type}140m*)&rhs->${name}));\n#;
                 print qq#    }\n#;

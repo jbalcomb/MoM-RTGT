@@ -354,10 +354,11 @@ void DialogCalculatorAddress::slot_addressChanged(const void* momPointer)
         ui->comboBox_File->setCurrentIndex(1);  // MAGIC.EXE
     }
 
-    MoM::SaveGame* saveGame = m_game->getSaveGame();
-    if ((0 != saveGame) && (momPointer >= saveGame) && (momPointer < saveGame + 1))
+    auto saveGameRef = m_game->getSaveGame();
+    if ((0 != saveGameRef.pointer) && (momPointer >= saveGameRef.pointer)
+            && (momPointer < saveGameRef.pointer + saveGameRef.size))
     {
-        int saveGameOffset = ((uint8_t*)momPointer - (uint8_t*)saveGame);
+        int saveGameOffset = ((uint8_t*)momPointer - (uint8_t*)saveGameRef.pointer);
         dosStr += QString(" save:%0").arg(saveGameOffset, 5, 16, QChar('0'));
     }
 
