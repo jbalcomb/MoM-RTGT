@@ -40,11 +40,11 @@ void Test_MoMGameBase::testCase_Failures()
 
 void Test_MoMGameBase::load()
 {
+    // TODO: Check each possible MoMVersion
+
     MoM::MoMGameSave game;
     QVERIFY(game.load(gRefGameFile.c_str()));
     QCOMPARE(game.errorString().c_str(), "");
-
-    // TODO: Check each possible MoMVersion
 }
 
 void Test_MoMGameBase::save()
