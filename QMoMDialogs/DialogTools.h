@@ -43,6 +43,8 @@ private slots:
 
     void on_pushButton_SelectRaces_clicked();
 
+    void on_pushButton_BuildingTree_clicked();
+
 private:
 	QStatusBar* statusBar();
 

@@ -67,6 +67,7 @@ HEADERS += \
     ../../MoMControl/MoMLevelBonuses.h \
     ../../QMoMCommon/UnitModel.h \
     ../../QMoMDialogs/DialogAddUnit.h \
+    ../../QMoMDialogs/DialogBuildingTree.h \
     ../../QMoMDialogs/DialogCalculatorAddress.h \
     ../../QMoMDialogs/DialogExternalAI.h \
     ../../QMoMDialogs/DialogLbxEditor.h \
@@ -126,6 +127,7 @@ SOURCES += \
     ../../giflib-5.0.4/lib/dgif_lib.cpp \
     ../../MoMControl/MoMLevelBonuses.cpp \
     ../../QMoMDialogs/DialogAddUnit.cpp \
+    ../../QMoMDialogs/DialogBuildingTree.cpp \
     ../../QMoMDialogs/DialogCalculatorAddress.cpp \
     ../../QMoMDialogs/DialogExternalAI.cpp \
     ../../QMoMDialogs/DialogLbxEditor.cpp \
@@ -142,8 +144,10 @@ SOURCES += \
     ../../MoMControl/MoMManageCities.cpp
 
 FORMS += \
+    $$PWD/../../QMoMDialogs/DialogBuildingTree.ui \
     ../../Applications/MoMTweaker/MainWindow.ui \
     ../../QMoMDialogs/DialogAddUnit.ui \
+    ../../QMoMDialogs/DialogBuildingTree.ui \
     ../../QMoMDialogs/DialogCalculatorAddress.ui \
     ../../QMoMDialogs/DialogExternalAI.ui \
     ../../QMoMDialogs/DialogLbxEditor.ui \

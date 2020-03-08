@@ -23,6 +23,7 @@
 #include "QMoMResources.h"
 
 #include "DialogAddArtifact.h"
+#include "DialogBuildingTree.h"
 #include "DialogExternalAI.h"
 #include "DialogManageCities.h"
 #include "DialogSelectInitialSpells.h"
@@ -389,5 +390,11 @@ void DialogTools::on_pushButton_ConjureArtifact_clicked()
 void DialogTools::on_pushButton_SelectRaces_clicked()
 {
     DialogSelectRaces* dialog = new DialogSelectRaces(MainWindow::getInstance());
+    dialog->show();
+}
+
+void DialogTools::on_pushButton_BuildingTree_clicked()
+{
+    auto dialog = new MoM::DialogBuildingTree(MainWindow::getInstance());
     dialog->show();
 }
