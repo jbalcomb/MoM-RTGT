@@ -989,10 +989,10 @@ bool MoMController::replaceRace(eRace fromRace, eRace toRace, ePlane plane)
     m_errorString.clear();
     if (0 == m_game)
         return false;
-    if ((toUInt(fromRace) >= eRace_MAX) || (toUInt(toRace) >= eRace_MAX) || (toUInt(plane) >= ePlane_MAX))
+    if ((toUInt(fromRace) >= gMAX_RACES) || (toUInt(toRace) >= gMAX_RACES) || (toUInt(plane) >= ePlane_MAX))
         return false;
 
-    eUnit_Type firstUnitOfRace[(int)RACE_Troll + 2] =
+    eUnit_Type firstUnitOfRace[(int)gMAX_RACES + 1] =
     {
         UNITTYPE_Barbarian_Spearmen,    //RACE_Barbarian = 0,
         UNITTYPE_Beastmen_Spearmen,     //RACE_Beastmen = 1,
@@ -1009,15 +1009,6 @@ bool MoMController::replaceRace(eRace fromRace, eRace toRace, ePlane plane)
         UNITTYPE_Orc_Spearmen,          //RACE_Orc = 12,
         UNITTYPE_Troll_Spearmen,        //RACE_Troll = 13,
         UNITTYPE_Arcane_Magic_Spirit    //14
-
-        // NOTE: Races below do not have the same order as unit types
-//        UNITTYPE_Trireme,               //RACE_Generic_ship_or_catapult = 0x0E,
-//        UNITTYPE_Arcane_Magic_Spirit,   //RACE_Arcane = 0x0F,
-//        UNITTYPE_Green_War_Bears,       //RACE_Nature = 0x10,
-//        UNITTYPE_Blue_Floating_Island,  //RACE_Sorcery = 0x11,
-//        UNITTYPE_Red_Hell_Hounds,       //RACE_Chaos = 0x12,
-//        UNITTYPE_White_Unicorns,        //RACE_Life = 0x13,
-//        UNITTYPE_Black_Skeletons,       //RACE_Death = 0x14,
     };
 
     // Change race

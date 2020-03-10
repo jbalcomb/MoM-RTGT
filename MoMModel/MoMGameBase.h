@@ -326,7 +326,7 @@ public:
     Race_Data* getRaceData(eRace race)
     {
 		MoMDataSegment* dataSegment = getDataSegment();
-        if ((0 == dataSegment) || !inRange(race, eRace_MAX))
+        if ((0 == dataSegment) || !inRange(race, gMAX_RACES))
             return 0;
 		return &dataSegment->m_Race_Data[race];
     }

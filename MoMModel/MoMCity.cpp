@@ -603,7 +603,7 @@ bool MoMCity::canProduce(eUnit_Type unitTypeNr) const
         return false;
 
     // Check race
-    if ((unitType->m_Race_Code != m_city->m_Race) && (unitType->m_Race_Code != RACE_Generic_ship_or_catapult))
+    if ((unitType->m_Race_Code != m_city->m_Race) && (unitType->m_Race_Code != RACE_Generic))
     {
         return false;   // Wrong race and not generic
     }
@@ -753,7 +753,7 @@ int MoMCity::getCostToProduce(eProducing producing) const
     }
 
     int buildingCost = -1;
-    if (producing < MoM::PRODUCING_BUILDING_MAX)
+    if (producing < MoM::eProducing_Building_MAX)
     {
         MoM::Building_Data* buildingData = m_game->getBuildingData((eBuilding)producing);
         if (0 != buildingData)
@@ -938,7 +938,7 @@ bool MoMCity::hasWaterRequirement() const
 
 bool MoMCity::isProductionAllowed(eProducing producing) const
 {
-    return ((inRange(producing, PRODUCING_Trade_Goods, PRODUCING_BUILDING_MAX) && isBuildingAllowed(static_cast<eBuilding>(producing)))
+    return ((inRange(producing, PRODUCING_Trade_Goods, eProducing_Building_MAX) && isBuildingAllowed(static_cast<eBuilding>(producing)))
             || (inRange(producing, PRODUCING_Trireme, eProducing_MAX) && isUnitAllowed(static_cast<eUnit_Type>(toUInt(producing) - 100))));
 }
 
@@ -1025,7 +1025,7 @@ bool MoMCity::isUnitAllowed(eUnit_Type unitTypeNr) const
         return false;
 
     // Check race
-    if ((unitType->m_Race_Code != m_city->m_Race) && (unitType->m_Race_Code != RACE_Generic_ship_or_catapult))
+    if ((unitType->m_Race_Code != m_city->m_Race) && (unitType->m_Race_Code != RACE_Generic))
     {
         return false;   // Wrong race and not generic
     }

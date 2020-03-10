@@ -1986,7 +1986,7 @@ std::ostream& operator<<(std::ostream& os, const eProducing& rhs)
     case PRODUCING_Mechanicians_Guild: os << "PRODUCING_Mechanicians_Guild"; break;
     case PRODUCING_Miners_Guild: os << "PRODUCING_Miners_Guild"; break;
     case PRODUCING_City_Walls: os << "PRODUCING_City_Walls"; break;
-    case PRODUCING_BUILDING_MAX: os << "PRODUCING_BUILDING_MAX"; break;
+    case eProducing_Building_MAX: os << "eProducing_Building_MAX"; break;
     case PRODUCING_Trireme: os << "PRODUCING_Trireme"; break;
     case PRODUCING_Galley: os << "PRODUCING_Galley"; break;
     case PRODUCING_Catapult: os << "PRODUCING_Catapult"; break;
@@ -2131,7 +2131,7 @@ std::ostream& operator<<(std::ostream& os, const eRace& rhs)
     case RACE_Nomad: os << "RACE_Nomad"; break;
     case RACE_Orc: os << "RACE_Orc"; break;
     case RACE_Troll: os << "RACE_Troll"; break;
-    case RACE_Generic_ship_or_catapult: os << "RACE_Generic_ship_or_catapult"; break;
+    case RACE_Generic: os << "RACE_Generic"; break;
     case RACE_Arcane: os << "RACE_Arcane"; break;
     case RACE_Nature: os << "RACE_Nature"; break;
     case RACE_Sorcery: os << "RACE_Sorcery"; break;
@@ -2261,7 +2261,7 @@ std::ostream& operator<<(std::ostream& os, const eResource& rhs)
     case RESOURCE_10_Research: os << "RESOURCE_10_Research"; break;
     case RESOURCE_10_Gray_Food: os << "RESOURCE_10_Gray_Food"; break;
     case RESOURCE_10_Gray_Gold: os << "RESOURCE_10_Gray_Gold"; break;
-    case eResource_AMX: os << "eResource_AMX"; break;
+    case eResource_MAX: os << "eResource_MAX"; break;
     default: os << "<Unknown eResource>"; break;
     }
     os << " (" << (unsigned)rhs << ")";

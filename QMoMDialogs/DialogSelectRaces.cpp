@@ -50,12 +50,12 @@ void DialogSelectRaces::slot_gameChanged(const QMoMGamePtr &game)
 {
     m_game = game;
     ui->comboBox_ReplaceFromRace->clear();
-    MOM_FOREACH(eRace, race, eRace_MAX)
+    MOM_FOREACH(eRace, race, gMAX_RACES)
     {
         ui->comboBox_ReplaceFromRace->addItem(*QMoMResources::instance().getIcon(race, 2), prettyQStr(race));
     }
     ui->comboBox_ReplaceByRace->clear();
-    MOM_FOREACH(eRace, race, eRace_MAX)
+    MOM_FOREACH(eRace, race, gMAX_RACES)
     {
         ui->comboBox_ReplaceByRace->addItem(*QMoMResources::instance().getIcon(race, 2), prettyQStr(race));
     }

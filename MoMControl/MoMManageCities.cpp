@@ -334,7 +334,7 @@ bool MoMManageCities::MoMCityState::commitProduction(eProducing produce)
 
 bool MoMManageCities::MoMCityState::findRequiredBuildings(eProducing produce, std::vector<eProducing> &reqList) const
 {
-    if (toUInt(produce) < PRODUCING_BUILDING_MAX)
+    if (toUInt(produce) < eProducing_Building_MAX)
     {
         return findRequiredBuildings((eBuilding)produce, reqList);
     }
@@ -402,12 +402,12 @@ bool MoMManageCities::MoMCityState::findRequiredBuildings(eUnit_Type unitTypeNr,
 bool MoMManageCities::MoMCityState::producingBuilding() const
 {
     return ((m_momCity.getCity()->m_Producing >= PRODUCING_Barracks)
-            && (m_momCity.getCity()->m_Producing < PRODUCING_BUILDING_MAX));
+            && (m_momCity.getCity()->m_Producing < eProducing_Building_MAX));
 }
 
 bool MoMManageCities::MoMCityState::producingGarrison() const
 {
-    return (m_momCity.getCity()->m_Producing >= PRODUCING_BUILDING_MAX);
+    return (m_momCity.getCity()->m_Producing >= eProducing_Building_MAX);
 }
 
 void MoMManageCities::MoMCityState::updateState()

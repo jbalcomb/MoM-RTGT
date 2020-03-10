@@ -1198,7 +1198,7 @@ bool MoMUnit::hasMutation(eUnitMutation unitMutation) const
 
 bool MoMUnit::isBuildable(const City &city) const
 {
-    if ((m_unitType->m_Race_Code != city.m_Race) && (m_unitType->m_Race_Code != RACE_Generic_ship_or_catapult))
+    if ((m_unitType->m_Race_Code != city.m_Race) && (m_unitType->m_Race_Code != RACE_Generic))
     {
         return false;   // Wrong race and not generic
     }

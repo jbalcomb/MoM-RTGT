@@ -1764,7 +1764,7 @@ enum eProducing ENUMSIZE16
     PRODUCING_Mechanicians_Guild = 33,
     PRODUCING_Miners_Guild = 34,
     PRODUCING_City_Walls = 35,
-    PRODUCING_BUILDING_MAX, 
+    eProducing_Building_MAX,
 
     //  * Inanimate units
     PRODUCING_Trireme = 135,
@@ -1923,10 +1923,10 @@ enum eRace ENUMSIZE8
     RACE_Lizardman = 10,
     RACE_Nomad = 11,
     RACE_Orc = 12,
-    RACE_Troll = 13,         // Maximum used in SaveGame
+    RACE_Troll = 13,         // Maximum in SaveGame and in Race_Data (gMAX_RACES-1)
 
     // Extra used in WizardsExe
-    RACE_Generic_ship_or_catapult = 0x0E,
+    RACE_Generic = 0x0E,
     RACE_Arcane = 0x0F,
     RACE_Nature = 0x10,
     RACE_Sorcery = 0x11,
@@ -2039,7 +2039,7 @@ enum eResource
     RESOURCE_10_Gray_Food,
     RESOURCE_10_Gray_Gold,
 
-    eResource_AMX
+    eResource_MAX
 };
 
 enum eReward_Specials ENUMSIZE8

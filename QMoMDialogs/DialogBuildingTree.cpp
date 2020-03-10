@@ -16,6 +16,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <regex>
 #include <vector>
 
 #include "DialogCalculatorAddress.h"
@@ -38,6 +39,44 @@
 namespace MoM
 {
 
+// TODO: Put in its own file. Let it clash if accidentally duplicated.
+class MoMBuilding
+{
+public:
+    MoMBuilding(MoMGameBase* game, eBuilding building) : m_game(game), m_buildingEnum(building), m_buildingData(nullptr)
+    {
+        if (m_game != nullptr)
+            m_buildingData = m_game->getBuildingData(m_buildingEnum);
+    }
+    eBuilding getBuildingEnum() const { return m_buildingEnum; }
+    std::string getName() const
+    {
+        if (m_buildingData != nullptr)
+        {
+            return m_buildingData->m_BuildingName;
+        }
+        auto name = std::regex_replace(toStr(m_buildingEnum), std::regex("^[A-Z]+_"), "");
+        name = std::regex_replace(name, std::regex("\\s*\\(\\d+\\)$"), "");
+        return replaceUnderscoresBySpaces(name);
+    }
+    std::vector<eBuilding> getRequiredBuildings() const
+    {
+        if (m_buildingData == nullptr)
+            return {};
+        auto buildings = std::vector<eBuilding>();
+        for (auto preq: {m_buildingData->m_Prerequisite1, m_buildingData->m_Prerequisite2})
+        {
+            if (preq != BUILDING_None)
+                buildings.push_back(preq);
+        }
+        return buildings;
+    }
+private:
+    MoMGameBase* m_game;
+    eBuilding m_buildingEnum;
+    Building_Data* m_buildingData;
+};
+
 namespace
 {
 
@@ -47,21 +86,20 @@ class QMoMBuildingTile : public QGraphicsItem
 public:
     QMoMBuildingTile(eBuilding buildingEnum, const QMoMGamePtr& game)
         : QGraphicsItem(),
-          m_buildingEnum(buildingEnum),
-          m_game(game)
-    {
-    }
+          m_game(game),
+          m_momBuilding(game.get(), buildingEnum)
+    {}
 
     QRectF boundingRect() const override
     {
         int height = 1;
-        height += MoM::QMoMResources::instance().getPixmap(m_buildingEnum, 1).height() + 2; // pixmap
-        //height += lineHeight; // Title
-        height += m_prerequisites.count() * lineHeight;
+        height += MoM::QMoMResources::instance().getPixmap(m_momBuilding.getBuildingEnum(), 1).height();
+        height += m_momBuilding.getRequiredBuildings().size() * lineHeight;
+        height += m_prohibitedRaces.size() * lineHeight;
         height += m_unitsPossible.count() * (MoM::QMoMResources::instance().getPixmap(
-                                                 UNITTYPE_High_Men_Spearmen, 1).height() + 2);
-        height += 4;
-        return QRectF(0, 0, 120, height);
+                                                 UNITTYPE_High_Men_Spearmen, 1).height());
+        height += 2;
+        return QRectF(0, 0, 150, height);
     }
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*) override
@@ -69,63 +107,94 @@ public:
         painter->fillRect(boundingRect(), Qt::white);
         painter->drawRect(boundingRect());
 
-        auto buildingData = m_game->getBuildingData(m_buildingEnum);
-        if (buildingData == nullptr)
-            return;
-
-        int xLeft = 4;
+        const int xLeft = 2;
         int y = 1;
-        int dy = lineHeight;
+        int x;
 
-        QPixmap pixmapBuilding = MoM::QMoMResources::instance().getPixmap(m_buildingEnum, 1);
-        painter->drawPixmap(xLeft, y, pixmapBuilding);
-        painter->drawText(xLeft + pixmapBuilding.width() + 4, y + pixmapBuilding.height() / 2,
-                          buildingData->m_BuildingName);
-        y += pixmapBuilding.height() + 2;
-        for (auto preqTile : m_prerequisites)
+        auto animationBuilding = MoM::QMoMResources::instance().getAnimation(m_momBuilding.getBuildingEnum());
+        auto rectBuilding = QRect(0, 0, 32, 32);
+        if (!animationBuilding.empty())
         {
-            painter->drawText(xLeft , y + dy / 2, QString("Preq: %0").arg(
-                                  m_game->getBuildingData(preqTile->buildingEnum())->m_BuildingName));
-            y += dy;
+            rectBuilding = animationBuilding.first()->rect();
+            animationBuilding.crop();
+            auto rect = animationBuilding.first()->rect();
+            painter->drawImage(xLeft + (rectBuilding.width() - rect.width()) / 2,
+                               y + (rectBuilding.height() - rect.height()) / 2,
+                               *animationBuilding.first());
+        }
+        x = xLeft + rectBuilding.width();
+        painter->drawText(x, y, boundingRect().width() - x, rectBuilding.height(), Qt::AlignVCenter,
+                          m_momBuilding.getName().c_str());
+        y += rectBuilding.height();
+        for (auto preqEnum : m_momBuilding.getRequiredBuildings())
+        {
+            auto preqBuilding = MoMBuilding(m_game.get(), preqEnum);
+            painter->drawText(xLeft, y, boundingRect().width() - xLeft, lineHeight, Qt::AlignVCenter,
+                              QString("Prequisite: %0").arg(preqBuilding.getName().c_str()));
+            y += lineHeight;
+        }
+        for (auto raceEnum : m_prohibitedRaces)
+        {
+            painter->drawText(xLeft, y, boundingRect().width() - xLeft, lineHeight, Qt::AlignVCenter,
+                              QString("Prohibited: %0").arg(m_game->getRaceName(raceEnum).c_str()));
+            y += lineHeight;
         }
         for (auto unit : m_unitsPossible)
         {
             QPixmap pixmapUnit = MoM::QMoMResources::instance().getPixmap(unit.getUnitTypeNr(), 1);
             painter->drawPixmap(xLeft, y, pixmapUnit);
-            painter->drawText(xLeft + pixmapUnit.width() + 4, y + pixmapUnit.height() / 2,
-                              QString("%0 %1").arg(unit.getRaceName().c_str(),
-                                                   unit.getUnitName().c_str()));
-            y += pixmapUnit.height() + 2;
+            x = xLeft + pixmapUnit.width();
+            painter->drawText(x, y, boundingRect().width() - x, pixmapUnit.height(), Qt::AlignVCenter,
+                              unit.getDisplayName().c_str());
+            y += pixmapUnit.height();
         }
     }
 
-    eBuilding buildingEnum() const { return m_buildingEnum; }
+    eBuilding buildingEnum() const { return m_momBuilding.getBuildingEnum(); }
 
-    void addPrerequisite(QMoMBuildingTile* preqTile) { m_prerequisites.push_back(preqTile); }
-    QVector<QMoMBuildingTile*> getPrerequisites() { return m_prerequisites; }
+    void addPrerequisite(QMoMBuildingTile* preqTile) { m_prerequisiteTiles.push_back(preqTile); }
+    QVector<QMoMBuildingTile*> getPrerequisites() { return m_prerequisiteTiles; }
+
+    void addProhibitedRace(eRace race) { m_prohibitedRaces.push_back(race); }
+    QVector<eRace> getProhibitedRaces() { return m_prohibitedRaces; }
 
     void addUnit(const MoMUnit& momUnit) { return m_unitsPossible.push_back(momUnit); }
     QVector<MoMUnit> getUnits() const { return m_unitsPossible; }
 
-    void setCol(int value) { m_col = value; }
-    int getCol() const { return m_col; }
+    void setTier(int value) { m_col = value; }
+    int getTier() const { return m_col; }
 
 private:
-    eBuilding m_buildingEnum;
     QMoMGamePtr m_game;
-    QVector<QMoMBuildingTile*> m_prerequisites;
+    MoMBuilding m_momBuilding;
+    QVector<QMoMBuildingTile*> m_prerequisiteTiles;
+    QVector<eRace> m_prohibitedRaces;
     QVector<MoMUnit> m_unitsPossible;
     int m_col = -1;
 };
 
+void positionBuildingTiles(QMap<eBuilding, QMoMBuildingTile*>& buildingTiles)
+{
+    QVector<int> firstFreeRow(buildingTiles.count());
+    for (auto buildingTile : buildingTiles)
+    {
+        auto col = buildingTile->getTier();
+        auto row = firstFreeRow[col];
+        firstFreeRow[col] += buildingTile->boundingRect().height() + 20;
+        buildingTile->setPos(buildingTile->getTier() * (buildingTile->boundingRect().width() + 40), row);
+        buildingTile->setZValue(1);
+    }
+}
+
 int recurseDependency(QMoMBuildingTile& tile)
 {
+    // TODO: Better way to find buildings that are already available
     if ((tile.buildingEnum() == BUILDING_Trade_Goods) || (tile.buildingEnum() == BUILDING_Housing))
     {
-        tile.setCol(0);
+        tile.setTier(0);
     }
-    if (tile.getCol() != -1)
-        return tile.getCol();
+    if (tile.getTier() != -1)
+        return tile.getTier();
 
     int maxPreqCol = 0;
     for (auto preqTile : tile.getPrerequisites())
@@ -133,8 +202,8 @@ int recurseDependency(QMoMBuildingTile& tile)
         int col = recurseDependency(*preqTile);
         maxPreqCol = Max(maxPreqCol, col);
     }
-    tile.setCol(maxPreqCol + 1);
-    return tile.getCol();
+    tile.setTier(maxPreqCol + 1);
+    return tile.getTier();
 }
 
 }
@@ -149,7 +218,8 @@ public:
         auto line = addLine(QLineF(preq->x() + preq->boundingRect().right(),
                                    preq->y() + preq->boundingRect().height() / 2,
                                    tile->x(),
-                                   tile->y() + tile->boundingRect().height() / 2));
+                                   tile->y() + tile->boundingRect().height() / 2),
+                            QPen(Qt::black, 2));
         line->setZValue(0);
     }
 };
@@ -185,7 +255,7 @@ DialogBuildingTree::DialogBuildingTree(QWidget *parent) :
     QObject::connect(m_timer.data(), SIGNAL(timeout()), this, SLOT(slot_timerAnimations()));
 
     // Start timer
-    m_timer->start(250);
+//    m_timer->start(250);
 
     ui->graphicsView->setScene(m_scene.get());
 }
@@ -314,53 +384,75 @@ void DialogBuildingTree::slot_gameUpdated()
         buildingTiles[buildingEnum] = tile;
     }
 
-    // List units at the buildings they require
-    for (int unitTypeNr = 0; unitTypeNr < eUnit_Type_MAX; ++unitTypeNr)
-    {
-        MoMUnit momUnit(m_game.get(), static_cast<eUnit_Type>(unitTypeNr));
-        auto listBuildings = momUnit.getRequiredBuildings();
-        for (auto buildingEnum : listBuildings)
-        {
-            auto it = buildingTiles.find(buildingEnum);
-            if (it != buildingTiles.end())
-            {
-                it.value()->addUnit(momUnit);
-            }
-        }
-    }
-
     // Register prerequisite tiles for every building tile
     for(auto buildingTile : buildingTiles)
     {
-       auto buildingData = m_game->getBuildingData(buildingTile->buildingEnum());
-       auto itPreq = buildingTiles.find(buildingData->m_Prerequisite1);
-       if (itPreq != buildingTiles.end())
+       for (auto preq : MoMBuilding(m_game.get(), buildingTile->buildingEnum()).getRequiredBuildings())
        {
-           buildingTile->addPrerequisite(itPreq.value());
-       }
-       itPreq = buildingTiles.find(buildingData->m_Prerequisite2);
-       if (itPreq != buildingTiles.end())
-       {
-           buildingTile->addPrerequisite(itPreq.value());
+           auto it = buildingTiles.find(preq);
+           if (it != buildingTiles.end())
+           {
+               buildingTile->addPrerequisite(it.value());
+           }
        }
     }
 
-    // Find column position for each building tile
+    // List prohibited races for each building
+    for (int raceNr = 0; raceNr < (int)gMAX_RACES; ++raceNr)
+    {
+        auto race = (eRace)raceNr;
+        const auto raceData = m_game->getRaceData(race);
+        if (raceData == nullptr)
+            break;
+        for (size_t i = 0; (i < raceData->m_Number_of_prohibited_buildings) && (i < ARRAYSIZE(raceData->m_Prohibited_buildings)); ++i)
+        {
+             auto buildingEnum = raceData->m_Prohibited_buildings[i];
+             auto it = buildingTiles.find(buildingEnum);
+             if (it != buildingTiles.end())
+             {
+                 it.value()->addProhibitedRace(race);
+             }
+        }
+    }
+
+    // Find tier for each building tile
     for (auto buildingTile : buildingTiles)
     {
         recurseDependency(*buildingTile);
     }
 
     // Position each building tile
-    QVector<int> firstFreeRow(buildingTiles.count());
-    for (auto buildingTile : buildingTiles)
+    positionBuildingTiles(buildingTiles);
+
+    // List units at the highest tier buildings they require
+    for (int unitTypeNr = 0; unitTypeNr < eUnit_Type_MAX; ++unitTypeNr)
     {
-        auto col = buildingTile->getCol();
-        auto row = firstFreeRow[col];
-        firstFreeRow[col] += buildingTile->boundingRect().height() + 20;
-        buildingTile->setPos(buildingTile->getCol() * (buildingTile->boundingRect().width() + 40), row);
-        buildingTile->setZValue(1);
+        MoMUnit momUnit(m_game.get(), static_cast<eUnit_Type>(unitTypeNr));
+        auto listBuildings = momUnit.getRequiredBuildings();
+        auto highestTierValue = QPointF();
+        QMoMBuildingTile* highestTierTile = nullptr;
+        for (auto buildingEnum : listBuildings)
+        {
+            auto it = buildingTiles.find(buildingEnum);
+            if (it != buildingTiles.end())
+            {
+                auto tile = it.value();
+                if ((tile->x() > highestTierValue.x())
+                        || ((tile->x() == highestTierValue.x()) && (tile->y() > highestTierValue.y())))
+                {
+                    highestTierTile = tile;
+                    highestTierValue = tile->pos();
+                }
+            }
+        }
+        if (highestTierTile != nullptr)
+        {
+            highestTierTile->addUnit(momUnit);
+        }
     }
+
+    // Redo positioning of each building tile to give space to added units
+    positionBuildingTiles(buildingTiles);
 
     // Add connectors for prequisite tiles to the scene
     for (auto buildingTile : buildingTiles)

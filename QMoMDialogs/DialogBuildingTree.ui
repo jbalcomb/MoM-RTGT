@@ -29,6 +29,9 @@
         </color>
        </brush>
       </property>
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+      </property>
       <property name="resizeAnchor">
        <enum>QGraphicsView::AnchorViewCenter</enum>
       </property>

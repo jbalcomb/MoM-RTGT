@@ -898,7 +898,7 @@ const QMoMImagePtr  QMoMResources::getImage(MoM::eTower_Node_Lair_Type lair, boo
 const QMoMImagePtr QMoMResources::getImage(MoM::eProducing producing) const
 {
     QMoMImagePtr image;
-    if (toUInt(producing) < PRODUCING_BUILDING_MAX)
+    if (toUInt(producing) < eProducing_Building_MAX)
     {
         eBuilding building = (eBuilding)producing;
         image = getImage(building);
