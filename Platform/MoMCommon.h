@@ -12,11 +12,10 @@
 #ifndef MOMCOMMON_H
 #define MOMCOMMON_H
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <sstream>
-#include <string.h>
-
+#include <cstring>
 
 // Specify integer types with specific sizes
 #if defined(_MSC_VER) || defined(SWIG)         // Compiler MS Visual Studio or Swig (no proper POSIX)
@@ -30,25 +29,17 @@ typedef signed int int32_t;
 #include <stdint.h>     // POSIX
 #endif
 
-
 // Specify to pack structures
-#ifdef _MSC_VER         // Compiler MS Visual Studio
-//#pragma warning( once : 4103 )  // alignment changed after including header, may be due to missing #pragma #pragma pack(1)
-#pragma pack(push, 1)
-#define PACKED_STRUCT
-#endif
-
-#ifdef __MINGW32__      // Compiler MinGW
-#pragma pack(push, 1)
-#define PACKED_STRUCT __attribute__((packed))
-#endif
-
-#ifdef __GNUC__         // Compiler g++
-#define PACKED_STRUCT __attribute__((packed))
-#endif
-
-#ifdef SWIG             // Swig wrapper generator
-#define PACKED_STRUCT
+#if defined(_MSC_VER)       // Compiler MS Visual Studio
+  #pragma pack(push, 1)
+  #define PACKED_STRUCT
+#elif defined(__linux__)    // Compiler Linux g++
+  #define PACKED_STRUCT __attribute__((packed))
+#elif defined(__GNUC__)     // Compiler Linux g++ (use g++ -fshort-enums)
+  #pragma pack(push, 1)
+  #define PACKED_STRUCT __attribute__((packed))
+#elif defined(SWIG)         // Swig wrapper generator
+  #define PACKED_STRUCT
 #endif
 
 namespace MoM {
@@ -202,13 +193,11 @@ const uint16_t gFLIC_chunk_type_FLI_COPY = 16;      // uncompressed image
 
 }
 
-#ifdef _MSC_VER         // Compiler MS Visual Studio
-#pragma pack(pop)
+#if defined(_MSC_VER)       // Compiler MS Visual Studio
+  #pragma pack(pop)
+#elif defined(__MINGW32__)  // Compiler MinGW
+  #pragma pack(pop)
 #endif
-#ifdef __MINGW32__  // Compiler MinGW
-#pragma pack(pop)
-#endif
-
 #undef PACKED_STRUCT
 
 #endif

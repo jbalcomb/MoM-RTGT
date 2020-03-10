@@ -43,3 +43,6 @@ Applications/MoMTweaker/Makefile
 Applications/build-*
 Makefile.Debug
 Makefile.Release
+MoMGenerated.idc
+.qmake.stash
+object_script.*

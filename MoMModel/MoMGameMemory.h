@@ -20,7 +20,7 @@ public:
     MoMGameMemory(void);
     virtual ~MoMGameMemory();
 
-    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
+    bool openGame(std::unique_ptr<MoMProcess>& momProcess);
 
     virtual bool load(const char* filename);
     virtual bool save(const char* filename);
@@ -158,8 +158,8 @@ private:
         return m_WizardsExe.get();
     }
 
-    std::auto_ptr<MoMProcess> m_process;
-    std::auto_ptr<MoMExeWizards> m_WizardsExe;
+    std::unique_ptr<MoMProcess> m_process;
+    std::unique_ptr<MoMExeWizards> m_WizardsExe;
     std::string m_filename_WizardsExe;
 };
 
