@@ -25,6 +25,8 @@ namespace MoM {
 static_assert(1 == sizeof(eSkill), "Check enum-size (g++ flag -fshort-enums)");
 static_assert(0x04C8 == sizeof(Wizard), "Check pack-struct (g++ flag -fpack-struct)");
 
+MoMGameBase::~MoMGameBase() = default;
+
 void MoMGameBase::findUnitsAtLocation(const MoMLocation& location, std::vector<int>& units)
 {
     units.clear();

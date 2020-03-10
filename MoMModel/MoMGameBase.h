@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "MoMLbxBase.h"     // TODO: Why does forward not work?
 #include "MoMLocation.h"
 #include "MoMTemplate.h"
 #include "MoMUtility.h"
@@ -24,7 +25,7 @@ public:
     struct SaveGameRef { uint8_t* pointer = 0; size_t size = 0; };
 
     MoMGameBase() {}
-    virtual ~MoMGameBase() {}
+    virtual ~MoMGameBase();
 
     virtual void closeGame() throw() = 0;
 
@@ -698,8 +699,8 @@ protected:
     }
 
 protected:
-    std::auto_ptr<class MoMLbxBase> m_ItemDataLbx;
-    std::auto_ptr<class MoMLbxBase> m_ItemPowLbx;
+    std::unique_ptr<MoMLbxBase> m_ItemDataLbx;
+    std::unique_ptr<MoMLbxBase> m_ItemPowLbx;
 
 private:
     // NOT IMPLEMENTED

@@ -222,7 +222,7 @@ void MainWindow::update()
 
 void MainWindow::on_pushButton_Connect_clicked()
 {
-    std::auto_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
+    std::unique_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
 
     bool ok = momProcess->findProcessAndData();
 	QMoMGamePtr newGame;

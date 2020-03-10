@@ -20,7 +20,7 @@ public:
     MoMGameCustom(void);
     virtual ~MoMGameCustom();
 
-    bool openGame(std::auto_ptr<MoMProcess>& momProcess);
+    bool openGame(std::unique_ptr<MoMProcess>& momProcess);
 
 protected:
 public:
@@ -157,8 +157,8 @@ private:
     }
 
 
-    std::auto_ptr<MoMProcess> m_process;
-    std::auto_ptr<MoMExeMagic> m_MagicExe;
+    std::unique_ptr<MoMProcess> m_process;
+    std::unique_ptr<MoMExeMagic> m_MagicExe;
     std::string m_filename_MagicExe;
 };
 
