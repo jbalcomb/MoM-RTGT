@@ -234,8 +234,6 @@ DialogBuildingTree::DialogBuildingTree(QWidget *parent) :
 
     postInitialize();
 
-    setWindowFlags(Qt::Window);
-
     // Update view when checkbox is clicked
     QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
     QObject::connect(ui->checkBox_EnemyUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));

@@ -2,6 +2,14 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.3.1 (2020--)
+-----------------------------
+* New generated view of the Building Tree.
+  Available in the Tools window.
+
+* Cosmetic: eliminate the question marks in the caption bars.
+
+
 CHANGES IN 0.3.1 (2020-03-08)
 -----------------------------
 * Project requires at least C++11 to build.

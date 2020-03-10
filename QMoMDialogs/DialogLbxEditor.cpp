@@ -25,7 +25,6 @@ DialogLbxEditor::DialogLbxEditor(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowFlags(Qt::Window);
     setFont(MoM::QMoMResources::g_Font);
     ui->textEdit_lbxText->setFont(MoM::QMoMResources::g_FontFixed);
 

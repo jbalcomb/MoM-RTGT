@@ -12,6 +12,7 @@ QMoMDialogBase::QMoMDialogBase(QWidget *parent) :
     m_font()
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(Qt::Window);
 
     setFont(MoM::QMoMResources::g_Font);
     m_font = MoM::QMoMResources::g_Font;

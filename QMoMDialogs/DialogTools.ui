@@ -58,7 +58,7 @@
       </property>
       <property name="icon">
        <iconset resource="../Resources/InteractiveGameTweaker.qrc">
-        <normaloff>:/heroes/yramrag.gif</normaloff>:/heroes/yramrag.gif</iconset>
+        <normaloff>:/buildings/Builders Hall.gif</normaloff>:/buildings/Builders Hall.gif</iconset>
       </property>
       <property name="iconSize">
        <size>

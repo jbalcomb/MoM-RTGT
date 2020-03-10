@@ -35,8 +35,6 @@ DialogTables::DialogTables(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowFlags(Qt::Window);
-
     postInitialize();
 }
 

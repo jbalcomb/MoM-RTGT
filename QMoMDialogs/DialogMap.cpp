@@ -50,7 +50,6 @@ DialogMap::DialogMap(QWidget *parent) :
 
     postInitialize();
 
-    setWindowFlags(Qt::Window);
 
 //    QMoMGamePtr game= MainWindow::getInstance()->getGame();
 //    if ((0 != game) && (game->isBattleInProgress()))
