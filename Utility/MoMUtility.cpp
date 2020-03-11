@@ -25,9 +25,9 @@ std::string dirFromFilepath(const std::string filepath)
     return dir;
 }
 
-// Knuth–Morris–Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)
-// \retval n if the needle was not found
-// \retval the index of the needle in the haystack otherwise
+//! Knuth-Morris-Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)
+//! \retval n if the needle was not found
+//! \retval the index of the needle in the haystack otherwise
 static size_t findKnuthMorrisPratt(const uint8_t* needle, size_t m, const uint8_t* haystack, size_t n)
 {
     // Pre-compile the needle

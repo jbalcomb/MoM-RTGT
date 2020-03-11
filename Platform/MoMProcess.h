@@ -179,6 +179,7 @@ private:
     size_t      m_dwOffsetCode;
     size_t      m_dwOffsetDatasegment;
     std::vector<uint8_t> m_dataSegmentAndUp;
+    std::string m_processFileName;
     std::string m_exeFilepath;
     bool        m_verbose;
 };

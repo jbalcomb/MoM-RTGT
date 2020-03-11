@@ -6,6 +6,7 @@
 // ---------------------------------------------------------------------------
 
 #include <windows.h>
+#include <psapi.h>
 
 #include <cctype>
 #include <fstream>
@@ -166,6 +167,19 @@ bool MoMProcess::tryProcessId(size_t dwProcessId)
     else
     {
         std::cout << "Opened MoM process (processId=0x" << std::hex << dwProcessId << std::dec << ")" << std::dec << std::endl;
+    }
+
+    char szFileName[PATH_MAX] = "";
+    DWORD count = GetModuleFileNameExA(m_hProcess, NULL, szFileName, sizeof(szFileName));
+    if (count == 0)
+    {
+        std::cout << "GetModuleFileNameExA() failed. GetLastError=0x" << std::hex << GetLastError() << std::endl;
+        m_processFileName.clear();
+    }
+    else
+    {
+        std::cout << "GetModuleFileNameExA() -> '" << szFileName << "'" << std::endl;
+        m_processFileName = szFileName;
     }
 
     MEMORY_BASIC_INFORMATION mbi;

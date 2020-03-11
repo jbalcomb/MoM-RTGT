@@ -33,7 +33,7 @@ inline T Abs(const T& x)
 
 std::string dirFromFilepath(const std::string filepath);
 
-// Knuth–Morris–Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)
+// Knuth-Morris-Pratt algorithm to find a needle (m) in a haystack (n) of order O(m)+O(n)
 // \retval haystack.size() if the needle was not found
 // \retval the index of the needle in the haystack otherwise
 size_t findStringInBuffer(const std::string& needle, const std::vector<uint8_t>& haystack);

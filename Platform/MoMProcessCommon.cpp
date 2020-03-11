@@ -8,7 +8,8 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <string.h>     // memcmp()
+#include <regex>
+#include <string.h>
 
 #include "MoMProcess.h"
 #include "MoMUtility.h"
@@ -57,21 +58,30 @@ void MoMProcess::constructExeFilepath()
     {
     case gOFFSET_WIZARDS_DSEG_CODE: pszBaseFilename = "WIZARDS.EXE"; break;
     case gOFFSET_MAGIC_DSEG_CODE:   pszBaseFilename = "MAGIC.EXE"; break;
-    default:                      break;
+    default:                        break;
     }
 
     if (0 == pszBaseFilename)
     {
+        std::cout << "Unrecognized Offset_DS_Code()=" << getOffset_DS_Code() << ". Clear .exe filepath" << std::endl;
         m_exeFilepath.clear();
+        return;
     }
-    else
+
+    auto processFileDirectory = std::regex_replace(m_processFileName, std::regex(R"([^/\\]+$)"), "");
+    if (!std::regex_search(m_exeFilepath, std::regex(R"(^(/|\\|\w:))")))
     {
-        if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/' && m_exeFilepath[m_exeFilepath.size() - 1] != '\\')
-        {
-            m_exeFilepath += "/";
-        }
-        m_exeFilepath += pszBaseFilename;
+        // Relative path or empty: append to processFileDirectory (which may also be empty)
+        m_exeFilepath = processFileDirectory + m_exeFilepath;
     }
+
+    if (!m_exeFilepath.empty() && m_exeFilepath[m_exeFilepath.size() - 1] != '/'
+            && m_exeFilepath[m_exeFilepath.size() - 1] != '\\')
+    {
+        m_exeFilepath += "/";
+    }
+    m_exeFilepath += pszBaseFilename;
+    std::cout << "Set .exe filepath to '" << m_exeFilepath << "'" << std::endl;
 }
 
 bool MoMProcess::findSEG0(const std::vector<uint8_t>& data)
