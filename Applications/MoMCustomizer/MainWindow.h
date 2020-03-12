@@ -37,7 +37,7 @@ private:
     Ui::MainWindow *ui;
 
     QTimer* m_timer;
-    std::auto_ptr<MoM::MoMGameCustom> m_game;
+    std::unique_ptr<MoM::MoMGameCustom> m_game;
     bool m_updating;
 
 private slots:

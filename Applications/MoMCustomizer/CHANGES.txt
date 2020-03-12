@@ -2,8 +2,9 @@ MoMCustomizer
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.2.8 (2013--)
+CHANGES IN 0.3.1 (2020--)
 -----------------------------
+* Upgrade to C++14 and Qt 5.14
 
 * Make it work on 64-bit linux platforms.
   

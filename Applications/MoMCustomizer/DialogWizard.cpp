@@ -43,7 +43,7 @@ DialogWizard::DialogWizard(QWidget *parent) :
 
     // Start MoM process
     qDebug() << "Start MoM process";
-    std::auto_ptr<MoMProcess> momProcess(new MoMProcess);
+    std::unique_ptr<MoMProcess> momProcess(new MoMProcess);
     bool ok = momProcess->createProcess(
                 "C:\\Program Files (x86)\\DOSBox-0.74\\DOSBox.exe",
                 "\"C:\\Program Files (x86)\\DOSBox-0.74\\DOSBox.exe\""

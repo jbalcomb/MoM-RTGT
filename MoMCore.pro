@@ -8,10 +8,6 @@ unix:PLATF = Linux
 win32-g++:PLATF = Windows
 win32-msvc2008:PLATF = Windows
 
-unix:COMPILER = gcc
-win32-g++:COMPILER = mingw
-win32-msvc2008:COMPILER = msvc2008
-
 unix:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
 win32-g++:QMAKE_CXXFLAGS += -g -fshort-enums -Wno-unused-parameter
 win32-msvc2008:QMAKE_CXXFLAGS +=
@@ -32,8 +28,6 @@ QT       -= core gui
 
 TARGET = MoMCore
 TEMPLATE = lib
-DESTDIR = $${COMPILER}/bin
-OBJECTS_DIR += $${COMPILER}/obj
 
 #CONFIG += staticlib
 

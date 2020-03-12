@@ -248,8 +248,8 @@ void MainWindow::update()
 
 void MainWindow::on_pushButton_Connect_clicked()
 {
-    std::auto_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
-    std::auto_ptr<MoM::MoMGameCustom> customGame( new MoM::MoMGameCustom );
+    std::unique_ptr<MoM::MoMProcess> momProcess( new MoM::MoMProcess );
+    std::unique_ptr<MoM::MoMGameCustom> customGame( new MoM::MoMGameCustom );
 
     if (!momProcess->findProcessAndData())
     {
@@ -268,7 +268,7 @@ void MainWindow::on_pushButton_Connect_clicked()
     else
     {
         statusBar()->showMessage(tr("Connected to MoM Setup"));
-        m_game = customGame;
+        m_game = std::move(customGame);
     }
 
     update();
@@ -641,7 +641,7 @@ void MainWindow::slot_WizardType_editingFinished()
     MoM::Wizard_Type_Data* wizardType = &pDataSegment->m_Wizard_Types[portrait];
 
     memset(wizardType->m_Wizard_Name, '\0', sizeof(wizardType->m_Wizard_Name));
-    strncpy(wizardType->m_Wizard_Name, ui->lineEdit_Name->text().toAscii().data(), sizeof(wizardType->m_Wizard_Name) - 1);
+    strncpy(wizardType->m_Wizard_Name, ui->lineEdit_Name->text().toStdString().data(), sizeof(wizardType->m_Wizard_Name) - 1);
     wizardType->m_Life_books = ui->lineEdit_Life->text().toShort();
     wizardType->m_Death_books = ui->lineEdit_Death->text().toShort();
     wizardType->m_Nature_books = ui->lineEdit_Nature->text().toShort();

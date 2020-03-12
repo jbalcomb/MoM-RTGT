@@ -5,7 +5,7 @@
 ## Created:     2010-05-01
 ## ---------------------------------------------------------------------------
 
-include(../Common/Common.pri)
+include(Common.pri)
 
 TEMPLATE = app
 
@@ -14,10 +14,10 @@ DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 TARGET = MoMTweaker
 
-QT += core gui
-
 include(MoMTweaker.pri)
 
-# Additional platform specific sources
 SOURCES += \
-    ./main.cpp
+    Applications/MoMTweaker/main.cpp
+
+DISTFILES += \
+    Applications/MoMTweaker/CHANGES.txt

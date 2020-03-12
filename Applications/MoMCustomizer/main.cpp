@@ -5,7 +5,7 @@
 // Created:     2010-05-01
 // ---------------------------------------------------------------------------
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 #include <TeeRedirecter.h>
 #include "MainWindow.h"

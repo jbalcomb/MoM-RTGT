@@ -87,7 +87,7 @@ Test_MoMCombat::Test_MoMCombat() :
 void Test_MoMCombat::initTestCase()
 {
     // General set up, which is connecting to a game, since we need the unit data.
-    std::auto_ptr<MoM::MoMProcess> momProcess(new MoM::MoMProcess);
+    std::unique_ptr<MoM::MoMProcess> momProcess(new MoM::MoMProcess);
     QVERIFY(momProcess->findProcessAndData());
     QVERIFY(m_gameMemory.openGame(momProcess));
     m_game = &m_gameMemory;
