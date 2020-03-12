@@ -7,14 +7,23 @@ CHANGES IN 0.3.2 (2020-03-12)
 * Fixed problem that Tweaker did not properly connect to the Steam version
   of MoM and CoM.
 
-* New generated graphical view of the Building Tree.
+* New graphical view of the Building Tree, which is generated from the
+  dependencies. It will also show unit requirements and prohibited races,
+  but only if the corresponding information is available, e.g. when
+  connected to the game.
   Available in the Tools window.
 
 * Refer to actual names instead of old hard coded names in more places.
-  So if a spell has been renamed by a modder, that it actually shows up with
-  the new name.
+  So that if a spell has been renamed by a modder, that it actually shows up
+  with the new name.
+  Currently does not work yet if the spell name is a label in a sub tree view.
+  So e.g. the Known Spells of a player are still shown with the wrong label
+  in the main window.
 
 * Cosmetic: eliminate the question marks in the caption bars.
+
+* For the record, not all features of Tweaker will work correctly with
+  Caster of Magic - yet. They may even crash. Work In Progress...
 
 
 
