@@ -2,13 +2,17 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.3.1 (2020-03-11)
+CHANGES IN 0.3.2 (2020-03-12)
 -----------------------------
 * Fixed problem that Tweaker did not properly connect to the Steam version
   of MoM and CoM.
 
 * New generated graphical view of the Building Tree.
   Available in the Tools window.
+
+* Refer to actual names instead of old hard coded names in more places.
+  So if a spell has been renamed by a modder, that it actually shows up with
+  the new name.
 
 * Cosmetic: eliminate the question marks in the caption bars.
 

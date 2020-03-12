@@ -9,7 +9,7 @@ include(Common.pri)
 
 TEMPLATE = app
 
-VERSION = 0.3.1
+VERSION = 0.3.2
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 TARGET = MoMTweaker
