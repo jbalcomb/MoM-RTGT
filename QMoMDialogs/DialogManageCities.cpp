@@ -78,7 +78,7 @@ void CityTargetTableItem::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
-    QString name = prettyQStr(e);
+    QString name = MoM::QMoMResources::instance().getName(e);
     QAction* action = new QAction(name, m_actionGroup);
     QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
     if (!iconPtr.isNull())

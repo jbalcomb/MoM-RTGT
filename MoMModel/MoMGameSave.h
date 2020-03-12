@@ -11,6 +11,7 @@
 #include "MoMLbxBase.h"
 #include "MoMExeMagic.h"
 #include "MoMExeWizards.h"
+#include "MoMResources.h"
 
 namespace MoM {
 
@@ -176,8 +177,7 @@ protected:
     {
         if (0 == m_SpelldatLbx.get())
             return 0;
-        uint8_t* data = m_SpelldatLbx->getRecord(0);
-        return (Spell_Data*)(data + 4);
+        return getLbxSpellData(*m_SpelldatLbx);
     }
 
     virtual uint16_t* getTaxUnrestTable()

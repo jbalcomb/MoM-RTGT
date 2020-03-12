@@ -237,13 +237,14 @@ void EnumTableItemBase<Enum>::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && (e != *m_ptr))
+    auto rawName = prettyQStr(e);
+    if (!rawName.isEmpty() && (rawName[0] == '<') && (e != *m_ptr))
     {
         // Skip <Unknown> entries, unless one of them is selected
     }
     else
     {
+        auto name = MoM::QMoMResources::instance().getName(e);
         QAction* action = new QAction(name, m_actionGroup);
         QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
         if (!iconPtr.isNull())
@@ -275,7 +276,7 @@ QString EnumTableItemBase<Enum>::toString() const
         unsignedValue = (unsignedValue & m_bitmask);
     }
     Enum enumValue = static_cast<Enum>(unsignedValue);
-    QString str = prettyQStr(enumValue);
+    QString str = MoM::QMoMResources::instance().getName(enumValue);
 
     if (((m_showEnum == SHOWENUM_minusOne) || (m_showEnum == SHOWENUM_minusOneAndnoZero))
             && (enumValue == (Enum)-1))
@@ -458,13 +459,14 @@ void BitmaskTableItem<Bitmask, Enum>::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && !has(e))
+    auto rawName = prettyQStr(e);
+    if (!rawName.isEmpty() && (rawName[0] == '<') && !has(e))
     {
         // Skip <Unknown> entries, unless one of them is selected
     }
     else
     {
+        auto name = MoM::QMoMResources::instance().getName(e);
         QAction* action = new QAction(name, m_actionGroup);
         action->setCheckable(true);
         action->setData(QVariant((int)e));
@@ -526,7 +528,7 @@ QString BitmaskTableItem<Bitmask, Enum>::toString()
             {
                 result += ", ";
             }
-            QString name = prettyQStr(e);
+            QString name = MoM::QMoMResources::instance().getName(e);
             name.replace("Immunity", "Imm");
             result += name;
         }

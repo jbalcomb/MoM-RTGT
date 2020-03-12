@@ -179,8 +179,7 @@ void EnumTreeItem<Enum>::slotAction()
 template<typename Enum>
 QString EnumTreeItem<Enum>::toString() const
 {
-    QString str = prettyQStr(*m_ptr);
-    return str;
+    return MoM::QMoMResources::instance().getName(*m_ptr);
 }
 
 // Private
@@ -190,13 +189,14 @@ void EnumTreeItem<Enum>::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && (e != *m_ptr))
+    QString rawName = prettyQStr(e);
+    if (!rawName.isEmpty() && (rawName[0] == '<') && (e != *m_ptr))
     {
         // Skip <Unknown> entries, unless one of them is selected
     }
     else
     {
+        auto name = MoM::QMoMResources::instance().getName(e);
         QAction* action = new QAction(name, m_actionGroup);
         QMoMIconPtr iconPtr = MoM::QMoMResources::instance().getIcon(e);
         if (!iconPtr.isNull())
@@ -290,13 +290,14 @@ void BitmaskTreeItem<Bitmask, Enum>::addAction(Enum e)
 {
     assert(m_actionGroup != 0);
 
-    QString name = prettyQStr(e);
-    if (!name.isEmpty() && (name[0] == '<') && !has(e))
+    QString rawName = prettyQStr(e);
+    if (!rawName.isEmpty() && (rawName[0] == '<') && !has(e))
     {
         // Skip <Unknown> entries, unless one of them is selected
     }
     else
     {
+        auto name = MoM::QMoMResources::instance().getName(e);
         QAction* action = new QAction(name, m_actionGroup);
         action->setCheckable(true);
         action->setData(QVariant((int)e));
@@ -353,7 +354,7 @@ QString BitmaskTreeItem<Bitmask, Enum>::toString()
             {
                 result += ", ";
             }
-            QString name = prettyQStr(e);
+            QString name = MoM::QMoMResources::instance().getName(e);
             name.replace("Immunity", "Imm");
             result += name;
         }

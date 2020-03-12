@@ -5,22 +5,25 @@
 // Created:     2011-09-30
 // ---------------------------------------------------------------------------
 
-#include <string>
-
-#include <QFontDatabase>
+#include "QMoMResources.h"
 
 #include "MoMGameBase.h"
 #include "MoMGenerated.h"
 #include "MoMLbxBase.h"
+#include "MoMResources.h"
 #include "MoMUtility.h"
 #include "QMoMLbx.h"
 #include "QMoMTreeItemModel.h"
 #include "QMoMUtility.h"
 
-#include "QMoMResources.h"
+#include <QFontDatabase>
+
+#include <string>
 
 namespace MoM
 {
+
+namespace {
 
 template<typename Enum>
 struct Special
@@ -401,6 +404,18 @@ static Special<eUnitMutation> gTableUnitMutations[eUnitMutation_MAX] =
     { UNITMUTATION_Stasis_lingering, HELP_SPECIAL2_STASIS, "SPECIAL2.LBX", 4 },
 };
 
+MoM::MoMLbxBase loadLbx(const std::string& gameDirectory, const std::string& lbxFileTitle)
+{
+    if (gameDirectory.empty())
+        return {};
+    std::string lbxFile = gameDirectory + "/" + lbxFileTitle;
+    MoM::MoMLbxBase lbx;
+    if (!lbx.load(lbxFile))
+        return {};
+    return lbx;
+}
+
+}
 
 const QFont QMoMResources::g_FontSmall("Sans Serif", 8, -1, false);
 #ifdef _WIN32
@@ -1088,6 +1103,25 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
     }
 
     return image;
+}
+
+const QString QMoMResources::getName(MoM::eSpell spell) const
+{
+    // First try the game
+    const auto* gameSpellData = m_game->getSpellData(spell);
+    if (gameSpellData != nullptr)
+    {
+        return gameSpellData->m_SpellName;
+    }
+    // Then try the game directory
+    MoM::MoMLbxBase lbx = loadLbx(m_game->getGameDirectory(), "SPELLDAT.LBX");
+    const auto* lbxSpellData = getLbxSpellData(lbx);
+    if (lbxSpellData && inRange(spell, eSpell_MAX))
+    {
+        return lbxSpellData[spell].m_SpellName;
+    }
+    // If all fails, fall back to the enum constant as string
+    return prettyQStr(spell);
 }
 
 void QMoMResources::changeBannerColor(MoM::eBannerColor bannerColor, QMoMAnimation& animation) const

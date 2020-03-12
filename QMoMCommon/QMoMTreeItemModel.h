@@ -176,7 +176,7 @@ public:
             {
                 // Strip uppercase prefix
                 // Replace underscores by spaces
-                value = toQStr(*m_ptr).replace(QRegExp("^[A-Z][A-Z0-9]+_"), "").replace('_', ' ');
+                value = MoM::QMoMResources::instance().getName(*m_ptr);
             }
             else
             {

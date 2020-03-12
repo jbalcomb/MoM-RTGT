@@ -235,14 +235,7 @@ DialogBuildingTree::DialogBuildingTree(QWidget *parent) :
     postInitialize();
 
     // Update view when checkbox is clicked
-    QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_EnemyUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_ExploredOnly, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_Lairs, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_Terrain, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_TerrainBonuses, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_TerrainChanges, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
-    QObject::connect(ui->checkBox_YourUnits, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
+//    QObject::connect(ui->checkBox_Cities, SIGNAL(clicked()), this, SLOT(slot_gameUpdated()));
 
     // Update view when items are inspected
 //    QObject::connect(m_scene, SIGNAL(signal_tileChanged(MoM::MoMLocation)), this, SLOT(slot_tileChanged(MoM::MoMLocation)));
@@ -263,8 +256,8 @@ DialogBuildingTree::~DialogBuildingTree()
     preFinalize();
 }
 
-void DialogBuildingTree::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
-{
+//void DialogBuildingTree::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit)
+//{
 //    assert(0 != battleUnit);
 //    int battleUnitNr = (int)(battleUnit - m_game->getBattleUnit(0));
 //    Unit* unit = m_game->getUnit(battleUnit->m_unitNr);
@@ -284,7 +277,7 @@ void DialogBuildingTree::addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Un
 //    qtreeUnit->addChild(new EnumTreeItem<ePlayer>(m_game, "Owner", &battleUnit->m_Owner, ePlayer_MAX));
 //    qtreeUnit->addChild(new EnumTreeItem<eBattleUnitActive>(m_game, "Active", &battleUnit->m_Active, eBattleUnitActive_MAX));
 //    qtreeUnit->addChild(new NumberTreeItem<uint8_t>(m_game, "WeaponType", &battleUnit->m_Weapon_Type_Plus_1));
-}
+//}
 
 void DialogBuildingTree::on_comboBox_Plane_currentIndexChanged(int index)
 {
@@ -485,14 +478,6 @@ void DialogBuildingTree::slot_tileSelected(const MoM::MoMLocation &loc)
 }
 
 void DialogBuildingTree::slot_timerAnimations()
-{
-}
-
-void MoM::DialogBuildingTree::on_pushButton_SaveBookmark_clicked()
-{
-}
-
-void MoM::DialogBuildingTree::on_pushButton_RestoreBookmark_clicked()
 {
 }
 

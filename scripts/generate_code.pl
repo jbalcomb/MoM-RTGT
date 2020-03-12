@@ -347,7 +347,7 @@ sub generate_Qt_code
             
             #next if ($datamember =~ m#trash#i);
             
-			$type = "uint16_t" if ($type eq "DS_Offset");
+            $type = "uint16_t" if ($type eq "DS_Offset");
             $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
             my ($name, $range, $bitmask) = ($1, $3, $5);
             my $cast = "";

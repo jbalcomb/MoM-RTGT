@@ -2,12 +2,16 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.3.1 (2020--)
+CHANGES IN 0.3.1 (2020-03-11)
 -----------------------------
-* New generated view of the Building Tree.
+* Fixed problem that Tweaker did not properly connect to the Steam version
+  of MoM and CoM.
+
+* New generated graphical view of the Building Tree.
   Available in the Tools window.
 
 * Cosmetic: eliminate the question marks in the caption bars.
+
 
 
 CHANGES IN 0.3.1 (2020-03-08)

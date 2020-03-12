@@ -340,9 +340,7 @@ void DialogSelectInitialSpells::update()
         }
         QListWidgetItem* listItem = listWidget->item(row);
 
-        listItem->setText(prettyQStr(spell));
-//        listItem->setBackgroundColor(backColor);
-//        listItem->setTextColor(color);
+        listItem->setText(MoM::QMoMResources::instance().getName(spell));
         listItem->setForeground(QBrush(color));
 
         Qt::CheckState checkState;

@@ -20,6 +20,7 @@
 #include "QMoMAnimation.h"
 #include "QMoMLbx.h"
 #include "QMoMSharedPointers.h"
+#include "QMoMUtility.h"
 
 namespace MoM {
     class MoMGameBase;
@@ -119,6 +120,15 @@ public:
 			}
         }
         return pixmap;
+    }
+
+    const QString getName(MoM::eSpell spell) const;
+    const QString getName(MoM::eSpell16 spell) const { return getName((MoM::eSpell)spell); }
+    template<typename T>
+    const QString getName(const T& t) const
+    {
+        // Default match
+        return prettyQStr(t);
     }
 
     template<typename T, typename Value>

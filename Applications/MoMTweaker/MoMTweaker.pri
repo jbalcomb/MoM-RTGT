@@ -19,6 +19,7 @@ INCLUDEPATH += \
     ../../giflib-5.0.4/lib
 
 HEADERS += \
+    $$PWD/../../MoMModel/MoMResources.h \
     ../../Applications/MoMTweaker/MainWindow.h \
     ../../MoMControl/MoMCatnip.h \
     ../../MoMControl/MoMController.h \
@@ -33,6 +34,7 @@ HEADERS += \
     ../../MoMModel/MoMGameSave.h \
     ../../MoMModel/MoMLbxBase.h \
     ../../MoMModel/MoMLocation.h \
+    ../../MoMModel/MoMResources.h \
     ../../MoMModel/MoMTemplate.h \
     ../../MoMModel/MoMTerrain.h \
     ../../MoMModel/MoMUnit.h \

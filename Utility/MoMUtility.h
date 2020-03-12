@@ -76,8 +76,6 @@ inline T Min(const T& a, const T& b)
     return (a < b ? a : b);
 }
 
-std::string prettyEnumStr(const std::string& str);
-
 template< typename T >
 inline T Range(const T& value, const T& minimum, const T& maximum)
 {

@@ -39,11 +39,6 @@ public:
     ~DialogBuildingTree();
 
 private:
-    void addBattleUnitSubtree(QTreeWidget* treeWidget, Battle_Unit* battleUnit);
-
-    void updateGraying();
-
-private:
     std::unique_ptr<QMoMBuildingScene> m_scene;
     QMoMTimerPtr m_timer;
 
@@ -61,8 +56,6 @@ private slots:
     void slot_tileDragged(const MoM::MoMLocation& locFrom, const MoM::MoMLocation& locTo);
     void slot_tileSelected(const MoM::MoMLocation& loc);
     void slot_timerAnimations();
-    void on_pushButton_SaveBookmark_clicked();
-    void on_pushButton_RestoreBookmark_clicked();
 };
 
 }

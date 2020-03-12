@@ -148,48 +148,6 @@ std::string lowercase(const std::string& str)
     return result;
 }
 
-std::string prettyEnumStr(const std::string& str)
-{
-    if (str.empty())
-        return "";
-
-    std::string result = str;
-    if (str.substr(0, 2) == "m_")
-    {
-        // Strip data member "m_" prefix
-        result = str.substr(2);
-    }
-    else if ((str[0] >= 'A') && (str[0] <= 'Z'))
-    {
-        // Strip CAPITAL_ prefix
-        size_t pos = 1;
-        while (pos < str.length()
-               && (((str[pos] >= 'A') && (str[pos] <= 'Z')) || ((str[pos] >= '0') && (str[pos] <= '9'))))
-        {
-            pos++;
-        }
-        if ((pos < str.length()) && (str[pos] == '_'))
-        {
-            result = str.substr(pos + 1);
-        }
-    }
-    else
-    {
-        // No prefix that should be stripped
-    }
-
-    size_t pos;
-    if (std::string::npos != (pos = result.find(" (")))
-    {
-        // Strip postfix with parentheses
-        result.resize(pos);
-    }
-
-    result = replaceUnderscoresBySpaces(result);
-
-    return result;
-}
-
 std::string replaceUnderscoresBySpaces(const std::string& str)
 {
     std::string result = str;
