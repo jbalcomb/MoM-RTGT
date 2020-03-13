@@ -269,6 +269,7 @@ std::ostream& operator<<(std::ostream& os, const eBuildingStatus& rhs)
     case BUILDINGSTATUS_Not_Built: os << "BUILDINGSTATUS_Not_Built"; break;
     case BUILDINGSTATUS_Replaced: os << "BUILDINGSTATUS_Replaced"; break;
     case BUILDINGSTATUS_Built: os << "BUILDINGSTATUS_Built"; break;
+    case BUILDINGSTATUS_CoM_Destroyed: os << "BUILDINGSTATUS_CoM_Destroyed"; break;
     case BUILDINGSTATUS_Destroyed: os << "BUILDINGSTATUS_Destroyed"; break;
     case eBuildingStatus_MAX: os << "eBuildingStatus_MAX"; break;
     default: os << "<Unknown eBuildingStatus>"; break;
@@ -442,6 +443,24 @@ std::ostream& operator<<(std::ostream& os, const eDifficulty150& rhs)
     case DIFFICULTY150_Lunatic: os << "DIFFICULTY150_Lunatic"; break;
     case eDifficulty150_MAX: os << "eDifficulty150_MAX"; break;
     default: os << "<Unknown eDifficulty150>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eDifficulty60& rhs)
+{
+    switch (rhs)
+    {
+    case DIFFICULTY60_Easy: os << "DIFFICULTY60_Easy"; break;
+    case DIFFICULTY60_Normal: os << "DIFFICULTY60_Normal"; break;
+    case DIFFICULTY60_Fair: os << "DIFFICULTY60_Fair"; break;
+    case DIFFICULTY60_Advanced: os << "DIFFICULTY60_Advanced"; break;
+    case DIFFICULTY60_Expert: os << "DIFFICULTY60_Expert"; break;
+    case DIFFICULTY60_Master: os << "DIFFICULTY60_Master"; break;
+    case DIFFICULTY60_Lunatic: os << "DIFFICULTY60_Lunatic"; break;
+    case eDIFFICULTY60_MAX: os << "eDIFFICULTY60_MAX"; break;
+    default: os << "<Unknown eDifficulty60>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -1725,6 +1744,22 @@ std::ostream& operator<<(std::ostream& os, const eLand_Size150& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eLand_Size60& rhs)
+{
+    switch (rhs)
+    {
+    case LANDSIZE60_Tiny: os << "LANDSIZE60_Tiny"; break;
+    case LANDSIZE60_Small: os << "LANDSIZE60_Small"; break;
+    case LANDSIZE60_Fair: os << "LANDSIZE60_Fair"; break;
+    case LANDSIZE60_Large: os << "LANDSIZE60_Large"; break;
+    case LANDSIZE60_Huge: os << "LANDSIZE60_Huge"; break;
+    case eLand_Size60_MAX: os << "eLand_Size60_MAX"; break;
+    default: os << "<Unknown eLand_Size60>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eLevel& rhs)
 {
     switch (rhs)
@@ -1786,6 +1821,22 @@ std::ostream& operator<<(std::ostream& os, const eMagic_Powerful150& rhs)
     case MAGICPOWERFUL150_Max: os << "MAGICPOWERFUL150_Max"; break;
     case eMagic_Powerful150_MAX: os << "eMagic_Powerful150_MAX"; break;
     default: os << "<Unknown eMagic_Powerful150>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const eMagic_Powerful60& rhs)
+{
+    switch (rhs)
+    {
+    case MAGICPOWERFUL60_Min: os << "MAGICPOWERFUL60_Min"; break;
+    case MAGICPOWERFUL60_Low: os << "MAGICPOWERFUL60_Low"; break;
+    case MAGICPOWERFUL60_Fair: os << "MAGICPOWERFUL60_Fair"; break;
+    case MAGICPOWERFUL60_High: os << "MAGICPOWERFUL60_High"; break;
+    case MAGICPOWERFUL60_Max: os << "MAGICPOWERFUL60_Max"; break;
+    case eMagic_Powerful60_MAX: os << "eMagic_Powerful60_MAX"; break;
+    default: os << "<Unknown eMagic_Powerful60>"; break;
     }
     os << " (" << (unsigned)rhs << ")";
     return os;
@@ -2912,13 +2963,13 @@ std::ostream& operator<<(std::ostream& os, const eTax_Rate& rhs)
 {
     switch (rhs)
     {
-    case TAX_00_gold_00_unrest: os << "TAX_00_gold_00_unrest"; break;
-    case TAX_05_gold_10_unrest: os << "TAX_05_gold_10_unrest"; break;
-    case TAX_10_gold_20_unrest: os << "TAX_10_gold_20_unrest"; break;
-    case TAX_15_gold_30_unrest: os << "TAX_15_gold_30_unrest"; break;
-    case TAX_20_gold_45_unrest: os << "TAX_20_gold_45_unrest"; break;
-    case TAX_25_gold_60_unrest: os << "TAX_25_gold_60_unrest"; break;
-    case TAX_30_gold_75_unrest: os << "TAX_30_gold_75_unrest"; break;
+    case TAX_Rate_1: os << "TAX_Rate_1"; break;
+    case TAX_Rate_2: os << "TAX_Rate_2"; break;
+    case TAX_Rate_3: os << "TAX_Rate_3"; break;
+    case TAX_Rate_4: os << "TAX_Rate_4"; break;
+    case TAX_Rate_5: os << "TAX_Rate_5"; break;
+    case TAX_Rate_6: os << "TAX_Rate_6"; break;
+    case TAX_Rate_7: os << "TAX_Rate_7"; break;
     case eTax_Rate_MAX: os << "eTax_Rate_MAX"; break;
     default: os << "<Unknown eTax_Rate>"; break;
     }
@@ -3589,9 +3640,9 @@ std::ostream& operator<<(std::ostream& os, const Ability_Flags& rhs)
     {
     os << "Long_Range=" << (unsigned)rhs.Long_Range << "\n";
     }
-    if (0 != rhs.Land_Corruption)
+    if (0 != rhs.CoM_Quick_Casting)
     {
-    os << "Land_Corruption=" << (unsigned)rhs.Land_Corruption << "\n";
+    os << "CoM_Quick_Casting=" << (unsigned)rhs.CoM_Quick_Casting << "\n";
     }
     if (0 != rhs.Meld_With_Node)
     {
@@ -3676,9 +3727,9 @@ std::ostream& operator<<(std::ostream& os, const Attack_Flags& rhs)
     {
     os << "Ball_COMBAT=" << (unsigned)rhs.Ball_COMBAT << "\n";
     }
-    if (0 != rhs.No_effect20_COMBAT)
+    if (0 != rhs.CoM_Supernatural_COMBAT)
     {
-    os << "No_effect20_COMBAT=" << (unsigned)rhs.No_effect20_COMBAT << "\n";
+    os << "CoM_Supernatural_COMBAT=" << (unsigned)rhs.CoM_Supernatural_COMBAT << "\n";
     }
     if (0 != rhs.Eldritch_Weapon_COMBAT)
     {
@@ -4070,15 +4121,15 @@ std::ostream& operator<<(std::ostream& os, const Building_Data& rhs)
     os << "m_Prerequisite1=" << rhs.m_Prerequisite1 << "\n";
     os << "m_Prerequisite2=" << rhs.m_Prerequisite2 << "\n";
     os << "m_Replaces_building=" << rhs.m_Replaces_building << "\n";
-    os << "m_Produces_Regulars=" << rhs.m_Produces_Regulars << "\n";
-    os << "m_Produces_Veterans=" << rhs.m_Produces_Veterans << "\n";
-    os << "m_Produces_Magic_Weapons=" << rhs.m_Produces_Magic_Weapons << "\n";
+    os << "m_No_Effect_1A=" << rhs.m_No_Effect_1A << " 0x" << std::hex << rhs.m_No_Effect_1A << std::dec << "\n";
+    os << "m_No_Effect_1C=" << rhs.m_No_Effect_1C << " 0x" << std::hex << rhs.m_No_Effect_1C << std::dec << "\n";
+    os << "m_No_Effect_1E=" << rhs.m_No_Effect_1E << " 0x" << std::hex << rhs.m_No_Effect_1E << std::dec << "\n";
     os << "m_Upkeep_yield=" << rhs.m_Upkeep_yield << " 0x" << std::hex << rhs.m_Upkeep_yield << std::dec << "\n";
-    os << "m_AI_Food=" << rhs.m_AI_Food << " 0x" << std::hex << rhs.m_AI_Food << std::dec << "\n";
+    os << "m_No_Effect_22=" << rhs.m_No_Effect_22 << " 0x" << std::hex << rhs.m_No_Effect_22 << std::dec << "\n";
     os << "m_Zero_24=" << rhs.m_Zero_24 << " 0x" << std::hex << rhs.m_Zero_24 << std::dec << "\n";
-    os << "m_AI_Mana=" << rhs.m_AI_Mana << " 0x" << std::hex << rhs.m_AI_Mana << std::dec << "\n";
-    os << "m_AI_Religious=" << rhs.m_AI_Religious << " 0x" << std::hex << rhs.m_AI_Religious << std::dec << "\n";
-    os << "m_AI_Research=" << rhs.m_AI_Research << " 0x" << std::hex << rhs.m_AI_Research << std::dec << "\n";
+    os << "m_No_Effect_26=" << rhs.m_No_Effect_26 << " 0x" << std::hex << rhs.m_No_Effect_26 << std::dec << "\n";
+    os << "m_No_Effect_28=" << rhs.m_No_Effect_28 << " 0x" << std::hex << rhs.m_No_Effect_28 << std::dec << "\n";
+    os << "m_No_Effect_2A=" << rhs.m_No_Effect_2A << " 0x" << std::hex << rhs.m_No_Effect_2A << std::dec << "\n";
     os << "m_Building_cost=" << rhs.m_Building_cost << " 0x" << std::hex << rhs.m_Building_cost << std::dec << "\n";
     os << "m_Zero_2E=" << rhs.m_Zero_2E << " 0x" << std::hex << rhs.m_Zero_2E << std::dec << "\n";
     os << "m_Animation_related=" << rhs.m_Animation_related << " 0x" << std::hex << rhs.m_Animation_related << std::dec << "\n";
@@ -4143,10 +4194,10 @@ std::ostream& operator<<(std::ostream& os, const City& rhs)
     os << "m_Population=" << (int)rhs.m_Population << " 0x" << std::hex << (int)rhs.m_Population << std::dec << "\n";
     os << "m_Number_of_farmers_allocated=" << (int)rhs.m_Number_of_farmers_allocated << " 0x" << std::hex << (int)rhs.m_Number_of_farmers_allocated << std::dec << "\n";
     os << "m_Building_sold=" << rhs.m_Building_sold << "\n";
-    os << "m_Unk_17=" << (unsigned)rhs.m_Unk_17 << " 0x" << std::hex << (unsigned)rhs.m_Unk_17 << std::dec << "\n";
+    os << "m_CoM_Power=" << (unsigned)rhs.m_CoM_Power << " 0x" << std::hex << (unsigned)rhs.m_CoM_Power << std::dec << "\n";
     os << "m_PopulationDekaPop=" << rhs.m_PopulationDekaPop << " 0x" << std::hex << rhs.m_PopulationDekaPop << std::dec << "\n";
     os << "m_Player_as_bitmask_GUESS=" << (unsigned)rhs.m_Player_as_bitmask_GUESS << " 0x" << std::hex << (unsigned)rhs.m_Player_as_bitmask_GUESS << std::dec << "\n";
-    os << "m_Unk_1B=" << (unsigned)rhs.m_Unk_1B << " 0x" << std::hex << (unsigned)rhs.m_Unk_1B << std::dec << "\n";
+    os << "m_CoM_Gold=" << (unsigned)rhs.m_CoM_Gold << " 0x" << std::hex << (unsigned)rhs.m_CoM_Gold << std::dec << "\n";
     os << "m_Producing=" << rhs.m_Producing << "\n";
     os << "m_Nr_buildings=" << (unsigned)rhs.m_Nr_buildings << " 0x" << std::hex << (unsigned)rhs.m_Nr_buildings << std::dec << "\n";
     os << "m_Building_Status=" << rhs.m_Building_Status << "\n";
@@ -4286,7 +4337,7 @@ std::ostream& operator<<(std::ostream& os, const Difficulty_Table& rhs)
 {
     os << "{\n";
     os << "m_City_Growth_multiplier=" << rhs.m_City_Growth_multiplier << " 0x" << std::hex << rhs.m_City_Growth_multiplier << std::dec << "\n";
-    os << "m_Outpost_Growth_multiplier=" << rhs.m_Outpost_Growth_multiplier << " 0x" << std::hex << rhs.m_Outpost_Growth_multiplier << std::dec << "\n";
+    os << "m_Outpost_Growth_or_CoM_Overland_Casting_Cost_multiplier=" << rhs.m_Outpost_Growth_or_CoM_Overland_Casting_Cost_multiplier << " 0x" << std::hex << rhs.m_Outpost_Growth_or_CoM_Overland_Casting_Cost_multiplier << std::dec << "\n";
     os << "m_City_Production_multiplier=" << rhs.m_City_Production_multiplier << " 0x" << std::hex << rhs.m_City_Production_multiplier << std::dec << "\n";
     os << "m_City_Coin_multiplier=" << rhs.m_City_Coin_multiplier << " 0x" << std::hex << rhs.m_City_Coin_multiplier << std::dec << "\n";
     os << "m_City_Mana_multiplier=" << rhs.m_City_Mana_multiplier << " 0x" << std::hex << rhs.m_City_Mana_multiplier << std::dec << "\n";
@@ -4765,7 +4816,7 @@ std::ostream& operator<<(std::ostream& os, const Hero_stats& rhs)
         os << "[" << i << "] " << rhs.m_Spell[i] << ",\n";
     }
     os << ")\n";
-    os << "m_Garbage=" << (unsigned)rhs.m_Garbage << " 0x" << std::hex << (unsigned)rhs.m_Garbage << std::dec << "\n";
+    os << "m_CoM_Special_Skill=" << (unsigned)rhs.m_CoM_Special_Skill << " 0x" << std::hex << (unsigned)rhs.m_CoM_Special_Skill << std::dec << "\n";
     os << "}";
     return os;
 }
@@ -7232,7 +7283,8 @@ std::ostream& operator<<(std::ostream& os, const Spell_Data& rhs)
 {
     os << "{\n";
     os << "m_SpellName=" << formatCharArray(rhs.m_SpellName, 19) << "\n";
-    os << "m_Spell_desirability=" << rhs.m_Spell_desirability << " 0x" << std::hex << rhs.m_Spell_desirability << std::dec << "\n";
+    os << "m_Spell_Type=" << (int)rhs.m_Spell_Type << " 0x" << std::hex << (int)rhs.m_Spell_Type << std::dec << "\n";
+    os << "m_Trade_Desirability=" << (int)rhs.m_Trade_Desirability << " 0x" << std::hex << (int)rhs.m_Trade_Desirability << std::dec << "\n";
     os << "m_Spell_Category=" << rhs.m_Spell_Category << "\n";
     os << "m_Section_in_spell_book=" << rhs.m_Section_in_spell_book << "\n";
     os << "m_Magic_Realm=" << rhs.m_Magic_Realm << "\n";
@@ -8001,10 +8053,10 @@ std::ostream& operator<<(std::ostream& os, const Unit_Type_Data& rhs)
     os << "m_Construction=" << (unsigned)rhs.m_Construction << " 0x" << std::hex << (unsigned)rhs.m_Construction << std::dec << "\n";
     os << "m_Gaze_Modifier=" << (int)rhs.m_Gaze_Modifier << " 0x" << std::hex << (int)rhs.m_Gaze_Modifier << std::dec << "\n";
     os << "m_Movement_Flags=" << rhs.m_Movement_Flags << "\n";
-    os << "m_Zero_19=" << (unsigned)rhs.m_Zero_19 << " 0x" << std::hex << (unsigned)rhs.m_Zero_19 << std::dec << "\n";
+    os << "m_CoM_Production_Priority_or_Fame_Req=" << (int)rhs.m_CoM_Production_Priority_or_Fame_Req << " 0x" << std::hex << (int)rhs.m_CoM_Production_Priority_or_Fame_Req << std::dec << "\n";
     os << "m_Immunity_Flags=" << rhs.m_Immunity_Flags << "\n";
     os << "m_Attribute_Flags=" << rhs.m_Attribute_Flags << "\n";
-    os << "m_Zero_1D=" << (unsigned)rhs.m_Zero_1D << " 0x" << std::hex << (unsigned)rhs.m_Zero_1D << std::dec << "\n";
+    os << "m_CoM_Garrison_Priority=" << (unsigned)rhs.m_CoM_Garrison_Priority << " 0x" << std::hex << (unsigned)rhs.m_CoM_Garrison_Priority << std::dec << "\n";
     os << "m_Ability_Flags=" << rhs.m_Ability_Flags << "\n";
     os << "m_Attack_Flags=" << rhs.m_Attack_Flags << "\n";
     os << "m_Sound=" << (unsigned)rhs.m_Sound << " 0x" << std::hex << (unsigned)rhs.m_Sound << std::dec << "\n";

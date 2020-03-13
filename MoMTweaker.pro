@@ -20,4 +20,5 @@ SOURCES += \
     Applications/MoMTweaker/main.cpp
 
 DISTFILES += \
-    Applications/MoMTweaker/CHANGES.txt
+    Applications/MoMTweaker/CHANGES.txt \
+    scripts/generate_code.pl

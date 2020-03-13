@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Copyright:   2011 Klaas van Aarsen
+// Copyright:   2011-2020 Klaas van Aarsen
 // License:     GPL
 // Author:      I like Serena (aka Klaas van Aarsen)
 // Created:     2010-05-01
@@ -13,11 +13,6 @@
 
 #include "MoMCommon.h"
 
-// Modernize C++
-// - Unfortunately we still cannot force struct alignment to 1 byte.
-// - Use enum type size of C++11
-// - TODO: Eliminate std::unique_ptr
-// - TODO: May need some compiler option on various platforms
 static_assert(__cplusplus >= 201103L, "c++11 required");
 
 // Specify to pack structures
@@ -273,6 +268,7 @@ enum eBuildingStatus ENUMSIZE8
     BUILDINGSTATUS_Not_Built = 0xFF,
     BUILDINGSTATUS_Replaced = 0,
     BUILDINGSTATUS_Built = 1,
+    BUILDINGSTATUS_CoM_Destroyed = 0xFE,
     BUILDINGSTATUS_Destroyed = 2,
 
     eBuildingStatus_MAX,
@@ -385,7 +381,7 @@ enum eDifficulty ENUMSIZE16
     DIFFICULTY_Hard = 3,
     DIFFICULTY_Impossible = 4,
 
-    eDifficulty_MAX = 5,
+    eDifficulty_MAX,
     eDifficulty__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
@@ -397,7 +393,7 @@ enum eDifficulty140m ENUMSIZE16
     DIFFICULTY140M_Extreme = 3,
     DIFFICULTY140M_Impossible = 4,
 
-    eDifficulty140m_MAX = 5,
+    eDifficulty140m_MAX,
     eDifficulty140m__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
@@ -410,8 +406,22 @@ enum eDifficulty150 ENUMSIZE16
     DIFFICULTY150_Master = 4,
     DIFFICULTY150_Lunatic = 5,
 
-    eDifficulty150_MAX = 6,
+    eDifficulty150_MAX,
     eDifficulty150__SIZE__ = 0xFFFF
+} PACKED_ENUM;
+
+enum eDifficulty60 ENUMSIZE16
+{
+    DIFFICULTY60_Easy = 0,
+    DIFFICULTY60_Normal = 1,
+    DIFFICULTY60_Fair = 2,
+    DIFFICULTY60_Advanced = 3,
+    DIFFICULTY60_Expert = 4,
+    DIFFICULTY60_Master = 5,
+    DIFFICULTY60_Lunatic = 6,
+
+    eDIFFICULTY60_MAX,
+    eDifficulty60__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eEvent
@@ -1531,6 +1541,18 @@ enum eLand_Size150 ENUMSIZE16
     eLand_Size150__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
+enum eLand_Size60 ENUMSIZE16
+{
+    LANDSIZE60_Tiny,
+    LANDSIZE60_Small,
+    LANDSIZE60_Fair,
+    LANDSIZE60_Large,
+    LANDSIZE60_Huge,
+
+    eLand_Size60_MAX,
+    eLand_Size60__SIZE__ = 0xFFFF
+} PACKED_ENUM;
+
 enum eLevel ENUMSIZE8
 {
     LEVEL_Level_1 = 0,
@@ -1578,6 +1600,18 @@ enum eMagic_Powerful150 ENUMSIZE16
 
     eMagic_Powerful150_MAX,
     eMagic_Powerful150_Size__SIZE__ = 0xFFFF
+} PACKED_ENUM;
+
+enum eMagic_Powerful60 ENUMSIZE16
+{
+    MAGICPOWERFUL60_Min,
+    MAGICPOWERFUL60_Low,
+    MAGICPOWERFUL60_Fair,
+    MAGICPOWERFUL60_High,
+    MAGICPOWERFUL60_Max,
+
+    eMagic_Powerful60_MAX,
+    eMagic_Powerful60_Size__SIZE__ = 0xFFFF
 } PACKED_ENUM;
 
 enum eMovement
@@ -2718,13 +2752,13 @@ enum eSpell16 ENUMSIZE16
 
 enum eTax_Rate ENUMSIZE16
 {
-    TAX_00_gold_00_unrest = 0,
-    TAX_05_gold_10_unrest = 1,
-    TAX_10_gold_20_unrest = 2,
-    TAX_15_gold_30_unrest = 3,
-    TAX_20_gold_45_unrest = 4,
-    TAX_25_gold_60_unrest = 5,
-    TAX_30_gold_75_unrest = 6,
+    TAX_Rate_1 = 0,
+    TAX_Rate_2 = 1,
+    TAX_Rate_3 = 2,
+    TAX_Rate_4 = 3,
+    TAX_Rate_5 = 4,
+    TAX_Rate_6 = 5,
+    TAX_Rate_7 = 6,
     eTax_Rate_MAX,
     eTax_Rate__SIZE__ = 0xFFFF
 } PACKED_ENUM;
@@ -3430,6 +3464,7 @@ const unsigned gMAX_WIZARD_RECORDS = 6;
 
 typedef struct PACKED_STRUCT // Skills 
 {
+    // TODO: Match with eSkill
     eYesNo8             Alchemy;                // 00 (0 or 1)
     eYesNo8             Warlord;
     eYesNo8             Chaos_Master;
@@ -3463,15 +3498,15 @@ typedef struct PACKED_STRUCT // Building_Data
     eBuilding           m_Prerequisite1;        // 14
     eBuilding           m_Prerequisite2;        // 16
     eBuilding           m_Replaces_building;    // 18
-    eYesNo16            m_Produces_Regulars;    // 1A
-    eYesNo16            m_Produces_Veterans;    // 1C
-    eYesNo16            m_Produces_Magic_Weapons;// 1E
+    int16_t             m_No_Effect_1A;         // 1A
+    int16_t             m_No_Effect_1C;         // 1C
+    int16_t             m_No_Effect_1E;         // 1E
     int16_t             m_Upkeep_yield;         // 20
-    int16_t             m_AI_Food;              // 22
+    int16_t             m_No_Effect_22;         // 22
     int16_t             m_Zero_24;              // 24
-    int16_t             m_AI_Mana;              // 26
-    int16_t             m_AI_Religious;         // 28
-    int16_t             m_AI_Research;          // 2A
+    int16_t             m_No_Effect_26;         // 26
+    int16_t             m_No_Effect_28;         // 28
+    int16_t             m_No_Effect_2A;         // 2A
     int16_t             m_Building_cost;        // 2C
     int16_t             m_Zero_2E;              // 2E
     int16_t             m_Animation_related;    // 30
@@ -3481,6 +3516,7 @@ typedef struct PACKED_STRUCT // Building_Data
 
 typedef struct PACKED_STRUCT // Building_Status
 {
+    // TODO: Match with eBuilding
     eBuildingStatus     No_building;           // (keep at 0 "Replaced"!!!!!)
 
     eBuildingStatus     Trade_Goods;    // (keep at -1!!!!!)
@@ -3530,6 +3566,7 @@ typedef union // unionBuilding_Status
 
 typedef struct PACKED_STRUCT // City_Enchantments
 {
+    // TODO: Match with eSpell
     eOwner      Wall_of_Fire;
     eOwner      _Chaos_Rift_;
     eOwner      Dark_Rituals;
@@ -3591,6 +3628,7 @@ struct ClickableArea
 
 typedef struct PACKED_STRUCT // Combat_Enchantment
 {
+    // TODO: Match with eSpell
     uint8_t     Vertigo:1;              // 01
     uint8_t     Confusion:1;            // 02
     uint8_t     Whirlwind:1;            // 04
@@ -3687,6 +3725,7 @@ typedef struct PACKED_STRUCT // Game_Data_Save
 
 typedef struct PACKED_STRUCT // Global_Enchantments
 {
+    // TODO: Match with eSpell
     uint8_t     Eternal_Night;
     uint8_t     Evil_Omens;
     uint8_t     Zombie_Mastery;
@@ -3717,6 +3756,7 @@ typedef struct PACKED_STRUCT // Global_Enchantments
 
 typedef struct PACKED_STRUCT // Hero_Ability
 {
+    // TODO: Match... with which name?
     uint8_t     Leadership:1;       // 01
     uint8_t     Leadership_X:1;     // 02
     uint8_t     u1:1;               // 04
@@ -3778,7 +3818,7 @@ typedef struct PACKED_STRUCT // Hero_stats
     unionHero_Abilities m_Hero_Abilities;   // 02
     uint8_t     m_Hero_Casting_Skill;       // 06 <read=read_Hero_Casting_Skill>;
     eSpell      m_Spell[4];                 // 07-0A
-    uint8_t     m_Garbage;                  // 0B
+    uint8_t     m_CoM_Special_Skill;        // 0B
                                             // SIZE 0C
 } Hero_stats; // <read=read_Hero_stats>;
 
@@ -3808,6 +3848,7 @@ typedef struct PACKED_STRUCT // Item_Bonuses
 
 typedef struct PACKED_STRUCT // Item_Powers
 {
+    // TODO: Match with ItemPowLbx.m_Name
     uint8_t     Vampiric:1;             // 01
     uint8_t     Guardian_Wind:1;        // 02
     uint8_t     Lightning:1;            // 04
@@ -3892,6 +3933,7 @@ typedef struct PACKED_STRUCT // ItemPowLbx
 
 typedef struct PACKED_STRUCT // List_Hero_stats
 {
+    // TODO: Match with... what?
     //Hero_stats m_Hero_Stats[35];
     Hero_stats      Dwarf;
     Hero_stats      Barbarian;
@@ -4102,6 +4144,7 @@ typedef union // unionUnit_Weapon_Mutation
 
 typedef struct PACKED_STRUCT // Unit_Enchantment
 {
+    // TODO: Match with eSpell
     uint8_t     Immolation:1;       // 01
     uint8_t     Guardian_Wind:1;    // 02
     uint8_t     Berserk:1;          // 04
@@ -4148,6 +4191,7 @@ typedef union // unionUnit_Enchantment
 
 typedef struct PACKED_STRUCT // Spells_Cast_in_Battle
 {
+    // TODO: Match with eSpell
     uint8_t True_Light[2];          // 00-01    1=True Light (Battle), 2=Heavenly Light (City) / Cloud of Shadow (City), 3=Eternal Darkness (Global)
     uint8_t Darkness[2];            // 02-03
     uint8_t Warp_Reality[2];        // 04-05
@@ -4167,7 +4211,7 @@ typedef struct PACKED_STRUCT // Spells_Cast_in_Battle
 } Spells_Cast_in_Battle;
 
 typedef struct PACKED_STRUCT { // Spells_Known (order in file):
-
+    // TODO: Match with eSpell
     eSpellKnown     No_spell;
 
     //    * NATURE
@@ -4548,10 +4592,10 @@ typedef struct PACKED_STRUCT // City
     int8_t          m_Population;               // 14 (in thousands) (0-25)
     int8_t          m_Number_of_farmers_allocated;  // 15 (should be <= population)
     eYesNo8         m_Building_sold;            // 16
-    uint8_t         m_Unk_17;                   // 17
+    uint8_t         m_CoM_Power;                // 17
     int16_t         m_PopulationDekaPop;        // 18-19 (in tenths) (Outpost is 1-9, else 0-99)
     uint8_t         m_Player_as_bitmask_GUESS;  // 1A
-    uint8_t         m_Unk_1B;                   // 1B
+    uint8_t         m_CoM_Gold;                 // 1B
     eProducing      m_Producing;                // 1C-1D (0-??; see below)
     uint8_t         m_Nr_buildings;             // 1E
     unionBuilding_Status    m_Building_Status;  // 1F-42
@@ -4614,6 +4658,7 @@ typedef struct PACKED_STRUCT // Unit
 
 typedef struct PACKED_STRUCT // Upkeep_Enchantments
 {
+    // TODO: Match with eSpell
     // Unit_Enchantments
     uint16_t Immolation; // 0 Offset EXE:2B3B8
     uint16_t Guardian_Wind; // 2 Offset EXE:2B3BA
@@ -4884,7 +4929,7 @@ typedef struct PACKED_STRUCT // Ability_Flags
     uint8_t     Create_Undead:1;        // 80
 
     uint8_t     Long_Range:1;           // 01
-    uint8_t     Land_Corruption:1;      // 02
+    uint8_t     CoM_Quick_Casting:1;    // 02 The unused Land Corruption in MoM. Reused in CoM.
     uint8_t     Meld_With_Node:1;       // 04
     uint8_t     Non_Corporeal:1;        // 08
     uint8_t     Wind_Walking:1;         // 10
@@ -4909,7 +4954,7 @@ typedef struct PACKED_STRUCT // Attack_Flags
     uint8_t     Power_Drain:1;          // 04
     uint8_t     Dispel_Evil:1;          // 08
     uint8_t     Ball_COMBAT:1;          // 10
-    uint8_t     No_effect20_COMBAT:1;   // 20
+    uint8_t     CoM_Supernatural_COMBAT:1;   // 20 No effect in MoM. Reused in CoM.
     uint8_t     Eldritch_Weapon_COMBAT:1;   // 40
     uint8_t     Warp_Lightning_COMBAT:1;// 80
 } Attack_Flags;
@@ -4947,7 +4992,7 @@ typedef union // unionAttack_Flags;
 typedef struct PACKED_STRUCT // Difficulty_Table
 {
     int16_t         m_City_Growth_multiplier;       // 00
-    int16_t         m_Outpost_Growth_multiplier;    // 02
+    int16_t         m_Outpost_Growth_or_CoM_Overland_Casting_Cost_multiplier;    // 02
     int16_t         m_City_Production_multiplier;   // 04
     int16_t         m_City_Coin_multiplier;         // 06
     int16_t         m_City_Mana_multiplier;         // 08
@@ -4960,7 +5005,8 @@ typedef struct PACKED_STRUCT // Difficulty_Table
 typedef struct PACKED_STRUCT // Spell_Data
 {
     char            m_SpellName[19];            // 00 ",    0X0,    0x50000400, 0x0,    19);
-    int16_t         m_Spell_desirability;       // 13,   0x10000400, -1, 2);
+    int8_t          m_Spell_Type;               // 13,   0x10000400, -1, 1);
+    int8_t          m_Trade_Desirability;       // 14,   0x000400,   -1, 1);
     eSpellCategory  m_Spell_Category;           // 15,   0x000400,   -1, 1);
     eSpell_Type     m_Section_in_spell_book;    // 16,   0x000400,   -1, 1);
     eRealm_Type     m_Magic_Realm;              // 17,   0x800400,   GetEnum("enum_RealmType"),  1);
@@ -5006,11 +5052,11 @@ typedef struct PACKED_STRUCT // Unit_Type_Data
     uint8_t         m_Construction;             // 16  Construction capacity (road building)
     int8_t          m_Gaze_Modifier;            // 17  Special attack or bonus strength
     unionMovement_Flags     m_Movement_Flags;   // 18  Movement flags (table 4)
-    uint8_t                 m_Zero_19;          // 19  00
+    int8_t          m_CoM_Production_Priority_or_Fame_Req; // 19  00 in MoM. Reused in CoM.
     unionImmunity_Flags     m_Immunity_Flags;   // 1A  Immunity flags (table 5)
     unionAttribute_Flags    m_Attribute_Flags;  // 1B  Attribute flags (table 6)
                                                 // 1C  Attribute flags (table 7)
-    uint8_t                 m_Zero_1D;          // 1D  00
+    uint8_t                 m_CoM_Garrison_Priority;  // 1D  00 in MoM. Reused in CoM.
     unionAbility_Flags      m_Ability_Flags;    // 1E  Attribute flags (table 8)
                                                 // 1F  Attribute flags (table 9)
     unionAttack_Flags       m_Attack_Flags;     // 20  Special attack flags (table 10)
@@ -5242,6 +5288,7 @@ typedef struct PACKED_STRUCT // UnitView_ItemText
 
 typedef struct PACKED_STRUCT // Unit_Data_Hero_Types
 {
+    // TODO: Match with... what?
     //Unit_Type_Data m_Hero_Types[35];
     Unit_Type_Data      Dwarf;
     Unit_Type_Data      Barbarian;
@@ -5285,7 +5332,7 @@ typedef struct PACKED_STRUCT // Race_Data
     DS_Offset   m_PtrName;                          // 00-01  Pointer to name of race (note 1)
     uint16_t    m_Number_of_prohibited_buildings;   // 02-03  (0 to 7)
     eBuilding   m_Prohibited_buildings[7];          // 04-11  (table 3)
-    uint16_t    m_Outpost_growth_probability;       // 12-13  (percent chance to grow in each turn)
+    int16_t     m_Outpost_growth_probability;       // 12-13  (percent chance to grow in each turn)
     int16_t     m_City_population_growth_modifier;  // 14-15  (in units of 10 people per turn)
     eHousing    m_Housing_picture;                  // 16-17  (0 wood frame house, 1 tree house, 2 mud hut)
                                                     // SIZE 18

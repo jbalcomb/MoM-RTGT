@@ -1373,7 +1373,10 @@ void QMoMResources::createSpellImages()
         MoM::Spell_Data* spellData = m_game->getSpellData(spell);
         if ((0 != spellData) && (MoM::SPELLCATEGORY_Normal_summon == spellData->m_Spell_Category))
         {
-            m_spellImages[spell] = m_unitImages[ spellData->m_Parameters[0] ];
+            if (inVectorRange(m_unitImages, spellData->m_Parameters[0]))
+            {
+                m_spellImages[spell] = m_unitImages[ spellData->m_Parameters[0] ];
+            }
         }
     }
 

@@ -126,9 +126,8 @@ void DialogTables::update_BuildingData()
 
     QStringList labels;
     labels << "Nr";
-    labels << "BuildingName" << "Prerequisite1" << "Prerequisite2" << "Replaces" << "Regulars" << "Veterans" << "Magic Weapons" << "Upkeep"
+    labels << "BuildingName" << "Prerequisite1" << "Prerequisite2" << "Replaces" << "Upkeep"
            << "Cost" << "Category" << "Animation";
-    labels << "Food" << "Zero_24" << "Mana" << "Religious" << "Research" << "Zero_2E";
 
     buildTable(labels, ndata, SLOT(slot_addRow_to_BuildingData(int)));
 }
@@ -147,19 +146,10 @@ void DialogTables::slot_addRow_to_BuildingData(int row)
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite1, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prerequisite2, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Replaces_building, MoM::eBuilding_extra_MAX, SHOWENUM_minusOneAndnoZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Regulars, MoM::eYesNo16_MAX, SHOWENUM_noZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Veterans, MoM::eYesNo16_MAX, SHOWENUM_noZero));
-    ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eYesNo16>(m_game, &data->m_Produces_Magic_Weapons, MoM::eYesNo16_MAX, SHOWENUM_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Upkeep_yield, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Building_cost, 2, SHOWNUMBER_noZero));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuildingCategory>(m_game, &data->m_Building_category, MoM::eBuildingCategory_MAX));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Animation_related, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Food, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_24, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Mana, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Religious, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_AI_Research, 2, SHOWNUMBER_noZero));
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Zero_2E, 2, SHOWNUMBER_noZero));
 }
 
 void DialogTables::update_Cities()
@@ -660,7 +650,7 @@ void DialogTables::slot_addRow_to_RaceData(int row)
         ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eBuilding>(m_game, &data->m_Prohibited_buildings[i], MoM::eBuilding_extra_MAX, SHOWENUM_noZero));
     }
 
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<uint16_t>(m_game, &data->m_Outpost_growth_probability, 2));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Outpost_growth_probability, 2));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_City_population_growth_modifier, 2, SHOWNUMBER_plusAndNoZero));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eHousing>(m_game, &data->m_Housing_picture, MoM::eHousing_MAX));
 }
@@ -678,7 +668,7 @@ void DialogTables::update_SpellData()
 
     QStringList labels;
     labels << "Nr";
-    labels << "SpellName" << "Desirability" << "Category" << "Section" << "Realm" << "Elegibility"
+    labels << "SpellName" << "Type" << "Desirability" << "Category" << "Section" << "Realm" << "Elegibility"
             << "Casting" << "Research" << "Parameter" << "Immunities" << "Attack Flags";
     labels<< "Upkeep";
     labels<< "Save";
@@ -738,7 +728,8 @@ void DialogTables::slot_addRow_to_SpellData(int row)
     ui->tableWidget->item(row, col)->setForeground(QBrush(color));
     ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(spell).c_str());
 
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int16_t>(m_game, &data->m_Spell_desirability, 6));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Spell_Type, 4));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_Trade_Desirability, 4));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpellCategory>(m_game, &data->m_Spell_Category, MoM::eSpellCategory_MAX));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpell_Type>(m_game, &data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eRealm_Type>(m_game, &data->m_Magic_Realm, MoM::eRealm_Type_MAX));
