@@ -1843,8 +1843,12 @@ void UnitModel::threadUpdateModelData()
                 ptree->child(row, 2)->setData("Default +2 shields", Qt::EditRole);
                 row++;
 
-                ptree->appendChild("Noble", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl140[ 0x068F ]));
+                ptree->appendChild("Noble", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl120[ 0x0AC7 ]));
                 ptree->child(row, 2)->setData("Default 10 gold/turn", Qt::EditRole);
+                row++;
+
+                ptree->appendChild("Noble", new QMoMTreeItemModel<int8_t>((int8_t*)&ovl140[ 0x068F ]));
+                ptree->child(row, 2)->setData("Second occurrence of Noble", Qt::EditRole);
                 row++;
 
                 if (game->getMoMVersion() < std::string("5.0"))
