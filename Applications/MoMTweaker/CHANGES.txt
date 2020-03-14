@@ -13,7 +13,7 @@ CHANGES IN 0.3.3 (2020-03-14)
   as per Seravy's comments.
 
 * Visualize palettes and cursor images from FONTS.LBX in LBX editor
-  based in information from Drake178.
+  based on information from Drake178.
   Replacing them does not work (yet).
 
 * Released a Linux version as well.
