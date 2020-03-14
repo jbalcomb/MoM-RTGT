@@ -319,8 +319,9 @@ void DialogLbxEditor::loadLbx(const QString& filename)
             }
             else if (recordType == MoM::MoMLbxBase::TYPE_font)
             {
-                // Font
                 processFont(lbxIndex);
+                ui->comboBox_LbxIndex->addItem(text + " - font");
+
             }
             else if (recordType == MoM::MoMLbxBase::TYPE_palette)
             {
@@ -471,7 +472,6 @@ void DialogLbxEditor::processFont(int lbxIndex)
         m_lbxAnimations[lbxIndex].append(image);
     }
     m_lbxAnimations[lbxIndex].scale(2.0);
-    ui->comboBox_LbxIndex->addItem("0 - font");
 }
 
 void DialogLbxEditor::processPalette(int lbxIndex)
@@ -487,30 +487,58 @@ void DialogLbxEditor::processPalette(int lbxIndex)
 
     m_lbxAnimations[lbxIndex].clear();
 
-    uint8_t* dataPalette = m_lbx.getRecord(lbxIndex);
+    // Visualize palette
     MoM::QMoMPalette colorTable(256);
-    MoM::convertLbxToPalette(dataPalette, colorTable);
-
-    int width = 256 + 2 + 2;
-    int height = 256 + 2 + 2;
-    int cellSize = 14;
-    QMoMImagePtr image(new QImage(width, height, QImage::Format_Indexed8));
-    image->setColorTable(colorTable);
-    image->fill(0);
-    for (int i = 0; i < colorTable.count(); ++i)
     {
-        int left = (i % 16) * 16 + 2;
-        int top = (i / 16) * 16 + 2;
-        for (int y = top; y < top + cellSize; ++y)
+        uint8_t* dataPalette = m_lbx.getRecord(lbxIndex);
+        MoM::convertLbxToPalette(dataPalette, colorTable);
+
+        int width = 256;
+        int height = 256;
+        int cellSize = 14;
+        QMoMImagePtr paletteImage(new QImage(width, height, QImage::Format_Indexed8));
+        paletteImage->setColorTable(colorTable);
+        paletteImage->fill(0);
+        for (int i = 0; i < colorTable.count(); ++i)
         {
-            for (int x = left; x < left + cellSize; ++x)
+            int left = (i % 16) * 16 + 1;
+            int top = (i / 16) * 16 + 1;
+            for (int y = top; y < top + cellSize; ++y)
             {
-                image->setPixel(x, y, i);
+                for (int x = left; x < left + cellSize; ++x)
+                {
+                    paletteImage->setPixel(x, y, i);
+                }
             }
         }
+        m_lbxAnimations[lbxIndex].append(paletteImage);
     }
 
-    m_lbxAnimations[lbxIndex].append(image);
+    // FONTS.LBX palette records can have an additional raw cursor image at offset 0x500
+    const size_t offsetRawImages = 0x500;
+    if (data.size() >= 0x500)
+    {
+        const auto* cursorData = data.data() + offsetRawImages;
+        auto remainingSize = data.size() - offsetRawImages;
+        unsigned width = 16;
+        unsigned height = 16;
+        while (remainingSize >= width * height)
+        {
+            QMoMImagePtr cursorImage(new QImage(width, height, QImage::Format_Indexed8));
+            cursorImage->setColorTable(colorTable);
+            cursorImage->fill(0);
+
+            for (unsigned y = 0; y < height; ++y)
+            {
+                for (unsigned x = 0; x < width; ++x, ++cursorData, --remainingSize)
+                {
+                    cursorImage->setPixel(x, y, *cursorData);
+                }
+            }
+
+            m_lbxAnimations[lbxIndex].append(cursorImage);
+        }
+    }
 }
 
 void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)

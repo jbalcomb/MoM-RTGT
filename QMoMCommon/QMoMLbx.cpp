@@ -19,15 +19,15 @@ namespace MoM
 //
 // From: http://masteroforion2.blogspot.nl/
 //
-// The flags is a two byte value also stored as little endian. Contrary to previous multibyte values this doesn’t represent decimal value, but a binary value. Each flag is represented as one bit within the value. Take a look:
+// The flags is a two byte value also stored as little endian. Contrary to previous multibyte values this doesn't represent decimal value, but a binary value. Each flag is represented as one bit within the value. Take a look:
 // 0000 0000 0000 0000
 // ..JI FB.N .... ....
-// This is the binary representation of the two byte flags. The first line shows bits and the line below corresponding flags. The dot in the second line means that setting this bit either doesn’t do anything (is not used) or the behaviour of the flag is unknown. I have given those flags unique letters and they are as follows:
-// J - Junction - I don’t know really what it’s for. Grig de Griz has pointed out this flag in his format description so I’m including it here. (TAlchemist pointed out that: “Junction flag means that you add each frame to the frame before it making a composted image. and start from the begining on the first frame. That is how only the first frame of the big animations is large and all other frames just include the pixels that changed.”)
+// This is the binary representation of the two byte flags. The first line shows bits and the line below corresponding flags. The dot in the second line means that setting this bit either doesn't do anything (is not used) or the behaviour of the flag is unknown. I have given those flags unique letters and they are as follows:
+// J - Junction - I don't know really what it's for. Grig de Griz has pointed out this flag in his format description so I'm including it here. (TAlchemist pointed out that: "Junction flag means that you add each frame to the frame before it making a composted image. and start from the begining on the first frame. That is how only the first frame of the big animations is large and all other frames just include the pixels that changed.")
 // I - Internal palette - Tells if the image has internal palette
 // F - Functional color - Tells if the image has functional color. This color is used for effects like transparency or shading.
 // B - Fill background - Tells the game if it should clear the area on which the image is going to be drawn.
-// N - No compression - Tells if the image uses compression. For me it’s behaviour is unknown. It’s probably a left-over from MOO1 graphic formats which are almost identical to MOO2.
+// N - No compression - Tells if the image uses compression. For me it's behaviour is unknown. It's probably a left-over from MOO1 graphic formats which are almost identical to MOO2.
 
 //struct LBX_IMAGE_HEADER
 //{
