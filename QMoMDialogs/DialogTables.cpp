@@ -728,7 +728,7 @@ void DialogTables::slot_addRow_to_SpellData(int row)
     ui->tableWidget->item(row, col)->setForeground(QBrush(color));
     ui->tableWidget->item(row, col++)->setToolTip(MoM::QMoMResources::instance().getHelpText(spell).c_str());
 
-    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_AI_Spell_Category, 4));
+    ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_AI_Category, 4));
     ui->tableWidget->setItem(row, col++, new NumberTableItem<int8_t>(m_game, &data->m_AI_Desirability, 4));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpellCategory>(m_game, &data->m_Spell_Category, MoM::eSpellCategory_MAX));
     ui->tableWidget->setItem(row, col++, new EnumTableItem<MoM::eSpell_Type>(m_game, &data->m_Section_in_spell_book, MoM::eSpell_Type_MAX));
