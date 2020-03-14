@@ -136,6 +136,22 @@ bool MoMProcess::findSignatures(size_t baseAddress, const std::vector<uint8_t>& 
 {
     bool ok = true;
 
+    size_t indexDOSBoxExe = findStringInBuffer(gDOSBOX_EXE_MATCH, data);
+    if (indexDOSBoxExe < data.size())
+    {
+        std::cout << "Found '" << gDOSBOX_EXE_MATCH << "' in BaseAddress 0x" << std::hex << baseAddress
+                  << " with size 0x"<< data.size() << std::dec << std::endl;
+        const auto* pathDOSBoxExe = data.data() + indexDOSBoxExe;
+        while ((pathDOSBoxExe >= data.data()) && (*pathDOSBoxExe >= 0x20) && (*pathDOSBoxExe <= 0x7E) && (*pathDOSBoxExe != '"'))
+        {
+            --pathDOSBoxExe;
+        }
+        ++pathDOSBoxExe;
+        m_processFileName = std::string((const char*)pathDOSBoxExe,
+                                        (const char*)(data.data() + indexDOSBoxExe +  ARRAYSIZE(gDOSBOX_EXE_MATCH)));
+        std::cout << "Resulting processFileName='" << m_processFileName << "'" << std::endl;
+    }
+
     // Find the gLOCAL_DIRECTORY, but do not accept '%s' as a result (which is in the dosbox executable itself)
     std::string strLocalDirectoryKey(gLOCAL_DIRECTORY);
     size_t indexLocalDirectory = findStringInBuffer(strLocalDirectoryKey, data);

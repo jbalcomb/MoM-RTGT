@@ -2,6 +2,18 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
+CHANGES IN 0.3.3 (2020-03-14)
+-----------------------------
+* Revised solution to find Steam version of MoM and CoM, so that it still
+  works in e.g. Windows Vista.
+  That is, the dependency to GetModuleFileNameA in psapi.dll that was
+  introduced in 0.3.2 has been eliminated again.
+
+* Show all fields such that they are consistent with Caster of Magic
+  as per Seravy's comments.
+
+
+
 CHANGES IN 0.3.2 (2020-03-12)
 -----------------------------
 * Fixed problem that Tweaker did not properly connect to the Steam version

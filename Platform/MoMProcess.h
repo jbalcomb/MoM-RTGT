@@ -19,6 +19,10 @@ namespace MoM {
 /// \brief The first data in the Datasegment (DS) of MoM WIZARDS.EXE
 const char gDATASEGMENT_IDENTIFIER[] = "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
 
+/// \brief The text that identifies the path to the DOXBox executable.
+///        The actual game directory may be a relative directory with respect to its path.
+const char gDOSBOX_EXE_MATCH[] = "\\DOSBox.exe";
+
 /// \brief The text that prefixes the current directory of the game
 const char gLOCAL_DIRECTORY[] = "local directory ";
 
