@@ -87,7 +87,7 @@ public:
     QMoMBuildingTile(eBuilding buildingEnum, const QMoMGamePtr& game)
         : QGraphicsItem(),
           m_game(game),
-          m_momBuilding(game.get(), buildingEnum)
+          m_momBuilding(game.data(), buildingEnum)
     {}
 
     QRectF boundingRect() const override
@@ -128,7 +128,7 @@ public:
         y += rectBuilding.height();
         for (auto preqEnum : m_momBuilding.getRequiredBuildings())
         {
-            auto preqBuilding = MoMBuilding(m_game.get(), preqEnum);
+            auto preqBuilding = MoMBuilding(m_game.data(), preqEnum);
             painter->drawText(xLeft, y, boundingRect().width() - xLeft, lineHeight, Qt::AlignVCenter,
                               QString("Prequisite: %0").arg(preqBuilding.getName().c_str()));
             y += lineHeight;
@@ -378,7 +378,7 @@ void DialogBuildingTree::slot_gameUpdated()
     // Register prerequisite tiles for every building tile
     for(auto buildingTile : buildingTiles)
     {
-       for (auto preq : MoMBuilding(m_game.get(), buildingTile->buildingEnum()).getRequiredBuildings())
+       for (auto preq : MoMBuilding(m_game.data(), buildingTile->buildingEnum()).getRequiredBuildings())
        {
            auto it = buildingTiles.find(preq);
            if (it != buildingTiles.end())
@@ -418,7 +418,7 @@ void DialogBuildingTree::slot_gameUpdated()
     // List units at the highest tier buildings they require
     for (int unitTypeNr = 0; unitTypeNr < eUnit_Type_MAX; ++unitTypeNr)
     {
-        MoMUnit momUnit(m_game.get(), static_cast<eUnit_Type>(unitTypeNr));
+        MoMUnit momUnit(m_game.data(), static_cast<eUnit_Type>(unitTypeNr));
         auto listBuildings = momUnit.getRequiredBuildings();
         auto highestTierValue = QPointF();
         QMoMBuildingTile* highestTierTile = nullptr;
