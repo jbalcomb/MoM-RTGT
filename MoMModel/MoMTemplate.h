@@ -5005,8 +5005,8 @@ typedef struct PACKED_STRUCT // Difficulty_Table
 typedef struct PACKED_STRUCT // Spell_Data
 {
     char            m_SpellName[19];            // 00 ",    0X0,    0x50000400, 0x0,    19);
-    int8_t          m_Spell_Type;               // 13,   0x10000400, -1, 1);
-    int8_t          m_Trade_Desirability;       // 14,   0x000400,   -1, 1);
+    int8_t          m_AI_Category;              // 13,   0x10000400, -1, 1);
+    int8_t          m_AI_Desirability;          // 14,   0x000400,   -1, 1);
     eSpellCategory  m_Spell_Category;           // 15,   0x000400,   -1, 1);
     eSpell_Type     m_Section_in_spell_book;    // 16,   0x000400,   -1, 1);
     eRealm_Type     m_Magic_Realm;              // 17,   0x800400,   GetEnum("enum_RealmType"),  1);

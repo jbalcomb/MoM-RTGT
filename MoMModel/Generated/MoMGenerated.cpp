@@ -7283,8 +7283,8 @@ std::ostream& operator<<(std::ostream& os, const Spell_Data& rhs)
 {
     os << "{\n";
     os << "m_SpellName=" << formatCharArray(rhs.m_SpellName, 19) << "\n";
-    os << "m_Spell_Type=" << (int)rhs.m_Spell_Type << " 0x" << std::hex << (int)rhs.m_Spell_Type << std::dec << "\n";
-    os << "m_Trade_Desirability=" << (int)rhs.m_Trade_Desirability << " 0x" << std::hex << (int)rhs.m_Trade_Desirability << std::dec << "\n";
+    os << "m_AI_Category=" << (int)rhs.m_AI_Category << " 0x" << std::hex << (int)rhs.m_AI_Category << std::dec << "\n";
+    os << "m_AI_Desirability=" << (int)rhs.m_AI_Desirability << " 0x" << std::hex << (int)rhs.m_AI_Desirability << std::dec << "\n";
     os << "m_Spell_Category=" << rhs.m_Spell_Category << "\n";
     os << "m_Section_in_spell_book=" << rhs.m_Section_in_spell_book << "\n";
     os << "m_Magic_Realm=" << rhs.m_Magic_Realm << "\n";

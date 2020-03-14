@@ -6295,8 +6295,8 @@ QMoMTreeItemModelBase* constructTreeItem(Spell_Data* rhs, const QString& context
         return ptree;
 
     ptree->appendChild("m_SpellName", new QMoMTreeItemModel<char[19]>(rhs->m_SpellName));
-    ptree->appendChild("m_Spell_Type", new QMoMTreeItemModel<int8_t>(&rhs->m_Spell_Type));
-    ptree->appendChild("m_Trade_Desirability", new QMoMTreeItemModel<int8_t>(&rhs->m_Trade_Desirability));
+    ptree->appendChild("m_AI_Category", new QMoMTreeItemModel<int8_t>(&rhs->m_AI_Category));
+    ptree->appendChild("m_AI_Desirability", new QMoMTreeItemModel<int8_t>(&rhs->m_AI_Desirability));
     ptree->appendChild("m_Spell_Category", new QMoMTreeItemModel<eSpellCategory>(&rhs->m_Spell_Category));
     ptree->appendChild("m_Section_in_spell_book", new QMoMTreeItemModel<eSpell_Type>(&rhs->m_Section_in_spell_book));
     ptree->appendChild("m_Magic_Realm", new QMoMTreeItemModel<eRealm_Type>(&rhs->m_Magic_Realm));
