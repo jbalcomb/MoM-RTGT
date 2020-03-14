@@ -322,6 +322,11 @@ void DialogLbxEditor::loadLbx(const QString& filename)
                 // Font
                 processFont(lbxIndex);
             }
+            else if (recordType == MoM::MoMLbxBase::TYPE_palette)
+            {
+                processPalette(lbxIndex);
+                ui->comboBox_LbxIndex->addItem(text + " - palette");
+            }
             else
             {
                 // Type without specific support
@@ -467,6 +472,45 @@ void DialogLbxEditor::processFont(int lbxIndex)
     }
     m_lbxAnimations[lbxIndex].scale(2.0);
     ui->comboBox_LbxIndex->addItem("0 - font");
+}
+
+void DialogLbxEditor::processPalette(int lbxIndex)
+{
+    MoM::MoMLbxBase::eRecordType recordType = m_lbx.getRecordType(lbxIndex);
+    if (recordType != MoM::MoMLbxBase::TYPE_palette)
+        return;
+    std::vector<uint8_t> data;
+    if (!m_lbx.getRecord(lbxIndex, data))
+        return;
+    if (data.size() < 256 * 4)
+        return;
+
+    m_lbxAnimations[lbxIndex].clear();
+
+    uint8_t* dataPalette = m_lbx.getRecord(lbxIndex);
+    MoM::QMoMPalette colorTable(256);
+    MoM::convertLbxToPalette(dataPalette, colorTable);
+
+    int width = 256 + 2 + 2;
+    int height = 256 + 2 + 2;
+    int cellSize = 14;
+    QMoMImagePtr image(new QImage(width, height, QImage::Format_Indexed8));
+    image->setColorTable(colorTable);
+    image->fill(0);
+    for (int i = 0; i < colorTable.count(); ++i)
+    {
+        int left = (i % 16) * 16 + 2;
+        int top = (i / 16) * 16 + 2;
+        for (int y = top; y < top + cellSize; ++y)
+        {
+            for (int x = left; x < left + cellSize; ++x)
+            {
+                image->setPixel(x, y, i);
+            }
+        }
+    }
+
+    m_lbxAnimations[lbxIndex].append(image);
 }
 
 void DialogLbxEditor::updateBitmapImage(const QString& bitmapFilename)
