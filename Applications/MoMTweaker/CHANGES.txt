@@ -12,6 +12,12 @@ CHANGES IN 0.3.3 (2020-03-14)
 * Show all fields such that they are consistent with Caster of Magic
   as per Seravy's comments.
 
+* Visualize palettes and cursor images from FONTS.LBX in LBX editor
+  based in information from Drake178.
+  Replacing them does not work (yet).
+
+* Released a Linux version as well.
+
 
 
 CHANGES IN 0.3.2 (2020-03-12)
