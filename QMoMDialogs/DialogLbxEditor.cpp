@@ -1,17 +1,18 @@
 #include "DialogLbxEditor.h"
 #include "ui_DialogLbxEditor.h"
 
-#include <QDebug>
-#include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QMessageBox>
-
+#include "MoMResources.h"
 #include "MoMUtility.h"
 #include "QMoMGifHandler.h"
 #include "QMoMLbx.h"
 #include "QMoMResources.h"
 #include "QMoMSettings.h"
 #include "QMoMUnitTile.h"
+
+#include <QDebug>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
+#include <QMessageBox>
 
 using namespace MoM;
 
@@ -336,6 +337,30 @@ void DialogLbxEditor::loadLbx(const QString& filename)
         }
     }
 
+    if (0 ==QFileInfo(filename).fileName().compare("TERRAIN.LBX", Qt::CaseInsensitive))
+    {
+        const auto allTerrainData = getLbxTerrainData(m_lbx);
+        for (int planeNr = 0; planeNr < ePlane_MAX; ++planeNr)
+        {
+            for (int terrainNr = 0; terrainNr < eTerrainType_MAX; ++terrainNr)
+            {
+                auto terrainEnum = (eTerrainType)terrainNr;
+                auto terrainData = allTerrainData[planeNr][terrainNr];
+                QMoMAnimation tileAnimation(terrainData.size());
+                for (auto& imageRef : terrainData)
+                {
+                    tileAnimation.append(MoM::convertLbxToImage(imageRef.pointer, imageRef.size, m_colorTable, toStr(terrainEnum)));
+                }
+                m_lbxAnimations.append(tileAnimation);
+                ui->comboBox_LbxIndex->addItem(
+                            QString("%0 - %1 - %2")
+                            .arg(prettyQStr((ePlane)planeNr))
+                            .arg(terrainNr)
+                            .arg(prettyQStr(terrainEnum)));
+            }
+        }
+    }
+
     if (ui->comboBox_LbxIndex->count() > 0)
     {
         ui->comboBox_LbxIndex->setCurrentIndex(0);
@@ -516,7 +541,7 @@ void DialogLbxEditor::processPalette(int lbxIndex)
 
     // FONTS.LBX palette records can have an additional raw cursor image at offset 0x500
     const size_t offsetRawImages = 0x500;
-    if (data.size() >= 0x500)
+    if (data.size() >= offsetRawImages)
     {
         const auto* cursorData = data.data() + offsetRawImages;
         auto remainingSize = data.size() - offsetRawImages;
