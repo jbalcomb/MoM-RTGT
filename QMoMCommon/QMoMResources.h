@@ -204,6 +204,7 @@ private:
     QVector<QMoMImagePtr> m_terrainBattleImages;
     QVector<QMoMAnimation> m_terrainAnimations;
     QVector<QMoMImagePtr> m_unitImages;
+    std::unique_ptr<MoMExeWizards> m_wizardsExe;
 };
 
 }

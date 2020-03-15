@@ -464,6 +464,7 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
     {
 //        qDebug() << getDateTimeStr() << ">QMoMResources::setGame() begin";
         m_game = game;
+        m_wizardsExe.reset();
 
         (void)createColorTable();
 
@@ -494,6 +495,15 @@ void QMoMResources::setGame(const QMoMGamePtr& game)
         createSpellImages();
         createLbxImages("CMBGRASS", m_terrainBattleImages);
         createTerrainImages();
+
+        if (!m_game->getGameDirectory().empty())
+        {
+            auto wizardsExe = std::make_unique<MoMExeWizards>();
+            if (wizardsExe->load(m_game->getGameDirectory() + "/" + "WIZARDS.EXE"))
+            {
+                m_wizardsExe.swap(wizardsExe);
+            }
+        }
 
 //        qDebug() << getDateTimeStr() << "<QMoMResources::setGame() end";
     }
@@ -1113,16 +1123,10 @@ const QString QMoMResources::getNameSkill(MoM::eSkill skill) const
 
     // First try the game
     const auto* wizardsDS = m_game->getWizardsExeDataSegment();
-    MoMExeWizards wizardsExe;
-
     // Then try the game directory
-    if ((wizardsDS == nullptr) && !m_game->getGameDirectory().empty())
+    if ((wizardsDS == nullptr) && m_wizardsExe)
     {
-        // TODO: Only load once. Perhaps lazily
-        if (wizardsExe.load(m_game->getGameDirectory() + "/" + "WIZARDS.EXE"))
-        {
-            wizardsDS = reinterpret_cast<const MoMDataSegment*>(wizardsExe.getDataSegment());
-        }
+        wizardsDS = reinterpret_cast<const MoMDataSegment*>(m_wizardsExe->getDataSegment());
     }
 
     if (wizardsDS != nullptr)
