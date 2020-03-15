@@ -100,10 +100,6 @@ sub generate_code
         print "std::ostream& operator<<(std::ostream& os, const $enumname& rhs);\n";
     }
     print "\n";
-    foreach my $classname (sort keys %gStructUnions)
-    {
-        print "std::ostream& operator<<(std::ostream& os, const $classname& rhs);\n";
-    }
     
     print "\n";
     print "}\n";
@@ -134,28 +130,6 @@ sub generate_code
     "namespace MoM {\n".
     "\n";
 
-print <<'EOF';
-std::string formatCharArray(const char* buffer, unsigned size)
-{
-    std::ostringstream oss;
-    for (unsigned i = 0; i < size; ++i)
-    {
-        if (isprint((unsigned char)buffer[i]))
-        {
-            oss << buffer[i];
-        }
-        else
-        {
-            oss << "\\x" << std::setbase(16) << std::setw(2) << std::setfill('0') 
-                << (unsigned)(unsigned char)buffer[i] 
-                << std::setbase(10);
-        }
-    }
-    return oss.str();
-}
-
-EOF
-
     #
     # Generate ostream operator<<()
     #
@@ -181,85 +155,7 @@ EOF
         print "}\n";
         print "\n";
     }
-    
-    foreach my $classname (sort keys %gStructUnions)
-    {
-        my @datamembers = @{$gStructUnions{$classname}{'datamembers'}};
         
-        if ($classname eq "EXE_Reloc")
-        {
-           print "std::ostream& operator<<(std::ostream& os, const $classname& rhs)\n";
-           print "{\n";
-           print "    os << std::hex << rhs.segment << ':' << rhs.offset << std::dec;\n";
-           print "    return os;\n";
-           print "}\n";
-           print "\n";
-           next;
-        }
-        
-        print "std::ostream& operator<<(std::ostream& os, const $classname& rhs)\n";
-        print "{\n";
-        print "    os << \"{\\n\";\n";
-        while (1)
-        {
-            my $type = shift @datamembers;
-            my $datamember = shift @datamembers;
-            last if not defined $datamember;
-            
-			$type = "uint16_t" if ($type eq "DS_Offset");
-            $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
-            my ($name, $range, $bitmask) = ($1, $3, $5);
-            my $cast = "";
-            $cast = "(unsigned)" if $type eq "uint8_t" or $type =~ m#\benum\b#;
-            $cast = "(int)" if $type eq "int8_t";
-            if ((defined $range) && ($type =~ m#int\d+_t$#))
-            {
-                print "    os << \"$name=(\\n\";\n";
-                print "    for (unsigned i = 0; i < $range; ++i)\n";
-                print "    {\n";
-                print qq#        os << "[" << i << "] " << ${cast}rhs.$name\[i] << " 0x" << std::hex << ${cast}rhs.$name\[i] << std::dec << ",\\n";\n#;
-                print "    }\n";
-                print "    os << \")\\n\";\n";
-            }
-            elsif ((defined $range) && ($type ne "char"))
-            {
-                print "    os << \"$name=(\\n\";\n";
-                print "    for (unsigned i = 0; i < $range; ++i)\n";
-                print "    {\n";
-                print qq#        os << "[" << i << "] " << ${cast}rhs.${name}\[i] << ",\\n";\n#;
-                print "    }\n";
-                print "    os << \")\\n\";\n";
-            }
-           elsif ((defined $range) && ($type eq "char"))
-            {
-                print "    os << \"$name=\" << formatCharArray(rhs.$name, $range) << \"\\n\";\n";
-            }
-            elsif ($type =~ m#int\d+_t$#)
-            {
-                if (defined $bitmask)
-                {
-                    print qq#    if (0 != rhs.$name)\n#;
-                    print qq#    {\n#;
-                    print qq#    os << \"$name=\" << ${cast}rhs.$name << "\\n";\n#;
-                    print qq#    }\n#;
-                }
-                else
-                {
-                    print qq#    os << \"$name=\" << ${cast}rhs.$name << " 0x" << std::hex << ${cast}rhs.$name << std::dec << \"\\n\";\n#;
-                }
-            }
-            else
-            {
-                print "    os << \"$name=\" << ${cast}rhs.$name << \"\\n\";\n";
-            }
-        }
-        print "    os << \"}\";\n";
-        print "    return os;\n";
-        print "}\n";
-        print "\n";
-    }
-    
-    print "\n";
     print "} // namespace\n";
 
     close(CPPFILE);
@@ -350,12 +246,18 @@ sub generate_Qt_code
             $type = "uint16_t" if ($type eq "DS_Offset");
             $datamember =~ m#^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$#;
             my ($name, $range, $bitmask) = ($1, $3, $5);
+            my $displayName = qq#"${name}"#;
+            if ($name =~ m#^(e[A-Z][^_]*)_(\w+)$#)
+            {
+                my ($enumClass, $enumValue) = ($1, $2);
+                $displayName = "QMoMResources::instance().getNameSkill(${enumClass}::${enumValue})";
+            }
             my $cast = "";
             $cast = "(unsigned)" if $type eq "uint8_t" or $type =~ m#\benum\b#;
             $cast = "(int)" if $type eq "int8_t";
             if (defined $range and $type eq "char")
             {
-                print "    ptree->appendChild(\"${name}\", new QMoMTreeItemModel<char[$range]>(rhs->${name}));\n";
+                print "    ptree->appendChild($displayName, new QMoMTreeItemModel<char[$range]>(rhs->${name}));\n";
             }
             elsif (defined $range)
             {
@@ -365,7 +267,7 @@ sub generate_Qt_code
                 {
                     print qq#    if ($range > 3)\n#;
                     print qq#    {\n#;
-                    print qq#        $psubtree = new QMoMTreeItemModelBase("${name}");\n#;
+                    print qq#        $psubtree = new QMoMTreeItemModelBase($displayName);\n#;
                     print qq#        ptree->appendTree($psubtree, "");\n#;
                     print qq#    }\n#;
                 }
@@ -391,38 +293,38 @@ sub generate_Qt_code
                 print qq#    memset(&mask${name}, '\\0', sizeof(mask${name}));\n#;
                 print qq#    mask${name}.${name} = $max_value;\n#;
                 print qq#    if (1 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask${name}));\n#;
                 print qq#    else if (2 == sizeof(mask${name}))\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask${name}));\n#;
                 print qq#    else\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask${name}));\n#;
             }
             elsif (exists $gEnums{"${type}"} and exists $gEnums{"${type}140m"})
             {
                 print qq#    if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("6.0"))\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}60>((${type}60*)&rhs->${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<${type}60>((${type}60*)&rhs->${name}));\n#;
                 print qq#    }\n#;
                 print qq#    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("1.50"))\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}150>((${type}150*)&rhs->${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<${type}150>((${type}150*)&rhs->${name}));\n#;
                 print qq#    }\n#;
                 print qq#    else if (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("1.40m"))\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}140m>((${type}140m*)&rhs->${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<${type}140m>((${type}140m*)&rhs->${name}));\n#;
                 print qq#    }\n#;
                 print qq#    else\n#;
                 print qq#    {\n#;
-                print qq#        ptree->appendChild("${name}", new QMoMTreeItemModel<${type}>(&rhs->${name}));\n#;
+                print qq#        ptree->appendChild($displayName, new QMoMTreeItemModel<${type}>(&rhs->${name}));\n#;
                 print qq#    }\n#;
             }
             elsif ($type =~ m#u?int\d+_t# or exists $gEnums{$type})
             {
-                print qq#    ptree->appendChild("${name}", new QMoMTreeItemModel<$type>(&rhs->${name}));\n#;
+                print qq#    ptree->appendChild($displayName, new QMoMTreeItemModel<$type>(&rhs->${name}));\n#;
             }
             else
             {
-                print qq#    ptree->appendTree(constructTreeItem(&rhs->${name}, "${name}"), "");\n#;
+                print qq#    ptree->appendTree(constructTreeItem(&rhs->${name}, $displayName), "");\n#;
             }
         }
         print "    return ptree;\n";

@@ -12,6 +12,7 @@
 #include "MoMLbxBase.h"
 #include "MoMResources.h"
 #include "MoMUtility.h"
+#include "MoMExeWizards.h"
 #include "QMoMLbx.h"
 #include "QMoMTreeItemModel.h"
 #include "QMoMUtility.h"
@@ -1103,6 +1104,36 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
     }
 
     return image;
+}
+
+const QString QMoMResources::getNameSkill(MoM::eSkill skill) const
+{
+    if (!inRange(skill, eSkill_MAX))
+        return {};
+
+    // First try the game
+    const auto* wizardsDS = m_game->getWizardsExeDataSegment();
+    MoMExeWizards wizardsExe;
+
+    // Then try the game directory
+    if ((wizardsDS == nullptr) && !m_game->getGameDirectory().empty())
+    {
+        // TODO: Only load once. Perhaps lazily
+        if (wizardsExe.load(m_game->getGameDirectory() + "/" + "WIZARDS.EXE"))
+        {
+            wizardsDS = reinterpret_cast<const MoMDataSegment*>(wizardsExe.getDataSegment());
+        }
+    }
+
+    if (wizardsDS != nullptr)
+    {
+        // TODO: Validate range and ensure terminating zero
+        const char* ptrName = reinterpret_cast<const char*>(wizardsDS) + wizardsDS->m_Offsets_SkillNames[skill];
+        return QString(ptrName);
+    }
+
+    // Fall back to enum constant as string
+    return skill._to_string();
 }
 
 const QString QMoMResources::getName(MoM::eSpell spell) const

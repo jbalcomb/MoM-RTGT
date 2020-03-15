@@ -408,7 +408,7 @@ int MoMCity::calcPacifyingReligiousEffects() const
         {
             religiousEffects++;
         }
-        if (wizard->m_Skills.s.Infernal_Power || wizard->m_Skills.s.Divine_Power)
+        if (wizard->m_Skills.s.eSkill_Infernal_Power || wizard->m_Skills.s.eSkill_Divine_Power)
         {
             religiousEffects += religiousEffects / 2;
         }

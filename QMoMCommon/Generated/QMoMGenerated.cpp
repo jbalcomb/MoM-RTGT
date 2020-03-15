@@ -6267,24 +6267,24 @@ QMoMTreeItemModelBase* constructTreeItem(Skills* rhs, const QString& context)
     if (0 == rhs)
         return ptree;
 
-    ptree->appendChild("Alchemy", new QMoMTreeItemModel<eYesNo8>(&rhs->Alchemy));
-    ptree->appendChild("Warlord", new QMoMTreeItemModel<eYesNo8>(&rhs->Warlord));
-    ptree->appendChild("Chaos_Master", new QMoMTreeItemModel<eYesNo8>(&rhs->Chaos_Master));
-    ptree->appendChild("Nature_Master", new QMoMTreeItemModel<eYesNo8>(&rhs->Nature_Master));
-    ptree->appendChild("Sorcery_Master", new QMoMTreeItemModel<eYesNo8>(&rhs->Sorcery_Master));
-    ptree->appendChild("Infernal_Power", new QMoMTreeItemModel<eYesNo8>(&rhs->Infernal_Power));
-    ptree->appendChild("Divine_Power", new QMoMTreeItemModel<eYesNo8>(&rhs->Divine_Power));
-    ptree->appendChild("Sage_Master", new QMoMTreeItemModel<eYesNo8>(&rhs->Sage_Master));
-    ptree->appendChild("Channeller", new QMoMTreeItemModel<eYesNo8>(&rhs->Channeller));
-    ptree->appendChild("Myrran", new QMoMTreeItemModel<eYesNo8>(&rhs->Myrran));
-    ptree->appendChild("Archmage", new QMoMTreeItemModel<eYesNo8>(&rhs->Archmage));
-    ptree->appendChild("Mana_Focusing", new QMoMTreeItemModel<eYesNo8>(&rhs->Mana_Focusing));
-    ptree->appendChild("Node_Mastery", new QMoMTreeItemModel<eYesNo8>(&rhs->Node_Mastery));
-    ptree->appendChild("Famous", new QMoMTreeItemModel<eYesNo8>(&rhs->Famous));
-    ptree->appendChild("Runemaster", new QMoMTreeItemModel<eYesNo8>(&rhs->Runemaster));
-    ptree->appendChild("Conjurer", new QMoMTreeItemModel<eYesNo8>(&rhs->Conjurer));
-    ptree->appendChild("Charismatic", new QMoMTreeItemModel<eYesNo8>(&rhs->Charismatic));
-    ptree->appendChild("Artificer", new QMoMTreeItemModel<eYesNo8>(&rhs->Artificer));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Alchemy), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Alchemy));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Warlord), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Warlord));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Chaos_Master), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Chaos_Master));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Nature_Master), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Nature_Master));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Sorcery_Master), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Sorcery_Master));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Infernal_Power), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Infernal_Power));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Divine_Power), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Divine_Power));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Sage_Master), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Sage_Master));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Channeller), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Channeller));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Myrran), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Myrran));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Archmage), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Archmage));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Mana_Focusing), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Mana_Focusing));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Node_Mastery), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Node_Mastery));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Famous), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Famous));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Runemaster), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Runemaster));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Conjurer), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Conjurer));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Charismatic), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Charismatic));
+    ptree->appendChild(QMoMResources::instance().getNameSkill(eSkill::Artificer), new QMoMTreeItemModel<eYesNo8>(&rhs->eSkill_Artificer));
     return ptree;
 }
 

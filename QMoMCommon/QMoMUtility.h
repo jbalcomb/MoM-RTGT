@@ -28,6 +28,12 @@ inline QString getDateTimeStr()
             .arg(time.msec(), 3, 10, QChar('0'));
 }
 
+inline std::ostream& operator<<(std::ostream& os, const MoM::EXE_Reloc& rhs)
+{
+    os << std::hex << rhs.segment << ':' << rhs.offset << std::dec;
+    return os;
+}
+
 template< typename T >
 inline QString toQStr(const T& t)
 {

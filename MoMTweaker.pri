@@ -15,6 +15,7 @@ INCLUDEPATH += \
     QMoMCommon/Generated \
     QMoMDialogs \
     Utility \
+    better-enums-0.11.2 \
     giflib-5.0.4/lib
 
 HEADERS += \
@@ -59,6 +60,7 @@ HEADERS += \
     QMoMCommon/QMoMGifHandler.h \
     QMoMCommon/QMoMAnimation.h \
     QMoMCommon/QMoMAnimationTile.h \
+    better-enums-0.11.2/enum.h \
     giflib-5.0.4/lib/gif_stdint.h \
     giflib-5.0.4/lib/gif_unistd.h \
     giflib-5.0.4/lib/gif_lib_private.h \

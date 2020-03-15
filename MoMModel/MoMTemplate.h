@@ -13,6 +13,9 @@
 
 #include "MoMCommon.h"
 
+// Better enums
+#include <enum.h>
+
 static_assert(__cplusplus >= 201103L, "c++11 required");
 
 // Specify to pack structures
@@ -2089,29 +2092,28 @@ enum eReward_Specials ENUMSIZE8
     eReward_Specials_MAX
 } PACKED_ENUM;
 
-enum eSkill ENUMSIZE8
-{
-    SKILL_Alchemy,
-    SKILL_Warlord,
-    SKILL_Chaos_Master,
-    SKILL_Nature_Master,
-    SKILL_Sorcery_Master,
-    SKILL_Infernal_Power,
-    SKILL_Divine_Power,
-    SKILL_Sage_Master,
-    SKILL_Channeller,
-    SKILL_Myrran,
-    SKILL_Archmage,
-    SKILL_Mana_Focusing,
-    SKILL_Node_Mastery,
-    SKILL_Famous,
-    SKILL_Runemaster,
-    SKILL_Conjurer,
-    SKILL_Charismatic,
-    SKILL_Artificer,
-    eSkill_MAX,
-    eSkill__SIZE__ = 0xFF
-} PACKED_ENUM;
+BETTER_ENUM(eSkill, uint8_t,
+    Alchemy,
+    Warlord,
+    Chaos_Master,
+    Nature_Master,
+    Sorcery_Master,
+    Infernal_Power,
+    Divine_Power,
+    Sage_Master,
+    Channeller,
+    Myrran,
+    Archmage,
+    Mana_Focusing,
+    Node_Mastery,
+    Famous,
+    Runemaster,
+    Conjurer,
+    Charismatic,
+    Artificer
+)
+
+const unsigned eSkill_MAX = eSkill::_size();
 
 enum eSkill16 ENUMSIZE16
 {
@@ -3464,25 +3466,24 @@ const unsigned gMAX_WIZARD_RECORDS = 6;
 
 typedef struct PACKED_STRUCT // Skills 
 {
-    // TODO: Match with eSkill
-    eYesNo8             Alchemy;                // 00 (0 or 1)
-    eYesNo8             Warlord;
-    eYesNo8             Chaos_Master;
-    eYesNo8             Nature_Master;
-    eYesNo8             Sorcery_Master;
-    eYesNo8             Infernal_Power;         // 05
-    eYesNo8             Divine_Power;
-    eYesNo8             Sage_Master;
-    eYesNo8             Channeller;
-    eYesNo8             Myrran;
-    eYesNo8             Archmage;               // 0A
-    eYesNo8             Mana_Focusing;
-    eYesNo8             Node_Mastery;
-    eYesNo8             Famous;
-    eYesNo8             Runemaster;
-    eYesNo8             Conjurer;               // 0F
-    eYesNo8             Charismatic;
-    eYesNo8             Artificer;              // 11
+    eYesNo8             eSkill_Alchemy;                // 00 (0 or 1)
+    eYesNo8             eSkill_Warlord;
+    eYesNo8             eSkill_Chaos_Master;
+    eYesNo8             eSkill_Nature_Master;
+    eYesNo8             eSkill_Sorcery_Master;
+    eYesNo8             eSkill_Infernal_Power;         // 05
+    eYesNo8             eSkill_Divine_Power;
+    eYesNo8             eSkill_Sage_Master;
+    eYesNo8             eSkill_Channeller;
+    eYesNo8             eSkill_Myrran;
+    eYesNo8             eSkill_Archmage;               // 0A
+    eYesNo8             eSkill_Mana_Focusing;
+    eYesNo8             eSkill_Node_Mastery;
+    eYesNo8             eSkill_Famous;
+    eYesNo8             eSkill_Runemaster;
+    eYesNo8             eSkill_Conjurer;               // 0F
+    eYesNo8             eSkill_Charismatic;
+    eYesNo8             eSkill_Artificer;              // 11
                                 // SIZE 12
 } Skills;
 

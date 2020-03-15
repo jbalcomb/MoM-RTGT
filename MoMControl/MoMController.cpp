@@ -530,7 +530,7 @@ int MoMController::calcPower(ePlayer playerNr) const
             + wizard->m_Number_of_Spellbooks_Sorcery;
 
     // Myrran
-    if (wizard->m_Skills.s.Myrran)
+    if (wizard->m_Skills.s.eSkill_Myrran)
     {
         power += 5;
     }
@@ -565,13 +565,13 @@ void MoMController::calcPowerBaseDivision(ePlayer playerNr, int &mana, int &skil
         research = 0;
     }
 
-    if (wizard->m_Skills.s.Mana_Focusing)
+    if (wizard->m_Skills.s.eSkill_Mana_Focusing)
     {
         mana += mana / 4;
     }
 
     // NOTE: v1.31 does not show the added 50% skill for archmage, although Insecticide does
-    if (wizard->m_Skills.s.Archmage)
+    if (wizard->m_Skills.s.eSkill_Archmage)
     {
         skill += skill / 2;
     }
@@ -643,11 +643,11 @@ int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
     Spell_Data* spellData = m_game->getSpellData(wizard->m_Researching_Spell);
     eRealm_Type realmResearching = spellData->m_Magic_Realm;
     int researchBonusPercentage = 0;
-    if (wizard->m_Skills.s.Sage_Master)
+    if (wizard->m_Skills.s.eSkill_Sage_Master)
     {
         researchBonusPercentage += 25;
     }
-    if (wizard->m_Skills.s.Conjurer && (spellData->m_Spell_Category == SPELLCATEGORY_Normal_summon))
+    if (wizard->m_Skills.s.eSkill_Conjurer && (spellData->m_Spell_Category == SPELLCATEGORY_Normal_summon))
     {
         researchBonusPercentage += 25;
     }
@@ -655,7 +655,7 @@ int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
     switch (realmResearching)
     {
     case REALM_Nature:
-        if (wizard->m_Skills.s.Nature_Master)
+        if (wizard->m_Skills.s.eSkill_Nature_Master)
         {
             researchBonusPercentage += 15;
         }
@@ -665,7 +665,7 @@ int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
         }
         break;
     case REALM_Sorcery:
-        if (wizard->m_Skills.s.Sorcery_Master)
+        if (wizard->m_Skills.s.eSkill_Sorcery_Master)
         {
             researchBonusPercentage += 15;
         }
@@ -675,7 +675,7 @@ int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
         }
         break;
     case REALM_Chaos:
-        if (wizard->m_Skills.s.Chaos_Master)
+        if (wizard->m_Skills.s.eSkill_Chaos_Master)
         {
             researchBonusPercentage += 15;
         }
@@ -697,7 +697,7 @@ int MoMController::calcResearchBonusPercentage(ePlayer playerNr) const
         }
         break;
     case REALM_Arcane:
-        if (wizard->m_Skills.s.Runemaster)
+        if (wizard->m_Skills.s.eSkill_Runemaster)
         {
             researchBonusPercentage += 25;
         }

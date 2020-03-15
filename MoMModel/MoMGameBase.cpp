@@ -22,7 +22,8 @@
 
 namespace MoM {
 
-static_assert(1 == sizeof(eSkill), "Check enum-size (g++ flag -fshort-enums)");
+static_assert(1 == sizeof(eHero_TypeCode), "Check enum-size (g++ flag -fshort-enums)");
+static_assert(1 == sizeof(eSkill), "Check enum-size (BETTER_ENUM?)");
 static_assert(0x04C8 == sizeof(Wizard), "Check pack-struct (g++ flag -fpack-struct)");
 
 MoMGameBase::~MoMGameBase() = default;
