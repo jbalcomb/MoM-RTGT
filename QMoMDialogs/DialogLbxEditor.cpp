@@ -532,7 +532,8 @@ void DialogLbxEditor::processPalette(int lbxIndex)
             {
                 for (unsigned x = 0; x < width; ++x, ++cursorData, --remainingSize)
                 {
-                    cursorImage->setPixel(x, y, *cursorData);
+                    // LBX has data column by column: reverse x and y
+                    cursorImage->setPixel(y, x, *cursorData);
                 }
             }
 
