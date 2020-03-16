@@ -17,6 +17,14 @@ win32-msvc2008:QMAKE_LIBS += user32.lib
 win32-msvc2010:QMAKE_LIBS += user32.lib
 message(QMAKE_LIBS: $$QMAKE_LIBS)
 
+unix:{
+  # Suppress default RPATH
+  QMAKE_LFLAGS_RPATH=
+  # Set RPATH
+  QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN:\$$ORIGIN/../lib\'"
+}
+message(QMAKE_RPATHDIR: $$QMAKE_RPATHDIR)
+
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
 QT += core gui widgets

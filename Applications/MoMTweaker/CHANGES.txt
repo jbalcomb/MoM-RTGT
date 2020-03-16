@@ -2,9 +2,11 @@ MoMTweaker
 Author: Klaas van Aarsen
 
 
-CHANGES IN 0.3.4 (2020-03-)
+CHANGES IN 0.3.4 (2020-03-16)
 -----------------------------
 * Fixed cursor images from FONTS.LBX (column major).
+
+* Fixed dependencies of Linux version (and upgraded it to Qt 5.14)
 
 
 
