@@ -15,7 +15,7 @@ members can unzip and run, with no installer, no Qt DLLs and no `LD_LIBRARY_PATH
   **no Qt dependency**. It stays as it is.
 - Most of the GUI is generic: an editable tree generated from `MoMTemplate.h`, tables of
   game records, and image views. ImGui handles this kind of tool UI well.
-- The code generator (`scripts/generate_code.pl`) already emits the Qt tree builders. A
+- The code generator (`scripts/generate_code.py`) already emits the Qt tree builders. A
   new back end can emit ImGui builders from the same structs.
 
 ## 2. Proposed stack
@@ -66,7 +66,7 @@ caches when to rebuild.
 flowchart LR
   A["0 · Groundwork<br/>CMake build of core + Qt app<br/>CI on Win/Linux/macOS"] -->
   B["1 · Skeleton<br/>SDL + ImGui docking app<br/>connect / open file / status"] -->
-  C["2 · Generated tree<br/>4th generate_code.pl target<br/>number/enum/bitmask/string editors"] -->
+  C["2 · Generated tree<br/>4th generate_code.py target<br/>number/enum/bitmask/string editors"] -->
   D["3 · Tables + LBX viewer<br/>texture cache, PNG export"] -->
   E["4 · Map, cities, tools, mods,<br/>external AI, customizer"] -->
   F["5 · Packaging<br/>zip / AppImage / .app<br/>retire Qt"]
@@ -74,8 +74,8 @@ flowchart LR
 
 1. **Groundwork** (done). A CMake build for the core with the Qt apps as an option, CI
    for all three operating systems, the core tests moved from QtTest to doctest, and
-   a `MoMProcessMacOS.cpp` stub. Next: translate `scripts/generate_code.pl` to Python,
-   with output identical to the committed generated files.
+   a `MoMProcessMacOS.cpp` stub. `scripts/generate_code.pl` translated to Python
+   (`generate_code.py`), with output identical to the Perl script.
 2. **Skeleton.** An ImGui app that can attach to DOSBox or open a `.GAM`/`.EXE`/`.LBX`
    and show connection status.
 3. **Generated tree.** Extend the (Python) code generator to emit `drawTree(T*)` functions for

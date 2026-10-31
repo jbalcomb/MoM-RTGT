@@ -139,7 +139,7 @@ if [ -n "$GENERATE" ]; then
     echo "-------------------------"
     echo "GENERATE:"
     cd "$CHECKOUTDIR/MoMEditorTemplate"
-    perl generate_code.pl
+    python3 scripts/generate_code.py
 fi
 
 # BUILD ALL

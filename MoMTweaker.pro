@@ -21,4 +21,4 @@ SOURCES += \
 
 DISTFILES += \
     Applications/MoMTweaker/CHANGES.txt \
-    scripts/generate_code.pl
+    scripts/generate_code.py

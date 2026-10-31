@@ -88,11 +88,29 @@ if(WIN32)
 endif()
 
 # ---------------------------------------------------------------------------
+# Code generation from MoMModel/MoMTemplate.h
+#   The generated sources are committed; regenerate them after changing
+#   the template with:  cmake --build build --target rtgt_generate
+# ---------------------------------------------------------------------------
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_custom_target(rtgt_generate
+        COMMAND Python3::Interpreter ${PROJECT_SOURCE_DIR}/scripts/generate_code.py
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMENT "Regenerating sources from MoMTemplate.h"
+        VERBATIM)
+endif()
+
+# ---------------------------------------------------------------------------
 # Tests
 # ---------------------------------------------------------------------------
 if(RTGT_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
+    if(Python3_Interpreter_FOUND)
+        add_test(NAME generated_code_up_to_date
+            COMMAND Python3::Interpreter ${PROJECT_SOURCE_DIR}/scripts/generate_code.py --check)
+    endif()
 endif()
 
 # ---------------------------------------------------------------------------

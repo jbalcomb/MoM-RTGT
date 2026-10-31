@@ -15,7 +15,7 @@ macOS       Core library and tests only; attaching to a running DOSBox is not im
 DEPENDENCIES
 ============
 Qt          Needed for GUI components
-perl        Needed to regenerate sources
+python3     Needed to regenerate sources (scripts/generate_code.py)
 
 
 DEPLOYING
@@ -43,6 +43,10 @@ Needs CMake 3.16+ and a C++14 compiler. Qt5 is only needed for the GUI applicati
 Executables end up in build/bin. The combat tests need a running game in DOSBox
 and are skipped by default; run them with: build/bin/rtgt_tests --no-skip
 
+After changing MoMModel/MoMTemplate.h, regenerate the generated sources with
+    cmake --build build --target rtgt_generate      (or: python3 scripts/generate_code.py)
+ctest fails while the committed generated sources are out of date.
+
 
 BUILDING FROM SOURCES WITH QMAKE
 ================================
@@ -51,4 +55,4 @@ BUILDING FROM SOURCES WITH QMAKE
 3. Build & Run.
 4. If you make changes to the structures that map to the game, you'll have 
    regenerate some sources:
-        perl scripts/generate_code.pl
+        python3 scripts/generate_code.py

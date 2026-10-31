@@ -114,11 +114,11 @@ that live outside DS.
 `MoMModel/MoMTemplate.h` (about 6,200 lines) declares the packed structs and enums that
 mirror the game's memory: `SaveGame`, `MoMDataSegment`, `MoMMagicDataSegment`,
 `Unit_Type_Data`, `Spell_Data`, `City`, `Wizard` and about 90 more.
-`scripts/generate_code.pl` parses it and generates the rest:
+`scripts/generate_code.py` (a Python translation of the original `generate_code.pl`) parses it and generates the rest:
 
 ```mermaid
 flowchart LR
-  T["Platform/MoMCommon.h<br/>MoMModel/MoMTemplate.h"] --> G[[scripts/generate_code.pl]]
+  T["Platform/MoMCommon.h<br/>MoMModel/MoMTemplate.h"] --> G[[scripts/generate_code.py]]
   G --> A["MoMModel/Generated/MoMGenerated.*<br/>enum → string (operator overloads)"]
   G --> B["QMoMCommon/Generated/QMoMGenerated.*<br/>constructTreeItem() for every struct<br/>→ the editable Qt tree"]
   G --> I["MoMGenerated.idc<br/>IDA Pro type definitions"]
