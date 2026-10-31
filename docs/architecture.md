@@ -122,8 +122,8 @@ flowchart LR
   G --> A["MoMModel/Generated/MoMGenerated.*<br/>enum → string (operator overloads)"]
   G --> B["QMoMCommon/Generated/QMoMGenerated.*<br/>constructTreeItem() for every struct<br/>→ the editable Qt tree"]
   G --> I["MoMGenerated.idc<br/>IDA Pro type definitions"]
+  G --> JS["docs/data/mom-layout.json<br/>enums + struct layouts for other tools"]
   B -. "ImGui port: add a 4th target" .-> N["ImGui tree / table builders"]
-  T -. "proposal" .-> J["JSON / YAML layout export<br/>shared with ReMoM & Simtex Universe"]
 ```
 
 `xml/momrtgt.xml` (with its `.xsd` schemas) describes some locations, such as the

@@ -38,14 +38,52 @@ flowchart LR
   GEN --> WEB["GitHub Pages reference<br/>(searchable tables)"]
 ```
 
-1. Start by **exporting** what RTGT already has. The code generator (`scripts/generate_code.py`)
-   parses `MoMTemplate.h`, so it can emit JSON (struct name, field, type, offset, size, enum)
-   as easily as it emits `.idc`.
+1. Start by **exporting** what RTGT already has. Done: see
+   [the layout export](#the-layout-export-docsdatamom-layoutjson) below.
 2. Compare that export with ReMoM's `MOM_DAT.h` offsets. Mismatches are either RTGT
    errors, version differences (1.31 vs 1.40n) or ReMoM naming gaps, and each one is
    worth knowing.
 3. Make the STU repository the home of the reconciled data and its Pages site. RTGT and
    ReMoM consume it: generated headers in RTGT, verification tests in ReMoM.
+
+## The layout export: `docs/data/mom-layout.json`
+
+[`mom-layout.json`](data/mom-layout.json) holds every enum and every struct layout that
+MoM-RTGT knows about, generated from `MoMModel/MoMTemplate.h` by `scripts/generate_code.py`.
+It is committed, CI fails when it is out of date, and the same layout is checked against
+the C++ compilers (`sizeof`/`offsetof` for every struct and member) on Windows, Linux and
+macOS. Offsets and sizes are in bytes; structs are packed.
+
+```json
+{
+  "schema": "momrtgt-layout/1",
+  "primitive_types": { "uint16_t": {"size": 2, "signed": false}, "...": {} },
+  "constants": { "gMAX_UNITS_IN_LOCATION": 9, "...": 0 },
+  "enums": [
+    { "name": "eReward_Specials", "size": 1, "location": "MoMModel/MoMTemplate.h:2080",
+      "enumerators": [
+        {"name": "REWARD_2_Spellbooks_or_Skills", "value": 6,
+         "comment": "6 = 2 Spellbooks or Skills (74% - 26%)"} ] }
+  ],
+  "structs": [
+    { "name": "MoMDataSegment", "kind": "struct", "size": 60128,
+      "location": "MoMModel/MoMTemplate.h:5411",
+      "members": [
+        {"name": "m_units_in_overland_stack", "type": "uint32_t", "offset": 39326, "size": 36,
+         "count": 9, "count_expr": "gMAX_UNITS_IN_LOCATION", "comment": "999E"} ] }
+  ]
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `type` | a primitive type, an enum name or a struct name |
+| `count`, `count_expr` | array length, and the expression used in the header when it is not a plain number |
+| `bits`, `bit_offset` | bitfield width and first bit within its storage unit (`offset`, `size`) |
+| `comment` | the `//` comment on that line of the header, often the offset in hex or the meaning of a value |
+| `location` | file and line of the declaration |
+
+Enums and structs are listed in header order. A struct's `kind` is `struct` or `union`.
 
 **Open questions:** which name wins when the projects disagree (ReMoM's names follow the
 disassembly, RTGT's follow community usage)? Which game versions does the shared data

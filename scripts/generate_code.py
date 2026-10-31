@@ -4,6 +4,7 @@
 Reads    Platform/MoMCommon.h and MoMModel/MoMTemplate.h
 Writes   MoMModel/Generated/MoMGenerated.{h,cpp}     operator<< for every enum
          QMoMCommon/Generated/QMoMGenerated.{h,cpp}  constructTreeItem() for every struct (Qt tree)
+         docs/data/mom-layout.json                   all enums and struct layouts, for other tools
          MoMGenerated.idc                            IDA Pro type definitions (not committed)
 
 With --layout-check FILE it writes only a C++ file of static_asserts that the
@@ -19,7 +20,9 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import contextlib
+import json
 import math
 import operator
 import re
@@ -38,6 +41,9 @@ QT_HEADER = "QMoMGenerated.h"
 QT_SOURCE = "QMoMGenerated.cpp"
 IDC_DIR = "."
 IDC_FILE = "MoMGenerated.idc"
+JSON_DIR = "docs/data"
+JSON_FILE = "mom-layout.json"
+JSON_SCHEMA = "momrtgt-layout/1"
 
 # The headers are ASCII; latin-1 keeps any stray byte intact.
 ENCODING = "latin-1"
@@ -52,6 +58,7 @@ ENCODING = "latin-1"
 class Enumerator:
     name: str
     value: int
+    comment: str | None = None
 
 
 @dataclass
@@ -59,6 +66,7 @@ class Enum:
     name: str
     size: int
     enumerators: list[Enumerator] = field(default_factory=list)
+    location: str = ""  # "file:line" of the declaration
 
 
 @dataclass
@@ -70,6 +78,8 @@ class Member:
     bits: int | None = None  # bitfield width
     offset: int = 0
     size: int = 0
+    bit_offset: int | None = None  # first bit of a bitfield within its storage unit
+    comment: str | None = None
 
     @property
     def declarator(self) -> str:
@@ -86,11 +96,13 @@ class Struct:
     name: str
     members: list[Member] = field(default_factory=list)
     size: int = 0
+    location: str = ""  # "file:line" of the declaration
 
 
 @dataclass
 class Model:
-    constants: dict[str, int] = field(default_factory=dict)
+    constants: dict[str, int] = field(default_factory=dict)  # const declarations and enumerators
+    declared_constants: list[str] = field(default_factory=list)  # names of the const declarations
     enums: dict[str, Enum] = field(default_factory=dict)
     structs: dict[str, Struct] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
@@ -179,55 +191,103 @@ _DECLARATION = re.compile(
 )
 
 
-def strip_comments(text: str) -> str:
-    text = text.replace("\r", "")
-    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
-    return re.sub(r"//[^\n]*", "", text)
+_COMMENT = re.compile(r"/\*.*?\*/|//[^\n]*", re.DOTALL)
 
 
-def parse(text: str) -> Model:
+def blank(m: re.Match) -> str:
+    """Replace a match by spaces, keeping newlines, so text positions stay valid."""
+    return re.sub(r"[^\n]", " ", m[0])
+
+
+class Source:
+    """The concatenated input files, with comments blanked out of the code.
+
+    Positions in `code` are positions in the original text, so a parsed
+    declaration can be traced back to its file, line and trailing comment.
+    """
+
+    def __init__(self, files: list[tuple[str, str]]):
+        self.file_starts: list[tuple[int, str, int]] = []  # (position, file name, line number of position)
+        text, line = "", 1
+        for name, content in files:
+            content = content.replace("\r", "")
+            self.file_starts.append((len(text), name, line))
+            text += content
+            line += content.count("\n")
+        self.line_starts = [0] + [m.end() for m in re.finditer("\n", text)]
+        self.line_comments: dict[int, str] = {}
+        for m in _COMMENT.finditer(text):
+            if m[0].startswith("//") and (comment := m[0][2:].strip()):
+                self.line_comments[self.line_index(m.start())] = comment
+        self.code = _COMMENT.sub(blank, text)
+
+    def line_index(self, position: int) -> int:
+        return bisect.bisect_right(self.line_starts, position) - 1
+
+    def comment_at(self, position: int) -> str | None:
+        """The // comment at the end of the line containing position."""
+        return self.line_comments.get(self.line_index(position))
+
+    def location(self, position: int) -> str:
+        start, name, first_line = self.file_starts[bisect.bisect_right([f[0] for f in self.file_starts], position) - 1]
+        return f"{name}:{self.line_index(position) - self.line_index(start) + 1}"
+
+
+def parse(source: Source) -> Model:
     model = Model()
-    text = strip_comments(text)
+    text = source.code
 
     for name, value in _CONSTANT.findall(text):
         with contextlib.suppress(ValueError, SyntaxError):  # skip non-integer constants
             model.constants[name] = evaluate(value, model.constants)
+            model.declared_constants.append(name)
 
     for m in _ENUM.finditer(text):
-        model.enums[m["name"]] = parse_enum(m["name"], m["bits"], m["body"], model.constants)
+        enum = parse_enum(m["name"], m["bits"], m["body"], m.start("body"), source, model.constants)
+        enum.location = source.location(m.start())
+        model.enums[enum.name] = enum
 
-    # Enum bodies can contain ';' in their trailing text; take them out before the structs.
-    text = _ENUM.sub("", text)
+    # Enum bodies can contain ';' in their trailing text; blank them out before the structs.
+    text = _ENUM.sub(blank, text)
     for m in _STRUCT.finditer(text):
-        struct = parse_struct(m["kind"], m["name"], m["body"], model)
+        struct = parse_struct(m["kind"], m["name"], m["body"], m.start("body"), source, model)
+        struct.location = source.location(m.start())
         model.structs[struct.name] = struct
 
     return model
 
 
-def parse_enum(name: str, bits: str | None, body: str, constants: dict[str, int]) -> Enum:
+def parse_enum(
+    name: str, bits: str | None, body: str, body_start: int, source: Source, constants: dict[str, int]
+) -> Enum:
     enum = Enum(name, size=int(bits) // 8 if bits else 4)
     value = -1
-    for item in (part.strip() for part in body.split(",")):
-        if not item:
+    for item in re.finditer(r"[^,]+", body):
+        if not item[0].strip():
             continue
-        enumerator, _, expression = (s.strip() for s in item.partition("="))
+        enumerator, _, expression = (s.strip() for s in item[0].partition("="))
         value = evaluate(expression, constants) if expression else value + 1
-        enum.enumerators.append(Enumerator(enumerator, value))
+        position = body_start + item.start() + len(item[0]) - len(item[0].lstrip())
+        enum.enumerators.append(Enumerator(enumerator, value, source.comment_at(position)))
         constants[enumerator] = value
     return enum
 
 
-def parse_struct(kind: str, name: str, body: str, model: Model) -> Struct:
+def parse_struct(kind: str, name: str, body: str, body_start: int, source: Source, model: Model) -> Struct:
     struct = Struct(kind, name)
-    for declaration in (d.strip() for d in body.split(";")):
+    for statement in re.finditer(r"([^;]*);", body):
+        declaration = statement[1].strip()
         if not declaration:
             continue
         m = _DECLARATION.fullmatch(declaration)
         if not m or not m["type"]:
             raise ValueError(f"{name}: cannot parse declaration '{declaration}'")
         member = Member(
-            type=m["type"], name=m["name"], count_expr=m["count"], bits=int(m["bits"]) if m["bits"] else None
+            type=m["type"],
+            name=m["name"],
+            count_expr=m["count"],
+            bits=int(m["bits"]) if m["bits"] else None,
+            comment=source.comment_at(body_start + statement.end() - 1),
         )
         if member.count_expr is not None:
             try:
@@ -267,6 +327,7 @@ def layout(struct: Struct, model: Model) -> None:
                 end_bitfield_run()
                 unit_size = type_size
             member.offset = offset + bits_used // (8 * unit_size) * unit_size
+            member.bit_offset = bits_used % (8 * unit_size)
             member.size = unit_size
             bits_used += member.bits
             continue
@@ -642,6 +703,83 @@ def generate_layout_check(model: Model) -> str:
     )
 
 
+PRIMITIVE_TYPES = {
+    "char": {"size": 1, "signed": True},
+    "int8_t": {"size": 1, "signed": True},
+    "uint8_t": {"size": 1, "signed": False},
+    "int16_t": {"size": 2, "signed": True},
+    "uint16_t": {"size": 2, "signed": False},
+    "int32_t": {"size": 4, "signed": True},
+    "uint32_t": {"size": 4, "signed": False},
+    "DS_Offset": {"size": 2, "signed": False, "note": "offset into the data segment"},
+}
+
+
+def without_none(**fields: object) -> dict[str, object]:
+    return {key: value for key, value in fields.items() if value is not None}
+
+
+def layout_document(model: Model) -> dict[str, object]:
+    """The parsed model as plain data. Offsets and sizes are in bytes."""
+    return {
+        "schema": JSON_SCHEMA,
+        "generator": "scripts/generate_code.py",
+        "sources": list(INPUT_FILES),
+        "primitive_types": PRIMITIVE_TYPES,
+        "constants": {name: model.constants[name] for name in model.declared_constants},
+        "enums": [
+            {
+                "name": enum.name,
+                "size": enum.size,
+                "location": enum.location,
+                "enumerators": [without_none(name=e.name, value=e.value, comment=e.comment) for e in enum.enumerators],
+            }
+            for enum in model.enums.values()
+        ],
+        "structs": [
+            {
+                "name": struct.name,
+                "kind": struct.kind,
+                "size": struct.size,
+                "location": struct.location,
+                "members": [
+                    without_none(
+                        name=m.name,
+                        type=m.type,
+                        offset=m.offset,
+                        size=m.size,
+                        count=m.count,
+                        count_expr=m.count_expr if m.count_expr != str(m.count) else None,
+                        bits=m.bits,
+                        bit_offset=m.bit_offset,
+                        comment=m.comment,
+                    )
+                    for m in struct.members
+                ],
+            }
+            for struct in model.structs.values()
+        ],
+    }
+
+
+def to_json(value: object, indent: int = 0) -> str:
+    """JSON with one line per enumerator or member, which keeps the file readable and diffs small."""
+    if isinstance(value, dict) and not any(isinstance(v, (dict, list)) for v in value.values()):
+        return json.dumps(value)
+    pad, inner = " " * indent, " " * (indent + 2)
+    if isinstance(value, dict):
+        items = [f"{inner}{json.dumps(k)}: {to_json(v, indent + 2)}" for k, v in value.items()]
+        return "{\n" + ",\n".join(items) + f"\n{pad}}}" if items else "{}"
+    if isinstance(value, list):
+        items = [f"{inner}{to_json(v, indent + 2)}" for v in value]
+        return "[\n" + ",\n".join(items) + f"\n{pad}]" if items else "[]"
+    return json.dumps(value)
+
+
+def generate_json(model: Model) -> str:
+    return to_json(layout_document(model)) + "\n"
+
+
 def describe_layouts(model: Model) -> str:
     out = []
     for struct in model.structs.values():
@@ -676,8 +814,7 @@ def main() -> int:
     )
     args = arg_parser.parse_args()
 
-    text = "".join((args.root / name).read_text(encoding=ENCODING) for name in INPUT_FILES)
-    model = parse(text)
+    model = parse(Source([(name, (args.root / name).read_text(encoding=ENCODING)) for name in INPUT_FILES]))
 
     for warning in model.warnings:
         print(f"warning: {warning}", file=sys.stderr)
@@ -693,6 +830,7 @@ def main() -> int:
         Path(CORE_DIR, CORE_SOURCE): generate_core_source(model),
         Path(QT_DIR, QT_HEADER): generate_qt_header(model),
         Path(QT_DIR, QT_SOURCE): generate_qt_source(model),
+        Path(JSON_DIR, JSON_FILE): generate_json(model),
     }
 
     if args.check:
@@ -707,6 +845,7 @@ def main() -> int:
     if not args.no_idc:
         outputs[Path(IDC_DIR, IDC_FILE)] = generate_idc(model)
     for path, content in outputs.items():
+        (args.root / path).parent.mkdir(parents=True, exist_ok=True)
         write(args.root / path, content)
     return 0
 
