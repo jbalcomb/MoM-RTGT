@@ -5410,7 +5410,7 @@ typedef struct PACKED_STRUCT {   // Lbx_ems_info
                                             // SIZE 0C
 } EMS_descriptor;
 
-typedef struct // MoMDataSegment
+typedef struct PACKED_STRUCT // MoMDataSegment
 {
     char        m_DataSegmentStart[0x0130];                     // ds:0 / EXE:294A0
     // "\0\0\0\0Borland C++ - Copyright 1991 Borland Intl.";
