@@ -122,9 +122,7 @@ public:
         return pixmap;
     }
 
-    const QString getNameSkill(MoM::eSkill skill) const;
-    // TODO: Why doesn't getName(eSkill) match instead of the default match?
-    const QString getName(MoM::eSkill skill) const { return getNameSkill(skill); }
+    const QString getName(MoM::eSkill skill) const;
     const QString getName(MoM::eSpell spell) const;
     const QString getName(MoM::eSpell16 spell) const { return getName((MoM::eSpell)spell); }
     template<typename T>

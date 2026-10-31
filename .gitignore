@@ -49,3 +49,6 @@ object_script.*
 
 # CMake build trees
 build*/
+
+# Python
+__pycache__/

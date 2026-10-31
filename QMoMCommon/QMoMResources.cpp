@@ -1116,7 +1116,7 @@ const QMoMImagePtr QMoMResources::getImage(MoM::eUnit_Type unitType, int heading
     return image;
 }
 
-const QString QMoMResources::getNameSkill(MoM::eSkill skill) const
+const QString QMoMResources::getName(MoM::eSkill skill) const
 {
     if (!inRange(skill, eSkill_MAX))
         return {};
@@ -1137,7 +1137,7 @@ const QString QMoMResources::getNameSkill(MoM::eSkill skill) const
     }
 
     // Fall back to enum constant as string
-    return skill._to_string();
+    return prettyQStr(skill);
 }
 
 const QString QMoMResources::getName(MoM::eSpell spell) const

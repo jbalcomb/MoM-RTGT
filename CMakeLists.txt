@@ -80,7 +80,6 @@ target_include_directories(rtgt_core PUBLIC
     MoMModel/Generated
     Platform
     Utility
-    better-enums-0.11.2
 )
 target_link_libraries(rtgt_core PUBLIC rtgt_options)
 if(WIN32)

@@ -13,9 +13,6 @@
 
 #include "MoMCommon.h"
 
-// Better enums
-#include <enum.h>
-
 static_assert(__cplusplus >= 201103L, "c++11 required");
 
 // Specify to pack structures
@@ -2092,28 +2089,29 @@ enum eReward_Specials ENUMSIZE8
     eReward_Specials_MAX
 } PACKED_ENUM;
 
-BETTER_ENUM(eSkill, uint8_t,
-    Alchemy,
-    Warlord,
-    Chaos_Master,
-    Nature_Master,
-    Sorcery_Master,
-    Infernal_Power,
-    Divine_Power,
-    Sage_Master,
-    Channeller,
-    Myrran,
-    Archmage,
-    Mana_Focusing,
-    Node_Mastery,
-    Famous,
-    Runemaster,
-    Conjurer,
-    Charismatic,
-    Artificer
-)
-
-const unsigned eSkill_MAX = eSkill::_size();
+enum eSkill ENUMSIZE8
+{
+    SKILL_Alchemy,
+    SKILL_Warlord,
+    SKILL_Chaos_Master,
+    SKILL_Nature_Master,
+    SKILL_Sorcery_Master,
+    SKILL_Infernal_Power,
+    SKILL_Divine_Power,
+    SKILL_Sage_Master,
+    SKILL_Channeller,
+    SKILL_Myrran,
+    SKILL_Archmage,
+    SKILL_Mana_Focusing,
+    SKILL_Node_Mastery,
+    SKILL_Famous,
+    SKILL_Runemaster,
+    SKILL_Conjurer,
+    SKILL_Charismatic,
+    SKILL_Artificer,
+    eSkill_MAX,
+    eSkill__SIZE__ = 0xFF
+} PACKED_ENUM;
 
 enum eSkill16 ENUMSIZE16
 {

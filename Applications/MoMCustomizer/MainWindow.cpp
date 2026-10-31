@@ -55,10 +55,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->comboBox_WizardSkill->clear();
     ui->comboBox_WizardSkill->addItem("None");
-    // eSkill is a BETTER_ENUM; eSkill16 has the same values and an operator<<
-    for (unsigned skillNr = 0; skillNr < MoM::eSkill_MAX; ++skillNr)
+    for (MoM::eSkill skill = (MoM::eSkill)0; skill < MoM::eSkill_MAX; MoM::inc(skill))
     {
-        ui->comboBox_WizardSkill->addItem(prettyQStr((MoM::eSkill16)skillNr));
+        ui->comboBox_WizardSkill->addItem(prettyQStr(skill));
     }
 
     update();

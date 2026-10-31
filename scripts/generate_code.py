@@ -93,8 +93,6 @@ class Model:
     constants: dict[str, int] = field(default_factory=dict)
     enums: dict[str, Enum] = field(default_factory=dict)
     structs: dict[str, Struct] = field(default_factory=dict)
-    # Types whose size is known but which get no generated code (BETTER_ENUM)
-    opaque_sizes: dict[str, int] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
 
     def sorted_enums(self) -> list[Enum]:
@@ -114,7 +112,7 @@ class Model:
             return self.enums[type_name].size
         if type_name in self.structs:
             return self.structs[type_name].size
-        return self.opaque_sizes.get(type_name)
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -172,8 +170,6 @@ def evaluate(expression: str, names: dict[str, int]) -> int:
 
 _CONSTANT = re.compile(r"\bconst\s+(?:unsigned|size_t)\s+(\w+)\s*=\s*([^;]+);")
 _ENUM = re.compile(r"\benum\s+(?P<name>\w+)\s*(?:ENUMSIZE(?P<bits>\d+))?[^{;]*\{(?P<body>[^}]*)\}[^;]*;")
-_BETTER_ENUM = re.compile(r"\bBETTER_ENUM\(\s*(\w+)\s*,\s*(\w+)\s*,([^)]*)\)")
-_BETTER_ENUM_SIZE = re.compile(r"\b(\w+)::_size\(\)")
 # The closing brace of a typedef is at the start of a line; nested braces are indented.
 _STRUCT = re.compile(
     r"\btypedef\s+(?P<kind>struct|union|class)\b[^{]*\{(?P<body>.*?\n)\}\s*(?P<name>\w+)\s*;", re.DOTALL
@@ -193,15 +189,7 @@ def parse(text: str) -> Model:
     model = Model()
     text = strip_comments(text)
 
-    # BETTER_ENUMs get no generated code, but their size and value count are needed
-    better_enum_counts = {}
-    for name, underlying, values in _BETTER_ENUM.findall(text):
-        better_enum_counts[name] = sum(1 for value in values.split(",") if value.strip())
-        if (size := model.type_size(underlying)) is not None:
-            model.opaque_sizes[name] = size
-
     for name, value in _CONSTANT.findall(text):
-        value = _BETTER_ENUM_SIZE.sub(lambda m: str(better_enum_counts.get(m[1], m[0])), value)
         with contextlib.suppress(ValueError, SyntaxError):  # skip non-integer constants
             model.constants[name] = evaluate(value, model.constants)
 
@@ -393,14 +381,25 @@ def is_integer_type(type_name: str) -> bool:
     return re.search(r"u?int\d+_t", type_name) is not None
 
 
+def enumerator_for_member(model: Model, member_name: str) -> str | None:
+    """The enumerator a member is named after: eSkill_Alchemy -> SKILL_Alchemy (an enumerator of eSkill)."""
+    enum_name, _, value = member_name.partition("_")
+    if enum_name not in model.enums or not value:
+        return None
+    matches = [e.name for e in model.enums[enum_name].enumerators if e.name.endswith(f"_{value}")]
+    return matches[0] if len(matches) == 1 else None
+
+
 def tree_item_lines(model: Model, struct: Struct, member: Member) -> list[str]:
     """C++ statements that add one member to the Qt tree of its struct."""
     type_name = "uint16_t" if member.type == "DS_Offset" else member.type
     name = member.name
     is_leaf = is_integer_type(type_name) or type_name in model.enums
 
-    if m := re.fullmatch(r"(e[A-Z][^_]*)_(\w+)", name):
-        label = f"QMoMResources::instance().getNameSkill({m[1]}::{m[2]})"
+    if enumerator := enumerator_for_member(model, name):
+        # A member named after an enumerator (eSkill_Alchemy for SKILL_Alchemy)
+        # is labeled with the name the game gives that enumerator
+        label = f"QMoMResources::instance().getName({enumerator})"
     else:
         label = f'"{name}"'
 

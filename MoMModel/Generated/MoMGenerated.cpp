@@ -2318,6 +2318,35 @@ std::ostream& operator<<(std::ostream& os, const eReward_Specials& rhs)
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const eSkill& rhs)
+{
+    switch (rhs)
+    {
+    case SKILL_Alchemy: os << "SKILL_Alchemy"; break;
+    case SKILL_Warlord: os << "SKILL_Warlord"; break;
+    case SKILL_Chaos_Master: os << "SKILL_Chaos_Master"; break;
+    case SKILL_Nature_Master: os << "SKILL_Nature_Master"; break;
+    case SKILL_Sorcery_Master: os << "SKILL_Sorcery_Master"; break;
+    case SKILL_Infernal_Power: os << "SKILL_Infernal_Power"; break;
+    case SKILL_Divine_Power: os << "SKILL_Divine_Power"; break;
+    case SKILL_Sage_Master: os << "SKILL_Sage_Master"; break;
+    case SKILL_Channeller: os << "SKILL_Channeller"; break;
+    case SKILL_Myrran: os << "SKILL_Myrran"; break;
+    case SKILL_Archmage: os << "SKILL_Archmage"; break;
+    case SKILL_Mana_Focusing: os << "SKILL_Mana_Focusing"; break;
+    case SKILL_Node_Mastery: os << "SKILL_Node_Mastery"; break;
+    case SKILL_Famous: os << "SKILL_Famous"; break;
+    case SKILL_Runemaster: os << "SKILL_Runemaster"; break;
+    case SKILL_Conjurer: os << "SKILL_Conjurer"; break;
+    case SKILL_Charismatic: os << "SKILL_Charismatic"; break;
+    case SKILL_Artificer: os << "SKILL_Artificer"; break;
+    case eSkill_MAX: os << "eSkill_MAX"; break;
+    default: os << "<Unknown eSkill>"; break;
+    }
+    os << " (" << (unsigned)rhs << ")";
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const eSkill16& rhs)
 {
     switch (rhs)
