@@ -3,10 +3,10 @@
 
 #include "TeeRedirecter.h"
 
-int runTests_MoMCombat(int argc, char *argv[]);
-int runTests_MoMGameBase(int argc, char *argv[]);
 int runTests_Test_MoMTweaker(int argc, char *argv[]);
 
+
+// The Qt-free core tests moved to tests/ (doctest, built with CMake).
 
 int main(int argc, char *argv[])
 {
@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
     TeeRedirecter redirecter(output_filename, true);
 
     int exitCode = 0;
-    if (0 == exitCode) exitCode = runTests_MoMCombat(argc, argv);
-    if (0 == exitCode) exitCode = runTests_MoMGameBase(argc, argv);
     if (0 == exitCode) exitCode = runTests_Test_MoMTweaker(argc, argv);
     return exitCode;
 }

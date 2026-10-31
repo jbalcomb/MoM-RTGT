@@ -46,3 +46,6 @@ Makefile.Release
 MoMGenerated.idc
 .qmake.stash
 object_script.*
+
+# CMake build trees
+build*/

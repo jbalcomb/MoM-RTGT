@@ -195,7 +195,7 @@ const uint16_t gFLIC_chunk_type_FLI_COPY = 16;      // uncompressed image
 
 #if defined(_MSC_VER)       // Compiler MS Visual Studio
   #pragma pack(pop)
-#elif defined(__MINGW32__)  // Compiler MinGW
+#elif defined(__GNUC__) && !defined(__linux__)  // MinGW, clang on macOS (matches the push above)
   #pragma pack(pop)
 #endif
 #undef PACKED_STRUCT

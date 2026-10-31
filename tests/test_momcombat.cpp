@@ -1,185 +1,130 @@
-#include <QtCore/QString>
-#include <QtTest/QtTest>
+#include <doctest.h>
 
 #include <cmath>
-#include <cstdio>
+#include <cstring>
 #include <fstream>
+#include <memory>
+#include <string>
 
 #include <MoMCombat.h>
 #include <MoMController.h>
 #include <MoMGameMemory.h>
 #include "test_utility.h"
 
-class Test_MoMCombat : public QObject
+// These tests need the unit data of a running game, so they connect to
+// Master of Magic in DOSBox. They are skipped by default; run them with
+//      rtgt_tests --no-skip
+
+namespace
 {
-    Q_OBJECT
-    
-public:
-    Test_MoMCombat();
 
-private Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
-    void init();
-    void cleanup();
-
-    void testCase_Nominal();
-
-    void testCase_Abilities();
-    void testCase_AbilityFlying();
-    void testCase_AbilityInvisible();
-    void testCase_Items();
-    void testCase_ItemFlying();
-    void testCase_ItemInvisible();
-//    void testCase_ItemInvulnerability();
-    void testCase_Level();
-
-    void testCase_ShootArrows();
-    void testCase_ShootMagic();
-
-//    void testCase_SpecialPreBreath();
-//    void testCase_SpecialPreGaze();
-//    void testCase_SpecialPreThrown();
-//    void testCase_SpecialPreGazeDefend();
-//    void testCase_SpecialPreMultipleGaze();
-
-//    void testCase_SpecialImmolation();
-//    void testCase_SpecialPoison();
-//    void testCase_SpecialTouch();
-//    void testCase_SpecialFirstStrike();
-
-//    void testCase_Spells();
-    void testCase_SpellFlying();
-//    void testCase_SpellInvisibility();
-//    void testCase_SpellInvulnerability();
-    void testCase_WeaponType();
-
-private:
-    void createHero(MoM::ePlayer playerNr, int slotNr, int unitNr);
-
-    double prec1(double v)
+// Connect once and share the connection between all test cases
+MoM::MoMGameMemory* liveGame()
+{
+    static MoM::MoMGameMemory gameMemory;
+    static bool tried = false;
+    static bool connected = false;
+    if (!tried)
     {
-        // Format the number v to have 3 digit max after the decimal point.
-        return std::floor(v * 10 + 0.5) / 10;
+        tried = true;
+        std::unique_ptr<MoM::MoMProcess> momProcess(new MoM::MoMProcess);
+        connected = momProcess->findProcessAndData() && gameMemory.openGame(momProcess);
+    }
+    return connected ? &gameMemory : nullptr;
+}
+
+class CombatFixture
+{
+public:
+    CombatFixture() :
+        m_game(liveGame()),
+        m_combat(),
+        m_attacker(m_game),
+        m_defender(m_game)
+    {
+        REQUIRE_MESSAGE(m_game != nullptr, "No running Master of Magic found in DOSBox");
     }
 
-    void test_combat_attack(const std::string& testName);
-    void test_shoot_attack(const std::string& testName, int distance);
+protected:
+    void createHero(MoM::ePlayer playerNr, int slotNr, int unitNr)
+    {
+        MoM::Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, slotNr);
+        MoM::Unit* unit = m_game->getUnit(unitNr);
 
-private:
-    MoM::MoMGameMemory m_gameMemory;
+        REQUIRE(hiredHero != nullptr);
+        REQUIRE(unit != nullptr);
+        memset(hiredHero, '\0', sizeof(*hiredHero));
+        memset(unit, '\0', sizeof(*unit));
+
+        hiredHero->m_Unit_Nr = unitNr;
+        hiredHero->m_Items_In_Slot[0] = -1;
+        hiredHero->m_Items_In_Slot[1] = -1;
+        hiredHero->m_Items_In_Slot[2] = -1;
+        unit->m_Owner = playerNr;
+        unit->m_Hero_Slot_Number = slotNr;
+    }
+
+    void test_combat_attack(const std::string& testName)
+    {
+        std::ofstream ofs((testName + ".out").c_str());
+
+        ofs << testName << "\n";
+        ofs << "Unit " << m_attacker.getDisplayName() << "\n"
+            << "attacks unit " <<  m_defender.getDisplayName() << "\n\n";
+
+        std::string ostr = m_combat.combat_attack(m_attacker, m_defender);
+
+        ofs << ostr;
+        ofs.close();
+
+        CHECK_MESSAGE(0 == diff(testName + ".out", refFile(testName)), testName);
+    }
+
+    void test_shoot_attack(const std::string& testName, int distance)
+    {
+        std::ofstream ofs((testName + ".out").c_str());
+
+        ofs << testName << "\n";
+        ofs << "Unit " << m_attacker.getDisplayName() << "\n"
+            << "shoot unit " <<  m_defender.getDisplayName() << "\n"
+            << "at distance " <<  distance << "\n\n";
+
+        std::string ostr = m_combat.shoot_attack(m_attacker, m_defender, distance);
+
+        ofs << ostr;
+        ofs.close();
+
+        CHECK_MESSAGE(0 == diff(testName + ".out", refFile(testName)), testName);
+    }
+
+    static std::string refFile(const std::string& testName)
+    {
+        return std::string(RTGT_TEST_DATA_DIR) + "combat/" + testName + ".ref";
+    }
+
     MoM::MoMGameMemory* m_game;
     MoM::MoMCombat  m_combat;
     MoM::CombatUnit m_attacker;
     MoM::CombatUnit m_defender;
 };
 
-Test_MoMCombat::Test_MoMCombat() :
-    m_gameMemory(),
-    m_game(),
-    m_combat(),
-    m_attacker(),
-    m_defender()
-{
 }
 
-void Test_MoMCombat::initTestCase()
+TEST_SUITE("live" * doctest::skip())
 {
-    // General set up, which is connecting to a game, since we need the unit data.
-    std::unique_ptr<MoM::MoMProcess> momProcess(new MoM::MoMProcess);
-    QVERIFY(momProcess->findProcessAndData());
-    QVERIFY(m_gameMemory.openGame(momProcess));
-    m_game = &m_gameMemory;
-}
 
-void Test_MoMCombat::cleanupTestCase()
-{
-}
-
-void Test_MoMCombat::init()
-{
-    m_combat = MoM::MoMCombat();
-    m_attacker = MoM::CombatUnit(m_game);
-    m_defender = MoM::CombatUnit(m_game);
-}
-
-void Test_MoMCombat::cleanup()
-{
-}
-
-void Test_MoMCombat::createHero(MoM::ePlayer playerNr, int slotNr, int unitNr)
-{
-    MoM::Hired_Hero* hiredHero = m_game->getHiredHero(playerNr, slotNr);
-    MoM::Unit* unit = m_game->getUnit(unitNr);
-
-    QVERIFY(0 != hiredHero);
-    QVERIFY(0 != unit);
-    memset(hiredHero, '\0', sizeof(*hiredHero));
-    memset(unit, '\0', sizeof(*unit));
-
-    hiredHero->m_Unit_Nr = unitNr;
-    hiredHero->m_Items_In_Slot[0] = -1;
-    hiredHero->m_Items_In_Slot[1] = -1;
-    hiredHero->m_Items_In_Slot[2] = -1;
-    unit->m_Owner = playerNr;
-    unit->m_Hero_Slot_Number = slotNr;
-}
-
-void Test_MoMCombat::test_combat_attack(const std::string& testName)
-{
-    std::ofstream ofs(("out/" + testName + ".out").c_str());
-
-    ofs << testName << "\n";
-    ofs << "Unit " << m_attacker.getDisplayName() << "\n"
-        << "attacks unit " <<  m_defender.getDisplayName() << "\n\n";
-
-    std::string ostr = m_combat.combat_attack(m_attacker, m_defender);
-
-    ofs << ostr;
-    ofs.close();
-
-    QVERIFY(0 == diff("out/" + testName + ".out", "out/" + testName + ".ref"));
-}
-
-void Test_MoMCombat::test_shoot_attack(const std::string& testName, int distance)
-{
-    std::ofstream ofs(("out/" + testName + ".out").c_str());
-
-    ofs << testName << "\n";
-    ofs << "Unit " << m_attacker.getDisplayName() << "\n"
-        << "shoot unit " <<  m_defender.getDisplayName() << "\n"
-        << "at distance " <<  distance << "\n\n";
-
-    std::string ostr = m_combat.shoot_attack(m_attacker, m_defender, distance);
-
-    ofs << ostr;
-    ofs.close();
-
-    QVERIFY(0 == diff("out/" + testName + ".out", "out/" + testName + ".ref"));
-}
-
-void Test_MoMCombat::testCase_Nominal()
+TEST_CASE_FIXTURE(CombatFixture, "combat: nominal")
 {
     m_attacker.changeUnit(MoM::UNITTYPE_High_Men_Swordsmen);
     m_defender.changeUnit(MoM::UNITTYPE_High_Men_Spearmen);
     test_combat_attack("testCase_Nominal");
 }
 
-void Test_MoMCombat::testCase_Abilities()
-{
-    // TODO
-    // First Strike
-    // Armor Piercing
-    // Breath
-    // Gaze
-    // Touch
-    // ...
-}
+// TODO: First Strike, Armor Piercing, Breath, Gaze, Touch, ...
+// TODO: Items: Vampiric, ...
 
-void Test_MoMCombat::testCase_AbilityFlying()
+TEST_CASE_FIXTURE(CombatFixture, "combat: ability flying")
 {
-
     // Cannot attack flying creature
     m_attacker.changeUnit(MoM::UNITTYPE_High_Men_Swordsmen);
     m_defender.changeUnit(MoM::UNITTYPE_Green_Gorgons);
@@ -191,7 +136,7 @@ void Test_MoMCombat::testCase_AbilityFlying()
     test_combat_attack("testCase_AbilityFlying2");
 }
 
-void Test_MoMCombat::testCase_AbilityInvisible()
+TEST_CASE_FIXTURE(CombatFixture, "combat: ability invisible")
 {
     // Attack invisible
     m_attacker.changeUnit(MoM::UNITTYPE_High_Men_Swordsmen);
@@ -204,14 +149,7 @@ void Test_MoMCombat::testCase_AbilityInvisible()
     test_combat_attack("testCase_AbilityInvisible2");
 }
 
-void Test_MoMCombat::testCase_Items()
-{
-    // TODO
-    // Vampiric
-    // ...
-}
-
-void Test_MoMCombat::testCase_ItemFlying()
+TEST_CASE_FIXTURE(CombatFixture, "combat: item flying")
 {
     int attUnitNr = 0;
     int defUnitNr = 1;
@@ -240,11 +178,7 @@ void Test_MoMCombat::testCase_ItemFlying()
     test_combat_attack("testCase_ItemFlying2");
 }
 
-void Test_MoMCombat::testCase_ItemInvisible()
-{
-}
-
-void Test_MoMCombat::testCase_Level()
+TEST_CASE_FIXTURE(CombatFixture, "combat: level")
 {
     MoM::Unit attUnit = m_attacker.getUnitInGame();
     attUnit.m_Unit_Type = MoM::UNITTYPE_High_Men_Swordsmen;
@@ -259,7 +193,7 @@ void Test_MoMCombat::testCase_Level()
     test_combat_attack("testCase_Level");
 }
 
-void Test_MoMCombat::testCase_ShootArrows()
+TEST_CASE_FIXTURE(CombatFixture, "combat: shoot arrows")
 {
     // Regular shooting arrows
     m_attacker.changeUnit(MoM::UNITTYPE_High_Men_Bowmen);
@@ -287,7 +221,7 @@ void Test_MoMCombat::testCase_ShootArrows()
     test_shoot_attack("testCase_ShootArrows_Invis2", 1);
 }
 
-void Test_MoMCombat::testCase_ShootMagic()
+TEST_CASE_FIXTURE(CombatFixture, "combat: shoot magic")
 {
     // Shoot magic
     m_attacker.changeUnit(MoM::UNITTYPE_Blue_Storm_Giant);
@@ -313,7 +247,7 @@ void Test_MoMCombat::testCase_ShootMagic()
     test_shoot_attack("testCase_ShootMagic_Invis2", 1);
 }
 
-void Test_MoMCombat::testCase_SpellFlying()
+TEST_CASE_FIXTURE(CombatFixture, "combat: spell flying")
 {
     // Cannot attack flying creature
     m_attacker.changeUnit(MoM::UNITTYPE_High_Men_Swordsmen);
@@ -332,7 +266,7 @@ void Test_MoMCombat::testCase_SpellFlying()
     test_combat_attack("testCase_SpellFlying2");
 }
 
-void Test_MoMCombat::testCase_WeaponType()
+TEST_CASE_FIXTURE(CombatFixture, "combat: weapon type")
 {
     MoM::Unit attUnit = m_attacker.getUnitInGame();
     attUnit.m_Unit_Type = MoM::UNITTYPE_High_Men_Swordsmen;
@@ -347,10 +281,4 @@ void Test_MoMCombat::testCase_WeaponType()
     test_combat_attack("testCase_WeaponType");
 }
 
-int runTests_MoMCombat(int argc, char *argv[])
-{
-    Test_MoMCombat tc;
-    return QTest::qExec(&tc, argc, argv);
 }
-
-#include "tst_momcombat.moc"

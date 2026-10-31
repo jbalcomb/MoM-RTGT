@@ -35,16 +35,7 @@ INCLUDEPATH += \
 
 include(MoMTweaker.pri)
 
-# Additional platform specific sources
-SOURCES += \
-    Applications/MoMTest/Test/tst_momcombat.cpp \
-    Applications/MoMTest/Test/test_utility.cpp
-
 # Test sources
 SOURCES += \
     Applications/MoMTest/Test/test_main.cpp \
-    Applications/MoMTest/Test/tst_momgamebase.cpp \
     Applications/MoMTest/Test/tst_momtweaker_mainwindow.cpp
-
-HEADERS += \
-    Applications/MoMTest/Test/test_utility.h

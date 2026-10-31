@@ -10,6 +10,7 @@ SUPPORTED PLATFORMS
 ===================
 Windows
 Linux
+macOS       Core library and tests only; attaching to a running DOSBox is not implemented yet
 
 DEPENDENCIES
 ============
@@ -29,8 +30,22 @@ the same directory as the executables and adding the current directory to
 the environment variable LD_LIBRARY_PATH.
 
 
-BUILDING FROM SOURCES
-=====================
+BUILDING FROM SOURCES WITH CMAKE
+================================
+Needs CMake 3.16+ and a C++14 compiler. Qt5 is only needed for the GUI applications.
+
+    cmake -S . -B build                         # core library + unit tests
+    cmake --build build
+    ctest --test-dir build --output-on-failure
+
+    cmake -S . -B build -DRTGT_BUILD_QT_APPS=ON # also MoMTweaker and MoMCustomizer
+
+Executables end up in build/bin. The combat tests need a running game in DOSBox
+and are skipped by default; run them with: build/bin/rtgt_tests --no-skip
+
+
+BUILDING FROM SOURCES WITH QMAKE
+================================
 1. Download QtCreator.
 2. Open one of the projects, for instance Applications\MoMTweaker\MoMTweaker.pro.
 3. Build & Run.

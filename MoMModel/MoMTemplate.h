@@ -6197,7 +6197,7 @@ typedef struct PACKED_STRUCT // LBX_PaletteInfo
 
 #if defined(_MSC_VER)       // Compiler MS Visual Studio
   #pragma pack(pop)
-#elif defined(__MINGW32__)  // Compiler MinGW
+#elif defined(__GNUC__) && !defined(__linux__)  // MinGW, clang on macOS (matches the push above)
   #pragma pack(pop)
 #endif
 #undef PACKED_STRUCT

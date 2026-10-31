@@ -38,8 +38,8 @@ flowchart LR
   GEN --> WEB["GitHub Pages reference<br/>(searchable tables)"]
 ```
 
-1. Start by **exporting** what RTGT already has. `generate_code.pl` parses
-   `MoMTemplate.h`, so it can emit JSON (struct name, field, type, offset, size, enum)
+1. Start by **exporting** what RTGT already has. The code generator (`generate_code.pl`,
+   to be translated to Python first) parses `MoMTemplate.h`, so it can emit JSON (struct name, field, type, offset, size, enum)
    as easily as it emits `.idc`.
 2. Compare that export with ReMoM's `MOM_DAT.h` offsets. Mismatches are either RTGT
    errors, version differences (1.31 vs 1.40n) or ReMoM naming gaps, and each one is

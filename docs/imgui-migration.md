@@ -72,12 +72,13 @@ flowchart LR
   F["5 · Packaging<br/>zip / AppImage / .app<br/>retire Qt"]
 ```
 
-1. **Groundwork.** Write a CMake build for the core and keep the Qt app building for
-   comparison. Add CI for all three operating systems, port the core tests off QtTest,
-   and add `MoMProcessMacOS.cpp`.
+1. **Groundwork** (done). A CMake build for the core with the Qt apps as an option, CI
+   for all three operating systems, the core tests moved from QtTest to doctest, and
+   a `MoMProcessMacOS.cpp` stub. Next: translate `scripts/generate_code.pl` to Python,
+   with output identical to the committed generated files.
 2. **Skeleton.** An ImGui app that can attach to DOSBox or open a `.GAM`/`.EXE`/`.LBX`
    and show connection status.
-3. **Generated tree.** Extend `generate_code.pl` to emit `drawTree(T*)` functions for
+3. **Generated tree.** Extend the (Python) code generator to emit `drawTree(T*)` functions for
    every struct, using editors for numbers, enums (combo), bitmasks (checkboxes) and
    fixed strings. This is most of the tweaker's value.
 4. **Tables and LBX viewer.** Port `DialogTables` using `ImGuiListClipper`, add the
