@@ -1,627 +1,728 @@
 #!/usr/bin/env python3
-"""Generate code from the game structures in MoMModel/MoMTemplate.h.
+"""Generate code from the game structures declared in MoMModel/MoMTemplate.h.
 
-Python translation of scripts/generate_code.pl; the output is byte-for-byte the same.
+Reads    Platform/MoMCommon.h and MoMModel/MoMTemplate.h
+Writes   MoMModel/Generated/MoMGenerated.{h,cpp}     operator<< for every enum
+         QMoMCommon/Generated/QMoMGenerated.{h,cpp}  constructTreeItem() for every struct (Qt tree)
+         MoMGenerated.idc                            IDA Pro type definitions (not committed)
 
-Reads   Platform/MoMCommon.h and MoMModel/MoMTemplate.h
-Writes  MoMModel/Generated/MoMGenerated.{h,cpp}     operator<< for every enum
-        QMoMCommon/Generated/QMoMGenerated.{h,cpp}  constructTreeItem() for every struct (Qt tree)
-        MoMGenerated.idc                            IDA Pro type definitions
+With --layout-check FILE it writes only a C++ file of static_asserts that the
+offsets and sizes computed here match the compiler's (built into the unit tests).
 
 Usage (from any directory):
     python3 scripts/generate_code.py            # regenerate the files
     python3 scripts/generate_code.py --check    # exit 1 if a committed file is out of date
-    python3 scripts/generate_code.py --verbose  # also print the parse log (as the Perl script did)
+    python3 scripts/generate_code.py --verbose  # also print the parsed struct layouts
 """
 
+from __future__ import annotations
+
 import argparse
-import os
+import ast
+import contextlib
+import math
+import operator
 import re
 import sys
+from dataclasses import dataclass, field
+from pathlib import Path
 
-INPUTFILE = "MoMTemplate.h"
-INPUTFILENAMES = ["Platform/MoMCommon.h", "MoMModel/" + INPUTFILE]
-GENDIR = "MoMModel/Generated"
-HFILENAME = "MoMGenerated.h"
-CPPFILENAME = "MoMGenerated.cpp"
-QT_GENDIR = "QMoMCommon/Generated"
-QT_HFILENAME = "QMoMGenerated.h"
-QT_CPPFILENAME = "QMoMGenerated.cpp"
-IDC_GENDIR = "."
-IDC_FILENAME = "MoMGenerated.idc"
+INPUT_FILES = ("Platform/MoMCommon.h", "MoMModel/MoMTemplate.h")
+TEMPLATE_HEADER = "MoMTemplate.h"
 
-# The headers are ASCII; latin-1 maps bytes 1:1 like Perl does without an encoding layer.
+CORE_DIR = "MoMModel/Generated"
+CORE_HEADER = "MoMGenerated.h"
+CORE_SOURCE = "MoMGenerated.cpp"
+QT_DIR = "QMoMCommon/Generated"
+QT_HEADER = "QMoMGenerated.h"
+QT_SOURCE = "QMoMGenerated.cpp"
+IDC_DIR = "."
+IDC_FILE = "MoMGenerated.idc"
+
+# The headers are ASCII; latin-1 keeps any stray byte intact.
 ENCODING = "latin-1"
 
 
 # ---------------------------------------------------------------------------
-# Perl semantics that the original script relies on
+# Model
 # ---------------------------------------------------------------------------
 
-def perl_eval(expr):
-    """Evaluate a C-like integer expression like Perl's eval() under 'use strict'.
 
-    Returns None (Perl: undef) when the expression cannot be evaluated,
-    for instance because it contains a bareword.
-    """
-    if expr is None:
-        return None
-    if isinstance(expr, (int, float)):
-        return expr
-    text = str(expr)
-    if re.search(r"[A-Za-z_]", re.sub(r"\b0[xX][0-9A-Fa-f]+\b", "", text)):
-        return None
-    # Perl treats a leading 0 as octal
-    text = re.sub(r"\b0([0-7]+)\b", r"0o\1", text)
-    if not re.fullmatch(r"[0-9a-fA-FxXo+\-*/%()<>|&^~\s]*", text):
-        return None
-    try:
-        value = eval(text, {"__builtins__": {}}, {})
-    except Exception:
-        return None
-    if isinstance(value, float) and value.is_integer():
-        value = int(value)
-    return value
+@dataclass
+class Enumerator:
+    name: str
+    value: int
 
 
-def perl_num(value):
-    """Numeric value of a scalar like Perl's numification (undef and junk become 0)."""
-    if value is None:
-        return 0
-    if isinstance(value, (int, float)):
-        return value
-    m = re.match(r"\s*([+-]?\d+)", str(value))
-    return int(m.group(1)) if m else 0
+@dataclass
+class Enum:
+    name: str
+    size: int
+    enumerators: list[Enumerator] = field(default_factory=list)
 
 
-def perl_str(value):
-    """String value of a scalar like Perl's stringification."""
-    if value is None:
-        return ""
-    if isinstance(value, float) and value.is_integer():
-        return str(int(value))
-    return str(value)
+@dataclass
+class Member:
+    type: str
+    name: str
+    count_expr: str | None = None  # array size as written in the header
+    count: int | None = None  # evaluated array size
+    bits: int | None = None  # bitfield width
+    offset: int = 0
+    size: int = 0
+
+    @property
+    def declarator(self) -> str:
+        if self.count_expr is not None:
+            return f"{self.name}[{self.count_expr}]"
+        if self.bits is not None:
+            return f"{self.name}:{self.bits}"
+        return self.name
 
 
-def perl_split_comma(line):
-    """split(/,\\s*/, $line): like re.split, but trailing empty fields are removed."""
-    fields = re.split(r",\s*", line)
-    while fields and fields[-1] == "":
-        fields.pop()
-    return fields
+@dataclass
+class Struct:
+    kind: str  # "struct", "union" or "class"
+    name: str
+    members: list[Member] = field(default_factory=list)
+    size: int = 0
 
 
-def remove_each_match(pattern, text, handle):
-    """Mimic Perl's  while (s#pattern##) { handle(...) }
+@dataclass
+class Model:
+    constants: dict[str, int] = field(default_factory=dict)
+    enums: dict[str, Enum] = field(default_factory=dict)
+    structs: dict[str, Struct] = field(default_factory=dict)
+    # Types whose size is known but which get no generated code (BETTER_ENUM)
+    opaque_sizes: dict[str, int] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
 
-    Each iteration removes the first match from the remaining text and
-    searches again from the start, exactly like the Perl loop.
-    """
-    regex = re.compile(pattern, re.ASCII)
-    while True:
-        m = regex.search(text)
-        if not m:
-            return text
-        text = text[:m.start()] + text[m.end():]
-        handle(m)
+    def sorted_enums(self) -> list[Enum]:
+        return [self.enums[name] for name in sorted(self.enums)]
+
+    def sorted_structs(self) -> list[Struct]:
+        return [self.structs[name] for name in sorted(self.structs)]
+
+    def type_size(self, type_name: str) -> int | None:
+        if type_name == "char":
+            return 1
+        if m := re.fullmatch(r"u?int(8|16|32|64)_t", type_name):
+            return int(m.group(1)) // 8
+        if type_name == "DS_Offset":
+            return 2
+        if type_name in self.enums:
+            return self.enums[type_name].size
+        if type_name in self.structs:
+            return self.structs[type_name].size
+        return self.opaque_sizes.get(type_name)
+
+
+# ---------------------------------------------------------------------------
+# Constant expressions
+# ---------------------------------------------------------------------------
+
+_C_INTEGER = re.compile(r"\b(0[xX][0-9a-fA-F]+|0[0-7]*|[1-9][0-9]*)[uUlL]*\b")
+
+_BINARY_OPS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: lambda a, b: math.trunc(a / b),  # C integer division
+    ast.FloorDiv: lambda a, b: math.trunc(a / b),
+    ast.Mod: operator.mod,
+    ast.LShift: operator.lshift,
+    ast.RShift: operator.rshift,
+    ast.BitOr: operator.or_,
+    ast.BitAnd: operator.and_,
+    ast.BitXor: operator.xor,
+}
+_UNARY_OPS = {ast.USub: operator.neg, ast.UAdd: operator.pos, ast.Invert: operator.invert}
+
+
+def _c_literal_to_python(m: re.Match) -> str:
+    literal = m.group(1)
+    if literal.lower().startswith("0x"):
+        return str(int(literal, 16))
+    if literal.startswith("0") and len(literal) > 1:
+        return str(int(literal, 8))  # C octal
+    return literal
+
+
+def evaluate(expression: str, names: dict[str, int]) -> int:
+    """Evaluate a C integer constant expression; names are constants and enumerators."""
+    tree = ast.parse(_C_INTEGER.sub(_c_literal_to_python, expression.strip()), mode="eval")
+
+    def visit(node: ast.AST) -> int:
+        if isinstance(node, ast.Constant) and type(node.value) is int:
+            return node.value
+        if isinstance(node, ast.Name) and node.id in names:
+            return names[node.id]
+        if isinstance(node, ast.BinOp) and type(node.op) in _BINARY_OPS:
+            return _BINARY_OPS[type(node.op)](visit(node.left), visit(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _UNARY_OPS:
+            return _UNARY_OPS[type(node.op)](visit(node.operand))
+        raise ValueError(f"cannot evaluate '{expression}'")
+
+    return visit(tree.body)
 
 
 # ---------------------------------------------------------------------------
 # Parser
 # ---------------------------------------------------------------------------
 
-class Parser:
-    def __init__(self, log):
-        self.constants = {}
-        self.enums = {}
-        self.struct_unions = {}
-        self.log = log
+_CONSTANT = re.compile(r"\bconst\s+(?:unsigned|size_t)\s+(\w+)\s*=\s*([^;]+);")
+_ENUM = re.compile(r"\benum\s+(?P<name>\w+)\s*(?:ENUMSIZE(?P<bits>\d+))?[^{;]*\{(?P<body>[^}]*)\}[^;]*;")
+_BETTER_ENUM = re.compile(r"\bBETTER_ENUM\(\s*(\w+)\s*,\s*(\w+)\s*,([^)]*)\)")
+_BETTER_ENUM_SIZE = re.compile(r"\b(\w+)::_size\(\)")
+# The closing brace of a typedef is at the start of a line; nested braces are indented.
+_STRUCT = re.compile(
+    r"\btypedef\s+(?P<kind>struct|union|class)\b[^{]*\{(?P<body>.*?\n)\}\s*(?P<name>\w+)\s*;", re.DOTALL
+)
+_DECLARATION = re.compile(
+    r"(?P<type>.*?)\s*\b(?P<name>\w+)\s*(?:\[(?P<count>[^\]]+)\])?\s*(?::\s*(?P<bits>\d+))?", re.DOTALL
+)
 
-    def parse(self, text):
-        # Strip comment and Carriage Returns (if any)
-        text = text.replace("\r", "")
-        text = re.sub(r"/\*[\s\S]*?\*/", "", text)
-        text = re.sub(r"\s*//[^\n]*", "", text, flags=re.ASCII)
 
-        # Collect constants
-        def on_constant(m):
-            self.constants[m.group(2)] = m.group(3)
-        text = remove_each_match(r"\bconst (unsigned|size_t) (\w+) = (\d+);", text, on_constant)
+def strip_comments(text: str) -> str:
+    text = text.replace("\r", "")
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+    return re.sub(r"//[^\n]*", "", text)
 
-        # Collect enums (includes collecting the enumerators in constants)
-        def on_enum(m):
-            enumname, enumsizebits, enumbody = m.group(1), m.group(3), m.group(4)
-            if "ENUMSIZE" in enumname:
-                return
-            self.process_enum(enumname, enumsizebits, enumbody)
-        text = remove_each_match(r"enum\s+(\w+)\s*(ENUMSIZE(\d+))?[^{]*\{([^}]*)\}[^;]*;", text, on_enum)
 
-        # Collect structs and unions
-        def on_struct(m):
-            self.process_struct_union(m.group(1), m.group(3), m.group(2))
-        text = remove_each_match(r"typedef (struct|union|class)\b[^{]*\{([\s\S]*?\n)\}\s*(\w+);", text, on_struct)
+def parse(text: str) -> Model:
+    model = Model()
+    text = strip_comments(text)
 
-    def process_enum(self, enumname, enumsizebits, enumbody):
-        enumsize = 4
-        if enumsizebits is not None:
-            enumsize = perl_eval(enumsizebits) / 8
-            if enumsize.is_integer():
-                enumsize = int(enumsize)
-        names = []
-        values = []
-        enumerator_value = -1
+    # BETTER_ENUMs get no generated code, but their size and value count are needed
+    better_enum_counts = {}
+    for name, underlying, values in _BETTER_ENUM.findall(text):
+        better_enum_counts[name] = sum(1 for value in values.split(",") if value.strip())
+        if (size := model.type_size(underlying)) is not None:
+            model.opaque_sizes[name] = size
 
-        self.log("enumname = %s (%s)\n" % (enumname, perl_str(enumsize)))
-        line_regex = re.compile(r"^\s*([^\n]*)\n", re.ASCII)
-        while True:
-            m = line_regex.match(enumbody)
-            if not m:
-                break
-            enumbody = enumbody[m.end():]
-            line = m.group(1)
+    for name, value in _CONSTANT.findall(text):
+        value = _BETTER_ENUM_SIZE.sub(lambda m: str(better_enum_counts.get(m[1], m[0])), value)
+        with contextlib.suppress(ValueError, SyntaxError):  # skip non-integer constants
+            model.constants[name] = evaluate(value, model.constants)
 
-            # Strip comment and white space
-            line = re.sub(r"\s*//\s*(.*)", "", line, count=1, flags=re.ASCII)
-            line = re.sub(r"^\s*", "", line, flags=re.ASCII)
+    for m in _ENUM.finditer(text):
+        model.enums[m["name"]] = parse_enum(m["name"], m["bits"], m["body"], model.constants)
 
-            for enumerator in perl_split_comma(line):
-                m_assign = re.match(r"^(\w+)\s*=\s*(\S+)$", enumerator, re.ASCII)
-                m_name = re.match(r"^(\w+)$", enumerator, re.ASCII)
-                if m_assign:
-                    enumerator_name, enumerator_value = m_assign.group(1), m_assign.group(2)
-                elif m_name:
-                    enumerator_name = m_name.group(1)
-                    enumerator_value = perl_num(perl_eval(enumerator_value)) + 1
-                else:
-                    sys.exit("Cannot parse enum '%s' at line '%s'" % (enumname, line))
+    # Enum bodies can contain ';' in their trailing text; take them out before the structs.
+    text = _ENUM.sub("", text)
+    for m in _STRUCT.finditer(text):
+        struct = parse_struct(m["kind"], m["name"], m["body"], model)
+        model.structs[struct.name] = struct
 
-                names.append(enumerator_name)
-                values.append(enumerator_value)
-                self.constants[enumerator_name] = enumerator_value
+    return model
 
-        self.enums[enumname] = {"size": enumsize, "names": names, "values": values}
 
-    def process_struct_union(self, classtype, classname, classbody):
-        datamembers = []    # old-style: type, declarator, type, declarator, ...
-        memberlist = []
-        offset = 0
-        countbits = 0
-        classsize = None
+def parse_enum(name: str, bits: str | None, body: str, constants: dict[str, int]) -> Enum:
+    enum = Enum(name, size=int(bits) // 8 if bits else 4)
+    value = -1
+    for item in (part.strip() for part in body.split(",")):
+        if not item:
+            continue
+        enumerator, _, expression = (s.strip() for s in item.partition("="))
+        value = evaluate(expression, constants) if expression else value + 1
+        enum.enumerators.append(Enumerator(enumerator, value))
+        constants[enumerator] = value
+    return enum
 
-        self.log("classname = %s\nclassbody = '%s'\n\n" % (classname, classbody))
-        decl_regex = re.compile(r"^([^;]*?);[^\n]*\n", re.ASCII)
-        while True:
-            m = decl_regex.match(classbody)
-            if not m:
-                break
-            classbody = classbody[m.end():]
-            declaration = m.group(1)
 
-            # Strip leading and trailing white space
-            declaration = re.sub(r"^(\s|\n)+", "", declaration, flags=re.ASCII)
-            declaration = re.sub(r"\s+$", "", declaration, flags=re.ASCII)
+def parse_struct(kind: str, name: str, body: str, model: Model) -> Struct:
+    struct = Struct(kind, name)
+    for declaration in (d.strip() for d in body.split(";")):
+        if not declaration:
+            continue
+        m = _DECLARATION.fullmatch(declaration)
+        if not m or not m["type"]:
+            raise ValueError(f"{name}: cannot parse declaration '{declaration}'")
+        member = Member(
+            type=m["type"], name=m["name"], count_expr=m["count"], bits=int(m["bits"]) if m["bits"] else None
+        )
+        if member.count_expr is not None:
+            try:
+                member.count = evaluate(member.count_expr, model.constants)
+            except (ValueError, SyntaxError):
+                model.warnings.append(f"{name}.{member.name}: unknown array size '{member.count_expr}'")
+        struct.members.append(member)
 
-            m_decl = re.match(r"^([^;]*?)\s*\b(\w+(\[[^\]]*\])*(\s*:\s*\d+)?)$", declaration, re.ASCII)
-            if not m_decl:
-                continue
-            type_, datamember = m_decl.group(1), m_decl.group(2)
+    layout(struct, model)
+    return struct
 
-            m_member = re.match(r"^(\w+)(\[([^\]]+)\])?(\s*:\s*(\d+))?$", datamember, re.ASCII)
-            if not m_member:
-                sys.exit("Cannot parse class '%s' at declaration '%s'" % (classname, declaration))
-            name, range_, bits = m_member.group(1), m_member.group(3), m_member.group(5)
 
-            rangevalue = None
-            if range_ is None:
-                pass
-            elif range_ in self.constants:
-                rangevalue = self.constants[range_]
-            else:
-                rangevalue = perl_eval(range_)
+def layout(struct: Struct, model: Model) -> None:
+    """Assign offsets and sizes as for a packed struct or union.
 
-            typesize = 0
-            m_int = re.match(r"^u?int(\d+)_t$", type_, re.ASCII)
-            if type_ == "char":
-                typesize = 1
-            elif m_int:
-                typesize = int(m_int.group(1)) // 8
-            elif type_ == "DS_Offset":
-                typesize = 2
-            elif type_ in self.enums:
-                typesize = self.enums[type_]["size"]
-            elif type_ in self.struct_unions:
-                typesize = self.struct_unions[type_]["size"]
-            membersize = typesize
-            if rangevalue is not None:
-                membersize *= perl_num(rangevalue)
+    A run of consecutive bitfields of the same type shares storage units of that type.
+    """
+    is_union = struct.kind == "union"
+    offset = 0
+    unit_size = 0  # storage unit size of the current run of bitfields; 0 if none
+    bits_used = 0
 
-            out = "%s\t%s" % (type_, name)
-            if rangevalue is not None:
-                out += "[%s]" % perl_str(rangevalue)
-            if bits is not None:
-                out += ":%s" % bits
-            out += ";\t// %02X\tsize %03X\n" % (offset, membersize)
-            self.log(out)
+    def end_bitfield_run() -> None:
+        nonlocal offset, unit_size, bits_used
+        if unit_size:
+            offset += math.ceil(bits_used / (8 * unit_size)) * unit_size
+        unit_size = bits_used = 0
 
-            # Register data member
-            datamembers.extend([type_, datamember])
-            member = {
-                "type": type_,
-                "name": name,
-                "offset": offset,
-                "typesize": typesize,
-                "size": membersize,
-            }
-            if range_ is not None:
-                member["range"] = range_
-            if rangevalue is not None:
-                member["rangevalue"] = rangevalue
-            if bits is not None:
-                member["bits"] = bits
-                member["bitmask"] = 1 << countbits
-            memberlist.append(member)
+    for member in struct.members:
+        type_size = model.type_size(member.type)
+        if type_size is None:
+            model.warnings.append(f"{struct.name}.{member.name}: unknown size of type '{member.type}'")
+            type_size = 0
 
-            if classtype == "union":
-                classsize = membersize
-            elif bits is not None:
-                countbits += int(bits)
-            else:
-                offset += membersize
+        if member.bits is not None and not is_union and type_size:
+            if type_size != unit_size:
+                end_bitfield_run()
+                unit_size = type_size
+            member.offset = offset + bits_used // (8 * unit_size) * unit_size
+            member.size = unit_size
+            bits_used += member.bits
+            continue
 
-        if classtype != "union":
-            classsize = offset
-        self.log("SIZE %03X\n" % perl_num(classsize))
+        end_bitfield_run()
+        member.size = type_size * (1 if member.count is None else member.count)
+        if not is_union:
+            member.offset = offset
+            offset += member.size
 
-        self.struct_unions[classname] = {
-            "datamembers": datamembers,
-            "size": classsize,
-            "members": memberlist,
-        }
+    end_bitfield_run()
+    struct.size = max((m.size for m in struct.members), default=0) if is_union else offset
 
 
 # ---------------------------------------------------------------------------
-# Generators. Each returns the file contents as a string.
+# Generators. Each returns the contents of one file.
 # ---------------------------------------------------------------------------
 
-def generate_code_h(p, gendir, hfilename):
-    out = []
-    out.append("// File: %s/%s\n" % (gendir, hfilename))
-    out.append("// Generated from: %s\n" % INPUTFILE)
-    out.append("\n")
-    out.append("#include <iostream>\n")
-    out.append("\n")
-    out.append("#include \"%s\"\n" % INPUTFILE)
-    out.append("\n")
-    out.append("namespace MoM {\n")
-    out.append("\n")
-    for enumname in sorted(p.enums):
-        out.append("std::ostream& operator<<(std::ostream& os, const %s& rhs);\n" % enumname)
-    out.append("\n")
-    out.append("\n")
-    out.append("}\n")
+
+def lines(*parts: str) -> str:
+    return "".join(f"{part}\n" for part in parts)
+
+
+def generate_core_header(model: Model) -> str:
+    declarations = [f"std::ostream& operator<<(std::ostream& os, const {e.name}& rhs);" for e in model.sorted_enums()]
+    return lines(
+        f"// File: {CORE_DIR}/{CORE_HEADER}",
+        f"// Generated from: {TEMPLATE_HEADER}",
+        "",
+        "#include <iostream>",
+        "",
+        f'#include "{TEMPLATE_HEADER}"',
+        "",
+        "namespace MoM {",
+        "",
+        *declarations,
+        "",
+        "",
+        "}",
+    )
+
+
+def generate_core_source(model: Model) -> str:
+    out = [
+        lines(
+            f"// File: {CORE_DIR}/{CORE_SOURCE}",
+            f"// Generated from: {TEMPLATE_HEADER}",
+            "",
+            "#include <ctype.h>",
+            "#include <iomanip>",
+            "#include <sstream>",
+            "",
+            f'#include "{CORE_HEADER}"',
+            "",
+            "#ifdef _MSC_VER                // Compiler MS Visual Studio",
+            "#pragma warning(disable: 4100) // MSVC: unreferenced formal parameter",
+            "#endif",
+            "",
+            "namespace MoM {",
+            "",
+        )
+    ]
+    for enum in model.sorted_enums():
+        # Sentinels (_SIZE__) and aliases (_FIRST) would give duplicate case labels
+        cases = [
+            f'    case {e.name}: os << "{e.name}"; break;'
+            for e in enum.enumerators
+            if "_SIZE__" not in e.name and "_FIRST" not in e.name
+        ]
+        out.append(
+            lines(
+                f"std::ostream& operator<<(std::ostream& os, const {enum.name}& rhs)",
+                "{",
+                "    switch (rhs)",
+                "    {",
+                *cases,
+                f'    default: os << "<Unknown {enum.name}>"; break;',
+                "    }",
+                '    os << " (" << (unsigned)rhs << ")";',
+                "    return os;",
+                "}",
+                "",
+            )
+        )
+    out.append(lines("} // namespace"))
     return "".join(out)
 
 
-def generate_code_cpp(p, gendir, hfilename, cppfilename):
-    out = []
-    out.append(
-        "// File: %s/%s\n" % (gendir, cppfilename) +
-        "// Generated from: %s\n" % INPUTFILE +
-        "\n"
-        "#include <ctype.h>\n"
-        "#include <iomanip>\n"
-        "#include <sstream>\n"
-        "\n"
-        "#include \"%s\"\n" % hfilename +
-        "\n"
-        "#ifdef _MSC_VER                // Compiler MS Visual Studio\n"
-        "#pragma warning(disable: 4100) // MSVC: unreferenced formal parameter\n"
-        "#endif\n"
-        "\n"
-        "namespace MoM {\n"
-        "\n")
+def generate_qt_header(model: Model) -> str:
+    declarations = [
+        f"QMoMTreeItemModelBase* constructTreeItem({s.name}* rhs, const QString& context);"
+        for s in model.sorted_structs()
+    ]
+    return lines(
+        f"// File: {QT_DIR}/{QT_HEADER}",
+        f"// Generated from: {TEMPLATE_HEADER}",
+        "",
+        "#include <iostream>",
+        "",
+        f'#include "{TEMPLATE_HEADER}"',
+        '#include "QMoMTreeItemModel.h"',
+        "",
+        "namespace MoM {",
+        "",
+        *declarations,
+        "",
+        "}",
+    )
 
-    # Generate ostream operator<<()
-    for enumname in sorted(p.enums):
-        out.append("std::ostream& operator<<(std::ostream& os, const %s& rhs)\n" % enumname)
-        out.append("{\n")
-        out.append("    switch (rhs)\n")
-        out.append("    {\n")
-        for enumvalue in p.enums[enumname]["names"]:
-            if "_SIZE__" in enumvalue or "_FIRST" in enumvalue:
-                continue
-            out.append("    case %s: os << \"%s\"; break;\n" % (enumvalue, enumvalue))
-        out.append("    default: os << \"<Unknown %s>\"; break;\n" % enumname)
-        out.append("    }\n")
-        out.append("    os << \" (\" << (unsigned)rhs << \")\";\n")
-        out.append("    return os;\n")
-        out.append("}\n")
-        out.append("\n")
 
-    out.append("} // namespace\n")
+def is_integer_type(type_name: str) -> bool:
+    return re.search(r"u?int\d+_t", type_name) is not None
+
+
+def tree_item_lines(model: Model, struct: Struct, member: Member) -> list[str]:
+    """C++ statements that add one member to the Qt tree of its struct."""
+    type_name = "uint16_t" if member.type == "DS_Offset" else member.type
+    name = member.name
+    is_leaf = is_integer_type(type_name) or type_name in model.enums
+
+    if m := re.fullmatch(r"(e[A-Z][^_]*)_(\w+)", name):
+        label = f"QMoMResources::instance().getNameSkill({m[1]}::{m[2]})"
+    else:
+        label = f'"{name}"'
+
+    if member.count_expr is not None and type_name == "char":
+        return [f"    ptree->appendChild({label}, new QMoMTreeItemModel<char[{member.count_expr}]>(rhs->{name}));"]
+
+    if member.count_expr is not None:
+        count, subtree = member.count_expr, f"ptree{name}"
+        out = [f"    QMoMTreeItemModelBase* {subtree} = ptree;"]
+        if len(struct.members) > 1:
+            # Group larger arrays under their own node
+            out += [
+                f"    if ({count} > 3)",
+                "    {",
+                f"        {subtree} = new QMoMTreeItemModelBase({label});",
+                f'        ptree->appendTree({subtree}, "");',
+                "    }",
+            ]
+        if is_leaf:
+            add = f"{subtree}->appendChild(oss.str().c_str(), new QMoMTreeItemModel<{type_name}>(&rhs->{name}[i]));"
+        else:
+            add = f'{subtree}->appendTree(constructTreeItem(&rhs->{name}[i], oss.str().c_str()), "");'
+        return out + [
+            f"    for (unsigned i = 0; i < {count}; ++i)",
+            "    {",
+            "          std::ostringstream oss;",
+            f'          oss << "{name}[" << i << "]";',
+            f"          {add}",
+            "    }",
+        ]
+
+    if is_integer_type(type_name) and member.bits is not None:
+        mask = f"mask{name}"
+        add = "ptree->appendChild({label}, new QMoMTreeItemModel<{t}>(({t}*)rhs, *({t}*)&{mask}));"
+        return [
+            f"    {struct.name} {mask};",
+            f"    memset(&{mask}, '\\0', sizeof({mask}));",
+            f"    {mask}.{name} = {(1 << member.bits) - 1};",
+            f"    if (1 == sizeof({mask}))",
+            "        " + add.format(label=label, t="uint8_t", mask=mask),
+            f"    else if (2 == sizeof({mask}))",
+            "        " + add.format(label=label, t="uint16_t", mask=mask),
+            "    else",
+            "        " + add.format(label=label, t="uint32_t", mask=mask),
+        ]
+
+    if type_name in model.enums and f"{type_name}140m" in model.enums:
+        # The enum has variants per game version
+        out = []
+        for keyword, version, suffix in (("if", "6.0", "60"), ("else if", "1.50", "150"), ("else if", "1.40m", "140m")):
+            variant = f"{type_name}{suffix}"
+            out += [
+                f'    {keyword} (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string("{version}"))',
+                "    {",
+                f"        ptree->appendChild({label}, new QMoMTreeItemModel<{variant}>(({variant}*)&rhs->{name}));",
+                "    }",
+            ]
+        return out + [
+            "    else",
+            "    {",
+            f"        ptree->appendChild({label}, new QMoMTreeItemModel<{type_name}>(&rhs->{name}));",
+            "    }",
+        ]
+
+    if is_leaf:
+        return [f"    ptree->appendChild({label}, new QMoMTreeItemModel<{type_name}>(&rhs->{name}));"]
+
+    return [f'    ptree->appendTree(constructTreeItem(&rhs->{name}, {label}), "");']
+
+
+def generate_qt_source(model: Model) -> str:
+    out = [
+        lines(
+            f"// File: {QT_DIR}/{QT_SOURCE}",
+            f"// Generated from: {TEMPLATE_HEADER}",
+            "",
+            "#include <ctype.h>",
+            "#include <iomanip>",
+            "#include <sstream>",
+            "",
+            "#include <MoMGenerated.h>",
+            "",
+            f'#include "{QT_HEADER}"',
+            "",
+            "namespace MoM {",
+            "",
+        )
+    ]
+    for struct in model.sorted_structs():
+        body = [line for member in struct.members for line in tree_item_lines(model, struct, member)]
+        out.append(
+            lines(
+                f"QMoMTreeItemModelBase* constructTreeItem({struct.name}* rhs, const QString& context)",
+                "{",
+                f"    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<{struct.name}>(rhs, context);",
+                "    if (0 == rhs)",
+                "        return ptree;",
+                "",
+                *body,
+                "    return ptree;",
+                "}",
+                "",
+            )
+        )
+    out.append(lines("", "} // namespace"))
     return "".join(out)
 
 
-def generate_qt_h(p, gendir, hfilename):
+# IDA member flags
+IDA_FIELD = 0x000400
+IDA_ENUM = 0x800000  # also used for char
+IDA_WORD = 0x10000000
+IDA_DWORD = 0x20000000
+IDA_STRUCT = 0x60000000
+
+
+def idc_member_line(model: Model, member: Member) -> str:
+    if member.type == "DS_Offset":
+        return (
+            f'    mid = AddStrucMember(id,"{member.name}",\t0X{member.offset:X},\t0x10500400,'
+            f"\t0X36AA0,\t2,\t0XFFFFFFFF,\t0X0,\t0x000002);"
+        )
+
+    flags, type_id = IDA_FIELD, "-1"
+    if member.type == "char":
+        flags, type_id = flags | IDA_ENUM, "0x0"
+    elif member.type in model.enums:
+        flags, type_id = flags | IDA_ENUM, f'GetEnum("{member.type}")'
+    elif member.type in model.structs:
+        flags, type_id = flags | IDA_STRUCT, f'GetStrucIdByName("{member.type}")'
+
+    if model.type_size(member.type) == 2:
+        flags |= IDA_WORD
+    elif model.type_size(member.type) == 4 and member.type not in model.enums:
+        flags |= IDA_DWORD
+
+    return (
+        f'    mid = AddStrucMember(id,"{member.name}",\t0X{member.offset:X},\t0X{flags:06X},'
+        f"\t{type_id},\t{member.size});"
+    )
+
+
+def idc_members(struct: Struct) -> list[Member]:
+    """Members as IDA sees them: one member per bitfield storage unit."""
+    members, unit_offset = [], None
+    for member in struct.members:
+        if member.bits is None:
+            members.append(member)
+            unit_offset = None
+        elif member.offset != unit_offset or struct.kind == "union":
+            members.append(member)
+            unit_offset = member.offset
+    return members
+
+
+def generate_idc(model: Model) -> str:
+    enum_lines = []
+    for enum in model.sorted_enums():
+        enum_lines.append(f'    id = AddEnum(-1,"{enum.name}",0x1100000);')
+        enum_lines += [f'    AddConstEx(id,"{e.name}",\t{e.value},\t-1);' for e in enum.enumerators]
+
+    struct_lines = [f'    id = AddStrucEx(-1,"{s.name}",{int(s.kind == "union")});' for s in model.sorted_structs()]
+    struct_lines.append("")
+    for struct in model.sorted_structs():
+        struct_lines.append(f'    id = GetStrucIdByName("{struct.name}");')
+        struct_lines += [idc_member_line(model, m) for m in idc_members(struct)]
+
+    return lines(
+        f"// File: {IDC_DIR}/{IDC_FILE}",
+        f"// Generated from: {TEMPLATE_HEADER}",
+        "",
+        "//      This file contains the user-defined type definitions.",
+        "//      To use it press F2 in IDA and enter the name of this file.",
+        "//",
+        "",
+        "#define UNLOADED_FILE   1",
+        "#include <idc.idc>",
+        "",
+        "static main(void)",
+        "{",
+        "  Enums();              // enumerations",
+        "  Structures();         // structure types",
+        "  LowVoids(0x20);",
+        "  HighVoids(0xF978);",
+        "}",
+        "",
+        "static Enums_0(id) {",
+        "",
+        *enum_lines,
+        "",
+        "  return id;",
+        "}",
+        "",
+        "// Information about enum types",
+        "static Enums(void) {",
+        "  auto id;",
+        "  id = Enums_0(id);",
+        "}",
+        "",
+        "static Structures_0(id) {",
+        "  auto mid;",
+        "",
+        *struct_lines,
+        "  return id;",
+        "}",
+        "",
+        "// Information about structure types",
+        "static Structures(void) {",
+        "  auto id;",
+        "  id = Structures_0(id);",
+        "}",
+        "",
+        "// End of file.",
+    )
+
+
+def generate_layout_check(model: Model) -> str:
+    """static_asserts that the compiler lays out every struct as computed here."""
+    asserts = []
+    for struct in model.structs.values():
+        asserts.append(f'static_assert(sizeof({struct.name}) == 0x{struct.size:X}, "sizeof({struct.name})");')
+        asserts += [
+            f'static_assert(offsetof({struct.name}, {m.name}) == 0x{m.offset:X}, "{struct.name}::{m.name}");'
+            for m in struct.members
+            if m.bits is None
+        ]
+    return lines(
+        "// Generated by scripts/generate_code.py --layout-check",
+        f"// Checks that the compiler lays out the structs of {TEMPLATE_HEADER} as the generator computes",
+        "",
+        "#include <cstddef>",
+        "",
+        f'#include "{TEMPLATE_HEADER}"',
+        "",
+        "namespace MoM {",
+        "",
+        *asserts,
+        "",
+        "}",
+    )
+
+
+def describe_layouts(model: Model) -> str:
     out = []
-    out.append("// File: %s/%s\n" % (gendir, hfilename))
-    out.append("// Generated from: %s\n" % INPUTFILE)
-    out.append("\n")
-    out.append("#include <iostream>\n")
-    out.append("\n")
-    out.append("#include \"%s\"\n" % INPUTFILE)
-    out.append("#include \"QMoMTreeItemModel.h\"\n")
-    out.append("\n")
-    out.append("namespace MoM {\n")
-    out.append("\n")
-    for classname in sorted(p.struct_unions):
-        out.append("QMoMTreeItemModelBase* constructTreeItem(%s* rhs, const QString& context);\n" % classname)
-    out.append("\n")
-    out.append("}\n")
-    return "".join(out)
-
-
-def is_int_type(type_):
-    return re.search(r"u?int\d+_t", type_, re.ASCII) is not None
-
-
-def generate_qt_cpp(p, gendir, hfilename, cppfilename):
-    out = []
-    w = out.append
-    w("// File: %s/%s\n" % (gendir, cppfilename))
-    w("// Generated from: %s\n" % INPUTFILE)
-    w("\n")
-    w("#include <ctype.h>\n")
-    w("#include <iomanip>\n")
-    w("#include <sstream>\n")
-    w("\n")
-    w("#include <MoMGenerated.h>\n")
-    w("\n")
-    w("#include \"%s\"\n" % hfilename)
-    w("\n")
-    w("namespace MoM {\n")
-    w("\n")
-
-    # Generate constructTreeItem()
-    for classname in sorted(p.struct_unions):
-        all_datamembers = p.struct_unions[classname]["datamembers"]
-
-        w("QMoMTreeItemModelBase* constructTreeItem(%s* rhs, const QString& context)\n" % classname)
-        w("{\n")
-        w("    QMoMTreeItemModelBase* ptree = new QMoMTreeItemModelSubtree<%s>(rhs, context);\n" % classname)
-        w("    if (0 == rhs)\n")
-        w("        return ptree;\n")
-        w("\n")
-
-        for i in range(0, len(all_datamembers) - 1, 2):
-            type_, datamember = all_datamembers[i], all_datamembers[i + 1]
-
-            if type_ == "DS_Offset":
-                type_ = "uint16_t"
-            m = re.match(r"^(\w+)(\[([^\]]+)\])?(\s*:\s*(.*))?$", datamember, re.ASCII)
-            name, range_, bitmask = m.group(1), m.group(3), m.group(5)
-            display_name = '"%s"' % name
-            m_enum = re.match(r"^(e[A-Z][^_]*)_(\w+)$", name, re.ASCII)
-            if m_enum:
-                display_name = "QMoMResources::instance().getNameSkill(%s::%s)" % (m_enum.group(1), m_enum.group(2))
-
-            if range_ is not None and type_ == "char":
-                w("    ptree->appendChild(%s, new QMoMTreeItemModel<char[%s]>(rhs->%s));\n" % (display_name, range_, name))
-            elif range_ is not None:
-                psubtree = "ptree%s" % name
-                w("    QMoMTreeItemModelBase* %s = ptree;\n" % psubtree)
-                if len(all_datamembers) > 2:
-                    w("    if (%s > 3)\n" % range_)
-                    w("    {\n")
-                    w("        %s = new QMoMTreeItemModelBase(%s);\n" % (psubtree, display_name))
-                    w("        ptree->appendTree(%s, \"\");\n" % psubtree)
-                    w("    }\n")
-                w("    for (unsigned i = 0; i < %s; ++i)\n" % range_)
-                w("    {\n")
-                w("          std::ostringstream oss;\n")
-                w("          oss << \"%s[\" << i << \"]\";\n" % name)
-                if is_int_type(type_) or type_ in p.enums:
-                    w("          %s->appendChild(oss.str().c_str(), new QMoMTreeItemModel<%s>(&rhs->%s[i]));\n" % (psubtree, type_, name))
-                else:
-                    w("          %s->appendTree(constructTreeItem(&rhs->%s[i], oss.str().c_str()), \"\");\n" % (psubtree, name))
-                w("    }\n")
-            elif is_int_type(type_) and bitmask is not None:
-                max_value = 2 ** perl_num(bitmask) - 1
-                w("    %s mask%s;\n" % (classname, name))
-                w("    memset(&mask%s, '\\0', sizeof(mask%s));\n" % (name, name))
-                w("    mask%s.%s = %s;\n" % (name, name, max_value))
-                w("    if (1 == sizeof(mask%s))\n" % name)
-                w("        ptree->appendChild(%s, new QMoMTreeItemModel<uint8_t>((uint8_t*)rhs, *(uint8_t*)&mask%s));\n" % (display_name, name))
-                w("    else if (2 == sizeof(mask%s))\n" % name)
-                w("        ptree->appendChild(%s, new QMoMTreeItemModel<uint16_t>((uint16_t*)rhs, *(uint16_t*)&mask%s));\n" % (display_name, name))
-                w("    else\n")
-                w("        ptree->appendChild(%s, new QMoMTreeItemModel<uint32_t>((uint32_t*)rhs, *(uint32_t*)&mask%s));\n" % (display_name, name))
-            elif type_ in p.enums and (type_ + "140m") in p.enums:
-                for version, suffix in (("6.0", "60"), ("1.50", "150"), ("1.40m", "140m")):
-                    keyword = "if" if suffix == "60" else "else if"
-                    w("    %s (QMoMTreeItemModelBase::game()->getMoMVersion() >= std::string(\"%s\"))\n" % (keyword, version))
-                    w("    {\n")
-                    w("        ptree->appendChild(%s, new QMoMTreeItemModel<%s%s>((%s%s*)&rhs->%s));\n" % (display_name, type_, suffix, type_, suffix, name))
-                    w("    }\n")
-                w("    else\n")
-                w("    {\n")
-                w("        ptree->appendChild(%s, new QMoMTreeItemModel<%s>(&rhs->%s));\n" % (display_name, type_, name))
-                w("    }\n")
-            elif is_int_type(type_) or type_ in p.enums:
-                w("    ptree->appendChild(%s, new QMoMTreeItemModel<%s>(&rhs->%s));\n" % (display_name, type_, name))
-            else:
-                w("    ptree->appendTree(constructTreeItem(&rhs->%s, %s), \"\");\n" % (name, display_name))
-
-        w("    return ptree;\n")
-        w("}\n")
-        w("\n")
-
-    w("\n")
-    w("} // namespace\n")
-    return "".join(out)
-
-
-def generate_idc(p, gendir, idcfilename):
-    out = []
-    w = out.append
-    w("// File: %s/%s\n" % (gendir, idcfilename) +
-      "// Generated from: %s\n" % INPUTFILE +
-      "\n"
-      "//      This file contains the user-defined type definitions.\n"
-      "//      To use it press F2 in IDA and enter the name of this file.\n"
-      "//\n"
-      "\n"
-      "#define UNLOADED_FILE   1\n"
-      "#include <idc.idc>\n"
-      "\n"
-      "static main(void)\n"
-      "{\n"
-      "  Enums();              // enumerations\n"
-      "  Structures();         // structure types\n"
-      "\tLowVoids(0x20);\n"
-      "\tHighVoids(0xF978);\n"
-      "}\n"
-      "\n"
-      "static Enums_0(id) {\n"
-      "\n")
-
-    for enumname in sorted(p.enums):
-        enum = p.enums[enumname]
-        w("    id = AddEnum(-1,\"%s\",0x1100000);\n" % enumname)
-        if "bitmask" in enum:
-            w("    SetEnumBf(id,1);\n")
-        for name, value in zip(enum["names"], enum["values"]):
-            if value is None:
-                sys.exit("Can't find value for '%s' '%s'" % (enumname, name))
-            bitmask_value = value if "bitmask" in enum else -1
-            w("    AddConstEx(id,\"%s\",\t%s,\t%s);\n" % (name, perl_str(value), perl_str(bitmask_value)))
-
-    w("\n"
-      "\treturn id;\n"
-      "}\n"
-      "\n"
-      "//------------------------------------------------------------------------\n"
-      "// Information about enum types\n"
-      "\n"
-      "static Enums(void) {\n"
-      "        auto id;\n"
-      "\tid = Enums_0(id);\n"
-      "}\n"
-      "\n"
-      "static Structures_0(id) {\n"
-      "        auto mid;\n"
-      "\n")
-
-    for classname in sorted(p.struct_unions):
-        w("    id = AddStrucEx(-1,\"%s\",0);\n" % classname)
-    w("\n")
-
-    # IDA member flags:
-    #   0x000400 struct-field (always on)   0x800000 enum-byte / char
-    #   0x10000000 dw   0x20000000 dd       0x60000000 struct
-    for classname in sorted(p.struct_unions):
-        w("    id = GetStrucIdByName(\"%s\");\n" % classname)
-        for member in p.struct_unions[classname]["members"]:
-            name = member["name"]
-            offset = member["offset"]
-            type_ = member["type"]
-            size = member["size"]
-            idcflags = 0x000400
-            idctype = "-1"
-
-            if type_ == "char":
-                idctype = "0x0"
-                idcflags |= 0x800000
-            elif type_ in p.enums:
-                idctype = "GetEnum(\"%s\")" % type_
-                idcflags |= 0x800000
-            elif type_ in p.struct_unions:
-                idctype = "GetStrucIdByName(\"%s\")" % type_
-                idcflags |= 0x60000000
-
-            if re.match(r"^u?int16_t", type_, re.ASCII) or (type_ in p.enums and p.enums[type_]["size"] == 2):
-                idcflags |= 0x10000000
-            elif re.match(r"^u?int32_t", type_, re.ASCII):
-                idcflags |= 0x20000000
-
-            if type_ == "DS_Offset":
-                w("    mid = AddStrucMember(id,\"%s\",\t0X%X,\t0x10500400,\t0X36AA0,\t2,\t0XFFFFFFFF,\t0X0,\t0x000002);\n"
-                  % (name, offset))
-            else:
-                w("    mid = AddStrucMember(id,\"%s\",\t0X%X,\t0X%06X,\t%s,\t%s);\n"
-                  % (name, offset, idcflags, idctype, perl_str(size)))
-
-    w("\treturn id;\n"
-      "}\n"
-      "\n"
-      "//------------------------------------------------------------------------\n"
-      "// Information about structure types\n"
-      "\n"
-      "static Structures(void) {\n"
-      "        auto id;\n"
-      "\tid = Structures_0(id);\n"
-      "}\n"
-      "\n"
-      "// End of file.\n")
-    return "".join(out)
+    for struct in model.structs.values():
+        out.append(f"{struct.kind} {struct.name}  size 0x{struct.size:X}")
+        out += [f"    {m.offset:04X}  {m.size:4X}  {m.type} {m.declarator}" for m in struct.members]
+    return "\n".join(out) + "\n"
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
-def main():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--root", default=os.path.dirname(script_dir),
-                        help="repository root (default: the parent of this script's directory)")
-    parser.add_argument("--check", action="store_true",
-                        help="do not write; exit 1 if a generated source file differs from the committed one")
-    parser.add_argument("--no-idc", action="store_true", help="do not generate the IDA .idc file")
-    parser.add_argument("--verbose", action="store_true", help="print the parse log")
-    args = parser.parse_args()
 
-    log = sys.stdout.write if args.verbose else (lambda text: None)
+def main() -> int:
+    arg_parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    arg_parser.add_argument(
+        "--root",
+        type=Path,
+        default=Path(__file__).resolve().parent.parent,
+        help="repository root (default: the parent of this script's directory)",
+    )
+    arg_parser.add_argument(
+        "--check", action="store_true", help="write nothing; exit 1 if a committed generated file is out of date"
+    )
+    arg_parser.add_argument("--no-idc", action="store_true", help="do not write the IDA .idc file")
+    arg_parser.add_argument("--verbose", action="store_true", help="print the parsed struct layouts")
+    arg_parser.add_argument(
+        "--layout-check",
+        type=Path,
+        metavar="FILE",
+        help="only write a C++ file of static_asserts on the struct layouts",
+    )
+    args = arg_parser.parse_args()
 
-    text = ""
-    for inputfilename in INPUTFILENAMES:
-        with open(os.path.join(args.root, inputfilename), encoding=ENCODING, newline="") as fh:
-            text += fh.read()
+    text = "".join((args.root / name).read_text(encoding=ENCODING) for name in INPUT_FILES)
+    model = parse(text)
 
-    p = Parser(log)
-    p.parse(text)
+    for warning in model.warnings:
+        print(f"warning: {warning}", file=sys.stderr)
+    if args.verbose:
+        print(describe_layouts(model), end="")
 
-    outputs = [
-        (GENDIR, HFILENAME, generate_code_h(p, GENDIR, HFILENAME)),
-        (GENDIR, CPPFILENAME, generate_code_cpp(p, GENDIR, HFILENAME, CPPFILENAME)),
-        (QT_GENDIR, QT_HFILENAME, generate_qt_h(p, QT_GENDIR, QT_HFILENAME)),
-        (QT_GENDIR, QT_CPPFILENAME, generate_qt_cpp(p, QT_GENDIR, QT_HFILENAME, QT_CPPFILENAME)),
-    ]
-    if not args.no_idc and not args.check:
-        outputs.append((IDC_GENDIR, IDC_FILENAME, generate_idc(p, IDC_GENDIR, IDC_FILENAME)))
+    if args.layout_check:
+        write(args.layout_check, generate_layout_check(model))
+        return 0
 
-    stale = []
-    for gendir, filename, content in outputs:
-        path = os.path.join(args.root, gendir, filename)
-        if args.check:
-            try:
-                with open(path, encoding=ENCODING, newline="") as fh:
-                    # A Windows checkout may have converted LF to CRLF
-                    current = fh.read().replace("\r\n", "\n")
-            except OSError:
-                current = None
-            if current != content:
-                stale.append(os.path.join(gendir, filename))
-        else:
-            with open(path, "w", encoding=ENCODING, newline="") as fh:
-                fh.write(content)
+    outputs = {
+        Path(CORE_DIR, CORE_HEADER): generate_core_header(model),
+        Path(CORE_DIR, CORE_SOURCE): generate_core_source(model),
+        Path(QT_DIR, QT_HEADER): generate_qt_header(model),
+        Path(QT_DIR, QT_SOURCE): generate_qt_source(model),
+    }
 
-    if stale:
-        sys.stderr.write("Out of date (run: python3 scripts/generate_code.py):\n")
-        for path in stale:
-            sys.stderr.write("    %s\n" % path)
-        return 1
+    if args.check:
+        stale = [path for path, content in outputs.items() if read_normalized(args.root / path) != content]
+        if stale:
+            print("Out of date (run: python3 scripts/generate_code.py):", file=sys.stderr)
+            for path in stale:
+                print(f"    {path.as_posix()}", file=sys.stderr)
+            return 1
+        return 0
+
+    if not args.no_idc:
+        outputs[Path(IDC_DIR, IDC_FILE)] = generate_idc(model)
+    for path, content in outputs.items():
+        write(args.root / path, content)
     return 0
+
+
+def write(path: Path, content: str) -> None:
+    with open(path, "w", encoding=ENCODING, newline="\n") as file:
+        file.write(content)
+
+
+def read_normalized(path: Path) -> str | None:
+    """File contents with LF line endings (a Windows checkout may use CRLF)."""
+    try:
+        return path.read_text(encoding=ENCODING).replace("\r\n", "\n")
+    except OSError:
+        return None
 
 
 if __name__ == "__main__":
