@@ -606,7 +606,8 @@ def main():
         if args.check:
             try:
                 with open(path, encoding=ENCODING, newline="") as fh:
-                    current = fh.read()
+                    # A Windows checkout may have converted LF to CRLF
+                    current = fh.read().replace("\r\n", "\n")
             except OSError:
                 current = None
             if current != content:
