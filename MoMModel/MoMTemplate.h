@@ -5107,7 +5107,7 @@ typedef struct PACKED_STRUCT // Battle_Figure
     uint16_t                m_Unk_8;            // 08
     uint16_t                m_Unk_A;            // 0A
     uint16_t                m_Unk_C;            // 0C
-    ePlayer                 m_Owner;            // 0E
+    int16_t                 m_Owner;            // 0E ePlayer (16-bit in memory)
     uint16_t                m_Unk_10;           // 10
     uint16_t                m_Color_enchantment;// 12
     uint16_t                m_Unk_14_sound;     // 14

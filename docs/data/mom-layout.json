@@ -5228,7 +5228,7 @@
     {
       "name": "Battle_Figure",
       "kind": "struct",
-      "size": 29,
+      "size": 30,
       "location": "MoMModel/MoMTemplate.h:5101",
       "members": [
         {"name": "m_xpel", "type": "int16_t", "offset": 0, "size": 2, "comment": "0"},
@@ -5238,13 +5238,13 @@
         {"name": "m_Unk_8", "type": "uint16_t", "offset": 8, "size": 2, "comment": "08"},
         {"name": "m_Unk_A", "type": "uint16_t", "offset": 10, "size": 2, "comment": "0A"},
         {"name": "m_Unk_C", "type": "uint16_t", "offset": 12, "size": 2, "comment": "0C"},
-        {"name": "m_Owner", "type": "ePlayer", "offset": 14, "size": 1, "comment": "0E"},
-        {"name": "m_Unk_10", "type": "uint16_t", "offset": 15, "size": 2, "comment": "10"},
-        {"name": "m_Color_enchantment", "type": "uint16_t", "offset": 17, "size": 2, "comment": "12"},
-        {"name": "m_Unk_14_sound", "type": "uint16_t", "offset": 19, "size": 2, "comment": "14"},
-        {"name": "m_Unk_16", "type": "uint16_t", "offset": 21, "size": 2, "comment": "16"},
-        {"name": "m_Unk_18_battleunit_field_58", "type": "uint16_t", "offset": 23, "size": 2, "comment": "18"},
-        {"name": "m_ZDepth", "type": "uint32_t", "offset": 25, "size": 4, "comment": "1A"}
+        {"name": "m_Owner", "type": "int16_t", "offset": 14, "size": 2, "comment": "0E ePlayer (16-bit in memory)"},
+        {"name": "m_Unk_10", "type": "uint16_t", "offset": 16, "size": 2, "comment": "10"},
+        {"name": "m_Color_enchantment", "type": "uint16_t", "offset": 18, "size": 2, "comment": "12"},
+        {"name": "m_Unk_14_sound", "type": "uint16_t", "offset": 20, "size": 2, "comment": "14"},
+        {"name": "m_Unk_16", "type": "uint16_t", "offset": 22, "size": 2, "comment": "16"},
+        {"name": "m_Unk_18_battleunit_field_58", "type": "uint16_t", "offset": 24, "size": 2, "comment": "18"},
+        {"name": "m_ZDepth", "type": "uint32_t", "offset": 26, "size": 4, "comment": "1A"}
       ]
     },
     {

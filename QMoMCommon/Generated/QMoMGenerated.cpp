@@ -507,7 +507,7 @@ QMoMTreeItemModelBase* constructTreeItem(Battle_Figure* rhs, const QString& cont
     ptree->appendChild("m_Unk_8", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_8));
     ptree->appendChild("m_Unk_A", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_A));
     ptree->appendChild("m_Unk_C", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_C));
-    ptree->appendChild("m_Owner", new QMoMTreeItemModel<ePlayer>(&rhs->m_Owner));
+    ptree->appendChild("m_Owner", new QMoMTreeItemModel<int16_t>(&rhs->m_Owner));
     ptree->appendChild("m_Unk_10", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_10));
     ptree->appendChild("m_Color_enchantment", new QMoMTreeItemModel<uint16_t>(&rhs->m_Color_enchantment));
     ptree->appendChild("m_Unk_14_sound", new QMoMTreeItemModel<uint16_t>(&rhs->m_Unk_14_sound));
