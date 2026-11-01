@@ -76,8 +76,11 @@ flowchart LR
    for all three operating systems, the core tests moved from QtTest to doctest, and
    a `MoMProcessMacOS.cpp` stub. `scripts/generate_code.pl` translated to Python
    (`generate_code.py`), with output identical to the Perl script.
-2. **Skeleton.** An ImGui app that can attach to DOSBox or open a `.GAM`/`.EXE`/`.LBX`
-   and show connection status.
+2. **Skeleton** (done). `Applications/RTGT`: the `MoM-RTGT` executable (SDL2 + OpenGL 3,
+   Dear ImGui v1.92.9b-docking). It attaches to DOSBox or opens a `.GAM`/`.EXE`/`.LBX`,
+   shows the game summary and the wizards, and has a file browser and a log of the core's
+   output. Settings and the dock layout persist in `MoM-RTGT.ini` next to the executable.
+   The UI lives in the `rtgt_ui` library, which the unit tests run headless.
 3. **Generated tree.** Extend the (Python) code generator to emit `drawTree(T*)` functions for
    every struct, using editors for numbers, enums (combo), bitmasks (checkboxes) and
    fixed strings. This is most of the tweaker's value.

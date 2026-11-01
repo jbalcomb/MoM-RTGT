@@ -32,13 +32,21 @@ the environment variable LD_LIBRARY_PATH.
 
 BUILDING FROM SOURCES WITH CMAKE
 ================================
-Needs CMake 3.16+ and a C++14 compiler. Qt5 is only needed for the GUI applications.
+Needs CMake 3.16+, git and a C++17 compiler (the core library alone needs C++14).
 
-    cmake -S . -B build                         # core library + unit tests
+    cmake -S . -B build                         # MoM-RTGT, core library, unit tests
     cmake --build build
     ctest --test-dir build --output-on-failure
 
-    cmake -S . -B build -DRTGT_BUILD_QT_APPS=ON # also MoMTweaker and MoMCustomizer
+MoM-RTGT is the Dear ImGui application (Applications/RTGT). Configuring downloads
+Dear ImGui, and SDL2 when no installed SDL2 is found (Linux: apt install libsdl2-dev).
+    -DRTGT_FETCH_SDL2=ON     always build SDL2 from source and link it statically,
+                             for a portable executable (as the CI builds do)
+    -DRTGT_BUILD_APP=OFF     only the core library and its tests
+    -DRTGT_BUILD_QT_APPS=ON  also the legacy Qt5 GUI (MoMTweaker, MoMCustomizer)
+
+MoM-RTGT keeps its settings in MoM-RTGT.ini next to the executable. It opens a file
+given on the command line or dropped onto its window.
 
 Executables end up in build/bin. The combat tests need a running game in DOSBox
 and are skipped by default; run them with: build/bin/rtgt_tests --no-skip

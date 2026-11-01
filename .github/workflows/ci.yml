@@ -6,31 +6,43 @@ on:
   workflow_dispatch:
 
 jobs:
-  core:
-    name: Core + tests (${{ matrix.os }})
+  build:
+    name: MoM-RTGT + tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, windows-2022, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - name: Install SDL2 build dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl-dev
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        # SDL2 is built from source and linked statically, so the executable is portable
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DRTGT_FETCH_SDL2=ON
       - name: Build
         run: cmake --build build --config Release --parallel
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
+      - name: Upload MoM-RTGT
+        uses: actions/upload-artifact@v4
+        with:
+          name: MoM-RTGT-${{ runner.os }}
+          path: |
+            build/bin/MoM-RTGT
+            build/bin/Release/MoM-RTGT.exe
+          if-no-files-found: error
 
-  qt-apps:
-    name: Qt5 apps (ubuntu-24.04)
+  legacy-qt:
+    name: Legacy Qt5 GUI (ubuntu-24.04)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Qt5
         run: sudo apt-get update && sudo apt-get install -y qtbase5-dev
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DRTGT_BUILD_QT_APPS=ON
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DRTGT_BUILD_QT_APPS=ON -DRTGT_BUILD_APP=OFF
       - name: Build
         run: cmake --build build --parallel
       - name: Test

@@ -2,17 +2,20 @@
 # MoM-RTGT - Master of Magic Real-Time Game Tweaker
 #
 #   rtgt_core       Qt-free game model, controller and platform layer
-#   rtgt_tests      doctest unit tests for rtgt_core
-#   MoMTweaker      Qt5 GUI      (optional, RTGT_BUILD_QT_APPS)
-#   MoMCustomizer   Qt5 GUI      (optional, RTGT_BUILD_QT_APPS)
+#   MoM-RTGT        the Dear ImGui application (RTGT_BUILD_APP), see Applications/RTGT
+#   rtgt_tests      doctest unit tests for rtgt_core (and rtgt_ui_tests for the UI)
+#   MoMTweaker      legacy Qt5 GUI  (optional, RTGT_BUILD_QT_APPS)
+#   MoMCustomizer   legacy Qt5 GUI  (optional, RTGT_BUILD_QT_APPS)
 #
-# The qmake projects (*.pro) remain until the Qt GUI is retired.
+# The legacy Qt GUI and its qmake projects (*.pro) remain until the ImGui
+# application replaces them.
 # ---------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.16)
 
 project(MoM-RTGT VERSION 0.3.4 LANGUAGES CXX)
 
+option(RTGT_BUILD_APP     "Build the Dear ImGui application MoM-RTGT" ON)
 option(RTGT_BUILD_TESTS   "Build the core unit tests" ON)
 option(RTGT_BUILD_QT_APPS "Build the Qt5 applications MoMTweaker and MoMCustomizer" OFF)
 
@@ -98,6 +101,13 @@ if(Python3_Interpreter_FOUND)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Regenerating sources from MoMTemplate.h"
         VERBATIM)
+endif()
+
+# ---------------------------------------------------------------------------
+# Dear ImGui application
+# ---------------------------------------------------------------------------
+if(RTGT_BUILD_APP)
+    add_subdirectory(Applications/RTGT)
 endif()
 
 # ---------------------------------------------------------------------------
